@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>D&D Campaign Map</title>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.css" />
+		<style>
+			body,
+			html {
+				margin: 0;
+				padding: 0;
+				height: 100%;
+			}
+			#map {
+				width: 100%;
+				height: 100%;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="map"></div>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.js"></script>
+		<script>
+			var originalImageWidth = 21905; // Replace with your image's actual width
+			var originalImageHeight = 14175; // Replace with your image's actual height
+			var maxZoom = 5;
+
+			var map = L.map('map', {
+				crs: L.CRS.Simple,
+				minZoom: 0,
+				maxZoom: maxZoom,
+			});
+
+			var southWest = map.unproject([0, originalImageHeight], maxZoom);
+			var northEast = map.unproject([originalImageWidth, 0], maxZoom);
+			var bounds = new L.LatLngBounds(southWest, northEast);
+
+			map.setMaxBounds(bounds);
+			map.fitBounds(bounds);
+
+			L.TileLayer.CustomTileLayer = L.TileLayer.extend({
+				getTileUrl: function (coords) {
+					var zoom = this._getZoomForUrl();
+					var tileBounds = this._tileCoordsToBounds(coords);
+					var nw = this._map.project(tileBounds.getNorthWest(), zoom);
+					var se = this._map.project(tileBounds.getSouthEast(), zoom);
+					var tileWidth = se.x - nw.x;
+					var tileHeight = se.y - nw.y;
+
+					// Calculate tile coordinates based on the original image size
+					var x = Math.floor(nw.x / tileWidth);
+					var y = Math.floor(nw.y / tileHeight);
+
+					return L.Util.template(
+						this._url,
+						L.extend(
+							{
+								s: this._getSubdomain(coords),
+								x: x,
+								y: y,
+								z: zoom,
+							},
+							this.options
+						)
+					);
+				},
+			});
+
+			L.tileLayer.customTileLayer = function (templateUrl, options) {
+				return new L.TileLayer.CustomTileLayer(templateUrl, options);
+			};
+
+			L.tileLayer
+				.customTileLayer('tiles/{z}/{x}_{y}.png', {
+					minZoom: 0,
+					maxZoom: maxZoom,
+					noWrap: true,
+					bounds: bounds,
+					attribution: 'Your D&D Campaign Map',
+				})
+				.addTo(map);
+		</script>
+	</body>
+</html>
