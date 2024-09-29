@@ -147,7 +147,7 @@ function loadNotes() {
 
 // loadNotes();
 
-const IS_DEBUG = true;
+const IS_DEBUG = false;
 
 map.on('click', (e) => {
 	if (IS_DEBUG) {
