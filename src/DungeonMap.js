@@ -81,6 +81,7 @@ let currentMarker = null;
 function showNoteForm(e) {
 	noteForm.style.display = 'block';
 	currentMarker = e.latlng;
+	console.log(e.latlng);
 }
 
 function hideNoteForm() {
@@ -145,3 +146,41 @@ function loadNotes() {
 // cancelNoteButton.addEventListener('click', hideNoteForm);
 
 // loadNotes();
+
+const IS_DEBUG = true;
+
+map.on('click', (e) => {
+	if (IS_DEBUG) {
+		// Prompt the user for a label
+		const label = prompt('Please enter a label for this location:');
+
+		// Check if the user entered a label
+		if (label !== null) {
+			// Check if the user didn't cancel the prompt
+			const iconType = e.originalEvent.shiftKey ? 'user' : 'mapPin';
+			const placeType = e.originalEvent.shiftKey ? 'people' : 'place';
+
+			const output = JSON.stringify({
+				lat: e.latlng.lat,
+				lng: e.latlng.lng,
+				label: label, // Use the entered label
+				type: placeType,
+				icon: iconType,
+			});
+
+			console.log(output);
+
+			// Copy the output to the clipboard
+			navigator.clipboard
+				.writeText(output)
+				.then(() => {
+					console.log('Output copied to clipboard!');
+				})
+				.catch((err) => {
+					console.error('Failed to copy output: ', err);
+				});
+		} else {
+			console.log('Label input was canceled.');
+		}
+	}
+});
