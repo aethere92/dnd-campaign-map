@@ -1,75 +1,62 @@
-const originalImageWidth = 13458;
-const originalImageHeight = 6961;
-const maxZoom = 5;
+// Constants
+const ORIGINAL_IMAGE_WIDTH = 13458;
+const ORIGINAL_IMAGE_HEIGHT = 6961;
+const MAX_ZOOM = 5;
+const IS_DEBUG = false;
 
+// Map initialization
 const map = L.map('map', {
 	crs: L.CRS.Simple,
 	minZoom: 0,
-	maxZoom: maxZoom,
+	maxZoom: MAX_ZOOM,
+	zoomSnap: 1,
 });
 
-const southWest = map.unproject([0, originalImageHeight], maxZoom);
-const northEast = map.unproject([originalImageWidth, 0], maxZoom);
-const bounds = new L.LatLngBounds(southWest, northEast);
+const bounds = new L.LatLngBounds(map.unproject([0, ORIGINAL_IMAGE_HEIGHT], MAX_ZOOM), map.unproject([ORIGINAL_IMAGE_WIDTH, 0], MAX_ZOOM));
 
-map.setMaxBounds(bounds);
-map.fitBounds(bounds);
+map.setMaxBounds(bounds).fitBounds(bounds);
 
+// Custom tile layer
 L.TileLayer.CustomTileLayer = L.TileLayer.extend({
 	getTileUrl: function (coords) {
 		const zoom = this._getZoomForUrl();
 		const tileBounds = this._tileCoordsToBounds(coords);
 		const nw = this._map.project(tileBounds.getNorthWest(), zoom);
-		const se = this._map.project(tileBounds.getSouthEast(), zoom);
-		const tileWidth = se.x - nw.x;
-		const tileHeight = se.y - nw.y;
+		const tileSize = this.getTileSize();
 
-		const x = Math.floor(nw.x / tileWidth);
-		const y = Math.floor(nw.y / tileHeight);
+		const x = Math.floor(nw.x / tileSize.x);
+		const y = Math.floor(nw.y / tileSize.y);
 
-		return L.Util.template(
-			this._url,
-			L.extend(
-				{
-					s: this._getSubdomain(coords),
-					x: x,
-					y: y,
-					z: zoom,
-				},
-				this.options
-			)
-		);
+		return L.Util.template(this._url, {
+			s: this._getSubdomain(coords),
+			x: x,
+			y: y,
+			z: zoom,
+		});
 	},
 });
 
-L.tileLayer.customTileLayer = function (templateUrl, options) {
-	return new L.TileLayer.CustomTileLayer(templateUrl, options);
-};
+L.tileLayer.customTileLayer = (templateUrl, options) => new L.TileLayer.CustomTileLayer(templateUrl, options);
 
 L.tileLayer
 	.customTileLayer('tiles/{z}/{x}_{y}.png', {
 		minZoom: 0,
-		maxZoom: maxZoom,
+		maxZoom: MAX_ZOOM,
 		noWrap: true,
 		bounds: bounds,
 		attribution: "A quest, a questin' we shall go",
 	})
 	.addTo(map);
 
-L.setOptions(map, {
-	zoomSnap: 1,
-});
-
-// Coordinate display functionality
+// Coordinate display
 const coordinatesDiv = document.getElementById('coordinates');
-
-function updateCoordinates(e) {
+const updateCoordinates = (e) => {
 	const { lat, lng } = e.latlng;
 	coordinatesDiv.textContent = `Lat: ${lat.toFixed(2)}, Lng: ${lng.toFixed(2)}`;
-}
+};
 
 map.on('mousemove', updateCoordinates);
-map.on('click', updateCoordinates); // For mobile devices
+map.on('click', updateCoordinates);
 
 // Note-taking functionality
 const noteForm = document.getElementById('note-form');
@@ -78,24 +65,25 @@ const saveNoteButton = document.getElementById('save-note');
 const cancelNoteButton = document.getElementById('cancel-note');
 let currentMarker = null;
 
-function showNoteForm(e) {
+const noteLayer = L.layerGroup().addTo(map);
+
+const showNoteForm = (e) => {
 	noteForm.style.display = 'block';
 	currentMarker = e.latlng;
-	console.log(e.latlng);
-}
+};
 
-function hideNoteForm() {
+const hideNoteForm = () => {
 	noteForm.style.display = 'none';
 	noteContent.value = '';
 	currentMarker = null;
-}
+};
 
-function saveNote(e) {
+const saveNote = (e) => {
 	e.preventDefault();
 	if (!currentMarker) return;
 
 	const note = {
-		id: Date.now(), // Use timestamp as a unique identifier
+		id: Date.now(),
 		content: noteContent.value,
 		lat: currentMarker.lat,
 		lng: currentMarker.lng,
@@ -107,10 +95,10 @@ function saveNote(e) {
 
 	addNoteToMap(note);
 	hideNoteForm();
-}
+};
 
-function addNoteToMap(note) {
-	const marker = L.marker([note.lat, note.lng]).addTo(map);
+const addNoteToMap = (note) => {
+	const marker = L.marker([note.lat, note.lng]).addTo(noteLayer);
 	const popupContent = `
         <div>
             ${note.content}
@@ -119,68 +107,55 @@ function addNoteToMap(note) {
     `;
 	marker.bindPopup(popupContent);
 
-	marker.on('popupopen', function () {
+	marker.on('popupopen', () => {
 		const deleteButton = document.querySelector(`.delete-note[data-note-id="${note.id}"]`);
 		if (deleteButton) {
-			deleteButton.addEventListener('click', function () {
-				deleteNote(note.id, marker);
-			});
+			deleteButton.addEventListener('click', () => deleteNote(note.id, marker));
 		}
 	});
-}
+};
 
-function deleteNote(noteId, marker) {
+const deleteNote = (noteId, marker) => {
 	let notes = JSON.parse(localStorage.getItem('mapNotes')) || [];
 	notes = notes.filter((note) => note.id !== noteId);
 	localStorage.setItem('mapNotes', JSON.stringify(notes));
-	map.removeLayer(marker);
-}
+	noteLayer.removeLayer(marker);
+};
 
-function loadNotes() {
+const loadNotes = () => {
 	const notes = JSON.parse(localStorage.getItem('mapNotes')) || [];
 	notes.forEach(addNoteToMap);
-}
+};
 
+// Uncomment these lines to enable note-taking functionality
 // map.on('click', showNoteForm);
 // saveNoteButton.addEventListener('click', saveNote);
 // cancelNoteButton.addEventListener('click', hideNoteForm);
-
 // loadNotes();
 
-const IS_DEBUG = false;
-
-map.on('click', (e) => {
-	if (IS_DEBUG) {
-		// Prompt the user for a label
+// Debug mode
+if (IS_DEBUG) {
+	map.on('click', (e) => {
 		const label = prompt('Please enter a label for this location:');
-
-		// Check if the user entered a label
 		if (label !== null) {
-			// Check if the user didn't cancel the prompt
 			const iconType = e.originalEvent.shiftKey ? 'user' : 'mapPin';
 			const placeType = e.originalEvent.shiftKey ? 'people' : 'place';
 
 			const output = JSON.stringify({
 				lat: e.latlng.lat,
 				lng: e.latlng.lng,
-				label: label, // Use the entered label
+				label: label,
 				type: placeType,
 				icon: iconType,
 			});
 
 			console.log(output);
-
-			// Copy the output to the clipboard
 			navigator.clipboard
 				.writeText(output)
-				.then(() => {
-					console.log('Output copied to clipboard!');
-				})
-				.catch((err) => {
-					console.error('Failed to copy output: ', err);
-				});
+				.then(() => console.log('Output copied to clipboard!'))
+				.catch((err) => console.error('Failed to copy output: ', err));
 		} else {
 			console.log('Label input was canceled.');
 		}
-	}
-});
+	});
+}

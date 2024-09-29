@@ -127,3 +127,11 @@ html {
 .leaflet-container {
 	background-color: #e7dabb;
 }
+
+.custom-marker-icon {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	/* background: rgba(255 255 255 / 50%);
+	border-radius: 100%; */
+}
