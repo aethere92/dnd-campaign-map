@@ -11,6 +11,7 @@ const MAP_DATA = {
 	'Enemy NPCs': [{ lat: -95.65625, lng: 35.875, label: 'Lizardman', type: 'people', icon: 'cityLizard', iconType: 'png' }],
 	'Combat locations': [
 		{ lat: -172, lng: 265.75, label: 'Wolves', type: 'place', icon: 'poiCombat', iconType: 'png' },
+		{ lat: -104.3125, lng: 68.3125, label: 'Wolves', type: 'place', icon: 'poiCombat', iconType: 'png' },
 		{ lat: -82.25, lng: 72.75, label: 'Bandits', type: 'people', icon: 'poiCombat', iconType: 'png' },
 		{ lat: -116.25, lng: 48.5, label: 'Goblin camp', type: 'place', icon: 'poiCombat', iconType: 'png' },
 	],
