@@ -65,3 +65,7 @@ html {
 .delete-note:hover {
 	color: #333;
 }
+
+.leaflet-container {
+	background-color: #e8dbbb;
+}
