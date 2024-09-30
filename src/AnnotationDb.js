@@ -1,9 +1,9 @@
 const MAP_DATA = {
 	'Friendly NPCs': [
-		{ lat: -118.21875, lng: 189.59375, label: 'Darren', type: 'people', icon: 'poiGenericNPC', iconType: 'png' },
-		{ lat: -149.65625, lng: 134.875, label: 'Constantine', type: 'people', icon: 'poiGenericNPC', iconType: 'png' },
+		{ lat: -118.21875, lng: 189.59375, label: 'Darren (Fire mage)', type: 'people', icon: 'poiGenericNPC', iconType: 'png' },
+		{ lat: -149.65625, lng: 134.875, label: 'Constantine (Water mage)', type: 'people', icon: 'poiGenericNPC', iconType: 'png' },
 		{ lat: -139.65625, lng: 302.75, label: 'Erol (tablets)', type: 'place', icon: 'poiGenericNPC', iconType: 'png' },
-		{ lat: -81.03125, lng: 314.78125, label: 'Isgaroth (Red mage)', type: 'people', icon: 'poiGenericNPC', iconType: 'png' },
+		{ lat: -81.03125, lng: 314.78125, label: 'Isgaroth (Fire mage)', type: 'people', icon: 'poiGenericNPC', iconType: 'png' },
 		{ lat: -137.09375, lng: 117.9375, label: 'Bosper', type: 'people', icon: 'tradeHunter', iconType: 'png' },
 		{ lat: -146.5, lng: 126.0625, label: 'Thorben', type: 'people', icon: 'tradeAlchemy', iconType: 'png' },
 		{ lat: -110.5, lng: 135, label: 'Thoren', type: 'people', icon: 'tradeForge', iconType: 'png' },
@@ -26,7 +26,7 @@ const MAP_DATA = {
 		{ lat: -146.75, lng: 342.5, label: 'Inn', type: 'place', icon: 'poiBed', iconType: 'png' },
 		{ lat: -80.25, lng: 121.625, label: 'Harbour Inn', type: 'place', icon: 'poiBed', iconType: 'png' },
 		{ lat: -99, lng: 177, label: 'Paladin Barracks', type: 'place', icon: 'city', iconType: 'png' },
-		{ lat: -47.47, lng: 328, label: 'Monastery', type: 'place', icon: 'templeCathedral', iconType: 'png' },
+		{ lat: -47.47, lng: 328, label: 'Fire Mages Monastery', type: 'place', icon: 'templeCathedral', iconType: 'png' },
 		{ lat: -122.40625, lng: 102.96875, label: 'Pawn shop', type: 'place', icon: 'tradeShop', iconType: 'png' },
 		{ lat: -111.53125, lng: 252.3125, label: 'Sefob Farm', type: 'place', icon: 'poiFarm', iconType: 'png' },
 		{ lat: -144.5, lng: 32.625, label: 'Lobart Farm', type: 'place', icon: 'poiFarm', iconType: 'png' },
