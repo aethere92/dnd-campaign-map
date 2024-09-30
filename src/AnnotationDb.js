@@ -4,9 +4,9 @@ const MAP_DATA = {
 		{ lat: -149.65625, lng: 134.875, label: 'Constantine (Water mage)', type: 'people', icon: 'poiGenericNPC', iconType: 'png' },
 		{ lat: -139.65625, lng: 302.75, label: 'Erol (tablets)', type: 'place', icon: 'poiGenericNPC', iconType: 'png' },
 		{ lat: -81.03125, lng: 314.78125, label: 'Isgaroth (Fire mage)', type: 'people', icon: 'poiGenericNPC', iconType: 'png' },
-		{ lat: -137.09375, lng: 117.9375, label: 'Bosper', type: 'people', icon: 'tradeHunter', iconType: 'png' },
-		{ lat: -146.5, lng: 126.0625, label: 'Thorben', type: 'people', icon: 'tradeAlchemy', iconType: 'png' },
-		{ lat: -110.5, lng: 135, label: 'Thoren', type: 'people', icon: 'tradeForge', iconType: 'png' },
+		{ lat: -137.09375, lng: 117.9375, label: 'Bosper (Hunter)', type: 'people', icon: 'tradeHunter', iconType: 'png' },
+		{ lat: -146.5, lng: 126.0625, label: 'Thorben (Alchemist)', type: 'people', icon: 'tradeAlchemy', iconType: 'png' },
+		{ lat: -110.5, lng: 135, label: 'Thoren (Blacksmith)', type: 'people', icon: 'tradeForge', iconType: 'png' },
 	],
 	'Enemy NPCs': [{ lat: -95.65625, lng: 35.875, label: 'Lizardman', type: 'people', icon: 'cityLizard', iconType: 'png' }],
 	'Combat locations': [
