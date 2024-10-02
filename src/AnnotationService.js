@@ -1,53 +1,64 @@
 // Add custom markers (assuming MAP_DATA is defined elsewhere)
 const addAnnotations = () => {
-	const iconCache = {};
-	const layers = {};
+    const iconCache = {};
+    const layers = {};
+    const markers = [];
 
-	Object.entries(MAP_DATA).forEach(([category, points]) => {
-		layers[category] = L.layerGroup();
+    Object.entries(MAP_DATA).forEach(([category, points]) => {
+        layers[category] = L.layerGroup();
 
-		points.forEach((point) => {
-			const icon = getIcon(point.icon, point.iconColor, point.iconType);
-			const marker = L.marker([point.lat, point.lng], { icon }).bindPopup(point.label);
-			marker.addTo(layers[category]);
-		});
+        points.forEach((point) => {
+            const icon = getIcon(point.icon, point.iconColor, point.iconType);
+            const marker = L.marker([point.lat, point.lng], { icon }).bindPopup(point.label);
 
-		layers[category].addTo(map);
-	});
+            marker.on('add', () => {
+                const markerElement = marker.getElement();
+                if (markerElement) {
+                    markerElement.classList.add('custom-marker-class');
+                    markerElement.setAttribute('data-category', category);
+                    markerElement.setAttribute('data-label', point.label);
+                }
+            });
+            marker.addTo(layers[category]);
+            markers.push(marker);
+        });
 
-	L.control.layers(null, layers).addTo(map);
+        layers[category].addTo(map);
+    });
 
-	function getIcon(iconName, iconColor, iconType) {
-		let iconContent;
+    L.control.layers(null, layers).addTo(map);
 
-		const cacheKey = `${iconName}-${iconColor}`;
-		if (iconCache[cacheKey]) {
-			return iconCache[cacheKey];
-		}
+    function getIcon(iconName, iconColor, iconType) {
+        let iconContent;
 
-		if (!iconType || iconType === 'png') {
-			iconContent = `
+        const cacheKey = `${iconName}-${iconColor}`;
+        if (iconCache[cacheKey]) {
+            return iconCache[cacheKey];
+        }
+
+        if (!iconType || iconType === 'png') {
+            iconContent = `
             <div class="custom-marker-icon">
                 <img width="24px" src="images/custom-icons/${iconName}.png" />
             </div>`;
-		} else if (iconType === 'svg') {
-			iconContent = `
+        } else if (iconType === 'svg') {
+            iconContent = `
             <div class="custom-marker-icon">
                 ${SVG_ICON_DB[iconName]}
             </div>`;
-		}
+        }
 
-		const icon = L.divIcon({
-			className: 'marker',
-			html: iconContent,
-			iconSize: [25, 41],
-			iconAnchor: [12, 41],
-			popupAnchor: [1, -34],
-		});
+        const icon = L.divIcon({
+            className: 'marker',
+            html: iconContent,
+            iconSize: [25, 41],
+            iconAnchor: [12, 41],
+            popupAnchor: [1, -34],
+        });
 
-		iconCache[cacheKey] = icon;
-		return icon;
-	}
+        iconCache[cacheKey] = icon;
+        return icon;
+    }
 };
 
 // Call the function to add annotations
