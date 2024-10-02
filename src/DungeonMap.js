@@ -52,7 +52,7 @@ L.tileLayer
 const coordinatesDiv = document.getElementById('coordinates');
 const updateCoordinates = (e) => {
 	const { lat, lng } = e.latlng;
-	coordinatesDiv.textContent = `Lat: ${lat.toFixed(2)}, Lng: ${lng.toFixed(2)}`;
+	coordinatesDiv.innerHTML = `<span>Lat: ${lat.toFixed(2)}, Lng: ${lng.toFixed(2)}</span>`;
 };
 
 map.on('mousemove', updateCoordinates);
