@@ -1,32 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>D&D Campaign Map</title>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.css" />
-        <link rel="stylesheet" href="styles/styles.css" />
-        <link rel="icon" type="image/x-icon" href="images/pageicon.png" />
-        <script defer src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.js"></script>
-        <script defer src="src/SvgIcons.js"></script>
-        <script defer src="src/DungeonIcons.js"></script>
-        <script defer src="src/DungeonMap.js"></script>
-        <script defer src="src/AnnotationDb.js"></script>
-        <script defer src="src/AnnotationService.js"></script>
-        <script defer src="src/EventHandlers.js"></script>
-    </head>
-    <body>
-        <div id="map"></div>
-        <div id="actions">
-            <div id="buttons">
-                <button data-role="toggle-markers" class="button" data-toggled="off">Toggle names</button>
-            </div>
-            <div id="coordinates"></div>
-        </div>
-        <div id="note-form" style="display: none">
-            <textarea id="note-content" placeholder="Enter your note"></textarea>
-            <button id="save-note">Save Note</button>
-            <button id="cancel-note">Cancel</button>
-        </div>
-    </body>
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>D&D Campaign Map</title>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.css" />
+		<link rel="stylesheet" href="styles/styles.css" />
+		<link rel="icon" type="image/x-icon" href="images/pageicon.png" />
+		<script defer src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.js"></script>
+		<script defer src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+		<script defer src="src/SvgIcons.js"></script>
+		<script defer src="src/AnnotationDb.js"></script>
+		<script defer src="src/AnnotationService.js"></script>
+		<script defer src="src/DungeonIcons.js"></script>
+		<script defer src="src/DungeonMap.js"></script>
+		<script defer src="src/NoteManager.js"></script>
+		<script defer src="src/Initialization.js"></script>
+		<script defer src="src/EventHandlers.js"></script>
+	</head>
+	<body>
+		<div id="map"></div>
+		<div id="actions">
+			<div id="buttons">
+				<button data-role="toggle-markers" class="button" data-toggled="off">Toggle names</button>
+			</div>
+			<div id="coordinates"></div>
+		</div>
+		<div id="note-form" style="display: none">
+			<textarea id="note-content" placeholder="Enter your note"></textarea>
+			<button id="save-note">Save Note</button>
+			<button id="cancel-note">Cancel</button>
+		</div>
+	</body>
 </html>
