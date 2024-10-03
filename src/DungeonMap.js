@@ -413,12 +413,28 @@ class CustomMap {
 		return allLoaded;
 	}
 
+	// _downloadImage(canvas) {
+	// 	const link = document.createElement('a');
+	// 	const timestamp = new Date().toISOString().replace(/[:.-]/g, '');
+	// 	link.download = `dnd-campaign-map_${timestamp}.png`;
+	// 	link.href = canvas.toDataURL('image/png');
+	// 	link.click();
+	// }
+
 	_downloadImage(canvas) {
-		const link = document.createElement('a');
-		const timestamp = new Date().toISOString().replace(/[:.-]/g, '');
-		link.download = `dnd-campaign-map_${timestamp}.png`;
-		link.href = canvas.toDataURL('image/png');
-		link.click();
+		// Convert to JPEG and compress
+		canvas.toBlob(
+			(blob) => {
+				const link = document.createElement('a');
+				const timestamp = new Date().toISOString().replace(/[:.-]/g, '');
+				link.download = `dnd-campaign-map_${timestamp}.jpg`;
+				link.href = URL.createObjectURL(blob);
+				link.click();
+				URL.revokeObjectURL(link.href);
+			},
+			'image/jpeg',
+			0.9
+		); // 0.8 is the quality, adjust as needed
 	}
 
 	_testMarkerPositioning() {
