@@ -31,5 +31,6 @@ const MAP_DATA = {
 		{ lat: -111.53125, lng: 252.3125, label: 'Sefob Farm', type: 'place', icon: 'poiFarm', iconType: 'png' },
 		{ lat: -144.5, lng: 32.625, label: 'Lobart Farm', type: 'place', icon: 'poiFarm', iconType: 'png' },
 		{ lat: -198.75, lng: 282.25, label: 'Caves (scales + blue blood)', type: 'place', icon: 'poiCave', iconType: 'png' },
+		{ lat: -24.75, lng: 79.75, label: 'Paladin ship', type: 'place', icon: 'city' },
 	],
 };
