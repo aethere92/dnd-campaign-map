@@ -13,7 +13,15 @@ const MAP_DATA = {
 		{ lat: -172, lng: 265.75, label: 'Wolves', type: 'place', icon: 'poiCombat', iconType: 'png' },
 		{ lat: -104.3125, lng: 68.3125, label: 'Wolves', type: 'place', icon: 'poiCombat', iconType: 'png' },
 		{ lat: -82.25, lng: 72.75, label: 'Bandits', type: 'people', icon: 'poiCombat', iconType: 'png' },
-		{ lat: -116.25, lng: 48.5, label: 'Goblin camp', type: 'place', icon: 'poiCombat', iconType: 'png' },
+		{
+			lat: -116.25,
+			lng: 48.5,
+			label: 'Goblin camp',
+			type: 'place',
+			icon: 'poiCombat',
+			iconType: 'png',
+			description: `The adventurers, hoping to make a new ally, approached the lizardman with friendly intentions. However, their efforts were met with hostility as the lizardman attacked them. The battle was intense, with the group struggling to subdue their reptilian foe. Just as they seemed to gain the upper hand, a group of goblins ambushed them from the shadows. The adventurers fought valiantly, managing to defeat the goblins, but in the chaos, one of the goblins used a spell to explode nearby corpses, which killed the lizardman, whom they had been trying to keep alive.`,
+		},
 	],
 	'Navigation arrows': [
 		{ lat: -48.53125, lng: 369.65625, label: 'To Hunter Camp', type: 'place', icon: 'arrowUpRight', iconType: 'svg' },
