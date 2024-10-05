@@ -29,14 +29,16 @@ class AnnotationService {
 		// Create a new icon instance with the label
 		const labeledIcon = this._createLabeledIcon(icon, point.label);
 
-		const image = point.image ? `<img style="border-radius: 0.25rem;" src="images/assets/${point.image}" width="200"/>` : '';
-		const description = point.description ? `<span style="font-size: 8pt;">${point.description}</span>` : '';
+		const image = point.image ? `<img class="label-image" src="images/assets/${point.image}" width="200"/>` : '';
+		const description = point.description ? `<span class="label-description">${point.description}</span>` : '';
 
-		const label = `<div style="display: flex; flex-direction: column; gap: 0.25rem; align-items: center; justify-content: center; font-family: system-ui;">
-				<span style="font-size: 9pt;"><strong>${point.label}</strong></span>
-				${description}
-				${image}
-				</div>`;
+		const label = `<div class="label-container">
+				<span class="label-title">${point.label}</span>
+				<div class="label-container-body">
+					${image}
+					${description}
+				</div>
+			</div>`;
 
 		const marker = L.marker([point.lat, point.lng], { icon: labeledIcon }).bindPopup(label);
 

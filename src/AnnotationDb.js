@@ -21,6 +21,7 @@ const MAP_DATA = {
 			icon: 'poiCombat',
 			iconType: 'png',
 			description: `The adventurers, hoping to make a new ally, approached the lizardman with friendly intentions. However, their efforts were met with hostility as the lizardman attacked them. The battle was intense, with the group struggling to subdue their reptilian foe. Just as they seemed to gain the upper hand, a group of goblins ambushed them from the shadows. The adventurers fought valiantly, managing to defeat the goblins, but in the chaos, one of the goblins used a spell to explode nearby corpses, which killed the lizardman, whom they had been trying to keep alive.`,
+			image: 'goblin_camp_01.png',
 		},
 	],
 	'Navigation arrows': [
@@ -32,12 +33,21 @@ const MAP_DATA = {
 	'Points of interest': [
 		{ lat: -137.75, lng: 172.5, label: 'Inn', type: 'place', icon: 'poiBed', iconType: 'png' },
 		{ lat: -146.75, lng: 342.5, label: 'Inn', type: 'place', icon: 'poiBed', iconType: 'png' },
-		{ lat: -80.25, lng: 121.625, label: 'Harbour Inn', type: 'place', icon: 'poiBed', iconType: 'png' },
+		{ lat: -80.25, lng: 121.625, label: 'Harbour Inn', type: 'place', icon: 'poiBed', iconType: 'png', image: 'harbour_inn.png' },
 		{ lat: -99, lng: 177, label: 'Paladin Barracks', type: 'place', icon: 'city', iconType: 'png' },
 		{ lat: -47.47, lng: 328, label: 'Fire Mages Monastery', type: 'place', icon: 'templeCathedral', iconType: 'png' },
 		{ lat: -122.40625, lng: 102.96875, label: 'Pawn shop', type: 'place', icon: 'tradeShop', iconType: 'png' },
 		{ lat: -111.53125, lng: 252.3125, label: 'Sefob Farm', type: 'place', icon: 'poiFarm', iconType: 'png' },
-		{ lat: -144.5, lng: 32.625, label: 'Lobart Farm', type: 'place', icon: 'poiFarm', iconType: 'png' },
+		{
+			lat: -144.5,
+			lng: 32.625,
+			label: 'Lobart Farm',
+			type: 'place',
+			icon: 'poiFarm',
+			iconType: 'png',
+			description:
+				"The adventurers arrived at a farm on the outskirts of the city, seeking entry but lacking the necessary gold. Speaking with one of the farmers, they learned that the head farmer might offer them a way in. They approached him and were given a proposition: earn gold by helping with the crops and assisting the farmer's wife with her tasks.",
+		},
 		{ lat: -198.75, lng: 282.25, label: 'Caves (scales + blue blood)', type: 'place', icon: 'poiCave', iconType: 'png' },
 		{ lat: -24.75, lng: 79.75, label: 'Paladin ship', type: 'place', icon: 'city' },
 	],

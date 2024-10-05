@@ -1,0 +1,72 @@
+.label-container {
+	display: flex;
+	flex-direction: column;
+	gap: 0.25rem;
+	align-items: center;
+	justify-content: center;
+	font-family: system-ui, sans-serif;
+}
+
+.label-title {
+	font-weight: 600;
+	font-size: 9pt;
+}
+
+.label-description {
+	font-size: 8pt;
+	text-align: justify;
+	display: block;
+}
+
+.label-image {
+	display: block;
+	max-width: 230px;
+	max-height: 95px;
+	width: auto;
+	height: auto;
+
+	border-radius: 0.25rem;
+}
+
+.label-container-body:has(.label-description) .label-image {
+	margin-left: 0.75rem;
+	float: right;
+}
+
+.label-container-body {
+	/* display: flex; */
+	gap: 0.5rem;
+	max-height: 200px;
+	overflow: auto;
+
+	&:not(:has(> *)) {
+		display: none;
+	}
+
+	&:has(.label-description) {
+		padding: 0.5rem;
+		background: rgb(0 0 0 / 5%);
+		border-radius: 0.25rem;
+		border: 1px solid rgb(0 0 0 / 20%);
+	}
+}
+
+/* width */
+::-webkit-scrollbar {
+	width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+	background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+	background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+	background: #555;
+}
