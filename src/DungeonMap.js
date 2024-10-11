@@ -1,34 +1,39 @@
 // Constants
 const CONFIG = {
-	ORIGINAL_IMAGE_WIDTH: 13458,
-	ORIGINAL_IMAGE_HEIGHT: 6961,
-	MAX_ZOOM: 5,
+	TILE_SIZE: 256,
 	IS_DEBUG: false,
-	TILE_SIZE: 256, // Added constant for tile size
 };
 
 // Main Map Class
 class CustomMap {
-	constructor(mapElementId) {
+	constructor(mapElementId, initialMapKey = 'main') {
 		this.mapElementId = mapElementId;
 		this.exportButton = null;
-		this.annotationService = new AnnotationService(this.map);
-		this.init();
+		this.currentMapKey = null;
+		this.annotationService = null;
+		this.loadingIndicator = this._createLoadingIndicator();
+
+		window.customMap = this;
+		this.init(initialMapKey);
 	}
 
-	init() {
-		this.map = this._initializeMap();
-		this.bounds = this._calculateBounds();
-		this.noteLayer = L.layerGroup().addTo(this.map);
-		this.coordinatesDiv = document.getElementById('coordinates');
+	async init(mapKey) {
+		try {
+			this.map = this._initializeMap();
+			this.annotationService = new AnnotationService(this.map);
+			this.noteLayer = L.layerGroup().addTo(this.map);
+			this.coordinatesDiv = document.getElementById('coordinates');
 
-		this._setBoundsAndFit();
-		this._initializeEventListeners();
+			await this.loadMap(mapKey);
+			this._initializeEventListeners();
 
-		this.map.whenReady(() => {
-			this._createExportButton();
-			this.addTileLayer();
-		});
+			this.map.whenReady(() => {
+				this._createExportButton();
+			});
+		} catch (error) {
+			console.error('Error initializing map:', error);
+			this._hideLoadingIndicator();
+		}
 	}
 
 	_initializeMap() {
@@ -40,13 +45,194 @@ class CustomMap {
 		return L.map(this.mapElementId, {
 			crs: L.CRS.Simple,
 			minZoom: 0,
-			maxZoom: CONFIG.MAX_ZOOM,
 			zoomSnap: 1,
 		});
 	}
 
-	_calculateBounds() {
-		return new L.LatLngBounds(this.map.unproject([0, CONFIG.ORIGINAL_IMAGE_HEIGHT], CONFIG.MAX_ZOOM), this.map.unproject([CONFIG.ORIGINAL_IMAGE_WIDTH, 0], CONFIG.MAX_ZOOM));
+	addMapButton(mapKey, position = 'topleft', customLabel = null) {
+		if (!MAP_DATABASE[mapKey]) {
+			console.error(`Map key '${mapKey}' not found in MAP_DATABASE`);
+			return;
+		}
+
+		const mapButton = L.control({ position });
+		mapButton.onAdd = () => {
+			const container = L.DomUtil.create('div', 'leaflet-bar leaflet-control');
+			const button = L.DomUtil.create('button', 'leaflet-control-custom', container);
+			button.innerHTML = customLabel || mapKey.replace(/_/g, ' ');
+			button.style.cssText = 'background-color: white; padding: 5px 10px; cursor: pointer; border: none; border-radius: 0.25rem; font-family: system-ui;';
+
+			L.DomEvent.on(button, 'click', () => this.loadMap(mapKey));
+			L.DomEvent.disableClickPropagation(container);
+
+			return container;
+		};
+		mapButton.addTo(this.map);
+	}
+
+	async loadMap(mapKey) {
+		if (!MAP_DATABASE[mapKey]) {
+			throw new Error(`Map key '${mapKey}' not found in MAP_DATABASE`);
+		}
+
+		const mapConfig = MAP_DATABASE[mapKey];
+		this.currentMapKey = mapKey;
+
+		try {
+			this._showLoadingIndicator();
+
+			// Clear existing layers and controls
+			this.map.eachLayer((layer) => this.map.removeLayer(layer));
+			this._removeAllControls();
+
+			// Update map zoom settings
+			this.map.setMaxZoom(mapConfig.maxZoom);
+
+			// Initialize dimensions and update bounds
+			await this._initializeMapDimensions(mapConfig);
+			this.bounds = this._calculateBounds(mapConfig);
+			this._setBoundsAndFit();
+
+			// Add new tile layer
+			this.addTileLayer(mapConfig);
+
+			// Add back-to-main button if not on main map
+			if (mapKey !== 'main') {
+				this.addMapButton('main', 'topleft', 'Back to Main Map');
+			}
+
+			// Add annotations if they exist for this map
+			if (mapConfig.annotations) {
+				this.annotationService.addAnnotations(mapConfig.annotations);
+			}
+
+			this._setMapColor(mapConfig);
+
+			// Recreate export button
+			this._createExportButton();
+
+			// Set default zoom to half the maximum
+			this.map.setZoom(Math?.floor(mapConfig?.maxZoom / 2) ?? 1);
+		} catch (error) {
+			console.error('Error loading map:', error);
+		} finally {
+			this._hideLoadingIndicator();
+		}
+	}
+
+	_setMapColor(config) {
+		const map = document.getElementById('map');
+		if (!config.backgroundColor) map.style.background = '#e7dabb';
+		else map.style.background = config.backgroundColor;
+	}
+
+	_removeAllControls() {
+		// Remove export button
+		if (this.exportButton) {
+			this.exportButton.remove();
+			this.exportButton = null;
+		}
+
+		// Remove layer control
+		if (this.layerControl) {
+			this.map.removeControl(this.layerControl);
+			this.layerControl = null;
+		}
+
+		// Remove other controls
+		const controlContainers = document.querySelectorAll('.leaflet-control-container .leaflet-control');
+		controlContainers.forEach((container) => {
+			if (container.parentNode && !container.classList.contains('leaflet-control-zoom')) {
+				container.parentNode.removeChild(container);
+			}
+		});
+	}
+
+	_createLoadingIndicator() {
+		const loadingDiv = document.createElement('div');
+		loadingDiv.className = 'map-loading-indicator';
+		loadingDiv.innerHTML = 'Loading map...';
+		loadingDiv.style.cssText = `
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            z-index: 1000;
+            font-family: system-ui;
+        `;
+		return loadingDiv;
+	}
+
+	_showLoadingIndicator() {
+		const mapElement = document.getElementById(this.mapElementId);
+		if (mapElement && this.loadingIndicator) {
+			mapElement.appendChild(this.loadingIndicator);
+			this.loadingIndicator.style.display = 'block';
+		}
+	}
+
+	_hideLoadingIndicator() {
+		if (this.loadingIndicator) {
+			this.loadingIndicator.style.display = 'none';
+			if (this.loadingIndicator.parentNode) {
+				this.loadingIndicator.parentNode.removeChild(this.loadingIndicator);
+			}
+		}
+	}
+
+	async _initializeMapDimensions(mapConfig) {
+		try {
+			// Start with default dimensions
+			let maxX = 0;
+			let maxY = 0;
+
+			// Check for tiles at max zoom level
+			const z = mapConfig.maxZoom;
+
+			// First, scan horizontally to find the maximum X
+			let x = 0;
+			while (true) {
+				try {
+					await this._loadTile(x, 0, z, mapConfig.path);
+					x++;
+				} catch (error) {
+					maxX = x;
+					break;
+				}
+			}
+
+			// Then, scan vertically to find the maximum Y
+			let y = 0;
+			while (true) {
+				try {
+					await this._loadTile(0, y, z, mapConfig.path);
+					y++;
+				} catch (error) {
+					maxY = y;
+					break;
+				}
+			}
+
+			// Calculate actual image dimensions
+			mapConfig.imageWidth = maxX * CONFIG.TILE_SIZE;
+			mapConfig.imageHeight = maxY * CONFIG.TILE_SIZE;
+
+			console.log(`Map dimensions calculated: ${mapConfig.imageWidth}x${mapConfig.imageHeight}`);
+		} catch (error) {
+			console.error('Error initializing map dimensions:', error);
+			// Set default dimensions if calculation fails
+			mapConfig.imageWidth = CONFIG.TILE_SIZE;
+			mapConfig.imageHeight = CONFIG.TILE_SIZE;
+		}
+	}
+
+	_calculateBounds(mapConfig) {
+		return new L.LatLngBounds(this.map.unproject([0, mapConfig.imageHeight], mapConfig.maxZoom), this.map.unproject([mapConfig.imageWidth, 0], mapConfig.maxZoom));
 	}
 
 	_setBoundsAndFit() {
@@ -68,10 +254,10 @@ class CustomMap {
 		}
 	}
 
-	addTileLayer() {
-		const customTileLayer = new CustomTileLayer('tiles/{z}/{x}_{y}.png', {
+	addTileLayer(mapConfig) {
+		const customTileLayer = new CustomTileLayer(`${mapConfig.path}/{z}/{x}_{y}.png`, {
 			minZoom: 0,
-			maxZoom: CONFIG.MAX_ZOOM,
+			maxZoom: mapConfig.maxZoom,
 			noWrap: true,
 			bounds: this.bounds,
 			attribution: "A quest, a questin' we shall go",
@@ -117,15 +303,16 @@ class CustomMap {
 			const zoomSelect = L.DomUtil.create('select', 'leaflet-control-custom', container);
 			zoomSelect.style.cssText = 'display: block; width: 100%; padding: 5px; border: none; border-radius: 0.25rem; color: black; font-family: system-ui';
 
-			// Add zoom level options
-			for (let i = 0; i <= CONFIG.MAX_ZOOM; i++) {
+			// Add zoom level options based on current map config
+			const currentMapConfig = MAP_DATABASE[this.currentMapKey];
+			for (let i = 0; i <= currentMapConfig.maxZoom; i++) {
 				const option = L.DomUtil.create('option', '', zoomSelect);
 				option.value = i;
 				option.text = `Zoom ${i + 1}`;
 			}
 
 			// Set default value to max zoom
-			zoomSelect.value = CONFIG.MAX_ZOOM;
+			zoomSelect.value = currentMapConfig.maxZoom;
 
 			L.DomEvent.on(button, 'click', () => this._handleExportClick(parseInt(zoomSelect.value)));
 			L.DomEvent.disableClickPropagation(container);
@@ -161,6 +348,7 @@ class CustomMap {
 
 	async _setMapForExport(exportZoom) {
 		return new Promise((resolve) => {
+			const currentMapConfig = MAP_DATABASE[this.currentMapKey];
 			this.map.setZoom(exportZoom);
 			this.map.panTo(this.bounds.getCenter());
 
@@ -182,10 +370,11 @@ class CustomMap {
 	}
 
 	async _captureMap(exportModal, exportZoom) {
-		const scale = Math.pow(2, CONFIG.MAX_ZOOM - exportZoom);
+		const currentMapConfig = MAP_DATABASE[this.currentMapKey];
+		const scale = Math.pow(2, currentMapConfig.maxZoom - exportZoom);
 		const canvas = document.createElement('canvas');
-		canvas.width = CONFIG.ORIGINAL_IMAGE_WIDTH / scale;
-		canvas.height = CONFIG.ORIGINAL_IMAGE_HEIGHT / scale;
+		canvas.width = currentMapConfig.imageWidth / scale;
+		canvas.height = currentMapConfig.imageHeight / scale;
 		const ctx = canvas.getContext('2d');
 
 		const tileSize = CONFIG.TILE_SIZE;
@@ -193,32 +382,34 @@ class CustomMap {
 		const tilesY = Math.ceil(canvas.height / tileSize);
 
 		let loadedTiles = 0;
-		const markers = this.annotationService.getMarkers(this.map);
+		const totalTiles = tilesX * tilesY;
 
 		for (let y = 0; y < tilesY; y++) {
 			for (let x = 0; x < tilesX; x++) {
 				try {
-					const tile = await this._loadTile(x, y, exportZoom);
+					const tile = await this._loadTile(x, y, exportZoom, currentMapConfig.path);
 					ctx.drawImage(tile, x * tileSize, y * tileSize);
 					loadedTiles++;
-					exportModal.show(`Exporting map... ${((loadedTiles / (tilesX * tilesY)) * 100).toFixed(2)}% complete`);
+					exportModal.show(`Exporting map... ${((loadedTiles / totalTiles) * 100).toFixed(1)}% complete`);
 				} catch (error) {
 					console.error(`Failed to load tile at x: ${x}, y: ${y}`, error);
 				}
 			}
 		}
 
-		// Render all markers after all tiles have been drawn
-		await Promise.all(
-			markers.map(async (marker, index) => {
-				console.log(`Rendering marker ${index + 1}/${markers.length}`);
-				try {
-					await this._renderCustomMarker(ctx, marker, 1 / scale, exportZoom);
-				} catch (error) {
-					console.error(`Failed to render marker ${index + 1}:`, error);
-				}
-			})
-		);
+		// Handle markers if needed
+		if (this.annotationService) {
+			const markers = this.annotationService.getMarkers(this.map);
+			await Promise.all(
+				markers.map(async (marker, index) => {
+					try {
+						await this._renderCustomMarker(ctx, marker, 1 / scale, exportZoom);
+					} catch (error) {
+						console.error(`Failed to render marker ${index + 1}:`, error);
+					}
+				})
+			);
+		}
 
 		return canvas;
 	}
@@ -358,13 +549,16 @@ class CustomMap {
 		});
 	}
 
-	async _loadTile(x, y, z) {
+	async _loadTile(x, y, z, path) {
 		return new Promise((resolve, reject) => {
 			const img = new Image();
 			img.crossOrigin = 'anonymous';
 			img.onload = () => resolve(img);
-			img.onerror = reject;
-			img.src = `tiles/${z}/${x}_${y}.png`;
+			img.onerror = () => reject(new Error(`Tile not found at ${x},${y},${z}`));
+			img.src = `${path}/${z}/${x}_${y}.png`;
+
+			// Add a timeout to prevent hanging
+			setTimeout(() => reject(new Error('Tile load timeout')), 2000);
 		});
 	}
 
@@ -422,19 +616,19 @@ class CustomMap {
 	// }
 
 	_downloadImage(canvas) {
-		// Convert to JPEG and compress
 		canvas.toBlob(
 			(blob) => {
 				const link = document.createElement('a');
 				const timestamp = new Date().toISOString().replace(/[:.-]/g, '');
-				link.download = `dnd-campaign-map_${timestamp}.jpg`;
+				const mapName = this.currentMapKey || 'map';
+				link.download = `${mapName}_${timestamp}.jpg`;
 				link.href = URL.createObjectURL(blob);
 				link.click();
 				URL.revokeObjectURL(link.href);
 			},
 			'image/jpeg',
 			0.9
-		); // 0.8 is the quality, adjust as needed
+		);
 	}
 
 	_testMarkerPositioning() {
@@ -542,3 +736,5 @@ class ExportModal {
 		this.modal.style.display = 'none';
 	}
 }
+
+L.Control.prototype.setPosition('center');

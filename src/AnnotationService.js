@@ -6,14 +6,42 @@ class AnnotationService {
 		this.markers = [];
 	}
 
-	addAnnotations(mapData) {
-		Object.entries(mapData).forEach(([category, points]) => {
+	addAnnotations(annotationsData) {
+		// Clear existing layers and markers
+		this.clearLayers();
+
+		Object.entries(annotationsData).forEach(([category, points]) => {
 			this.layers[category] = L.layerGroup();
 			this._addPointsToLayer(category, points);
 			this.layers[category].addTo(this.map);
 		});
 
-		L.control.layers(null, this.layers).addTo(this.map);
+		if (Object.keys(this.layers).length > 0) {
+			// Store the layer control in the CustomMap instance
+			this.map.layerControl = L.control.layers(null, this.layers).addTo(this.map);
+		}
+	}
+
+	clearLayers() {
+		Object.values(this.layers).forEach((layer) => {
+			this.map.removeLayer(layer);
+		});
+		this.layers = {};
+		this.markers = [];
+	}
+
+	addMapLinkToMarker(annotation) {
+		const marker = this.markers.find((m) => m.getLatLng().lat === annotation.lat && m.getLatLng().lng === annotation.lng);
+
+		if (marker) {
+			const originalPopupContent = marker.getPopup().getContent();
+			const linkButton = `<button onclick="customMap.loadMap('${annotation.mapLink}')" 
+                                       class="map-button">
+                                  Go to map
+                               </button>`;
+
+			marker.bindPopup(originalPopupContent + linkButton);
+		}
 	}
 
 	_addPointsToLayer(category, points) {
@@ -31,13 +59,15 @@ class AnnotationService {
 
 		const image = point.image ? `<img class="label-image" src="images/assets/${point.image}" width="200"/>` : '';
 		const description = point.description ? `<span class="label-description">${point.description}</span>` : '';
+		const mapLink = point.mapLink ? `<button onclick="customMap.loadMap('${point.mapLink}')" class="map-button">Go to map</button>` : '';
 
-		const label = `<div class="label-container">
+		const label = `<div class='label-container'>
 				<span class="label-title">${point.label}</span>
 				<div class="label-container-body">
 					${image}
 					${description}
 				</div>
+					${mapLink}
 			</div>`;
 
 		const marker = L.marker([point.lat, point.lng], { icon: labeledIcon }).bindPopup(label);
@@ -48,6 +78,10 @@ class AnnotationService {
 				markerElement.classList.add('custom-marker-class');
 				markerElement.setAttribute('data-category', category);
 				markerElement.setAttribute('data-label', point.label);
+
+				if (point.mapLink) {
+					markerElement.classList.add('has-map');
+				}
 			}
 		});
 
