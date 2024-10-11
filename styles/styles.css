@@ -183,11 +183,11 @@ html {
 		border: 1px solid #7b4122;
 		color: #753818;
 		bottom: 0;
-		right: 0;
+		right: -0.5rem;
 		font-size: 8pt;
 		font-family: Calibri;
 		font-weight: 600;
-		border-radius: 100%;
+		border-radius: 0.25rem;
 		height: 14px;
 		width: 14px;
 		text-align: center;

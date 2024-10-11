@@ -43,7 +43,7 @@ const MAP_DATABASE = {
 			'Points of interest': [
 				{ lat: -137.75, lng: 172.5, label: 'Inn', type: 'place', icon: 'poiBed', iconType: 'png', mapLink: 'main_town_inn' },
 				{ lat: -146.75, lng: 342.5, label: 'Inn', type: 'place', icon: 'poiBed', iconType: 'png' },
-				{ lat: -80.25, lng: 121.625, label: 'Harbour Inn', type: 'place', icon: 'poiBed', iconType: 'png', image: 'harbour_inn.png' },
+				{ lat: -80.25, lng: 121.625, label: 'Harbour Inn', type: 'place', icon: 'poiBed', iconType: 'png', image: 'harbour_inn.png', mapLink: 'main_town_harbour_inn' },
 				{ lat: -99, lng: 177, label: 'Paladin Barracks', type: 'place', icon: 'city', iconType: 'png' },
 				{ lat: -47.47, lng: 328, label: 'Fire Mages Monastery', type: 'place', icon: 'templeCathedral', iconType: 'png' },
 				{ lat: -122.40625, lng: 102.96875, label: 'Pawn shop', type: 'place', icon: 'tradeShop', iconType: 'png' },
@@ -84,6 +84,15 @@ const MAP_DATABASE = {
 			maxZoom: 3,
 			imageWidth: 3328,
 			imageHeight: 3328,
+		},
+		backgroundColor: 'linear-gradient(0deg, #292315, #0c0805)',
+	},
+	main_town_harbour_inn: {
+		path: 'maps/interiors/taverns/main-town-harbour-inn',
+		sizes: {
+			maxZoom: 3,
+			imageWidth: 4352,
+			imageHeight: 4608,
 		},
 		backgroundColor: 'linear-gradient(0deg, #292315, #0c0805)',
 	},
