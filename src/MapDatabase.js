@@ -2,7 +2,11 @@
 const MAP_DATABASE = {
 	main: {
 		path: 'maps/main',
-		maxZoom: 5,
+		sizes: {
+			maxZoom: 5,
+			imageWidth: 13568,
+			imageHeight: 7168,
+		},
 		backgroundColor: '#e7dabb',
 		annotations: {
 			'Friendly NPCs': [
@@ -61,7 +65,11 @@ const MAP_DATABASE = {
 	},
 	bandits_01: {
 		path: 'maps/encounters/bandits/01',
-		maxZoom: 3,
+		sizes: {
+			maxZoom: 3,
+			imageWidth: 4864,
+			imageHeight: 2048,
+		},
 		backgroundColor: 'linear-gradient(0deg, #292315, #0c0805)',
 		annotations: {
 			'Navigation arrows': [
@@ -72,12 +80,20 @@ const MAP_DATABASE = {
 	},
 	main_town_inn: {
 		path: 'maps/interiors/taverns/main-town-inn',
-		maxZoom: 3,
+		sizes: {
+			maxZoom: 3,
+			imageWidth: 3328,
+			imageHeight: 3328,
+		},
 		backgroundColor: 'linear-gradient(0deg, #292315, #0c0805)',
 	},
 	main_town_blacksmith: {
 		path: 'maps/interiors/blacksmiths/main-town-blacksmith',
-		maxZoom: 3,
+		sizes: {
+			maxZoom: 3,
+			imageWidth: 3584,
+			imageHeight: 2304,
+		},
 		backgroundColor: 'linear-gradient(0deg, #292315, #0c0805)',
 	},
 };

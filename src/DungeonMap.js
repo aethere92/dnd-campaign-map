@@ -86,10 +86,15 @@ class CustomMap {
 			this._removeAllControls();
 
 			// Update map zoom settings
-			this.map.setMaxZoom(mapConfig.maxZoom);
+			this.map.setMaxZoom(mapConfig.sizes.maxZoom);
 
 			// Initialize dimensions and update bounds
-			await this._initializeMapDimensions(mapConfig);
+			if (!mapConfig.sizes.imageWidth && !mapConfig.sizes.imageHeight) {
+				await this._initializeMapDimensions(mapConfig);
+			} else {
+				mapConfig.imageWidth = mapConfig.sizes.imageWidth;
+				mapConfig.imageHeight = mapConfig.sizes.imageHeight;
+			}
 			this.bounds = this._calculateBounds(mapConfig);
 			this._setBoundsAndFit();
 
@@ -112,7 +117,7 @@ class CustomMap {
 			this._createExportButton();
 
 			// Set default zoom to half the maximum
-			this.map.setZoom(Math?.floor(mapConfig?.maxZoom / 2) ?? 1);
+			this.map.setZoom(Math?.floor(mapConfig?.sizes?.maxZoom / 2) ?? 1);
 		} catch (error) {
 			console.error('Error loading map:', error);
 		} finally {
@@ -192,7 +197,7 @@ class CustomMap {
 			let maxY = 0;
 
 			// Check for tiles at max zoom level
-			const z = mapConfig.maxZoom;
+			const z = mapConfig.sizes.maxZoom;
 
 			// First, scan horizontally to find the maximum X
 			let x = 0;
@@ -232,7 +237,7 @@ class CustomMap {
 	}
 
 	_calculateBounds(mapConfig) {
-		return new L.LatLngBounds(this.map.unproject([0, mapConfig.imageHeight], mapConfig.maxZoom), this.map.unproject([mapConfig.imageWidth, 0], mapConfig.maxZoom));
+		return new L.LatLngBounds(this.map.unproject([0, mapConfig.imageHeight], mapConfig.sizes.maxZoom), this.map.unproject([mapConfig.imageWidth, 0], mapConfig.sizes.maxZoom));
 	}
 
 	_setBoundsAndFit() {
@@ -257,7 +262,7 @@ class CustomMap {
 	addTileLayer(mapConfig) {
 		const customTileLayer = new CustomTileLayer(`${mapConfig.path}/{z}/{x}_{y}.png`, {
 			minZoom: 0,
-			maxZoom: mapConfig.maxZoom,
+			maxZoom: mapConfig.sizes.maxZoom,
 			noWrap: true,
 			bounds: this.bounds,
 			attribution: "A quest, a questin' we shall go",
@@ -305,14 +310,14 @@ class CustomMap {
 
 			// Add zoom level options based on current map config
 			const currentMapConfig = MAP_DATABASE[this.currentMapKey];
-			for (let i = 0; i <= currentMapConfig.maxZoom; i++) {
+			for (let i = 0; i <= currentMapConfig.sizes.maxZoom; i++) {
 				const option = L.DomUtil.create('option', '', zoomSelect);
 				option.value = i;
 				option.text = `Zoom ${i + 1}`;
 			}
 
 			// Set default value to max zoom
-			zoomSelect.value = currentMapConfig.maxZoom;
+			zoomSelect.value = currentMapConfig.sizes.maxZoom;
 
 			L.DomEvent.on(button, 'click', () => this._handleExportClick(parseInt(zoomSelect.value)));
 			L.DomEvent.disableClickPropagation(container);
