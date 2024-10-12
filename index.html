@@ -7,15 +7,19 @@
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.css" />
 		<link rel="stylesheet" href="styles/styles.css" />
 		<link rel="icon" type="image/x-icon" href="images/pageicon.png" />
+		<!-- IMPORTS -->
 		<script defer src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.js"></script>
-		<script defer src="src/SvgIcons.js"></script>
-		<script defer src="src/MapDatabase.js"></script>
-		<script defer src="src/AnnotationService.js"></script>
-		<script defer src="src/DungeonIcons.js"></script>
-		<script defer src="src/DungeonMap.js"></script>
-		<script defer src="src/NoteManager.js"></script>
-		<script defer src="src/Initialization.js"></script>
-		<script defer src="src/EventHandlers.js"></script>
+		<!-- DATABASES -->
+		<script defer src="src/databases/SvgIconsDb.js"></script>
+		<script defer src="src/databases/MapsDb.js"></script>
+		<script defer src="src/databases/DungeonIconsDb.js"></script>
+		<!-- CORE SERVICES -->
+		<script defer src="src/services/annotations/AnnotationService.js"></script>
+		<script defer src="src/services/map/DungeonMapServices.js"></script>
+		<script defer src="src/services/notes/NoteManager.js"></script>
+		<!-- CORE SCRIPTS -->
+		<script defer src="src/core/Initialization.js"></script>
+		<script defer src="src/core/EventHandlers.js"></script>
 	</head>
 	<body>
 		<div id="map"></div>
