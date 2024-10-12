@@ -12,7 +12,6 @@
 		<!-- DATABASES -->
 		<script defer src="src/databases/SvgIconsDb.js"></script>
 		<script defer src="src/databases/MapsDb.js"></script>
-		<script defer src="src/databases/DungeonIconsDb.js"></script>
 		<!-- CORE SERVICES -->
 		<script defer src="src/services/annotations/AnnotationService.js"></script>
 		<script defer src="src/services/map/DungeonMapServices.js"></script>
@@ -25,9 +24,15 @@
 		<div id="map"></div>
 		<div id="actions">
 			<div id="buttons">
-				<button data-role="toggle-markers" class="button" data-toggled="off">Toggle names</button>
+				<button
+					data-role="toggle-markers"
+					class="button"
+					style="border: 2px solid rgba(0, 0, 0, 0.2); background-clip: padding-box"
+					data-toggled="off">
+					Toggle names
+				</button>
 			</div>
-			<div id="coordinates"></div>
+			<div id="coordinates" style="border: 2px solid rgba(0, 0, 0, 0.2); background-clip: padding-box"></div>
 		</div>
 		<div id="note-form" style="display: none">
 			<textarea id="note-content" placeholder="Enter your note"></textarea>

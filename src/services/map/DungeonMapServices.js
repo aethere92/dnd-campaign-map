@@ -316,12 +316,13 @@ class CustomMap {
 
 			const button = L.DomUtil.create('button', 'leaflet-control-custom', container);
 			button.innerHTML = 'Export Map';
+			button.classList.add('button');
 			button.style.cssText =
-				'background-color: white; padding: 5px 10px; cursor: pointer; display: block; margin-bottom: 5px; border: none; border-radius: 0.25rem; font-family: system-ui;';
+				'background-color: white; color: ; padding: 5px 10px; cursor: pointer; display: block; margin-bottom: 5px; border: 2px solid rgba(0, 0, 0, 0.2); background-clip: padding-box; border-radius: 0.25rem; font-family: system-ui;';
 
 			const zoomSelect = L.DomUtil.create('select', 'leaflet-control-custom', container);
 			zoomSelect.style.cssText =
-				'display: block; width: 100%; padding: 5px; border: none; border-radius: 0.25rem; color: black; font-family: system-ui';
+				'display: block; width: 100%; padding: 5px; border: 2px solid rgba(0, 0, 0, 0.2); background-clip: padding-box; border-radius: 0.25rem; color: black; font-family: system-ui';
 
 			// Add zoom level options based on current map config
 			const currentMapConfig = this._getMapConfig(this.currentMapKey);
