@@ -6,7 +6,7 @@ const CONFIG = {
 
 // Main Map Class
 class CustomMap {
-	constructor(mapElementId, initialMapKey = 'main') {
+	constructor(mapElementId, initialMapKey = 'world_maps.main_map_01') {
 		this.mapElementId = mapElementId;
 		this.exportButton = null;
 		this.currentMapKey = null;
@@ -50,7 +50,7 @@ class CustomMap {
 	}
 
 	addMapButton(mapKey, position = 'topleft', customLabel = null) {
-		if (!MAP_DATABASE[mapKey]) {
+		if (!this._getMapConfig(mapKey)) {
 			console.error(`Map key '${mapKey}' not found in MAP_DATABASE`);
 			return;
 		}
@@ -59,8 +59,9 @@ class CustomMap {
 		mapButton.onAdd = () => {
 			const container = L.DomUtil.create('div', 'leaflet-bar leaflet-control');
 			const button = L.DomUtil.create('button', 'leaflet-control-custom', container);
-			button.innerHTML = customLabel || mapKey.replace(/_/g, ' ');
-			button.style.cssText = 'background-color: white; padding: 5px 10px; cursor: pointer; border: none; border-radius: 0.25rem; font-family: system-ui;';
+			button.innerHTML = customLabel || mapKey.split('.').pop().replace(/_/g, ' ');
+			button.style.cssText =
+				'background-color: white; padding: 5px 10px; cursor: pointer; border: none; border-radius: 0.25rem; font-family: system-ui;';
 
 			L.DomEvent.on(button, 'click', () => this.loadMap(mapKey));
 			L.DomEvent.disableClickPropagation(container);
@@ -71,11 +72,11 @@ class CustomMap {
 	}
 
 	async loadMap(mapKey) {
-		if (!MAP_DATABASE[mapKey]) {
+		const mapConfig = this._getMapConfig(mapKey);
+		if (!mapConfig) {
 			throw new Error(`Map key '${mapKey}' not found in MAP_DATABASE`);
 		}
 
-		const mapConfig = MAP_DATABASE[mapKey];
 		this.currentMapKey = mapKey;
 
 		try {
@@ -86,15 +87,11 @@ class CustomMap {
 			this._removeAllControls();
 
 			// Update map zoom settings
-			this.map.setMaxZoom(mapConfig.sizes.maxZoom);
+			this.map.setMaxZoom(mapConfig.metadata.sizes.maxZoom);
 
 			// Initialize dimensions and update bounds
-			if (!mapConfig.sizes.imageWidth && !mapConfig.sizes.imageHeight) {
-				await this._initializeMapDimensions(mapConfig);
-			} else {
-				mapConfig.imageWidth = mapConfig.sizes.imageWidth;
-				mapConfig.imageHeight = mapConfig.sizes.imageHeight;
-			}
+			mapConfig.imageWidth = mapConfig.metadata.sizes.imageWidth;
+			mapConfig.imageHeight = mapConfig.metadata.sizes.imageHeight;
 			this.bounds = this._calculateBounds(mapConfig);
 			this._setBoundsAndFit();
 
@@ -102,8 +99,8 @@ class CustomMap {
 			this.addTileLayer(mapConfig);
 
 			// Add back-to-main button if not on main map
-			if (mapKey !== 'main') {
-				this.addMapButton('main', 'topleft', 'Back to Main Map');
+			if (mapKey !== 'world_maps.main_map_01') {
+				this.addMapButton('world_maps.main_map_01', 'topleft', 'Back to Main Map');
 			}
 
 			// Add annotations if they exist for this map
@@ -117,7 +114,7 @@ class CustomMap {
 			this._createExportButton();
 
 			// Set default zoom to half the maximum
-			this.map.setZoom(Math?.floor(mapConfig?.sizes?.maxZoom / 2) ?? 1);
+			this.map.setZoom(Math.floor(mapConfig.metadata.sizes.maxZoom / 2) ?? 1);
 		} catch (error) {
 			console.error('Error loading map:', error);
 		} finally {
@@ -127,8 +124,21 @@ class CustomMap {
 
 	_setMapColor(config) {
 		const map = document.getElementById('map');
-		if (!config.backgroundColor) map.style.background = '#e7dabb';
-		else map.style.background = config.backgroundColor;
+		if (!config.metadata.backgroundColor) map.style.background = '#e7dabb';
+		else map.style.background = config.metadata.backgroundColor;
+	}
+
+	_getMapConfig(mapKey) {
+		const keys = mapKey.split('.');
+		let config = MAP_DATABASE;
+		for (const key of keys) {
+			if (config[key]) {
+				config = config[key];
+			} else {
+				return null;
+			}
+		}
+		return config;
 	}
 
 	_removeAllControls() {
@@ -197,7 +207,7 @@ class CustomMap {
 			let maxY = 0;
 
 			// Check for tiles at max zoom level
-			const z = mapConfig.sizes.maxZoom;
+			const z = mapConfig.metadata.sizes.maxZoom;
 
 			// First, scan horizontally to find the maximum X
 			let x = 0;
@@ -237,7 +247,10 @@ class CustomMap {
 	}
 
 	_calculateBounds(mapConfig) {
-		return new L.LatLngBounds(this.map.unproject([0, mapConfig.imageHeight], mapConfig.sizes.maxZoom), this.map.unproject([mapConfig.imageWidth, 0], mapConfig.sizes.maxZoom));
+		return new L.LatLngBounds(
+			this.map.unproject([0, mapConfig.imageHeight], mapConfig.metadata.sizes.maxZoom),
+			this.map.unproject([mapConfig.imageWidth, 0], mapConfig.metadata.sizes.maxZoom)
+		);
 	}
 
 	_setBoundsAndFit() {
@@ -260,9 +273,9 @@ class CustomMap {
 	}
 
 	addTileLayer(mapConfig) {
-		const customTileLayer = new CustomTileLayer(`${mapConfig.path}/{z}/{x}_{y}.png`, {
+		const customTileLayer = new CustomTileLayer(`${mapConfig.metadata.path}/{z}/{x}_{y}.png`, {
 			minZoom: 0,
-			maxZoom: mapConfig.sizes.maxZoom,
+			maxZoom: mapConfig.metadata.sizes.maxZoom,
 			noWrap: true,
 			bounds: this.bounds,
 			attribution: "A quest, a questin' we shall go",
@@ -303,21 +316,23 @@ class CustomMap {
 
 			const button = L.DomUtil.create('button', 'leaflet-control-custom', container);
 			button.innerHTML = 'Export Map';
-			button.style.cssText = 'background-color: white; padding: 5px 10px; cursor: pointer; display: block; margin-bottom: 5px; border: none; border-radius: 0.25rem; font-family: system-ui;';
+			button.style.cssText =
+				'background-color: white; padding: 5px 10px; cursor: pointer; display: block; margin-bottom: 5px; border: none; border-radius: 0.25rem; font-family: system-ui;';
 
 			const zoomSelect = L.DomUtil.create('select', 'leaflet-control-custom', container);
-			zoomSelect.style.cssText = 'display: block; width: 100%; padding: 5px; border: none; border-radius: 0.25rem; color: black; font-family: system-ui';
+			zoomSelect.style.cssText =
+				'display: block; width: 100%; padding: 5px; border: none; border-radius: 0.25rem; color: black; font-family: system-ui';
 
 			// Add zoom level options based on current map config
-			const currentMapConfig = MAP_DATABASE[this.currentMapKey];
-			for (let i = 0; i <= currentMapConfig.sizes.maxZoom; i++) {
+			const currentMapConfig = this._getMapConfig(this.currentMapKey);
+			for (let i = 0; i <= currentMapConfig.metadata.sizes.maxZoom; i++) {
 				const option = L.DomUtil.create('option', '', zoomSelect);
 				option.value = i;
 				option.text = `Zoom ${i + 1}`;
 			}
 
 			// Set default value to max zoom
-			zoomSelect.value = currentMapConfig.sizes.maxZoom;
+			zoomSelect.value = currentMapConfig.metadata.sizes.maxZoom;
 
 			L.DomEvent.on(button, 'click', () => this._handleExportClick(parseInt(zoomSelect.value)));
 			L.DomEvent.disableClickPropagation(container);
@@ -353,7 +368,6 @@ class CustomMap {
 
 	async _setMapForExport(exportZoom) {
 		return new Promise((resolve) => {
-			const currentMapConfig = MAP_DATABASE[this.currentMapKey];
 			this.map.setZoom(exportZoom);
 			this.map.panTo(this.bounds.getCenter());
 
@@ -375,11 +389,11 @@ class CustomMap {
 	}
 
 	async _captureMap(exportModal, exportZoom) {
-		const currentMapConfig = MAP_DATABASE[this.currentMapKey];
-		const scale = Math.pow(2, currentMapConfig.maxZoom - exportZoom);
+		const currentMapConfig = this._getMapConfig(this.currentMapKey);
+		const scale = Math.pow(2, currentMapConfig.metadata.sizes.maxZoom - exportZoom);
 		const canvas = document.createElement('canvas');
-		canvas.width = currentMapConfig.imageWidth / scale;
-		canvas.height = currentMapConfig.imageHeight / scale;
+		canvas.width = currentMapConfig.metadata.sizes.imageWidth / scale;
+		canvas.height = currentMapConfig.metadata.sizes.imageHeight / scale;
 		const ctx = canvas.getContext('2d');
 
 		const tileSize = CONFIG.TILE_SIZE;
@@ -392,7 +406,7 @@ class CustomMap {
 		for (let y = 0; y < tilesY; y++) {
 			for (let x = 0; x < tilesX; x++) {
 				try {
-					const tile = await this._loadTile(x, y, exportZoom, currentMapConfig.path);
+					const tile = await this._loadTile(x, y, exportZoom, currentMapConfig.metadata.path);
 					ctx.drawImage(tile, x * tileSize, y * tileSize);
 					loadedTiles++;
 					exportModal.show(`Exporting map... ${((loadedTiles / totalTiles) * 100).toFixed(1)}% complete`);
@@ -677,7 +691,9 @@ class CustomMap {
 			ctx.font = '12px Arial';
 			ctx.fillText(`Marker ${index + 1}`, point.x + 6, point.y);
 
-			console.log(`Marker ${index + 1}: LatLng(${markerLatLng.lat}, ${markerLatLng.lng}) -> Pixel(${point.x}, ${point.y})`);
+			console.log(
+				`Marker ${index + 1}: LatLng(${markerLatLng.lat}, ${markerLatLng.lng}) -> Pixel(${point.x}, ${point.y})`
+			);
 		});
 
 		// Open the canvas in a new window

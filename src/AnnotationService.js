@@ -10,10 +10,10 @@ class AnnotationService {
 		// Clear existing layers and markers
 		this.clearLayers();
 
-		Object.entries(annotationsData).forEach(([category, points]) => {
-			this.layers[category] = L.layerGroup();
-			this._addPointsToLayer(category, points);
-			this.layers[category].addTo(this.map);
+		Object.entries(annotationsData).forEach(([categoryKey, category]) => {
+			this.layers[category.name] = L.layerGroup();
+			this._addPointsToLayer(categoryKey, category.items, category.name);
+			this.layers[category.name].addTo(this.map);
 		});
 
 		if (Object.keys(this.layers).length > 0) {
@@ -44,16 +44,16 @@ class AnnotationService {
 		}
 	}
 
-	_addPointsToLayer(category, points) {
+	_addPointsToLayer(categoryKey, points, categoryName) {
 		points.forEach((point) => {
 			const icon = this._getIcon(point.icon, point.iconColor, point.iconType);
-			const marker = this._createMarker(point, icon, category);
-			marker.addTo(this.layers[category]);
+			const marker = this._createMarker(point, icon, categoryKey, categoryName);
+			marker.addTo(this.layers[categoryName]);
 			this.markers.push(marker);
 		});
 	}
 
-	_createMarker(point, icon, category) {
+	_createMarker(point, icon, categoryKey, categoryName) {
 		// Create a new icon instance with the label
 		const labeledIcon = this._createLabeledIcon(icon, point.label);
 
@@ -76,7 +76,8 @@ class AnnotationService {
 			const markerElement = marker.getElement();
 			if (markerElement) {
 				markerElement.classList.add('custom-marker-class');
-				markerElement.setAttribute('data-category', category);
+				markerElement.setAttribute('data-category', categoryKey);
+				markerElement.setAttribute('data-category-name', categoryName);
 				markerElement.setAttribute('data-label', point.label);
 
 				if (point.mapLink) {
@@ -181,6 +182,12 @@ class AnnotationService {
 		if (filterCriteria.category) {
 			const markerCategory = markerElement.getAttribute('data-category');
 			matches = matches && markerCategory === filterCriteria.category;
+		}
+
+		// Check for category name filter
+		if (filterCriteria.categoryName) {
+			const markerCategoryName = markerElement.getAttribute('data-category-name');
+			matches = matches && markerCategoryName === filterCriteria.categoryName;
 		}
 
 		// Check for label filter
