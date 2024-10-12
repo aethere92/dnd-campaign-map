@@ -71,7 +71,14 @@ const MAP_DATABASE = {
 							iconType: 'png',
 							mapLink: 'world_maps.main_map_01.submaps.interiors.main_map_interior_blacksmith',
 						},
-						{ lat: -95.75, lng: 35.9375, label: 'Lizardman', type: 'people', icon: 'cityLizard' },
+						{
+							lat: -95.75,
+							lng: 35.9375,
+							label: 'Lizardman',
+							type: 'people',
+							icon: 'cityLizard',
+							iconType: 'png',
+						},
 					],
 				},
 				points_of_interest: {
