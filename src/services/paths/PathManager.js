@@ -8,8 +8,6 @@ class PathManager {
 
 		this.pathMasterGroup = L.layerGroup();
 		this.pathGroups = {};
-
-		this.init();
 	}
 
 	init() {
@@ -29,7 +27,6 @@ class PathManager {
 	}
 
 	_initializeGeoman() {
-		// Initialize leaflet-geoman
 		this.map.pm.addControls({
 			position: 'topleft',
 			drawMarker: false,
@@ -38,7 +35,7 @@ class PathManager {
 			drawRectangle: false,
 			drawCircle: false,
 			editMode: true,
-			dragMode: false,
+			dragMode: true,
 			cutPolygon: false,
 			removalMode: true,
 		});
@@ -111,7 +108,6 @@ class PathManager {
 			name: `Path ${this.paths.length + 1}`,
 			points: latlngs.map((latlng) => ({
 				coordinates: [latlng.lat, latlng.lng],
-				text: null,
 			})),
 		};
 	}
@@ -150,10 +146,11 @@ class PathManager {
 			const pathGroup = L.layerGroup();
 			const latlngs = pathData.points.map((point) => point.coordinates);
 			const path = L.polyline(latlngs, {
-				color: '#F15B50',
+				color: pathData?.lineColor || '#F15B50',
 				weight: 2,
 				opacity: 0.9,
 				dashArray: [5, 5],
+				smoothFactor: 3,
 			});
 			pathGroup.addLayer(path);
 
@@ -167,6 +164,11 @@ class PathManager {
 							html: `${pathTextIndex}`,
 						}),
 					}).bindPopup(point.text);
+
+					markerDot.on('add', () => {
+						const markerElement = markerDot.getElement();
+						markerElement.style.backgroundColor = pathData?.lineColor ?? '#F15B50';
+					});
 					pathGroup.addLayer(markerDot);
 				}
 			});

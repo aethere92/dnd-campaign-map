@@ -180,7 +180,8 @@ const MAP_DATABASE = {
 			},
 			paths: [
 				{
-					name: 'Session 1 highlights',
+					name: 'Session 1 Recap',
+					lineColor: '#F15B50',
 					points: [
 						{ coordinates: [-134.125, 5.625] },
 						{ coordinates: [-133.125, 34.75] },
@@ -215,6 +216,147 @@ const MAP_DATABASE = {
 						{
 							coordinates: [-130.875, 167.625],
 							text: 'Walked into the inn and slept. During the night, some of the gold and some of our belongings were stolen.',
+						},
+					],
+				},
+				{
+					name: 'Session 3 Recap',
+					lineColor: '#2898BD',
+					points: [
+						{
+							coordinates: [-137.75, 172.5],
+							text: 'Woken up, the party decided to go into the woods and gather the plants that were requested by the alchemist.',
+						},
+						{
+							coordinates: [-130.25, 166.5],
+						},
+						{
+							coordinates: [-124.4375, 177.0625],
+						},
+						{
+							coordinates: [-131.5, 189.625],
+						},
+						{
+							coordinates: [-132.9375, 210.4375],
+							text: 'On the way out of the city, guards stopped them and asked them what they were doing. Upon learning they were headed into the forest, the guards wished them good luck.',
+						},
+						{
+							coordinates: [-133.1875, 302.875],
+						},
+						{
+							coordinates: [-133, 218.75],
+						},
+						{
+							coordinates: [-136.6875, 221.4375],
+							text: 'The party ventured into the forest down this path.',
+						},
+						{
+							coordinates: [-137.9375, 235.5],
+						},
+						{
+							coordinates: [-143.8125, 240.4375],
+						},
+						{
+							coordinates: [-152.3125, 242.75],
+						},
+						{
+							coordinates: [-159.6875, 239.375],
+						},
+						{
+							coordinates: [-164.125, 231.9375],
+						},
+						{
+							coordinates: [-171.9375, 229.4375],
+						},
+						{
+							coordinates: [-180.75, 231.5625],
+						},
+						{
+							coordinates: [-186.4375, 242.3125],
+						},
+						{
+							coordinates: [-185.3125, 252.9375],
+						},
+						{
+							coordinates: [-181.125, 262.3125],
+						},
+						{
+							coordinates: [-172, 265.75],
+							text: 'They attacked a pack of wolves which were roaming around in the forest. The battle was fierce, but they were victorious. They managed to find hides, which would prove useful to gain apprenticeship.',
+						},
+						{
+							coordinates: [-183.5625, 268.125],
+						},
+						{
+							coordinates: [-190.3125, 274.125],
+						},
+						{
+							coordinates: [-198.75, 282.25],
+							text: 'Entering the nearby caves, they saw what looked like blue blood - lizardmen blood, and a few creatures which looked way too powerful for them to handle.',
+						},
+						{
+							coordinates: [-174.3125, 285.375],
+						},
+						{
+							coordinates: [-139.65625, 302.75],
+							text: 'Near the bridge, they met Erol, who had been robbed by the bandits on the bridge nearby. He had a broken leg, which the party Cleric mended.',
+						},
+						{
+							coordinates: [-133.125, 299.9375],
+						},
+						{
+							coordinates: [-132.8125, 330.75],
+						},
+						{
+							coordinates: [-126.3125, 337.6875],
+							text: "At the crossroads, they took a left turn to go towards the Fire Mages Monastery, in order to seek a Fire Mage's blessing.",
+						},
+						{
+							coordinates: [-100.5625, 338],
+						},
+						{
+							coordinates: [-81.625, 335.25],
+						},
+						{
+							coordinates: [-81.4375, 325.25],
+						},
+						{
+							coordinates: [-83.3125, 315.9375],
+							text: 'They saw Isgaroth, a Fire Mage, who was doing a prayer. They waited for two hours for the prayer to finish and after that they received the Fire Mage blessing for free, as they had made the trip to the Monastery.',
+						},
+						{
+							coordinates: [-81.03125, 314.78125],
+						},
+						{
+							coordinates: [-82.3125, 315.4375],
+						},
+						{
+							coordinates: [-81.03125, 314.78125],
+						},
+						{
+							coordinates: [-83.3125, 315.9375],
+						},
+						{
+							coordinates: [-81.4375, 325.25],
+						},
+						{
+							coordinates: [-81.625, 335.25],
+						},
+						{
+							coordinates: [-100.5625, 338],
+						},
+						{
+							coordinates: [-126.3125, 337.6875],
+						},
+						{
+							coordinates: [-132.8125, 330.75],
+						},
+						{
+							coordinates: [-140.09375, 339.4375],
+						},
+						{
+							coordinates: [-146.75, 342.5],
+							text: 'The party checked out the inn at the crossroads, looking for a place to spend the night in, but the prices were too steep for them, so they went back in town.',
 						},
 					],
 				},

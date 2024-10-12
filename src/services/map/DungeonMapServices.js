@@ -13,6 +13,7 @@ class CustomMap {
 		this.annotationService = null;
 		this.pathManager = null;
 		this.loadingIndicator = this._createLoadingIndicator();
+		this.isDebugMode = isDebugMode;
 
 		window.customMap = this;
 		this.init(initialMapKey);
@@ -113,6 +114,7 @@ class CustomMap {
 			this._setMapColor(mapConfig);
 
 			if (mapConfig.paths) {
+				this.pathManager.init();
 				this.pathManager.loadPaths(mapConfig.paths);
 			}
 
