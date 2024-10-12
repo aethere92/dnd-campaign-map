@@ -3,3 +3,11 @@
 	color: #4a2c12;
 	font-family: system-ui;
 }
+
+.layer-group-pois a {
+	background-image: url('../images/icons/map-pin.svg') !important;
+}
+
+.layer-group-overviews a {
+	background-image: url('../images/icons/book.svg') !important;
+}

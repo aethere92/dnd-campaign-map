@@ -178,6 +178,77 @@ const MAP_DATABASE = {
 					],
 				},
 			},
+			paths: [
+				{
+					name: 'Session 1 highlights',
+					points: [
+						{
+							coordinates: [-134.125, 5.625],
+							text: null,
+						},
+						{
+							coordinates: [-133.125, 34.75],
+							text: null,
+						},
+						{
+							coordinates: [-139.625, 42.875],
+							text: "Reached Lombart farm and talked to its master. Learned the cost of entry into the city and were told to do deeds to gain money for it. Talked to the lead farmer's wife and got a task from her.",
+						},
+						{
+							coordinates: [-129.84, 63.5],
+							text: "Down the road, we met a merchant which sold us entry to the city for a favour once inside. Also got a pan for the lead farmer's wife as part of her task.",
+						},
+						{
+							coordinates: [-150.75, 61.5],
+							text: "We went back to the farmer's wife and gave her the pan. She gave us food to eat. After that, we talked to the lead farmer again and slept in the barn.",
+						},
+						{
+							coordinates: [-133.375, 69.125],
+							text: null,
+						},
+						{
+							coordinates: [-132.75, 90.125],
+							text: 'Talked to the guards and showed them our entry pass. They allowed us into the city.',
+						},
+						{
+							coordinates: [-132.5, 106.75],
+							text: 'Talked to the master paladin guarding the door and learned of the city rules and some whereabouts of the locations we were interested in.',
+						},
+						{
+							coordinates: [-127.25, 117.125],
+							text: null,
+						},
+						{
+							coordinates: [-127.75, 129.875],
+							text: null,
+						},
+						{
+							coordinates: [-140.875, 144.375],
+							text: null,
+						},
+						{
+							coordinates: [-140.75, 152.25],
+							text: null,
+						},
+						{
+							coordinates: [-134.375, 158.25],
+							text: null,
+						},
+						{
+							coordinates: [-128.375, 159.75],
+							text: null,
+						},
+						{
+							coordinates: [-126.75, 164.375],
+							text: null,
+						},
+						{
+							coordinates: [-130.875, 167.625],
+							text: 'Walked into the inn and slept. During the night, some of the gold and some of our belongings were stolen.',
+						},
+					],
+				},
+			],
 			submaps: {
 				interiors: {
 					main_map_interior_town_inn: {

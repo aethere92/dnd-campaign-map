@@ -19,6 +19,11 @@ class AnnotationService {
 		if (Object.keys(this.layers).length > 0) {
 			// Store the layer control in the CustomMap instance
 			this.map.layerControl = L.control.layers(null, this.layers).addTo(this.map);
+
+			const layerControlContainer = this.map.layerControl.getContainer();
+			if (layerControlContainer) {
+				layerControlContainer.classList.add('layer-group-pois');
+			}
 		}
 	}
 
@@ -28,20 +33,6 @@ class AnnotationService {
 		});
 		this.layers = {};
 		this.markers = [];
-	}
-
-	addMapLinkToMarker(annotation) {
-		const marker = this.markers.find((m) => m.getLatLng().lat === annotation.lat && m.getLatLng().lng === annotation.lng);
-
-		if (marker) {
-			const originalPopupContent = marker.getPopup().getContent();
-			const linkButton = `<button onclick="customMap.loadMap('${annotation.mapLink}')" 
-                                       class="map-button">
-                                  Go to map
-                               </button>`;
-
-			marker.bindPopup(originalPopupContent + linkButton);
-		}
 	}
 
 	_addPointsToLayer(categoryKey, points, categoryName) {
@@ -59,7 +50,9 @@ class AnnotationService {
 
 		const image = point.image ? `<img class="label-image" src="images/assets/${point.image}" width="200"/>` : '';
 		const description = point.description ? `<span class="label-description">${point.description}</span>` : '';
-		const mapLink = point.mapLink ? `<button onclick="customMap.loadMap('${point.mapLink}')" class="map-button">Go to map</button>` : '';
+		const mapLink = point.mapLink
+			? `<button onclick="customMap.loadMap('${point.mapLink}')" class="map-button">Go to map</button>`
+			: '';
 
 		const label = `<div class='label-container'>
 				<span class="label-title">${point.label}</span>

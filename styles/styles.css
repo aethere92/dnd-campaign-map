@@ -197,3 +197,26 @@ html {
 		background: #d4a76d;
 	}
 }
+
+.path-text-label span {
+	display: flex;
+	background: rgba(255 255 255 / 80%);
+	width: max-content;
+	max-width: 25ch;
+	font-size: 8pt;
+	font-family: system-ui;
+	padding: 0.25rem 0.5rem;
+	border-radius: 0.5rem;
+	margin-top: 1rem;
+	/* max-height: 50px;
+	overflow: auto; */
+}
+
+.path-text-dot {
+	background: #f15b50;
+	border-radius: 100%;
+	text-align: center;
+	line-height: 12px;
+	font-size: 8pt;
+	color: white;
+}

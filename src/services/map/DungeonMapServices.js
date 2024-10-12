@@ -6,11 +6,12 @@ const CONFIG = {
 
 // Main Map Class
 class CustomMap {
-	constructor(mapElementId, initialMapKey = 'world_maps.main_map_01') {
+	constructor(mapElementId, initialMapKey = 'world_maps.main_map_01', isDebugMode = false) {
 		this.mapElementId = mapElementId;
 		this.exportButton = null;
 		this.currentMapKey = null;
 		this.annotationService = null;
+		this.pathManager = null;
 		this.loadingIndicator = this._createLoadingIndicator();
 
 		window.customMap = this;
@@ -21,6 +22,7 @@ class CustomMap {
 		try {
 			this.map = this._initializeMap();
 			this.annotationService = new AnnotationService(this.map);
+			this.pathManager = new PathManager(this.map, this.isDebugMode);
 			this.noteLayer = L.layerGroup().addTo(this.map);
 			this.coordinatesDiv = document.getElementById('coordinates');
 
@@ -109,6 +111,10 @@ class CustomMap {
 			}
 
 			this._setMapColor(mapConfig);
+
+			if (mapConfig.paths) {
+				this.pathManager.loadPaths(mapConfig.paths);
+			}
 
 			// Recreate export button
 			this._createExportButton();
@@ -627,14 +633,6 @@ class CustomMap {
 		return allLoaded;
 	}
 
-	// _downloadImage(canvas) {
-	// 	const link = document.createElement('a');
-	// 	const timestamp = new Date().toISOString().replace(/[:.-]/g, '');
-	// 	link.download = `dnd-campaign-map_${timestamp}.png`;
-	// 	link.href = canvas.toDataURL('image/png');
-	// 	link.click();
-	// }
-
 	_downloadImage(canvas) {
 		canvas.toBlob(
 			(blob) => {
@@ -758,5 +756,3 @@ class ExportModal {
 		this.modal.style.display = 'none';
 	}
 }
-
-L.Control.prototype.setPosition('center');
