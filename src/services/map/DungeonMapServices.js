@@ -293,21 +293,23 @@ class CustomMap {
 	}
 
 	async _handleDebugClick(e) {
-		const label = prompt('Please enter a label for this location:');
-		if (label === null) return;
+		// const label = prompt('Please enter a label for this location:');
+		// if (label === null) return;
 
-		const { shiftKey } = e.originalEvent;
-		const output = JSON.stringify({
-			lat: e.latlng.lat,
-			lng: e.latlng.lng,
-			label,
-			type: shiftKey ? 'people' : 'place',
-			icon: shiftKey ? 'user' : 'mapPin',
-		});
+		// const { shiftKey } = e.originalEvent;
+		// const output = JSON.stringify({
+		// 	lat: e.latlng.lat,
+		// 	lng: e.latlng.lng,
+		// 	label,
+		// 	type: shiftKey ? 'people' : 'place',
+		// 	icon: shiftKey ? 'user' : 'mapPin',
+		// });
 
-		console.log(output);
+		// console.log(output);
+		console.log(`"lat":${e.latlng.lat}, "lng":${e.latlng.lng},`);
 		try {
-			await navigator.clipboard.writeText(output);
+			// await navigator.clipboard.writeText(output);
+			await navigator.clipboard.writeText(`"lat":${e.latlng.lat}, "lng":${e.latlng.lng},`);
 			console.log('Output copied to clipboard!');
 		} catch (err) {
 			console.error('Failed to copy output: ', err);
