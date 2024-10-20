@@ -237,11 +237,11 @@ const MAP_DATABASE = {
 						{
 							lat: -67.0,
 							lng: 44.81,
-							label: 'Main town of Lustria',
+							label: 'Main town of Korinis',
 							type: 'landmark',
 							icon: 'poiLandmarks',
 							iconType: 'png',
-							description: `The main town of Lustria is a captivating town of contrasts. Nestled between the open waters and rugged hills, its bustling harbour is alive with the scent of saltwater and the sounds of merchants peddling their wares amidst poverty and resourcefulness. The lower city, a maze of alleys and market squares, thrives with commerce and crafts, shadowed by the vigilant paladins who ensure safety at the cost of freedom. The upper city, dominated by the paladins' formidable barracks, exudes grandeur and control, with wide streets and grand homes. In this town of Lustria, prosperity and poverty coexist, and every street tells a story.`,
+							description: `The main town of Korinis is a captivating town of contrasts. Nestled between the open waters and rugged hills, its bustling harbour is alive with the scent of saltwater and the sounds of merchants peddling their wares amidst poverty and resourcefulness. The lower city, a maze of alleys and market squares, thrives with commerce and crafts, shadowed by the vigilant paladins who ensure safety at the cost of freedom. The upper city, dominated by the paladins' formidable barracks, exudes grandeur and control, with wide streets and grand homes. In this town of Lustria, prosperity and poverty coexist, and every street tells a story.`,
 						},
 					],
 				},
