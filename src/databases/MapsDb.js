@@ -8,7 +8,7 @@ const MAP_DATABASE = {
 					imageWidth: 13095,
 					imageHeight: 8054,
 				},
-				backgroundColor: '#e7dabb',
+				backgroundColor: '#ecdbb7',
 			},
 			annotations: {
 				npcs: {

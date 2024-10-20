@@ -402,14 +402,55 @@ class CustomMap {
 	async _captureMap(exportModal, exportZoom) {
 		const currentMapConfig = this._getMapConfig(this.currentMapKey);
 		const scale = Math.pow(2, currentMapConfig.metadata.sizes.maxZoom - exportZoom);
+		let canvasWidth = currentMapConfig.metadata.sizes.imageWidth / scale;
+		let canvasHeight = currentMapConfig.metadata.sizes.imageHeight / scale;
+
+		// Determine if the image is landscape or portrait
+		const isLandscape = canvasWidth > canvasHeight;
+
+		// Calculate the aspect ratio for A4 (1:√2 for portrait, √2:1 for landscape)
+		const targetAspectRatio = isLandscape ? Math.sqrt(2) : 1 / Math.sqrt(2);
+		const currentAspectRatio = canvasWidth / canvasHeight;
+
+		// Adjust canvas size to match the target aspect ratio while maintaining the larger dimension
+		if (isLandscape) {
+			if (currentAspectRatio > targetAspectRatio) {
+				// Current image is wider, adjust height
+				canvasHeight = canvasWidth / targetAspectRatio;
+			} else {
+				// Current image is taller, adjust width
+				canvasWidth = canvasHeight * targetAspectRatio;
+			}
+		} else {
+			if (currentAspectRatio < targetAspectRatio) {
+				// Current image is taller, adjust width
+				canvasWidth = canvasHeight * targetAspectRatio;
+			} else {
+				// Current image is wider, adjust height
+				canvasHeight = canvasWidth / targetAspectRatio;
+			}
+		}
+
+		// Round dimensions to whole numbers
+		canvasWidth = Math.round(canvasWidth);
+		canvasHeight = Math.round(canvasHeight);
+
 		const canvas = document.createElement('canvas');
-		canvas.width = currentMapConfig.metadata.sizes.imageWidth / scale;
-		canvas.height = currentMapConfig.metadata.sizes.imageHeight / scale;
+		canvas.width = canvasWidth;
+		canvas.height = canvasHeight;
 		const ctx = canvas.getContext('2d');
 
+		// Fill the canvas with a background color (e.g., white)
+		ctx.fillStyle = document.getElementById('map').style.background;
+		ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+
 		const tileSize = CONFIG.TILE_SIZE;
-		const tilesX = Math.ceil(canvas.width / tileSize);
-		const tilesY = Math.ceil(canvas.height / tileSize);
+		const tilesX = Math.ceil(currentMapConfig.metadata.sizes.imageWidth / scale / tileSize);
+		const tilesY = Math.ceil(currentMapConfig.metadata.sizes.imageHeight / scale / tileSize);
+
+		// Calculate offset to center the original content
+		const offsetX = (canvasWidth - currentMapConfig.metadata.sizes.imageWidth / scale) / 2;
+		const offsetY = (canvasHeight - currentMapConfig.metadata.sizes.imageHeight / scale) / 2;
 
 		let loadedTiles = 0;
 		const totalTiles = tilesX * tilesY;
@@ -418,7 +459,7 @@ class CustomMap {
 			for (let x = 0; x < tilesX; x++) {
 				try {
 					const tile = await this._loadTile(x, y, exportZoom, currentMapConfig.metadata.path);
-					ctx.drawImage(tile, x * tileSize, y * tileSize);
+					ctx.drawImage(tile, x * tileSize + offsetX, y * tileSize + offsetY);
 					loadedTiles++;
 					exportModal.show(`Exporting map... ${((loadedTiles / totalTiles) * 100).toFixed(1)}% complete`);
 				} catch (error) {
@@ -433,7 +474,7 @@ class CustomMap {
 			await Promise.all(
 				markers.map(async (marker, index) => {
 					try {
-						await this._renderCustomMarker(ctx, marker, 1 / scale, exportZoom);
+						await this._renderCustomMarker(ctx, marker, 1 / scale, exportZoom, offsetX, offsetY);
 					} catch (error) {
 						console.error(`Failed to render marker ${index + 1}:`, error);
 					}
@@ -444,12 +485,12 @@ class CustomMap {
 		return canvas;
 	}
 
-	async _renderCustomMarker(ctx, marker, scale = 1, exportZoom) {
+	async _renderCustomMarker(ctx, marker, scale = 1, exportZoom, offsetX = 0, offsetY = 0) {
 		const markerLatLng = marker.getLatLng();
 		const point = this.map.project(markerLatLng, exportZoom);
 
-		const x = Math.round(point.x);
-		const y = Math.round(point.y);
+		const x = Math.round(point.x) + offsetX;
+		const y = Math.round(point.y) + offsetY;
 
 		const icon = marker.options.icon;
 
