@@ -1,7 +1,29 @@
 .leaflet-popup-content-wrapper {
-	background: #f0e6d2;
+	background: #e4d8b7;
+
 	color: #4a2c12;
 	font-family: system-ui;
+
+	/* max-height: 200px; */
+
+	/* &:has(.label-container-body) {
+		box-shadow: none;
+		background: transparent;
+		background-image: url('/images/assets/parchment_texture.png');
+		background-size: cover;
+		background-repeat: no-repeat;
+		background-position: center start;
+		background-attachment: fixed;
+	}
+
+	&:has(.label-container-body > *) {
+		padding: 1rem;
+
+		& .label-title {
+			font-size: 1rem;
+			margin-top: 0.5rem;
+		}
+	} */
 }
 
 .layer-group-pois a {
@@ -10,4 +32,8 @@
 
 .layer-group-overviews a {
 	background-image: url('../images/icons/book.svg') !important;
+}
+
+.leaflet-container a.leaflet-popup-close-button {
+	color: #3d2816;
 }

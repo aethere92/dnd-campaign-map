@@ -48,13 +48,37 @@ class AnnotationService {
 		// Create a new icon instance with the label
 		const labeledIcon = this._createLabeledIcon(icon, point.label);
 
+		let label;
+		let marker;
+
 		const image = point.image ? `<img class="label-image" src="images/assets/${point.image}" width="200"/>` : '';
 		const description = point.description ? `<span class="label-description">${point.description}</span>` : '';
 		const mapLink = point.mapLink
 			? `<button onclick="customMap.loadMap('${point.mapLink}')" class="map-button">Go to map</button>`
 			: '';
 
-		const label = `<div class='label-container'>
+		if (categoryKey === 'landmarks') {
+			label = `
+				<div class="sidebar-content">
+					<span class="label-title">${point.label}</span>
+					<span class="label-separator"></span>
+					<div class="label-container-body">
+						${image}
+						${description}
+					</div>
+					<span class="label-separator"></span>
+					${mapLink}
+				</div>
+			`;
+
+			marker = L.marker([point.lat, point.lng], { icon: labeledIcon });
+
+			marker.on('click', (e) => {
+				this._openSidebar(label);
+				L.DomEvent.stopPropagation(e);
+			});
+		} else {
+			label = `<div class='label-container'>
 				<span class="label-title">${point.label}</span>
 				<div class="label-container-body">
 					${image}
@@ -63,7 +87,8 @@ class AnnotationService {
 					${mapLink}
 			</div>`;
 
-		const marker = L.marker([point.lat, point.lng], { icon: labeledIcon }).bindPopup(label);
+			marker = L.marker([point.lat, point.lng], { icon: labeledIcon }).bindPopup(label);
+		}
 
 		marker.on('add', () => {
 			const markerElement = marker.getElement();
@@ -80,6 +105,37 @@ class AnnotationService {
 		});
 
 		return marker;
+	}
+
+	_openSidebar(content) {
+		let sidebar = document.getElementById('landmark-sidebar');
+		if (!sidebar) {
+			sidebar = document.createElement('div');
+			sidebar.id = 'landmark-sidebar';
+			sidebar.className = 'landmark-sidebar';
+			document.body.appendChild(sidebar);
+
+			const closeButton = document.createElement('button');
+			closeButton.textContent = 'Close';
+			closeButton.className = 'sidebar-close';
+			closeButton.onclick = () => this._closeSidebar();
+			sidebar.appendChild(closeButton);
+
+			const contentDiv = document.createElement('div');
+			contentDiv.className = 'sidebar-inner-content';
+			sidebar.appendChild(contentDiv);
+		}
+
+		const contentDiv = sidebar.querySelector('.sidebar-inner-content');
+		contentDiv.innerHTML = content;
+		sidebar.style.left = '0';
+	}
+
+	_closeSidebar() {
+		const sidebar = document.getElementById('landmark-sidebar');
+		if (sidebar) {
+			sidebar.style.left = '-400px';
+		}
 	}
 
 	_getIcon(iconName, iconColor, iconType) {
