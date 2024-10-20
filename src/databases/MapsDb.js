@@ -5,8 +5,8 @@ const MAP_DATABASE = {
 				path: 'maps/world_maps/main_map_01',
 				sizes: {
 					maxZoom: 6,
-					imageWidth: 13458,
-					imageHeight: 6961,
+					imageWidth: 13095,
+					imageHeight: 8054,
 				},
 				backgroundColor: '#e7dabb',
 			},
@@ -25,7 +25,7 @@ const MAP_DATABASE = {
 						{
 							lat: -75.421875,
 							lng: 74.96875,
-							label: 'Constantine (Water mage)',
+							label: 'Valros (Water mage)',
 							type: 'people',
 							icon: 'poiGenericNPC',
 							iconType: 'png',
@@ -39,8 +39,8 @@ const MAP_DATABASE = {
 							iconType: 'png',
 						},
 						{
-							lat: -41.09375,
-							lng: 156.734375,
+							lat: -39.984375,
+							lng: 161.3125,
 							label: 'Isgaroth (Fire mage)',
 							type: 'people',
 							icon: 'poiGenericNPC',
@@ -49,7 +49,7 @@ const MAP_DATABASE = {
 						{
 							lat: -75.75,
 							lng: 62.71875,
-							label: 'Bosper (Hunter)',
+							label: 'Thorben (Carpenter)',
 							type: 'people',
 							icon: 'tradeHunter',
 							iconType: 'png',
@@ -57,7 +57,7 @@ const MAP_DATABASE = {
 						{
 							lat: -70.71875,
 							lng: 67.15625,
-							label: 'Thorben (Alchemist)',
+							label: 'Constantine (Alchemist)',
 							type: 'people',
 							icon: 'tradeAlchemy',
 							iconType: 'png',
@@ -65,7 +65,7 @@ const MAP_DATABASE = {
 						{
 							lat: -54.625,
 							lng: 72.5625,
-							label: 'Thoren (Blacksmith)',
+							label: 'Thorek (Blacksmith)',
 							type: 'people',
 							icon: 'tradeForge',
 							iconType: 'png',
@@ -77,6 +77,14 @@ const MAP_DATABASE = {
 							label: 'Lizardman',
 							type: 'people',
 							icon: 'cityLizard',
+							iconType: 'png',
+						},
+						{
+							lat: -30.625,
+							lng: 137.03125,
+							label: 'Bridge Troll',
+							type: 'people',
+							icon: 'poiGenericNPC',
 							iconType: 'png',
 						},
 					],
@@ -105,6 +113,7 @@ const MAP_DATABASE = {
 							mapLink: 'world_maps.main_map_01.submaps.interiors.main_map_interior_harbour_inn',
 						},
 						{ lat: -48.125, lng: 88.875, label: 'Paladin Barracks', type: 'place', icon: 'city', iconType: 'png' },
+						{ lat: -114.875, lng: 54.5, label: 'Paladin Hall', type: 'place', icon: 'city', iconType: 'png' },
 						{
 							lat: -23.3125,
 							lng: 163.6875,
@@ -114,7 +123,7 @@ const MAP_DATABASE = {
 							iconType: 'png',
 						},
 						{ lat: -53.65625, lng: 51.4375, label: 'Pawn shop', type: 'place', icon: 'tradeShop', iconType: 'png' },
-						{ lat: -56.625, lng: 126.625, label: 'Sefob Farm', type: 'place', icon: 'poiFarm', iconType: 'png' },
+						{ lat: -56.625, lng: 126.625, label: 'Secob Farm', type: 'place', icon: 'poiFarm', iconType: 'png' },
 						{
 							lat: -71.875,
 							lng: 17.375,
@@ -134,19 +143,32 @@ const MAP_DATABASE = {
 							iconType: 'png',
 						},
 						{ lat: -11.5, lng: 39.5, label: 'Paladin ship', type: 'place', icon: 'city' },
+						{
+							lat: -52.765625,
+							lng: 112.328125,
+							label: 'Teleporter Exit B',
+							type: 'place',
+							icon: 'mageTower',
+						},
+						{
+							lat: -76.71875,
+							lng: 160.90625,
+							label: 'Teleporter Exit C',
+							type: 'place',
+							icon: 'mageTower',
+						},
+						{
+							lat: -16.96875,
+							lng: 128.03125,
+							label: 'Water Mages Pyramid',
+							type: 'place',
+							icon: 'templePyramid',
+						},
 					],
 				},
 				navigation: {
 					name: 'Navigation arrows',
 					items: [
-						{
-							lat: -25.375,
-							lng: 184.5,
-							label: 'To Hunter Camp',
-							type: 'place',
-							icon: 'arrowUpRight',
-							iconType: 'svg',
-						},
 						{ lat: -66.625, lng: 198, label: 'To Mercenaries', type: 'place', icon: 'arrowRight', iconType: 'svg' },
 						{ lat: -99, lng: 182.625, label: 'To Penal Colony', type: 'place', icon: 'arrowDown', iconType: 'svg' },
 					],
@@ -154,7 +176,7 @@ const MAP_DATABASE = {
 				combat_encounters: {
 					name: 'Combat encounters',
 					items: [
-						{ lat: -52.375, lng: 33.875, label: 'Wolves', type: 'place', icon: 'poiCombat', iconType: 'png' },
+						{ lat: -52.375, lng: 33.875, label: 'Wolves', type: 'place', icon: 'poiDanger', iconType: 'png' },
 						{ lat: -88.125, lng: 133.125, label: 'Wolves', type: 'place', icon: 'poiCombat', iconType: 'png' },
 						{
 							lat: -41.5,
@@ -174,6 +196,38 @@ const MAP_DATABASE = {
 							iconType: 'png',
 							description: `The adventurers, hoping to make a new ally, approached the lizardman with friendly intentions. However, their efforts were met with hostility as the lizardman attacked them. The battle was intense, with the group struggling to subdue their reptilian foe. Just as they seemed to gain the upper hand, a group of goblins ambushed them from the shadows. The adventurers fought valiantly, managing to defeat the goblins, but in the chaos, one of the goblins used a spell to explode nearby corpses, which killed the lizardman, whom they had been trying to keep alive.`,
 							image: 'goblin_camp_01.png',
+						},
+						{
+							lat: -36.96875,
+							lng: 144.46875,
+							label: 'Inactive Golem',
+							type: 'place',
+							icon: 'poiDanger',
+							iconType: 'png',
+						},
+						{
+							lat: -18.625,
+							lng: 132.28125,
+							label: 'Snapers',
+							type: 'place',
+							icon: 'poiDanger',
+							iconType: 'png',
+						},
+						{
+							lat: -10.65625,
+							lng: 134.9375,
+							label: 'Wasps',
+							type: 'place',
+							icon: 'poiDanger',
+							iconType: 'png',
+						},
+						{
+							lat: -11,
+							lng: 125.4375,
+							label: 'Black Gobos',
+							type: 'place',
+							icon: 'poiDanger',
+							iconType: 'png',
 						},
 					],
 				},
@@ -394,6 +448,148 @@ const MAP_DATABASE = {
 						{
 							coordinates: [-146.75, 342.5],
 							text: 'The party checked out the inn at the crossroads, looking for a place to spend the night in, but the prices were too steep for them, so they went back in town.',
+						},
+					],
+				},
+				{
+					name: 'Session 7 Recap',
+					lineColor: '#216E4E',
+					points: [
+						{
+							coordinates: [-77.625, 75.375],
+							text: 'Decided to go to pyramids.',
+						},
+						{
+							coordinates: [-71.8125, 79.5625],
+						},
+						{
+							coordinates: [-65.8125, 79.5],
+						},
+						{
+							coordinates: [-65.8125, 87.8125],
+						},
+						{
+							coordinates: [-66.6875, 92.625],
+						},
+						{
+							coordinates: [-66.5625, 108.375],
+						},
+						{
+							coordinates: [-65.8125, 115.75],
+						},
+						{
+							coordinates: [-61.1875, 116.375],
+						},
+						{
+							coordinates: [-58.5625, 115.375],
+						},
+						{
+							coordinates: [-54.125, 118.1875],
+						},
+						{
+							coordinates: [-50.625, 116.3125],
+						},
+						{
+							coordinates: [-48, 118],
+						},
+						{
+							coordinates: [-47.5625, 125.5625],
+						},
+						{
+							coordinates: [-45.375, 126.3125],
+						},
+						{
+							coordinates: [-44.1875, 124.6875],
+						},
+						{
+							coordinates: [-45.375, 115.9375],
+						},
+						{
+							coordinates: [-45.8125, 111.875],
+						},
+						{
+							coordinates: [-44.8125, 109.375],
+						},
+						{
+							coordinates: [-43.25, 110.125],
+						},
+						{
+							coordinates: [-41.9375, 118.0625],
+						},
+						{
+							coordinates: [-42.375, 123.9375],
+						},
+						{
+							coordinates: [-41.3125, 125.3125],
+							text: 'Ranger and Sorcerer failed athletics check and injured.',
+						},
+						{
+							coordinates: [-40.3125, 125.0625],
+						},
+						{
+							coordinates: [-40.4375, 120.5625],
+						},
+						{
+							coordinates: [-40.3125, 118.0625],
+						},
+						{
+							coordinates: [-39.125, 117.9375],
+						},
+						{
+							coordinates: [-38.5, 120.4375],
+						},
+						{
+							coordinates: [-39.3125, 126.8125],
+						},
+						{
+							coordinates: [-39.9375, 128.9375],
+						},
+						{
+							coordinates: [-36.25, 131.1875],
+						},
+						{
+							coordinates: [-33.875, 135.9375],
+							text: 'Saw inactive golem to the right',
+						},
+						{
+							coordinates: [-32.25, 137.375],
+						},
+						{
+							coordinates: [-30.625, 137.03125],
+							text: 'Paid 2 silver per person to cross the river to the troll.',
+						},
+						{
+							coordinates: [-24.25, 135.75],
+						},
+						{
+							coordinates: [-22.1875, 135.125],
+						},
+						{
+							coordinates: [-19.625, 134.9375],
+						},
+						{
+							coordinates: [-18.0625, 135.25],
+							text: 'Saw ruins to the right and 2 chests.',
+						},
+						{
+							coordinates: [-16.25, 134.0625],
+						},
+						{
+							coordinates: [-14.3125, 133.0625],
+						},
+						{
+							coordinates: [-12.875, 132.0625],
+							text: 'Went into tents and found water mages location',
+						},
+						{
+							coordinates: [-14.9375, 130.875],
+						},
+						{
+							coordinates: [-16.0625, 129.5625],
+						},
+						{
+							coordinates: [-16.96875, 128.03125],
+							text: 'Entered the pyramid to find water mages.',
 						},
 					],
 				},
