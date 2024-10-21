@@ -168,13 +168,13 @@ html {
 	}
 
 	&.has-map:after {
-		content: '→';
+		content: '!';
 		position: absolute;
-		background: #daae74;
-		border: 1px solid #7b4122;
-		color: #753818;
-		bottom: 0;
-		right: -0.5rem;
+		background: rgba(255 255 255 / 50%);
+		/* border: 1px solid #7b4122; */
+		color: black;
+		top: 50%;
+		transform: translate(-50%, 0);
 		font-size: 8pt;
 		font-family: Calibri;
 		font-weight: 600;

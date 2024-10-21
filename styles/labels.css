@@ -142,3 +142,18 @@
 	background: #c3ac96;
 	margin-block: 1rem;
 }
+
+.custom-marker-text {
+	display: block;
+	width: max-content;
+	font-family: 'Oldenburg';
+	font-size: 9pt;
+	font-weight: 600;
+	background: rgba(255 255 255 / 35%);
+	padding: 0.25rem 0.5rem;
+	border-radius: 0.25rem;
+
+	&:hover {
+		background: rgba(255 255 255 / 25%);
+	}
+}

@@ -149,12 +149,10 @@ const MAP_DATABASE = {
 							name: 'Points of interest',
 							items: [
 								{
-									lat: -12.75,
-									lng: 103.75,
+									lat: -6,
+									lng: 98,
 									label: 'World Map',
-									type: 'place',
-									icon: 'cityCapital',
-									iconType: 'png',
+									type: 'text',
 									mapLink: 'world_maps',
 								},
 								{

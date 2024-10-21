@@ -46,7 +46,7 @@ class AnnotationService {
 
 	_createMarker(point, icon, categoryKey, categoryName) {
 		// Create a new icon instance with the label
-		const labeledIcon = this._createLabeledIcon(icon, point.label);
+		const labeledIcon = point.icon ? this._createLabeledIcon(icon, point.label) : null;
 
 		let label;
 		let marker;
@@ -87,7 +87,12 @@ class AnnotationService {
 					${mapLink}
 			</div>`;
 
-			marker = L.marker([point.lat, point.lng], { icon: labeledIcon }).bindPopup(label);
+			const icon = new L.DivIcon({
+				className: 'myDivIcon',
+				html: `<span class="custom-marker-text">${point.label}</span>`,
+			});
+
+			marker = L.marker([point.lat, point.lng], { icon: point.type === 'text' ? icon : labeledIcon }).bindPopup(label);
 		}
 
 		marker.on('add', () => {

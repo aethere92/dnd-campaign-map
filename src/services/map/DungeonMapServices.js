@@ -1,7 +1,7 @@
 // Constants
 const CONFIG = {
 	TILE_SIZE: 256,
-	IS_DEBUG: true,
+	IS_DEBUG: false,
 };
 
 // Main Map Class
@@ -14,6 +14,7 @@ class CustomMap {
 		this.pathManager = null;
 		this.loadingIndicator = this._createLoadingIndicator();
 		this.isDebugMode = isDebugMode;
+		this.initialMapKey = initialMapKey;
 
 		window.customMap = this;
 		this.init(initialMapKey);
@@ -102,8 +103,8 @@ class CustomMap {
 			this.addTileLayer(mapConfig);
 
 			// Add back-to-main button if not on main map
-			if (mapKey !== 'world_maps.submaps.islands.main_map_01') {
-				this.addMapButton('world_maps.submaps.islands.main_map_01', 'topleft', 'Back to Main Map');
+			if (mapKey !== this.initialMapKey) {
+				this.addMapButton(this.initialMapKey, 'topleft', 'Back to Main Map');
 			}
 
 			// Add annotations if they exist for this map
