@@ -1,12 +1,12 @@
 // Constants
 const CONFIG = {
 	TILE_SIZE: 256,
-	IS_DEBUG: false,
+	IS_DEBUG: true,
 };
 
 // Main Map Class
 class CustomMap {
-	constructor(mapElementId, initialMapKey = 'world_maps.main_map_01', isDebugMode = false) {
+	constructor(mapElementId, initialMapKey = 'world_maps.submaps.islands.main_map_01', isDebugMode = false) {
 		this.mapElementId = mapElementId;
 		this.exportButton = null;
 		this.currentMapKey = null;
@@ -102,8 +102,8 @@ class CustomMap {
 			this.addTileLayer(mapConfig);
 
 			// Add back-to-main button if not on main map
-			if (mapKey !== 'world_maps.main_map_01') {
-				this.addMapButton('world_maps.main_map_01', 'topleft', 'Back to Main Map');
+			if (mapKey !== 'world_maps.submaps.islands.main_map_01') {
+				this.addMapButton('world_maps.submaps.islands.main_map_01', 'topleft', 'Back to Main Map');
 			}
 
 			// Add annotations if they exist for this map
