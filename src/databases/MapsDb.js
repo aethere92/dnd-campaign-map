@@ -4,8 +4,8 @@ const MAP_DATABASE = {
 			path: 'maps/world_maps/world_map',
 			sizes: {
 				maxZoom: 5,
-				imageWidth: 4096,
-				imageHeight: 3072,
+				imageWidth: 8192,
+				imageHeight: 8192,
 			},
 			backgroundColor: 'rgb(82 105 112)',
 		},
@@ -14,24 +14,25 @@ const MAP_DATABASE = {
 				name: 'Points of Interest',
 				items: [
 					{
-						lat: -36.875,
-						lng: 107.25,
+						lat: -168.5,
+						lng: 207.1875,
 						label: 'Initial campaign island',
 						type: 'place',
 						icon: 'townDock',
 						iconType: 'png',
 					},
 					{
-						lat: -58.0625,
-						lng: 70.375,
+						lat: -197.8125,
+						lng: 165.125,
 						label: 'First unnamed island',
 						type: 'place',
 						icon: 'templeShrine',
 						iconType: 'png',
+						mapLink: 'world_maps.submaps.islands.unnamed_island_01',
 					},
 					{
-						lat: -65.5,
-						lng: 15.4375,
+						lat: -214.5,
+						lng: 74.875,
 						label: 'Korinis',
 						type: 'place',
 						icon: 'cityCapital',
@@ -44,8 +45,8 @@ const MAP_DATABASE = {
 				name: 'Combat Encounters',
 				items: [
 					{
-						lat: -59.125,
-						lng: 45.0625,
+						lat: -209.375,
+						lng: 116.875,
 						label: 'Bone wraiths encounter',
 						type: 'place',
 						icon: 'poiCombat',
@@ -798,6 +799,17 @@ const MAP_DATABASE = {
 								},
 							},
 						},
+					},
+				},
+				unnamed_island_01: {
+					metadata: {
+						path: 'maps/world_maps/unnamed_island_01',
+						sizes: {
+							maxZoom: 4,
+							imageWidth: 4096,
+							imageHeight: 3072,
+						},
+						backgroundColor: 'rgb(236 220 182)',
 					},
 				},
 			},
