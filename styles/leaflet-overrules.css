@@ -37,3 +37,8 @@
 .leaflet-container a.leaflet-popup-close-button {
 	color: #3d2816;
 }
+
+.leaflet-div-icon:has(.empty-marker) {
+	background: none;
+	border: none;
+}

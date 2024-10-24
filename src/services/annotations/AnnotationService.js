@@ -92,7 +92,21 @@ class AnnotationService {
 				html: `<span class="custom-marker-text">${point.label}</span>`,
 			});
 
-			marker = L.marker([point.lat, point.lng], { icon: point.type === 'text' ? icon : labeledIcon }).bindPopup(label);
+			if (point.icon) {
+				marker = L.marker([point.lat, point.lng], { icon: point.type === 'text' ? icon : labeledIcon }).bindPopup(
+					label
+				);
+			} else {
+				const customIcon = L.icon({
+					iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png', // URL of the default marker icon
+					iconSize: [15, 22.5], // Size of the icon (width, height)
+					iconAnchor: [7.5, 22.5], // Anchor point of the icon (half of the width, full height)
+					popupAnchor: [0, -22.5], // Offset of the popup relative to the icon
+				});
+
+				// Use the custom icon when creating the marker
+				marker = L.marker([point.lat, point.lng], { icon: customIcon }).bindPopup(label);
+			}
 		}
 
 		marker.on('add', () => {

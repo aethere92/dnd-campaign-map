@@ -1,7 +1,7 @@
 // Constants
 const CONFIG = {
 	TILE_SIZE: 256,
-	IS_DEBUG: false,
+	IS_DEBUG: true,
 };
 
 // Main Map Class
