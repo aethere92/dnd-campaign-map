@@ -35,59 +35,102 @@ class AnnotationService {
 		this.markers = [];
 	}
 
-	async _addPointsToLayer(categoryKey, points, categoryName) {
-		points.forEach((point) => {
-			const icon = this._getIcon(point.icon, point.iconColor, point.iconType);
-			const marker = this._createMarker(point, icon, categoryKey, categoryName);
-			marker.addTo(this.layers[categoryName]);
-			this.markers.push(marker);
-		});
-	}
+	_getIcon(iconName, iconColor, iconType) {
+		if (!iconName) {
+			return Promise.resolve(null);
+		}
 
-	async _createMarker(point, icon, categoryKey, categoryName) {
-		if (!icon) {
-			// Use default Leaflet icon if no custom icon is provided
-			const defaultIcon = L.icon({
-				iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
-				shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
+		const cacheKey = `${iconName}-${iconColor}`;
+		if (this.iconCache[cacheKey]) return this.iconCache[cacheKey];
+
+		if (!iconType || iconType === 'png') {
+			const img = new Image();
+			img.src = `images/custom-icons/${iconName}.png`;
+
+			return new Promise((resolve) => {
+				img.onload = () => {
+					const icon = L.icon({
+						iconUrl: `images/custom-icons/${iconName}.png`,
+						shadowUrl: 'images/custom-icons/shadow.png',
+						iconSize: [img.width / 2.5, img.height / 2.5],
+						shadowSize: [img.width / 2.5, img.height / 2.5],
+						iconAnchor: [img.width / 5, img.height / 2.5],
+						shadowAnchor: [img.width / 5, img.height / 2.5],
+						popupAnchor: [0, -img.height / 2.5],
+					});
+
+					this.iconCache[cacheKey] = icon;
+					resolve(icon);
+				};
+
+				img.onerror = () => {
+					resolve(null);
+				};
+			});
+		} else if (iconType === 'svg') {
+			const iconContent = `
+                <div class="custom-marker-icon">
+                    ${SVG_ICON_DB[iconName]}
+                </div>`;
+
+			const icon = L.divIcon({
+				className: 'marker',
+				html: iconContent,
 				iconSize: [25, 41],
 				iconAnchor: [12, 41],
 				popupAnchor: [1, -34],
-				shadowSize: [41, 41],
 			});
-			return this._createMarkerWithIcon(point, defaultIcon, categoryKey, categoryName);
+
+			this.iconCache[cacheKey] = icon;
+			return Promise.resolve(icon);
 		}
-		return this._createMarkerWithIcon(point, icon, categoryKey, categoryName);
 	}
 
-	_createMarkerWithIcon(point, icon, categoryKey, categoryName) {
-		// Create a new icon instance with the label
-		const labeledIcon = point.icon ? this._createLabeledIcon(icon, point.label) : null;
+	async _addPointsToLayer(categoryKey, points, categoryName) {
+		for (const point of points) {
+			const icon = await this._getIcon(point.icon, point.iconColor, point.iconType);
+			const marker = await this._createMarker(point, icon, categoryKey, categoryName);
+			marker.addTo(this.layers[categoryName]);
+			this.markers.push(marker);
+		}
+	}
 
-		let label;
-		let marker;
-
+	async _createMarker(point, icon, categoryKey, categoryName) {
 		const image = point.image ? `<img class="label-image" src="images/assets/${point.image}" width="200"/>` : '';
 		const description = point.description ? `<span class="label-description">${point.description}</span>` : '';
 		const mapLink = point.mapLink
 			? `<button onclick="customMap.loadMap('${point.mapLink}')" class="map-button">Go to map</button>`
 			: '';
 
+		let label;
+		let marker;
+
 		if (categoryKey === 'landmarks') {
 			label = `
-				<div class="sidebar-content">
-					<span class="label-title">${point.label}</span>
-					<span class="label-separator"></span>
-					<div class="label-container-body">
-						${image}
-						${description}
-					</div>
-					<span class="label-separator"></span>
-					${mapLink}
-				</div>
-			`;
+                <div class="sidebar-content">
+                    <span class="label-title">${point.label}</span>
+                    <span class="label-separator"></span>
+                    <div class="label-container-body">
+                        ${image}
+                        ${description}
+                    </div>
+                    <span class="label-separator"></span>
+                    ${mapLink}
+                </div>
+            `;
 
-			marker = L.marker([point.lat, point.lng], { icon: labeledIcon });
+			marker = L.marker([point.lat, point.lng], {
+				icon:
+					icon ||
+					L.icon({
+						iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
+						shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
+						iconSize: [25, 41],
+						iconAnchor: [12, 41],
+						popupAnchor: [1, -34],
+						shadowSize: [41, 41],
+					}),
+			});
 
 			marker.on('click', (e) => {
 				this._openSidebar(label);
@@ -95,33 +138,32 @@ class AnnotationService {
 			});
 		} else {
 			label = `<div class='label-container'>
-				<span class="label-title">${point.label}</span>
-				<div class="label-container-body">
-					${image}
-					${description}
-				</div>
-					${mapLink}
-			</div>`;
+                <span class="label-title">${point.label}</span>
+                <div class="label-container-body">
+                    ${image}
+                    ${description}
+                </div>
+                    ${mapLink}
+            </div>`;
 
-			const icon = new L.DivIcon({
+			const textIcon = new L.DivIcon({
 				className: 'myDivIcon',
 				html: `<span class="custom-marker-text">${point.label}</span>`,
 			});
 
 			if (point.icon) {
-				marker = L.marker([point.lat, point.lng], { icon: point.type === 'text' ? icon : labeledIcon }).bindPopup(
-					label
-				);
+				marker = L.marker([point.lat, point.lng], {
+					icon: point.type === 'text' ? textIcon : icon,
+				}).bindPopup(label);
 			} else {
-				const customIcon = L.icon({
-					iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png', // URL of the default marker icon
-					iconSize: [15, 22.5], // Size of the icon (width, height)
-					iconAnchor: [7.5, 22.5], // Anchor point of the icon (half of the width, full height)
-					popupAnchor: [0, -22.5], // Offset of the popup relative to the icon
+				const defaultIcon = L.icon({
+					iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
+					iconSize: [15, 22.5],
+					iconAnchor: [7.5, 22.5],
+					popupAnchor: [0, -22.5],
 				});
 
-				// Use the custom icon when creating the marker
-				marker = L.marker([point.lat, point.lng], { icon: customIcon }).bindPopup(label);
+				marker = L.marker([point.lat, point.lng], { icon: defaultIcon }).bindPopup(label);
 			}
 		}
 
@@ -173,110 +215,19 @@ class AnnotationService {
 		}
 	}
 
-	_getIcon(iconName, iconColor, iconType) {
-		// If no icon name provided, return null or a default icon
-		if (!iconName) {
-			return Promise.resolve(null);
-		}
-
-		const cacheKey = `${iconName}-${iconColor}`;
-		if (this.iconCache[cacheKey]) return this.iconCache[cacheKey];
-
-		if (!iconType || iconType === 'png') {
-			// Create a temporary image to get natural dimensions
-			const img = new Image();
-			img.src = `images/custom-icons/${iconName}.png`;
-
-			return new Promise((resolve) => {
-				img.onload = () => {
-					const icon = L.icon({
-						iconUrl: `images/custom-icons/${iconName}.png`,
-						shadowUrl: 'images/custom-icons/shadow.png',
-						iconSize: [img.width / 3, img.height / 3],
-						shadowSize: [img.width / 3, img.height / 3],
-						iconAnchor: [img.width / 5, img.height / 3], // Center bottom
-						shadowAnchor: [img.width / 5, img.height / 3], // Center bottom
-						popupAnchor: [0, -img.height / 3], // Center top
-					});
-
-					this.iconCache[cacheKey] = icon;
-					resolve(icon);
-				};
-
-				img.onerror = () => {
-					// If image fails to load, resolve with null or a default icon
-					resolve(null);
-				};
-			});
-		} else if (iconType === 'svg') {
-			const iconContent = `
-                <div class="custom-marker-icon">
-                    ${SVG_ICON_DB[iconName]}
-                </div>`;
-
-			const icon = L.divIcon({
-				className: 'marker',
-				html: iconContent,
-				iconSize: [25, 41], // Default size for SVG
-				iconAnchor: [12, 41],
-				popupAnchor: [1, -34],
-			});
-
-			this.iconCache[cacheKey] = icon;
-			return Promise.resolve(icon);
-		}
-	}
-
-	async _addPointsToLayer(categoryKey, points, categoryName) {
-		for (const point of points) {
-			const icon = await this._getIcon(point.icon, point.iconColor, point.iconType);
-			const marker = await this._createMarker(point, icon, categoryKey, categoryName);
-			marker.addTo(this.layers[categoryName]);
-			this.markers.push(marker);
-		}
-	}
-
-	_createLabeledIcon(baseIcon, label) {
-		if (baseIcon instanceof L.DivIcon) {
-			// Handle div icons (SVG)
-			const baseIconHtml = baseIcon.options.html;
-			const temp = document.createElement('div');
-			temp.innerHTML = baseIconHtml;
-
-			const iconDiv = temp.querySelector('.custom-marker-icon');
-			if (iconDiv) {
-				iconDiv.setAttribute('data-label', label || '');
-			}
-
-			return L.divIcon({
-				...baseIcon.options,
-				html: temp.innerHTML,
-			});
-		} else {
-			// For regular icons (PNG), return as is since we can't modify the icon directly
-			return baseIcon;
-		}
-	}
-
 	getMarkers(map = this.map, filterCriteria = {}) {
-		// If no map is passed and no local map is available, return an empty array
 		if (!map) return [];
 
-		// If there are markers in the local array, return them
 		if (this.markers.length > 0) {
 			return this.markers.filter((marker) => this._matchesCriteria(marker, filterCriteria));
 		}
 
-		// If no local markers exist, retrieve markers from the passed map or local map
 		let mapMarkers = [];
 
-		// Check if map is a Leaflet map object
 		if (map._layers) {
-			// Iterate through each layer on the map
 			Object.keys(map._layers).forEach((layerId) => {
 				const layer = map._layers[layerId];
 				if (layer instanceof L.LayerGroup) {
-					// Filter markers within the layer group
 					layer.getLayers().forEach((marker) => {
 						if (marker instanceof L.Marker) {
 							mapMarkers.push(marker);
@@ -286,30 +237,25 @@ class AnnotationService {
 			});
 		}
 
-		// Filter retrieved markers based on criteria
 		return mapMarkers.filter((marker) => this._matchesCriteria(marker, filterCriteria));
 	}
 
-	// Helper method to check if a marker matches the given criteria
 	_matchesCriteria(marker, filterCriteria) {
 		const markerElement = marker.getElement();
-		if (!markerElement) return false; // Skip if marker element is not available
+		if (!markerElement) return false;
 
 		let matches = true;
 
-		// Check for category filter
 		if (filterCriteria.category) {
 			const markerCategory = markerElement.getAttribute('data-category');
 			matches = matches && markerCategory === filterCriteria.category;
 		}
 
-		// Check for category name filter
 		if (filterCriteria.categoryName) {
 			const markerCategoryName = markerElement.getAttribute('data-category-name');
 			matches = matches && markerCategoryName === filterCriteria.categoryName;
 		}
 
-		// Check for label filter
 		if (filterCriteria.label) {
 			const markerLabel = markerElement.getAttribute('data-label');
 			matches = matches && markerLabel.includes(filterCriteria.label);
