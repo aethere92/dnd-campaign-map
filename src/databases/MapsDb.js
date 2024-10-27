@@ -449,8 +449,8 @@ const MAP_DATABASE = {
 							name: 'Points of interest',
 							items: [
 								{
-									lat: -6,
-									lng: 98,
+									lat: -1.875,
+									lng: 100.875,
 									label: 'World Map',
 									type: 'text',
 									mapLink: 'world_maps',

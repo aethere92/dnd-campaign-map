@@ -149,7 +149,7 @@ class AnnotationService {
 		const image = point.image ? `<img class="label-image" src="images/assets/${point.image}" width="200"/>` : '';
 		const description = point.description ? `<span class="label-description">${point.description}</span>` : '';
 		const mapLink = point.mapLink
-			? `<button onclick="customMap.loadMap('${point.mapLink}')" class="map-button">Go to map</button>`
+			? `<button onclick="customMap.loadMap('${point.mapLink}')" class="map-button">View map</button>`
 			: '';
 
 		let label;

@@ -9,7 +9,8 @@
 
 .label-title {
 	font-weight: 600;
-	font-size: 9pt;
+	font-size: 10pt;
+	font-family: 'Oldenburg';
 }
 
 .label-description {
@@ -149,12 +150,14 @@
 	font-family: 'Oldenburg';
 	font-size: 9pt;
 	font-weight: 600;
-	background: rgba(255 255 255 / 35%);
-	padding: 0.25rem 0.5rem;
-	border-radius: 0.25rem;
+	/* background: rgba(255 255 255 / 35%); */
+	/* padding: 0.25rem 0.5rem; */
+	/* border-radius: 0.25rem; */
+	color: white;
+	text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
 
 	&:hover {
-		background: rgba(255 255 255 / 25%);
+		/* background: rgba(255 255 255 / 25%); */
 	}
 }
 
