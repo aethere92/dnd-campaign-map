@@ -694,58 +694,6 @@ class CustomMap {
 			0.9
 		);
 	}
-
-	_testMarkerPositioning() {
-		// Create a test canvas with the same dimensions as your image
-		const canvas = document.createElement('canvas');
-		canvas.width = CONFIG.ORIGINAL_IMAGE_WIDTH;
-		canvas.height = CONFIG.ORIGINAL_IMAGE_HEIGHT;
-		const ctx = canvas.getContext('2d');
-
-		// Draw a grid for reference
-		ctx.strokeStyle = '#ddd';
-		for (let x = 0; x < canvas.width; x += 256) {
-			ctx.beginPath();
-			ctx.moveTo(x, 0);
-			ctx.lineTo(x, canvas.height);
-			ctx.stroke();
-		}
-		for (let y = 0; y < canvas.height; y += 256) {
-			ctx.beginPath();
-			ctx.moveTo(0, y);
-			ctx.lineTo(canvas.width, y);
-			ctx.stroke();
-		}
-
-		// Get all markers
-		const markers = this.annotationService.getMarkers(this.map);
-
-		// Draw each marker position
-		markers.forEach((marker, index) => {
-			const markerLatLng = marker.getLatLng();
-			const point = this.map.project(markerLatLng, CONFIG.MAX_ZOOM);
-
-			// Draw a point for each marker
-			ctx.fillStyle = 'red';
-			ctx.beginPath();
-			ctx.arc(point.x, point.y, 4, 0, 2 * Math.PI);
-			ctx.fill();
-
-			// Label the point
-			ctx.fillStyle = 'black';
-			ctx.font = '12px Arial';
-			ctx.fillText(`Marker ${index + 1}`, point.x + 6, point.y);
-
-			console.log(
-				`Marker ${index + 1}: LatLng(${markerLatLng.lat}, ${markerLatLng.lng}) -> Pixel(${point.x}, ${point.y})`
-			);
-		});
-
-		// Open the canvas in a new window
-		const dataUrl = canvas.toDataURL();
-		const win = window.open();
-		win.document.write(`<img src="${dataUrl}" />`);
-	}
 }
 
 // Custom Tile Layer Class
