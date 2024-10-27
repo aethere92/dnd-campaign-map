@@ -1,7 +1,7 @@
 // Constants
 const CONFIG = {
 	TILE_SIZE: 256,
-	IS_DEBUG: false,
+	IS_DEBUG: true,
 };
 
 // Main Map Class
@@ -263,7 +263,23 @@ class CustomMap {
 	}
 
 	_setBoundsAndFit() {
-		this.map.setMaxBounds(this.bounds).fitBounds(this.bounds);
+		// Extend bounds by 10%
+		const padding = 0.05; // 10% padding
+		const originalNorth = this.bounds.getNorth();
+		const originalSouth = this.bounds.getSouth();
+		const originalEast = this.bounds.getEast();
+		const originalWest = this.bounds.getWest();
+
+		const latDiff = originalNorth - originalSouth;
+		const lngDiff = originalEast - originalWest;
+
+		const extendedBounds = L.latLngBounds(
+			[originalSouth - latDiff * padding, originalWest - lngDiff * padding],
+			[originalNorth + latDiff * padding, originalEast + lngDiff * padding]
+		);
+
+		// Set max bounds to extended bounds, but fit to original bounds
+		this.map.setMaxBounds(extendedBounds).fitBounds(this.bounds);
 	}
 
 	_initializeEventListeners() {

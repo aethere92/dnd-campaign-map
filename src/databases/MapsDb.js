@@ -544,8 +544,8 @@ const MAP_DATABASE = {
 										'world_maps.submaps.islands.main_map_01.submaps.interiors.main_map_interior_pyramid_teleporter_c',
 								},
 								{
-									lat: -2.96875,
-									lng: 143.015625,
+									lat: -2.953125,
+									lng: 142.953125,
 									label: 'Water Mages Pyramid',
 									type: 'place',
 									icon: 'templePyramid',
@@ -624,8 +624,8 @@ const MAP_DATABASE = {
 									iconType: 'png',
 								},
 								{
-									lat: -0.75,
-									lng: 156.75,
+									lat: -1.71875,
+									lng: 156.140625,
 									label: 'Wasps',
 									type: 'place',
 									icon: 'poiDanger',

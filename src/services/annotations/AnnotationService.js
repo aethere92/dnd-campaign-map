@@ -35,7 +35,7 @@ class AnnotationService {
 		this.markers = [];
 	}
 
-	_addPointsToLayer(categoryKey, points, categoryName) {
+	async _addPointsToLayer(categoryKey, points, categoryName) {
 		points.forEach((point) => {
 			const icon = this._getIcon(point.icon, point.iconColor, point.iconType);
 			const marker = this._createMarker(point, icon, categoryKey, categoryName);
@@ -44,7 +44,23 @@ class AnnotationService {
 		});
 	}
 
-	_createMarker(point, icon, categoryKey, categoryName) {
+	async _createMarker(point, icon, categoryKey, categoryName) {
+		if (!icon) {
+			// Use default Leaflet icon if no custom icon is provided
+			const defaultIcon = L.icon({
+				iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
+				shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
+				iconSize: [25, 41],
+				iconAnchor: [12, 41],
+				popupAnchor: [1, -34],
+				shadowSize: [41, 41],
+			});
+			return this._createMarkerWithIcon(point, defaultIcon, categoryKey, categoryName);
+		}
+		return this._createMarkerWithIcon(point, icon, categoryKey, categoryName);
+	}
+
+	_createMarkerWithIcon(point, icon, categoryKey, categoryName) {
 		// Create a new icon instance with the label
 		const labeledIcon = point.icon ? this._createLabeledIcon(icon, point.label) : null;
 
@@ -158,53 +174,88 @@ class AnnotationService {
 	}
 
 	_getIcon(iconName, iconColor, iconType) {
+		// If no icon name provided, return null or a default icon
+		if (!iconName) {
+			return Promise.resolve(null);
+		}
+
 		const cacheKey = `${iconName}-${iconColor}`;
 		if (this.iconCache[cacheKey]) return this.iconCache[cacheKey];
 
-		let iconContent;
 		if (!iconType || iconType === 'png') {
-			iconContent = `
-                <div class="custom-marker-icon">
-                    <img width="24px" src="images/custom-icons/${iconName}.png" />
-                </div>`;
+			// Create a temporary image to get natural dimensions
+			const img = new Image();
+			img.src = `images/custom-icons/${iconName}.png`;
+
+			return new Promise((resolve) => {
+				img.onload = () => {
+					const icon = L.icon({
+						iconUrl: `images/custom-icons/${iconName}.png`,
+						shadowUrl: 'images/custom-icons/shadow.png',
+						iconSize: [img.width / 3, img.height / 3],
+						shadowSize: [img.width / 3, img.height / 3],
+						iconAnchor: [img.width / 5, img.height / 3], // Center bottom
+						shadowAnchor: [img.width / 5, img.height / 3], // Center bottom
+						popupAnchor: [0, -img.height / 3], // Center top
+					});
+
+					this.iconCache[cacheKey] = icon;
+					resolve(icon);
+				};
+
+				img.onerror = () => {
+					// If image fails to load, resolve with null or a default icon
+					resolve(null);
+				};
+			});
 		} else if (iconType === 'svg') {
-			iconContent = `
+			const iconContent = `
                 <div class="custom-marker-icon">
                     ${SVG_ICON_DB[iconName]}
                 </div>`;
+
+			const icon = L.divIcon({
+				className: 'marker',
+				html: iconContent,
+				iconSize: [25, 41], // Default size for SVG
+				iconAnchor: [12, 41],
+				popupAnchor: [1, -34],
+			});
+
+			this.iconCache[cacheKey] = icon;
+			return Promise.resolve(icon);
 		}
+	}
 
-		const icon = L.divIcon({
-			className: 'marker',
-			html: iconContent,
-			iconSize: [25, 41],
-			iconAnchor: [12, 41],
-			popupAnchor: [1, -34],
-		});
-
-		this.iconCache[cacheKey] = icon;
-		return icon;
+	async _addPointsToLayer(categoryKey, points, categoryName) {
+		for (const point of points) {
+			const icon = await this._getIcon(point.icon, point.iconColor, point.iconType);
+			const marker = await this._createMarker(point, icon, categoryKey, categoryName);
+			marker.addTo(this.layers[categoryName]);
+			this.markers.push(marker);
+		}
 	}
 
 	_createLabeledIcon(baseIcon, label) {
-		// Create a new icon instance
-		const baseIconHtml = baseIcon.options.html;
+		if (baseIcon instanceof L.DivIcon) {
+			// Handle div icons (SVG)
+			const baseIconHtml = baseIcon.options.html;
+			const temp = document.createElement('div');
+			temp.innerHTML = baseIconHtml;
 
-		// Parse the HTML string to a temporary element
-		const temp = document.createElement('div');
-		temp.innerHTML = baseIconHtml;
+			const iconDiv = temp.querySelector('.custom-marker-icon');
+			if (iconDiv) {
+				iconDiv.setAttribute('data-label', label || '');
+			}
 
-		// Find the custom-marker-icon div and add the data-label attribute
-		const iconDiv = temp.querySelector('.custom-marker-icon');
-		if (iconDiv) {
-			iconDiv.setAttribute('data-label', label || '');
+			return L.divIcon({
+				...baseIcon.options,
+				html: temp.innerHTML,
+			});
+		} else {
+			// For regular icons (PNG), return as is since we can't modify the icon directly
+			return baseIcon;
 		}
-
-		// Create a new icon with the updated HTML
-		return L.divIcon({
-			...baseIcon.options,
-			html: temp.innerHTML,
-		});
 	}
 
 	getMarkers(map = this.map, filterCriteria = {}) {
