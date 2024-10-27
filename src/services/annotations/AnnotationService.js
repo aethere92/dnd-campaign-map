@@ -6,8 +6,8 @@ class AnnotationService {
 		this.markers = [];
 	}
 
+	// Main public methods
 	addAnnotations(annotationsData) {
-		// Clear existing layers and markers
 		this.clearLayers();
 
 		Object.entries(annotationsData).forEach(([categoryKey, category]) => {
@@ -17,7 +17,6 @@ class AnnotationService {
 		});
 
 		if (Object.keys(this.layers).length > 0) {
-			// Store the layer control in the CustomMap instance
 			this.map.layerControl = L.control.layers(null, this.layers).addTo(this.map);
 
 			const layerControlContainer = this.map.layerControl.getContainer();
@@ -35,6 +34,41 @@ class AnnotationService {
 		this.markers = [];
 	}
 
+	getMarkers(map = this.map, filterCriteria = {}) {
+		if (!map) return [];
+
+		if (this.markers.length > 0) {
+			return this.markers.filter((marker) => this._matchesCriteria(marker, filterCriteria));
+		}
+
+		let mapMarkers = [];
+
+		if (map._layers) {
+			Object.keys(map._layers).forEach((layerId) => {
+				const layer = map._layers[layerId];
+				if (layer instanceof L.LayerGroup) {
+					layer.getLayers().forEach((marker) => {
+						if (marker instanceof L.Marker) {
+							mapMarkers.push(marker);
+						}
+					});
+				}
+			});
+		}
+
+		return mapMarkers.filter((marker) => this._matchesCriteria(marker, filterCriteria));
+	}
+
+	// Layer and marker creation methods
+	async _addPointsToLayer(categoryKey, points, categoryName) {
+		for (const point of points) {
+			const icon = await this._getIcon(point.icon, point.iconColor, point.iconType);
+			const marker = await this._createMarker(point, icon, categoryKey, categoryName);
+			marker.addTo(this.layers[categoryName]);
+			this.markers.push(marker);
+		}
+	}
+
 	_getIcon(iconName, iconColor, iconType) {
 		if (!iconName) {
 			return Promise.resolve(null);
@@ -44,26 +78,51 @@ class AnnotationService {
 		if (this.iconCache[cacheKey]) return this.iconCache[cacheKey];
 
 		if (!iconType || iconType === 'png') {
-			const img = new Image();
-			img.src = `images/custom-icons/${iconName}.png`;
-
 			return new Promise((resolve) => {
-				img.onload = () => {
-					const icon = L.icon({
-						iconUrl: `images/custom-icons/${iconName}.png`,
-						shadowUrl: 'images/custom-icons/shadow.png',
-						iconSize: [img.width / 2.5, img.height / 2.5],
-						shadowSize: [img.width / 2.5, img.height / 2.5],
-						iconAnchor: [img.width / 5, img.height / 2.5],
-						shadowAnchor: [img.width / 5, img.height / 2.5],
-						popupAnchor: [0, -img.height / 2.5],
+				// Load the image first to get dimensions
+				const tempImg = new Image();
+				tempImg.src = `images/custom-icons/${iconName}.png`;
+
+				tempImg.onload = () => {
+					// Calculate dimensions based on original image
+					const width = tempImg.width / 2.5;
+					const height = tempImg.height / 2.5;
+
+					const div = document.createElement('div');
+					div.className = 'custom-icon-container';
+
+					// Set container size to match calculated dimensions
+					div.style.width = `${width}px`;
+					div.style.height = `${height}px`;
+
+					// Create inner div for pseudo-element targeting
+					const innerDiv = document.createElement('div');
+					innerDiv.className = 'custom-icon-image';
+					innerDiv.style.backgroundImage = `url(images/custom-icons/${iconName}.png)`;
+
+					// Add shadow div
+					const shadowDiv = document.createElement('div');
+					shadowDiv.className = 'custom-icon-shadow';
+					shadowDiv.style.backgroundImage = 'url(images/custom-icons/shadow.png)';
+
+					div.appendChild(shadowDiv);
+					div.appendChild(innerDiv);
+
+					const icon = L.divIcon({
+						className: 'custom-marker',
+						html: div.outerHTML,
+						iconSize: [width, height],
+						shadowSize: [width, height],
+						iconAnchor: [width / 2, height],
+						shadowAnchor: [width / 2, height],
+						popupAnchor: [0, -height],
 					});
 
 					this.iconCache[cacheKey] = icon;
 					resolve(icon);
 				};
 
-				img.onerror = () => {
+				tempImg.onerror = () => {
 					resolve(null);
 				};
 			});
@@ -83,15 +142,6 @@ class AnnotationService {
 
 			this.iconCache[cacheKey] = icon;
 			return Promise.resolve(icon);
-		}
-	}
-
-	async _addPointsToLayer(categoryKey, points, categoryName) {
-		for (const point of points) {
-			const icon = await this._getIcon(point.icon, point.iconColor, point.iconType);
-			const marker = await this._createMarker(point, icon, categoryKey, categoryName);
-			marker.addTo(this.layers[categoryName]);
-			this.markers.push(marker);
 		}
 	}
 
@@ -120,16 +170,7 @@ class AnnotationService {
             `;
 
 			marker = L.marker([point.lat, point.lng], {
-				icon:
-					icon ||
-					L.icon({
-						iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
-						shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
-						iconSize: [25, 41],
-						iconAnchor: [12, 41],
-						popupAnchor: [1, -34],
-						shadowSize: [41, 41],
-					}),
+				icon: icon || this._createDefaultIcon(),
 			});
 
 			marker.on('click', (e) => {
@@ -151,20 +192,9 @@ class AnnotationService {
 				html: `<span class="custom-marker-text">${point.label}</span>`,
 			});
 
-			if (point.icon) {
-				marker = L.marker([point.lat, point.lng], {
-					icon: point.type === 'text' ? textIcon : icon,
-				}).bindPopup(label);
-			} else {
-				const defaultIcon = L.icon({
-					iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
-					iconSize: [15, 22.5],
-					iconAnchor: [7.5, 22.5],
-					popupAnchor: [0, -22.5],
-				});
-
-				marker = L.marker([point.lat, point.lng], { icon: defaultIcon }).bindPopup(label);
-			}
+			marker = L.marker([point.lat, point.lng], {
+				icon: point.type === 'text' ? textIcon : icon || this._createDefaultIcon(),
+			}).bindPopup(label);
 		}
 
 		marker.on('add', () => {
@@ -184,6 +214,42 @@ class AnnotationService {
 		return marker;
 	}
 
+	// Helper methods
+	_createDefaultIcon() {
+		return L.divIcon({
+			className: 'default-marker',
+			html: '<div class="default-marker-inner"></div>',
+			iconSize: [15, 22.5],
+			iconAnchor: [7.5, 22.5],
+			popupAnchor: [0, -22.5],
+		});
+	}
+
+	_matchesCriteria(marker, filterCriteria) {
+		const markerElement = marker.getElement();
+		if (!markerElement) return false;
+
+		let matches = true;
+
+		if (filterCriteria.category) {
+			const markerCategory = markerElement.getAttribute('data-category');
+			matches = matches && markerCategory === filterCriteria.category;
+		}
+
+		if (filterCriteria.categoryName) {
+			const markerCategoryName = markerElement.getAttribute('data-category-name');
+			matches = matches && markerCategoryName === filterCriteria.categoryName;
+		}
+
+		if (filterCriteria.label) {
+			const markerLabel = markerElement.getAttribute('data-label');
+			matches = matches && markerLabel.includes(filterCriteria.label);
+		}
+
+		return matches;
+	}
+
+	// Sidebar methods
 	_openSidebar(content) {
 		let sidebar = document.getElementById('landmark-sidebar');
 		if (!sidebar) {
@@ -213,54 +279,5 @@ class AnnotationService {
 		if (sidebar) {
 			sidebar.style.left = '-400px';
 		}
-	}
-
-	getMarkers(map = this.map, filterCriteria = {}) {
-		if (!map) return [];
-
-		if (this.markers.length > 0) {
-			return this.markers.filter((marker) => this._matchesCriteria(marker, filterCriteria));
-		}
-
-		let mapMarkers = [];
-
-		if (map._layers) {
-			Object.keys(map._layers).forEach((layerId) => {
-				const layer = map._layers[layerId];
-				if (layer instanceof L.LayerGroup) {
-					layer.getLayers().forEach((marker) => {
-						if (marker instanceof L.Marker) {
-							mapMarkers.push(marker);
-						}
-					});
-				}
-			});
-		}
-
-		return mapMarkers.filter((marker) => this._matchesCriteria(marker, filterCriteria));
-	}
-
-	_matchesCriteria(marker, filterCriteria) {
-		const markerElement = marker.getElement();
-		if (!markerElement) return false;
-
-		let matches = true;
-
-		if (filterCriteria.category) {
-			const markerCategory = markerElement.getAttribute('data-category');
-			matches = matches && markerCategory === filterCriteria.category;
-		}
-
-		if (filterCriteria.categoryName) {
-			const markerCategoryName = markerElement.getAttribute('data-category-name');
-			matches = matches && markerCategoryName === filterCriteria.categoryName;
-		}
-
-		if (filterCriteria.label) {
-			const markerLabel = markerElement.getAttribute('data-label');
-			matches = matches && markerLabel.includes(filterCriteria.label);
-		}
-
-		return matches;
 	}
 }

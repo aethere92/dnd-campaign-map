@@ -157,3 +157,35 @@
 		background: rgba(255 255 255 / 25%);
 	}
 }
+
+.custom-icon-container {
+	position: relative;
+}
+
+.custom-icon-image {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-size: contain;
+	background-position: center;
+	background-repeat: no-repeat;
+	z-index: 2;
+}
+
+.custom-icon-shadow {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-size: contain;
+	background-position: center;
+	background-repeat: no-repeat;
+	z-index: 1;
+}
+
+.custom-marker {
+	background: none !important;
+}
