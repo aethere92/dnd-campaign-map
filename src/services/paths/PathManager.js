@@ -142,17 +142,26 @@ class PathManager {
 			}
 
 			let pathTextIndex = 0;
-
 			const pathGroup = L.layerGroup();
-			const latlngs = pathData.points.map((point) => point.coordinates);
-			const path = L.polyline(latlngs, {
-				color: pathData?.lineColor || '#F15B50',
-				weight: 2,
-				opacity: 0.9,
-				dashArray: [5, 5],
-				smoothFactor: 3,
-			});
-			pathGroup.addLayer(path);
+
+			// Create segments between points
+			for (let i = 0; i < pathData.points.length - 1; i++) {
+				const startPoint = pathData.points[i];
+				const endPoint = pathData.points[i + 1];
+
+				// Determine segment color
+				// Use point color if specified, otherwise use line color or default
+				const segmentColor = startPoint.pointColor || endPoint.pointColor || pathData.lineColor || '#F15B50';
+
+				const segment = L.polyline([startPoint.coordinates, endPoint.coordinates], {
+					color: segmentColor,
+					weight: 2,
+					opacity: 0.9,
+					dashArray: [5, 5],
+					smoothFactor: 3,
+				});
+				pathGroup.addLayer(segment);
+			}
 
 			// Add text markers if present
 			pathData.points.forEach((point) => {
@@ -167,7 +176,8 @@ class PathManager {
 
 					markerDot.on('add', () => {
 						const markerElement = markerDot.getElement();
-						markerElement.style.backgroundColor = pathData?.lineColor ?? '#F15B50';
+						// Use point color if specified, otherwise use line color or default
+						markerElement.style.backgroundColor = point.pointColor || pathData.lineColor || '#F15B50';
 					});
 					pathGroup.addLayer(markerDot);
 				}

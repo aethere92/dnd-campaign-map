@@ -7,7 +7,7 @@ const MAP_DATABASE = {
 				imageWidth: 8192,
 				imageHeight: 8192,
 			},
-			backgroundColor: 'linear-gradient(90deg, #255c71, #39340a)',
+			backgroundColor: '#0a1c21',
 		},
 		annotations: {
 			points_of_interest: {
@@ -361,66 +361,66 @@ const MAP_DATABASE = {
 						path: 'maps/world_maps/main_map_01',
 						sizes: {
 							maxZoom: 6,
-							imageWidth: 13095,
-							imageHeight: 9261,
+							imageWidth: 13184,
+							imageHeight: 5508,
 						},
-						backgroundColor: 'rgb(236 220 182)',
+						backgroundColor: '#0a1c21',
 					},
 					annotations: {
 						npcs: {
 							name: 'NPCs',
 							items: [
 								{
-									lat: -66.28125,
-									lng: 91.6875,
+									lat: -41.5,
+									lng: 113.15625,
 									label: 'Darren (Fire mage)',
 									type: 'people',
 									icon: 'poiGenericNPC',
 									iconType: 'png',
 								},
 								{
-									lat: -85.5625,
-									lng: 75.53125,
+									lat: -57.890625,
+									lng: 81.734375,
 									label: 'Valros (Water mage)',
 									type: 'people',
 									icon: 'poiGenericNPC',
 									iconType: 'png',
 								},
 								{
-									lat: -87.9375,
-									lng: 140.875,
+									lat: -58.484375,
+									lng: 160.78125,
 									label: 'Erol (tablets)',
 									type: 'place',
 									icon: 'poiGenericNPC',
 									iconType: 'png',
 								},
 								{
-									lat: -49.3125,
-									lng: 161.25,
+									lat: -29.046875,
+									lng: 173.765625,
 									label: 'Isgaroth (Fire mage)',
 									type: 'people',
 									icon: 'poiGenericNPC',
 									iconType: 'png',
 								},
 								{
-									lat: -84.0625,
-									lng: 63.125,
+									lat: -56.03125,
+									lng: 74.65625,
 									label: 'Thorben (Carpenter)',
 									type: 'people',
 									icon: 'tradeHunter',
 									iconType: 'png',
 								},
 								{
-									lat: -79.78125,
-									lng: 66.8125,
+									lat: -53.375,
+									lng: 76.53125,
 									label: 'Constantine (Alchemist)',
 									type: 'people',
 									icon: 'tradeAlchemy',
 									iconType: 'png',
 								},
 								{
-									lat: -63.40625,
-									lng: 73.75,
+									lat: -40.125,
+									lng: 87.46875,
 									label: 'Thorek (Blacksmith)',
 									type: 'people',
 									icon: 'tradeForge',
@@ -428,16 +428,16 @@ const MAP_DATABASE = {
 									mapLink: 'world_maps.submaps.islands.main_map_01.submaps.interiors.main_map_interior_blacksmith',
 								},
 								{
-									lat: -57.21875,
-									lng: 18.03125,
+									lat: -29.640625,
+									lng: 28.046875,
 									label: 'Lizardman',
 									type: 'people',
 									icon: 'cityLizard',
 									iconType: 'png',
 								},
 								{
-									lat: -39.25,
-									lng: 137.375,
+									lat: -19.140625,
+									lng: 153.4375,
 									label: 'Bridge Troll',
 									type: 'people',
 									icon: 'poiGenericNPC',
@@ -456,18 +456,18 @@ const MAP_DATABASE = {
 									mapLink: 'world_maps',
 								},
 								{
-									lat: -77.5625,
-									lng: 85.8125,
+									lat: -50.5,
+									lng: 106.8125,
 									label: 'Inn',
 									type: 'place',
 									icon: 'poiBed',
 									iconType: 'png',
 									mapLink: 'world_maps.submaps.islands.main_map_01.submaps.interiors.main_map_interior_town_inn',
 								},
-								{ lat: -88.5, lng: 169.1875, label: 'Inn', type: 'place', icon: 'poiBed', iconType: 'png' },
+								{ lat: -61.59375, lng: 185.328125, label: 'Inn', type: 'place', icon: 'poiBed', iconType: 'png' },
 								{
-									lat: -49.375,
-									lng: 61.125,
+									lat: -27.5625,
+									lng: 71.875,
 									label: 'Harbour Inn',
 									type: 'place',
 									icon: 'poiBed',
@@ -476,34 +476,41 @@ const MAP_DATABASE = {
 									mapLink: 'world_maps.submaps.islands.main_map_01.submaps.interiors.main_map_interior_harbour_inn',
 								},
 								{
-									lat: -58.8125,
-									lng: 88.5625,
+									lat: -36.90625,
+									lng: 109.25,
 									label: 'Paladin Barracks',
 									type: 'place',
 									icon: 'city',
 									iconType: 'png',
 								},
-								{ lat: -123.625, lng: 54.875, label: 'Paladin Hall', type: 'place', icon: 'city', iconType: 'png' },
+								{ lat: -82.203125, lng: 59.4375, label: 'Paladin Hall', type: 'place', icon: 'city', iconType: 'png' },
 								{
-									lat: -28.375,
-									lng: 162.75,
+									lat: -10.578125,
+									lng: 182.6875,
 									label: 'Fire Mages Monastery',
 									type: 'place',
 									icon: 'templeCathedral',
 									iconType: 'png',
 								},
-								{ lat: -62.5625, lng: 51.625, label: 'Pawn shop', type: 'place', icon: 'tradeShop', iconType: 'png' },
 								{
-									lat: -78.96875,
-									lng: 121.15625,
+									lat: -38.21875,
+									lng: 59.859375,
+									label: 'Pawn shop',
+									type: 'place',
+									icon: 'tradeShop',
+									iconType: 'png',
+								},
+								{
+									lat: -46.75,
+									lng: 136.265625,
 									label: 'Secob Farm',
 									type: 'place',
 									icon: 'poiFarm',
 									iconType: 'png',
 								},
 								{
-									lat: -82,
-									lng: 17.625,
+									lat: -49.125,
+									lng: 11.84375,
 									label: 'Lobart Farm',
 									type: 'place',
 									icon: 'poiFarm',
@@ -512,24 +519,24 @@ const MAP_DATABASE = {
 										"The adventurers arrived at a farm on the outskirts of the city, seeking entry but lacking the necessary gold. Speaking with one of the farmers, they learned that the head farmer might offer them a way in. They approached him and were given a proposition: earn gold by helping with the crops and assisting the farmer's wife with her tasks.",
 								},
 								{
-									lat: -112.125,
-									lng: 139.875,
+									lat: -80.078125,
+									lng: 144.84375,
 									label: 'Caves (scales + blue blood)',
 									type: 'place',
 									icon: 'poiCave',
 									iconType: 'png',
 								},
-								{ lat: -20.75, lng: 39.875, label: 'Paladin ship', type: 'place', icon: 'city' },
+								{ lat: -2.34375, lng: 55.25, label: 'Paladin ship', type: 'place', icon: 'city' },
 								{
-									lat: -61.125,
-									lng: 116.375,
+									lat: -34.390625,
+									lng: 133.75,
 									label: 'Teleporter Exit B',
 									type: 'place',
 									icon: 'mageTower',
 								},
 								{
-									lat: -98.1875,
-									lng: 165.5625,
+									lat: -71.5625,
+									lng: 176.625,
 									label: 'Teleporter Exit C',
 									type: 'place',
 									icon: 'mageTower',
@@ -537,8 +544,8 @@ const MAP_DATABASE = {
 										'world_maps.submaps.islands.main_map_01.submaps.interiors.main_map_interior_pyramid_teleporter_c',
 								},
 								{
-									lat: -25.6875,
-									lng: 128.21875,
+									lat: -2.96875,
+									lng: 143.015625,
 									label: 'Water Mages Pyramid',
 									type: 'place',
 									icon: 'templePyramid',
@@ -551,16 +558,16 @@ const MAP_DATABASE = {
 							name: 'Navigation arrows',
 							items: [
 								{
-									lat: -81.125,
-									lng: 188.375,
+									lat: -56.1875,
+									lng: 204.875,
 									label: 'To Mercenaries',
 									type: 'place',
 									icon: 'arrowRight',
 									iconType: 'svg',
 								},
 								{
-									lat: -107.375,
-									lng: 182,
+									lat: -81.21875,
+									lng: 195.953125,
 									label: 'To Penal Colony',
 									type: 'place',
 									icon: 'arrowDown',
@@ -571,11 +578,11 @@ const MAP_DATABASE = {
 						combat_encounters: {
 							name: 'Combat encounters',
 							items: [
-								{ lat: -61.65625, lng: 35.90625, label: 'Wolves', type: 'place', icon: 'poiDanger', iconType: 'png' },
-								{ lat: -107.8125, lng: 135.3125, label: 'Wolves', type: 'place', icon: 'poiCombat', iconType: 'png' },
+								{ lat: -34.375, lng: 40.96875, label: 'Wolves', type: 'place', icon: 'poiDanger', iconType: 'png' },
+								{ lat: -73.4375, lng: 136.71875, label: 'Wolves', type: 'place', icon: 'poiCombat', iconType: 'png' },
 								{
-									lat: -50.625,
-									lng: 38.75,
+									lat: -26.03125,
+									lng: 42.1875,
 									label: 'Bandits',
 									type: 'people',
 									icon: 'poiCombat',
@@ -583,8 +590,16 @@ const MAP_DATABASE = {
 									mapLink: 'world_maps.submaps.islands.main_map_01.submaps.encounters.main_map_encounters_bandits_01',
 								},
 								{
-									lat: -68.28125,
-									lng: 20.09375,
+									lat: -40.59375,
+									lng: 153.71875,
+									label: 'Bandits',
+									type: 'people',
+									icon: 'poiCombat',
+									iconType: 'png',
+								},
+								{
+									lat: -35.578125,
+									lng: 33.8125,
 									label: 'Goblin camp',
 									type: 'place',
 									icon: 'poiCombat',
@@ -593,33 +608,25 @@ const MAP_DATABASE = {
 									image: 'goblin_camp_01.png',
 								},
 								{
-									lat: -45.125,
-									lng: 145.8125,
+									lat: -24.375,
+									lng: 158.0625,
 									label: 'Inactive Golem',
 									type: 'place',
 									icon: 'poiDanger',
 									iconType: 'png',
 								},
 								{
-									lat: -27.3125,
-									lng: 132.0625,
+									lat: -7.03125,
+									lng: 148.40625,
 									label: 'Snapers',
 									type: 'place',
 									icon: 'poiDanger',
 									iconType: 'png',
 								},
 								{
-									lat: -18.625,
-									lng: 135.625,
+									lat: -0.75,
+									lng: 156.75,
 									label: 'Wasps',
-									type: 'place',
-									icon: 'poiDanger',
-									iconType: 'png',
-								},
-								{
-									lat: -18.9375,
-									lng: 125.28125,
-									label: 'Black Gobos',
 									type: 'place',
 									icon: 'poiDanger',
 									iconType: 'png',
@@ -630,8 +637,8 @@ const MAP_DATABASE = {
 							name: 'Landmarks',
 							items: [
 								{
-									lat: -75.65625,
-									lng: 44.53125,
+									lat: -47.8125,
+									lng: 52.78125,
 									label: 'Main town of Korinis',
 									type: 'landmark',
 									icon: 'poiLandmarks',
@@ -647,60 +654,72 @@ const MAP_DATABASE = {
 							lineColor: '#E2B203',
 							points: [
 								{
-									coordinates: [-66.9375, 2.625],
+									coordinates: [-46.375, 0.125],
 								},
 								{
-									coordinates: [-66.5625, 16.1875],
+									coordinates: [-46.5625, 9.3125],
 								},
 								{
-									coordinates: [-70.875, 20.625],
+									coordinates: [-49.125, 11.84375],
 									text: "Reached Lombart farm and talked to its master. Learned the cost of entry into the city and were told to do deeds to gain money for it. Talked to the lead farmer's wife and got a task from her.",
 								},
 								{
-									coordinates: [-66.5, 23.3125],
+									coordinates: [-46.6875, 14.1875],
 								},
 								{
-									coordinates: [-65.0625, 31],
+									coordinates: [-46.3125, 22.8125],
+								},
+								{
+									coordinates: [-46.8125, 31.75],
+								},
+								{
+									coordinates: [-44.25, 36.0625],
 									text: "Down the road, we met a merchant which sold us entry to the city for a favour once inside. Also got a pan for the lead farmer's wife as part of her task.",
 								},
 								{
-									coordinates: [-77.1875, 30.8125],
+									coordinates: [-45.875, 38.125],
 									text: "We went back to the farmer's wife and gave her the pan. She gave us food to eat. After that, we talked to the lead farmer again and slept in the barn.",
 								},
 								{
-									coordinates: [-66.9375, 36.4375],
+									coordinates: [-46.5625, 43.75],
 								},
 								{
-									coordinates: [-66.5, 45.4375],
+									coordinates: [-48, 50.375],
+								},
+								{
+									coordinates: [-47.8125, 55.1875],
 									text: 'Talked to the guards and showed them our entry pass. They allowed us into the city.',
 								},
 								{
-									coordinates: [-66.25, 53.5625],
+									coordinates: [-48, 66.5625],
 									text: 'Talked to the master paladin guarding the door and learned of the city rules and some whereabouts of the locations we were interested in.',
 								},
 								{
-									coordinates: [-66.125, 56.125],
+									coordinates: [-50.875, 69.3125],
 								},
 								{
-									coordinates: [-67.75, 57.5625],
+									coordinates: [-49.75, 71],
 								},
 								{
-									coordinates: [-67.625, 58.9375],
+									coordinates: [-47.75, 72.375],
 								},
 								{
-									coordinates: [-66.125, 60.0625],
+									coordinates: [-47.875, 81.6875],
 								},
 								{
-									coordinates: [-65.9375, 67.375],
+									coordinates: [-47.625, 93.375],
 								},
 								{
-									coordinates: [-66, 76.6875],
+									coordinates: [-47.625, 102.5625],
 								},
 								{
-									coordinates: [-65.875, 83.3125],
+									coordinates: [-49.4375, 103.46875],
 								},
 								{
-									coordinates: [-69.375, 86.375],
+									coordinates: [-49.671875, 104.546875],
+								},
+								{
+									coordinates: [-50.046875, 105.234375],
 									text: 'Walked into the inn and slept. During the night, some of the gold and some of our belongings were stolen.',
 								},
 							],
@@ -710,280 +729,370 @@ const MAP_DATABASE = {
 							lineColor: '#2898BD',
 							points: [
 								{
-									coordinates: [-137.75, 172.5],
+									coordinates: [-50.5, 106.8125],
 									text: 'Woken up, the party decided to go into the woods and gather the plants that were requested by the alchemist.',
 								},
 								{
-									coordinates: [-130.25, 166.5],
+									coordinates: [-50.53125, 105.6875],
 								},
 								{
-									coordinates: [-124.4375, 177.0625],
+									coordinates: [-49.8125, 104.8125],
 								},
 								{
-									coordinates: [-131.5, 189.625],
+									coordinates: [-49.6875, 103.65625],
 								},
 								{
-									coordinates: [-132.9375, 210.4375],
+									coordinates: [-48.84375, 103.1875],
+								},
+								{
+									coordinates: [-48.15625, 103.25],
+								},
+								{
+									coordinates: [-47.25, 118.53125],
+								},
+								{
+									coordinates: [-47.53125, 126.75],
 									text: 'On the way out of the city, guards stopped them and asked them what they were doing. Upon learning they were headed into the forest, the guards wished them good luck.',
 								},
 								{
-									coordinates: [-133.1875, 302.875],
+									coordinates: [-48.84375, 129.125],
 								},
 								{
-									coordinates: [-133, 218.75],
+									coordinates: [-51.96875, 129.625],
 								},
 								{
-									coordinates: [-136.6875, 221.4375],
+									coordinates: [-54.71875, 130.15625],
+								},
+								{
+									coordinates: [-56.0625, 132.46875],
 									text: 'The party ventured into the forest down this path.',
 								},
 								{
-									coordinates: [-137.9375, 235.5],
+									coordinates: [-57.8125, 132.625],
 								},
 								{
-									coordinates: [-143.8125, 240.4375],
+									coordinates: [-59.09375, 132.3125],
 								},
 								{
-									coordinates: [-152.3125, 242.75],
+									coordinates: [-60.375, 134.21875],
 								},
 								{
-									coordinates: [-159.6875, 239.375],
+									coordinates: [-61.25, 135.3125],
 								},
 								{
-									coordinates: [-164.125, 231.9375],
+									coordinates: [-62.25, 133.71875],
 								},
 								{
-									coordinates: [-171.9375, 229.4375],
+									coordinates: [-62.96875, 133.90625],
 								},
 								{
-									coordinates: [-180.75, 231.5625],
+									coordinates: [-63.84375, 135.4375],
 								},
 								{
-									coordinates: [-186.4375, 242.3125],
+									coordinates: [-64.625, 135.5625],
 								},
 								{
-									coordinates: [-185.3125, 252.9375],
+									coordinates: [-66.9375, 133.34375],
 								},
 								{
-									coordinates: [-181.125, 262.3125],
+									coordinates: [-68.65625, 132.125],
 								},
 								{
-									coordinates: [-172, 265.75],
+									coordinates: [-69.9375, 132.5625],
+								},
+								{
+									coordinates: [-70.90625, 134.46875],
+								},
+								{
+									coordinates: [-73.4375, 136.71875],
 									text: 'They attacked a pack of wolves which were roaming around in the forest. The battle was fierce, but they were victorious. They managed to find hides, which would prove useful to gain apprenticeship.',
 								},
 								{
-									coordinates: [-183.5625, 268.125],
+									coordinates: [-76.3125, 136.21875],
 								},
 								{
-									coordinates: [-190.3125, 274.125],
+									coordinates: [-78.34375, 137.71875],
 								},
 								{
-									coordinates: [-198.75, 282.25],
+									coordinates: [-79.78125, 139.59375],
+								},
+								{
+									coordinates: [-80.84375, 140.9375],
+								},
+								{
+									coordinates: [-80.8125, 143.15625],
+								},
+								{
+									coordinates: [-80.078125, 144.84375],
 									text: 'Entering the nearby caves, they saw what looked like blue blood - lizardmen blood, and a few creatures which looked way too powerful for them to handle.',
 								},
 								{
-									coordinates: [-174.3125, 285.375],
+									coordinates: [-80.078125, 144.84375],
 								},
 								{
-									coordinates: [-139.65625, 302.75],
+									coordinates: [-73, 144.359375],
+								},
+								{
+									coordinates: [-72.015625, 143.28125],
+								},
+								{
+									coordinates: [-72.15625, 139.0625],
+								},
+								{
+									coordinates: [-72.28125, 136.296875],
+								},
+								{
+									coordinates: [-70.546875, 134.71875],
+								},
+								{
+									coordinates: [-69.328125, 133.0625],
+								},
+								{
+									coordinates: [-67.171875, 133.59375],
+								},
+								{
+									coordinates: [-65.640625, 136.109375],
+								},
+								{
+									coordinates: [-63.35656751865134, 136.05525840836606],
+								},
+								{
+									coordinates: [-62.75, 134.5625],
+								},
+								{
+									coordinates: [-61.515625, 136.265625],
+								},
+								{
+									coordinates: [-60.90625, 136.265625],
+								},
+								{
+									coordinates: [-58.734375, 132.953125],
+								},
+								{
+									coordinates: [-56.56391480275695, 133.00229117665427],
+								},
+								{
+									coordinates: [-56.234375, 135.453125],
+								},
+								{
+									coordinates: [-55.984375, 143.953125],
+								},
+								{
+									coordinates: [-55.734375, 151.125],
+								},
+								{
+									coordinates: [-55.40625, 158.796875],
+								},
+								{
+									coordinates: [-58.484375, 160.78125],
 									text: 'Near the bridge, they met Erol, who had been robbed by the bandits on the bridge nearby. He had a broken leg, which the party Cleric mended.',
 								},
 								{
-									coordinates: [-133.125, 299.9375],
+									coordinates: [-55.390625, 162.328125],
 								},
 								{
-									coordinates: [-132.8125, 330.75],
+									coordinates: [-55.484375, 180.703125],
 								},
 								{
-									coordinates: [-126.3125, 337.6875],
+									coordinates: [-53.03125, 182.015625],
+								},
+								{
+									coordinates: [-52.640625, 184.015625],
 									text: "At the crossroads, they took a left turn to go towards the Fire Mages Monastery, in order to seek a Fire Mage's blessing.",
 								},
 								{
-									coordinates: [-100.5625, 338],
+									coordinates: [-45.859375, 184.28125],
 								},
 								{
-									coordinates: [-81.625, 335.25],
+									coordinates: [-36.296875, 183.96875],
 								},
 								{
-									coordinates: [-81.4375, 325.25],
+									coordinates: [-31.109375, 183.546875],
 								},
 								{
-									coordinates: [-83.3125, 315.9375],
+									coordinates: [-29.109375, 183.1875],
+								},
+								{
+									coordinates: [-28.40625, 178.625],
+								},
+								{
+									coordinates: [-29.046875, 173.765625],
+								},
+								{
+									coordinates: [-29.046875, 173.765625],
 									text: 'They saw Isgaroth, a Fire Mage, who was doing a prayer. They waited for two hours for the prayer to finish and after that they received the Fire Mage blessing for free, as they had made the trip to the Monastery.',
 								},
 								{
-									coordinates: [-81.03125, 314.78125],
+									coordinates: [-28.03125, 175.84375],
 								},
 								{
-									coordinates: [-82.3125, 315.4375],
+									coordinates: [-27.796875, 177.71875],
 								},
 								{
-									coordinates: [-81.03125, 314.78125],
+									coordinates: [-28.796875, 183.9375],
 								},
 								{
-									coordinates: [-83.3125, 315.9375],
+									coordinates: [-34.390625, 184.265625],
 								},
 								{
-									coordinates: [-81.4375, 325.25],
+									coordinates: [-45.90625, 185.0625],
 								},
 								{
-									coordinates: [-81.625, 335.25],
+									coordinates: [-52.078125, 184.921875],
 								},
 								{
-									coordinates: [-100.5625, 338],
+									coordinates: [-54.09375, 186.21875],
 								},
 								{
-									coordinates: [-126.3125, 337.6875],
+									coordinates: [-56.953125, 185.890625],
 								},
 								{
-									coordinates: [-132.8125, 330.75],
+									coordinates: [-58.828125, 185.6875],
 								},
 								{
-									coordinates: [-140.09375, 339.4375],
-								},
-								{
-									coordinates: [-146.75, 342.5],
+									coordinates: [-61.59375, 185.328125],
 									text: 'The party checked out the inn at the crossroads, looking for a place to spend the night in, but the prices were too steep for them, so they went back in town.',
 								},
 							],
 						},
 						{
 							name: 'Session 7 Recap',
-							lineColor: '#216E4E',
+							lineColor: '#84d8e3',
 							points: [
 								{
-									coordinates: [-77.625, 75.375],
+									coordinates: [-57.890625, 81.734375],
+								},
+								{
+									coordinates: [-54.5625, 81.125],
+								},
+								{
+									coordinates: [-50.34375, 80.40625],
 									text: 'Decided to go to pyramids.',
 								},
 								{
-									coordinates: [-71.8125, 79.5625],
+									coordinates: [-47.90625, 80.53125],
 								},
 								{
-									coordinates: [-65.8125, 79.5],
+									coordinates: [-47.90625, 109.15625],
 								},
 								{
-									coordinates: [-65.8125, 87.8125],
+									coordinates: [-47.4375, 123.75],
 								},
 								{
-									coordinates: [-66.6875, 92.625],
+									coordinates: [-47.3125, 127.375],
 								},
 								{
-									coordinates: [-66.5625, 108.375],
+									coordinates: [-49.1875, 129.34375],
 								},
 								{
-									coordinates: [-65.8125, 115.75],
+									coordinates: [-52.875, 129.6875],
 								},
 								{
-									coordinates: [-61.1875, 116.375],
+									coordinates: [-55.71875, 130.9375],
 								},
 								{
-									coordinates: [-58.5625, 115.375],
+									coordinates: [-56.1875, 133.53125],
 								},
 								{
-									coordinates: [-54.125, 118.1875],
+									coordinates: [-56.09375, 139.25],
 								},
 								{
-									coordinates: [-50.625, 116.3125],
+									coordinates: [-55, 139.65625],
 								},
 								{
-									coordinates: [-48, 118],
+									coordinates: [-53.5, 139.84375],
 								},
 								{
-									coordinates: [-47.5625, 125.5625],
+									coordinates: [-49.625, 139.5625],
 								},
 								{
-									coordinates: [-45.375, 126.3125],
+									coordinates: [-49.84375, 137.75],
 								},
 								{
-									coordinates: [-44.1875, 124.6875],
+									coordinates: [-49.03125, 136.90625],
 								},
 								{
-									coordinates: [-45.375, 115.9375],
+									coordinates: [-48.75, 135.875],
 								},
 								{
-									coordinates: [-45.8125, 111.875],
+									coordinates: [-47.6875, 135.75],
 								},
 								{
-									coordinates: [-44.8125, 109.375],
+									coordinates: [-46.75, 136.265625],
 								},
 								{
-									coordinates: [-43.25, 110.125],
+									coordinates: [-44.625, 137.15625],
 								},
 								{
-									coordinates: [-41.9375, 118.0625],
+									coordinates: [-40.9375, 139.0625],
 								},
 								{
-									coordinates: [-42.375, 123.9375],
+									coordinates: [-39.40625, 140.53125],
 								},
 								{
-									coordinates: [-41.3125, 125.3125],
+									coordinates: [-38.03125, 142.125],
 									text: 'Ranger and Sorcerer failed athletics check and injured.',
 								},
 								{
-									coordinates: [-40.3125, 125.0625],
+									coordinates: [-36.5625, 143.3125],
 								},
 								{
-									coordinates: [-40.4375, 120.5625],
+									coordinates: [-34.8125, 146.25],
 								},
 								{
-									coordinates: [-40.3125, 118.0625],
+									coordinates: [-33.5625, 148.1875],
 								},
 								{
-									coordinates: [-39.125, 117.9375],
+									coordinates: [-29.625, 149.625],
 								},
 								{
-									coordinates: [-38.5, 120.4375],
-								},
-								{
-									coordinates: [-39.3125, 126.8125],
-								},
-								{
-									coordinates: [-39.9375, 128.9375],
-								},
-								{
-									coordinates: [-36.25, 131.1875],
-								},
-								{
-									coordinates: [-33.875, 135.9375],
+									coordinates: [-25.9375, 150.875],
 									text: 'Saw inactive golem to the right',
 								},
 								{
-									coordinates: [-32.25, 137.375],
+									coordinates: [-22.46875, 152.03125],
 								},
 								{
-									coordinates: [-30.625, 137.03125],
+									coordinates: [-19.140625, 153.4375],
 									text: 'Paid 2 silver per person to cross the river to the troll.',
 								},
 								{
-									coordinates: [-24.25, 135.75],
+									coordinates: [-15.9375, 153.3125],
 								},
 								{
-									coordinates: [-22.1875, 135.125],
+									coordinates: [-12.625, 152.71875],
 								},
 								{
-									coordinates: [-19.625, 134.9375],
+									coordinates: [-10.46875, 152.6875],
 								},
 								{
-									coordinates: [-18.0625, 135.25],
+									coordinates: [-6.84375, 152.1875],
 									text: 'Saw ruins to the right and 2 chests.',
 								},
 								{
-									coordinates: [-16.25, 134.0625],
+									coordinates: [-3.1875, 151.96875],
 								},
 								{
-									coordinates: [-14.3125, 133.0625],
-								},
-								{
-									coordinates: [-12.875, 132.0625],
+									coordinates: [-2.5625, 150.28125],
 									text: 'Went into tents and found water mages location',
 								},
 								{
-									coordinates: [-14.9375, 130.875],
+									coordinates: [-0.96875, 147.125],
 								},
 								{
-									coordinates: [-16.0625, 129.5625],
+									coordinates: [-2.25, 145.625],
 								},
 								{
-									coordinates: [-16.96875, 128.03125],
+									coordinates: [-4.3125, 145.25],
+								},
+								{
+									coordinates: [-5.125, 144.40625],
+								},
+								{
+									coordinates: [-5, 143.0625],
+								},
+								{
+									coordinates: [-2.96875, 143.015625],
 									text: 'Entered the pyramid to find water mages.',
 								},
 							],
