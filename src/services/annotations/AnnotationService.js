@@ -96,20 +96,22 @@ class AnnotationService {
 					div.style.height = `${height}px`;
 
 					// Create inner div for pseudo-element targeting
-					const innerDiv = document.createElement('div');
+					const innerDiv = document.createElement('img');
 					innerDiv.className = 'custom-icon-image';
-					innerDiv.style.backgroundImage = `url(images/custom-icons/${iconName}.png)`;
+					// innerDiv.style.backgroundImage = `url(images/custom-icons/${iconName}.png)`;
+					innerDiv.src = `images/custom-icons/${iconName}.png`;
 
 					// Add shadow div
-					const shadowDiv = document.createElement('div');
+					const shadowDiv = document.createElement('img');
 					shadowDiv.className = 'custom-icon-shadow';
-					shadowDiv.style.backgroundImage = 'url(images/custom-icons/shadow.png)';
+					// shadowDiv.style.backgroundImage = 'url(images/custom-icons/shadow.png)';
+					shadowDiv.src = 'images/custom-icons/shadow.png';
 
-					div.appendChild(shadowDiv);
+					// div.appendChild(shadowDiv);
 					div.appendChild(innerDiv);
 
 					const icon = L.divIcon({
-						className: 'custom-marker',
+						className: 'custom-marker-icon',
 						html: div.outerHTML,
 						iconSize: [width, height],
 						shadowSize: [width, height],
@@ -146,6 +148,8 @@ class AnnotationService {
 	}
 
 	async _createMarker(point, icon, categoryKey, categoryName) {
+		const labeledIcon = point.icon ? this._createLabeledIcon(icon, point.label) : null;
+
 		const image = point.image ? `<img class="label-image" src="images/assets/${point.image}" width="200"/>` : '';
 		const description = point.description ? `<span class="label-description">${point.description}</span>` : '';
 		const mapLink = point.mapLink
@@ -170,7 +174,7 @@ class AnnotationService {
             `;
 
 			marker = L.marker([point.lat, point.lng], {
-				icon: icon || this._createDefaultIcon(),
+				icon: labeledIcon || this._createDefaultIcon(),
 			});
 
 			marker.on('click', (e) => {
@@ -193,7 +197,7 @@ class AnnotationService {
 			});
 
 			marker = L.marker([point.lat, point.lng], {
-				icon: point.type === 'text' ? textIcon : icon || this._createDefaultIcon(),
+				icon: point.type === 'text' ? textIcon : labeledIcon || this._createDefaultIcon(),
 			}).bindPopup(label);
 		}
 
@@ -215,6 +219,27 @@ class AnnotationService {
 	}
 
 	// Helper methods
+	_createLabeledIcon(baseIcon, label) {
+		// Create a new icon instance
+		const baseIconHtml = baseIcon.options.html;
+
+		// Parse the HTML string to a temporary element
+		const temp = document.createElement('div');
+		temp.innerHTML = baseIconHtml;
+
+		// Find the custom-marker-icon div and add the data-label attribute
+		const iconDiv = temp.querySelector('.custom-icon-image');
+		if (iconDiv) {
+			iconDiv.setAttribute('data-label', label || '');
+		}
+
+		// Create a new icon with the updated HTML
+		return L.divIcon({
+			...baseIcon.options,
+			html: temp.innerHTML,
+		});
+	}
+
 	_createDefaultIcon() {
 		return L.divIcon({
 			className: 'default-marker',

@@ -510,12 +510,11 @@ class CustomMap {
 		const y = Math.round(point.y) + offsetY;
 
 		const icon = marker.options.icon;
-
 		if (icon instanceof L.DivIcon) {
 			const iconElement = document.createElement('div');
 			iconElement.innerHTML = icon.options.html.trim();
 			const imgElement = iconElement.querySelector('img');
-			const iconText = iconElement.querySelector('.custom-marker-icon');
+			const iconText = iconElement.querySelector('.custom-icon-image');
 
 			if (imgElement) {
 				const iconImg = await this._renderDivIconToImage(icon);
