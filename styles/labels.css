@@ -2,19 +2,19 @@
 	display: flex;
 	flex-direction: column;
 	gap: 0.25rem;
-	align-items: center;
+/* 	align-items: center; */
 	justify-content: center;
-	font-family: 'IM Fell English', system-ui, sans-serif;
+/* 	font-family: 'IM Fell English', system-ui, sans-serif; */
 }
 
 .label-title {
 	font-weight: 600;
 	font-size: 10pt;
-	font-family: 'Oldenburg';
+	font-family: system-ui;
 }
 
 .label-description {
-	font-size: pt;
+	font-size: 9pt;
 	text-align: justify;
 	display: block;
 }
