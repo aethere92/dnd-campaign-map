@@ -1,9 +1,7 @@
 .leaflet-popup-content-wrapper {
-	background: #e4d8b7;
-
-	color: #4a2c12;
 	font-family: system-ui;
-
+	background: #fff; 
+	
 	/* max-height: 200px; */
 
 	/* &:has(.label-container-body) {
@@ -41,4 +39,9 @@
 .leaflet-div-icon:has(.empty-marker) {
 	background: none;
 	border: none;
+}
+
+.leaflet-popup-content {
+	margin: none;
+	padding: 0.5rem;
 }
