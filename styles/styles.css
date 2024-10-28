@@ -190,15 +190,18 @@ html {
 
 .map-button {
 	font-size: 10pt;
-	font-family: 'Oldenburg';
+	font-family: system-ui;
+	width: max-content;
+	padding: 0;
+	color: #3F51B5;
 	border: none;
 	background: none;
-	border-radius: 0.75rem;
+	border-radius: none;
 	/* padding: 0.25rem 0.75rem; */
 	cursor: pointer;
 
 	&:hover {
-		background: #d4a76d;
+		text-decoration: underline;
 	}
 }
 
