@@ -1,6 +1,7 @@
 .leaflet-popup-content-wrapper {
 	font-family: system-ui;
 	background: #fff; 
+	border-radius: 0.25rem;
 	
 	/* max-height: 200px; */
 
@@ -42,6 +43,6 @@
 }
 
 .leaflet-popup-content {
-	margin: none;
+	margin: 0;
 	padding: 0.5rem;
 }
