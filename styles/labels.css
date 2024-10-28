@@ -2,9 +2,9 @@
 	display: flex;
 	flex-direction: column;
 	gap: 0.25rem;
-/* 	align-items: center; */
+	/* 	align-items: center; */
 	justify-content: center;
-/* 	font-family: 'IM Fell English', system-ui, sans-serif; */
+	/* 	font-family: 'IM Fell English', system-ui, sans-serif; */
 }
 
 .label-title {
@@ -191,4 +191,17 @@
 
 .custom-marker {
 	background: none !important;
+}
+
+.custom-tooltip {
+	background: rgba(0, 0, 0, 0.8);
+	border: none;
+	border-radius: 4px;
+	color: white;
+	padding: 4px 8px;
+	font-size: 12px;
+}
+
+.custom-tooltip:before {
+	border-top-color: rgba(0, 0, 0, 0.8);
 }

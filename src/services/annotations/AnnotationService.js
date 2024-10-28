@@ -4,6 +4,7 @@ class AnnotationService {
 		this.iconCache = {};
 		this.layers = {};
 		this.markers = [];
+		this.maxIconWidth = 50;
 	}
 
 	// Main public methods
@@ -84,9 +85,16 @@ class AnnotationService {
 				tempImg.src = `images/custom-icons/${iconName}.png`;
 
 				tempImg.onload = () => {
-					// Calculate dimensions based on original image
-					const width = tempImg.width / 2.5;
-					const height = tempImg.height / 2.5;
+					// Calculate initial dimensions
+					let width = tempImg.width / 2;
+					let height = tempImg.height / 2;
+
+					// Check if width exceeds maxIconWidth and adjust proportionally if needed
+					if (width > this.maxIconWidth) {
+						const aspectRatio = height / width;
+						width = this.maxIconWidth;
+						height = Math.round(width * aspectRatio); // Maintain aspect ratio
+					}
 
 					const div = document.createElement('div');
 					div.className = 'custom-icon-container';
@@ -98,16 +106,13 @@ class AnnotationService {
 					// Create inner div for pseudo-element targeting
 					const innerDiv = document.createElement('img');
 					innerDiv.className = 'custom-icon-image';
-					// innerDiv.style.backgroundImage = `url(images/custom-icons/${iconName}.png)`;
 					innerDiv.src = `images/custom-icons/${iconName}.png`;
 
 					// Add shadow div
 					const shadowDiv = document.createElement('img');
 					shadowDiv.className = 'custom-icon-shadow';
-					// shadowDiv.style.backgroundImage = 'url(images/custom-icons/shadow.png)';
 					shadowDiv.src = 'images/custom-icons/shadow.png';
 
-					// div.appendChild(shadowDiv);
 					div.appendChild(innerDiv);
 
 					const icon = L.divIcon({
@@ -130,9 +135,9 @@ class AnnotationService {
 			});
 		} else if (iconType === 'svg') {
 			const iconContent = `
-                <div class="custom-marker-icon">
-                    ${SVG_ICON_DB[iconName]}
-                </div>`;
+				<div class="custom-marker-icon">
+					${SVG_ICON_DB[iconName]}
+				</div>`;
 
 			const icon = L.divIcon({
 				className: 'marker',
@@ -148,7 +153,9 @@ class AnnotationService {
 	}
 
 	async _createMarker(point, icon, categoryKey, categoryName) {
-		const labeledIcon = point.icon ? this._createLabeledIcon(icon, point.label) : null;
+		const labeledIcon = point.icon
+			? this._createLabeledIcon(icon, point.label, point.mapLink ? true : false, point.icon)
+			: null;
 
 		const image = point.image ? `<img class="label-image" src="images/assets/${point.image}" width="200"/>` : '';
 		const description = point.description ? `<span class="label-description">${point.description}</span>` : '';
@@ -161,20 +168,27 @@ class AnnotationService {
 
 		if (categoryKey === 'landmarks') {
 			label = `
-                <div class="sidebar-content">
-                    <span class="label-title">${point.label}</span>
-                    <span class="label-separator"></span>
-                    <div class="label-container-body">
-                        ${image}
-                        ${description}
-                    </div>
-                    <span class="label-separator"></span>
-                    ${mapLink}
-                </div>
-            `;
+				<div class="sidebar-content">
+					<span class="label-title">${point.label}</span>
+					<span class="label-separator"></span>
+					<div class="label-container-body">
+						${image}
+						${description}
+					</div>
+					<span class="label-separator"></span>
+					${mapLink}
+				</div>
+			`;
 
 			marker = L.marker([point.lat, point.lng], {
 				icon: labeledIcon || this._createDefaultIcon(),
+			});
+
+			// Add tooltip
+			marker.bindTooltip(point.label, {
+				permanent: false,
+				direction: 'top',
+				className: 'custom-tooltip',
 			});
 
 			marker.on('click', (e) => {
@@ -183,13 +197,13 @@ class AnnotationService {
 			});
 		} else {
 			label = `<div class='label-container'>
-                <span class="label-title">${point.label}</span>
-                <div class="label-container-body">
-                    ${image}
-                    ${description}
-                </div>
-                    ${mapLink}
-            </div>`;
+				<span class="label-title">${point.label}</span>
+				<div class="label-container-body">
+					${image}
+					${description}
+				</div>
+					${mapLink}
+			</div>`;
 
 			const textIcon = new L.DivIcon({
 				className: 'myDivIcon',
@@ -199,6 +213,16 @@ class AnnotationService {
 			marker = L.marker([point.lat, point.lng], {
 				icon: point.type === 'text' ? textIcon : labeledIcon || this._createDefaultIcon(),
 			}).bindPopup(label);
+
+			// Add tooltip for non-landmark markers as well
+			if (point.type !== 'text') {
+				// Don't add tooltip for text markers since they already show the text
+				marker.bindTooltip(point.label, {
+					permanent: false,
+					direction: 'top',
+					className: 'custom-tooltip',
+				});
+			}
 		}
 
 		marker.on('add', () => {
@@ -231,6 +255,11 @@ class AnnotationService {
 		const iconDiv = temp.querySelector('.custom-icon-image');
 		if (iconDiv) {
 			iconDiv.setAttribute('data-label', label || '');
+		}
+
+		const containerDiv = temp.querySelector('.custom-icon-container');
+		if (containerDiv) {
+			containerDiv.setAttribute('data-tooltip', label || '');
 		}
 
 		// Create a new icon with the updated HTML

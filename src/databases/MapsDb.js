@@ -526,7 +526,7 @@ const MAP_DATABASE = {
 									icon: 'poiCave',
 									iconType: 'png',
 								},
-								{ lat: -2.34375, lng: 55.25, label: 'Paladin ship', type: 'place', icon: 'city' },
+								{ lat: -2.34375, lng: 55.25, label: 'Paladin ship', type: 'place', icon: 'poiShip' },
 								{
 									lat: -34.390625,
 									lng: 133.75,
