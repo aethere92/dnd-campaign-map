@@ -147,9 +147,9 @@
 .custom-marker-text {
 	display: block;
 	width: max-content;
-	font-family: 'Oldenburg';
-	font-size: 9pt;
-	font-weight: 600;
+	font-family: 'IM Fell English SC';
+	font-size: 13pt;
+	font-weight: 500;
 	/* background: rgba(255 255 255 / 35%); */
 	/* padding: 0.25rem 0.5rem; */
 	/* border-radius: 0.25rem; */

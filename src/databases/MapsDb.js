@@ -449,10 +449,11 @@ const MAP_DATABASE = {
 							name: 'Points of interest',
 							items: [
 								{
-									lat: -1.875,
-									lng: 100.875,
+									lat: -1.88,
+									lng: 3.75,
 									label: 'World Map',
 									type: 'text',
+									fontSize: 20,
 									mapLink: 'world_maps',
 								},
 								{

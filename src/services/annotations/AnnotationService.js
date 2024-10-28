@@ -207,7 +207,9 @@ class AnnotationService {
 
 			const textIcon = new L.DivIcon({
 				className: 'myDivIcon',
-				html: `<span class="custom-marker-text">${point.label}</span>`,
+				html: `<span class="custom-marker-text" style="${point.fontSize ? `font-size: ${point.fontSize}pt` : ''}">${
+					point.label
+				}</span>`,
 			});
 
 			marker = L.marker([point.lat, point.lng], {

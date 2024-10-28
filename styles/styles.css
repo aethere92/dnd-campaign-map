@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=MedievalSharp&family=Oldenburg&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=IM+Fell+English+SC&family=MedievalSharp&family=Oldenburg&display=swap');
 
 @import url('variables.css');
 @import url('labels.css');
@@ -166,26 +166,6 @@ html {
 		padding: 0 0.25rem;
 		border-radius: 0.25rem;
 	}
-
-	&.has-map:after {
-		content: '!';
-		position: absolute;
-		/* background: rgba(255 255 255 / 50%); */
-		/* border: 1px solid #7b4122; */
-		/* color: white; */
-		color: white;
-		text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
-		top: 50%;
-		left: 0%;
-		transform: translate(-100%, -50%);
-		font-size: 12pt;
-		font-family: 'Calibri';
-		font-weight: 600;
-		border-radius: 0.25rem;
-		height: 14px;
-		width: 14px;
-		text-align: center;
-	}
 }
 
 .map-button {
@@ -193,7 +173,7 @@ html {
 	font-family: system-ui;
 	width: max-content;
 	padding: 0;
-	color: #3F51B5;
+	color: #3f51b5;
 	border: none;
 	background: none;
 	border-radius: none;
@@ -228,4 +208,30 @@ html {
 	color: white;
 	height: 16px !important;
 	width: 16px !important;
+}
+
+/* Simple glow effect for markers with map links */
+.custom-marker-class.has-map .custom-icon-container {
+	filter: drop-shadow(0 0 3px #d3c190);
+}
+
+/* Add a subtle pulse animation to make it more noticeable */
+.custom-marker-class.has-map {
+	animation: marker-glow 2s ease-in-out infinite;
+}
+
+@keyframes marker-glow {
+	0%,
+	100% {
+		filter: drop-shadow(0 0 3px #d3c190);
+	}
+	50% {
+		filter: drop-shadow(0 0 6px #d3c190);
+	}
+}
+
+/* Optional: enhance the glow on hover */
+.custom-marker-class.has-map:hover {
+	animation: none;
+	filter: drop-shadow(0 0 9px #d3c190);
 }
