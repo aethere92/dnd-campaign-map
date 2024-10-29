@@ -229,9 +229,3 @@ html {
 		filter: drop-shadow(0 0 6px #d3c190);
 	}
 }
-
-/* Optional: enhance the glow on hover */
-.custom-marker-class.has-map:hover {
-	animation: none;
-	filter: drop-shadow(0 0 9px #d3c190);
-}

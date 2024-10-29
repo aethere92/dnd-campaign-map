@@ -1,7 +1,7 @@
 // Constants
 const CONFIG = {
 	TILE_SIZE: 256,
-	IS_DEBUG: false,
+	IS_DEBUG: true,
 };
 
 // Main Map Class
@@ -15,6 +15,7 @@ class CustomMap {
 		this.loadingIndicator = this._createLoadingIndicator();
 		this.isDebugMode = isDebugMode;
 		this.initialMapKey = initialMapKey;
+		this.previousMapKey = null;
 
 		window.customMap = this;
 		this.init(initialMapKey);
@@ -67,7 +68,29 @@ class CustomMap {
 			button.style.cssText =
 				'background-color: white; padding: 5px 10px; cursor: pointer; border: none; border-radius: 0.25rem; font-family: system-ui;';
 
-			L.DomEvent.on(button, 'click', () => this.loadMap(mapKey));
+			// Add event listener to the button
+			L.DomEvent.on(button, 'click', () => {
+				// Check if the current map key is not the initial map key
+				if (this.currentMapKey !== this.initialMapKey) {
+					// Find the index of the last "submaps" occurrence in the current map key
+					const mapKeyParts = this.currentMapKey.split('.');
+					const lastSubmapsIndex = mapKeyParts.lastIndexOf('submaps');
+
+					// If there are at least two "submaps" occurrences, the previous map key is the part before the last "submaps"
+					if (lastSubmapsIndex > -1 && lastSubmapsIndex < mapKeyParts.length - 1) {
+						const previousMapKeyParts = mapKeyParts.slice(0, lastSubmapsIndex);
+						const previousMapKey = previousMapKeyParts.join('.');
+						this.loadMap(previousMapKey);
+					} else {
+						// Otherwise, load the initial map key
+						this.loadMap(this.initialMapKey);
+					}
+				} else {
+					// Load the main map
+					this.loadMap(this.initialMapKey);
+				}
+			});
+
 			L.DomEvent.disableClickPropagation(container);
 
 			return container;
@@ -104,7 +127,7 @@ class CustomMap {
 
 			// Add back-to-main button if not on main map
 			if (mapKey !== this.initialMapKey) {
-				this.addMapButton(this.initialMapKey, 'topleft', 'Back to Main Map');
+				this.addMapButton(this.initialMapKey, 'topleft', 'Back to previous map');
 			}
 
 			// Add annotations if they exist for this map
