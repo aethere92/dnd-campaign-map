@@ -15,7 +15,6 @@ class CustomMap {
 		this.loadingIndicator = this._createLoadingIndicator();
 		this.isDebugMode = isDebugMode;
 		this.initialMapKey = initialMapKey;
-		this.previousMapKey = null;
 
 		window.customMap = this;
 		this.init(initialMapKey);
@@ -156,8 +155,8 @@ class CustomMap {
 
 	_setMapColor(config) {
 		const map = document.getElementById('map');
-		if (!config.metadata.backgroundColor) map.style.background = '#e7dabb';
-		else map.style.background = config.metadata.backgroundColor;
+		const backgroundColor = config.metadata.backgroundColor || '#e7dabb';
+		map.style.background = backgroundColor;
 	}
 
 	_getMapConfig(mapKey) {
