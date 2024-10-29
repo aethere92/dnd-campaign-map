@@ -123,7 +123,7 @@
 	& .label-title {
 		font-size: 18pt;
 		font-family: 'IM Fell English SC', system-ui, sans-serif;
-		font-size: 500;
+		font-weight: 500;
 	}
 
 	& .label-description {
