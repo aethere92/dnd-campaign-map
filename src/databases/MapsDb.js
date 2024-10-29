@@ -350,6 +350,7 @@ const MAP_DATABASE = {
 						type: 'place',
 						icon: 'poiCombat',
 						iconType: 'png',
+						mapLink: 'world_maps.submaps.combat_encounters.bone_wraiths_encounter_01',
 					},
 				],
 			},
@@ -1250,6 +1251,19 @@ const MAP_DATABASE = {
 								},
 							},
 						},
+					},
+				},
+			},
+			combat_encounters: {
+				bone_wraiths_encounter_01: {
+					metadata: {
+						path: 'maps/encounters/world_map/bone_wraiths_encounter_01',
+						sizes: {
+							maxZoom: 3,
+							imageWidth: 6144,
+							imageHeight: 3072,
+						},
+						backgroundColor: '#0a1c21',
 					},
 				},
 			},
