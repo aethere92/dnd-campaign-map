@@ -104,6 +104,8 @@
 	border: none;
 	cursor: pointer;
 	font-weight: 500;
+	font-family: 'IM Fell English SC', system-ui, sans-serif;
+	font-size: 13pt;
 }
 
 .sidebar-inner-content {
@@ -119,8 +121,9 @@
 		'Helvetica Neue', sans-serif;
 
 	& .label-title {
-		font-size: 16pt;
-		font-family: 'MedievalSharp', sans-serif;
+		font-size: 18pt;
+		font-family: 'IM Fell English SC', system-ui, sans-serif;
+		font-size: 500;
 	}
 
 	& .label-description {
