@@ -558,6 +558,14 @@ const MAP_DATABASE = {
                             name: 'Navigation arrows',
                             items: [
                                 {
+                                    lat: -46.45,
+                                    lng: 0.72,
+                                    label: 'To Landing Zone',
+                                    type: 'place',
+                                    icon: 'arrowDirectionLeft',
+                                    iconType: 'png',
+                                },
+                                {
                                     lat: -56.3,
                                     lng: 204.48,
                                     label: 'To Mercenaries',
