@@ -37,7 +37,7 @@ const MAP_DATABASE = {
 						type: 'place',
 						icon: 'cityCapital',
 						iconType: 'png',
-						mapLink: 'world_maps.submaps.islands.korinis_island',
+						mapLink: 'world_maps.submaps.islands.korinis_island.submaps.extensions.korinis_island_landing_zone',
 					},
 				],
 			},
