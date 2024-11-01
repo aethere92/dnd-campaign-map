@@ -21,14 +21,6 @@ class UrlManager {
 		return new URLSearchParams(window.location.search).get('map');
 	}
 
-	static updateUrl(mapKey, pushState = true) {
-		const newUrl = new URL(window.location.href);
-		newUrl.searchParams.set('map', mapKey);
-		if (pushState) {
-			window.history.pushState({ mapKey }, '', newUrl.toString());
-		}
-	}
-
 	static updateUrl(mapKey, pushState = true, target = null) {
 		let url = `?map=${mapKey}`;
 
@@ -36,7 +28,7 @@ class UrlManager {
 			// Simplified target format: type:id:lat,lng
 			// Example: marker:cities.baldurs_gate:-167.34,210.40
 			const targetStr = `${target.type}:${target.id}:${target.coordinates.join(',')}`;
-			url += `&t=${encodeURIComponent(targetStr)}`;
+			url += `&t=${targetStr}`;
 		}
 
 		if (pushState) {
@@ -54,7 +46,7 @@ class UrlManager {
 		let target = null;
 		if (targetStr) {
 			try {
-				const [type, id, coords] = decodeURIComponent(targetStr).split(':');
+				const [type, id, coords] = targetStr.split(':');
 				const [lat, lng] = coords.split(',').map(Number);
 
 				target = {
@@ -284,7 +276,7 @@ class CustomMap {
 		if (!coordinates) return;
 
 		// Set a higher zoom level for better focus
-		const zoomLevel = this.#map.getMaxZoom() - 1;
+		const zoomLevel = this.#map.getMaxZoom();
 
 		// First set the view
 		this.#map.setView(coordinates, zoomLevel);

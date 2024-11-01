@@ -284,6 +284,7 @@ class AnnotationService {
 				element.setAttribute('data-category', categoryKey);
 				element.setAttribute('data-category-name', categoryName);
 				element.setAttribute('data-label', point.label);
+				element.setAttribute('data-url', this._generateMarkerUrl(point, categoryKey));
 
 				if (point.mapLink) {
 					element.classList.add('has-map');
@@ -291,15 +292,51 @@ class AnnotationService {
 			}
 		});
 
-		marker.on('click', (e) => {
-			const target = {
-				type: 'marker',
-				id: `${categoryKey}.${point.label.toLowerCase().replace(/\s+/g, '_')}`,
-				coordinates: [point.lat, point.lng],
-			};
-			UrlManager.updateUrl(this.map.customMap.getCurrentMapKey(), true, target);
-			L.DomEvent.stopPropagation(e);
+		marker.on('popupopen', (e) => {
+			const element = marker.getElement();
+			const popupContent = e.popup.getContent();
+
+			// Create a temporary DOM parser to find the button
+			const tempDiv = document.createElement('div');
+			tempDiv.innerHTML = popupContent;
+
+			const urlButton = tempDiv.querySelector('.label-marker-anchor');
+			if (urlButton) {
+				// Remove any existing listeners to prevent multiple bindings
+				urlButton.removeEventListener('click', this._handleUrlButtonClick);
+
+				// Create a bound method to preserve 'this' context
+				this._handleUrlButtonClick = (event) => {
+					event.preventDefault(); // Prevent default link behavior
+					this._showMarkerUrl(element);
+				};
+
+				// Clone the button from the popup to add the listener
+				const actualButton = e.popup._contentNode.querySelector('.label-marker-anchor');
+				if (actualButton) {
+					actualButton.addEventListener('click', this._handleUrlButtonClick);
+				} else {
+					console.error('Actual button not found in popup');
+				}
+			} else {
+				console.error('No URL button found in popup content');
+			}
 		});
+	}
+
+	_showMarkerUrl(element) {
+		if (!element) return;
+		const url = element.dataset.url;
+		prompt('Marker link', url);
+	}
+
+	_generateMarkerUrl(point, categoryKey) {
+		// Generate a unique URL for the marker based on its properties
+		const mapKey = this.map.customMap.getCurrentMapKey();
+		const targetId = `marker:${categoryKey}.${point.label.toLowerCase().replace(/\s+/g, '_')}:${point.lat},${
+			point.lng
+		}`;
+		return `${window.location.origin}${window.location.pathname}?map=${mapKey}&t=${targetId}`;
 	}
 
 	_createSidebarContent({ label, image, description, mapLink }) {
@@ -320,7 +357,10 @@ class AnnotationService {
 	_createPopupContent({ label, image, description, mapLink }) {
 		return `
             <div class='label-container'>
-                <span class="label-title">${label}</span>
+                <div class="marker-label-container">
+					<button class="label-marker-anchor" title="Link to this marker">🔗</button>
+                    <span class="label-title">${label}</span>
+                </div>
                 <div class="label-container-body">
                     ${image}
                     ${description}

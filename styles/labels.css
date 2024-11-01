@@ -217,3 +217,21 @@
 	font-family: 'Oldenburg';
 	text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
 }
+
+.marker-label-container {
+	display: flex;
+	justify-content: flex-start;
+	gap: 0.25rem;
+}
+
+.label-marker-anchor {
+	border: none;
+	padding: 0;
+	background: none;
+	cursor: pointer;
+
+	&:hover {
+		background: #eee;
+		border-radius: 0.25rem;
+	}
+}
