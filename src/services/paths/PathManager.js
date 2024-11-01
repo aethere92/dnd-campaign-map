@@ -181,6 +181,17 @@ class PathManager {
 					smoothFactor: 3,
 				});
 				pathGroup.addLayer(segment);
+
+				// Add click handler for path segments
+				segment.on('click', (e) => {
+					const target = {
+						type: 'path',
+						id: pathData.name.toLowerCase().replace(/\s+/g, '_'),
+						coordinates: startPoint.coordinates,
+					};
+					UrlManager.updateUrl(this.map.customMap.getCurrentMapKey(), true, target);
+					L.DomEvent.stopPropagation(e);
+				});
 			}
 
 			// Add text markers if present
@@ -199,6 +210,18 @@ class PathManager {
 						// Use point color if specified, otherwise use line color or default
 						markerElement.style.backgroundColor = point.pointColor || pathData.lineColor || '#F15B50';
 					});
+
+					// Add click handler for text markers
+					markerDot.on('click', () => {
+						const target = {
+							type: 'path',
+							name: pathData.name,
+							coordinates: point.coordinates,
+							text: point.text,
+						};
+						UrlManager.updateUrl(this.map.customMap.getCurrentMapKey(), true, target);
+					});
+
 					pathGroup.addLayer(markerDot);
 				}
 			});
@@ -247,6 +270,17 @@ class PathManager {
 
 			this.areaGroups[area.name] = L.layerGroup([polygon, textMarker]);
 			this.areaLayerGroup.addLayer(this.areaGroups[area.name]);
+
+			// Add click handler for areas
+			polygon.on('click', (e) => {
+				const target = {
+					type: 'area',
+					id: area.name.toLowerCase().replace(/\s+/g, '_'),
+					coordinates: [center.lat, center.lng],
+				};
+				UrlManager.updateUrl(this.map.customMap.getCurrentMapKey(), true, target);
+				L.DomEvent.stopPropagation(e);
+			});
 		});
 
 		this.areaLayerGroup.addTo(this.map);
@@ -280,5 +314,51 @@ class PathManager {
 		if (layerControlContainer) {
 			layerControlContainer.classList.add('layer-group-overviews');
 		}
+	}
+
+	_createPathControls() {
+		// Add each path to the paths category
+		Object.entries(this.pathGroups).forEach(([pathName, pathLayer]) => {
+			this.map.customMap.updateLayerGroup('paths', `🛣️ ${pathName}`, pathLayer);
+		});
+	}
+
+	_createAreaControls() {
+		// Add each area to the areas category
+		Object.entries(this.areaGroups).forEach(([areaName, areaLayer]) => {
+			this.map.customMap.updateLayerGroup('areas', `📍 ${areaName}`, areaLayer);
+		});
+	}
+
+	focusPath(target) {
+		if (!target?.name) return;
+
+		setTimeout(() => {
+			const pathGroup = this.pathGroups[target.name];
+			if (pathGroup) {
+				// Make sure the path layer is visible
+				this.pathMasterGroup.addTo(this.map);
+				pathGroup.addTo(this.map);
+
+				// Update layer control
+				this.map.customMap.updateLayerGroup('paths', `🛣️ ${target.name}`, pathGroup);
+			}
+		}, 100);
+	}
+
+	focusArea(target) {
+		if (!target?.name) return;
+
+		setTimeout(() => {
+			const areaGroup = this.areaGroups[target.name];
+			if (areaGroup) {
+				// Make sure the area layer is visible
+				this.areaLayerGroup.addTo(this.map);
+				areaGroup.addTo(this.map);
+
+				// Update layer control
+				this.map.customMap.updateLayerGroup('areas', `📍 ${target.name}`, areaGroup);
+			}
+		}, 100);
 	}
 }

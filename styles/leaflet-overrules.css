@@ -50,3 +50,21 @@
     margin: 0;
     padding: 0.5rem;
 }
+
+
+.leaflet-control-layers-overlays strong {
+	display: block;
+	margin: 5px 0;
+	padding-top: 5px;
+	border-top: 1px solid #ddd;
+  }
+  
+  .leaflet-control-layers-overlays strong:first-child {
+	border-top: none;
+	padding-top: 0;
+  }
+  
+  /* Indent the layer items under categories */
+  .leaflet-control-layers-overlays label:not(:has(strong)) {
+	margin-left: 10px;
+  }

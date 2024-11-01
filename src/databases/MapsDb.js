@@ -1547,6 +1547,307 @@ const MAP_DATABASE = {
 								},
 							],
 						},
+						{
+							name: 'Secob farm',
+							textRotation: '0deg',
+							textSize: 16,
+							textFontType: 'title',
+							lineColor: null,
+							interiorColor: 'rgb(226 178 3 / 40%)',
+							points: [
+								{
+									coordinates: [-46.828125, 130.765625],
+								},
+								{
+									coordinates: [-45.46875, 132.375],
+								},
+								{
+									coordinates: [-44.875, 133.921875],
+								},
+								{
+									coordinates: [-44.8125, 135.90625],
+								},
+								{
+									coordinates: [-44.984375, 136.6875],
+								},
+								{
+									coordinates: [-44.90625, 138.09375],
+								},
+								{
+									coordinates: [-44.625, 140],
+								},
+								{
+									coordinates: [-44.609375, 141.921875],
+								},
+								{
+									coordinates: [-45.203125, 143.625],
+								},
+								{
+									coordinates: [-46.40625, 145.375],
+								},
+								{
+									coordinates: [-47.125, 146.234375],
+								},
+								{
+									coordinates: [-47.75, 146.078125],
+								},
+								{
+									coordinates: [-48.34375, 147.59375],
+								},
+								{
+									coordinates: [-50.8125, 150.25],
+								},
+								{
+									coordinates: [-54.515625, 150.71875],
+								},
+								{
+									coordinates: [-54.453125, 148.34375],
+								},
+								{
+									coordinates: [-54.828125, 145.765625],
+								},
+								{
+									coordinates: [-55.046875, 140.765625],
+								},
+								{
+									coordinates: [-54.953125, 139.21875],
+								},
+								{
+									coordinates: [-54.453125, 132.984375],
+								},
+								{
+									coordinates: [-53.515625, 131.921875],
+								},
+								{
+									coordinates: [-50.984375, 131.46875],
+								},
+								{
+									coordinates: [-48.640625, 131.25],
+								},
+							],
+						},
+						{
+							name: 'Lobart farm',
+							textRotation: '0deg',
+							textSize: 16,
+							textFontType: 'title',
+							lineColor: null,
+							interiorColor: 'rgb(226 178 3 / 40%)',
+							points: [
+								{
+									coordinates: [-48.46875, 0.03125],
+								},
+								{
+									coordinates: [-49.125, 9.9375],
+								},
+								{
+									coordinates: [-49.21875, 13.8125],
+								},
+								{
+									coordinates: [-48.46875, 22.375],
+								},
+								{
+									coordinates: [-48.65625, 33.09375],
+								},
+								{
+									coordinates: [-47.46875, 42.46875],
+								},
+								{
+									coordinates: [-50.3125, 43],
+								},
+								{
+									coordinates: [-56, 42.5],
+								},
+								{
+									coordinates: [-57.84375, 41.3125],
+								},
+								{
+									coordinates: [-60.09375, 36.96875],
+								},
+								{
+									coordinates: [-60.1875, 32.03125],
+								},
+								{
+									coordinates: [-63.34375, 28.3125],
+								},
+								{
+									coordinates: [-63.90625, 21.9375],
+								},
+								{
+									coordinates: [-65.3125, 15.90625],
+								},
+								{
+									coordinates: [-64.0625, 7.8125],
+								},
+								{
+									coordinates: [-63.84375, 0.09375],
+								},
+							],
+						},
+						{
+							name: 'Inn',
+							textRotation: '0deg',
+							textSize: 16,
+							textFontType: 'title',
+							lineColor: null,
+							interiorColor: 'rgb(87 157 255 / 40%)',
+							points: [
+								{
+									coordinates: [-58.375, 181.59375],
+								},
+								{
+									coordinates: [-58.875, 183.28125],
+								},
+								{
+									coordinates: [-58.75, 184.90625],
+								},
+								{
+									coordinates: [-58.3125, 185.75],
+								},
+								{
+									coordinates: [-57.40625, 186.59375],
+								},
+								{
+									coordinates: [-56.53125, 187.0625],
+								},
+								{
+									coordinates: [-56.75, 191.5625],
+								},
+								{
+									coordinates: [-60.4375, 192.84375],
+								},
+								{
+									coordinates: [-63.96875, 193.71875],
+								},
+								{
+									coordinates: [-67.03125, 194],
+								},
+								{
+									coordinates: [-67.75, 191.34375],
+								},
+								{
+									coordinates: [-69.09375, 185.71875],
+								},
+								{
+									coordinates: [-69.40625, 182.4375],
+								},
+								{
+									coordinates: [-67.96875, 179.90625],
+								},
+								{
+									coordinates: [-65.625, 179.8125],
+								},
+								{
+									coordinates: [-64.9375, 179.09375],
+								},
+								{
+									coordinates: [-62.40625, 179.09375],
+								},
+								{
+									coordinates: [-60.53125, 180.21875],
+								},
+								{
+									coordinates: [-60.25, 181],
+								},
+							],
+						},
+						{
+							name: 'Fire Mages Monastery',
+							textRotation: '0deg',
+							textSize: 12,
+							textFontType: 'title',
+							lineColor: null,
+							interiorColor: 'rgb(255 0 0 / 20%)',
+							points: [
+								{
+									coordinates: [-0.125, 177.8125],
+								},
+								{
+									coordinates: [-2.125, 178],
+								},
+								{
+									coordinates: [-3.4375, 175.75],
+								},
+								{
+									coordinates: [-6.1875, 171.0625],
+								},
+								{
+									coordinates: [-9.625, 171.5625],
+								},
+								{
+									coordinates: [-13.25, 171.75],
+								},
+								{
+									coordinates: [-15.6875, 171.6875],
+								},
+								{
+									coordinates: [-15.9375, 172.9375],
+								},
+								{
+									coordinates: [-15.125, 175.625],
+								},
+								{
+									coordinates: [-17, 177.75],
+								},
+								{
+									coordinates: [-16.0625, 181.6875],
+								},
+								{
+									coordinates: [-26.9375, 182.125],
+								},
+								{
+									coordinates: [-26.1875, 177.9375],
+								},
+								{
+									coordinates: [-26.4375, 172.0625],
+								},
+								{
+									coordinates: [-28.3125, 168.5],
+								},
+								{
+									coordinates: [-29.8125, 168.1875],
+								},
+								{
+									coordinates: [-30.5, 172.75],
+								},
+								{
+									coordinates: [-29.875, 179.6875],
+								},
+								{
+									coordinates: [-31, 182.5625],
+								},
+								{
+									coordinates: [-31.25, 184.75],
+								},
+								{
+									coordinates: [-16.5, 184.3125],
+								},
+								{
+									coordinates: [-16.5625, 187.9375],
+								},
+								{
+									coordinates: [-17.875, 189.625],
+								},
+								{
+									coordinates: [-15, 192.75],
+								},
+								{
+									coordinates: [-16.1875, 196.8125],
+								},
+								{
+									coordinates: [-16.375, 199.5625],
+								},
+								{
+									coordinates: [-4.3125, 192.8125],
+								},
+								{
+									coordinates: [-2, 186.6875],
+								},
+								{
+									coordinates: [-0.0625, 187.625],
+								},
+							],
+						},
 					],
 					submaps: {
 						interiors: {

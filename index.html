@@ -17,12 +17,13 @@
 		<!-- CORE SERVICES -->
 		<script defer src="src/services/annotations/AnnotationService.js"></script>
 		<script defer src="src/services/paths/PathManager.js"></script>
-		<script defer src="src/services/map/DungeonMapServices.js"></script>
 		<script defer src="src/services/notes/NoteManager.js"></script>
+		<script defer src="src/services/map/DungeonMapServices.js"></script>
 		<!-- CORE SCRIPTS -->
 		<script defer src="src/core/Initialization.js"></script>
 		<script defer src="src/core/EventHandlers.js"></script>
 	</head>
+
 	<body>
 		<div id="map"></div>
 		<div id="actions">
@@ -35,7 +36,8 @@
 					Toggle names
 				</button>
 			</div>
-			<div id="coordinates" style="border: 2px solid rgba(0, 0, 0, 0.2); background-clip: padding-box"></div>
+			<!-- <div id="coordinates"
+			style="border: 2px solid rgba(0, 0, 0, 0.2); background-clip: padding-box"></div> -->
 		</div>
 		<div id="note-form" style="display: none">
 			<textarea id="note-content" placeholder="Enter your note"></textarea>
