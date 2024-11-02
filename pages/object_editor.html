@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Map Database Editor</title>
+		<link rel="stylesheet" href="styles/styles.css" />
+
+		<!-- SCHEMAS -->
+		<script defer src="src/databases/schemas.js"></script>
+
+		<!-- HELPERS -->
+		<script defer src="src/helpers/creators.js"></script>
+		<script defer src="src/helpers/helpers.js"></script>
+		<script defer src="src/helpers/processors.js"></script>
+
+		<!-- SERVICES -->
+		<script defer src="src/services/navigationTree.js"></script>
+		<script defer src="src/services/search.js"></script>
+		<script defer src="src/services/toast.js"></script>
+
+		<!-- IMPORT / EXPORT -->
+		<script defer src="src/services/import.js"></script>
+		<script defer src="src/services/export.js"></script>
+
+		<!-- INIT -->
+		<script defer src="src/init.js"></script>
+	</head>
+	<body>
+		<div class="app-container">
+			<header class="header">
+				<h1>Map Database Editor</h1>
+				<div class="search-bar">
+					<span class="search-icon">🔍</span>
+					<input type="text" id="search-input" placeholder="Search fields..." onInput="handleSearch(event)" />
+				</div>
+				<div class="button-group">
+					<button onclick="showImportDialog()" class="primary-button">Import</button>
+					<button onclick="exportData()" class="success-button">Export</button>
+				</div>
+			</header>
+
+			<nav class="sidebar">
+				<div id="navigation-tree"></div>
+			</nav>
+
+			<main class="main-content">
+				<div class="breadcrumb" id="breadcrumb"></div>
+				<div id="editor"></div>
+			</main>
+
+			<div class="toast-container" id="toast-container"></div>
+		</div>
+
+		<!-- Import Dialog -->
+		<dialog id="import-dialog" class="import-section">
+			<h2>Import Data</h2>
+			<p>Paste your JSON data here:</p>
+			<textarea id="json-input" placeholder="Paste your MAP_DATABASE object here..."></textarea>
+			<div class="button-group">
+				<button onclick="importFromText()" class="primary-button">Import from Text</button>
+				<input
+					type="file"
+					id="file-input"
+					accept=".json,.js,.txt"
+					onchange="importFromFile(this)"
+					style="display: none" />
+				<label for="file-input" class="primary-button" style="cursor: pointer">Choose File</label>
+				<button onclick="document.getElementById('import-dialog').close()" class="danger-button">Cancel</button>
+			</div>
+		</dialog>
+
+		<dialog id="new-item-dialog" class="import-section">
+			<h2>Add New Item</h2>
+			<div style="display: flex; flex-direction: column; gap: 12px; margin: 16px 0">
+				<div>
+					<label>Key name:</label>
+					<input type="text" id="new-item-key" placeholder="Enter key name" />
+				</div>
+				<div>
+					<label>Type:</label>
+					<select id="new-item-type">
+						<option value="string">String</option>
+						<option value="number">Number</option>
+						<option value="boolean">Boolean</option>
+						<option value="object">Object</option>
+						<option value="array">Array</option>
+					</select>
+				</div>
+				<div>
+					<label>Quantity:</label>
+					<input type="number" id="new-item-quantity" value="1" min="1" max="100" />
+				</div>
+			</div>
+			<div class="button-group">
+				<button onclick="confirmAddNewItem()" class="primary-button">Add</button>
+				<button onclick="document.getElementById('new-item-dialog').close()" class="danger-button">Cancel</button>
+			</div>
+		</dialog>
+	</body>
+</html>
