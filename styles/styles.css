@@ -3,6 +3,7 @@
 @import url('variables.css');
 @import url('labels.css');
 @import url('leaflet-overrules.css');
+@import url('leaflet-controls.css');
 
 body,
 html {

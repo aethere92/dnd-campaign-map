@@ -1,17 +1,15 @@
 class PathManager {
 	constructor(map, isDebugMode) {
 		this.map = map;
-
 		this.paths = [];
-		this.pathLayer = null;
 		this.isDebugMode = isDebugMode;
-
 		this.pathMasterGroup = L.layerGroup();
 		this.pathGroups = {};
 		this.areaGroups = {};
-		this.areaLayerGroup = L.layerGroup(); // New layer group for areas
+		this.areaLayerGroup = L.layerGroup();
 	}
 
+	// Initialization Methods
 	init() {
 		this._initializePathLayer();
 		this._initializeGeoman();
@@ -42,7 +40,6 @@ class PathManager {
 			removalMode: true,
 		});
 
-		// Hide controls if not in debug mode
 		if (!this.isDebugMode) {
 			this.map.pm.removeControls();
 		}
@@ -53,8 +50,6 @@ class PathManager {
 			if (e.shape === 'Line' || e.shape === 'Polygon') {
 				const path = e.layer;
 				const pathData = this._convertPathToData(path);
-
-				console.log(path);
 				this.paths.push(pathData);
 			}
 		});
@@ -91,7 +86,6 @@ class PathManager {
 	}
 
 	_initializeDebugControls() {
-		// Add export button
 		L.Control.ExportButton = L.Control.extend({
 			onAdd: (map) => {
 				const container = L.DomUtil.create('div', 'leaflet-bar leaflet-control');
@@ -106,36 +100,7 @@ class PathManager {
 		new L.Control.ExportButton({ position: 'topleft' }).addTo(this.map);
 	}
 
-	_convertPathToData(path) {
-		const latlngs = path.getLatLngs();
-		let points = [];
-
-		if (Array.isArray(latlngs[0])) {
-			// It's a polygon
-			latlngs.forEach((ring) => {
-				ring.forEach((latlng) => {
-					points.push({
-						coordinates: [latlng.lat, latlng.lng],
-					});
-				});
-			});
-		} else {
-			// It's a line
-			points = latlngs.map((latlng) => ({
-				coordinates: [latlng.lat, latlng.lng],
-			}));
-		}
-
-		return {
-			name: `Path ${this.paths.length + 1}`,
-			points: points,
-		};
-	}
-
-	_exportPaths() {
-		console.log('paths:', JSON.stringify(this.paths, null, 2));
-	}
-
+	// Path Management Methods
 	loadPaths(pathsData) {
 		if (!Array.isArray(pathsData) || pathsData.length === 0) {
 			console.warn('No valid path data provided');
@@ -151,7 +116,6 @@ class PathManager {
 			return;
 		}
 
-		// Clear existing paths
 		this.pathMasterGroup.clearLayers();
 		this.pathGroups = {};
 
@@ -168,9 +132,6 @@ class PathManager {
 			for (let i = 0; i < pathData.points.length - 1; i++) {
 				const startPoint = pathData.points[i];
 				const endPoint = pathData.points[i + 1];
-
-				// Determine segment color
-				// Use point color if specified, otherwise use line color or default
 				const segmentColor = startPoint.pointColor || endPoint.pointColor || pathData.lineColor || '#F15B50';
 
 				const segment = L.polyline([startPoint.coordinates, endPoint.coordinates], {
@@ -182,7 +143,6 @@ class PathManager {
 				});
 				pathGroup.addLayer(segment);
 
-				// Add click handler for path segments
 				segment.on('click', (e) => {
 					const target = {
 						type: 'path',
@@ -194,7 +154,7 @@ class PathManager {
 				});
 			}
 
-			// Add text markers if present
+			// Add text markers
 			pathData.points.forEach((point) => {
 				if (point.text) {
 					pathTextIndex++;
@@ -207,11 +167,9 @@ class PathManager {
 
 					markerDot.on('add', () => {
 						const markerElement = markerDot.getElement();
-						// Use point color if specified, otherwise use line color or default
 						markerElement.style.backgroundColor = point.pointColor || pathData.lineColor || '#F15B50';
 					});
 
-					// Add click handler for text markers
 					markerDot.on('click', () => {
 						const target = {
 							type: 'path',
@@ -230,135 +188,242 @@ class PathManager {
 			this.pathMasterGroup.addLayer(pathGroup);
 		});
 
-		// Add the master group to the map but don't display it
 		this.pathMasterGroup.addTo(this.map);
 		this.map.removeLayer(this.pathMasterGroup);
 
 		this._createPathControls();
 	}
 
-	// New method to create Geoman areas
-	createGeomanAreas(areas) {
-		if (!Array.isArray(areas) || areas.length === 0) {
-			console.warn('No valid area data provided');
-			return;
-		}
-
-		areas.forEach((area) => {
-			if (!area.points || !Array.isArray(area.points) || area.points.length < 3) {
-				console.warn(`Invalid area data for area ${area.name}`);
-				return;
-			}
-
-			const latlngs = area.points.map((point) => point.coordinates);
-			const polygon = L.polygon(latlngs, {
-				color: area.lineColor || 'transparent',
-				fillColor: area.interiorColor || '#3388ff',
-				fillOpacity: 0.5,
-			}).addTo(this.map);
-
-			// Add text in the middle of the polygon
-			const center = polygon.getBounds().getCenter();
-			const textMarker = L.marker(center, {
-				icon: L.divIcon({
-					className: 'polygon-text',
-					html: `<span class="polygon-text" style="transform: rotate(${area?.textRotation ?? '0deg'}); font-size: ${
-						area?.textSize ?? '10'
-					}pt; font-family: var(--font-${area?.textFontType ?? 'description'});">${area.name}</span>`,
-				}),
-			}).addTo(this.map);
-
-			this.areaGroups[area.name] = L.layerGroup([polygon, textMarker]);
-			this.areaLayerGroup.addLayer(this.areaGroups[area.name]);
-
-			// Add click handler for areas
-			polygon.on('click', (e) => {
-				const target = {
-					type: 'area',
-					id: area.name.toLowerCase().replace(/\s+/g, '_'),
-					coordinates: [center.lat, center.lng],
-				};
-				UrlManager.updateUrl(this.map.customMap.getCurrentMapKey(), true, target);
-				L.DomEvent.stopPropagation(e);
-			});
-		});
-
-		this.areaLayerGroup.addTo(this.map);
-		this.map.removeLayer(this.areaLayerGroup);
-		this._createAreaControls();
-	}
-
-	_createAreaControls() {
-		const areaControls = {};
-
-		for (const [areaName, areaGroup] of Object.entries(this.areaGroups)) {
-			areaControls[areaName] = areaGroup;
-		}
-
-		const layerControl = L.control.layers(null, areaControls, { collapsed: true }).addTo(this.map);
-		const layerControlContainer = layerControl.getContainer();
-		if (layerControlContainer) {
-			layerControlContainer.classList.add('layer-group-areas');
-		}
-	}
-
 	_createPathControls() {
-		const pathControls = {};
-
-		for (const [pathName, pathGroup] of Object.entries(this.pathGroups)) {
-			pathControls[pathName] = pathGroup;
-		}
-
-		const layerControl = L.control.layers(null, pathControls, { collapsed: true }).addTo(this.map);
-		const layerControlContainer = layerControl.getContainer();
-		if (layerControlContainer) {
-			layerControlContainer.classList.add('layer-group-overviews');
-		}
-	}
-
-	_createPathControls() {
-		// Add each path to the paths category
 		Object.entries(this.pathGroups).forEach(([pathName, pathLayer]) => {
 			this.map.customMap.updateLayerGroup('paths', `🛣️ ${pathName}`, pathLayer);
 		});
 	}
 
-	_createAreaControls() {
-		// Add each area to the areas category
-		Object.entries(this.areaGroups).forEach(([areaName, areaLayer]) => {
-			this.map.customMap.updateLayerGroup('areas', `📍 ${areaName}`, areaLayer);
+	// Area Management Methods
+	createGeomanAreas(areasData) {
+		if (!areasData || Object.keys(areasData).length === 0) {
+			console.warn('No valid area data provided');
+			return;
+		}
+
+		this.areaLayerGroup.clearLayers();
+		this.areaGroups = {};
+
+		const layerControl = this.map.customMap.getLayerControl();
+
+		layerControl.addGroup('areas', {
+			label: '🗺️ Map areas',
+			collapsed: true,
+			defaultVisible: false,
+		});
+
+		for (const [categoryKey, category] of Object.entries(areasData)) {
+			layerControl.addGroup(categoryKey, {
+				label: category.name,
+				parentId: 'areas',
+				collapsed: true,
+				defaultVisible: false,
+			});
+
+			this._processAreaCategory(categoryKey, category.items);
+		}
+
+		this.areaLayerGroup.addTo(this.map);
+		this.map.removeLayer(this.areaLayerGroup);
+	}
+
+	_processAreaCategory(categoryKey, areaItems) {
+		if (!Array.isArray(areaItems) || areaItems.length === 0) {
+			console.warn(`No valid items in category ${categoryKey}`);
+			return;
+		}
+
+		areaItems.forEach((area) => {
+			if (!area.points || !Array.isArray(area.points) || area.points.length < 3) {
+				console.warn(`Invalid area data for area ${area.name}`);
+				return;
+			}
+
+			const areaGroup = this._createAreaGroup(area);
+
+			this.areaGroups[area.name] = areaGroup;
+			this.areaLayerGroup.addLayer(areaGroup);
+
+			this.map.customMap.addLayerToSubgroup(areaGroup, area.name, categoryKey, {
+				'data-area-name': area.name.replace(/[^a-zA-Z0-9-]/g, '-').toLowerCase(),
+			});
+
+			this._addAreaClickHandlers(categoryKey, area.name, areaGroup);
 		});
 	}
 
+	// ... (previous code remains the same until _createAreaGroup method)
+
+	_createAreaGroup(area) {
+		const latlngs = area.points.map((point) => point.coordinates);
+
+		const polygon = L.polygon(latlngs, {
+			color: area.lineColor || 'transparent',
+			fillColor: area.interiorColor || '#3388ff',
+			fillOpacity: 0.5,
+		});
+
+		const center = polygon.getBounds().getCenter();
+
+		// Enhanced text marker with better centering and background
+		const textMarker = L.marker(center, {
+			icon: L.divIcon({
+				className: 'polygon-text-container',
+				html: `
+				<div class="polygon-text-wrapper" style="
+					position: relative;
+					transform: translate(-50%, -50%);
+					display: flex;
+					align-items: center;
+					justify-content: center;
+				">
+					<span class="polygon-text" style="
+						transform: rotate(${area?.textRotation ?? '0deg'});
+						font-size: ${area?.textSize ?? '10'}pt;
+						font-family: var(--font-${area?.textFontType ?? 'description'});
+						text-align: center;
+						display: block;
+					">${area.name}</span>
+				</div>
+			`,
+				iconSize: null, // Allows the icon to size based on content
+				iconAnchor: [0, 0], // Center point of the icon
+			}),
+			// Disable click events on the text to allow clicking through to the polygon
+			interactive: false,
+		});
+
+		// Add click handler to polygon
+		polygon.on('click', (e) => {
+			const target = {
+				type: 'area',
+				id: area.name.toLowerCase().replace(/\s+/g, '_'),
+				coordinates: [center.lat, center.lng],
+			};
+			UrlManager.updateUrl(this.map.customMap.getCurrentMapKey(), true, target);
+			L.DomEvent.stopPropagation(e);
+		});
+
+		return L.layerGroup([polygon, textMarker]);
+	}
+
+	_addAreaClickHandlers(categoryKey, areaName, areaGroup) {
+		setTimeout(() => {
+			const labelElements = document.querySelectorAll(
+				`[data-category="${categoryKey}"] label[data-area-name="${areaName
+					.replace(/[^a-zA-Z0-9-]/g, '-')
+					.toLowerCase()}"]`
+			);
+
+			labelElements.forEach((labelElement) => {
+				labelElement.removeEventListener('click', labelElement._zoomHandler);
+
+				labelElement._zoomHandler = (e) => {
+					if (e.target.tagName.toLowerCase() === 'input') {
+						return;
+					}
+
+					e.preventDefault();
+					e.stopPropagation();
+
+					const bounds = this._getAreaGroupBounds(areaGroup);
+
+					this.map.fitBounds(bounds, {
+						padding: [50, 50],
+						animate: true,
+						duration: 1,
+					});
+				};
+
+				labelElement.addEventListener('click', labelElement._zoomHandler);
+				labelElement.style.cursor = 'pointer';
+				labelElement.title = 'Click to zoom to area';
+			});
+		}, 100);
+	}
+
+	_getAreaGroupBounds(areaGroup) {
+		let bounds = null;
+		areaGroup.eachLayer((layer) => {
+			if (layer instanceof L.Polygon) {
+				bounds = layer.getBounds();
+			}
+		});
+		return bounds;
+	}
+
+	// Focus Methods
 	focusPath(target) {
 		if (!target?.name) return;
 
 		setTimeout(() => {
 			const pathGroup = this.pathGroups[target.name];
 			if (pathGroup) {
-				// Make sure the path layer is visible
 				this.pathMasterGroup.addTo(this.map);
 				pathGroup.addTo(this.map);
-
-				// Update layer control
 				this.map.customMap.updateLayerGroup('paths', `🛣️ ${target.name}`, pathGroup);
 			}
 		}, 100);
 	}
 
 	focusArea(target) {
-		if (!target?.name) return;
+		if (!target?.id) return;
+
+		const areaName = target.id
+			.split('_')
+			.map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+			.join(' ');
 
 		setTimeout(() => {
-			const areaGroup = this.areaGroups[target.name];
+			const areaGroup = this.areaGroups[areaName];
 			if (areaGroup) {
-				// Make sure the area layer is visible
 				this.areaLayerGroup.addTo(this.map);
 				areaGroup.addTo(this.map);
 
-				// Update layer control
-				this.map.customMap.updateLayerGroup('areas', `📍 ${target.name}`, areaGroup);
+				const bounds = this._getAreaGroupBounds(areaGroup);
+				if (bounds) {
+					this.map.fitBounds(bounds, {
+						padding: [50, 50],
+						animate: true,
+						duration: 1,
+					});
+				}
 			}
 		}, 100);
+	}
+
+	// Utility Methods
+	_convertPathToData(path) {
+		const latlngs = path.getLatLngs();
+		let points = [];
+
+		if (Array.isArray(latlngs[0])) {
+			latlngs.forEach((ring) => {
+				ring.forEach((latlng) => {
+					points.push({
+						coordinates: [latlng.lat, latlng.lng],
+					});
+				});
+			});
+		} else {
+			points = latlngs.map((latlng) => ({
+				coordinates: [latlng.lat, latlng.lng],
+			}));
+		}
+
+		return {
+			name: `Path ${this.paths.length + 1}`,
+			points: points,
+		};
+	}
+
+	_exportPaths() {
+		console.log('paths:', JSON.stringify(this.paths, null, 2));
 	}
 }

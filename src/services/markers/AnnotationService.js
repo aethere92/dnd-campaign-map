@@ -1,4 +1,5 @@
 class AnnotationService {
+	// Constants
 	static DEFAULT_ICON_SIZES = {
 		width: 15,
 		height: 22.5,
@@ -9,6 +10,7 @@ class AnnotationService {
 		SVG: 'svg',
 	};
 
+	// Constructor
 	constructor(map) {
 		this.map = map;
 		this.iconCache = new Map();
@@ -17,25 +19,34 @@ class AnnotationService {
 		this.maxIconWidth = 50;
 	}
 
+	// Main Public Methods
 	addAnnotations(annotationsData) {
 		this.clearLayers();
+		const layerControl = this.map.customMap.getLayerControl();
+
+		layerControl.addGroup('markers', {
+			label: '📍 Markers',
+			collapsed: false,
+		});
 
 		for (const [categoryKey, category] of Object.entries(annotationsData)) {
+			layerControl.addGroup(categoryKey, {
+				label: category.name,
+				parentId: 'markers',
+				collapsed: true,
+			});
+
 			const layerGroup = L.layerGroup();
 			this.layers.set(category.name, layerGroup);
 			this._addPointsToLayer(categoryKey, category.items, category.name);
-			layerGroup.addTo(this.map);
-		}
-
-		if (this.layers.size > 0) {
-			this._initializeLayerControl();
 		}
 	}
 
 	clearLayers() {
-		for (const layer of this.layers.values()) {
-			this.map.removeLayer(layer);
-		}
+		this.layers.forEach((layer) => {
+			layer.clearLayers();
+			layer.remove();
+		});
 		this.layers.clear();
 		this.markers = [];
 	}
@@ -50,24 +61,22 @@ class AnnotationService {
 		return this._getAllMapMarkers(map).filter((marker) => this._matchesCriteria(marker, filterCriteria));
 	}
 
-	_getAllMapMarkers(map) {
-		const mapMarkers = [];
+	focusMarker(target) {
+		const marker = this.markers.find((m) => {
+			return m.getLatLng().lat === target.coordinates[0] && m.getLatLng().lng === target.coordinates[1];
+		});
 
-		if (map._layers) {
-			Object.values(map._layers).forEach((layer) => {
-				if (layer instanceof L.LayerGroup) {
-					layer.getLayers().forEach((marker) => {
-						if (marker instanceof L.Marker) {
-							mapMarkers.push(marker);
-						}
-					});
+		if (marker) {
+			marker.openPopup();
+			this.layers.forEach((layer) => {
+				if (layer.hasLayer(marker)) {
+					layer.addTo(this.map);
 				}
 			});
 		}
-
-		return mapMarkers;
 	}
 
+	// Marker Creation and Management
 	async _addPointsToLayer(categoryKey, points, categoryName) {
 		const layerGroup = this.layers.get(categoryName);
 
@@ -77,10 +86,35 @@ class AnnotationService {
 				const marker = await this._createMarker(point, icon, categoryKey, categoryName);
 				marker.addTo(layerGroup);
 				this.markers.push(marker);
+
+				const markerId = `marker-${point.id || Math.random().toString(36).substr(2, 9)}`;
+				marker._id = markerId;
+
+				const label = point.label || `${categoryName} Point`;
+				this.map.customMap.addLayerToSubgroup(marker, label, categoryKey, {
+					'data-marker-id': markerId,
+					'data-marker-label': label.replace(/[^a-zA-Z0-9-]/g, '-').toLowerCase(),
+				});
 			})
 		);
+
+		layerGroup.addTo(this.map);
+		this._addLabelClickHandlers(categoryKey);
 	}
 
+	async _createMarker(point, icon, categoryKey, categoryName) {
+		const labeledIcon = point.icon
+			? this._createLabeledIcon(icon, point.label, Boolean(point.mapLink), point.icon)
+			: null;
+
+		const markerContent = this._createMarkerContent(point);
+		const marker = this._initializeMarker(point, labeledIcon, categoryKey, markerContent);
+		this._attachMarkerEvents(marker, point, categoryKey, categoryName);
+
+		return marker;
+	}
+
+	// Icon Management
 	async _getIcon(iconName, iconColor, iconType) {
 		if (!iconName) return null;
 
@@ -96,41 +130,50 @@ class AnnotationService {
 		return icon;
 	}
 
-	_loadImage(src) {
-		return new Promise((resolve, reject) => {
-			const img = new Image();
-			img.onload = () => resolve({ width: img.width, height: img.height });
-			img.onerror = () => reject(new Error(`Failed to load image: ${src}`));
-			img.src = src;
+	_createDefaultIcon() {
+		const { width, height } = AnnotationService.DEFAULT_ICON_SIZES;
+		return L.divIcon({
+			className: 'default-marker',
+			html: '<div class="default-marker-inner"></div>',
+			iconSize: [width, height],
+			iconAnchor: [width / 2, height],
+			popupAnchor: [0, -height],
 		});
 	}
 
-	_calculateIconDimensions({ width, height }) {
-		let calculatedWidth = width / 2;
-		let calculatedHeight = height / 2;
-
-		if (calculatedWidth > this.maxIconWidth) {
-			const aspectRatio = calculatedHeight / calculatedWidth;
-			calculatedWidth = this.maxIconWidth;
-			calculatedHeight = Math.round(calculatedWidth * aspectRatio);
-		}
-
-		return { width: calculatedWidth, height: calculatedHeight };
+	_createTextIcon(point) {
+		return new L.DivIcon({
+			className: 'myDivIcon',
+			html: `<span class="custom-marker-text" style="${point.fontSize ? `font-size: ${point.fontSize}pt` : ''}">${
+				point.label
+			}</span>`,
+		});
 	}
 
-	_createIconHtml(iconName, width, height) {
-		return `
-            <div class="custom-icon-container" style="width:${width}px;height:${height}px">
-                <img class="custom-icon-image" src="images/custom-icons/${iconName}.png">
-            </div>
-        `;
+	_createLabeledIcon(baseIcon, label) {
+		const temp = document.createElement('div');
+		temp.innerHTML = baseIcon.options.html;
+
+		const iconDiv = temp.querySelector('.custom-icon-image');
+		if (iconDiv) {
+			iconDiv.setAttribute('data-label', label || '');
+		}
+
+		const containerDiv = temp.querySelector('.custom-icon-container');
+		if (containerDiv) {
+			containerDiv.setAttribute('data-tooltip', label || '');
+		}
+
+		return L.divIcon({
+			...baseIcon.options,
+			html: temp.innerHTML,
+		});
 	}
 
 	async _createPngIcon(iconName) {
 		try {
 			const dimensions = await this._loadImage(`images/custom-icons/${iconName}.png`);
 			const { width, height } = this._calculateIconDimensions(dimensions);
-
 			const iconHtml = this._createIconHtml(iconName, width, height);
 
 			return L.divIcon({
@@ -163,19 +206,104 @@ class AnnotationService {
 		});
 	}
 
-	async _createMarker(point, icon, categoryKey, categoryName) {
-		const labeledIcon = point.icon
-			? this._createLabeledIcon(icon, point.label, Boolean(point.mapLink), point.icon)
-			: null;
+	// UI Event Handlers
+	_addLabelClickHandlers(categoryKey) {
+		setTimeout(() => {
+			const labelElements = document.querySelectorAll(`[data-category="${categoryKey}"] label[data-marker-id]`);
 
-		const markerContent = this._createMarkerContent(point);
-		const marker = this._initializeMarker(point, labeledIcon, categoryKey, markerContent);
+			labelElements.forEach((labelElement) => {
+				const markerId = labelElement.getAttribute('data-marker-id');
+				const marker = this.markers.find((m) => m._id === markerId);
 
-		this._attachMarkerEvents(marker, point, categoryKey, categoryName);
+				if (marker) {
+					labelElement.removeEventListener('click', labelElement._zoomHandler);
 
-		return marker;
+					labelElement._zoomHandler = (e) => {
+						if (e.target.tagName.toLowerCase() === 'input') return;
+
+						e.preventDefault();
+						e.stopPropagation();
+
+						const pos = marker.getLatLng();
+						this.map.setView(pos, 16, {
+							animate: true,
+							duration: 1,
+						});
+
+						marker.openPopup();
+					};
+
+					labelElement.addEventListener('click', labelElement._zoomHandler);
+					labelElement.style.cursor = 'pointer';
+					labelElement.title = 'Click to zoom to marker';
+				}
+			});
+		}, 100);
 	}
 
+	// Utility Methods
+	_loadImage(src) {
+		return new Promise((resolve, reject) => {
+			const img = new Image();
+			img.onload = () => resolve({ width: img.width, height: img.height });
+			img.onerror = () => reject(new Error(`Failed to load image: ${src}`));
+			img.src = src;
+		});
+	}
+
+	_calculateIconDimensions({ width, height }) {
+		let calculatedWidth = width / 2;
+		let calculatedHeight = height / 2;
+
+		if (calculatedWidth > this.maxIconWidth) {
+			const aspectRatio = calculatedHeight / calculatedWidth;
+			calculatedWidth = this.maxIconWidth;
+			calculatedHeight = Math.round(calculatedWidth * aspectRatio);
+		}
+
+		return { width: calculatedWidth, height: calculatedHeight };
+	}
+
+	_createIconHtml(iconName, width, height) {
+		return `
+            <div class="custom-icon-container" style="width:${width}px;height:${height}px">
+                <img class="custom-icon-image" src="images/custom-icons/${iconName}.png">
+            </div>
+        `;
+	}
+
+	_getAllMapMarkers(map) {
+		const mapMarkers = [];
+
+		if (map._layers) {
+			Object.values(map._layers).forEach((layer) => {
+				if (layer instanceof L.LayerGroup) {
+					layer.getLayers().forEach((marker) => {
+						if (marker instanceof L.Marker) {
+							mapMarkers.push(marker);
+						}
+					});
+				}
+			});
+		}
+
+		return mapMarkers;
+	}
+
+	_matchesCriteria(marker, filterCriteria) {
+		const element = marker.getElement();
+		if (!element) return false;
+
+		const criteria = {
+			category: () => element.getAttribute('data-category') === filterCriteria.category,
+			categoryName: () => element.getAttribute('data-category-name') === filterCriteria.categoryName,
+			label: () => element.getAttribute('data-label').includes(filterCriteria.label),
+		};
+
+		return Object.entries(filterCriteria).every(([key, value]) => !value || (criteria[key] && criteria[key]()));
+	}
+
+	// Content Creation Methods
 	_createMarkerContent(point) {
 		const image = point.image ? `<img class="label-image" src="images/assets/${point.image}" width="200"/>` : '';
 		const description = point.description ? `<span class="label-description">${point.description}</span>` : '';
@@ -191,10 +319,43 @@ class AnnotationService {
 		};
 	}
 
+	_createPopupContent({ label, image, description, mapLink }) {
+		return `
+            <div class='label-container'>
+                <div class="marker-label-container">
+                    <button class="label-marker-anchor" title="Link to this marker">🔗</button>
+                    <span class="label-title">${label}</span>
+                </div>
+                <div class="label-container-body">
+                    ${image}
+                    ${description}
+                </div>
+                ${mapLink}
+            </div>
+        `;
+	}
+
+	_createSidebarContent({ label, image, description, mapLink }) {
+		return `
+            <div class="sidebar-content">
+                <span class="label-title">${label}</span>
+                <span class="label-separator"></span>
+                <div class="label-container-body">
+                    ${image}
+                    ${description}
+                </div>
+                <span class="label-separator"></span>
+                ${mapLink}
+            </div>
+        `;
+	}
+
+	// Marker Setup Methods
 	_initializeMarker(point, labeledIcon, categoryKey, content) {
 		const isLandmark = categoryKey === 'landmarks';
 		const markerOptions = {
 			icon: point.type === 'text' ? this._createTextIcon(point) : labeledIcon || this._createDefaultIcon(),
+			title: 'Săndele',
 		};
 
 		const marker = L.marker([point.lat, point.lng], markerOptions);
@@ -206,46 +367,6 @@ class AnnotationService {
 		}
 
 		return marker;
-	}
-
-	_createTextIcon(point) {
-		return new L.DivIcon({
-			className: 'myDivIcon',
-			html: `<span class="custom-marker-text" style="${point.fontSize ? `font-size: ${point.fontSize}pt` : ''}">${
-				point.label
-			}</span>`,
-		});
-	}
-
-	_createDefaultIcon() {
-		const { width, height } = AnnotationService.DEFAULT_ICON_SIZES;
-		return L.divIcon({
-			className: 'default-marker',
-			html: '<div class="default-marker-inner"></div>',
-			iconSize: [width, height],
-			iconAnchor: [width / 2, height],
-			popupAnchor: [0, -height],
-		});
-	}
-
-	_createLabeledIcon(baseIcon, label) {
-		const temp = document.createElement('div');
-		temp.innerHTML = baseIcon.options.html;
-
-		const iconDiv = temp.querySelector('.custom-icon-image');
-		if (iconDiv) {
-			iconDiv.setAttribute('data-label', label || '');
-		}
-
-		const containerDiv = temp.querySelector('.custom-icon-container');
-		if (containerDiv) {
-			containerDiv.setAttribute('data-tooltip', label || '');
-		}
-
-		return L.divIcon({
-			...baseIcon.options,
-			html: temp.innerHTML,
-		});
 	}
 
 	_setupLandmarkMarker(marker, content) {
@@ -295,33 +416,33 @@ class AnnotationService {
 		marker.on('popupopen', (e) => {
 			const element = marker.getElement();
 			const popupContent = e.popup.getContent();
-
-			// Create a temporary DOM parser to find the button
 			const tempDiv = document.createElement('div');
 			tempDiv.innerHTML = popupContent;
 
 			const urlButton = tempDiv.querySelector('.label-marker-anchor');
 			if (urlButton) {
-				// Remove any existing listeners to prevent multiple bindings
 				urlButton.removeEventListener('click', this._handleUrlButtonClick);
 
-				// Create a bound method to preserve 'this' context
 				this._handleUrlButtonClick = (event) => {
-					event.preventDefault(); // Prevent default link behavior
+					event.preventDefault();
 					this._showMarkerUrl(element);
 				};
 
-				// Clone the button from the popup to add the listener
 				const actualButton = e.popup._contentNode.querySelector('.label-marker-anchor');
 				if (actualButton) {
 					actualButton.addEventListener('click', this._handleUrlButtonClick);
-				} else {
-					console.error('Actual button not found in popup');
 				}
-			} else {
-				console.error('No URL button found in popup content');
 			}
 		});
+	}
+
+	// URL Management (continued)
+	_generateMarkerUrl(point, categoryKey) {
+		const mapKey = this.map.customMap.getCurrentMapKey();
+		const targetId = `marker:${categoryKey}.${point.label.toLowerCase().replace(/\s+/g, '_')}:${point.lat},${
+			point.lng
+		}`;
+		return `${window.location.origin}${window.location.pathname}?map=${mapKey}&t=${targetId}`;
 	}
 
 	_showMarkerUrl(element) {
@@ -330,59 +451,7 @@ class AnnotationService {
 		prompt('Marker link', url);
 	}
 
-	_generateMarkerUrl(point, categoryKey) {
-		// Generate a unique URL for the marker based on its properties
-		const mapKey = this.map.customMap.getCurrentMapKey();
-		const targetId = `marker:${categoryKey}.${point.label.toLowerCase().replace(/\s+/g, '_')}:${point.lat},${
-			point.lng
-		}`;
-		return `${window.location.origin}${window.location.pathname}?map=${mapKey}&t=${targetId}`;
-	}
-
-	_createSidebarContent({ label, image, description, mapLink }) {
-		return `
-            <div class="sidebar-content">
-                <span class="label-title">${label}</span>
-                <span class="label-separator"></span>
-                <div class="label-container-body">
-                    ${image}
-                    ${description}
-                </div>
-                <span class="label-separator"></span>
-                ${mapLink}
-            </div>
-        `;
-	}
-
-	_createPopupContent({ label, image, description, mapLink }) {
-		return `
-            <div class='label-container'>
-                <div class="marker-label-container">
-					<button class="label-marker-anchor" title="Link to this marker">🔗</button>
-                    <span class="label-title">${label}</span>
-                </div>
-                <div class="label-container-body">
-                    ${image}
-                    ${description}
-                </div>
-                ${mapLink}
-            </div>
-        `;
-	}
-
-	_matchesCriteria(marker, filterCriteria) {
-		const element = marker.getElement();
-		if (!element) return false;
-
-		const criteria = {
-			category: () => element.getAttribute('data-category') === filterCriteria.category,
-			categoryName: () => element.getAttribute('data-category-name') === filterCriteria.categoryName,
-			label: () => element.getAttribute('data-label').includes(filterCriteria.label),
-		};
-
-		return Object.entries(filterCriteria).every(([key, value]) => !value || (criteria[key] && criteria[key]()));
-	}
-
+	// Sidebar Management
 	_openSidebar(content) {
 		let sidebar = document.getElementById('landmark-sidebar');
 		if (!sidebar) {
@@ -419,44 +488,5 @@ class AnnotationService {
 		if (sidebar) {
 			sidebar.style.left = '-400px';
 		}
-	}
-
-	_initializeLayerControl() {
-		// Add each layer to the markers category
-		Array.from(this.layers.entries()).forEach(([name, layer]) => {
-			this.map.customMap.updateLayerGroup('markers', `📍 ${name}`, layer);
-		});
-	}
-
-	focusMarker(target) {
-		if (!target) return;
-
-		// Wait a bit to ensure markers are fully loaded
-		setTimeout(() => {
-			const marker = this.markers.find((m) => {
-				const element = m.getElement();
-				return (
-					element &&
-					element.getAttribute('data-category') === target.category &&
-					element.getAttribute('data-label') === target.label
-				);
-			});
-
-			if (marker) {
-				// Make sure the marker's layer is visible
-				const layerGroup = this.layers.get(target.categoryName);
-				if (layerGroup) {
-					layerGroup.addTo(this.map);
-				}
-
-				// Open tooltip and popup if available
-				if (marker.options.icon.options.className !== 'myDivIcon') {
-					marker.openTooltip();
-				}
-				if (marker.getPopup()) {
-					marker.openPopup();
-				}
-			}
-		}, 100);
 	}
 }
