@@ -268,7 +268,7 @@ class PathManager {
 
 		layerControl.addGroup('areas', {
 			label: '🗺️ Map areas',
-			collapsed: true,
+			collapsed: false,
 			defaultVisible: false,
 		});
 
