@@ -355,6 +355,186 @@ const MAP_DATABASE = {
 				],
 			},
 		},
+		paths: [
+			{
+				name: 'The Story So Far',
+				lineColor: '#FFDD00',
+				points: [
+					{
+						coordinates: [-159.375, 206.34375],
+						text: 'This is where the adventure began.',
+					},
+					{
+						coordinates: [-160.15625, 204.90625],
+					},
+					{
+						coordinates: [-161.625, 201.28125],
+					},
+					{
+						coordinates: [-161.75, 197.875],
+					},
+					{
+						coordinates: [-161.5625, 194.90625],
+					},
+					{
+						coordinates: [-161.90625, 191.96875],
+					},
+					{
+						coordinates: [-162.46875, 188.15625],
+					},
+					{
+						coordinates: [-163.0625, 185.4375],
+					},
+					{
+						coordinates: [-164.96875, 182.09375],
+					},
+					{
+						coordinates: [-167.9375, 179.28125],
+					},
+					{
+						coordinates: [-171.78125, 178.25],
+					},
+					{
+						coordinates: [-178, 177.1875],
+					},
+					{
+						coordinates: [-180.625, 176.46875],
+					},
+					{
+						coordinates: [-182.6875, 174.5625],
+					},
+					{
+						coordinates: [-185.53125, 170.1875],
+					},
+					{
+						coordinates: [-187.3125, 166.03125],
+					},
+					{
+						coordinates: [-188.46875, 160.90625],
+					},
+					{
+						coordinates: [-190.09375, 156.125],
+					},
+					{
+						coordinates: [-191.34375, 154.25],
+					},
+					{
+						coordinates: [-194.28125, 153.1875],
+					},
+					{
+						coordinates: [-197.15625, 153.34375],
+					},
+					{
+						coordinates: [-199.84375, 155.6875],
+					},
+					{
+						coordinates: [-201.53125, 158.84375],
+					},
+					{
+						coordinates: [-200.90625, 161.34375],
+					},
+					{
+						coordinates: [-199.9375, 163.15625],
+					},
+					{
+						coordinates: [-197.96875, 165.125],
+						text: 'Reaching an unnamed island, they stopped by to get water. Here they met Finneas, entered a temple and barely escaped a horde of undead.',
+					},
+					{
+						coordinates: [-200.5625, 165.34375],
+					},
+					{
+						coordinates: [-202.34375, 164.59375],
+					},
+					{
+						coordinates: [-204.03125, 160.96875],
+					},
+					{
+						coordinates: [-204.84375, 156.34375],
+					},
+					{
+						coordinates: [-204.875, 150.71875],
+					},
+					{
+						coordinates: [-203.5, 144.3125],
+					},
+					{
+						coordinates: [-201.53125, 139.28125],
+					},
+					{
+						coordinates: [-201.40625, 133.5],
+					},
+					{
+						coordinates: [-201.75, 130.125],
+					},
+					{
+						coordinates: [-204.84375, 126.09375],
+					},
+					{
+						coordinates: [-206.40625, 122.8125],
+					},
+					{
+						coordinates: [-206.71875, 118.59375],
+					},
+					{
+						coordinates: [-209.59375, 116.9375],
+						text: 'The bone the Barbarian had picked up was cursed. The party was attacked by wraiths summoned by the bone and barely managed to escape.',
+					},
+					{
+						coordinates: [-207.78125, 113.78125],
+					},
+					{
+						coordinates: [-207.375, 111.21875],
+					},
+					{
+						coordinates: [-208.8125, 108.90625],
+					},
+					{
+						coordinates: [-208.78125, 104.3125],
+					},
+					{
+						coordinates: [-208.03125, 99.96875],
+					},
+					{
+						coordinates: [-206.84375, 96.0625],
+					},
+					{
+						coordinates: [-207.15625, 93.78125],
+					},
+					{
+						coordinates: [-208.90625, 91.34375],
+					},
+					{
+						coordinates: [-214.84375, 89.21875],
+					},
+					{
+						coordinates: [-219.78125, 85.03125],
+					},
+					{
+						coordinates: [-221.875, 81.28125],
+					},
+					{
+						coordinates: [-222.28125, 76.4375],
+					},
+					{
+						coordinates: [-221.03125, 72.9375],
+					},
+					{
+						coordinates: [-219.15625, 72.125],
+					},
+					{
+						coordinates: [-217.46875, 72.8125],
+					},
+					{
+						coordinates: [-214.8125, 74.78125],
+					},
+					{
+						coordinates: [-214.5, 74.90625],
+						text: 'They reached the isle of Korinis, where their adventure is still ongoing.',
+					},
+				],
+			},
+		],
 		submaps: {
 			islands: {
 				korinis_island: {
@@ -741,115 +921,6 @@ const MAP_DATABASE = {
 						},
 						{
 							name: 'Session 2 Recap',
-							lineColor: '#EA891A',
-							points: [
-								{
-									coordinates: [-51, 107.03125],
-								},
-								{
-									coordinates: [-47.75, 102.625],
-									text: 'Decided to go outside the city where we came from.',
-								},
-								{
-									coordinates: [-47.4375, 73.96875],
-								},
-								{
-									coordinates: [-49.40625, 71.625],
-								},
-								{
-									coordinates: [-50.28125, 69.78125],
-								},
-								{
-									coordinates: [-48.15625, 66.8125],
-								},
-								{
-									coordinates: [-48.0625, 53.75],
-								},
-								{
-									coordinates: [-47.59375, 47.5625],
-								},
-								{
-									coordinates: [-46.09375, 45.375],
-								},
-								{
-									coordinates: [-41.53125, 46.875],
-									text: 'Saw some wolves and goblins in the distance and tried to avoid them.',
-								},
-								{
-									coordinates: [-38.59375, 47.15625],
-								},
-								{
-									coordinates: [-35.78125, 47.09375],
-								},
-								{
-									coordinates: [-31.65625, 45.40625],
-								},
-								{
-									coordinates: [-30.84375, 40.90625],
-								},
-								{
-									coordinates: [-30.6875, 37.6875],
-									text: 'Saw a lizardman in the distance and decided to approach it to make friends.',
-								},
-								{
-									coordinates: [-30.15625, 32.1875],
-									text: 'Lizardman attacked us, same with goblins. We emerged victorious but the lizardman was killed.',
-								},
-								{
-									coordinates: [-29.3125, 28.875],
-								},
-								{
-									coordinates: [-27.0625, 27.5625],
-								},
-								{
-									coordinates: [-25.65625, 28.90625],
-								},
-								{
-									coordinates: [-25.03125, 33.71875],
-								},
-								{
-									coordinates: [-26.25, 42.3125],
-									text: 'Got ambushed by bandits and fleed.',
-								},
-								{
-									coordinates: [-25.875, 34.59375],
-								},
-								{
-									coordinates: [-26.21875, 28.78125],
-								},
-								{
-									coordinates: [-27.28125, 28.4375],
-								},
-								{
-									coordinates: [-29.0625, 31.1875],
-								},
-								{
-									coordinates: [-32.21875, 27.625],
-								},
-								{
-									coordinates: [-37.25, 28.1875],
-								},
-								{
-									coordinates: [-39.1875, 32.78125],
-								},
-								{
-									coordinates: [-46.09375, 36.9375],
-								},
-								{
-									coordinates: [-46.28125, 42.65625],
-									text: 'Went back in town to recoup.',
-								},
-								{
-									coordinates: [-47.3125, 56.625],
-								},
-								{
-									coordinates: [-47.28125, 67.65625],
-									text: 'Talked with Paladin and told him about the bandits.',
-								},
-							],
-						},
-						{
-							name: 'Session 3 Recap',
 							lineColor: '#2898BD',
 							points: [
 								{
@@ -1079,6 +1150,192 @@ const MAP_DATABASE = {
 								},
 							],
 						},
+						{
+							name: 'Session 3 Recap',
+							lineColor: '#ff7e55',
+							points: [
+								{
+									coordinates: [-50.875, 107],
+								},
+								{
+									coordinates: [-47.5625, 101.9375],
+								},
+								{
+									coordinates: [-47.5, 96.625],
+									text: 'The party decided to venture outside, into the forest they saw when they first entered the city.',
+								},
+								{
+									coordinates: [-47.3125, 73.1875],
+								},
+								{
+									coordinates: [-46.125, 70.3125],
+								},
+								{
+									coordinates: [-47.6875, 66.3125],
+								},
+								{
+									coordinates: [-47.1875, 55.6875],
+								},
+								{
+									coordinates: [-47.0625, 48.625],
+								},
+								{
+									coordinates: [-46.375, 45.875],
+								},
+								{
+									coordinates: [-43.3125, 46.8125],
+								},
+								{
+									coordinates: [-39.375, 47.375],
+								},
+								{
+									coordinates: [-36.875, 47.125],
+									text: 'Seeing a pack of wolves and a goblin camp in the nearby forest, they took a more secluded path, going stealthily deeper in the forest.',
+								},
+								{
+									coordinates: [-33.8125, 46.5625],
+								},
+								{
+									coordinates: [-31.375, 45.125],
+								},
+								{
+									coordinates: [-31.125, 42.25],
+									text: 'In the distance stood a Lizardman. The party cleric decided to send a spell to them in order to make contact, hoping to come in peace and talk.',
+								},
+								{
+									coordinates: [-31.3125, 35.8125],
+								},
+								{
+									coordinates: [-29.875, 31.625],
+									text: "The plan didn't work out. The lizardman attacked, enraged, and a battle started. In the midst of the battle, the goblin horde attacked as well, killing the downed Lizarman. The party emerged victorious.",
+								},
+								{
+									coordinates: [-29.109375, 28.953125],
+								},
+								{
+									coordinates: [-27.890625, 28.09375],
+								},
+								{
+									coordinates: [-26.296875, 28.109375],
+								},
+								{
+									coordinates: [-26.265625, 29.234375],
+								},
+								{
+									coordinates: [-26.109375, 34.796875],
+								},
+								{
+									coordinates: [-26.15625, 38.734375],
+								},
+								{
+									coordinates: [-26.125, 42.234375],
+									text: 'The party was ambushed by some bandits who looked like they were smuggling things into the city. Overwhelmed and outnumbered, they wisely chose to run away from this encounter.',
+								},
+								{
+									coordinates: [-25.265625, 35.796875],
+								},
+								{
+									coordinates: [-25.5625, 30.203125],
+								},
+								{
+									coordinates: [-26.03125, 27.453125],
+								},
+								{
+									coordinates: [-28.25, 27.265625],
+								},
+								{
+									coordinates: [-30.609375, 27.71875],
+								},
+								{
+									coordinates: [-32.96875, 27.421875],
+									text: 'Hoping to avoid the wildlife they had seen, they took another path through the forest.',
+								},
+								{
+									coordinates: [-36.46875, 27.71875],
+								},
+								{
+									coordinates: [-38.03125, 29.28125],
+								},
+								{
+									coordinates: [-39.34375, 30.78125],
+								},
+								{
+									coordinates: [-40.15625, 33.875],
+								},
+								{
+									coordinates: [-41.4375, 35],
+								},
+								{
+									coordinates: [-43.6875, 35.3125],
+								},
+								{
+									coordinates: [-45.40625, 36.34375],
+								},
+								{
+									coordinates: [-46.125, 38.875],
+								},
+								{
+									coordinates: [-45.90625, 40.9375],
+								},
+								{
+									coordinates: [-46.96875, 43.78125],
+								},
+								{
+									coordinates: [-48.15625, 47.46875],
+								},
+								{
+									coordinates: [-48.3125, 51.59375],
+								},
+								{
+									coordinates: [-47.96875, 53.9375],
+								},
+								{
+									coordinates: [-48.40625, 57.71875],
+								},
+								{
+									coordinates: [-48.625, 65.21875],
+								},
+								{
+									coordinates: [-48.21875, 67.21875],
+									text: 'Back into the city, they stopped and talked to the Paladin guard and informed them of the bandits they had seen and their location. ',
+								},
+								{
+									coordinates: [-49.625, 69.1875],
+								},
+								{
+									coordinates: [-49.9375, 70.78125],
+								},
+								{
+									coordinates: [-48.78125, 72.09375],
+								},
+								{
+									coordinates: [-48.03125, 73.34375],
+								},
+								{
+									coordinates: [-48.03125, 78.0625],
+								},
+								{
+									coordinates: [-48, 85.875],
+								},
+								{
+									coordinates: [-47.96875, 94.0625],
+								},
+								{
+									coordinates: [-48.1875, 100.09375],
+								},
+								{
+									coordinates: [-48.40625, 102.46875],
+								},
+								{
+									coordinates: [-49.625, 103.53125],
+								},
+								{
+									coordinates: [-50.515625, 106.484375],
+									text: 'Exhausted for the day, they rested at the inn once more.',
+								},
+							],
+						},
+
 						{
 							name: 'Session 7 Recap',
 							lineColor: '#84d8e3',

@@ -317,7 +317,7 @@ class PathManager {
 
 		const polygon = L.polygon(latlngs, {
 			color: area.lineColor || 'transparent',
-			fillColor: area.interiorColor || '#3388ff',
+			fillColor: area.interiorColor || 'transparent',
 			fillOpacity: 0.5,
 		});
 

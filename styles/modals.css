@@ -163,6 +163,8 @@
 		padding: 0.5rem;
 		max-height: 200px;
 		overflow-y: auto;
+		max-width: 400px;
+		text-wrap: auto;
 	}
 }
 
