@@ -136,7 +136,7 @@ class PathManager {
 
 				const segment = L.polyline([startPoint.coordinates, endPoint.coordinates], {
 					color: segmentColor,
-					weight: 2,
+					weight: startPoint?.pointWidth || 2,
 					opacity: 0.9,
 					dashArray: [5, 5],
 					smoothFactor: 9,

@@ -1476,6 +1476,26 @@ const MAP_DATABASE = {
 									coordinates: [-2.96875, 143.015625],
 									text: 'Entered the pyramid to find water mages.',
 								},
+								{
+									coordinates: [-4, 143.125],
+									pointWidth: 1,
+									pointColor: 'yellow',
+								},
+								{
+									coordinates: [-36, 133.5],
+									pointWidth: 1,
+									pointColor: 'yellow',
+								},
+								{
+									coordinates: [-73.375, 175.5],
+									pointWidth: 1,
+									pointColor: 'yellow',
+								},
+								{
+									coordinates: [-3.234375, 143.359375],
+									pointWidth: 1,
+									pointColor: 'yellow',
+								},
 							],
 						},
 					],
