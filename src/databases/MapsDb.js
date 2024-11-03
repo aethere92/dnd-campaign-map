@@ -1348,7 +1348,7 @@ const MAP_DATABASE = {
 								},
 								{
 									coordinates: [-50.34375, 80.40625],
-									text: 'Decided to go to pyramids.',
+									text: 'The adventurers decide to journey to the pyramids in search of the water mages party.',
 								},
 								{
 									coordinates: [-47.90625, 80.53125],
@@ -1412,7 +1412,7 @@ const MAP_DATABASE = {
 								},
 								{
 									coordinates: [-38.03125, 142.125],
-									text: 'Ranger and Sorcerer failed athletics check and injured.',
+									text: 'While navigating the tough terrain, both the Ranger and Sorcerer fail an athletics check and get injured.',
 								},
 								{
 									coordinates: [-36.5625, 143.3125],
@@ -1428,14 +1428,14 @@ const MAP_DATABASE = {
 								},
 								{
 									coordinates: [-25.9375, 150.875],
-									text: 'Saw inactive golem to the right',
+									text: 'The group spots an inactive golem to their right, which catches their interest.',
 								},
 								{
 									coordinates: [-22.46875, 152.03125],
 								},
 								{
 									coordinates: [-19.140625, 153.4375],
-									text: 'Paid 2 silver per person to cross the river to the troll.',
+									text: 'They pay 2 silver per person to cross the river over a shaky bridge guarded by a troll.',
 								},
 								{
 									coordinates: [-15.9375, 153.3125],
@@ -1448,14 +1448,14 @@ const MAP_DATABASE = {
 								},
 								{
 									coordinates: [-6.84375, 152.1875],
-									text: 'Saw ruins to the right and 2 chests.',
+									text: 'To their right, they find ruins and two ancient chests, sparking their curiosity.',
 								},
 								{
 									coordinates: [-3.1875, 151.96875],
 								},
 								{
 									coordinates: [-2.5625, 150.28125],
-									text: 'Went into tents and found water mages location',
+									text: 'Straight ahead, they entered a group of tents and discovered the location of the water mages.',
 								},
 								{
 									coordinates: [-0.96875, 147.125],
@@ -1474,7 +1474,7 @@ const MAP_DATABASE = {
 								},
 								{
 									coordinates: [-2.96875, 143.015625],
-									text: 'Entered the pyramid to find water mages.',
+									text: 'The group entered the pyramids. In the first chamber they saw a huge door to their left, which was locked. Straight ahead through a corridor they fought a fierce battle against lich-like creatures and undead. They were victorious in the end with the help of the water mages party. Learning more about the strange devices of the land, they decided to help the mages with what looked like a teleporter. Once they stepped on it, they were teleported to a different location, but they managed to work out the system behind the teleporters: one would take you to a cave in the mountains, close to the city, and the other to another small cave near the inn.',
 								},
 								{
 									coordinates: [-4, 143.125],
