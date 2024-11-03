@@ -78,8 +78,9 @@ class CustomMap {
 
 	#initializeServices() {
 		this.#services.annotations = new AnnotationService(this.#map);
-		this.#services.paths = new PathManager(this.#map, this.#config.isDebugMode);
+		this.#services.paths = new PathManager(this.#map, false);
 		this.#services.sidebar = new SidebarService(this.#map).init();
+		this.#services.markers = new MarkerManager(this.#map, this.#config.isDebugMode);
 	}
 
 	#initializeDebugElements() {
@@ -223,13 +224,13 @@ class CustomMap {
 
 			this.#services.nestedLayerControl.addGroup('paths', {
 				label: '📝 Session recaps',
-				collapsed: true,
+				collapsed: false,
 				defaultVisible: false,
 			});
 
 			this.#services.nestedLayerControl.addGroup('areas', {
 				label: '🗺️ Map areas',
-				collapsed: true,
+				collapsed: false,
 				defaultVisible: false,
 			});
 
@@ -290,7 +291,7 @@ class CustomMap {
 	#handleMapClick(e) {
 		this.#handleMouseMove(e);
 		if (this.#config.isDebugMode) {
-			this.#handleDebugClick(e);
+			//this.#handleDebugClick(e);
 		}
 	}
 

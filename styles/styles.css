@@ -4,6 +4,7 @@
 @import url('labels.css');
 @import url('leaflet-overrules.css');
 @import url('leaflet-controls.css');
+@import url('modals.css');
 
 body,
 html {

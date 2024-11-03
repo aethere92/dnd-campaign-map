@@ -740,6 +740,115 @@ const MAP_DATABASE = {
 							],
 						},
 						{
+							name: 'Session 2 Recap',
+							lineColor: '#EA891A',
+							points: [
+								{
+									coordinates: [-51, 107.03125],
+								},
+								{
+									coordinates: [-47.75, 102.625],
+									text: 'Decided to go outside the city where we came from.',
+								},
+								{
+									coordinates: [-47.4375, 73.96875],
+								},
+								{
+									coordinates: [-49.40625, 71.625],
+								},
+								{
+									coordinates: [-50.28125, 69.78125],
+								},
+								{
+									coordinates: [-48.15625, 66.8125],
+								},
+								{
+									coordinates: [-48.0625, 53.75],
+								},
+								{
+									coordinates: [-47.59375, 47.5625],
+								},
+								{
+									coordinates: [-46.09375, 45.375],
+								},
+								{
+									coordinates: [-41.53125, 46.875],
+									text: 'Saw some wolves and goblins in the distance and tried to avoid them.',
+								},
+								{
+									coordinates: [-38.59375, 47.15625],
+								},
+								{
+									coordinates: [-35.78125, 47.09375],
+								},
+								{
+									coordinates: [-31.65625, 45.40625],
+								},
+								{
+									coordinates: [-30.84375, 40.90625],
+								},
+								{
+									coordinates: [-30.6875, 37.6875],
+									text: 'Saw a lizardman in the distance and decided to approach it to make friends.',
+								},
+								{
+									coordinates: [-30.15625, 32.1875],
+									text: 'Lizardman attacked us, same with goblins. We emerged victorious but the lizardman was killed.',
+								},
+								{
+									coordinates: [-29.3125, 28.875],
+								},
+								{
+									coordinates: [-27.0625, 27.5625],
+								},
+								{
+									coordinates: [-25.65625, 28.90625],
+								},
+								{
+									coordinates: [-25.03125, 33.71875],
+								},
+								{
+									coordinates: [-26.25, 42.3125],
+									text: 'Got ambushed by bandits and fleed.',
+								},
+								{
+									coordinates: [-25.875, 34.59375],
+								},
+								{
+									coordinates: [-26.21875, 28.78125],
+								},
+								{
+									coordinates: [-27.28125, 28.4375],
+								},
+								{
+									coordinates: [-29.0625, 31.1875],
+								},
+								{
+									coordinates: [-32.21875, 27.625],
+								},
+								{
+									coordinates: [-37.25, 28.1875],
+								},
+								{
+									coordinates: [-39.1875, 32.78125],
+								},
+								{
+									coordinates: [-46.09375, 36.9375],
+								},
+								{
+									coordinates: [-46.28125, 42.65625],
+									text: 'Went back in town to recoup.',
+								},
+								{
+									coordinates: [-47.3125, 56.625],
+								},
+								{
+									coordinates: [-47.28125, 67.65625],
+									text: 'Talked with Paladin and told him about the bandits.',
+								},
+							],
+						},
+						{
 							name: 'Session 3 Recap',
 							lineColor: '#2898BD',
 							points: [
