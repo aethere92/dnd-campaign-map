@@ -164,6 +164,11 @@
 		border: none;
 		padding: 1rem;
 	}
+
+	& .label-image {
+		max-height: 100%;
+		border-radius: 0.25rem;
+	}
 }
 
 .label-separator {

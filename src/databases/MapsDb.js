@@ -843,6 +843,7 @@ const MAP_DATABASE = {
 									icon: 'poiLandmarks3',
 									iconType: 'png',
 									description: `The main town of Korinis is a captivating town of contrasts. Nestled between the open waters and rugged hills, its bustling harbour is alive with the scent of saltwater and the sounds of merchants peddling their wares amidst poverty and resourcefulness. The lower city, a maze of alleys and market squares, thrives with commerce and crafts, shadowed by the vigilant paladins who ensure safety at the cost of freedom. The upper city, dominated by the paladins' formidable barracks, exudes grandeur and control, with wide streets and grand homes. In this town of Korinis, prosperity and poverty coexist, and every street tells a story.`,
+									image: '797410b1-f8a8-4d16-810c-011927fa1f8d.jpg',
 								},
 							],
 						},

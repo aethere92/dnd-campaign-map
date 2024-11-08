@@ -338,10 +338,11 @@ class AnnotationService {
 	_createSidebarContent({ label, image, description, mapLink }) {
 		return `
             <div class="sidebar-content">
+				${image}
+				<span class="label-separator"></span>
                 <span class="label-title">${label}</span>
                 <span class="label-separator"></span>
                 <div class="label-container-body">
-                    ${image}
                     ${description}
                 </div>
                 <span class="label-separator"></span>
