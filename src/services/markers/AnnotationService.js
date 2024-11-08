@@ -305,7 +305,7 @@ class AnnotationService {
 
 	// Content Creation Methods
 	_createMarkerContent(point) {
-		const image = point.image ? `<img class="label-image" src="images/assets/${point.image}" width="200"/>` : '';
+		const image = point.image ? `<img class="label-image" src="images/assets/${point.image}"/>` : '';
 		const description = point.description ? `<span class="label-description">${point.description}</span>` : '';
 		const mapLink = point.mapLink
 			? `<button onclick="customMap.loadMap('${point.mapLink}')" class="map-button">View map</button>`
@@ -322,15 +322,15 @@ class AnnotationService {
 	_createPopupContent({ label, image, description, mapLink }) {
 		return `
             <div class='label-container'>
+				${image}
                 <div class="marker-label-container">
-                    <button class="label-marker-anchor" title="Link to this marker">🔗</button>
-                    <span class="label-title">${label}</span>
+					<span class="label-title">${label}</span>
+					${mapLink}
+					<button class="label-marker-anchor" title="Link to this marker">🔗</button>
                 </div>
                 <div class="label-container-body">
-                    ${image}
                     ${description}
                 </div>
-                ${mapLink}
             </div>
         `;
 	}

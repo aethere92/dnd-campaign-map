@@ -21,17 +21,44 @@
 
 .label-image {
 	display: block;
-	max-width: 230px;
-	max-height: 95px;
+	/* max-width: 230px; */
+	max-height: 125px;
 	width: auto;
-	height: auto;
+	/* height: auto; */
 
-	border-radius: 0.25rem;
+	border-radius: 0.25rem 0.25rem 0 0;
 }
 
 .label-container-body:has(.label-description) .label-image {
 	margin-left: 0.75rem;
 	float: right;
+}
+
+.leaflet-popup-content-wrapper:has(.label-image) {
+	padding: 0;
+}
+
+.leaflet-popup-content:has(.label-image) {
+	padding: 0;
+
+	& .label-container {
+		gap: 0;
+	}
+
+	& .marker-label-container {
+		padding: 0.25rem;
+		justify-content: center;
+	}
+
+	& .map-button {
+		line-height: 1.4;
+		align-self: center;
+	}
+
+	& .label-container-body {
+		margin: 0.5rem;
+		margin-top: 0;
+	}
 }
 
 .label-container-body {
@@ -221,7 +248,8 @@
 .marker-label-container {
 	display: flex;
 	justify-content: flex-start;
-	gap: 0.25rem;
+	align-items: center;
+	gap: 0.5rem;
 }
 
 .label-marker-anchor {

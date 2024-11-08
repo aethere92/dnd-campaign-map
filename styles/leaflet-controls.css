@@ -94,14 +94,18 @@
 	width: 12px;
 }
 
-.leaflet-control-layers-group[data-level='1']:has(.leaflet-control-layers-group-layers:not(.item-hidden)) .leaflet-control-layers-group-layers {
-    margin-bottom: 0.35rem;
+.leaflet-control-layers-group[data-level='1']:has(.leaflet-control-layers-group-layers:not(.item-hidden))
+	.leaflet-control-layers-group-layers {
+	margin-bottom: 0.35rem;
 }
 
 .leaflet-control-layers-group-counter {
-    background: #eee;
-    padding: 0 0.35rem;
-    border-radius: 0.25rem;
-    font-size: 8pt;
+	background: #eee;
+	padding: 0 0.35rem;
+	border-radius: 0.25rem;
+	font-size: 8pt;
 }
 
+.leaflet-control-layers-list {
+	padding: 0.5rem;
+}

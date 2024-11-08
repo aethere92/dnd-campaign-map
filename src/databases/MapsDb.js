@@ -558,6 +558,7 @@ const MAP_DATABASE = {
 									type: 'people',
 									icon: 'poiGenericNPC',
 									iconType: 'png',
+									image: 'f965a770-b841-462c-8325-8dd483cca8a1.jpg',
 								},
 								{
 									lat: -57.890625,
@@ -566,6 +567,7 @@ const MAP_DATABASE = {
 									type: 'people',
 									icon: 'poiGenericNPC',
 									iconType: 'png',
+									image: 'bcaa3de1-7d67-4909-92b0-dea60f63bf71.jpg',
 								},
 								{
 									lat: -58.484375,
@@ -656,7 +658,7 @@ const MAP_DATABASE = {
 									type: 'place',
 									icon: 'poiBed',
 									iconType: 'png',
-									image: 'harbour_inn.png',
+									image: 'af14542d-6e79-4d4d-b9d7-8e2037a45307.jpg',
 									mapLink:
 										'world_maps.submaps.islands.korinis_island.submaps.interiors.korinis_island_interior_harbour_inn',
 								},
@@ -667,6 +669,7 @@ const MAP_DATABASE = {
 									type: 'place',
 									icon: 'city',
 									iconType: 'png',
+									image: 'cd2dbe90-39eb-483d-9ad5-85e36fda39b2.jpg',
 								},
 								{ lat: -82.203125, lng: 59.4375, label: 'Paladin Hall', type: 'place', icon: 'city', iconType: 'png' },
 								{
@@ -734,6 +737,7 @@ const MAP_DATABASE = {
 									label: 'Water Mages Pyramid',
 									type: 'place',
 									icon: 'templePyramid',
+									image: '241bf32d-094b-49d7-ba81-3a224d39da82.jpg',
 									mapLink:
 										'world_maps.submaps.islands.korinis_island.submaps.interiors.korinis_island_interior_water_mages_pyramid',
 								},
@@ -800,7 +804,7 @@ const MAP_DATABASE = {
 									icon: 'poiCombat',
 									iconType: 'png',
 									description: `The adventurers, hoping to make a new ally, approached the lizardman with friendly intentions. However, their efforts were met with hostility as the lizardman attacked them. The battle was intense, with the group struggling to subdue their reptilian foe. Just as they seemed to gain the upper hand, a group of goblins ambushed them from the shadows. The adventurers fought valiantly, managing to defeat the goblins, but in the chaos, one of the goblins used a spell to explode nearby corpses, which killed the lizardman, whom they had been trying to keep alive.`,
-									image: 'goblin_camp_01.png',
+									image: '5f2e59cb-3f54-452f-bbd9-63905789961a.jpg',
 								},
 								{
 									lat: -24.375,
