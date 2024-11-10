@@ -266,7 +266,7 @@ class AnnotationService {
 
 	_createIconHtml(iconName, width, height) {
 		return `
-            <div class="custom-icon-container" style="width:${width}px;height:${height}px">
+            <div class="custom-icon-container" style="width:${width}px; height:${height}px">
                 <img class="custom-icon-image" src="images/custom-icons/${iconName}.png">
             </div>
         `;
@@ -356,7 +356,7 @@ class AnnotationService {
 		const isLandmark = categoryKey === 'landmarks';
 		const markerOptions = {
 			icon: point.type === 'text' ? this._createTextIcon(point) : labeledIcon || this._createDefaultIcon(),
-			title: 'Săndele',
+			title: point.label,
 		};
 
 		const marker = L.marker([point.lat, point.lng], markerOptions);
@@ -407,6 +407,12 @@ class AnnotationService {
 				element.setAttribute('data-category-name', categoryName);
 				element.setAttribute('data-label', point.label);
 				element.setAttribute('data-url', this._generateMarkerUrl(point, categoryKey));
+
+				if (point.animationType) {
+					const img = element?.querySelector('img');
+
+					if (img) img.classList.add(`animation-${point.animationType}`);
+				}
 
 				if (point.mapLink) {
 					element.classList.add('has-map');
