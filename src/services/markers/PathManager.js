@@ -127,8 +127,9 @@ class PathManager {
 
 			let pathTextIndex = 0;
 			const pathGroup = L.layerGroup();
+			const textMarkers = []; // Array to store text markers for navigation
 
-			// Create segments between points
+			// Create segments between points (previous segment code remains the same)
 			for (let i = 0; i < pathData.points.length - 1; i++) {
 				const startPoint = pathData.points[i];
 				const endPoint = pathData.points[i + 1];
@@ -208,34 +209,77 @@ class PathManager {
 				});
 			}
 
-			// Add text markers
-			pathData.points.forEach((point) => {
-				if (point.text) {
-					pathTextIndex++;
-					const markerDot = L.marker(point.coordinates, {
-						icon: L.divIcon({
-							className: 'path-text-dot',
-							html: `${pathTextIndex}`,
-						}),
-					}).bindPopup(point.text);
+			// Add text markers with navigation
+			const textPoints = pathData.points.filter((point) => point.text);
+			textPoints.forEach((point, idx) => {
+				pathTextIndex++;
 
-					markerDot.on('add', () => {
-						const markerElement = markerDot.getElement();
-						markerElement.style.backgroundColor = point.pointColor || pathData.lineColor || '#F15B50';
-					});
+				// Create navigation buttons HTML
+				const prevButton = idx > 0 ? `<button class="marker-nav-btn prev-marker">← Previous</button>` : '';
+				const nextButton =
+					idx < textPoints.length - 1 ? `<button class="marker-nav-btn next-marker">Next →</button>` : '';
 
-					markerDot.on('click', () => {
-						const target = {
-							type: 'path',
-							name: pathData.name,
-							coordinates: point.coordinates,
-							text: point.text,
-						};
-						UrlManager.updateUrl(this.map.customMap.getCurrentMapKey(), true, target);
-					});
+				const popupContent = `
+                    <div class="marker-popup-content">
+                        <div class="marker-text">${point.text}</div>
+                        <div class="marker-navigation">
+                            ${prevButton}
+                            ${nextButton}
+                        </div>
+                    </div>
+                `;
 
-					pathGroup.addLayer(markerDot);
-				}
+				const markerDot = L.marker(point.coordinates, {
+					icon: L.divIcon({
+						className: 'path-text-dot',
+						html: `${pathTextIndex}`,
+					}),
+				}).bindPopup(popupContent);
+
+				markerDot.on('add', () => {
+					const markerElement = markerDot.getElement();
+					markerElement.style.backgroundColor = point.pointColor || pathData.lineColor || '#F15B50';
+				});
+
+				markerDot.on('popupopen', () => {
+					const popup = markerDot.getPopup();
+					const container = popup.getElement();
+
+					// Add navigation button click handlers
+					const prevBtn = container.querySelector('.prev-marker');
+					const nextBtn = container.querySelector('.next-marker');
+
+					if (prevBtn) {
+						prevBtn.addEventListener('click', () => {
+							markerDot.closePopup();
+							const prevMarker = textMarkers[idx - 1];
+							this.map.flyTo(prevMarker.getLatLng(), this.map.getMaxZoom() - 1);
+							prevMarker.openPopup();
+						});
+					}
+
+					if (nextBtn) {
+						nextBtn.addEventListener('click', () => {
+							markerDot.closePopup();
+							const nextMarker = textMarkers[idx + 1];
+							this.map.flyTo(nextMarker.getLatLng(), this.map.getMaxZoom() - 1);
+							nextMarker.openPopup();
+						});
+					}
+				});
+
+				markerDot.on('click', () => {
+					const target = {
+						type: 'path',
+						name: pathData.name,
+						coordinates: point.coordinates,
+						text: point.text,
+					};
+					UrlManager.updateUrl(this.map.customMap.getCurrentMapKey(), true, target);
+				});
+
+				textMarkers.push(markerDot);
+				pathGroup.addLayer(markerDot);
 			});
 
 			this.pathGroups[pathData.name] = pathGroup;
@@ -678,7 +722,6 @@ class PolylineManager {
 		};
 	}
 }
-
 class MarkerManager {
 	constructor(map, isDebugMode, iconsPath = 'images/custom-icons/') {
 		if (!map) {
