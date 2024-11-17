@@ -764,6 +764,8 @@ const MAP_DATABASE = {
 									type: 'place',
 									icon: 'arrowDirectionRight',
 									iconType: 'png',
+									mapLink:
+										'world_maps.submaps.islands.korinis_island.submaps.extensions.korinis_island_mercenaries_camp',
 								},
 								{
 									lat: -81.21875,
@@ -1342,7 +1344,6 @@ const MAP_DATABASE = {
 								},
 							],
 						},
-
 						{
 							name: 'Session 7 Recap',
 							lineColor: '#84d8e3',
@@ -1502,6 +1503,84 @@ const MAP_DATABASE = {
 									coordinates: [-3.234375, 143.359375],
 									pointWidth: 1,
 									pointColor: 'yellow',
+								},
+							],
+						},
+						{
+							name: 'Session 8 Recap',
+							lineColor: '#ff5722',
+							points: [
+								{
+									coordinates: [-35.0625, 134.25],
+								},
+								{
+									coordinates: [-36.5, 134.25],
+								},
+								{
+									coordinates: [-38.0625, 131.6875],
+								},
+								{
+									coordinates: [-38.875, 130.625],
+								},
+								{
+									coordinates: [-40.6875, 130.8125],
+								},
+								{
+									coordinates: [-46.0625, 127.875],
+								},
+								{
+									coordinates: [-49.4375, 129.5625],
+								},
+								{
+									coordinates: [-54.75, 130],
+								},
+								{
+									coordinates: [-56.3125, 135.5625],
+								},
+								{
+									coordinates: [-55.4375, 150.1875],
+								},
+								{
+									coordinates: [-55.1875, 163.5],
+								},
+								{
+									coordinates: [-55.125, 177.625],
+								},
+								{
+									coordinates: [-56.6875, 181.25],
+								},
+								{
+									coordinates: [-58, 183.9375],
+								},
+								{
+									coordinates: [-62.125, 185.625],
+									text: 'Went into the inn and talked with the bartender, who was a follower of the water mages. Learned about the mercenaries and got a key to unlock the teleporter B lock.',
+								},
+								{
+									coordinates: [-57.5, 185.3125],
+								},
+								{
+									coordinates: [-55.0625, 187.5],
+								},
+								{
+									coordinates: [-54.9375, 203.125],
+									text: 'Went to the mercenaries. \n\nFEATURE WIP TO GO TO THE NEXT MAP DIRECTLY, FOR NOW CLICK THE ARROW BUTTON NEAR AND TOGGLE THE SESSION RECAP FROM THERE.',
+								},
+								{
+									coordinates: [-56.125, 202.875],
+								},
+								{
+									coordinates: [-55.9375, 192.9375],
+									text: '[Continued from where session 8 ends from the other map]\n\nMade a left turn here towards the Penal Colony. What could go wrong?',
+								},
+								{
+									coordinates: [-59.75, 193.4375],
+								},
+								{
+									coordinates: [-73.6875, 195.625],
+								},
+								{
+									coordinates: [-78.875, 196.0625],
 								},
 							],
 						},
@@ -2511,6 +2590,516 @@ const MAP_DATABASE = {
 										],
 									},
 								],
+							},
+							korinis_island_mercenaries_camp: {
+								metadata: {
+									path: 'maps/world_maps/korinis_island/mercenaries_camp',
+									sizes: {
+										maxZoom: 6,
+										imageWidth: 8192,
+										imageHeight: 6282,
+									},
+									backgroundColor: 'rgb(10, 28, 33)',
+								},
+								annotations: {
+									navigation: {
+										name: 'Navigation arrows',
+										items: [
+											{
+												lat: -68.5,
+												lng: 1.3,
+												label: 'Towards Korinis City',
+												type: 'place',
+												icon: 'arrowDirectionLeft',
+												iconType: 'png',
+												mapLink: 'world_maps.submaps.islands.korinis_island',
+											},
+										],
+									},
+									npcs: {
+										name: 'NPCs',
+										items: [
+											{
+												lat: -68,
+												lng: 41.625,
+												label: 'Mercenary Guards',
+												type: 'people',
+												icon: 'fort',
+												iconType: 'png',
+											},
+											{
+												lat: -77.625,
+												lng: 40.96875,
+												label: "Erol's house",
+												type: 'people',
+												icon: 'poiGenericNPC',
+												iconType: 'png',
+											},
+											{
+												lat: -32.125,
+												lng: 87.40625,
+												label: 'Silvestro',
+												type: 'people',
+												icon: 'poiGenericNPC',
+												iconType: 'png',
+											},
+											{
+												lat: -28.84375,
+												lng: 85.265625,
+												label: 'Quixie & The Other Merchant',
+												type: 'people',
+												icon: 'tradeCampLarge',
+												iconType: 'png',
+											},
+											{
+												lat: -20.0625,
+												lng: 83.375,
+												label: 'General Lee',
+												type: 'people',
+												icon: 'poiGenericNPC',
+												iconType: 'png',
+											},
+											{
+												lat: -17.1875,
+												lng: 94.96875,
+												label: 'Farm Blacksmith',
+												type: 'people',
+												icon: 'tradeForge',
+												iconType: 'png',
+											},
+										],
+									},
+									points_of_interest: {
+										name: 'Points of Interest',
+										items: [
+											{
+												lat: -26.90625,
+												lng: 70.375,
+												label: 'The Chocolate Contest Tavern',
+												type: 'people',
+												icon: 'poiBed_map',
+												iconType: 'png',
+											},
+											{
+												lat: -32.25,
+												lng: 67.5625,
+												label: 'Farm Chapel',
+												type: 'people',
+												icon: 'templeShrine',
+												iconType: 'png',
+											},
+											{
+												lat: -8.53125,
+												lng: 102.171875,
+												label: 'Tower',
+												type: 'people',
+												icon: 'fortTower',
+												iconType: 'png',
+											},
+										],
+									},
+								},
+								paths: [
+									{
+										name: 'Session 8 Recap',
+										lineColor: '#ff5722',
+										points: [
+											{
+												coordinates: [-68.1875, 3.125],
+											},
+											{
+												coordinates: [-68.1875, 35.5625],
+											},
+											{
+												coordinates: [-69.25, 36.75],
+											},
+											{
+												coordinates: [-75.625, 36.5625],
+											},
+											{
+												coordinates: [-79.4375, 37.875],
+											},
+											{
+												coordinates: [-77.625, 40.9375],
+												text: "Went to Erol's house and met with him. Learned about the guards and Silvestro's quota.",
+											},
+											{
+												coordinates: [-75.5, 38.1875],
+											},
+											{
+												coordinates: [-68.5, 38],
+											},
+											{
+												coordinates: [-68.3125, 42.125],
+											},
+											{
+												coordinates: [-68, 46.6875],
+											},
+											{
+												coordinates: [-68.375, 62.9375],
+											},
+											{
+												coordinates: [-68.34375, 68.515625],
+												text: 'Saw a meadow with a lot of cows and sheep on the right, and huge farmlands to the left.',
+											},
+											{
+												coordinates: [-68.4375, 87.25],
+											},
+											{
+												coordinates: [-67.6875, 88.4375],
+												text: 'Decided to make a left turn here towards the farm.',
+											},
+											{
+												coordinates: [-58.875, 87.8125],
+											},
+											{
+												coordinates: [-46, 87.625],
+											},
+											{
+												coordinates: [-39.0625, 87.375],
+											},
+											{
+												coordinates: [-34.4375, 87.6875],
+											},
+											{
+												coordinates: [-32.5, 87.625],
+											},
+											{
+												coordinates: [-32.25, 87.5],
+												text: 'Met up with Silvestro, learned about the farm and paid the 20 gold per person tax.',
+											},
+											{
+												coordinates: [-29.546875, 85.4375],
+												text: 'Met up with the two merchants - Quixie and Jabba the Hutt. Bought 1 haste potion and two items for approximately 1000g.',
+											},
+											{
+												coordinates: [-30.5, 84.40625],
+											},
+											{
+												coordinates: [-30.421875, 80.375],
+											},
+											{
+												coordinates: [-30.34375, 80.3125],
+												text: 'Saw that the inn to the left was holding a competition for whoever could eat the most chocolate. Nobody could resist such temptation.',
+											},
+											{
+												coordinates: [-29.171875, 78.90625],
+											},
+											{
+												coordinates: [-26.9375, 77.734375],
+											},
+											{
+												coordinates: [-27, 70.390625],
+												text: 'Entered the contest - the Cleric and the Barbarian won, and ate a stew which increased their max HP by 5. The others puked.',
+											},
+											{
+												coordinates: [-26.421875, 77.078125],
+											},
+											{
+												coordinates: [-26.65625, 78.09375],
+											},
+											{
+												coordinates: [-26.40625, 82.578125],
+											},
+											{
+												coordinates: [-24.40625, 83.203125],
+											},
+											{
+												coordinates: [-22.171875, 82.84375],
+												text: "Met up with General Lee and learned that they wanted to leave the island and were planning to take over the city. While trying to help, the party might've accidentally killed Captain Cunts by revealing his location to the pirate queen Bianca.",
+											},
+											{
+												coordinates: [-22.28125, 84.765625],
+												text: 'Met up with another follower of the Water Mages guild who was training the mercenary recruits. Trained with him and gained expertise with chosen weapons.',
+											},
+											{
+												coordinates: [-24.71875, 84.078125],
+											},
+											{
+												coordinates: [-23.25, 87.75],
+											},
+											{
+												coordinates: [-22.515625, 91.03125],
+											},
+											{
+												coordinates: [-19.15625, 93.484375],
+												text: 'Went to the Blacksmith to learn about their trade.',
+											},
+											{
+												coordinates: [-19.75, 93.921875],
+											},
+											{
+												coordinates: [-23.703125, 91.1875],
+											},
+											{
+												coordinates: [-26.765625, 89.28125],
+											},
+											{
+												coordinates: [-33.171875, 87.921875],
+											},
+											{
+												coordinates: [-39.34375, 87.734375],
+											},
+											{
+												coordinates: [-45.390625, 86.734375],
+											},
+											{
+												coordinates: [-55.328125, 86.765625],
+											},
+											{
+												coordinates: [-60.8125, 87.140625],
+											},
+											{
+												coordinates: [-66.921875, 87.390625],
+											},
+											{
+												coordinates: [-67.453125, 82.484375],
+												text: 'Going back to the inn and towards the penal colony.',
+											},
+											{
+												coordinates: [-67.140625, 74.453125],
+											},
+											{
+												coordinates: [-67.25, 52.25],
+											},
+											{
+												coordinates: [-66.890625, 41.765625],
+												text: 'Noticed there was another set of guards compared to the first time.',
+											},
+											{
+												coordinates: [-67.1875, 31.859375],
+											},
+											{
+												coordinates: [-67.15625, 9.3125],
+											},
+											{
+												coordinates: [-67.21875, 0.859375],
+											},
+										],
+									},
+								],
+								areas: {
+									buildings: {
+										name: 'Buildings',
+										items: [
+											{
+												name: "Erol's house",
+												textRotation: '0deg',
+												textSize: 16,
+												textFontType: 'title',
+												lineColor: 'rgb(50 94 102 / 40%)',
+												interiorColor: 'rgb(50 94 102 / 40%)',
+												points: [
+													{
+														coordinates: [-69.25, 35.84375],
+													},
+													{
+														coordinates: [-69.09375, 25.0625],
+													},
+													{
+														coordinates: [-73.84375, 21.0625],
+													},
+													{
+														coordinates: [-79.9375, 21.15625],
+													},
+													{
+														coordinates: [-79.40625, 24.46875],
+													},
+													{
+														coordinates: [-78.3125, 29.3125],
+													},
+													{
+														coordinates: [-78.78125, 33.90625],
+													},
+													{
+														coordinates: [-79.71875, 35.5],
+													},
+													{
+														coordinates: [-80.53125, 38.25],
+													},
+													{
+														coordinates: [-81.4375, 44.375],
+													},
+													{
+														coordinates: [-80.59375, 46.8125],
+													},
+													{
+														coordinates: [-73.96875, 47.4375],
+													},
+													{
+														coordinates: [-70.125, 49.1875],
+													},
+													{
+														coordinates: [-69.25, 47.0625],
+													},
+													{
+														coordinates: [-69.09375, 38.53125],
+													},
+												],
+											},
+										],
+									},
+									farms: {
+										name: 'Farmlands',
+										items: [
+											{
+												name: 'Farmland with bovine and sheep',
+												textRotation: '0deg',
+												textSize: 12,
+												textFontType: 'title',
+												lineColor: 'rgb(226 178 3 / 40%)',
+												interiorColor: 'rgb(226 178 3 / 40%)',
+												points: [
+													{
+														coordinates: [-69.1875, 52.5],
+													},
+													{
+														coordinates: [-71.828125, 49.65625],
+													},
+													{
+														coordinates: [-75.328125, 47.703125],
+													},
+													{
+														coordinates: [-79.453125, 47.515625],
+													},
+													{
+														coordinates: [-85.609375, 56.359375],
+													},
+													{
+														coordinates: [-89.15625, 58.4375],
+													},
+													{
+														coordinates: [-93.28125, 57.25],
+													},
+													{
+														coordinates: [-96.6875, 58.09375],
+													},
+													{
+														coordinates: [-96.796875, 64.703125],
+													},
+													{
+														coordinates: [-96.796875, 74.640625],
+													},
+													{
+														coordinates: [-95.390625, 79.5],
+													},
+													{
+														coordinates: [-92.4375, 82.4375],
+													},
+													{
+														coordinates: [-90.6875, 85.1875],
+													},
+													{
+														coordinates: [-84.375, 86.703125],
+													},
+													{
+														coordinates: [-74.625, 87.125],
+													},
+													{
+														coordinates: [-70.84375, 87.234375],
+													},
+													{
+														coordinates: [-69.265625, 85.5],
+													},
+													{
+														coordinates: [-69.359375, 69.46875],
+													},
+												],
+											},
+											{
+												name: "Ogren's Farms",
+												textRotation: '0deg',
+												textSize: 16,
+												textFontType: 'title',
+												lineColor: 'rgb(226 178 3 / 40%)',
+												interiorColor: 'rgb(226 178 3 / 40%)',
+												points: [
+													{
+														coordinates: [-63.8125, 37.25],
+													},
+													{
+														coordinates: [-43.75, 37.375],
+													},
+													{
+														coordinates: [-37.5, 41.75],
+													},
+													{
+														coordinates: [-37.625, 48.75],
+													},
+													{
+														coordinates: [-31.125, 48.9375],
+													},
+													{
+														coordinates: [-17.3125, 50.5],
+													},
+													{
+														coordinates: [-17.625, 66.3125],
+													},
+													{
+														coordinates: [-16.6875, 73.6875],
+													},
+													{
+														coordinates: [-20.125, 74.1875],
+													},
+													{
+														coordinates: [-23.5625, 65],
+													},
+													{
+														coordinates: [-29.8125, 65.1875],
+													},
+													{
+														coordinates: [-31.5625, 64.25],
+													},
+													{
+														coordinates: [-35.4375, 66.5],
+													},
+													{
+														coordinates: [-38.3125, 65],
+													},
+													{
+														coordinates: [-40.75, 67.4375],
+													},
+													{
+														coordinates: [-43.9375, 67.6875],
+													},
+													{
+														coordinates: [-49.125, 72.625],
+													},
+													{
+														coordinates: [-50.625, 74.75],
+													},
+													{
+														coordinates: [-50.6875, 76.9375],
+													},
+													{
+														coordinates: [-47.625, 77.6875],
+													},
+													{
+														coordinates: [-40.25, 75.5625],
+													},
+													{
+														coordinates: [-36.3125, 77.9375],
+													},
+													{
+														coordinates: [-32.0625, 80.9375],
+													},
+													{
+														coordinates: [-32.0625, 85.6875],
+													},
+													{
+														coordinates: [-44.6875, 84.75],
+													},
+													{
+														coordinates: [-56.5, 84.875],
+													},
+													{
+														coordinates: [-64.0625, 84.625],
+													},
+												],
+											},
+										],
+									},
+								},
 							},
 						},
 					},

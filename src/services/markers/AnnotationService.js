@@ -411,7 +411,9 @@ class AnnotationService {
 				if (point.animationType) {
 					const img = element?.querySelector('img');
 
-					if (img) img.classList.add(`animation-${point.animationType}`);
+					if (img) {
+						img.classList.add(`animation-${point.animationType}`);
+					}
 				}
 
 				if (point.mapLink) {
