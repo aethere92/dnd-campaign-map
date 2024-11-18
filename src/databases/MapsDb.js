@@ -2806,7 +2806,7 @@ const MAP_DATABASE = {
 											},
 											{
 												coordinates: [-22.171875, 82.84375],
-												text: "Met up with General Lee and learned that they wanted to leave the island and were planning to take over the city. While trying to help, the party might've accidentally killed Captain Cunts by revealing his location to the pirate queen Bianca.",
+												text: "Met up with General Lee and learned that they wanted to leave the island and were planning to take over the city. While trying to help, the party might've accidentally killed Captain Cunts by revealing his location to the pirate queen Bianca. Lee told the party, under the condition that they help Lee's lieutenants too, that the valley of mines was currently under siege by the Lizardmen, and that the only 'safe' entrance was through another path his spies had been using for a while.",
 											},
 											{
 												coordinates: [-22.28125, 84.765625],
