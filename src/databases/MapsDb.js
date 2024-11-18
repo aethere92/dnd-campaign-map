@@ -1,3 +1,37 @@
+const MAP_ALIASES = {
+	world_map: 'world_maps',
+
+	// UNNAMED ISLAND
+	unnamed_island_01: 'world_maps.submaps.islands.unnamed_island_01',
+	finneas_encounter: 'world_maps.submaps.islands.unnamed_island_01.submaps.encounters.finneas_encounter',
+
+	//BONE WRAITHS
+	bone_wraiths_01: 'world_maps.submaps.combat_encounters.bone_wraiths_encounter_01',
+
+	// KORINIS
+	korinis_landing: 'world_maps.submaps.islands.korinis_island.submaps.extensions.korinis_island_landing_zone',
+	korinis_city: 'world_maps.submaps.islands.korinis_island',
+	korinis_mercenaries_camp:
+		'world_maps.submaps.islands.korinis_island.submaps.extensions.korinis_island_mercenaries_camp',
+	korinis_penal_colony: 'world_maps.submaps.islands.korinis_island.submaps.extensions.korinis_island_penal_colony',
+
+	// KORINIS POIs
+	korinis_city_blacksmith:
+		'world_maps.submaps.islands.korinis_island.submaps.interiors.korinis_island_interior_blacksmith',
+	korinis_lower_city_inn:
+		'world_maps.submaps.islands.korinis_island.submaps.interiors.korinis_island_interior_town_inn',
+	korinis_city_harbour_inn:
+		'world_maps.submaps.islands.korinis_island.submaps.interiors.korinis_island_interior_harbour_inn',
+	korinis_pyramid:
+		'world_maps.submaps.islands.korinis_island.submaps.interiors.korinis_island_interior_water_mages_pyramid',
+	korinis_teleporter_c:
+		'world_maps.submaps.islands.korinis_island.submaps.interiors.korinis_island_interior_pyramid_teleporter_c',
+
+	// KORINIS ENCOUNTERS
+	korinis_bandits_01:
+		'world_maps.submaps.islands.korinis_island.submaps.encounters.korinis_island_encounters_bandits_01',
+};
+
 const MAP_DATABASE = {
 	world_maps: {
 		metadata: {
@@ -28,7 +62,7 @@ const MAP_DATABASE = {
 						type: 'place',
 						icon: 'templeShrine',
 						iconType: 'png',
-						mapLink: 'world_maps.submaps.islands.unnamed_island_01',
+						mapLink: 'unnamed_island_01',
 					},
 					{
 						lat: -214.5,
@@ -37,7 +71,7 @@ const MAP_DATABASE = {
 						type: 'place',
 						icon: 'cityCapital',
 						iconType: 'png',
-						mapLink: 'world_maps.submaps.islands.korinis_island.submaps.extensions.korinis_island_landing_zone',
+						mapLink: 'korinis_landing',
 					},
 				],
 			},
@@ -350,7 +384,7 @@ const MAP_DATABASE = {
 						type: 'place',
 						icon: 'poiCombat',
 						iconType: 'png',
-						mapLink: 'world_maps.submaps.combat_encounters.bone_wraiths_encounter_01',
+						mapLink: 'bone_wraiths_01',
 					},
 				],
 			},
@@ -608,8 +642,7 @@ const MAP_DATABASE = {
 									type: 'people',
 									icon: 'tradeForge',
 									iconType: 'png',
-									mapLink:
-										'world_maps.submaps.islands.korinis_island.submaps.interiors.korinis_island_interior_blacksmith',
+									mapLink: 'korinis_city_blacksmith',
 								},
 								{
 									lat: -29.640625,
@@ -647,8 +680,7 @@ const MAP_DATABASE = {
 									type: 'place',
 									icon: 'poiBed',
 									iconType: 'png',
-									mapLink:
-										'world_maps.submaps.islands.korinis_island.submaps.interiors.korinis_island_interior_town_inn',
+									mapLink: 'korinis_lower_city_inn',
 								},
 								{ lat: -61.59375, lng: 185.328125, label: 'Inn', type: 'place', icon: 'poiBed', iconType: 'png' },
 								{
@@ -659,8 +691,7 @@ const MAP_DATABASE = {
 									icon: 'poiBed',
 									iconType: 'png',
 									image: 'af14542d-6e79-4d4d-b9d7-8e2037a45307.jpg',
-									mapLink:
-										'world_maps.submaps.islands.korinis_island.submaps.interiors.korinis_island_interior_harbour_inn',
+									mapLink: 'korinis_city_harbour_inn',
 								},
 								{
 									lat: -36.90625,
@@ -730,8 +761,7 @@ const MAP_DATABASE = {
 									type: 'place',
 									icon: 'iconPortal',
 									animationType: 'spin',
-									mapLink:
-										'world_maps.submaps.islands.korinis_island.submaps.interiors.korinis_island_interior_pyramid_teleporter_c',
+									mapLink: 'korinis_teleporter_c',
 								},
 								{
 									lat: -2.953125,
@@ -740,8 +770,7 @@ const MAP_DATABASE = {
 									type: 'place',
 									icon: 'templePyramid',
 									image: '241bf32d-094b-49d7-ba81-3a224d39da82.jpg',
-									mapLink:
-										'world_maps.submaps.islands.korinis_island.submaps.interiors.korinis_island_interior_water_mages_pyramid',
+									mapLink: 'korinis_pyramid',
 								},
 							],
 						},
@@ -755,7 +784,7 @@ const MAP_DATABASE = {
 									type: 'place',
 									icon: 'arrowDirectionLeft',
 									iconType: 'png',
-									mapLink: 'world_maps.submaps.islands.korinis_island.submaps.extensions.korinis_island_landing_zone',
+									mapLink: 'korinis_landing',
 								},
 								{
 									lat: -56.3,
@@ -764,8 +793,7 @@ const MAP_DATABASE = {
 									type: 'place',
 									icon: 'arrowDirectionRight',
 									iconType: 'png',
-									mapLink:
-										'world_maps.submaps.islands.korinis_island.submaps.extensions.korinis_island_mercenaries_camp',
+									mapLink: 'korinis_mercenaries_camp',
 								},
 								{
 									lat: -81.21875,
@@ -774,7 +802,7 @@ const MAP_DATABASE = {
 									type: 'place',
 									icon: 'arrowDirectionDown',
 									iconType: 'png',
-									mapLink: 'world_maps.submaps.islands.korinis_island.submaps.extensions.korinis_island_penal_colony',
+									mapLink: 'korinis_penal_colony',
 								},
 							],
 						},
@@ -790,8 +818,7 @@ const MAP_DATABASE = {
 									type: 'people',
 									icon: 'poiCombat',
 									iconType: 'png',
-									mapLink:
-										'world_maps.submaps.islands.korinis_island.submaps.encounters.korinis_island_encounters_bandits_01',
+									mapLink: 'korinis_bandits_01',
 								},
 								{
 									lat: -40.59375,
@@ -2490,7 +2517,7 @@ const MAP_DATABASE = {
 												type: 'place',
 												icon: 'arrowDirectionRight',
 												iconType: 'png',
-												mapLink: 'world_maps.submaps.islands.korinis_island',
+												mapLink: 'korinis_city',
 											},
 										],
 									},
@@ -2613,7 +2640,7 @@ const MAP_DATABASE = {
 												type: 'place',
 												icon: 'arrowDirectionLeft',
 												iconType: 'png',
-												mapLink: 'world_maps.submaps.islands.korinis_island',
+												mapLink: 'korinis_city',
 											},
 										],
 									},
@@ -3123,7 +3150,7 @@ const MAP_DATABASE = {
 												type: 'people',
 												icon: 'arrowDirectionUp',
 												iconType: 'png',
-												mapLink: 'world_maps.submaps.islands.korinis_island',
+												mapLink: 'korinis_city',
 											},
 										],
 									},
@@ -3198,7 +3225,7 @@ const MAP_DATABASE = {
 									type: 'place',
 									icon: 'iconPortal',
 									iconType: 'png',
-									mapLink: 'world_maps.submaps.islands.unnamed_island_01.submaps.encounters.finneas_encounter',
+									mapLink: 'finneas_encounter',
 								},
 								{
 									lat: -193.5,

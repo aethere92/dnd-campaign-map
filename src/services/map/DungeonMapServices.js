@@ -295,16 +295,6 @@ class CustomMap {
 		}
 	}
 
-	async #handleDebugClick(e) {
-		const coordinates = `"lat":${e.latlng.lat}, "lng":${e.latlng.lng},`;
-		try {
-			await navigator.clipboard.writeText(coordinates);
-			console.log('Coordinates copied to clipboard:', coordinates);
-		} catch (err) {
-			console.error('Failed to copy coordinates:', err);
-		}
-	}
-
 	// Map Feature Methods
 	addTileLayer(mapConfig) {
 		const customTileLayer = new CustomTileLayer(`${mapConfig.metadata.path}/{z}/{x}_{y}.png`, {
@@ -436,7 +426,8 @@ class CustomMap {
 	}
 
 	#getMapConfig(mapKey) {
-		return mapKey.split('.').reduce((config, key) => config?.[key], MAP_DATABASE);
+		const fullPath = MAP_ALIASES[mapKey] || mapKey; // Use alias if it exists, otherwise the provided key
+		return fullPath.split('.').reduce((config, key) => config?.[key], MAP_DATABASE);
 	}
 
 	#setMapColor(config) {
