@@ -215,9 +215,9 @@ class PathManager {
 				pathTextIndex++;
 
 				// Create navigation buttons HTML
-				const prevButton = idx > 0 ? `<button class="marker-nav-btn prev-marker">← Previous</button>` : '';
+				const prevButton = idx > 0 ? `<button class="marker-nav-btn prev-marker">Previous</button>` : '';
 				const nextButton =
-					idx < textPoints.length - 1 ? `<button class="marker-nav-btn next-marker">Next →</button>` : '';
+					idx < textPoints.length - 1 ? `<button class="marker-nav-btn next-marker">Next</button>` : '';
 
 				const popupContent = `
                     <div class="marker-popup-content">

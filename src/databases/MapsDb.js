@@ -774,6 +774,7 @@ const MAP_DATABASE = {
 									type: 'place',
 									icon: 'arrowDirectionDown',
 									iconType: 'png',
+									mapLink: 'world_maps.submaps.islands.korinis_island.submaps.extensions.korinis_island_penal_colony',
 								},
 							],
 						},
@@ -3100,6 +3101,78 @@ const MAP_DATABASE = {
 										],
 									},
 								},
+							},
+							korinis_island_penal_colony: {
+								metadata: {
+									path: 'maps/world_maps/korinis_island/penal_colony',
+									sizes: {
+										maxZoom: 6,
+										imageWidth: 8192,
+										imageHeight: 6430,
+									},
+									backgroundColor: 'rgb(10, 28, 33)',
+								},
+								annotations: {
+									navigation_arrows: {
+										name: 'Navigation arrows',
+										items: [
+											{
+												lat: -1.46875,
+												lng: 64.40625,
+												label: 'To Korinis City',
+												type: 'people',
+												icon: 'arrowDirectionUp',
+												iconType: 'png',
+												mapLink: 'world_maps.submaps.islands.korinis_island',
+											},
+										],
+									},
+									points_of_interest: {
+										name: 'Points of Interest',
+										items: [
+											{
+												lat: -26.8125,
+												lng: 33.8125,
+												label: 'Unnamed farm',
+												type: 'people',
+												icon: 'poiFarm',
+												iconType: 'png',
+											},
+										],
+									},
+									combat_encounters: {
+										name: 'Combat encounters',
+										items: [
+											{
+												lat: -20.75,
+												lng: 80.3125,
+												label: 'Ruined Tower Mages',
+												type: 'people',
+												icon: 'poiCombat',
+												iconType: 'png',
+											},
+										],
+									},
+								},
+								paths: [
+									{
+										name: 'Session 8 Recap',
+										lineColor: '#ff5722',
+										points: [
+											{
+												coordinates: [-2.375, 64.75],
+												text: '[Continued from Korinis City map]\nIn front of them, they saw the road and two paladins standing guard. To their left, a ruined tower; to their right, farmland.',
+											},
+											{
+												coordinates: [-10.25, 65.125],
+											},
+											{
+												coordinates: [-17, 73.25],
+												text: 'Their passive perception not enough, the party was ambushed by a party of 3 orc mages - each master of a different element: fire, ice and lightning. After a fierce battle, they emerged victorious.',
+											},
+										],
+									},
+								],
 							},
 						},
 					},
