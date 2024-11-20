@@ -291,7 +291,8 @@ class CustomMap {
 	#handleMapClick(e) {
 		this.#handleMouseMove(e);
 		if (this.#config.isDebugMode) {
-			//this.#handleDebugClick(e);
+			const { lat, lng } = e.latlng;
+			navigator.clipboard.writeText(`lat: ${lat}, lng: ${lng},`).catch((err) => console.error('Failed to copy:', err));
 		}
 	}
 
