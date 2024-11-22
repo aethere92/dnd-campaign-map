@@ -16,6 +16,7 @@ html {
 #map {
 	width: 100%;
 	height: 100%;
+	overflow: hidden;
 }
 
 #actions {
@@ -234,4 +235,163 @@ html {
 
 .item-hidden {
 	display: none;
+}
+
+/* Campaign Selection Styles */
+.view {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	overflow: auto;
+}
+
+#campaign-selection {
+	padding: 4rem 2rem;
+	background: linear-gradient(rgba(26, 20, 18, 0.97), rgba(26, 20, 18, 0.97)),
+		url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 0l30 30-30 30L0 30z' fill='%23241c1a' fill-opacity='0.4' fill-rule='evenodd'/%3E%3C/svg%3E");
+}
+
+#campaign-selection header {
+	text-align: center;
+	margin-bottom: 4rem;
+	position: relative;
+}
+
+#campaign-selection h1 {
+	font-family: 'IM Fell English SC', serif;
+	font-size: 3rem;
+	color: #d4b174;
+	margin-bottom: 1rem;
+	letter-spacing: 0.1em;
+	text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+#campaign-selection header p {
+	font-size: 1.3rem;
+	color: #a89386;
+	max-width: 600px;
+	margin: 0 auto;
+	font-style: italic;
+}
+
+.campaign-list {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+	gap: 2.5rem;
+	max-width: 1400px;
+	margin: 0 auto;
+	padding: 0 1rem;
+}
+
+.campaign-card {
+	background: #f4e4bc;
+	border-radius: 8px;
+	padding: 2rem;
+	cursor: pointer;
+	transition: all 0.3s ease;
+	position: relative;
+	overflow: hidden;
+	box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+	background-image: linear-gradient(rgba(244, 228, 188, 0.9), rgba(244, 228, 188, 0.9)),
+		url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0h100v100H0z' fill='%23d4b174' fill-opacity='0.1'/%3E%3C/svg%3E");
+}
+
+.campaign-card::before {
+	content: '';
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	height: 3px;
+	background: linear-gradient(90deg, transparent, #8b6b4a, transparent);
+	opacity: 0;
+	transition: opacity 0.3s ease;
+}
+
+.campaign-card:hover {
+	transform: translateY(-3px);
+	box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+.campaign-card:hover::before {
+	opacity: 1;
+}
+.campaign-card h2 {
+	font-size: 1.5rem;
+	margin-bottom: 1rem;
+	color: #4a3427;
+}
+
+.campaign-card p {
+	color: #5c4434;
+	line-height: 1.7;
+	margin-bottom: 1.5rem;
+	font-size: 1.1rem;
+}
+
+.campaign-card img {
+	width: 64px;
+	height: 64px;
+	margin-top: 1rem;
+}
+
+.campaign-level {
+	background: rgba(139, 107, 74, 0.1);
+	padding: 0.5rem 1rem;
+	border-radius: 4px;
+	color: #6d4c33;
+	font-size: 1rem;
+}
+
+.campaign-info {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-top: 1.5rem;
+	padding-top: 1.5rem;
+	border-top: 1px solid rgba(139, 107, 74, 0.2);
+}
+
+.back-button {
+	position: fixed;
+	bottom: 1rem;
+	right: 1rem;
+	z-index: 1000;
+	padding: 0.5rem 1rem;
+	background: white;
+	border: 2px solid rgba(0, 0, 0, 0.2);
+	border-radius: 4px;
+	cursor: pointer;
+	font-family: system-ui;
+}
+
+.back-button:hover {
+	background: #f5f5f5;
+}
+
+/* Add these styles to your existing CSS */
+.campaign-card.disabled {
+	opacity: 0.7;
+	cursor: not-allowed;
+}
+
+.campaign-card .campaign-status {
+	margin-top: 1rem;
+	padding: 0.5rem;
+	background: rgb(0 0 0 / 20%);
+	border-radius: 4px;
+	text-align: center;
+	color: #635840;
+	font-weight: bold;
+}
+
+.view {
+	position: fixed;
+}
+
+#campaign-selection {
+	font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans',
+		'Helvetica Neue', sans-serif;
 }

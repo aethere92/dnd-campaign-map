@@ -172,7 +172,7 @@ class AnnotationService {
 
 	async _createPngIcon(iconName) {
 		try {
-			const dimensions = await this._loadImage(`images/custom-icons/${iconName}.png`);
+			const dimensions = await this._loadImage(`/images/custom-icons/${iconName}.png`);
 			const { width, height } = this._calculateIconDimensions(dimensions);
 			const iconHtml = this._createIconHtml(iconName, width, height);
 
@@ -267,7 +267,7 @@ class AnnotationService {
 	_createIconHtml(iconName, width, height) {
 		return `
             <div class="custom-icon-container" style="width:${width}px; height:${height}px">
-                <img class="custom-icon-image" src="images/custom-icons/${iconName}.png">
+                <img class="custom-icon-image" src="/images/custom-icons/${iconName}.png">
             </div>
         `;
 	}
@@ -305,7 +305,7 @@ class AnnotationService {
 
 	// Content Creation Methods
 	_createMarkerContent(point) {
-		const image = point.image ? `<img class="label-image" src="images/assets/${point.image}"/>` : '';
+		const image = point.image ? `<img class="label-image" src="/images/assets/${point.image}"/>` : '';
 		const description = point.description ? `<span class="label-description">${point.description}</span>` : '';
 		const mapLink = point.mapLink
 			? `<button onclick="customMap.loadMap('${point.mapLink}')" class="map-button">View map</button>`

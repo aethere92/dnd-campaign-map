@@ -25,14 +25,18 @@ class CustomMap {
 	#bounds;
 	#exportButton;
 	#coordinatesDiv;
+	#campaignData;
 
-	constructor(mapElementId, initialMapKey = 'world_maps.submaps.islands.korinis_island', isDebugMode = false) {
+	constructor(mapElementId, options = {}) {
+		const { initialMapKey = 'korinis_island', isDebugMode = false, campaignData = null } = options;
+
 		this.#config = {
 			mapElementId,
 			initialMapKey,
 			isDebugMode,
 		};
 
+		this.#campaignData = campaignData;
 		this.#stateManager = new MapStateManager();
 		this.#loadingManager = new LoadingManager(mapElementId);
 		this.#services = {
@@ -44,6 +48,10 @@ class CustomMap {
 
 		window.customMap = this;
 		this.#initialize();
+	}
+
+	updateCampaignData(newData) {
+		this.#campaignData = newData;
 	}
 
 	// Initialization Methods
@@ -71,6 +79,7 @@ class CustomMap {
 				e.originalEvent.target === this.#map._container ||
 				e.originalEvent.target.classList.contains('leaflet-container')
 			) {
+				// Use the current map key when clearing target
 				UrlManager.clearTarget(this.#currentMapKey);
 			}
 		});
@@ -427,8 +436,14 @@ class CustomMap {
 	}
 
 	#getMapConfig(mapKey) {
-		const fullPath = MAP_ALIASES[mapKey] || mapKey; // Use alias if it exists, otherwise the provided key
-		return fullPath.split('.').reduce((config, key) => config?.[key], MAP_DATABASE);
+		if (!mapKey || !this.#campaignData) return null;
+
+		const fullPath = CAMPAIGN_01_ALIASES[mapKey] || mapKey; // Use alias if it exists
+		const pathParts = fullPath.split('.');
+
+		return pathParts.reduce((config, key) => {
+			return config?.[key];
+		}, this.#campaignData);
 	}
 
 	#setMapColor(config) {

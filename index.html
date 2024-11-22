@@ -6,50 +6,46 @@
 		<title>D&D Campaign Map</title>
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.css" />
 		<link rel="stylesheet" href="https://unpkg.com/@geoman-io/leaflet-geoman-free@2.17.0/dist/leaflet-geoman.css" />
-		<link rel="stylesheet" href="styles/styles.css" />
-		<link rel="icon" type="image/x-icon" href="images/pageicon.png" />
+		<link rel="stylesheet" href="/styles/styles.css" />
+		<link rel="icon" type="image/x-icon" href="/images/pageicon.png" />
 		<!-- IMPORTS -->
 		<script defer src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.js"></script>
 		<script defer src="https://unpkg.com/@geoman-io/leaflet-geoman-free@2.17.0/dist/leaflet-geoman.js"></script>
 		<!-- DATABASES -->
-		<script defer src="src/databases/SvgIconsDb.js"></script>
-		<script defer src="src/databases/MapsDb.js"></script>
+		<script defer src="/src/databases/SvgIconsDb.js"></script>
+		<script defer src="/src/databases/campaign_data/campaign_01.js"></script>
+		<script defer src="/src/databases/CampaignInfo.js"></script>
 		<!-- UTILS -->
-		<script defer src="src/services/utils/UrlManager.js"></script>
-		<script defer src="src/services/utils/LoadingManager.js"></script>
-		<script defer src="src/services/utils/MapStateManager.js"></script>
-		<script defer src="src/services/utils/MapExporter.js"></script>
-		<script defer src="src/services/utils/NestedLayerControl.js"></script>
+		<script defer src="/src/services/utils/UrlManager.js"></script>
+		<script defer src="/src/services/utils/LoadingManager.js"></script>
+		<script defer src="/src/services/utils/MapStateManager.js"></script>
+		<script defer src="/src/services/utils/MapExporter.js"></script>
+		<script defer src="/src/services/utils/NestedLayerControl.js"></script>
 		<!-- CORE SERVICES -->
-		<script defer src="src/services/markers/SidebarService.js"></script>
-		<script defer src="src/services/markers/AnnotationService.js"></script>
-		<script defer src="src/services/markers/PathManager.js"></script>
-		<script defer src="src/services/markers/NoteManager.js"></script>
-		<script defer src="src/services/map/DungeonMapServices.js"></script>
+		<script defer src="/src/services/markers/SidebarService.js"></script>
+		<script defer src="/src/services/markers/AnnotationService.js"></script>
+		<script defer src="/src/services/markers/PathManager.js"></script>
+		<script defer src="/src/services/markers/NoteManager.js"></script>
+		<script defer src="/src/services/map/DungeonMapServices.js"></script>
 		<!-- CORE SCRIPTS -->
-		<script defer src="src/core/Initialization.js"></script>
-		<script defer src="src/core/EventHandlers.js"></script>
+		<script defer src="/src/core/Initialization.js"></script>
+		<script defer src="/src/core/EventHandlers.js"></script>
 	</head>
 
 	<body>
-		<div id="map"></div>
-		<div id="actions">
-			<div id="buttons">
-				<button
-					data-role="toggle-markers"
-					class="button"
-					style="border: 2px solid rgba(0, 0, 0, 0.2); background-clip: padding-box"
-					data-toggled="off">
-					Toggle names
-				</button>
+		<div id="root">
+			<!-- Campaign selection view and map view will be created dynamically -->
+			<div id="map"></div>
+			<div id="actions">
+				<div id="buttons">
+					<button data-role="toggle-markers" class="button" data-toggled="off">Toggle names</button>
+				</div>
 			</div>
-			<!-- <div id="coordinates"
-			style="border: 2px solid rgba(0, 0, 0, 0.2); background-clip: padding-box"></div> -->
-		</div>
-		<div id="note-form" style="display: none">
-			<textarea id="note-content" placeholder="Enter your note"></textarea>
-			<button id="save-note">Save Note</button>
-			<button id="cancel-note">Cancel</button>
+			<div id="note-form" style="display: none">
+				<textarea id="note-content" placeholder="Enter your note"></textarea>
+				<button id="save-note">Save Note</button>
+				<button id="cancel-note">Cancel</button>
+			</div>
 		</div>
 	</body>
 </html>
