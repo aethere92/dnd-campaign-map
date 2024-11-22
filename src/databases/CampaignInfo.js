@@ -31,8 +31,9 @@ class CampaignManager {
 	#mapInstance = null;
 	#rootElement;
 
-	constructor(rootElementId) {
+	constructor(rootElementId, isDebugMode = false) {
 		this.#rootElement = document.getElementById(rootElementId);
+		this.isDebugMode = isDebugMode;
 		this.#initialize();
 	}
 
@@ -204,7 +205,7 @@ class CampaignManager {
 			this.#mapInstance = new CustomMap('map', {
 				initialMapKey: defaultMap,
 				campaignData: campaign.data,
-				isDebugMode: false,
+				isDebugMode: this.isDebugMode,
 			});
 		} else {
 			// Reload map with new campaign data
