@@ -172,7 +172,7 @@ class AnnotationService {
 
 	async _createPngIcon(iconName) {
 		try {
-			const dimensions = await this._loadImage(`/images/custom-icons/${iconName}.png`);
+			const dimensions = await this._loadImage(`images/custom-icons/${iconName}.png`);
 			const { width, height } = this._calculateIconDimensions(dimensions);
 			const iconHtml = this._createIconHtml(iconName, width, height);
 
