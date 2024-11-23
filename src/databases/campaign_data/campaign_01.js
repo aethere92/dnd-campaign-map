@@ -31,7 +31,7 @@ const CAMPAIGN_01_ALIASES = {
 const CAMPAIGN_01 = {
 	world_maps: {
 		metadata: {
-			path: '/maps/world_maps/world_map',
+			path: 'maps/world_maps/world_map',
 			sizes: {
 				maxZoom: 5,
 				imageWidth: 8192,
@@ -569,7 +569,7 @@ const CAMPAIGN_01 = {
 			islands: {
 				korinis_island: {
 					metadata: {
-						path: '/maps/world_maps/korinis_island',
+						path: 'maps/world_maps/korinis_island',
 						sizes: {
 							maxZoom: 6,
 							imageWidth: 32069,
@@ -2486,7 +2486,7 @@ const CAMPAIGN_01 = {
 						interiors: {
 							korinis_island_interior_town_inn: {
 								metadata: {
-									path: '/maps/interiors/korinis_island/town_inn',
+									path: 'maps/interiors/korinis_island/town_inn',
 									sizes: {
 										maxZoom: 3,
 										imageWidth: 3300,
@@ -2497,7 +2497,7 @@ const CAMPAIGN_01 = {
 							},
 							korinis_island_interior_harbour_inn: {
 								metadata: {
-									path: '/maps/interiors/korinis_island/harbour_inn',
+									path: 'maps/interiors/korinis_island/harbour_inn',
 									sizes: {
 										maxZoom: 3,
 										imageWidth: 4200,
@@ -2508,7 +2508,7 @@ const CAMPAIGN_01 = {
 							},
 							korinis_island_interior_blacksmith: {
 								metadata: {
-									path: '/maps/interiors/korinis_island/blacksmith',
+									path: 'maps/interiors/korinis_island/blacksmith',
 									sizes: {
 										maxZoom: 3,
 										imageWidth: 3450,
@@ -2519,7 +2519,7 @@ const CAMPAIGN_01 = {
 							},
 							korinis_island_interior_pyramid_teleporter_c: {
 								metadata: {
-									path: '/maps/interiors/korinis_island/pyramid_teleporter/teleporter_c',
+									path: 'maps/interiors/korinis_island/pyramid_teleporter/teleporter_c',
 									sizes: {
 										maxZoom: 3,
 										imageWidth: 1800,
@@ -2546,7 +2546,7 @@ const CAMPAIGN_01 = {
 							},
 							korinis_island_interior_water_mages_pyramid: {
 								metadata: {
-									path: '/maps/interiors/korinis_island/water_mages_pyramid',
+									path: 'maps/interiors/korinis_island/water_mages_pyramid',
 									sizes: {
 										maxZoom: 3,
 										imageWidth: 7800,
@@ -2559,7 +2559,7 @@ const CAMPAIGN_01 = {
 						encounters: {
 							korinis_island_encounters_bandits_01: {
 								metadata: {
-									path: '/maps/encounters/korinis_island/bandit_encounters/bandit_encounter_01',
+									path: 'maps/encounters/korinis_island/bandit_encounters/bandit_encounter_01',
 									sizes: {
 										maxZoom: 3,
 										imageWidth: 4800,
@@ -2596,7 +2596,7 @@ const CAMPAIGN_01 = {
 				},
 				unnamed_island_01: {
 					metadata: {
-						path: '/maps/world_maps/unnamed_island_01',
+						path: 'maps/world_maps/unnamed_island_01',
 						sizes: {
 							maxZoom: 3,
 							imageWidth: 4096,
@@ -2797,7 +2797,7 @@ const CAMPAIGN_01 = {
 						encounters: {
 							finneas_encounter: {
 								metadata: {
-									path: '/maps/encounters/unnamed_island_01/finneas_dungeon',
+									path: 'maps/encounters/unnamed_island_01/finneas_dungeon',
 									sizes: {
 										maxZoom: 3,
 										imageWidth: 7800,
@@ -2813,7 +2813,7 @@ const CAMPAIGN_01 = {
 			combat_encounters: {
 				bone_wraiths_encounter_01: {
 					metadata: {
-						path: '/maps/encounters/world_map/bone_wraiths_encounter_01',
+						path: 'maps/encounters/world_map/bone_wraiths_encounter_01',
 						sizes: {
 							maxZoom: 3,
 							imageWidth: 6144,
