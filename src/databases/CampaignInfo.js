@@ -8,7 +8,7 @@ const CAMPAIGN_DATA = [
 			levelRange: '3-8',
 		},
 		styling: {
-			icon: '/images/pageicon.png',
+			icon: 'images/pageicon.png',
 			backgroundColor: '#795548',
 		},
 		defaultMap: 'korinis_island',
