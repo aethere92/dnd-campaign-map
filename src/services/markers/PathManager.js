@@ -7,6 +7,8 @@ class PathManager {
 		this.pathGroups = {};
 		this.areaGroups = {};
 		this.areaLayerGroup = L.layerGroup();
+		this.pathAnimationControl = new PathAnimationControl(this.map);
+		this.pathAnimations = new Map();
 	}
 
 	// Initialization Methods
@@ -284,6 +286,21 @@ class PathManager {
 
 			this.pathGroups[pathData.name] = pathGroup;
 			this.pathMasterGroup.addLayer(pathGroup);
+
+			const allPoints = pathData.points.map((point) => point.coordinates);
+			const pathId = pathData.name.toLowerCase().replace(/\s+/g, '_');
+
+			// Create animation but don't start it yet
+			const duration = Math.max(5000, pathData.points.length * 1000);
+			this.pathAnimationControl.createAnimation(pathId, allPoints, duration);
+
+			// Set initial visibility state
+			this.pathAnimationControl.pathVisibility.set(pathId, false);
+
+			// Update animation visibility when path visibility changes
+			pathGroup.on('add remove', (e) => {
+				this.pathAnimationControl.updateAnimationVisibility(pathId, this.map.hasLayer(pathGroup));
+			});
 		});
 
 		this.pathMasterGroup.addTo(this.map);
@@ -1143,5 +1160,166 @@ class MarkerManager {
 	// Export all markers
 	exportMarkers() {
 		return JSON.stringify(this.markers, null, 2);
+	}
+}
+
+class PathAnimationControl {
+	constructor(map) {
+		this.map = map;
+		this.animations = new Map();
+		this.markers = new Map();
+		this.currentPoints = new Map();
+		this.pathVisibility = new Map();
+		this.isAnimating = new Map(); // Track animation state for each path
+	}
+
+	createMarker() {
+		return L.divIcon({
+			className: 'animated-marker',
+			html: `
+                <div style="
+                    width: 28px;
+                    height: 28px;
+                    position: relative;
+                    transform-origin: center;
+                ">
+					<img src="images/pageicon.png" style="width: 28px;" />
+
+                </div>
+            `,
+			iconSize: [24, 24],
+			iconAnchor: [12, 12],
+		});
+	}
+
+	calculatePathDistance(points) {
+		let distance = 0;
+		for (let i = 0; i < points.length - 1; i++) {
+			const p1 = L.latLng(points[i]);
+			const p2 = L.latLng(points[i + 1]);
+			distance += p1.distanceTo(p2);
+		}
+		return distance;
+	}
+
+	interpolatePosition(points, percentage) {
+		const totalDistance = this.calculatePathDistance(points);
+		const targetDistance = totalDistance * percentage;
+
+		let currentDistance = 0;
+
+		for (let i = 0; i < points.length - 1; i++) {
+			const p1 = L.latLng(points[i]);
+			const p2 = L.latLng(points[i + 1]);
+			const segmentDistance = p1.distanceTo(p2);
+
+			if (currentDistance + segmentDistance >= targetDistance) {
+				const remainingDistance = targetDistance - currentDistance;
+				const ratio = remainingDistance / segmentDistance;
+
+				const lat = p1.lat + (p2.lat - p1.lat) * ratio;
+				const lng = p1.lng + (p2.lng - p1.lng) * ratio;
+
+				return {
+					position: [lat, lng],
+				};
+			}
+
+			currentDistance += segmentDistance;
+		}
+
+		const lastPoint = points[points.length - 1];
+		return {
+			position: [lastPoint[0], lastPoint[1]],
+		};
+	}
+
+	createAnimation(pathId, points, duration = 5000) {
+		// Always create or update marker regardless of visibility
+		const marker = L.marker([points[0][0], points[0][1]], {
+			icon: this.createMarker(),
+			interactive: false,
+			zIndexOffset: 1000,
+		});
+
+		// Store marker and points
+		this.markers.set(pathId, marker);
+		this.currentPoints.set(pathId, points);
+
+		// Start animation only if path is visible
+		if (this.pathVisibility.get(pathId)) {
+			this.startAnimation(pathId, points, duration);
+		}
+
+		return marker;
+	}
+
+	startAnimation(pathId, points, duration) {
+		if (this.isAnimating.get(pathId)) return; // Don't start if already animating
+
+		this.isAnimating.set(pathId, true);
+		const marker = this.markers.get(pathId);
+
+		if (marker && !this.map.hasLayer(marker)) {
+			marker.addTo(this.map);
+		}
+
+		let startTime = null;
+		const animate = (timestamp) => {
+			if (!this.pathVisibility.get(pathId) || !this.isAnimating.get(pathId)) {
+				this.stopAnimation(pathId);
+				return;
+			}
+
+			if (!startTime) startTime = timestamp;
+			const progress = ((timestamp - startTime) % duration) / duration;
+
+			const { position } = this.interpolatePosition(points, progress);
+			if (marker) {
+				marker.setLatLng(position);
+			}
+
+			const animationId = requestAnimationFrame(animate);
+			this.animations.set(pathId, animationId);
+		};
+
+		const animationId = requestAnimationFrame(animate);
+		this.animations.set(pathId, animationId);
+	}
+
+	stopAnimation(pathId) {
+		this.isAnimating.set(pathId, false);
+
+		if (this.animations.has(pathId)) {
+			cancelAnimationFrame(this.animations.get(pathId));
+			this.animations.delete(pathId);
+		}
+
+		if (this.markers.has(pathId)) {
+			const marker = this.markers.get(pathId);
+			if (marker && this.map.hasLayer(marker)) {
+				marker.remove();
+			}
+		}
+	}
+
+	updateAnimationVisibility(pathId, visible) {
+		this.pathVisibility.set(pathId, visible);
+
+		if (visible) {
+			const points = this.currentPoints.get(pathId);
+			if (points) {
+				const duration = Math.max(5000, points.length * 1000);
+				// If marker exists, just start the animation
+				if (this.markers.has(pathId)) {
+					this.startAnimation(pathId, points, duration);
+				} else {
+					// Create new animation if marker doesn't exist
+					this.createAnimation(pathId, points, duration);
+				}
+			}
+		} else {
+			this.stopAnimation(pathId);
+		}
 	}
 }

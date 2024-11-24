@@ -1702,6 +1702,7 @@ const CAMPAIGN_01 = {
 							points: [
 								{
 									coordinates: [-55.84375, 279.34375],
+									text: 'This is where the previous session ended.',
 								},
 								{
 									coordinates: [-58.125, 280.1875],
