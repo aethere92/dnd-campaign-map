@@ -4,7 +4,7 @@ const CAMPAIGN_DATA = [
 		metadata: {
 			name: "A quest, a questin' we shall go",
 			description:
-				'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Repudiandae tempora architecto ducimus odio doloremque sunt harum numquam eaque saepe asperiores et enim consectetur ab, ipsum in cumque sint labore tenetur.',
+				'Six adventurers — a cleric, ranger, sorcerer, bard, and two barbarians — receive mysterious invitations to a strange, distant land. Teaming up with a band of pirates, they embark on an epic journey, battling fearsome monsters and navigating treacherous seas. Their quest takes an unexpected turn as they find themselves stranded on the enigmatic island of Korinis, where new challenges and hidden secrets await.',
 			levelRange: '3-8',
 		},
 		styling: {
