@@ -487,7 +487,6 @@ class CustomMap {
             padding: 5px 10px;
             cursor: pointer;
             display: block;
-            margin-bottom: 5px;
             border: 2px solid rgba(0, 0, 0, 0.2);
             background-clip: padding-box;
             border-radius: 0.25rem;

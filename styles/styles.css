@@ -462,6 +462,13 @@ html {
 		margin: 0 0.25rem;
 		width: calc(100% - 0.5rem);
 	}
+
+	.path-text-list-container {
+		display: none;
+	}
+	.path-text-toggle {
+		transform: rotate(-90deg);
+	}
 }
 
 /* Tablet Optimizations */
@@ -496,4 +503,63 @@ html {
 		transform: translate(-50%, -50%) scale(1);
 		opacity: 0.8;
 	}
+}
+
+.path-text-modal {
+	position: absolute;
+	left: 12px;
+	top: 150px;
+	background: white;
+	padding: 0.25rem;
+	border-radius: 0.25rem;
+	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+	max-width: 350px;
+	z-index: 1000;
+	display: none;
+}
+
+.path-text-list {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	max-height: 250px;
+	overflow: auto;
+	display: flex;
+	gap: 0.25rem;
+	flex-direction: column;
+}
+
+.path-text-item {
+	padding: 0.25rem;
+	border-left: 3px solid #007bff;
+	background: #f8f9fa;
+	display: flex;
+	align-items: center;
+	gap: 0.25rem;
+}
+
+.path-text {
+	padding-left: 0.5rem;
+}
+
+.path-event-icon {
+	margin-left: auto;
+	font-size: 12pt;
+	padding-left: 0.5rem;
+}
+
+.path-text-header {
+	display: flex;
+	gap: 0.25rem;
+	align-items: center;
+	padding: 0.25rem;
+}
+
+.path-text-toggle {
+	background: none;
+	border: none;
+	cursor: pointer;
+	margin: 0;
+	margin-left: auto;
+	padding: 0;
 }

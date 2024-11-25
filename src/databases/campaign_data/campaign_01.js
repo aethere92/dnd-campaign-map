@@ -974,10 +974,18 @@ const CAMPAIGN_01 = {
 								{
 									coordinates: [-96.859375, 79.703125],
 									text: 'At the crossroads, they met up with a guy who told them to follow him in the caves as there were some people looking for them. The party, after arguing a bit, agreed.',
+									animationInfo: {
+										waitTimer: 2,
+										animationType: 'conversation',
+									},
 								},
 								{
 									coordinates: [-97.328125, 100.734375],
 									text: 'Turns out the people looking for them were bandits. Who could have guessed? After a fierce battle, the party emerged victorious.',
+									animationInfo: {
+										waitTimer: 3,
+										animationType: 'fight',
+									},
 								},
 								{
 									coordinates: [-95.9375, 90.9375],
@@ -1032,6 +1040,10 @@ const CAMPAIGN_01 = {
 								{
 									coordinates: [-73.3125, 141.53125],
 									text: "Reached Lobart farm and talked to its master. Learned the cost of entry into the city and were told to do deeds to gain money for it. Talked to the lead farmer's wife and got a task from her.",
+									animationInfo: {
+										waitTimer: 2,
+										animationType: 'conversation',
+									},
 								},
 								{
 									coordinates: [-69.65625, 143.96875],
@@ -1048,6 +1060,10 @@ const CAMPAIGN_01 = {
 								{
 									coordinates: [-67.21875, 168.3125],
 									text: "Down the road, we met a merchant which sold us entry to the city for a favour once inside. Also got a pan for the lead farmer's wife as part of her task.",
+									animationInfo: {
+										waitTimer: 2,
+										animationType: 'conversation',
+									},
 								},
 								{
 									coordinates: [-69.296875, 170.453125],
@@ -1065,6 +1081,10 @@ const CAMPAIGN_01 = {
 								{
 									coordinates: [-71, 190.671875],
 									text: 'Talked to the guards and showed them our entry pass. They allowed us into the city.',
+									animationInfo: {
+										waitTimer: 2,
+										animationType: 'conversation',
+									},
 								},
 								{
 									coordinates: [-71.53125, 199.734375],
@@ -1072,6 +1092,10 @@ const CAMPAIGN_01 = {
 								{
 									coordinates: [-71.5, 203.6875],
 									text: 'Talked to the master paladin guarding the door and learned of the city rules and some whereabouts of the locations we were interested in.\n',
+									animationInfo: {
+										waitTimer: 2,
+										animationType: 'conversation',
+									},
 								},
 								{
 									coordinates: [-73.734375, 205.421875],
@@ -1097,6 +1121,10 @@ const CAMPAIGN_01 = {
 								{
 									coordinates: [-73.390625, 246.71875],
 									text: 'Walked into the inn and slept. During the night, some of the gold and some of our belongings were stolen.',
+									animationInfo: {
+										waitTimer: 5,
+										animationType: 'rest',
+									},
 								},
 							],
 						},
@@ -1107,6 +1135,10 @@ const CAMPAIGN_01 = {
 								{
 									coordinates: [-74.96875, 247.59375],
 									text: 'Woken up, the party decided to go into the woods and gather the plants that were requested by the alchemist.',
+									animationInfo: {
+										waitTimer: 2,
+										animationType: 'walk',
+									},
 								},
 								{
 									coordinates: [-73.625, 246.75],
@@ -1126,6 +1158,10 @@ const CAMPAIGN_01 = {
 								{
 									coordinates: [-71.4375, 271.65625],
 									text: 'On the way out of the city, guards stopped them and asked them what they were doing. Upon learning they were headed into the forest, the guards wished them good luck.',
+									animationInfo: {
+										waitTimer: 1,
+										animationType: 'conversation',
+									},
 								},
 								{
 									coordinates: [-71.90625, 273.46875],
@@ -1145,6 +1181,9 @@ const CAMPAIGN_01 = {
 								{
 									coordinates: [-81.125, 277.90625],
 									text: 'The party ventured into the forest down this path.',
+									animationInfo: {
+										animationType: 'walk',
+									},
 								},
 								{
 									coordinates: [-83.0625, 278],
@@ -1188,6 +1227,10 @@ const CAMPAIGN_01 = {
 								{
 									coordinates: [-100.6875, 282.90625],
 									text: 'They attacked a pack of wolves which were roaming around in the forest. The battle was fierce, but they were victorious. They managed to find hides, which would prove useful to gain apprenticeship.\n',
+									animationInfo: {
+										waitTimer: 3,
+										animationType: 'fight',
+									},
 								},
 								{
 									coordinates: [-102.75, 282.5625],
@@ -1206,7 +1249,7 @@ const CAMPAIGN_01 = {
 								},
 								{
 									coordinates: [-108.921875, 292.453125],
-									text: 'Entering the nearby caves, they saw what looked like blue blood - lizardmen blood, and a few creatures which looked way too powerful for them to handle.\n',
+									text: 'Entering the nearby caves, they saw what looked like blue blood - lizardmen blood, and a few creatures which looked way too powerful for them to handle.',
 								},
 								{
 									coordinates: [-107.296875, 292.890625],
@@ -1255,7 +1298,11 @@ const CAMPAIGN_01 = {
 								},
 								{
 									coordinates: [-83.546875, 310.15625],
-									text: 'Near the bridge, they met Erol, who had been robbed by the bandits on the bridge nearby. He had a broken leg, which the party Cleric mended.\n',
+									text: 'Near the bridge, they met Erol, who had been robbed by the bandits on the bridge nearby. He had a broken leg, which the party Cleric mended.',
+									animationInfo: {
+										waitTimer: 2,
+										animationType: 'conversation',
+									},
 								},
 								{
 									coordinates: [-79.828125, 310.9375],
@@ -1271,7 +1318,10 @@ const CAMPAIGN_01 = {
 								},
 								{
 									coordinates: [-76.046875, 336.328125],
-									text: "At the crossroads, they took a left turn to go towards the Fire Mages Monastery, in order to seek a Fire Mage's blessing.\n",
+									text: "At the crossroads, they took a left turn to go towards the Fire Mages Monastery, in order to seek a Fire Mage's blessing.",
+									animationInfo: {
+										animationType: 'walk',
+									},
 								},
 								{
 									coordinates: [-69.6875, 336.53125],
@@ -1297,6 +1347,10 @@ const CAMPAIGN_01 = {
 								{
 									coordinates: [-49.515625, 324.765625],
 									text: 'They saw Isgaroth, a Fire Mage, who was doing a prayer. They waited for two hours for the prayer to finish and after that they received the Fire Mage blessing for free, as they had made the trip to the Monastery.\n',
+									animationInfo: {
+										waitTimer: 7,
+										animationType: 'conversation',
+									},
 								},
 								{
 									coordinates: [-48.21875, 326.125],
@@ -1327,7 +1381,11 @@ const CAMPAIGN_01 = {
 								},
 								{
 									coordinates: [-85.609375, 337.859375],
-									text: 'The party checked out the inn at the crossroads, looking for a place to spend the night in, but the prices were too steep for them, so they went back in town.\n',
+									text: 'The party checked out the inn at the crossroads, looking for a place to spend the night in, but the prices were too steep for them, so they went back in town.',
+									animationInfo: {
+										waitTimer: 2,
+										animationType: 'rest',
+									},
 								},
 							],
 						},
@@ -1349,7 +1407,10 @@ const CAMPAIGN_01 = {
 								},
 								{
 									coordinates: [-70.90625, 235.25],
-									text: 'The party decided to venture outside, into the forest they saw when they first entered the city.\n',
+									text: 'The party decided to venture outside, into the forest they saw when they first entered the city.',
+									animationInfo: {
+										animationType: 'walk',
+									},
 								},
 								{
 									coordinates: [-70.84375, 224.59375],
@@ -1395,6 +1456,10 @@ const CAMPAIGN_01 = {
 								{
 									coordinates: [-50.78125, 163.3125],
 									text: "The plan didn't work out. The lizardman attacked, enraged, and a battle started. In the midst of the battle, the goblin horde attacked as well, killing the downed Lizarman. The party emerged victorious.\n",
+									animationInfo: {
+										waitTimer: 5,
+										animationType: 'fight',
+									},
 								},
 								{
 									coordinates: [-49.84375, 159.21875],
@@ -1413,7 +1478,11 @@ const CAMPAIGN_01 = {
 								},
 								{
 									coordinates: [-47, 179.25],
-									text: 'The party was ambushed by some bandits who looked like they were smuggling things into the city. Overwhelmed and outnumbered, they wisely chose to run away from this encounter.\n',
+									text: 'The party was ambushed by some bandits who looked like they were smuggling things into the city. Overwhelmed and outnumbered, they wisely chose to run away from this encounter.',
+									animationInfo: {
+										waitTimer: 3,
+										animationType: 'fight',
+									},
 								},
 								{
 									coordinates: [-45.8125, 173.15625],
@@ -1423,6 +1492,9 @@ const CAMPAIGN_01 = {
 								},
 								{
 									coordinates: [-45.78125, 159.5625],
+									animationInfo: {
+										animationType: 'walk',
+									},
 								},
 								{
 									coordinates: [-47.25, 157.84375],
@@ -1438,7 +1510,7 @@ const CAMPAIGN_01 = {
 								},
 								{
 									coordinates: [-57.1875, 158.03125],
-									text: 'Hoping to avoid the wildlife they had seen, they took another path through the forest.\n',
+									text: 'Hoping to avoid the wildlife they had seen, they took another path through the forest.',
 								},
 								{
 									coordinates: [-59.625, 160.34375],
@@ -1475,7 +1547,11 @@ const CAMPAIGN_01 = {
 								},
 								{
 									coordinates: [-71.8125, 203.75],
-									text: 'Back into the city, they stopped and talked to the Paladin guard and informed them of the bandits they had seen and their location.\n',
+									text: 'Back into the city, they stopped and talked to the Paladin guard and informed them of the bandits they had seen and their location.',
+									animationInfo: {
+										waitTimer: 2,
+										animationType: 'conversation',
+									},
 								},
 								{
 									coordinates: [-73.84375, 206.53125],
@@ -1503,7 +1579,11 @@ const CAMPAIGN_01 = {
 								},
 								{
 									coordinates: [-74.46875, 247.8125],
-									text: 'Exhausted for the day, they rested at the inn once more.\n',
+									text: 'Exhausted for the day, they rested at the inn once more.',
+									animationInfo: {
+										waitTimer: 2,
+										animationType: 'rest',
+									},
 								},
 							],
 						},
@@ -1519,7 +1599,11 @@ const CAMPAIGN_01 = {
 								},
 								{
 									coordinates: [-73.875, 218.78125],
-									text: 'The adventurers decide to journey to the pyramids in search of the water mages party.\n',
+									text: 'The adventurers decide to journey to the pyramids in search of the water mages party.',
+									animationInfo: {
+										waitTimer: 1,
+										animationType: 'walk',
+									},
 								},
 								{
 									coordinates: [-71.15625, 218.78125],
@@ -1592,7 +1676,11 @@ const CAMPAIGN_01 = {
 								},
 								{
 									coordinates: [-56.4375, 293.6875],
-									text: 'While navigating the tough terrain, both the Ranger and Sorcerer fail an athletics check and get injured.\n',
+									text: 'While navigating the tough terrain, both the Ranger and Sorcerer fail an athletics check and get injured.',
+									animationInfo: {
+										waitTimer: 1,
+										animationType: 'walk',
+									},
 								},
 								{
 									coordinates: [-54.1875, 296.6875],
@@ -1608,7 +1696,7 @@ const CAMPAIGN_01 = {
 								},
 								{
 									coordinates: [-44.5625, 300.1875],
-									text: 'The group spots an inactive golem to their right, which catches their interest.\n',
+									text: 'The group spots an inactive golem to their right, which catches their interest.',
 								},
 								{
 									coordinates: [-41.90625, 300.75],
@@ -1618,7 +1706,11 @@ const CAMPAIGN_01 = {
 								},
 								{
 									coordinates: [-38.625, 301.96875],
-									text: 'They pay 2 silver per person to cross the river over a shaky bridge guarded by a troll.\n',
+									text: 'They pay 2 silver per person to cross the river over a shaky bridge guarded by a troll.',
+									animationInfo: {
+										waitTimer: 2,
+										animationType: 'merchant',
+									},
 								},
 								{
 									coordinates: [-35.90625, 302],
@@ -1637,7 +1729,7 @@ const CAMPAIGN_01 = {
 								},
 								{
 									coordinates: [-23.5625, 300.625],
-									text: 'To their right, they find ruins and two ancient chests, sparking their curiosity.\n',
+									text: 'To their right, they find ruins and two ancient chests, sparking their curiosity.',
 								},
 								{
 									coordinates: [-21.25, 300.34375],
@@ -1647,7 +1739,10 @@ const CAMPAIGN_01 = {
 								},
 								{
 									coordinates: [-19.625, 298.59375],
-									text: 'Straight ahead, they entered a group of tents and discovered the location of the water mages.\n',
+									text: 'Straight ahead, they entered a group of tents and discovered the location of the water mages.',
+									animationInfo: {
+										animationType: 'walk',
+									},
 								},
 								{
 									coordinates: [-18.25, 295.84375],
@@ -1673,6 +1768,10 @@ const CAMPAIGN_01 = {
 								{
 									coordinates: [-20.71875, 290.09375],
 									text: 'The group entered the pyramids. In the first chamber they saw a huge door to their left, which was locked. Straight ahead through a corridor they fought a fierce battle against lich-like creatures and undead. They were victorious in the end with the help of the water mages party. Learning more about the strange devices of the land, they decided to help the mages with what looked like a teleporter. Once they stepped on it, they were teleported to a different location, but they managed to work out the system behind the teleporters: one would take you to a cave in the mountains, close to the city, and the other to another small cave near the inn.\n',
+									animationInfo: {
+										waitTimer: 5,
+										animationType: 'fight',
+									},
 								},
 								{
 									coordinates: [-20.875, 290.25],
@@ -1761,6 +1860,10 @@ const CAMPAIGN_01 = {
 								{
 									coordinates: [-86.71875, 337.765625],
 									text: 'Went into the inn and talked with the bartender, who was a follower of the water mages. Learned about the mercenaries and got a key to unlock the teleporter B lock.\n',
+									animationInfo: {
+										waitTimer: 2,
+										animationType: 'conversation',
+									},
 								},
 								{
 									coordinates: [-83.65625, 338.421875],
@@ -1800,7 +1903,11 @@ const CAMPAIGN_01 = {
 								},
 								{
 									coordinates: [-90.15625, 401.59375],
-									text: "Went to Erol's house and met with him. Learned about the guards and Silvestro's quota.\n",
+									text: "Went to Erol's house and met with him. Learned about the guards and Silvestro's quota.",
+									animationInfo: {
+										waitTimer: 2,
+										animationType: 'conversation',
+									},
 								},
 								{
 									coordinates: [-89.734375, 399.265625],
@@ -1846,17 +1953,25 @@ const CAMPAIGN_01 = {
 								{
 									coordinates: [-44.765625, 449.078125],
 									text: 'Met up with Silvestro, learned about the farm and paid the 20 gold per person tax.\n',
+									animationInfo: {
+										waitTimer: 2,
+										animationType: 'conversation',
+									},
 								},
 								{
 									coordinates: [-42.09375, 446.796875],
 									text: 'Met up with the two merchants - Quixie and Jabba the Hutt. Bought 1 haste potion and two items for approximately 1000g.\n',
+									animationInfo: {
+										waitTimer: 2, // seconds to wait at this point
+										animationType: 'merchant', // or 'merchant' or 'rest'
+									},
 								},
 								{
 									coordinates: [-42.796875, 445.21875],
 								},
 								{
 									coordinates: [-42.515625, 441.53125],
-									text: 'Saw that the inn to the left was holding a competition for whoever could eat the most chocolate. Nobody could resist such temptation.\n',
+									text: 'Saw that the inn to the left was holding a competition for whoever could eat the most chocolate. Nobody could resist such temptation.',
 								},
 								{
 									coordinates: [-39.921875, 439.25],
@@ -1866,7 +1981,7 @@ const CAMPAIGN_01 = {
 								},
 								{
 									coordinates: [-39.25, 432.34375],
-									text: 'Entered the contest - the Cleric and the Barbarian won, and ate a stew which increased their max HP by 5. The others puked.\n',
+									text: 'Entered the contest - the Cleric and the Barbarian won, and ate a stew which increased their max HP by 5. The others puked.',
 								},
 								{
 									coordinates: [-38.6875, 438.765625],
@@ -1886,10 +2001,18 @@ const CAMPAIGN_01 = {
 								{
 									coordinates: [-34.328125, 444.125],
 									text: "Met up with General Lee and learned that they wanted to leave the island and were planning to take over the city. While trying to help, the party might've accidentally killed Captain Cunts by revealing his location to the pirate queen Bianca. Lee told the party, under the condition that they help Lee's lieutenants too, that the valley of mines was currently under siege by the Lizardmen, and that the only 'safe' entrance was through another path his spies had been using for a while.\n",
+									animationInfo: {
+										waitTimer: 2,
+										animationType: 'conversation',
+									},
 								},
 								{
 									coordinates: [-34.40625, 445.953125],
 									text: 'Met up with another follower of the Water Mages guild who was training the mercenary recruits. Trained with him and gained expertise with chosen weapons.\n',
+									animationInfo: {
+										waitTimer: 2,
+										animationType: 'conversation',
+									},
 								},
 								{
 									coordinates: [-37.171875, 445.734375],
@@ -1911,7 +2034,7 @@ const CAMPAIGN_01 = {
 								},
 								{
 									coordinates: [-31.078125, 455.03125],
-									text: 'Went to the Blacksmith to learn about their trade.\n',
+									text: 'Went to the Blacksmith to learn about their trade.',
 								},
 								{
 									coordinates: [-32.125, 455.609375],
@@ -1942,14 +2065,14 @@ const CAMPAIGN_01 = {
 								},
 								{
 									coordinates: [-79.890625, 438.5],
-									text: 'Going back to the inn and towards the penal colony.\n',
+									text: 'Going back to the inn and towards the penal colony.',
 								},
 								{
 									coordinates: [-79.0625, 418.90625],
 								},
 								{
 									coordinates: [-79.046875, 402.171875],
-									text: 'Noticed there was another set of guards compared to the first time.\n',
+									text: 'Noticed there was another set of guards compared to the first time.',
 								},
 								{
 									coordinates: [-79.46875, 346.40625],
@@ -1980,6 +2103,10 @@ const CAMPAIGN_01 = {
 								{
 									coordinates: [-116.453125, 344.890625],
 									text: 'Their passive perception not enough, the party was ambushed by a party of 3 orc mages - each master of a different element: fire, ice and lightning. After a fierce battle, they emerged victorious.\n',
+									animationInfo: {
+										waitTimer: 5,
+										animationType: 'fight',
+									},
 								},
 							],
 						},
@@ -2696,6 +2823,10 @@ const CAMPAIGN_01 = {
 								{
 									coordinates: [-193.5, 241.5],
 									text: 'Fought dinosaurs',
+									animationInfo: {
+										waitTimer: 2,
+										animationType: 'fight',
+									},
 								},
 								{
 									coordinates: [-171, 244],
@@ -2726,6 +2857,10 @@ const CAMPAIGN_01 = {
 								{
 									coordinates: [-126.625, 314.75],
 									text: 'Entered door, met Finneas, fought undeads.',
+									animationInfo: {
+										waitTimer: 5,
+										animationType: 'fight',
+									},
 								},
 								{
 									coordinates: [-143.5, 324.5],
@@ -2743,6 +2878,10 @@ const CAMPAIGN_01 = {
 								{
 									coordinates: [-197.5, 276],
 									text: 'Took another path down the mountain, found dead crew member parties bodies and looted them.',
+									animationInfo: {
+										waitTimer: 2,
+										animationType: 'loot',
+									},
 								},
 								{
 									coordinates: [-209.5, 281.5],
