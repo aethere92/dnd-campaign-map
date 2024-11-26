@@ -133,7 +133,8 @@
 }
 
 #debug-line-wait-input,
-#debug-line-wait-type {
+#debug-line-wait-type,
+#debug-line-filter-type {
 	padding: 0.25rem;
 	border: 1px solid #aaa;
 	border-radius: 0.25rem;

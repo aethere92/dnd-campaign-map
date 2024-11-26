@@ -384,7 +384,6 @@ class CustomMap {
 		};
 
 		const extendedBounds = this.#calculateExtendedBounds(originalBounds, padding);
-		console.log(extendedBounds);
 		this.#map.setMaxBounds(extendedBounds).fitBounds(this.#bounds);
 	}
 

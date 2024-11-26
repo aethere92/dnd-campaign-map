@@ -1162,9 +1162,11 @@ const CAMPAIGN_01 = {
 										waitTimer: 2,
 										animationType: 'conversation',
 									},
+									filter: 'night',
 								},
 								{
 									coordinates: [-138.9375, 337.9375],
+									filter: null,
 								},
 								{
 									coordinates: [-137.875, 342.5],
@@ -2416,7 +2418,7 @@ const CAMPAIGN_01 = {
 						},
 						{
 							name: 'Session 9 Recap',
-							lineColor: '#430067',
+							lineColor: 'rgb(188 64 255)',
 							points: [
 								{
 									coordinates: [-242.625, 686.375],
@@ -2438,7 +2440,6 @@ const CAMPAIGN_01 = {
 								},
 								{
 									coordinates: [-201.875, 698.875],
-									// filter: null,
 								},
 								{
 									coordinates: [-185.75, 697.5],
@@ -2459,16 +2460,16 @@ const CAMPAIGN_01 = {
 									coordinates: [-173.125, 678.875],
 									text: 'Went back to the inn to sleep, found out from General Lee that they were attacked too.',
 									animationInfo: {
-										waitTimer: 5,
 										animationType: 'rest',
+										waitTimer: 5,
 									},
+									filter: 'night',
 								},
 								{
 									coordinates: [-174.875, 673.125],
 								},
 								{
 									coordinates: [-166.25, 672.5],
-									filter: 'night',
 								},
 								{
 									coordinates: [-164.75, 675.5],
@@ -2754,6 +2755,7 @@ const CAMPAIGN_01 = {
 									animationInfo: {
 										animationType: 'walk',
 									},
+									filter: 'dusk',
 								},
 								{
 									coordinates: [-436.5, 566.5],
@@ -2769,6 +2771,7 @@ const CAMPAIGN_01 = {
 								},
 								{
 									coordinates: [-420.75, 542.125],
+									filter: null,
 								},
 								{
 									coordinates: [-420.25, 537.625],
@@ -2776,7 +2779,9 @@ const CAMPAIGN_01 = {
 								{
 									coordinates: [-417.5, 532.25],
 									text: "Reached Diego's Hideout. Session end.",
-									filter: null,
+									animationInfo: {
+										waitTimer: 5,
+									},
 								},
 							],
 						},
