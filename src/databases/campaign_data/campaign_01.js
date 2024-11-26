@@ -2776,6 +2776,7 @@ const CAMPAIGN_01 = {
 								{
 									coordinates: [-417.5, 532.25],
 									text: "Reached Diego's Hideout. Session end.",
+									filter: null,
 								},
 							],
 						},
