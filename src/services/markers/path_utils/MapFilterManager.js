@@ -13,6 +13,16 @@ class MapFilterManager {
                     }
                 `,
 			},
+			'night-half': {
+				className: 'night-half-filter',
+				css: `
+                    .night-half-filter {
+                        filter: brightness(0.6) saturate(0.7);
+                        background: linear-gradient(to bottom, rgb(0 0 26 / 30%) 0%, rgb(0 0 81 / 30%) 100%);
+                        transition: all 0.5s ease;
+                    }
+                `,
+			},
 			dusk: {
 				className: 'dusk-filter',
 				css: `

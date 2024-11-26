@@ -80,6 +80,7 @@ class PolylineManager {
 					<option value="N/A">No filter</option>
 					<option value="null">Remove filter</option>
 					<option value="night">Night</option>
+					<option value="night-half">Night 50%</option>
 					<option value="dusk">Dusk</option>
 					<option value="snow">Snow</option>
 					<option value="rain">Rain</option>					

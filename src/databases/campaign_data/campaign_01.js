@@ -2685,6 +2685,7 @@ const CAMPAIGN_01 = {
 								},
 								{
 									coordinates: [-411.625, 654.75],
+									filter: 'night-half',
 								},
 								{
 									coordinates: [-420.5, 653.25],
@@ -2755,7 +2756,6 @@ const CAMPAIGN_01 = {
 									animationInfo: {
 										animationType: 'walk',
 									},
-									filter: 'dusk',
 								},
 								{
 									coordinates: [-436.5, 566.5],
