@@ -26,6 +26,7 @@ const CAMPAIGN_01_ALIASES = {
 	// KORINIS ENCOUNTERS
 	korinis_bandits_01:
 		'world_maps.submaps.islands.korinis_island.submaps.encounters.korinis_island_encounters_bandits_01',
+	korinis_spider_cave: 'world_maps.submaps.islands.korinis_island.submaps.encounters.korinis_island_spider_cave',
 };
 
 const CAMPAIGN_01 = {
@@ -879,6 +880,7 @@ const CAMPAIGN_01 = {
 									type: 'people',
 									icon: 'poiCave',
 									iconType: 'png',
+									mapLink: 'korinis_spider_cave',
 								},
 								{
 									lat: -392.5,
@@ -887,6 +889,7 @@ const CAMPAIGN_01 = {
 									type: 'people',
 									icon: 'poiCave',
 									iconType: 'png',
+									mapLink: 'korinis_spider_cave',
 								},
 								{
 									lat: -395.625,
@@ -2467,6 +2470,7 @@ const CAMPAIGN_01 = {
 								},
 								{
 									coordinates: [-174.875, 673.125],
+									filter: 'night',
 								},
 								{
 									coordinates: [-166.25, 672.5],
@@ -3263,6 +3267,42 @@ const CAMPAIGN_01 = {
 												type: 'place',
 												icon: 'arrowDirectionDown',
 												iconType: 'png',
+											},
+										],
+									},
+								},
+							},
+							korinis_island_spider_cave: {
+								metadata: {
+									path: 'maps/encounters/korinis_island/spider_cave_encounter',
+									sizes: {
+										maxZoom: 3,
+										imageWidth: 4095,
+										imageHeight: 6144,
+									},
+									backgroundColor: 'linear-gradient(0deg, #292315, #0c0805)',
+								},
+								annotations: {
+									navigation: {
+										name: 'Navigation arrows',
+										items: [
+											{
+												lat: -764,
+												lng: 262.5,
+												label: 'To Penal Colony',
+												type: 'people',
+												icon: 'arrowDirectionDown',
+												iconType: 'png',
+												mapLink: 'korinis_island',
+											},
+											{
+												lat: -10.5,
+												lng: 419.5,
+												label: 'To Shortcut Terrace',
+												type: 'people',
+												icon: 'arrowDirectionUp',
+												iconType: 'png',
+												mapLink: 'korinis_island',
 											},
 										],
 									},
