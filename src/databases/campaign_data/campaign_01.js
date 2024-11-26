@@ -571,9 +571,9 @@ const CAMPAIGN_01 = {
 					metadata: {
 						path: 'maps/world_maps/korinis_island',
 						sizes: {
-							maxZoom: 6,
+							maxZoom: 5,
 							imageWidth: 32069,
-							imageHeight: 12624,
+							imageHeight: 16845,
 						},
 						backgroundColor: `linear-gradient(rgba(26, 20, 18, 0.97), rgba(26, 20, 18, 0.97)),url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 0l30 30-30 30L0 30z' fill='%23241c1a' fill-opacity='0.4' fill-rule='evenodd'/%3E%3C/svg%3E")`,
 					},
@@ -582,8 +582,8 @@ const CAMPAIGN_01 = {
 							name: 'NPCs',
 							items: [
 								{
-									lat: -64.03125,
-									lng: 255.953125,
+									lat: -127.25,
+									lng: 511.125,
 									label: 'Darren (Fire mage)',
 									type: 'people',
 									icon: 'poiGenericNPC',
@@ -591,8 +591,8 @@ const CAMPAIGN_01 = {
 									image: 'f965a770-b841-462c-8325-8dd483cca8a1.jpg',
 								},
 								{
-									lat: -82.6875,
-									lng: 220.578125,
+									lat: -166.03125,
+									lng: 442.5,
 									label: 'Valros (Water mage)',
 									type: 'people',
 									icon: 'poiGenericNPC',
@@ -600,40 +600,40 @@ const CAMPAIGN_01 = {
 									image: 'bcaa3de1-7d67-4909-92b0-dea60f63bf71.jpg',
 								},
 								{
-									lat: -83.078125,
-									lng: 310.515625,
+									lat: -165.25,
+									lng: 621,
 									label: 'Erol (tablets)',
 									type: 'place',
 									icon: 'poiGenericNPC',
 									iconType: 'png',
 								},
 								{
-									lat: -49.25,
-									lng: 325.8125,
+									lat: -98.5,
+									lng: 652.1875,
 									label: 'Isgaroth (Fire mage)',
 									type: 'people',
 									icon: 'poiGenericNPC',
 									iconType: 'png',
 								},
 								{
-									lat: -81.234375,
-									lng: 212.71875,
+									lat: -162.5625,
+									lng: 425.1875,
 									label: 'Thorben (Carpenter)',
 									type: 'people',
 									icon: 'tradeHunter',
 									iconType: 'png',
 								},
 								{
-									lat: -77.546875,
-									lng: 214.171875,
+									lat: -155.3125,
+									lng: 428.03125,
 									label: 'Constantine (Alchemist)',
 									type: 'people',
 									icon: 'tradeAlchemy',
 									iconType: 'png',
 								},
 								{
-									lat: -62.25,
-									lng: 226.5,
+									lat: -124.21875,
+									lng: 453.125,
 									label: 'Thorek (Blacksmith)',
 									type: 'people',
 									icon: 'tradeForge',
@@ -641,59 +641,75 @@ const CAMPAIGN_01 = {
 									mapLink: 'korinis_city_blacksmith',
 								},
 								{
-									lat: -48.96875,
-									lng: 157.828125,
+									lat: -98.25,
+									lng: 316.34375,
 									label: 'Lizardman',
 									type: 'people',
 									icon: 'cityLizard',
 									iconType: 'png',
 								},
 								{
-									lat: -37.875,
-									lng: 302.03125,
+									lat: -75.9375,
+									lng: 604.0625,
 									label: 'Bridge Troll',
 									type: 'people',
 									icon: 'poiGenericNPC',
 									iconType: 'png',
 								},
 								{
-									lat: -29.0625,
-									lng: 456.1875,
+									lat: -57.5,
+									lng: 911.96875,
 									label: 'Farm Blacksmith',
 									type: 'people',
 									icon: 'tradeForge',
 									iconType: 'png',
 								},
 								{
-									lat: -31.828125,
-									lng: 444.78125,
+									lat: -63.625,
+									lng: 888.75,
 									label: 'General Lee',
 									type: 'people',
 									icon: 'poiGenericNPC',
 									iconType: 'png',
 								},
 								{
-									lat: -41.453125,
-									lng: 446.59375,
+									lat: -82.9375,
+									lng: 893.375,
 									label: 'Quixie & The Other Merchant',
 									type: 'people',
 									icon: 'tradeCampLarge',
 									iconType: 'png',
 								},
 								{
-									lat: -44.203125,
-									lng: 448.65625,
+									lat: -88.625,
+									lng: 897.375,
 									label: 'Silvestro',
 									type: 'people',
 									icon: 'poiGenericNPC',
 									iconType: 'png',
 								},
 								{
-									lat: -79.875,
-									lng: 401.875,
+									lat: -159.75,
+									lng: 804.8125,
 									label: 'Mercenary Guards',
 									type: 'people',
 									icon: 'fort',
+									iconType: 'png',
+								},
+								{
+									lat: -361.875,
+									lng: 702.75,
+									label: 'Penal Colony Paladin Guards',
+									type: 'people',
+									icon: 'poiGenericNPC',
+									iconType: 'png',
+								},
+								{
+									lat: -424.25,
+									lng: 594.25,
+									label: 'Quickse and the Penguin',
+									type: 'people',
+									icon: 'tradeCamp',
 									iconType: 'png',
 								},
 							],
@@ -702,8 +718,8 @@ const CAMPAIGN_01 = {
 							name: 'Points of interest',
 							items: [
 								{
-									lat: -136.90625,
-									lng: 68.78125,
+									lat: -274.375,
+									lng: 137.375,
 									label: 'Landing zone',
 									type: 'place',
 									icon: 'cityCapital',
@@ -718,18 +734,18 @@ const CAMPAIGN_01 = {
 									mapLink: 'world_maps',
 								},
 								{
-									lat: -74.5,
-									lng: 248.53125,
+									lat: -148,
+									lng: 497.5,
 									label: 'Lower City Inn',
 									type: 'place',
 									icon: 'poiBed',
 									iconType: 'png',
 									mapLink: 'korinis_lower_city_inn',
 								},
-								{ lat: -86.78125, lng: 338.34375, label: 'Inn', type: 'place', icon: 'poiBed', iconType: 'png' },
+								{ lat: -173.3125, lng: 676.1875, label: 'Inn', type: 'place', icon: 'poiBed', iconType: 'png' },
 								{
-									lat: -48.03125,
-									lng: 209.09375,
+									lat: -96.25,
+									lng: 416.5625,
 									label: 'Harbour Inn',
 									type: 'place',
 									icon: 'poiBed',
@@ -738,42 +754,42 @@ const CAMPAIGN_01 = {
 									mapLink: 'korinis_city_harbour_inn',
 								},
 								{
-									lat: -58.71875,
-									lng: 251.625,
+									lat: -116.5,
+									lng: 502.75,
 									label: 'Paladin Barracks',
 									type: 'place',
 									icon: 'city',
 									iconType: 'png',
 									image: 'cd2dbe90-39eb-483d-9ad5-85e36fda39b2.jpg',
 								},
-								{ lat: -110.0625, lng: 194.9375, label: 'Paladin Hall', type: 'place', icon: 'city', iconType: 'png' },
+								{ lat: -220.5, lng: 389.375, label: 'Paladin Hall', type: 'place', icon: 'city', iconType: 'png' },
 								{
-									lat: -28.53125,
-									lng: 335.15625,
+									lat: -57.5,
+									lng: 670.3125,
 									label: 'Fire Mages Monastery',
 									type: 'place',
 									icon: 'templeCathedral',
 									iconType: 'png',
 								},
 								{
-									lat: -60.09375,
-									lng: 195.59375,
+									lat: -120.1875,
+									lng: 390.6875,
 									label: 'Pawn shop',
 									type: 'place',
 									icon: 'tradeShop',
 									iconType: 'png',
 								},
 								{
-									lat: -69.75,
-									lng: 282.75,
+									lat: -138.34375,
+									lng: 565.78125,
 									label: 'Secob Farm',
 									type: 'place',
 									icon: 'poiFarm',
 									iconType: 'png',
 								},
 								{
-									lat: -72.46875,
-									lng: 141.59375,
+									lat: -145.375,
+									lng: 283.15625,
 									label: 'Lobart Farm',
 									type: 'place',
 									icon: 'poiFarm',
@@ -782,25 +798,33 @@ const CAMPAIGN_01 = {
 										"The adventurers arrived at a farm on the outskirts of the city, seeking entry but lacking the necessary gold. Speaking with one of the farmers, they learned that the head farmer might offer them a way in. They approached him and were given a proposition: earn gold by helping with the crops and assisting the farmer's wife with her tasks.",
 								},
 								{
-									lat: -108.8125,
-									lng: 292.8125,
+									lat: -290.75,
+									lng: 713.375,
+									label: 'Unnamed farm',
+									type: 'people',
+									icon: 'poiFarm',
+									iconType: 'png',
+								},
+								{
+									lat: -217.25,
+									lng: 585.5625,
 									label: 'Caves (scales + blue blood)',
 									type: 'place',
 									icon: 'poiCave',
 									iconType: 'png',
 								},
-								{ lat: -20.25, lng: 189.875, label: 'Paladin ship', type: 'place', icon: 'poiShip' },
+								{ lat: -41, lng: 378, label: 'Paladin ship', type: 'place', icon: 'poiShip' },
 								{
-									lat: -55.421875,
-									lng: 278.8125,
+									lat: -110.6875,
+									lng: 558.0625,
 									label: 'Teleporter Exit B',
 									type: 'place',
 									icon: 'iconPortal',
 									animationType: 'spin',
 								},
 								{
-									lat: -98.84375,
-									lng: 328.0625,
+									lat: -198.3125,
+									lng: 655.8125,
 									label: 'Teleporter Exit C',
 									type: 'place',
 									icon: 'iconPortal',
@@ -808,8 +832,8 @@ const CAMPAIGN_01 = {
 									mapLink: 'korinis_teleporter_c',
 								},
 								{
-									lat: -19.96875,
-									lng: 290.03125,
+									lat: -40.125,
+									lng: 580.125,
 									label: 'Water Mages Pyramid',
 									type: 'place',
 									icon: 'templePyramid',
@@ -817,35 +841,83 @@ const CAMPAIGN_01 = {
 									mapLink: 'korinis_pyramid',
 								},
 								{
-									lat: -89.96875,
-									lng: 402.03125,
+									lat: -179.9375,
+									lng: 803.5625,
 									label: "Erol's house",
 									type: 'people',
 									icon: 'poiGenericNPC',
 									iconType: 'png',
 								},
 								{
-									lat: -44.328125,
-									lng: 429.109375,
+									lat: -88.5625,
+									lng: 858.34375,
 									label: 'Farm Chapel',
 									type: 'people',
 									icon: 'templeShrine',
 									iconType: 'png',
 								},
 								{
-									lat: -38.96875,
-									lng: 431.875,
+									lat: -77.6875,
+									lng: 863.5625,
 									label: 'The Chocolate Contest Tavern',
 									type: 'people',
 									icon: 'poiBed_map',
 									iconType: 'png',
 								},
 								{
-									lat: -20.65625,
-									lng: 463.5,
+									lat: -41.25,
+									lng: 927.15625,
 									label: 'Tower',
 									type: 'people',
 									icon: 'fortTower',
+									iconType: 'png',
+								},
+								{
+									lat: -384.9375,
+									lng: 710.6875,
+									label: 'Cave shortcut entrance',
+									type: 'people',
+									icon: 'poiCave',
+									iconType: 'png',
+								},
+								{
+									lat: -392.5,
+									lng: 717.6875,
+									label: 'Cave shortcut exit',
+									type: 'people',
+									icon: 'poiCave',
+									iconType: 'png',
+								},
+								{
+									lat: -395.625,
+									lng: 687.1875,
+									label: 'Mine entrance',
+									type: 'people',
+									icon: 'poiCave',
+									iconType: 'png',
+								},
+								{
+									lat: -418.3125,
+									lng: 651.9375,
+									label: 'Mine shortcut exit',
+									type: 'people',
+									icon: 'poiCave',
+									iconType: 'png',
+								},
+								{
+									lat: -414.125,
+									lng: 531.375,
+									label: "Diego's hideout",
+									type: 'people',
+									icon: 'poiBed',
+									iconType: 'png',
+								},
+								{
+									lat: -503.75,
+									lng: 534.5,
+									label: 'Paladin Citadel',
+									type: 'people',
+									icon: 'city',
 									iconType: 'png',
 								},
 							],
@@ -853,11 +925,11 @@ const CAMPAIGN_01 = {
 						combat_encounters: {
 							name: 'Combat encounters',
 							items: [
-								{ lat: -55.03125, lng: 173.90625, label: 'Wolves', type: 'place', icon: 'poiDanger', iconType: 'png' },
-								{ lat: -100.375, lng: 282.84375, label: 'Wolves', type: 'place', icon: 'poiCombat', iconType: 'png' },
+								{ lat: -111.25, lng: 349.25, label: 'Wolves', type: 'place', icon: 'poiDanger', iconType: 'png' },
+								{ lat: -200.1875, lng: 564.34375, label: 'Wolves', type: 'place', icon: 'poiCombat', iconType: 'png' },
 								{
-									lat: -47.1875,
-									lng: 181.3125,
+									lat: -94.1875,
+									lng: 361.90625,
 									label: 'Bandits',
 									type: 'people',
 									icon: 'poiCombat',
@@ -865,16 +937,16 @@ const CAMPAIGN_01 = {
 									mapLink: 'korinis_bandits_01',
 								},
 								{
-									lat: -63.9375,
-									lng: 303.03125,
+									lat: -125.9375,
+									lng: 605.5625,
 									label: 'Bandits',
 									type: 'people',
 									icon: 'poiCombat',
 									iconType: 'png',
 								},
 								{
-									lat: -56.71875,
-									lng: 165.75,
+									lat: -114.0625,
+									lng: 332.59375,
 									label: 'Goblin camp',
 									type: 'place',
 									icon: 'poiCombat',
@@ -883,43 +955,59 @@ const CAMPAIGN_01 = {
 									image: '5f2e59cb-3f54-452f-bbd9-63905789961a.jpg',
 								},
 								{
-									lat: -43.9375,
-									lng: 307.09375,
+									lat: -89.0625,
+									lng: 614.3125,
 									label: 'Inactive Golem',
 									type: 'place',
 									icon: 'poiDanger',
 									iconType: 'png',
 								},
 								{
-									lat: -24.15625,
-									lng: 296.515625,
+									lat: -46.9375,
+									lng: 594.1875,
 									label: 'Snapers',
 									type: 'place',
 									icon: 'poiDanger',
 									iconType: 'png',
 								},
 								{
-									lat: -16.65625,
-									lng: 305.453125,
+									lat: -32.75,
+									lng: 609.9375,
 									label: 'Wasps',
 									type: 'place',
 									icon: 'poiDanger',
 									iconType: 'png',
 								},
 								{
-									lat: -119.125,
-									lng: 341.8125,
+									lat: -238.9375,
+									lng: 683.5625,
 									label: 'Ruined Tower Mages',
 									type: 'people',
 									icon: 'poiCombat',
 									iconType: 'png',
 								},
 								{
-									lat: -97,
-									lng: 100.75,
+									lat: -193.625,
+									lng: 200.625,
 									label: "Bandits' cave",
 									type: 'place',
 									icon: 'poiCave',
+									iconType: 'png',
+								},
+								{
+									lat: -385.75,
+									lng: 716.8125,
+									label: 'Cave spiders encounter',
+									type: 'people',
+									icon: 'poiCombat',
+									iconType: 'png',
+								},
+								{
+									lat: -445,
+									lng: 584.125,
+									label: 'Dinosaurs combat ambush',
+									type: 'people',
+									icon: 'poiCombat',
 									iconType: 'png',
 								},
 							],
@@ -928,8 +1016,8 @@ const CAMPAIGN_01 = {
 							name: 'Landmarks',
 							items: [
 								{
-									lat: -71,
-									lng: 188.59375,
+									lat: -142.0625,
+									lng: 376.0625,
 									label: 'Main town of Korinis',
 									type: 'landmark',
 									icon: 'poiLandmarks3',
@@ -946,33 +1034,36 @@ const CAMPAIGN_01 = {
 							lineColor: '#e2b203',
 							points: [
 								{
-									coordinates: [-137.078125, 69.46875],
+									coordinates: [-275.25, 138.375],
 									text: 'Landing zone for the party.',
 								},
 								{
-									coordinates: [-127.296875, 72.671875],
+									coordinates: [-260.75, 144.0625],
 								},
 								{
-									coordinates: [-120.34375, 73.84375],
+									coordinates: [-248.6875, 147.5],
 								},
 								{
-									coordinates: [-117.484375, 73.6875],
+									coordinates: [-240.1875, 148],
 									text: 'Went up the path towards the mountains.',
 								},
 								{
-									coordinates: [-112.703125, 73.234375],
+									coordinates: [-229.0625, 147.125],
 								},
 								{
-									coordinates: [-103.703125, 73.078125],
+									coordinates: [-220.3125, 145.25],
 								},
 								{
-									coordinates: [-99.5, 74.46875],
+									coordinates: [-207.625, 146],
 								},
 								{
-									coordinates: [-97.015625, 76.328125],
+									coordinates: [-197.375, 150],
 								},
 								{
-									coordinates: [-96.859375, 79.703125],
+									coordinates: [-192.0625, 153.625],
+								},
+								{
+									coordinates: [-192.25, 161.1875],
 									text: 'At the crossroads, they met up with a guy who told them to follow him in the caves as there were some people looking for them. The party, after arguing a bit, agreed.',
 									animationInfo: {
 										waitTimer: 2,
@@ -980,7 +1071,13 @@ const CAMPAIGN_01 = {
 									},
 								},
 								{
-									coordinates: [-97.328125, 100.734375],
+									coordinates: [-193.3125, 173.5625],
+								},
+								{
+									coordinates: [-193.9375, 188.9375],
+								},
+								{
+									coordinates: [-193.9375, 199.3125],
 									text: 'Turns out the people looking for them were bandits. Who could have guessed? After a fierce battle, the party emerged victorious.',
 									animationInfo: {
 										waitTimer: 3,
@@ -988,57 +1085,61 @@ const CAMPAIGN_01 = {
 									},
 								},
 								{
-									coordinates: [-95.9375, 90.9375],
+									coordinates: [-192.5, 196.625],
 								},
 								{
-									coordinates: [-95.40625, 78.296875],
+									coordinates: [-191.5625, 172.6875],
+								},
+								{
+									coordinates: [-190.6875, 155.625],
 									text: 'Back at the crossroads, they decided to go onwards to what they hoped would be a settlement.',
 								},
 								{
-									coordinates: [-92.609375, 76.734375],
+									coordinates: [-186.375, 153.8125],
 								},
 								{
-									coordinates: [-87.171875, 76.0625],
+									coordinates: [-172.8125, 152.125],
 								},
 								{
-									coordinates: [-79.859375, 75.859375],
+									coordinates: [-157.125, 151.1875],
 								},
 								{
-									coordinates: [-75.1875, 76.296875],
+									coordinates: [-142.5, 154.375],
 								},
 								{
-									coordinates: [-70.40625, 78.09375],
+									coordinates: [-132.875, 165.4375],
 								},
 								{
-									coordinates: [-66.046875, 83.875],
+									coordinates: [-126.5625, 181.5625],
 								},
 								{
-									coordinates: [-63.6875, 90.203125],
+									coordinates: [-126.375, 198.9375],
 								},
 								{
-									coordinates: [-62.90625, 96.625],
+									coordinates: [-131.0625, 213.6875],
 								},
 								{
-									coordinates: [-64.171875, 103.90625],
+									coordinates: [-134.375, 224.9375],
 								},
 								{
-									coordinates: [-66.671875, 110.4375],
-								},
-								{
-									coordinates: [-67.59375, 114.03125],
+									coordinates: [-136.1875, 234.875],
 									text: 'They saw a city in the background and a few farms to their right. Exhausted, they decided to go to one of the farmers.',
+									animationInfo: {
+										waitTimer: 1,
+										animationType: 'question',
+									},
 								},
 								{
-									coordinates: [-69.125, 124.375],
+									coordinates: [-138.625, 247.75],
 								},
 								{
-									coordinates: [-69.21875, 132.78125],
+									coordinates: [-138.875, 262.1875],
 								},
 								{
-									coordinates: [-69.09375, 138.8125],
+									coordinates: [-138.8125, 276.25],
 								},
 								{
-									coordinates: [-73.3125, 141.53125],
+									coordinates: [-144.4375, 284.8125],
 									text: "Reached Lobart farm and talked to its master. Learned the cost of entry into the city and were told to do deeds to gain money for it. Talked to the lead farmer's wife and got a task from her.",
 									animationInfo: {
 										waitTimer: 2,
@@ -1046,19 +1147,16 @@ const CAMPAIGN_01 = {
 									},
 								},
 								{
-									coordinates: [-69.65625, 143.96875],
+									coordinates: [-139.1875, 288.1875],
 								},
 								{
-									coordinates: [-69.28125, 154.6875],
+									coordinates: [-139.6875, 309.9375],
 								},
 								{
-									coordinates: [-69.875, 162.84375],
+									coordinates: [-139.8125, 330.125],
 								},
 								{
-									coordinates: [-69.71875, 166.46875],
-								},
-								{
-									coordinates: [-67.21875, 168.3125],
+									coordinates: [-133.75, 335.3125],
 									text: "Down the road, we met a merchant which sold us entry to the city for a favour once inside. Also got a pan for the lead farmer's wife as part of her task.",
 									animationInfo: {
 										waitTimer: 2,
@@ -1066,20 +1164,27 @@ const CAMPAIGN_01 = {
 									},
 								},
 								{
-									coordinates: [-69.296875, 170.453125],
+									coordinates: [-138.9375, 337.9375],
+								},
+								{
+									coordinates: [-137.875, 342.5],
 									text: "We went back to the farmer's wife and gave her the pan. She gave us food to eat. After that, we talked to the lead farmer again and slept in the barn.",
+									animationInfo: {
+										waitTimer: 2,
+										animationType: 'rest',
+									},
 								},
 								{
-									coordinates: [-68.875, 174.9375],
+									coordinates: [-137.6875, 347.75],
 								},
 								{
-									coordinates: [-70.765625, 181.03125],
+									coordinates: [-140.25, 358.625],
 								},
 								{
-									coordinates: [-71.171875, 186.984375],
+									coordinates: [-143.25, 367.5625],
 								},
 								{
-									coordinates: [-71, 190.671875],
+									coordinates: [-143.1875, 377.1875],
 									text: 'Talked to the guards and showed them our entry pass. They allowed us into the city.',
 									animationInfo: {
 										waitTimer: 2,
@@ -1087,39 +1192,48 @@ const CAMPAIGN_01 = {
 									},
 								},
 								{
-									coordinates: [-71.53125, 199.734375],
+									coordinates: [-142.5625, 393.1875],
 								},
 								{
-									coordinates: [-71.5, 203.6875],
-									text: 'Talked to the master paladin guarding the door and learned of the city rules and some whereabouts of the locations we were interested in.\n',
+									coordinates: [-142.875, 406.625],
+									text: 'Talked to the master paladin guarding the door and learned of the city rules and some whereabouts of the locations we were interested in.',
 									animationInfo: {
 										waitTimer: 2,
 										animationType: 'conversation',
 									},
 								},
 								{
-									coordinates: [-73.734375, 205.421875],
+									coordinates: [-146.875, 410.4375],
 								},
 								{
-									coordinates: [-73.8125, 207.75],
+									coordinates: [-147.8125, 414.75],
 								},
 								{
-									coordinates: [-72.203125, 209.53125],
+									coordinates: [-145.5625, 417.5],
 								},
 								{
-									coordinates: [-71.0625, 210.4375],
+									coordinates: [-142.4375, 419.1875],
 								},
 								{
-									coordinates: [-71, 235.59375],
+									coordinates: [-141.9375, 447.25],
 								},
 								{
-									coordinates: [-70.734375, 244.5625],
+									coordinates: [-141.625, 472.875],
 								},
 								{
-									coordinates: [-72.734375, 244.78125],
+									coordinates: [-141.3125, 489.0625],
 								},
 								{
-									coordinates: [-73.390625, 246.71875],
+									coordinates: [-146.0625, 489.6875],
+								},
+								{
+									coordinates: [-146.25, 492.5],
+								},
+								{
+									coordinates: [-147.4375, 494.625],
+								},
+								{
+									coordinates: [-149.375, 496.8125],
 									text: 'Walked into the inn and slept. During the night, some of the gold and some of our belongings were stolen.',
 									animationInfo: {
 										waitTimer: 5,
@@ -1133,7 +1247,7 @@ const CAMPAIGN_01 = {
 							lineColor: '#2898bd',
 							points: [
 								{
-									coordinates: [-74.96875, 247.59375],
+									coordinates: [-150.0625, 495.75],
 									text: 'Woken up, the party decided to go into the woods and gather the plants that were requested by the alchemist.',
 									animationInfo: {
 										waitTimer: 2,
@@ -1141,22 +1255,22 @@ const CAMPAIGN_01 = {
 									},
 								},
 								{
-									coordinates: [-73.625, 246.75],
+									coordinates: [-146.75, 493.5625],
 								},
 								{
-									coordinates: [-73.0625, 245.375],
+									coordinates: [-146.375, 490.6875],
 								},
 								{
-									coordinates: [-71.5625, 244.65625],
+									coordinates: [-142.875, 489.625],
 								},
 								{
-									coordinates: [-71.21875, 248.5],
+									coordinates: [-141.75, 503.875],
 								},
 								{
-									coordinates: [-71.28125, 266.40625],
+									coordinates: [-141.1875, 528.1875],
 								},
 								{
-									coordinates: [-71.4375, 271.65625],
+									coordinates: [-142.0625, 544.875],
 									text: 'On the way out of the city, guards stopped them and asked them what they were doing. Upon learning they were headed into the forest, the guards wished them good luck.',
 									animationInfo: {
 										waitTimer: 1,
@@ -1164,140 +1278,152 @@ const CAMPAIGN_01 = {
 									},
 								},
 								{
-									coordinates: [-71.90625, 273.46875],
+									coordinates: [-145.125, 548.375],
 								},
 								{
-									coordinates: [-74.5625, 274.40625],
+									coordinates: [-150.5, 549.1875],
 								},
 								{
-									coordinates: [-76.84375, 274.25],
+									coordinates: [-156.0625, 549.6875],
 								},
 								{
-									coordinates: [-78.96875, 274.84375],
+									coordinates: [-159.8125, 551.6875],
 								},
 								{
-									coordinates: [-80.5625, 276.375],
-								},
-								{
-									coordinates: [-81.125, 277.90625],
+									coordinates: [-161.625, 555.5625],
 									text: 'The party ventured into the forest down this path.',
 									animationInfo: {
 										animationType: 'walk',
 									},
 								},
 								{
-									coordinates: [-83.0625, 278],
+									coordinates: [-165.375, 555.8125],
 								},
 								{
-									coordinates: [-84.1875, 277.5],
+									coordinates: [-168.9375, 554.8125],
 								},
 								{
-									coordinates: [-85.15625, 279.71875],
+									coordinates: [-170.9375, 559.4375],
 								},
 								{
-									coordinates: [-86.15625, 279.71875],
+									coordinates: [-174, 558.875],
 								},
 								{
-									coordinates: [-87.28125, 278.9375],
+									coordinates: [-175, 557.5625],
 								},
 								{
-									coordinates: [-88.4375, 280.09375],
+									coordinates: [-176.625, 560],
 								},
 								{
-									coordinates: [-89.59375, 280.75],
+									coordinates: [-178, 561.625],
 								},
 								{
-									coordinates: [-91.9375, 279.71875],
+									coordinates: [-181.5, 561.3125],
 								},
 								{
-									coordinates: [-93.75, 277.875],
+									coordinates: [-184.625, 558.5625],
 								},
 								{
-									coordinates: [-95.625, 278],
+									coordinates: [-188.5625, 555.875],
 								},
 								{
-									coordinates: [-96.96875, 279],
+									coordinates: [-190.875, 555.3125],
 								},
 								{
-									coordinates: [-98.46875, 280.4375],
+									coordinates: [-194.75, 558.875],
 								},
 								{
-									coordinates: [-99.875, 281.5625],
+									coordinates: [-196.3125, 562.25],
 								},
 								{
-									coordinates: [-100.6875, 282.90625],
-									text: 'They attacked a pack of wolves which were roaming around in the forest. The battle was fierce, but they were victorious. They managed to find hides, which would prove useful to gain apprenticeship.\n',
+									coordinates: [-201.4375, 564.1875],
+									text: 'They attacked a pack of wolves which were roaming around in the forest. The battle was fierce, but they were victorious. They managed to find hides, which would prove useful to gain apprenticeship.',
 									animationInfo: {
 										waitTimer: 3,
 										animationType: 'fight',
 									},
 								},
 								{
-									coordinates: [-102.75, 282.5625],
+									coordinates: [-204.6875, 564.75],
 								},
 								{
-									coordinates: [-103.890625, 282.734375],
+									coordinates: [-209.375, 566.1875],
 								},
 								{
-									coordinates: [-105.703125, 283.625],
+									coordinates: [-213.3125, 570.875],
 								},
 								{
-									coordinates: [-107.0625, 285],
+									coordinates: [-217.1875, 577.625],
 								},
 								{
-									coordinates: [-108.59375, 290.65625],
-								},
-								{
-									coordinates: [-108.921875, 292.453125],
+									coordinates: [-217.6875, 584.375],
 									text: 'Entering the nearby caves, they saw what looked like blue blood - lizardmen blood, and a few creatures which looked way too powerful for them to handle.',
 								},
 								{
-									coordinates: [-107.296875, 292.890625],
+									coordinates: [-213.1875, 585.125],
 								},
 								{
-									coordinates: [-104.625, 291.578125],
+									coordinates: [-206.6875, 583.625],
 								},
 								{
-									coordinates: [-100.625, 292.109375],
+									coordinates: [-202.5, 584.5],
 								},
 								{
-									coordinates: [-99.03125, 291.40625],
+									coordinates: [-196.8125, 582.5],
 								},
 								{
-									coordinates: [-98.453125, 286.203125],
+									coordinates: [-195.75, 573],
 								},
 								{
-									coordinates: [-95.703125, 278.796875],
+									coordinates: [-195.375, 564.3125],
 								},
 								{
-									coordinates: [-93.671875, 278.796875],
+									coordinates: [-192.0625, 557.875],
 								},
 								{
-									coordinates: [-91.671875, 281.125],
+									coordinates: [-188.75, 557.75],
 								},
 								{
-									coordinates: [-88.34375, 281.703125],
+									coordinates: [-185.1875, 559.8125],
 								},
 								{
-									coordinates: [-84.890625, 280.265625],
+									coordinates: [-183.0625, 562.9375],
 								},
 								{
-									coordinates: [-84.078125, 279.328125],
+									coordinates: [-176.4375, 563.125],
 								},
 								{
-									coordinates: [-80.859375, 278.5],
+									coordinates: [-171.1875, 561.6875],
 								},
 								{
-									coordinates: [-80.5, 286.3125],
+									coordinates: [-168.75, 558.3125],
 								},
 								{
-									coordinates: [-80.015625, 300.609375],
+									coordinates: [-164.0625, 557.125],
 								},
 								{
-									coordinates: [-79.859375, 308.234375],
+									coordinates: [-161.8125, 558.125],
 								},
 								{
-									coordinates: [-83.546875, 310.15625],
+									coordinates: [-160.5, 583.5],
+								},
+								{
+									coordinates: [-160.375, 593.4375],
+								},
+								{
+									coordinates: [-160.25, 599.75],
+								},
+								{
+									coordinates: [-160.1875, 612.3125],
+								},
+								{
+									coordinates: [-160.0625, 616.5],
+								},
+								{
+									coordinates: [-164.0625, 617.8125],
+								},
+								{
+									coordinates: [-166.5625, 620.1875],
 									text: 'Near the bridge, they met Erol, who had been robbed by the bandits on the bridge nearby. He had a broken leg, which the party Cleric mended.',
 									animationInfo: {
 										waitTimer: 2,
@@ -1305,85 +1431,102 @@ const CAMPAIGN_01 = {
 									},
 								},
 								{
-									coordinates: [-79.828125, 310.9375],
+									coordinates: [-160.25, 619.5],
 								},
 								{
-									coordinates: [-80.140625, 328.15625],
+									coordinates: [-160.375, 641.5625],
 								},
 								{
-									coordinates: [-79.421875, 332.671875],
+									coordinates: [-159.8125, 663.25],
 								},
 								{
-									coordinates: [-77.015625, 334.078125],
+									coordinates: [-158.1875, 666.8125],
 								},
 								{
-									coordinates: [-76.046875, 336.328125],
-									text: "At the crossroads, they took a left turn to go towards the Fire Mages Monastery, in order to seek a Fire Mage's blessing.",
-									animationInfo: {
-										animationType: 'walk',
-									},
+									coordinates: [-154.75, 668.6875],
 								},
 								{
-									coordinates: [-69.6875, 336.53125],
+									coordinates: [-153.125, 673.875],
 								},
 								{
-									coordinates: [-64.703125, 336.375],
+									coordinates: [-141.5625, 673.75],
 								},
 								{
-									coordinates: [-59.8125, 336.3125],
+									coordinates: [-127.75, 672.9375],
 								},
 								{
-									coordinates: [-51.875, 335.71875],
+									coordinates: [-116.9375, 672.75],
 								},
 								{
-									coordinates: [-49.578125, 335.421875],
+									coordinates: [-105.4375, 671.75],
 								},
 								{
-									coordinates: [-49.59375, 331.5625],
+									coordinates: [-100.6875, 671.125],
 								},
 								{
-									coordinates: [-50.203125, 327],
+									coordinates: [-99.1875, 666.75],
 								},
 								{
-									coordinates: [-49.515625, 324.765625],
-									text: 'They saw Isgaroth, a Fire Mage, who was doing a prayer. They waited for two hours for the prayer to finish and after that they received the Fire Mage blessing for free, as they had made the trip to the Monastery.\n',
+									coordinates: [-98.4375, 658.875],
+								},
+								{
+									coordinates: [-99.8125, 655.0625],
+								},
+								{
+									coordinates: [-100, 650.5625],
+									text: 'They saw Isgaroth, a Fire Mage, who was doing a prayer. They waited for two hours for the prayer to finish and after that they received the Fire Mage blessing for free, as they had made the trip to the Monastery.',
 									animationInfo: {
 										waitTimer: 7,
 										animationType: 'conversation',
 									},
 								},
 								{
-									coordinates: [-48.21875, 326.125],
+									coordinates: [-97.0625, 649.9375],
 								},
 								{
-									coordinates: [-48.71875, 336.5625],
+									coordinates: [-95.6875, 654.625],
 								},
 								{
-									coordinates: [-58.859375, 337.34375],
+									coordinates: [-96.5625, 665.25],
 								},
 								{
-									coordinates: [-65.953125, 337.625],
+									coordinates: [-98.375, 668.25],
 								},
 								{
-									coordinates: [-76.03125, 337.75],
+									coordinates: [-98.1875, 672.9375],
 								},
 								{
-									coordinates: [-79.21875, 339.6875],
+									coordinates: [-113.9375, 674.3125],
 								},
 								{
-									coordinates: [-81.71875, 338.734375],
+									coordinates: [-131.1875, 675.75],
 								},
 								{
-									coordinates: [-83.359375, 338.9375],
+									coordinates: [-148.375, 675.75],
 								},
 								{
-									coordinates: [-84.3125, 337.453125],
+									coordinates: [-153.6875, 676.4375],
 								},
 								{
-									coordinates: [-85.609375, 337.859375],
+									coordinates: [-158.125, 679.5],
+								},
+								{
+									coordinates: [-163.25, 678.1875],
+								},
+								{
+									coordinates: [-165.3125, 676.9375],
+								},
+								{
+									coordinates: [-167.125, 677.875],
+								},
+								{
+									coordinates: [-168.8125, 674.375],
+								},
+								{
+									coordinates: [-173.8125, 674.9375],
 									text: 'The party checked out the inn at the crossroads, looking for a place to spend the night in, but the prices were too steep for them, so they went back in town.',
 									animationInfo: {
-										waitTimer: 2,
+										waitTimer: 5,
 										animationType: 'rest',
 									},
 								},
@@ -1394,90 +1537,133 @@ const CAMPAIGN_01 = {
 							lineColor: '#ff7e55',
 							points: [
 								{
-									coordinates: [-73.875, 247.71875],
+									coordinates: [-150.1875, 495.6875],
 								},
 								{
-									coordinates: [-72.875, 246.40625],
+									coordinates: [-146.875, 494.375],
 								},
 								{
-									coordinates: [-72.375, 244.78125],
+									coordinates: [-146.0625, 491],
 								},
 								{
-									coordinates: [-70.875, 242.71875],
+									coordinates: [-143.75, 488.8125],
 								},
 								{
-									coordinates: [-70.90625, 235.25],
+									coordinates: [-142.4375, 486.75],
+								},
+								{
+									coordinates: [-141.6875, 477.5],
+								},
+								{
+									coordinates: [-141.4375, 469.25],
 									text: 'The party decided to venture outside, into the forest they saw when they first entered the city.',
 									animationInfo: {
 										animationType: 'walk',
 									},
 								},
 								{
-									coordinates: [-70.84375, 224.59375],
+									coordinates: [-141.375, 451.1875],
 								},
 								{
-									coordinates: [-70.28125, 209.1875],
+									coordinates: [-141.75, 426.4375],
 								},
 								{
-									coordinates: [-68.75, 207.25],
+									coordinates: [-141.125, 419],
 								},
 								{
-									coordinates: [-69.8125, 204.375],
+									coordinates: [-138.3125, 417.125],
 								},
 								{
-									coordinates: [-70.96875, 201.71875],
+									coordinates: [-137.375, 412.5625],
 								},
 								{
-									coordinates: [-70.625, 192.4375],
+									coordinates: [-139.5, 408.1875],
 								},
 								{
-									coordinates: [-70.625, 183.375],
+									coordinates: [-141.75, 405.0625],
 								},
 								{
-									coordinates: [-69.78125, 179.28125],
+									coordinates: [-141.3125, 383.8125],
 								},
 								{
-									coordinates: [-66.3125, 179.625],
+									coordinates: [-141.4375, 371.25],
 								},
 								{
-									coordinates: [-62.375, 180.6875],
+									coordinates: [-140.75, 364.5625],
 								},
 								{
-									coordinates: [-57.28125, 180.53125],
-									text: 'Seeing a pack of wolves and a goblin camp in the nearby forest, they took a more secluded path, going stealthily deeper in the forest.\n',
+									coordinates: [-139.25, 358.875],
 								},
 								{
-									coordinates: [-52.84375, 178.75],
+									coordinates: [-135.6875, 359.0625],
 								},
 								{
-									coordinates: [-51.8125, 175.34375],
-									text: 'In the distance stood a Lizardman. The party cleric decided to send a spell to them in order to make contact, hoping to come in peace and talk.\n',
+									coordinates: [-130.875, 360.9375],
 								},
 								{
-									coordinates: [-50.78125, 163.3125],
-									text: "The plan didn't work out. The lizardman attacked, enraged, and a battle started. In the midst of the battle, the goblin horde attacked as well, killing the downed Lizarman. The party emerged victorious.\n",
+									coordinates: [-124.8125, 361.9375],
+								},
+								{
+									coordinates: [-118.6875, 361.25],
+								},
+								{
+									coordinates: [-113.125, 360.75],
+									text: 'Seeing a pack of wolves and a goblin camp in the nearby forest, they took a more secluded path, going stealthily deeper in the forest.',
+								},
+								{
+									coordinates: [-110.1875, 359.875],
+								},
+								{
+									coordinates: [-105.625, 357.4375],
+								},
+								{
+									coordinates: [-103.8125, 349.9375],
+									text: 'In the distance stood a Lizardman. The party cleric decided to send a spell to them in order to make contact, hoping to come in peace and talk.',
+									animationInfo: {
+										waitTimer: 2,
+										animationType: 'question',
+									},
+								},
+								{
+									coordinates: [-104.375, 339.0625],
+								},
+								{
+									coordinates: [-103.625, 333.25],
+								},
+								{
+									coordinates: [-101.8125, 326.625],
+									text: "The plan didn't work out. The lizardman attacked, enraged, and a battle started. In the midst of the battle, the goblin horde attacked as well, killing the downed Lizarman. The party emerged victorious.",
 									animationInfo: {
 										waitTimer: 5,
 										animationType: 'fight',
 									},
 								},
 								{
-									coordinates: [-49.84375, 159.21875],
+									coordinates: [-100.875, 322.5],
 								},
 								{
-									coordinates: [-47.0625, 158.875],
+									coordinates: [-98.5625, 318.5],
 								},
 								{
-									coordinates: [-46.46875, 160],
+									coordinates: [-94.4375, 317.875],
 								},
 								{
-									coordinates: [-46.53125, 166.125],
+									coordinates: [-92.75, 321],
 								},
 								{
-									coordinates: [-46.5625, 172.625],
+									coordinates: [-92.375, 329.8125],
 								},
 								{
-									coordinates: [-47, 179.25],
+									coordinates: [-92.75, 339.4375],
+								},
+								{
+									coordinates: [-93.3125, 347.6875],
+								},
+								{
+									coordinates: [-93.8125, 353.6875],
+								},
+								{
+									coordinates: [-93.75, 357.375],
 									text: 'The party was ambushed by some bandits who looked like they were smuggling things into the city. Overwhelmed and outnumbered, they wisely chose to run away from this encounter.',
 									animationInfo: {
 										waitTimer: 3,
@@ -1485,68 +1671,74 @@ const CAMPAIGN_01 = {
 									},
 								},
 								{
-									coordinates: [-45.8125, 173.15625],
+									coordinates: [-91.9375, 351.625],
 								},
 								{
-									coordinates: [-45.1875, 165.0625],
+									coordinates: [-90.9375, 340.4375],
 								},
 								{
-									coordinates: [-45.78125, 159.5625],
+									coordinates: [-90.4375, 335.625],
 									animationInfo: {
 										animationType: 'walk',
 									},
 								},
 								{
-									coordinates: [-47.25, 157.84375],
+									coordinates: [-90.4375, 327],
 								},
 								{
-									coordinates: [-50.4375, 158.34375],
+									coordinates: [-91.4375, 319.5625],
 								},
 								{
-									coordinates: [-52.375, 158.875],
+									coordinates: [-93.875, 316.0625],
 								},
 								{
-									coordinates: [-55, 158.21875],
+									coordinates: [-100.375, 317.4375],
 								},
 								{
-									coordinates: [-57.1875, 158.03125],
+									coordinates: [-105.3125, 316.4375],
+								},
+								{
+									coordinates: [-109.125, 315.9375],
+								},
+								{
+									coordinates: [-114.125, 315.5625],
 									text: 'Hoping to avoid the wildlife they had seen, they took another path through the forest.',
 								},
 								{
-									coordinates: [-59.625, 160.34375],
+									coordinates: [-117.4375, 317.4375],
 								},
 								{
-									coordinates: [-61.4375, 161.59375],
+									coordinates: [-120.75, 322.0625],
 								},
 								{
-									coordinates: [-61.75, 164.03125],
+									coordinates: [-127.3125, 333.25],
 								},
 								{
-									coordinates: [-62.8125, 165.84375],
+									coordinates: [-131.9375, 334.9375],
 								},
 								{
-									coordinates: [-64.84375, 166.75],
+									coordinates: [-138.4375, 337.25],
 								},
 								{
-									coordinates: [-67.71875, 167.875],
+									coordinates: [-137.9375, 345.0625],
 								},
 								{
-									coordinates: [-69.28125, 170.71875],
+									coordinates: [-138.8125, 353.1875],
 								},
 								{
-									coordinates: [-70.15625, 177.5],
+									coordinates: [-143.3125, 367.75],
 								},
 								{
-									coordinates: [-71.59375, 183.59375],
+									coordinates: [-143.3125, 377.125],
 								},
 								{
-									coordinates: [-71.4375, 191.15625],
+									coordinates: [-143.4375, 389.25],
 								},
 								{
-									coordinates: [-71.78125, 200.71875],
+									coordinates: [-143.6875, 400.3125],
 								},
 								{
-									coordinates: [-71.8125, 203.75],
+									coordinates: [-143.3125, 408.25],
 									text: 'Back into the city, they stopped and talked to the Paladin guard and informed them of the bandits they had seen and their location.',
 									animationInfo: {
 										waitTimer: 2,
@@ -1554,34 +1746,40 @@ const CAMPAIGN_01 = {
 									},
 								},
 								{
-									coordinates: [-73.84375, 206.53125],
+									coordinates: [-146.875, 410.3125],
 								},
 								{
-									coordinates: [-73.4375, 208.65625],
+									coordinates: [-148.125, 415.125],
 								},
 								{
-									coordinates: [-71.28125, 210.46875],
+									coordinates: [-143.375, 420.1875],
 								},
 								{
-									coordinates: [-71.40625, 219.875],
+									coordinates: [-143.4375, 432.0625],
 								},
 								{
-									coordinates: [-71.40625, 234.625],
+									coordinates: [-143, 452.5625],
 								},
 								{
-									coordinates: [-71.5625, 241.90625],
+									coordinates: [-142.9375, 470.125],
 								},
 								{
-									coordinates: [-71.84375, 243.40625],
+									coordinates: [-143.4375, 481.5],
 								},
 								{
-									coordinates: [-73.625, 244.84375],
+									coordinates: [-143.5625, 485.3125],
 								},
 								{
-									coordinates: [-74.46875, 247.8125],
+									coordinates: [-144.625, 488.25],
+								},
+								{
+									coordinates: [-150.25, 491.375],
+								},
+								{
+									coordinates: [-150.625, 494.375],
 									text: 'Exhausted for the day, they rested at the inn once more.',
 									animationInfo: {
-										waitTimer: 2,
+										waitTimer: 5,
 										animationType: 'rest',
 									},
 								},
@@ -1592,13 +1790,16 @@ const CAMPAIGN_01 = {
 							lineColor: '#84d8e3',
 							points: [
 								{
-									coordinates: [-81.5625, 219.8125],
+									coordinates: [-166.625, 440.6875],
 								},
 								{
-									coordinates: [-77.40625, 219],
+									coordinates: [-163.4375, 440],
 								},
 								{
-									coordinates: [-73.875, 218.78125],
+									coordinates: [-155.75, 438.375],
+								},
+								{
+									coordinates: [-147.8125, 437.4375],
 									text: 'The adventurers decide to journey to the pyramids in search of the water mages party.',
 									animationInfo: {
 										waitTimer: 1,
@@ -1606,76 +1807,103 @@ const CAMPAIGN_01 = {
 									},
 								},
 								{
-									coordinates: [-71.15625, 218.78125],
+									coordinates: [-141.875, 437.75],
 								},
 								{
-									coordinates: [-70.96875, 229.03125],
+									coordinates: [-142, 447.375],
 								},
 								{
-									coordinates: [-71.0625, 247.875],
+									coordinates: [-141.9375, 474.1875],
 								},
 								{
-									coordinates: [-70.8125, 263.96875],
+									coordinates: [-142, 495.625],
 								},
 								{
-									coordinates: [-70.625, 272.375],
+									coordinates: [-141.625, 517.6875],
 								},
 								{
-									coordinates: [-72.84375, 274.46875],
+									coordinates: [-141.375, 539],
 								},
 								{
-									coordinates: [-77.84375, 275.09375],
+									coordinates: [-141.1875, 545.3125],
 								},
 								{
-									coordinates: [-80.5625, 277.25],
+									coordinates: [-143.625, 548.6875],
 								},
 								{
-									coordinates: [-80.59375, 286.90625],
+									coordinates: [-149.25, 549.5625],
 								},
 								{
-									coordinates: [-78.71875, 286.40625],
+									coordinates: [-155.5, 549.8125],
 								},
 								{
-									coordinates: [-75.125, 286.3125],
+									coordinates: [-159.375, 552.875],
 								},
 								{
-									coordinates: [-73.03125, 286.125],
+									coordinates: [-161.3125, 559.6875],
 								},
 								{
-									coordinates: [-73.40625, 284.09375],
+									coordinates: [-161.5625, 568.875],
 								},
 								{
-									coordinates: [-72.65625, 283.03125],
+									coordinates: [-161.1875, 573],
 								},
 								{
-									coordinates: [-72.03125, 283.34375],
+									coordinates: [-158.5625, 572.5625],
 								},
 								{
-									coordinates: [-70.46875, 283.09375],
+									coordinates: [-155.5, 573.25],
 								},
 								{
-									coordinates: [-70.21875, 282.15625],
+									coordinates: [-147.4375, 572.3125],
 								},
 								{
-									coordinates: [-68.28125, 283.21875],
+									coordinates: [-146.125, 572.25],
 								},
 								{
-									coordinates: [-67.125, 283.34375],
+									coordinates: [-147, 569.125],
 								},
 								{
-									coordinates: [-65.5625, 284.1875],
+									coordinates: [-146.6875, 568.0625],
 								},
 								{
-									coordinates: [-63.09375, 285.59375],
+									coordinates: [-146.0625, 566.9375],
 								},
 								{
-									coordinates: [-60.375, 288.40625],
+									coordinates: [-145, 566.5625],
 								},
 								{
-									coordinates: [-57.90625, 291.28125],
+									coordinates: [-142.3125, 566.5625],
 								},
 								{
-									coordinates: [-56.4375, 293.6875],
+									coordinates: [-140.8125, 565.75],
+								},
+								{
+									coordinates: [-140, 564.6875],
+								},
+								{
+									coordinates: [-136.75, 567.0625],
+								},
+								{
+									coordinates: [-133.0625, 567.5],
+								},
+								{
+									coordinates: [-123.1875, 574.4375],
+								},
+								{
+									coordinates: [-119.3125, 578.3125],
+								},
+								{
+									coordinates: [-117.3125, 581.3125],
+								},
+								{
+									coordinates: [-115.4375, 582.4375],
+								},
+								{
+									coordinates: [-113.3125, 587.5],
+								},
+								{
+									coordinates: [-110.5625, 591.25],
 									text: 'While navigating the tough terrain, both the Ranger and Sorcerer fail an athletics check and get injured.',
 									animationInfo: {
 										waitTimer: 1,
@@ -1683,29 +1911,39 @@ const CAMPAIGN_01 = {
 									},
 								},
 								{
-									coordinates: [-54.1875, 296.6875],
+									coordinates: [-106.5625, 593.5],
 								},
 								{
-									coordinates: [-50.3125, 297.5],
+									coordinates: [-101.9375, 594.75],
 								},
 								{
-									coordinates: [-48.03125, 298.3125],
+									coordinates: [-97.125, 596.5625],
 								},
 								{
-									coordinates: [-46.375, 300],
+									coordinates: [-94.75, 597.3125],
 								},
 								{
-									coordinates: [-44.5625, 300.1875],
+									coordinates: [-93.3125, 599.875],
+								},
+								{
+									coordinates: [-90.1875, 600.3125],
 									text: 'The group spots an inactive golem to their right, which catches their interest.',
+									animationInfo: {
+										waitTimer: 1,
+										animationType: 'question',
+									},
 								},
 								{
-									coordinates: [-41.90625, 300.75],
+									coordinates: [-86.25, 600.6875],
 								},
 								{
-									coordinates: [-40.03125, 301.8125],
+									coordinates: [-81.8125, 602.875],
 								},
 								{
-									coordinates: [-38.625, 301.96875],
+									coordinates: [-79.875, 604.3125],
+								},
+								{
+									coordinates: [-77.25, 604.3125],
 									text: 'They pay 2 silver per person to cross the river over a shaky bridge guarded by a troll.',
 									animationInfo: {
 										waitTimer: 2,
@@ -1713,85 +1951,98 @@ const CAMPAIGN_01 = {
 									},
 								},
 								{
-									coordinates: [-35.90625, 302],
+									coordinates: [-70.3125, 604],
 								},
 								{
-									coordinates: [-33.71875, 301.59375],
+									coordinates: [-64.875, 603],
 								},
 								{
-									coordinates: [-31.34375, 301.21875],
+									coordinates: [-62.3125, 602.1875],
 								},
 								{
-									coordinates: [-30.3125, 301.125],
+									coordinates: [-58.1875, 602.0625],
 								},
 								{
-									coordinates: [-27.625, 301.0625],
+									coordinates: [-55.1875, 602.125],
 								},
 								{
-									coordinates: [-23.5625, 300.625],
+									coordinates: [-51.25, 601.625],
+								},
+								{
+									coordinates: [-48.5625, 601.1875],
 									text: 'To their right, they find ruins and two ancient chests, sparking their curiosity.',
+									animationInfo: {
+										waitTimer: 1,
+										animationType: 'loot',
+									},
 								},
 								{
-									coordinates: [-21.25, 300.34375],
+									coordinates: [-45.3125, 601.375],
 								},
 								{
-									coordinates: [-20.34375, 300.40625],
-								},
-								{
-									coordinates: [-19.625, 298.59375],
+									coordinates: [-41.4375, 600.875],
 									text: 'Straight ahead, they entered a group of tents and discovered the location of the water mages.',
 									animationInfo: {
 										animationType: 'walk',
 									},
 								},
 								{
-									coordinates: [-18.25, 295.84375],
+									coordinates: [-39.75, 600.1875],
 								},
 								{
-									coordinates: [-17.6875, 294.625],
+									coordinates: [-38.1875, 596.1875],
 								},
 								{
-									coordinates: [-18.09375, 293.6875],
+									coordinates: [-36.5, 592.5],
 								},
 								{
-									coordinates: [-19.34375, 293.1875],
+									coordinates: [-35.6875, 590.25],
 								},
 								{
-									coordinates: [-20.90625, 293.0625],
+									coordinates: [-36.125, 587.75],
 								},
 								{
-									coordinates: [-22.34375, 290.9375],
+									coordinates: [-38.625, 586.75],
 								},
 								{
-									coordinates: [-22, 289.75],
+									coordinates: [-41.25, 586.4375],
 								},
 								{
-									coordinates: [-20.71875, 290.09375],
-									text: 'The group entered the pyramids. In the first chamber they saw a huge door to their left, which was locked. Straight ahead through a corridor they fought a fierce battle against lich-like creatures and undead. They were victorious in the end with the help of the water mages party. Learning more about the strange devices of the land, they decided to help the mages with what looked like a teleporter. Once they stepped on it, they were teleported to a different location, but they managed to work out the system behind the teleporters: one would take you to a cave in the mountains, close to the city, and the other to another small cave near the inn.\n',
+									coordinates: [-43.5, 585.25],
+								},
+								{
+									coordinates: [-44.5625, 582.4375],
+								},
+								{
+									coordinates: [-44.0625, 580.125],
+								},
+								{
+									coordinates: [-41.5625, 580.125],
+									text: 'The group entered the pyramids. In the first chamber they saw a huge door to their left, which was locked. Straight ahead through a corridor they fought a fierce battle against lich-like creatures and undead. They were victorious in the end with the help of the water mages party. Learning more about the strange devices of the land, they decided to help the mages with what looked like a teleporter. Once they stepped on it, they were teleported to a different location, but they managed to work out the system behind the teleporters: one would take you to a cave in the mountains, close to the city, and the other to another small cave near the inn.',
 									animationInfo: {
 										waitTimer: 5,
 										animationType: 'fight',
 									},
 								},
 								{
-									coordinates: [-20.875, 290.25],
-									pointColor: 'yellow',
+									coordinates: [-111.21875, 558.65625],
 									pointWidth: 1,
+									pointColor: 'yellow',
 								},
 								{
-									coordinates: [-55.11, 278.8],
-									pointColor: 'yellow',
+									coordinates: [-199.53125, 655.65625],
 									pointWidth: 1,
+									pointColor: 'yellow',
 								},
 								{
-									coordinates: [-98.64, 328.05],
-									pointColor: 'yellow',
+									coordinates: [-41.5625, 580.6875],
 									pointWidth: 1,
+									pointColor: 'yellow',
 								},
 								{
-									coordinates: [-20.875, 290.25],
-									pointColor: 'yellow',
+									coordinates: [-41.5625, 580.125],
 									pointWidth: 1,
+									pointColor: 'yellow',
 								},
 							],
 						},
@@ -1800,109 +2051,118 @@ const CAMPAIGN_01 = {
 							lineColor: '#ff5722',
 							points: [
 								{
-									coordinates: [-55.84375, 279.34375],
+									coordinates: [-111.625, 558.9375],
 									text: 'This is where the previous session ended.',
 								},
 								{
-									coordinates: [-58.125, 280.1875],
+									coordinates: [-115.9375, 560.125],
 								},
 								{
-									coordinates: [-59.34375, 279.21875],
+									coordinates: [-118.375, 559.3125],
 								},
 								{
-									coordinates: [-60.34375, 276.3125],
+									coordinates: [-120.4375, 553.375],
 								},
 								{
-									coordinates: [-62.1875, 276.21875],
+									coordinates: [-122.1875, 551.9375],
 								},
 								{
-									coordinates: [-63.5, 276.4375],
+									coordinates: [-126, 552.1875],
 								},
 								{
-									coordinates: [-68.8125, 273.0625],
+									coordinates: [-131.25, 549.875],
 								},
 								{
-									coordinates: [-70.75, 272.71875],
+									coordinates: [-140.0625, 545.25],
 								},
 								{
-									coordinates: [-72.34375, 274.84375],
+									coordinates: [-145.125, 548.8125],
 								},
 								{
-									coordinates: [-75.40625, 275.1875],
+									coordinates: [-152, 549.25],
 								},
 								{
-									coordinates: [-79.15625, 275.6875],
+									coordinates: [-159.1875, 552.3125],
 								},
 								{
-									coordinates: [-80.5625, 278.3125],
+									coordinates: [-161.25, 561.125],
 								},
 								{
-									coordinates: [-80.59375, 289.65625],
+									coordinates: [-161.125, 573.75],
 								},
 								{
-									coordinates: [-80.3125, 297.625],
+									coordinates: [-160.0625, 586.25],
 								},
 								{
-									coordinates: [-79.84375, 309.03125],
+									coordinates: [-160.125, 601.0625],
 								},
 								{
-									coordinates: [-79.84375, 319.59375],
+									coordinates: [-159.625, 617.25],
 								},
 								{
-									coordinates: [-79.5, 329.03125],
+									coordinates: [-160.1875, 638.875],
 								},
 								{
-									coordinates: [-80, 332.71875],
+									coordinates: [-160.1875, 655.25],
 								},
 								{
-									coordinates: [-82.28125, 335.46875],
+									coordinates: [-162.9375, 667.8125],
 								},
 								{
-									coordinates: [-86.71875, 337.765625],
-									text: 'Went into the inn and talked with the bartender, who was a follower of the water mages. Learned about the mercenaries and got a key to unlock the teleporter B lock.\n',
+									coordinates: [-167.0625, 674.5625],
+								},
+								{
+									coordinates: [-170.5625, 675.375],
+									text: 'Went into the inn and talked with the bartender, who was a follower of the water mages. Learned about the mercenaries and got a key to unlock the teleporter B lock.',
 									animationInfo: {
 										waitTimer: 2,
 										animationType: 'conversation',
 									},
 								},
 								{
-									coordinates: [-83.65625, 338.421875],
+									coordinates: [-167.875, 676.25],
 								},
 								{
-									coordinates: [-80.671875, 339.90625],
+									coordinates: [-166.75, 677.625],
 								},
 								{
-									coordinates: [-80.453125, 347.34375],
+									coordinates: [-164.0625, 677.375],
 								},
 								{
-									coordinates: [-80.515625, 363.28125],
+									coordinates: [-161, 679.375],
 								},
 								{
-									coordinates: [-80.328125, 373.09375],
+									coordinates: [-160.9375, 694.5],
 								},
 								{
-									coordinates: [-80.515625, 387.265625],
+									coordinates: [-161.125, 721.5625],
 								},
 								{
-									coordinates: [-80.546875, 393.828125],
+									coordinates: [-161.0625, 743],
 								},
 								{
-									coordinates: [-80.609375, 397.25],
+									coordinates: [-161.375, 769.75],
 								},
 								{
-									coordinates: [-81.25, 397.90625],
+									coordinates: [-161.25, 794.9375],
 								},
 								{
-									coordinates: [-85.25, 397.921875],
+									coordinates: [-162.8125, 796.4375],
 								},
 								{
-									coordinates: [-90.359375, 398.0625],
+									coordinates: [-166.25, 796.125],
 								},
 								{
-									coordinates: [-91.5625, 400.125],
+									coordinates: [-173.1875, 796.125],
 								},
 								{
-									coordinates: [-90.15625, 401.59375],
+									coordinates: [-179.75, 796.375],
+								},
+								{
+									coordinates: [-181.75, 798.5],
+								},
+								{
+									coordinates: [-180.5, 802.3125],
 									text: "Went to Erol's house and met with him. Learned about the guards and Silvestro's quota.",
 									animationInfo: {
 										waitTimer: 2,
@@ -1910,203 +2170,612 @@ const CAMPAIGN_01 = {
 									},
 								},
 								{
-									coordinates: [-89.734375, 399.265625],
+									coordinates: [-179.75, 799.1875],
 								},
 								{
-									coordinates: [-84.484375, 398.40625],
+									coordinates: [-169.375, 797.125],
 								},
 								{
-									coordinates: [-81.1875, 398.796875],
+									coordinates: [-164.375, 797.25],
 								},
 								{
-									coordinates: [-80.71875, 401.84375],
+									coordinates: [-161.5, 798.5625],
 								},
 								{
-									coordinates: [-80.8125, 409.875],
+									coordinates: [-161.4375, 805.3125],
 								},
 								{
-									coordinates: [-80.859375, 421.609375],
+									coordinates: [-161.5, 827.4375],
 								},
 								{
-									coordinates: [-80.8125, 430.984375],
-									text: 'Saw a meadow with a lot of cows and sheep on the right, and huge farmlands to the left.\n',
+									coordinates: [-161.9375, 846],
 								},
 								{
-									coordinates: [-80.828125, 445.09375],
+									coordinates: [-161.75, 862.25],
 								},
 								{
-									coordinates: [-80.625, 450.125],
-									text: 'Decided to make a left turn here towards the farm.\n',
+									coordinates: [-161.8125, 872.3125],
+									text: 'Saw a meadow with a lot of cows and sheep on the right, and huge farmlands to the left.',
 								},
 								{
-									coordinates: [-74.765625, 449.625],
+									coordinates: [-161.5625, 882.375],
 								},
 								{
-									coordinates: [-68.5625, 449.203125],
+									coordinates: [-161.6875, 897.5625],
 								},
 								{
-									coordinates: [-57.234375, 448.96875],
+									coordinates: [-159.5625, 899.8125],
+									text: 'Decided to make a left turn here towards the farm.',
 								},
 								{
-									coordinates: [-47.84375, 448.953125],
+									coordinates: [-150.6875, 899.3125],
 								},
 								{
-									coordinates: [-44.765625, 449.078125],
-									text: 'Met up with Silvestro, learned about the farm and paid the 20 gold per person tax.\n',
+									coordinates: [-136.625, 898.25],
+								},
+								{
+									coordinates: [-125.9375, 897.9375],
+								},
+								{
+									coordinates: [-110.3125, 897.375],
+								},
+								{
+									coordinates: [-98.3125, 897.75],
+								},
+								{
+									coordinates: [-92.625, 898.1875],
+								},
+								{
+									coordinates: [-89.9375, 897.25],
+									text: 'Met up with Silvestro, learned about the farm and paid the 20 gold per person tax.',
 									animationInfo: {
 										waitTimer: 2,
 										animationType: 'conversation',
 									},
 								},
 								{
-									coordinates: [-42.09375, 446.796875],
-									text: 'Met up with the two merchants - Quixie and Jabba the Hutt. Bought 1 haste potion and two items for approximately 1000g.\n',
+									coordinates: [-86.625, 895.875],
+								},
+								{
+									coordinates: [-84.25, 893.625],
+									text: 'Met up with the two merchants - Quixie and Jabba the Hutt. Bought 1 haste potion and two items for approximately 1000g.',
 									animationInfo: {
-										waitTimer: 2, // seconds to wait at this point
-										animationType: 'merchant', // or 'merchant' or 'rest'
+										waitTimer: 2,
+										animationType: 'merchant',
 									},
 								},
 								{
-									coordinates: [-42.796875, 445.21875],
+									coordinates: [-85.3125, 891.25],
 								},
 								{
-									coordinates: [-42.515625, 441.53125],
+									coordinates: [-85, 882.375],
 									text: 'Saw that the inn to the left was holding a competition for whoever could eat the most chocolate. Nobody could resist such temptation.',
 								},
 								{
-									coordinates: [-39.921875, 439.25],
+									coordinates: [-80.9375, 879.375],
 								},
 								{
-									coordinates: [-39.90625, 435.28125],
+									coordinates: [-79.25, 877.5625],
 								},
 								{
-									coordinates: [-39.25, 432.34375],
+									coordinates: [-79.125, 872.75],
+								},
+								{
+									coordinates: [-79.5625, 868.75],
+								},
+								{
+									coordinates: [-78.125, 864.9375],
 									text: 'Entered the contest - the Cleric and the Barbarian won, and ate a stew which increased their max HP by 5. The others puked.',
+									animationInfo: {
+										waitTimer: 2,
+										animationType: 'loot',
+									},
 								},
 								{
-									coordinates: [-38.6875, 438.765625],
+									coordinates: [-76.875, 871.125],
 								},
 								{
-									coordinates: [-39.25, 439.578125],
+									coordinates: [-76.125, 876.375],
 								},
 								{
-									coordinates: [-39, 443.671875],
+									coordinates: [-77.3125, 879.5625],
 								},
 								{
-									coordinates: [-37.4375, 444.53125],
+									coordinates: [-77.6875, 887.375],
 								},
 								{
-									coordinates: [-35.265625, 444.5625],
+									coordinates: [-75.1875, 888.9375],
 								},
 								{
-									coordinates: [-34.328125, 444.125],
-									text: "Met up with General Lee and learned that they wanted to leave the island and were planning to take over the city. While trying to help, the party might've accidentally killed Captain Cunts by revealing his location to the pirate queen Bianca. Lee told the party, under the condition that they help Lee's lieutenants too, that the valley of mines was currently under siege by the Lizardmen, and that the only 'safe' entrance was through another path his spies had been using for a while.\n",
+									coordinates: [-71.375, 889.3125],
+								},
+								{
+									coordinates: [-68.25, 888.375],
+									text: "Met up with General Lee and learned that they wanted to leave the island and were planning to take over the city. While trying to help, the party might've accidentally killed Captain Cunts by revealing his location to the pirate queen Bianca. Lee told the party, under the condition that they help Lee's lieutenants too, that the valley of mines was currently under siege by the Lizardmen, and that the only 'safe' entrance was through another path his spies had been using for a while.",
+									animationInfo: {
+										waitTimer: 3,
+										animationType: 'conversation',
+									},
+								},
+								{
+									coordinates: [-69, 893.3125],
+									text: 'Met up with another follower of the Water Mages guild who was training the mercenary recruits. Trained with him and gained expertise with chosen weapons.',
 									animationInfo: {
 										waitTimer: 2,
 										animationType: 'conversation',
 									},
 								},
 								{
-									coordinates: [-34.40625, 445.953125],
-									text: 'Met up with another follower of the Water Mages guild who was training the mercenary recruits. Trained with him and gained expertise with chosen weapons.\n',
-									animationInfo: {
-										waitTimer: 2,
-										animationType: 'conversation',
-									},
+									coordinates: [-74.8125, 893],
 								},
 								{
-									coordinates: [-37.171875, 445.734375],
+									coordinates: [-73.75, 902.9375],
 								},
 								{
-									coordinates: [-37.234375, 448.34375],
+									coordinates: [-67.3125, 906.875],
 								},
 								{
-									coordinates: [-36.609375, 450.796875],
+									coordinates: [-62.6875, 908.5],
 								},
 								{
-									coordinates: [-35.421875, 451.890625],
-								},
-								{
-									coordinates: [-33.234375, 453.40625],
-								},
-								{
-									coordinates: [-32, 454.1875],
-								},
-								{
-									coordinates: [-31.078125, 455.03125],
+									coordinates: [-61.9375, 910.9375],
 									text: 'Went to the Blacksmith to learn about their trade.',
+									animationInfo: {
+										waitTimer: 1,
+										animationType: 'null',
+									},
 								},
 								{
-									coordinates: [-32.125, 455.609375],
+									coordinates: [-64.25, 911.6875],
 								},
 								{
-									coordinates: [-33.265625, 454.375],
+									coordinates: [-68.0625, 908.125],
 								},
 								{
-									coordinates: [-37.3125, 451.5625],
+									coordinates: [-78.375, 902.5625],
 								},
 								{
-									coordinates: [-42.953125, 449.65625],
+									coordinates: [-89.125, 898.875],
 								},
 								{
-									coordinates: [-46.90625, 448.21875],
+									coordinates: [-94.4375, 896.5625],
 								},
 								{
-									coordinates: [-53.53125, 448.015625],
+									coordinates: [-112.5625, 895.125],
 								},
 								{
-									coordinates: [-63.46875, 448.484375],
+									coordinates: [-126.125, 896.3125],
 								},
 								{
-									coordinates: [-76.078125, 448.8125],
+									coordinates: [-150.25, 896.75],
 								},
 								{
-									coordinates: [-79.75, 448.796875],
+									coordinates: [-158.9375, 897.375],
 								},
 								{
-									coordinates: [-79.890625, 438.5],
-									text: 'Going back to the inn and towards the penal colony.',
+									coordinates: [-159.0625, 870.1875],
 								},
 								{
-									coordinates: [-79.0625, 418.90625],
+									coordinates: [-158.875, 833],
 								},
 								{
-									coordinates: [-79.046875, 402.171875],
+									coordinates: [-158.875, 812.0625],
 									text: 'Noticed there was another set of guards compared to the first time.',
 								},
 								{
-									coordinates: [-79.46875, 346.40625],
+									coordinates: [-158.5625, 790.1875],
+								},
+								{
+									coordinates: [-158.3125, 748],
+								},
+								{
+									coordinates: [-158.6875, 711.625],
+								},
+								{
+									coordinates: [-158.5625, 692.6875],
 									text: 'Made a left turn here towards the Penal Colony. What could go wrong?',
+									animationInfo: {
+										waitTimer: 1,
+										animationType: 'question',
+									},
 								},
 								{
-									coordinates: [-83.375, 346.796875],
+									coordinates: [-164.3125, 693.4375],
 								},
 								{
-									coordinates: [-87.703125, 348.53125],
+									coordinates: [-176.0625, 696.25],
 								},
 								{
-									coordinates: [-94.484375, 349.515625],
+									coordinates: [-188.25, 699.3125],
 								},
 								{
-									coordinates: [-99.1875, 350.421875],
+									coordinates: [-205, 700.125],
 								},
 								{
-									coordinates: [-107.40625, 350.125],
+									coordinates: [-217, 700.4375],
 								},
 								{
-									coordinates: [-111.09375, 350.390625],
-									text: 'In front of them, they saw the road and two paladins standing guard. To their left, a ruined tower; to their right, farmland.',
+									coordinates: [-222, 700.5625],
+									text: 'In front of them, they saw the road and two paladins standing guard. To their right, a ruined tower; to their left, farmland.',
 								},
 								{
-									coordinates: [-115.484375, 350.484375],
+									coordinates: [-226.4375, 700.875],
 								},
 								{
-									coordinates: [-116.453125, 344.890625],
-									text: 'Their passive perception not enough, the party was ambushed by a party of 3 orc mages - each master of a different element: fire, ice and lightning. After a fierce battle, they emerged victorious.\n',
+									coordinates: [-233.125, 695.3125],
+								},
+								{
+									coordinates: [-238.5, 685.75],
+									text: 'Their passive perception not enough, the party was ambushed by a party of 3 orc mages - each master of a different element: fire, ice and lightning. After a fierce battle, they emerged victorious.',
 									animationInfo: {
 										waitTimer: 5,
 										animationType: 'fight',
 									},
+								},
+							],
+						},
+						{
+							name: 'Session 9 Recap',
+							lineColor: '#430067',
+							points: [
+								{
+									coordinates: [-242.625, 686.375],
+									text: 'This is where the last session ended.',
+								},
+								{
+									coordinates: [-250.375, 691.625],
+								},
+								{
+									coordinates: [-254.375, 698.625],
+									text: 'Talked to 2 mercenaries and found out 2 more mages were there and one farmer was killed.',
+									animationInfo: {
+										waitTimer: 2,
+										animationType: 'conversation',
+									},
+								},
+								{
+									coordinates: [-226, 698.375],
+								},
+								{
+									coordinates: [-201.875, 698.875],
+									// filter: null,
+								},
+								{
+									coordinates: [-185.75, 697.5],
+								},
+								{
+									coordinates: [-173, 695.25],
+								},
+								{
+									coordinates: [-162.75, 692.375],
+								},
+								{
+									coordinates: [-160.375, 684.625],
+								},
+								{
+									coordinates: [-162.25, 678.75],
+								},
+								{
+									coordinates: [-173.125, 678.875],
+									text: 'Went back to the inn to sleep, found out from General Lee that they were attacked too.',
+									animationInfo: {
+										waitTimer: 5,
+										animationType: 'rest',
+									},
+								},
+								{
+									coordinates: [-174.875, 673.125],
+								},
+								{
+									coordinates: [-166.25, 672.5],
+									filter: 'night',
+								},
+								{
+									coordinates: [-164.75, 675.5],
+								},
+								{
+									coordinates: [-157.125, 679],
+								},
+								{
+									coordinates: [-158, 688.75],
+									text: 'Decided to go to General Lee to talk to him directly.',
+								},
+								{
+									coordinates: [-158.125, 703.375],
+								},
+								{
+									coordinates: [-158.5, 724.625],
+									text: "When entering the Oviedo's farm we saw a huge form and then saw Silvestro and the other guy.",
+								},
+								{
+									coordinates: [-158.75, 801.75],
+									text: 'We confronted Silvestro and the other guy and they both denied being werewolves. They said they had been using potions to enlarge themselves.',
+									animationInfo: {
+										waitTimer: 3,
+										animationType: 'conversation',
+									},
+								},
+								{
+									coordinates: [-158.5, 854.375],
+								},
+								{
+									coordinates: [-158, 896.5],
+								},
+								{
+									coordinates: [-123.375, 896.625],
+								},
+								{
+									coordinates: [-92.25, 896.375],
+								},
+								{
+									coordinates: [-85.75, 892],
+								},
+								{
+									coordinates: [-84.5, 883.625],
+								},
+								{
+									coordinates: [-77.625, 888.125],
+								},
+								{
+									coordinates: [-71.125, 889.25],
+									text: 'Got to Lee and told him about the Bianca treachery and pyramid location.',
+									animationInfo: {
+										waitTimer: 2,
+										animationType: 'conversation',
+									},
+								},
+								{
+									coordinates: [-77, 900.875],
+								},
+								{
+									coordinates: [-93.625, 898.75],
+								},
+								{
+									coordinates: [-161.25, 899.375],
+								},
+								{
+									coordinates: [-161, 787.75],
+								},
+								{
+									coordinates: [-160.75, 695.75],
+									text: 'Going towards the Penal Colony.',
+									animationInfo: {
+										animationType: 'walk',
+									},
+								},
+								{
+									coordinates: [-168.25, 695.625],
+								},
+								{
+									coordinates: [-187.625, 700.75],
+								},
+								{
+									coordinates: [-241.625, 701.375],
+								},
+								{
+									coordinates: [-293.125, 701.875],
+								},
+								{
+									coordinates: [-315, 703.625],
+								},
+								{
+									coordinates: [-348, 703.75],
+								},
+								{
+									coordinates: [-364.25, 704.375],
+									text: 'Reached the 2 paladins and got 2 keys and passage into the Penal Colony. ',
+									animationInfo: {
+										waitTimer: 2,
+										animationType: 'conversation',
+									},
+								},
+								{
+									coordinates: [-368.75, 703.75],
+								},
+								{
+									coordinates: [-380.875, 704.5],
+								},
+								{
+									coordinates: [-385.875, 710.875],
+									text: 'Entered the shortcut just as Lee told us.',
+									animationInfo: {
+										animationType: 'null',
+									},
+								},
+								{
+									coordinates: [-386.625, 717.25],
+									text: 'Got ambushed by spiders in the middle of the cave.',
+									animationInfo: {
+										waitTimer: 3,
+										animationType: 'fight',
+									},
+								},
+								{
+									coordinates: [-393.875, 717.5],
+								},
+								{
+									coordinates: [-395.375, 713.25],
+								},
+								{
+									coordinates: [-395.75, 700.125],
+								},
+								{
+									coordinates: [-395.75, 689.75],
+									text: 'Entered the abandoned mines',
+								},
+								{
+									coordinates: [-396, 681],
+								},
+								{
+									coordinates: [-396, 673.375],
+								},
+								{
+									coordinates: [-394.25, 672.25],
+									animationInfo: {
+										waitTimer: 2,
+										animationType: 'question',
+									},
+								},
+								{
+									coordinates: [-391.125, 670.25],
+								},
+								{
+									coordinates: [-390, 667.25],
+								},
+								{
+									coordinates: [-389.875, 662.375],
+								},
+								{
+									coordinates: [-390, 656.125],
+								},
+								{
+									coordinates: [-390.875, 651.25],
+								},
+								{
+									coordinates: [-392.75, 646.875],
+								},
+								{
+									coordinates: [-395.75, 643.75],
+								},
+								{
+									coordinates: [-399, 642.75],
+								},
+								{
+									coordinates: [-399.875, 643.75],
+								},
+								{
+									coordinates: [-401, 648.5],
+								},
+								{
+									coordinates: [-400, 653.375],
+								},
+								{
+									coordinates: [-399.125, 657.75],
+								},
+								{
+									coordinates: [-399.375, 663.375],
+								},
+								{
+									coordinates: [-402.625, 667.875],
+								},
+								{
+									coordinates: [-405, 668.25],
+								},
+								{
+									coordinates: [-406.625, 660.875],
+								},
+								{
+									coordinates: [-406.875, 653.125],
+								},
+								{
+									coordinates: [-405.625, 647.875],
+								},
+								{
+									coordinates: [-404.125, 641.375],
+								},
+								{
+									coordinates: [-406.125, 637.625],
+								},
+								{
+									coordinates: [-412, 641.25],
+								},
+								{
+									coordinates: [-412.25, 649.25],
+								},
+								{
+									coordinates: [-411.625, 654.75],
+								},
+								{
+									coordinates: [-420.5, 653.25],
+									text: 'Got to the exit of the mines, which were on a ledge. Tied some rope and climbed down.',
+									animationInfo: {
+										waitTimer: 2,
+										animationType: 'walk',
+									},
+								},
+								{
+									coordinates: [-422.25, 650.625],
+								},
+								{
+									coordinates: [-426.875, 651.375],
+								},
+								{
+									coordinates: [-428.5, 646.25],
+								},
+								{
+									coordinates: [-422.875, 634.75],
+								},
+								{
+									coordinates: [-425.25, 625.25],
+								},
+								{
+									coordinates: [-435.5, 615.125],
+								},
+								{
+									coordinates: [-440.625, 610.625],
+								},
+								{
+									coordinates: [-442.875, 605.5],
+								},
+								{
+									coordinates: [-437, 599.25],
+								},
+								{
+									coordinates: [-430.125, 597.75],
+								},
+								{
+									coordinates: [-427, 594.75],
+									text: 'Went up the ladder and found the two merchants - penguin and the drugged rabbit - bought items and did a long rest.',
+									animationInfo: {
+										waitTimer: 5,
+										animationType: 'merchant',
+									},
+								},
+								{
+									coordinates: [-430.5, 595.125],
+								},
+								{
+									coordinates: [-438.25, 597.25],
+								},
+								{
+									coordinates: [-441.625, 599.625],
+								},
+								{
+									coordinates: [-446.625, 586.875],
+									text: 'Got ambushed by dinosaurs and almost wiped. ',
+									animationInfo: {
+										waitTimer: 4,
+										animationType: 'fight',
+									},
+								},
+								{
+									coordinates: [-444.375, 578.875],
+									text: 'Met Diego as he tried to save us. He decided to take us to his hideout.',
+									animationInfo: {
+										animationType: 'walk',
+									},
+								},
+								{
+									coordinates: [-436.5, 566.5],
+								},
+								{
+									coordinates: [-430.125, 559.875],
+								},
+								{
+									coordinates: [-428.25, 550.375],
+								},
+								{
+									coordinates: [-422.5, 543.5],
+								},
+								{
+									coordinates: [-420.75, 542.125],
+								},
+								{
+									coordinates: [-420.25, 537.625],
+								},
+								{
+									coordinates: [-417.5, 532.25],
+									text: "Reached Diego's Hideout. Session end.",
 								},
 							],
 						},
@@ -2124,94 +2793,28 @@ const CAMPAIGN_01 = {
 									interiorColor: 'rgb(220 223 228 / 50%)',
 									points: [
 										{
-											coordinates: [-43.34375, 186.65625],
+											coordinates: [-87.25, 372],
 										},
 										{
-											coordinates: [-42.4375, 193.0625],
+											coordinates: [-76, 374],
 										},
 										{
-											coordinates: [-42.9375, 195.4375],
+											coordinates: [-44.25, 499.75],
 										},
 										{
-											coordinates: [-41.90625, 201.1875],
+											coordinates: [-51.5, 511.25],
 										},
 										{
-											coordinates: [-42.0625, 204.46875],
+											coordinates: [-67.5, 480],
 										},
 										{
-											coordinates: [-42.03125, 205.96875],
+											coordinates: [-78.75, 432.5],
 										},
 										{
-											coordinates: [-41.15625, 209.3125],
+											coordinates: [-84.25, 413.25],
 										},
 										{
-											coordinates: [-41.5625, 210.46875],
-										},
-										{
-											coordinates: [-39.4375, 217.5],
-										},
-										{
-											coordinates: [-37.78125, 218.5625],
-										},
-										{
-											coordinates: [-36.6875, 222.40625],
-										},
-										{
-											coordinates: [-37.3125, 225.25],
-										},
-										{
-											coordinates: [-36.53125, 228.09375],
-										},
-										{
-											coordinates: [-36.28125, 231.1875],
-										},
-										{
-											coordinates: [-34.65625, 232.21875],
-										},
-										{
-											coordinates: [-33.4375, 233.34375],
-										},
-										{
-											coordinates: [-33.28125, 234.9375],
-										},
-										{
-											coordinates: [-33.53125, 236.0625],
-										},
-										{
-											coordinates: [-33.15625, 237.375],
-										},
-										{
-											coordinates: [-33.71875, 239.84375],
-										},
-										{
-											coordinates: [-30.0625, 248.53125],
-										},
-										{
-											coordinates: [-27.3125, 252.96875],
-										},
-										{
-											coordinates: [-25.15625, 254.71875],
-										},
-										{
-											coordinates: [-22.34375, 250.875],
-										},
-										{
-											coordinates: [-28.375, 242.96875],
-										},
-										{
-											coordinates: [-28.09375, 233.03125],
-										},
-										{
-											coordinates: [-35.40625, 215],
-										},
-										{
-											coordinates: [-37.6875, 200.5],
-										},
-										{
-											coordinates: [-37.6875, 195.1875],
-										},
-										{
-											coordinates: [-38.25, 187.65625],
+											coordinates: [-85.25, 387.5],
 										},
 									],
 								},
@@ -2224,88 +2827,46 @@ const CAMPAIGN_01 = {
 									interiorColor: 'rgb(248 113 104 / 50%)',
 									points: [
 										{
-											coordinates: [-43.5, 186.6875],
+											coordinates: [-87.25, 373.5],
 										},
 										{
-											coordinates: [-42.4375, 193.3125],
+											coordinates: [-84.75, 386.25],
 										},
 										{
-											coordinates: [-43.0625, 195.40625],
+											coordinates: [-84.5, 407.75],
 										},
 										{
-											coordinates: [-42, 200.875],
+											coordinates: [-81.25, 425],
 										},
 										{
-											coordinates: [-42.03125, 205.3125],
+											coordinates: [-75.25, 436],
 										},
 										{
-											coordinates: [-41.1875, 209.4375],
+											coordinates: [-72.5, 460.25],
 										},
 										{
-											coordinates: [-41.5, 210.6875],
+											coordinates: [-65.25, 474.5],
 										},
 										{
-											coordinates: [-39.5, 217.375],
+											coordinates: [-66.25, 483.75],
 										},
 										{
-											coordinates: [-37.84375, 218.625],
+											coordinates: [-51, 509.25],
 										},
 										{
-											coordinates: [-36.6875, 222.3125],
+											coordinates: [-56.5, 516.25],
 										},
 										{
-											coordinates: [-37.34375, 225.3125],
+											coordinates: [-91, 517.25],
 										},
 										{
-											coordinates: [-36.625, 227.9375],
+											coordinates: [-107.5, 531.25],
 										},
 										{
-											coordinates: [-36.4375, 231.4375],
+											coordinates: [-117.5, 519.75],
 										},
 										{
-											coordinates: [-33.6875, 233.03125],
-										},
-										{
-											coordinates: [-33.03125, 237.34375],
-										},
-										{
-											coordinates: [-33.78125, 239.25],
-										},
-										{
-											coordinates: [-31.78125, 244.46875],
-										},
-										{
-											coordinates: [-30.25, 248.34375],
-										},
-										{
-											coordinates: [-28.40625, 250.5],
-										},
-										{
-											coordinates: [-26.6875, 254],
-										},
-										{
-											coordinates: [-24.96875, 254.5625],
-										},
-										{
-											coordinates: [-27.65625, 258.0625],
-										},
-										{
-											coordinates: [-45.84375, 258.46875],
-										},
-										{
-											coordinates: [-53.71875, 265.71875],
-										},
-										{
-											coordinates: [-58.5, 260.28125],
-										},
-										{
-											coordinates: [-58.3125, 247.65625],
-										},
-										{
-											coordinates: [-58.34375, 208.8125],
-										},
-										{
-											coordinates: [-58.5, 189.71875],
+											coordinates: [-117.25, 380],
 										},
 									],
 								},
@@ -2318,43 +2879,34 @@ const CAMPAIGN_01 = {
 									interiorColor: 'rgb(245 205 71 / 30%)',
 									points: [
 										{
-											coordinates: [-58.5625, 189.5625],
+											coordinates: [-118, 379.25],
 										},
 										{
-											coordinates: [-58.21875, 254],
+											coordinates: [-117, 518.75],
 										},
 										{
-											coordinates: [-58.53125, 260.3125],
+											coordinates: [-107, 530.5],
 										},
 										{
-											coordinates: [-53.28125, 265.40625],
+											coordinates: [-119.75, 541.5],
 										},
 										{
-											coordinates: [-60.40625, 270.84375],
+											coordinates: [-149.25, 541],
 										},
 										{
-											coordinates: [-74.5625, 270.84375],
+											coordinates: [-149.75, 528],
 										},
 										{
-											coordinates: [-75, 264.78125],
+											coordinates: [-174, 484.25],
 										},
 										{
-											coordinates: [-77.875, 257.5],
+											coordinates: [-174, 370.25],
 										},
 										{
-											coordinates: [-86.90625, 242.125],
+											coordinates: [-149.25, 379],
 										},
 										{
-											coordinates: [-86.875, 185.625],
-										},
-										{
-											coordinates: [-85.125, 185.6875],
-										},
-										{
-											coordinates: [-74.90625, 189.6875],
-										},
-										{
-											coordinates: [-69.15625, 190.03125],
+											coordinates: [-145.75, 380.25],
 										},
 									],
 								},
@@ -2367,31 +2919,28 @@ const CAMPAIGN_01 = {
 									interiorColor: 'rgb(87 157 255 / 40%)',
 									points: [
 										{
-											coordinates: [-86.75, 185.5],
+											coordinates: [-173.75, 371],
 										},
 										{
-											coordinates: [-86.78125, 242.03125],
+											coordinates: [-173.75, 485.25],
 										},
 										{
-											coordinates: [-77.5625, 257.84375],
+											coordinates: [-149.75, 529],
 										},
 										{
-											coordinates: [-74.9375, 264.71875],
+											coordinates: [-148, 541.5],
 										},
 										{
-											coordinates: [-74.625, 270.625],
+											coordinates: [-169, 535],
 										},
 										{
-											coordinates: [-84.21875, 267.8125],
+											coordinates: [-228.25, 505.5],
 										},
 										{
-											coordinates: [-114.25, 252.6875],
+											coordinates: [-229.75, 379.25],
 										},
 										{
-											coordinates: [-114.4375, 190.34375],
-										},
-										{
-											coordinates: [-99.84375, 185.84375],
+											coordinates: [-198.5, 370.75],
 										},
 									],
 								},
@@ -2409,52 +2958,46 @@ const CAMPAIGN_01 = {
 									interiorColor: 'rgb(226 178 3 / 40%)',
 									points: [
 										{
-											coordinates: [-71, 275.1875],
+											coordinates: [-141.75, 550.0625],
 										},
 										{
-											coordinates: [-68.96875, 276.25],
+											coordinates: [-136.5, 556.6875],
 										},
 										{
-											coordinates: [-67.34375, 279.25],
+											coordinates: [-135.4375, 563.5625],
 										},
 										{
-											coordinates: [-67.5, 282.59375],
+											coordinates: [-136.375, 567.6875],
 										},
 										{
-											coordinates: [-67.75, 284.625],
+											coordinates: [-135.1875, 576.4375],
 										},
 										{
-											coordinates: [-67.0625, 287.53125],
+											coordinates: [-139, 585.75],
 										},
 										{
-											coordinates: [-68.0625, 291.75],
+											coordinates: [-144.8125, 590.6875],
 										},
 										{
-											coordinates: [-70.0625, 294.34375],
+											coordinates: [-155.1875, 597.3125],
 										},
 										{
-											coordinates: [-72.46875, 297.09375],
+											coordinates: [-156.1875, 591.5625],
 										},
 										{
-											coordinates: [-78.875, 299.375],
+											coordinates: [-157.75, 579.625],
 										},
 										{
-											coordinates: [-78.875, 294.15625],
+											coordinates: [-158, 569.6875],
 										},
 										{
-											coordinates: [-79.6875, 287.09375],
+											coordinates: [-155.125, 555.1875],
 										},
 										{
-											coordinates: [-79.90625, 281.59375],
+											coordinates: [-147.875, 553.375],
 										},
 										{
-											coordinates: [-78.5, 277.53125],
-										},
-										{
-											coordinates: [-75.34375, 276.53125],
-										},
-										{
-											coordinates: [-72.78125, 276.625],
+											coordinates: [-143.375, 553.5],
 										},
 									],
 								},
@@ -2467,55 +3010,52 @@ const CAMPAIGN_01 = {
 									interiorColor: 'rgb(226 178 3 / 40%)',
 									points: [
 										{
-											coordinates: [-73.625, 125],
+											coordinates: [-145.5, 251.25],
 										},
 										{
-											coordinates: [-71.125, 128.375],
+											coordinates: [-141.5, 259.5],
 										},
 										{
-											coordinates: [-72, 139.9375],
+											coordinates: [-145.375, 283.15625],
 										},
 										{
-											coordinates: [-72.625, 143.9375],
+											coordinates: [-143, 304],
 										},
 										{
-											coordinates: [-71.4375, 152.1875],
+											coordinates: [-143.75, 328],
 										},
 										{
-											coordinates: [-71.5, 163],
+											coordinates: [-141.5, 352],
 										},
 										{
-											coordinates: [-70.5625, 174.5625],
+											coordinates: [-161.75, 353],
 										},
 										{
-											coordinates: [-71.125, 176.625],
+											coordinates: [-171.25, 341.5],
 										},
 										{
-											coordinates: [-76.3125, 176.6875],
+											coordinates: [-174.75, 327],
 										},
 										{
-											coordinates: [-83.75, 175.9375],
+											coordinates: [-181.75, 317.75],
 										},
 										{
-											coordinates: [-85.6875, 170.125],
+											coordinates: [-185.75, 292.5],
 										},
 										{
-											coordinates: [-87.1875, 164.75],
+											coordinates: [-184, 276.75],
 										},
 										{
-											coordinates: [-89.875, 160.9375],
+											coordinates: [-172.5, 276.5],
 										},
 										{
-											coordinates: [-90.125, 152.4375],
+											coordinates: [-170.75, 255.75],
 										},
 										{
-											coordinates: [-91.9375, 146.3125],
+											coordinates: [-166.75, 249],
 										},
 										{
-											coordinates: [-88.0625, 132.4375],
-										},
-										{
-											coordinates: [-84.1875, 124.4375],
+											coordinates: [-157.5, 249],
 										},
 									],
 								},
@@ -2528,82 +3068,85 @@ const CAMPAIGN_01 = {
 									interiorColor: 'rgb(226 178 3 / 40%)',
 									points: [
 										{
-											coordinates: [-30, 411.75],
+											coordinates: [-152.5, 795.375],
 										},
 										{
-											coordinates: [-28.6875, 435.75],
+											coordinates: [-128.25, 796.125],
 										},
 										{
-											coordinates: [-33.125, 436.0625],
+											coordinates: [-122.5, 786],
 										},
 										{
-											coordinates: [-36.5, 427.4375],
+											coordinates: [-105.875, 794.875],
 										},
 										{
-											coordinates: [-43.125, 426.125],
+											coordinates: [-97.5, 806.625],
 										},
 										{
-											coordinates: [-47.0625, 427.5625],
+											coordinates: [-90.625, 807.5],
 										},
 										{
-											coordinates: [-49.5625, 429.8125],
+											coordinates: [-77.625, 814.875],
 										},
 										{
-											coordinates: [-56.0625, 428.875],
+											coordinates: [-75.625, 812.25],
 										},
 										{
-											coordinates: [-59.625, 433.0625],
+											coordinates: [-58.5, 815.5],
 										},
 										{
-											coordinates: [-61.0625, 433.375],
+											coordinates: [-54.75, 835.375],
 										},
 										{
-											coordinates: [-62.125, 435.8125],
+											coordinates: [-59, 856.375],
 										},
 										{
-											coordinates: [-62.75, 438.25],
+											coordinates: [-56.5, 872.875],
 										},
 										{
-											coordinates: [-59.875, 439.125],
+											coordinates: [-69.125, 871.625],
 										},
 										{
-											coordinates: [-52.25, 436.625],
+											coordinates: [-73.75, 854.875],
 										},
 										{
-											coordinates: [-48.5, 438],
+											coordinates: [-87, 852.5],
 										},
 										{
-											coordinates: [-45.875, 440.875],
+											coordinates: [-96.625, 858.125],
 										},
 										{
-											coordinates: [-43.1875, 441.8125],
+											coordinates: [-105.375, 862.25],
 										},
 										{
-											coordinates: [-43.1875, 445.4375],
+											coordinates: [-110.75, 862.75],
 										},
 										{
-											coordinates: [-45.3125, 447.4375],
+											coordinates: [-121.875, 871.625],
 										},
 										{
-											coordinates: [-60.5625, 447.625],
+											coordinates: [-123, 875.375],
 										},
 										{
-											coordinates: [-76.875, 448],
+											coordinates: [-115.5, 876.25],
 										},
 										{
-											coordinates: [-76.375, 398.25],
+											coordinates: [-105.625, 873],
 										},
 										{
-											coordinates: [-56.5, 398.25],
+											coordinates: [-99.875, 874.375],
 										},
 										{
-											coordinates: [-49.6875, 402.9375],
+											coordinates: [-86.375, 883.25],
 										},
 										{
-											coordinates: [-49.75, 410.4375],
+											coordinates: [-85.875, 891],
 										},
 										{
-											coordinates: [-43.6875, 410.1875],
+											coordinates: [-89.375, 894.875],
+										},
+										{
+											coordinates: [-155.5, 895.625],
 										},
 									],
 								},
@@ -2759,8 +3302,8 @@ const CAMPAIGN_01 = {
 							name: 'Points of Interest',
 							items: [
 								{
-									lat: -326.25,
-									lng: 206.75,
+									lat: -329.375,
+									lng: 203.125,
 									label: 'Landing zone',
 									type: 'place',
 									icon: 'cityCapital',

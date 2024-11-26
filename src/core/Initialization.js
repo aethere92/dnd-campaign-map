@@ -1,3 +1,3 @@
 document.addEventListener('DOMContentLoaded', async () => {
-	const campaignManager = new CampaignManager('root', false);
+	const campaignManager = new CampaignManager('root', true);
 });

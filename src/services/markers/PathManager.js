@@ -9,6 +9,7 @@ class PathManager {
 		this.areaLayerGroup = L.layerGroup();
 		this.pathAnimationControl = new PathAnimationControl(this.map);
 		this.pathAnimations = new Map();
+		this.filterManager = new MapFilterManager(map);
 	}
 
 	// Initialization Methods
@@ -595,7 +596,6 @@ class PolylineManager {
 	openTextInputModal(pointIndex) {
 		const modal = document.createElement('div');
 		modal.className = 'debug__line-text-modal';
-
 		modal.innerHTML = `
             <h4 class="debug__line-text-modal--title">Add text for point ${pointIndex + 1}</h3>
             <textarea 
@@ -603,6 +603,19 @@ class PolylineManager {
                 rows="4" 
 				class="debug__line-text-modal--textarea"
                 placeholder="Enter description for this point..."></textarea>
+			<div class="debug__line-text-modal--actions">
+				<input id="debug-line-wait-input" type="number" placeholder="Wait timer"/>
+				<select id="debug-line-wait-type">
+					<option value="null">None</option>
+					<option value="fight">⚔️</option>
+					<option value="merchant">💰</option>
+					<option value="rest">💤</option>
+					<option value="conversation">💬</option>
+					<option value="loot">💎</option>
+					<option value="walk">👣</option>
+					<option value="question">❓</option>
+				</select>
+			</div>
             <div class="debug__line-text-modal--actions">
                 <button class="debug__line-text-modal--action" id="debug-line-text-cancel" style="margin-left: auto; background: #E2B203; color: black;">Cancel</button>
                 <button class="debug__line-text-modal--action" id="debug-line-text-save" style="background: #22A06B; color: white;">Save</button>
@@ -614,9 +627,26 @@ class PolylineManager {
 		// Handle save
 		document.getElementById('debug-line-text-save').onclick = () => {
 			const text = document.getElementById('debug-line-text-input').value;
+			const waitTimer = document.getElementById('debug-line-wait-input').value;
+			const waitType = document.getElementById('debug-line-wait-type').value;
+
 			if (text) {
 				this.points[pointIndex].text = text;
 			}
+
+			if (waitTimer) {
+				this.points[pointIndex].animationInfo = this.points[pointIndex].animationInfo || {};
+				this.points[pointIndex].animationInfo.waitTimer = parseInt(waitTimer);
+			}
+
+			if (waitType) {
+				if (!waitTimer && waitType == 'null') {
+				} else {
+					this.points[pointIndex].animationInfo = this.points[pointIndex].animationInfo || {};
+					this.points[pointIndex].animationInfo.animationType = waitType;
+				}
+			}
+
 			modal.remove();
 		};
 
@@ -730,6 +760,14 @@ class PolylineManager {
 				};
 				if (point.text) {
 					pointData.text = point.text;
+				}
+				if (point.animationInfo && point.animationInfo.waitTimer) {
+					pointData.animationInfo = pointData.animationInfo || {};
+					pointData.animationInfo.waitTimer = point.animationInfo.waitTimer;
+				}
+				if (point.animationInfo && point.animationInfo.animationType) {
+					pointData.animationInfo = pointData.animationInfo || {};
+					pointData.animationInfo.animationType = point.animationInfo.animationType;
 				}
 				return pointData;
 			}),
@@ -1132,7 +1170,7 @@ class MarkerManager {
 			lng: parseFloat(document.getElementById('debug-marker-modal-lng').value),
 			label: document.getElementById('debug-marker-modal-label').value,
 			type: document.getElementById('debug-marker-modal-type').value,
-			icon: selectedIcon && selectedIcon !== undefined ? selectedIcon + '.png' : null,
+			icon: selectedIcon && selectedIcon !== undefined ? selectedIcon : null,
 			iconType: document.getElementById('debug-marker-modal-icon-type').value,
 			mapLink: document.getElementById('debug-marker-modal-map-link').value || undefined,
 		};
@@ -1172,6 +1210,8 @@ class PathAnimationControl {
 		this.passedPoints = new Map(); // Track points that have been passed
 		this.textModal = this.createTextModal();
 		this.isModalCollapsed = window.innerWidth < 768; // Collapsed by default on mobile
+		this.filterManager = new MapFilterManager(map);
+		this.currentFilter = null;
 	}
 
 	createMarker() {
@@ -1297,6 +1337,9 @@ class PathAnimationControl {
 			case 'loot':
 				icon = '💎';
 				break;
+			case 'question':
+				icon = '❓';
+				break;
 			default:
 				icon = '👣';
 		}
@@ -1349,6 +1392,9 @@ class PathAnimationControl {
 			case 'walk':
 				effectContent = '👣';
 				break;
+			case 'question':
+				effectContent = '❓';
+				break;
 		}
 
 		container.textContent = effectContent;
@@ -1392,19 +1438,29 @@ class PathAnimationControl {
 	}
 
 	interpolatePosition(points, percentage) {
-		// Handle the case where we're exactly at the end
+		// Find current and next filter points
+		const findActiveFilter = (currentIndex) => {
+			// Look backward for the last valid filter
+			for (let i = currentIndex; i >= 0; i--) {
+				if (points[i].filter !== undefined) {
+					return points[i].filter;
+				}
+			}
+			return null; // No filter found
+		};
+
 		if (Math.abs(percentage - 1) < 0.01) {
 			const lastPoint = points[points.length - 1];
 			return {
 				position: lastPoint.coordinates,
 				animationInfo: lastPoint.animationInfo,
 				text: lastPoint.text,
+				filter: findActiveFilter(points.length - 1),
 			};
 		}
 
 		const totalDistance = this.calculatePathDistance(points.map((p) => p.coordinates));
 		const targetDistance = totalDistance * percentage;
-
 		let currentDistance = 0;
 
 		for (let i = 0; i < points.length - 1; i++) {
@@ -1419,25 +1475,27 @@ class PathAnimationControl {
 				const lat = p1.lat + (p2.lat - p1.lat) * ratio;
 				const lng = p1.lng + (p2.lng - p1.lng) * ratio;
 
-				// Check if we're at or very close to a point with text
+				// Determine which point we're closer to for animation info and text
 				const nearPoint = Math.abs(ratio - 0) < 0.01 ? points[i] : Math.abs(ratio - 1) < 0.01 ? points[i + 1] : null;
 
 				return {
 					position: [lat, lng],
 					animationInfo: nearPoint?.animationInfo,
 					text: nearPoint?.text,
+					filter: findActiveFilter(i), // Get the active filter for current position
 				};
 			}
 
 			currentDistance += segmentDistance;
 		}
 
-		// Fallback to last point if we somehow go beyond
+		// Fallback to last point
 		const lastPoint = points[points.length - 1];
 		return {
 			position: lastPoint.coordinates,
 			animationInfo: lastPoint.animationInfo,
 			text: lastPoint.text,
+			filter: findActiveFilter(points.length - 1),
 		};
 	}
 
@@ -1488,7 +1546,7 @@ class PathAnimationControl {
 
 			if (pauseStartTime !== null) {
 				const currentPauseTime = timestamp - pauseStartTime;
-				if (currentPauseTime < currentAnimationInfo.waitTimer * 1000) {
+				if (currentPauseTime < (currentAnimationInfo?.waitTimer || 0) * 1000) {
 					const animationId = requestAnimationFrame(animate);
 					this.animations.set(pathId, animationId);
 					return;
@@ -1501,24 +1559,43 @@ class PathAnimationControl {
 			const effectiveTime = timestamp - startTime - totalPausedTime;
 			let progress = (effectiveTime % duration) / duration;
 
-			// Force progress to exactly 1.0 on first complete loop
 			if (progress > 0.99 && !hasReachedEnd) {
 				progress = 1.0;
 				hasReachedEnd = true;
 			}
 
-			const { position, animationInfo, text } = this.interpolatePosition(points, progress);
+			const { position, animationInfo, text, filter } = this.interpolatePosition(points, progress);
 
 			if (marker) {
 				marker.setLatLng(position);
 
-				// Handle text display - only add if not already passed
+				// Handle filter changes - only process actual changes and valid filters
+				if (filter !== this.currentFilter) {
+					// If there's a current filter, disable it
+					if (this.currentFilter) {
+						this.filterManager.applyFilter({
+							mode: this.currentFilter,
+							enabled: false,
+						});
+					}
+
+					// If there's a new filter (and it's not null/undefined), enable it
+					if (filter) {
+						this.filterManager.applyFilter({
+							mode: filter,
+							enabled: true,
+						});
+					}
+
+					this.currentFilter = filter;
+				}
+
+				// Handle other animations...
 				if (text && !this.passedPoints.get(pathId).has(text)) {
 					this.passedPoints.get(pathId).add(text);
 					this.addTextToModal(text, pathId, animationInfo?.animationType);
 				}
 
-				// Handle animation effects
 				if (animationInfo && animationInfo !== currentAnimationInfo) {
 					currentAnimationInfo = animationInfo;
 
@@ -1557,6 +1634,15 @@ class PathAnimationControl {
 				marker.remove();
 			}
 		}
+
+		// Clear the current filter
+		if (this.currentFilter) {
+			this.filterManager.applyFilter({
+				mode: this.currentFilter,
+				enabled: false,
+			});
+			this.currentFilter = null;
+		}
 	}
 
 	updateAnimationVisibility(pathId, visible) {
@@ -1577,5 +1663,218 @@ class PathAnimationControl {
 			this.stopAnimation(pathId);
 			this.clearTextModal(pathId); // Clear modal when hiding animation
 		}
+	}
+}
+
+class MapFilterManager {
+	constructor(map) {
+		this.map = map;
+		this.activeFilters = new Set();
+		this.filterStyles = {
+			night: {
+				className: 'night-filter',
+				css: `
+                    .night-filter {
+                        filter: brightness(0.6) saturate(0.7);
+                        background: linear-gradient(to bottom, rgb(0 0 26 / 44%) 0%, rgb(0 0 81 / 44%) 100%);
+                        transition: all 0.5s ease;
+                    }
+                `,
+			},
+			rain: {
+				className: 'rain-filter',
+				css: `
+                    .rain-filter {
+                        position: relative;
+                        filter: brightness(0.9) saturate(0.9);
+                        background: linear-gradient(to bottom, 
+                            rgba(100,100,100,0.2) 0%,
+                            rgba(50,50,50,0.4) 100%);
+                    }
+                    .rain-filter::before {
+                        content: '';
+                        position: absolute;
+                        width: 100%;
+                        height: 100%;
+                        background: repeating-linear-gradient(transparent 0%,
+                            rgba(155,155,155,0.3) 90%,
+                            transparent 100%),
+                            repeating-linear-gradient(90deg,
+                            transparent 0%,
+                            rgba(155,155,155,0.3) 90%,
+                            transparent 100%);
+                        background-size: 50px 50px;
+                        animation: rain 0.5s linear infinite;
+                        opacity: 0.5;
+                    }
+                    @keyframes rain {
+                        0% { background-position: 0px 0px; }
+                        100% { background-position: -50px 50px; }
+                    }
+                `,
+			},
+			snow: {
+				className: 'snow-filter',
+				css: `
+                    .snow-filter {
+                        filter: brightness(1.1) contrast(0.95);
+                        background-color: rgba(255, 255, 255, 0.3);
+                        transition: all 0.5s ease;
+                    }
+                    .snow-filter::before {
+                        content: '';
+                        position: absolute;
+                        width: 100%;
+                        height: 100%;
+                        background: radial-gradient(circle at 50% 50%,
+                            rgba(255, 255, 255, 0.8) 0%,
+                            rgba(255, 255, 255, 0) 60%);
+                        background-size: 24px 24px;
+                        animation: snow 8s linear infinite;
+                        opacity: 0.4;
+                    }
+                    @keyframes snow {
+                        0% { background-position: 0px 0px; }
+                        100% { background-position: 24px 24px; }
+                    }
+                `,
+			},
+			fog: {
+				className: 'fog-filter',
+				css: `
+                    .fog-filter {
+                        filter: contrast(0.9) brightness(0.95);
+                        background: linear-gradient(45deg,
+                            rgba(255,255,255,0.4) 0%,
+                            rgba(255,255,255,0.2) 100%);
+                        transition: opacity 1s ease;
+                    }
+                    .fog-filter::before {
+                        content: '';
+                        position: absolute;
+                        width: 200%;
+                        height: 200%;
+                        background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.005' numOctaves='5' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+                        opacity: 0.4;
+                        animation: fog 20s linear infinite;
+                        transform: scale(1.5);
+                    }
+                    @keyframes fog {
+                        0% { transform: translate(0%, 0%) scale(1.5); }
+                        100% { transform: translate(-50%, -50%) scale(1.5); }
+                    }
+                `,
+			},
+		};
+		this.init();
+	}
+
+	init() {
+		this._injectStyles();
+		this._setupFilterContainer();
+	}
+
+	_injectStyles() {
+		// Remove any existing styles first
+		const existingStyle = document.getElementById('map-filter-styles');
+		if (existingStyle) {
+			existingStyle.remove();
+		}
+
+		const style = document.createElement('style');
+		style.id = 'map-filter-styles';
+		style.textContent = Object.values(this.filterStyles)
+			.map((filter) => filter.css)
+			.join('\n');
+		document.head.appendChild(style);
+	}
+
+	_setupFilterContainer() {
+		// Remove existing container if it exists
+		const existingContainer = document.querySelector('.map-filter-container');
+		if (existingContainer) {
+			existingContainer.innerHTML = null;
+		} else {
+			const mapContainer = this.map.getContainer();
+			const filterContainer = document.createElement('div');
+			filterContainer.className = 'map-filter-container';
+			filterContainer.style.cssText = `
+				position: absolute;
+				top: 0;
+				left: 0;
+				right: 0;
+				bottom: 0;
+				pointer-events: none;
+				z-index: 400;
+			`;
+			mapContainer.appendChild(filterContainer);
+			this.filterContainer = filterContainer;
+		}
+	}
+
+	applyFilter(filter) {
+		if (!filter || !filter.mode || !this.filterStyles[filter.mode]) {
+			return;
+		}
+
+		const className = this.filterStyles[filter.mode].className;
+		const existingFilter = this.filterContainer.querySelector(`.${className}`);
+
+		if (filter.enabled) {
+			if (!existingFilter) {
+				const filterElement = document.createElement('div');
+				filterElement.className = `map-filter ${className}`;
+				filterElement.style.cssText = `
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    opacity: 0;
+                    transition: opacity 0.5s ease;
+                `;
+				this.filterContainer.appendChild(filterElement);
+
+				// Force reflow before adding opacity
+				filterElement.offsetHeight;
+				filterElement.style.opacity = '1';
+
+				this.activeFilters.add(filter.mode);
+			}
+		} else if (existingFilter) {
+			existingFilter.style.opacity = '0';
+			setTimeout(() => {
+				if (existingFilter.parentNode) {
+					existingFilter.remove();
+				}
+			}, 500);
+			this.activeFilters.delete(filter.mode);
+		}
+	}
+
+	removeFilter(mode) {
+		const filterElement = this.filterContainer.querySelector(`.${this.filterStyles[mode].className}`);
+		if (filterElement) {
+			filterElement.style.opacity = '0';
+			setTimeout(() => {
+				if (filterElement.parentNode) {
+					filterElement.remove();
+				}
+			}, 500);
+			this.activeFilters.delete(mode);
+		}
+	}
+
+	clearFilters() {
+		const filters = this.filterContainer.querySelectorAll('.map-filter');
+		filters.forEach((filter) => {
+			filter.style.opacity = '0';
+			setTimeout(() => {
+				if (filter.parentNode) {
+					filter.remove();
+				}
+			}, 500);
+		});
+		this.activeFilters.clear();
 	}
 }
