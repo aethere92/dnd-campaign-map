@@ -367,7 +367,6 @@ class PathAnimationControl {
 
 				// Handle filter changes
 				if (filter !== currentFilter) {
-					console.log('Changing filter:', filter); // Debug log
 					if (currentFilter) {
 						this.filterManager.applyFilter({
 							mode: currentFilter,

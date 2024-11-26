@@ -8,7 +8,7 @@ class MapFilterManager {
 				css: `
                     .night-filter {
                         filter: brightness(0.6) saturate(0.7);
-                        background: linear-gradient(to bottom, rgb(0 0 26 / 44%) 0%, rgb(0 0 81 / 44%) 100%);
+                        background: linear-gradient(to bottom, rgb(0 0 73 / 44%) 0%, rgb(0 0 81 / 44%) 100%);
                         transition: all 0.5s ease;
                     }
                 `,
@@ -18,7 +18,7 @@ class MapFilterManager {
 				css: `
                     .night-half-filter {
                         filter: brightness(0.6) saturate(0.7);
-                        background: linear-gradient(to bottom, rgb(0 0 26 / 30%) 0%, rgb(0 0 81 / 30%) 100%);
+                        background: linear-gradient(to bottom, rgb(0 0 73 / 30%) 0%, rgb(0 0 81 / 30%) 100%);
                         transition: all 0.5s ease;
                     }
                 `,
@@ -38,26 +38,9 @@ class MapFilterManager {
 				css: `
                     .rain-filter {
                         position: relative;
-                        filter: brightness(0.9) saturate(0.9);
-                        background: linear-gradient(to bottom, 
-                            rgba(100,100,100,0.2) 0%,
-                            rgba(50,50,50,0.4) 100%);
-                    }
-                    .rain-filter::before {
-                        content: '';
-                        position: absolute;
-                        width: 100%;
-                        height: 100%;
-                        background: repeating-linear-gradient(transparent 0%,
-                            rgba(155,155,155,0.3) 90%,
-                            transparent 100%),
-                            repeating-linear-gradient(90deg,
-                            transparent 0%,
-                            rgba(155,155,155,0.3) 90%,
-                            transparent 100%);
-                        background-size: 50px 50px;
-                        animation: rain 0.5s linear infinite;
-                        opacity: 0.5;
+                        filter: brightness(0.9) saturate(0.9) invert(0.7);
+						background: url('images/assets/rain_texture.png');
+						animation: rain 0.6s linear infinite;
                     }
                     @keyframes rain {
                         0% { background-position: 0px 0px; }
