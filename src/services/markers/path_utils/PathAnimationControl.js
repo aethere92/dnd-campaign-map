@@ -12,6 +12,13 @@ class PathAnimationControl {
 		this.isModalCollapsed = window.innerWidth < 768; // Collapsed by default on mobile
 		this.filterManager = new MapFilterManager(map);
 		this.currentFilter = null;
+
+		// Cache for path distance calculations
+		this.pathDistanceCache = new Map();
+		// Cache for DOM elements to avoid repeated queries
+		this.domCache = new Map();
+		// Use performance.now() for more precise timing
+		this.performanceOffset = performance.timing.navigationStart + performance.now();
 	}
 
 	createMarker() {
@@ -163,48 +170,51 @@ class PathAnimationControl {
 	}
 
 	showEffect(marker, type) {
-		const container = marker.getElement().querySelector('.effect-container');
-		const markerImg = marker.getElement().querySelector('img');
+		// Cache DOM elements
+		const cacheKey = marker._leaflet_id;
+		let elements = this.domCache.get(cacheKey);
 
-		// Bounce animation for marker
-		markerImg.style.transform = 'scale(1.2)';
-		setTimeout(() => {
-			markerImg.style.transform = 'scale(1)';
-		}, 300);
-
-		let effectContent = '';
-		switch (type) {
-			case 'fight':
-				effectContent = '⚔️';
-				break;
-			case 'merchant':
-				effectContent = '💰';
-				break;
-			case 'rest':
-				effectContent = '💤';
-				break;
-			case 'conversation':
-				effectContent = '💬';
-				break;
-			case 'loot':
-				effectContent = '💎';
-				break;
-			case 'walk':
-				effectContent = '👣';
-				break;
-			case 'question':
-				effectContent = '❓';
-				break;
+		if (!elements) {
+			elements = {
+				container: marker.getElement().querySelector('.effect-container'),
+				markerImg: marker.getElement().querySelector('img'),
+			};
+			this.domCache.set(cacheKey, elements);
 		}
 
-		container.textContent = effectContent;
-		container.style.display = 'block';
+		const { container, markerImg } = elements;
 
-		// Animated appearance
-		setTimeout(() => {
-			container.style.transform = 'translateX(-50%) scale(1)';
-			container.style.opacity = '1';
-		}, 50);
+		// Use CSS transform instead of scale for better performance
+		markerImg.style.transform = 'scale3d(1.2, 1.2, 1)';
+
+		// Use requestAnimationFrame for smoother animations
+		requestAnimationFrame(() => {
+			container.textContent = this.getEffectContent(type);
+			container.style.display = 'block';
+
+			requestAnimationFrame(() => {
+				container.style.transform = 'translate3d(-50%, 0, 0) scale3d(1, 1, 1)';
+				container.style.opacity = '1';
+
+				setTimeout(() => {
+					markerImg.style.transform = 'scale3d(1, 1, 1)';
+				}, 300);
+			});
+		});
+	}
+
+	// Cache effect content
+	getEffectContent(type) {
+		const effectMap = {
+			fight: '⚔️',
+			merchant: '💰',
+			rest: '💤',
+			conversation: '💬',
+			loot: '💎',
+			walk: '👣',
+			question: '❓',
+		};
+		return effectMap[type] || '👣';
 	}
 
 	hideEffect(marker) {
@@ -228,18 +238,26 @@ class PathAnimationControl {
 	}
 
 	calculatePathDistance(points) {
+		// Cache path distance calculations
+		const cacheKey = points.map((p) => p.toString()).join('|');
+		if (this.pathDistanceCache.has(cacheKey)) {
+			return this.pathDistanceCache.get(cacheKey);
+		}
+
 		let distance = 0;
 		for (let i = 0; i < points.length - 1; i++) {
 			const p1 = L.latLng(points[i]);
 			const p2 = L.latLng(points[i + 1]);
 			distance += p1.distanceTo(p2);
 		}
+
+		this.pathDistanceCache.set(cacheKey, distance);
 		return distance;
 	}
 
 	interpolatePosition(points, percentage) {
-		// Handle exact end point
-		if (Math.abs(percentage - 1) < 0.01) {
+		// Quick return for end points
+		if (percentage >= 0.99) {
 			const lastPoint = points[points.length - 1];
 			return {
 				position: lastPoint.coordinates,
@@ -253,29 +271,29 @@ class PathAnimationControl {
 		const targetDistance = totalDistance * percentage;
 
 		let currentDistance = 0;
-		let lastPassedPoint = points[0]; // Keep track of the last point we passed
+		let lastPassedPoint = points[0];
 
-		for (let i = 0; i < points.length - 1; i++) {
+		// Use a more efficient loop
+		const len = points.length - 1;
+		for (let i = 0; i < len; i++) {
 			const p1 = L.latLng(points[i].coordinates);
 			const p2 = L.latLng(points[i + 1].coordinates);
 			const segmentDistance = p1.distanceTo(p2);
 
 			if (currentDistance + segmentDistance >= targetDistance) {
-				const remainingDistance = targetDistance - currentDistance;
-				const ratio = remainingDistance / segmentDistance;
+				const ratio = (targetDistance - currentDistance) / segmentDistance;
 
-				const lat = p1.lat + (p2.lat - p1.lat) * ratio;
-				const lng = p1.lng + (p2.lng - p1.lng) * ratio;
-
-				// Check if we're closer to the start or end of this segment
-				const nearPoint =
-					Math.abs(ratio - 0) < 0.01 ? points[i] : Math.abs(ratio - 1) < 0.01 ? points[i + 1] : points[i]; // Use the last passed point's filter
-
+				// Use more efficient calculations
 				return {
-					position: [lat, lng],
-					animationInfo: nearPoint?.animationInfo,
-					text: nearPoint?.text,
-					filter: nearPoint?.filter || lastPassedPoint.filter, // Use the last valid filter
+					position: [p1.lat + (p2.lat - p1.lat) * ratio, p1.lng + (p2.lng - p1.lng) * ratio],
+					animationInfo:
+						ratio < 0.01
+							? points[i].animationInfo
+							: ratio > 0.99
+							? points[i + 1].animationInfo
+							: points[i].animationInfo,
+					text: points[i].text,
+					filter: points[i].filter || lastPassedPoint.filter,
 				};
 			}
 
@@ -331,8 +349,17 @@ class PathAnimationControl {
 		let totalPausedTime = 0;
 		let currentAnimationInfo = null;
 		let hasReachedEnd = false;
+		let lastFrameTime = 0;
 
 		const animate = (timestamp) => {
+			// Throttle to 60fps
+			if (timestamp - lastFrameTime < 16.67) {
+				const animationId = requestAnimationFrame(animate);
+				this.animations.set(pathId, animationId);
+				return;
+			}
+			lastFrameTime = timestamp;
+
 			if (!this.pathVisibility.get(pathId) || !this.isAnimating.get(pathId)) {
 				this.stopAnimation(pathId);
 				return;
@@ -340,66 +367,56 @@ class PathAnimationControl {
 
 			if (!startTime) startTime = timestamp;
 
+			// Fixed pause timing logic
 			if (pauseStartTime !== null) {
-				const currentPauseTime = timestamp - pauseStartTime;
-				if (currentPauseTime < (currentAnimationInfo?.waitTimer || 0) * 1000) {
+				const pauseDuration = (currentAnimationInfo?.waitTimer || 0) * 1000;
+				if (timestamp - pauseStartTime < pauseDuration) {
 					const animationId = requestAnimationFrame(animate);
 					this.animations.set(pathId, animationId);
 					return;
-				} else {
-					totalPausedTime += currentPauseTime;
-					pauseStartTime = null;
 				}
+				totalPausedTime += timestamp - pauseStartTime;
+				pauseStartTime = null;
 			}
 
 			const effectiveTime = timestamp - startTime - totalPausedTime;
-			let progress = (effectiveTime % duration) / duration;
+			let progress = ((effectiveTime % duration) / duration) * 1;
 
 			if (progress > 0.99 && !hasReachedEnd) {
 				progress = 1.0;
 				hasReachedEnd = true;
 			}
 
-			const { position, animationInfo, text, filter } = this.interpolatePosition(points, progress);
+			const interpolated = this.interpolatePosition(points, progress);
 
 			if (marker) {
-				marker.setLatLng(position);
+				marker.setLatLng(interpolated.position);
 
-				// Handle filter changes
-				if (filter !== currentFilter) {
-					if (currentFilter) {
-						this.filterManager.applyFilter({
-							mode: currentFilter,
-							enabled: false,
-						});
-					}
-					if (filter) {
-						this.filterManager.applyFilter({
-							mode: filter,
-							enabled: true,
-						});
-					}
-					currentFilter = filter;
+				if (interpolated.filter !== currentFilter) {
+					this.updateFilter(currentFilter, interpolated.filter);
+					currentFilter = interpolated.filter;
 				}
 
-				if (text && !this.passedPoints.get(pathId).has(text)) {
-					this.passedPoints.get(pathId).add(text);
-					this.addTextToModal(text, pathId, animationInfo?.animationType);
-				}
-
-				if (animationInfo && animationInfo !== currentAnimationInfo) {
-					currentAnimationInfo = animationInfo;
-
-					if (animationInfo.waitTimer) {
+				// Check for new animation info and handle pausing
+				if (interpolated.animationInfo && interpolated.animationInfo !== currentAnimationInfo) {
+					if (interpolated.animationInfo.waitTimer && pauseStartTime === null) {
 						pauseStartTime = timestamp;
 					}
 
-					if (animationInfo.animationType) {
-						this.showEffect(marker, animationInfo.animationType);
+					if (interpolated.animationInfo.animationType) {
+						this.showEffect(marker, interpolated.animationInfo.animationType);
 						setTimeout(() => {
 							this.hideEffect(marker);
-						}, (animationInfo.waitTimer || 1) * 1000);
+						}, (interpolated.animationInfo.waitTimer || 1) * 1000);
 					}
+
+					currentAnimationInfo = interpolated.animationInfo;
+				}
+
+				// Handle text updates
+				if (interpolated.text && !this.passedPoints.get(pathId).has(interpolated.text)) {
+					this.passedPoints.get(pathId).add(interpolated.text);
+					this.addTextToModal(interpolated.text, pathId, interpolated.animationInfo?.animationType);
 				}
 			}
 
@@ -428,6 +445,44 @@ class PathAnimationControl {
 
 		// Clear any active filters
 		this.filterManager.clearFilters();
+	}
+
+	updateFilter(currentFilter, newFilter) {
+		if (currentFilter) {
+			this.filterManager.applyFilter({
+				mode: currentFilter,
+				enabled: false,
+			});
+		}
+		if (newFilter) {
+			this.filterManager.applyFilter({
+				mode: newFilter,
+				enabled: true,
+			});
+		}
+	}
+
+	updateTextAndEffects(pathId, marker, interpolated, currentAnimationInfo, timestamp) {
+		const { text, animationInfo } = interpolated;
+		const passedPoints = this.passedPoints.get(pathId);
+
+		if (text && !passedPoints.has(text)) {
+			passedPoints.add(text);
+			this.addTextToModal(text, pathId, animationInfo?.animationType);
+		}
+
+		if (animationInfo && animationInfo !== currentAnimationInfo) {
+			if (animationInfo.waitTimer) {
+				this.pauseStartTime = timestamp;
+			}
+
+			if (animationInfo.animationType) {
+				this.showEffect(marker, animationInfo.animationType);
+				setTimeout(() => {
+					this.hideEffect(marker);
+				}, (animationInfo.waitTimer || 1) * 1000);
+			}
+		}
 	}
 
 	updateAnimationVisibility(pathId, visible) {

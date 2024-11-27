@@ -2470,7 +2470,6 @@ const CAMPAIGN_01 = {
 								},
 								{
 									coordinates: [-174.875, 673.125],
-									filter: 'night',
 								},
 								{
 									coordinates: [-166.25, 672.5],
@@ -2610,16 +2609,16 @@ const CAMPAIGN_01 = {
 								},
 								{
 									coordinates: [-396, 681],
+									animationInfo: {
+										waitTimer: 2,
+										animationType: 'question',
+									},
 								},
 								{
 									coordinates: [-396, 673.375],
 								},
 								{
 									coordinates: [-394.25, 672.25],
-									animationInfo: {
-										waitTimer: 2,
-										animationType: 'question',
-									},
 								},
 								{
 									coordinates: [-391.125, 670.25],
