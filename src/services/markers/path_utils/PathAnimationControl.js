@@ -78,10 +78,8 @@ class PathAnimationControl {
 
 		// Initialize the state after the modal is fully created
 		if (this.isModalCollapsed) {
-			listContainer.style.maxHeight = '0';
 			toggleButton.style.transform = 'rotate(-90deg)';
 		} else {
-			listContainer.style.maxHeight = '350px';
 			toggleButton.style.transform = 'rotate(0deg)';
 		}
 
@@ -94,11 +92,9 @@ class PathAnimationControl {
 		const toggleButton = this.textModal.querySelector('.path-text-toggle');
 
 		if (this.isModalCollapsed) {
-			listContainer.style.maxHeight = '0';
 			toggleButton.style.transform = 'rotate(-90deg)';
 			listContainer.style.display = 'none';
 		} else {
-			listContainer.style.maxHeight = '350px';
 			toggleButton.style.transform = 'rotate(0deg)';
 			listContainer.style.display = 'block';
 		}
@@ -109,26 +105,24 @@ class PathAnimationControl {
 		const toggleButton = this.textModal.querySelector('.path-text-toggle');
 
 		if (this.isModalCollapsed) {
-			listContainer.style.maxHeight = '0';
 			toggleButton.style.transform = 'rotate(-90deg)';
 			this.textModal.style.transform = 'translateY(calc(100% - 45px))';
 			listContainer.style.display = 'none';
 		} else {
-			listContainer.style.maxHeight = '350px';
 			toggleButton.style.transform = 'rotate(0deg)';
 			this.textModal.style.transform = 'translateY(0)';
 			listContainer.style.display = 'block';
 		}
 	}
 
-	addTextToModal(text, pathId, animationType) {
+	addTextToModal(text, pathId, type, loot, level) {
 		const list = this.textModal.querySelector('.path-text-list');
 		const listItem = document.createElement('li');
 		listItem.classList.add('path-text-item');
 
 		// Add icon based on animation type
 		let icon = '';
-		switch (animationType) {
+		switch (type) {
 			case 'fight':
 				icon = '⚔️';
 				break;
@@ -151,7 +145,45 @@ class PathAnimationControl {
 				icon = '👣';
 		}
 
-		listItem.innerHTML = `<span class="path-text">${text}</span><span class="path-event-icon">${icon}</span>`;
+		listItem.innerHTML = `<div class="path-item-row">
+			<span class="path-text">${text}</span>
+			<span class="path-event-icon">${icon}</span>
+		</div>`;
+
+		if (loot || level) {
+			const itemRow = document.createElement('div');
+			itemRow.className = 'path-item-column';
+
+			if (loot) {
+				const lootContainer = document.createElement('div');
+				lootContainer.className = 'path-item-loot-container';
+
+				lootContainer.innerHTML = '<span class="path-item-loot-title">New loot</span>';
+
+				loot.forEach((item) => {
+					const itemContainer = document.createElement('div');
+					itemContainer.className = 'path-item-loot-container-item';
+
+					itemContainer.innerHTML = `<div class="loot-item-icon icon-${item?.rarity ?? 'common'}"></div>
+						<span class='loot-item rarity-${item?.rarity ?? 'common'}' title='${item?.description ?? 'No description.'}'>${
+						item.name
+					}</span>`;
+
+					lootContainer.append(itemContainer);
+				});
+
+				itemRow.append(lootContainer);
+			}
+
+			if (level) {
+				itemRow.insertAdjacentHTML(
+					'beforeEnd',
+					`<span class="path-item-level">Reached <strong>level ${level}!</strong></span>`
+				);
+			}
+
+			listItem.append(itemRow);
+		}
 		list.appendChild(listItem);
 
 		// Show modal if it's the first item
@@ -261,9 +293,11 @@ class PathAnimationControl {
 			const lastPoint = points[points.length - 1];
 			return {
 				position: lastPoint.coordinates,
-				animationInfo: lastPoint.animationInfo,
+				animation: lastPoint.animation,
 				text: lastPoint.text,
 				filter: lastPoint.filter,
+				level: lastPoint.level,
+				loot: lastPoint.loot,
 			};
 		}
 
@@ -286,14 +320,11 @@ class PathAnimationControl {
 				// Use more efficient calculations
 				return {
 					position: [p1.lat + (p2.lat - p1.lat) * ratio, p1.lng + (p2.lng - p1.lng) * ratio],
-					animationInfo:
-						ratio < 0.01
-							? points[i].animationInfo
-							: ratio > 0.99
-							? points[i + 1].animationInfo
-							: points[i].animationInfo,
+					animation: ratio < 0.01 ? points[i].animation : ratio > 0.99 ? points[i + 1].animation : points[i].animation,
 					text: points[i].text,
 					filter: points[i].filter || lastPassedPoint.filter,
+					loot: points[i]?.loot ?? null,
+					level: points[i]?.level ?? null,
 				};
 			}
 
@@ -306,9 +337,11 @@ class PathAnimationControl {
 		const lastPoint = points[points.length - 1];
 		return {
 			position: lastPoint.coordinates,
-			animationInfo: lastPoint.animationInfo,
+			animation: lastPoint.animation,
 			text: lastPoint.text,
 			filter: lastPoint.filter,
+			level: lastPoint.level,
+			loot: lastPoint.loot,
 		};
 	}
 
@@ -347,7 +380,7 @@ class PathAnimationControl {
 		let startTime = null;
 		let pauseStartTime = null;
 		let totalPausedTime = 0;
-		let currentAnimationInfo = null;
+		let currentanimation = null;
 		let hasReachedEnd = false;
 		let lastFrameTime = 0;
 
@@ -369,7 +402,7 @@ class PathAnimationControl {
 
 			// Fixed pause timing logic
 			if (pauseStartTime !== null) {
-				const pauseDuration = (currentAnimationInfo?.waitTimer || 0) * 1000;
+				const pauseDuration = (currentanimation?.timer || 0) * 1000;
 				if (timestamp - pauseStartTime < pauseDuration) {
 					const animationId = requestAnimationFrame(animate);
 					this.animations.set(pathId, animationId);
@@ -398,25 +431,31 @@ class PathAnimationControl {
 				}
 
 				// Check for new animation info and handle pausing
-				if (interpolated.animationInfo && interpolated.animationInfo !== currentAnimationInfo) {
-					if (interpolated.animationInfo.waitTimer && pauseStartTime === null) {
+				if (interpolated.animation && interpolated.animation !== currentanimation) {
+					if (interpolated.animation.timer && pauseStartTime === null) {
 						pauseStartTime = timestamp;
 					}
 
-					if (interpolated.animationInfo.animationType) {
-						this.showEffect(marker, interpolated.animationInfo.animationType);
+					if (interpolated.animation.type) {
+						this.showEffect(marker, interpolated.animation.type);
 						setTimeout(() => {
 							this.hideEffect(marker);
-						}, (interpolated.animationInfo.waitTimer || 1) * 1000);
+						}, (interpolated.animation.timer || 1) * 1000);
 					}
 
-					currentAnimationInfo = interpolated.animationInfo;
+					currentanimation = interpolated.animation;
 				}
 
 				// Handle text updates
 				if (interpolated.text && !this.passedPoints.get(pathId).has(interpolated.text)) {
 					this.passedPoints.get(pathId).add(interpolated.text);
-					this.addTextToModal(interpolated.text, pathId, interpolated.animationInfo?.animationType);
+					this.addTextToModal(
+						interpolated.text,
+						pathId,
+						interpolated.animation?.type,
+						interpolated?.loot,
+						interpolated?.level
+					);
 				}
 			}
 
@@ -462,25 +501,25 @@ class PathAnimationControl {
 		}
 	}
 
-	updateTextAndEffects(pathId, marker, interpolated, currentAnimationInfo, timestamp) {
-		const { text, animationInfo } = interpolated;
+	updateTextAndEffects(pathId, marker, interpolated, currentanimation, timestamp) {
+		const { text, animation } = interpolated;
 		const passedPoints = this.passedPoints.get(pathId);
 
 		if (text && !passedPoints.has(text)) {
 			passedPoints.add(text);
-			this.addTextToModal(text, pathId, animationInfo?.animationType);
+			this.addTextToModal(text, pathId, animation?.type);
 		}
 
-		if (animationInfo && animationInfo !== currentAnimationInfo) {
-			if (animationInfo.waitTimer) {
+		if (animation && animation !== currentanimation) {
+			if (animation.timer) {
 				this.pauseStartTime = timestamp;
 			}
 
-			if (animationInfo.animationType) {
-				this.showEffect(marker, animationInfo.animationType);
+			if (animation.type) {
+				this.showEffect(marker, animation.type);
 				setTimeout(() => {
 					this.hideEffect(marker);
-				}, (animationInfo.waitTimer || 1) * 1000);
+				}, (animation.timer || 1) * 1000);
 			}
 		}
 	}

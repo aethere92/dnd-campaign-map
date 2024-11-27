@@ -516,17 +516,32 @@ html {
 	max-width: 350px;
 	z-index: 1000;
 	display: none;
+	cursor: default;
 }
 
 .path-text-list {
 	list-style: none;
 	padding: 0;
 	margin: 0;
-	max-height: 250px;
+	max-height: 500px;
 	overflow: auto;
 	display: flex;
 	gap: 0.25rem;
 	flex-direction: column;
+}
+
+.path-item-row {
+	display: flex;
+	width: 100%;
+	align-items: center;
+}
+
+.path-item-column {
+	display: flex;
+	width: 100%;
+	flex-direction: column;
+	justify-content: center;
+	gap: 0.5rem;
 }
 
 .path-text-item {
@@ -535,6 +550,7 @@ html {
 	background: #f8f9fa;
 	display: flex;
 	align-items: center;
+	flex-direction: column;
 	gap: 0.25rem;
 }
 
@@ -562,4 +578,73 @@ html {
 	margin: 0;
 	margin-left: auto;
 	padding: 0;
+}
+
+.path-item-loot-container {
+	display: flex;
+	flex-direction: column;
+	gap: 0.25rem;
+	flex-wrap: wrap;
+}
+
+.loot-item {
+	cursor: pointer;
+
+	&:hover {
+		text-decoration: underline;
+	}
+}
+
+.rarity-common {
+	color: #555;
+}
+
+.rarity-uncommon {
+	color: #28ad2e;
+}
+
+.rarity-rare {
+	color: #0070dd;
+}
+
+.path-item-loot-container-item {
+	display: flex;
+	gap: 0.25rem;
+	padding-left: 2rem;
+}
+
+.loot-item-icon {
+	height: 16px;
+	width: 16px;
+	border-radius: 0.125rem;
+}
+
+.icon-common {
+	background: #555;
+}
+
+.icon-uncommon {
+	background: #72a875;
+}
+
+.icon-rare {
+	background: #0070dd;
+}
+
+.path-item-level {
+	background: #e91e63;
+	padding: 0.125rem;
+	padding-left: 0.5rem;
+	border-radius: 0.25rem;
+	color: white;
+}
+
+.path-item-loot-title {
+	font-weight: 600;
+	background: #795548;
+	color: white;
+	padding: 0.125rem;
+	border-radius: 0.125rem;
+	padding-left: 0.25rem;
+	margin-left: 1.5rem;
 }
