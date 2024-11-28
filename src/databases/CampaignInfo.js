@@ -6,6 +6,50 @@ const CAMPAIGN_DATA = [
 			description:
 				'Six adventurers — a cleric, ranger, sorcerer, bard, and two barbarians — receive mysterious invitations to a strange, distant land. Teaming up with a band of pirates, they embark on an epic journey, battling fearsome monsters and navigating treacherous seas. Their quest takes an unexpected turn as they find themselves stranded on the enigmatic island of Korinis, where new challenges and hidden secrets await.',
 			levelRange: '3-8',
+			characters: [
+				{
+					name: 'Aenwyn',
+					class: 'Sorcerer',
+					race: 'Elf',
+					level: 7,
+					icon: 'images/assets/character_thumbnails/campaign_001/aenwyn.jpeg',
+				},
+				{
+					name: 'Aethere',
+					class: 'Bard',
+					race: 'Half-Elf',
+					level: 7,
+					icon: 'images/assets/character_thumbnails/campaign_001/aethere.jpeg',
+				},
+				{
+					name: 'Alezander',
+					class: 'Barbarian',
+					race: 'Half-Orc',
+					level: 7,
+					icon: 'images/assets/character_thumbnails/campaign_001/alezander.jpeg',
+				},
+				{
+					name: 'Nora',
+					class: 'Ranger',
+					race: 'Half-Elf',
+					level: 7,
+					icon: 'images/assets/character_thumbnails/campaign_001/nora.png',
+				},
+				{
+					name: 'Samantha',
+					class: 'Cleric',
+					race: 'Halfling',
+					level: 7,
+					icon: 'images/assets/character_thumbnails/campaign_001/samantha.jpeg',
+				},
+				{
+					name: 'Smasherina',
+					class: 'Barbarian',
+					race: 'Halfling',
+					level: 7,
+					icon: 'images/assets/character_thumbnails/campaign_001/smasherina.jpg',
+				},
+			],
 		},
 		styling: {
 			icon: 'images/pageicon.png',
@@ -153,6 +197,15 @@ class CampaignManager {
 				</div>
         `;
 
+		if (campaign?.metadata?.characters) {
+			const characterCards = this.#createCampaignCharacters(campaign);
+			const characterCardsContainer = document.createElement('div');
+			characterCardsContainer.className = 'campaign-characters';
+			characterCards.forEach((card) => characterCardsContainer.appendChild(card));
+
+			card.append(characterCardsContainer);
+		}
+
 		if (campaign.data) {
 			card.addEventListener('click', () => this.loadCampaign(campaign.id, defaultMap));
 		} else {
@@ -160,6 +213,29 @@ class CampaignManager {
 		}
 
 		return card;
+	}
+
+	#createCampaignCharacters(campaign) {
+		if (!campaign?.metadata?.characters) return;
+
+		const characterCards = campaign.metadata.characters.map((character) => {
+			const characterCard = document.createElement('div');
+			characterCard.className = 'campaign-character-card';
+
+			characterCard.innerHTML = `
+				<div class="character-card-item">
+					<img src="${character?.icon}" class="character-card-icon"/>
+				</div>
+				<div class="character-card-item item-row">
+					<span class="character-card-name">${character.name}</span>
+					<span class="character-card-info">Level ${character.level} | ${character.race} | ${character.class}</span>
+				</div>
+			`;
+
+			return characterCard;
+		});
+
+		return characterCards;
 	}
 
 	#isCampaignValid(campaignId) {
@@ -229,7 +305,7 @@ class CampaignManager {
 		window.history.pushState({ view: 'campaigns', campaignId }, '', currentUrl.toString());
 
 		// Show/hide appropriate views
-		document.getElementById('campaign-selection').style.display = 'block';
+		document.getElementById('campaign-selection').style.display = 'flex';
 		document.getElementById('map').style.display = 'none';
 		document.getElementById('actions').style.display = 'none';
 	}
