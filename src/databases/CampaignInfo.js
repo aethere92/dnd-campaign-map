@@ -220,16 +220,17 @@ class CampaignManager {
 
 		const characterCards = campaign.metadata.characters.map((character) => {
 			const characterCard = document.createElement('div');
-			characterCard.className = 'campaign-character-card';
+			characterCard.className = `campaign-character-card`;
 
 			characterCard.innerHTML = `
-				<div class="character-card-item">
-					<img src="${character?.icon}" class="character-card-icon"/>
-				</div>
 				<div class="character-card-item item-row">
 					<span class="character-card-name">${character.name}</span>
-					<span class="character-card-info">Level ${character.level} | ${character.race} | ${character.class}</span>
+					<span class="character-card-info">Lvl ${character.level} | ${character.race} | ${character.class}</span>
 				</div>
+				<div class="character-card-item">
+					<img src="${character?.icon}" class="character-card-icon icon-${character.class.toLowerCase()}"/>
+				</div>
+
 			`;
 
 			return characterCard;
