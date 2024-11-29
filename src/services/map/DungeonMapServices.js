@@ -71,7 +71,7 @@ class CustomMap {
 			zoomControl: true,
 			attributionControl: true,
 			rotate: true,
-			touchRotate: true,
+			touchRotate: false,
 		});
 
 		this.#map.customMap = this;
@@ -85,14 +85,6 @@ class CustomMap {
 				UrlManager.clearTarget(this.#currentMapKey);
 			}
 		});
-
-		// this.#map.on('rotate', (e) => {
-		// 	const lc = document.querySelector(
-		// 		'#map > div.leaflet-control-container > div.leaflet-top.leaflet-right > div > a'
-		// 	);
-		// 	const bearing = e.target._bearing;
-		// 	lc.style.transform = `rotate(${bearing * 60}deg)`;
-		// });
 	}
 
 	#initializeServices() {

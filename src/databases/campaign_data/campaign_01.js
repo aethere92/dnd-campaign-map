@@ -10,14 +10,6 @@ const CAMPAIGN_01_ALIASES = {
 
 	// KORINIS
 	korinis_island: 'world_maps.submaps.islands.korinis_island',
-
-	// KORINIS POIs
-	korinis_city_blacksmith:
-		'world_maps.submaps.islands.korinis_island.submaps.interiors.korinis_island_interior_blacksmith',
-	korinis_lower_city_inn:
-		'world_maps.submaps.islands.korinis_island.submaps.interiors.korinis_island_interior_town_inn',
-	korinis_city_harbour_inn:
-		'world_maps.submaps.islands.korinis_island.submaps.interiors.korinis_island_interior_harbour_inn',
 	korinis_pyramid:
 		'world_maps.submaps.islands.korinis_island.submaps.interiors.korinis_island_interior_water_mages_pyramid',
 	korinis_teleporter_c:
@@ -639,7 +631,6 @@ const CAMPAIGN_01 = {
 									type: 'people',
 									icon: 'tradeForge',
 									iconType: 'png',
-									mapLink: 'korinis_city_blacksmith',
 								},
 								{
 									lat: -98.25,
@@ -727,8 +718,8 @@ const CAMPAIGN_01 = {
 									iconType: 'png',
 								},
 								{
-									lat: -7.625,
-									lng: 213.5,
+									lat: -277,
+									lng: 412,
 									label: 'World Map',
 									type: 'text',
 									fontSize: 20,
@@ -741,7 +732,6 @@ const CAMPAIGN_01 = {
 									type: 'place',
 									icon: 'poiBed',
 									iconType: 'png',
-									mapLink: 'korinis_lower_city_inn',
 								},
 								{ lat: -173.3125, lng: 676.1875, label: 'Inn', type: 'place', icon: 'poiBed', iconType: 'png' },
 								{
@@ -752,7 +742,6 @@ const CAMPAIGN_01 = {
 									icon: 'poiBed',
 									iconType: 'png',
 									image: 'af14542d-6e79-4d4d-b9d7-8e2037a45307.jpg',
-									mapLink: 'korinis_city_harbour_inn',
 								},
 								{
 									lat: -116.5,
@@ -821,7 +810,7 @@ const CAMPAIGN_01 = {
 									label: 'Teleporter Exit B',
 									type: 'place',
 									icon: 'iconPortal',
-									type: 'spin',
+									animationType: 'spin',
 								},
 								{
 									lat: -198.3125,
@@ -829,7 +818,7 @@ const CAMPAIGN_01 = {
 									label: 'Teleporter Exit C',
 									type: 'place',
 									icon: 'iconPortal',
-									type: 'spin',
+									animationType: 'spin',
 									mapLink: 'korinis_teleporter_c',
 								},
 								{
@@ -3186,39 +3175,6 @@ const CAMPAIGN_01 = {
 					},
 					submaps: {
 						interiors: {
-							korinis_island_interior_town_inn: {
-								metadata: {
-									path: 'maps/interiors/korinis_island/town_inn',
-									sizes: {
-										maxZoom: 3,
-										imageWidth: 3300,
-										imageHeight: 3300,
-									},
-									backgroundColor: 'linear-gradient(0deg, #292315, #0c0805)',
-								},
-							},
-							korinis_island_interior_harbour_inn: {
-								metadata: {
-									path: 'maps/interiors/korinis_island/harbour_inn',
-									sizes: {
-										maxZoom: 3,
-										imageWidth: 4200,
-										imageHeight: 4500,
-									},
-									backgroundColor: 'linear-gradient(0deg, #292315, #0c0805)',
-								},
-							},
-							korinis_island_interior_blacksmith: {
-								metadata: {
-									path: 'maps/interiors/korinis_island/blacksmith',
-									sizes: {
-										maxZoom: 3,
-										imageWidth: 3450,
-										imageHeight: 2250,
-									},
-									backgroundColor: 'linear-gradient(0deg, #292315, #0c0805)',
-								},
-							},
 							korinis_island_interior_pyramid_teleporter_c: {
 								metadata: {
 									path: 'maps/interiors/korinis_island/pyramid_teleporter/teleporter_c',
@@ -3236,11 +3192,26 @@ const CAMPAIGN_01 = {
 											{
 												lat: -110,
 												lng: 196.625,
-												label: 'Teleporter to A/B/C',
+												label: 'Teleporter to A (Pyramid)',
 												type: 'place',
 												icon: 'iconPortal',
-												type: 'spin',
+												animationType: 'spin',
 												iconType: 'png',
+												mapLink: 'korinis_pyramid',
+											},
+										],
+									},
+									navigation_arrows: {
+										name: 'Navigation arrows',
+										items: [
+											{
+												lat: -38.625,
+												lng: 63.125,
+												label: 'To Korinis Island',
+												type: 'place',
+												icon: 'arrowDirectionUp',
+												iconType: 'png',
+												mapLink: 'korinis_island',
 											},
 										],
 									},
@@ -3255,6 +3226,22 @@ const CAMPAIGN_01 = {
 										imageHeight: 4800,
 									},
 									backgroundColor: 'rgb(13 15 3)',
+								},
+								annotations: {
+									navigation: {
+										name: 'Navigation arrows',
+										items: [
+											{
+												lat: -579.5,
+												lng: 882,
+												label: 'To Korinis Island',
+												type: 'people',
+												icon: 'arrowDirectionDown',
+												iconType: 'png',
+												mapLink: 'korinis_island',
+											},
+										],
+									},
 								},
 							},
 						},
@@ -3280,6 +3267,7 @@ const CAMPAIGN_01 = {
 												type: 'place',
 												icon: 'arrowDirectionDown',
 												iconType: 'png',
+												mapLink: 'korinis_island',
 											},
 											{
 												lat: -200,
@@ -3375,6 +3363,14 @@ const CAMPAIGN_01 = {
 									type: 'place',
 									icon: 'cityCapital',
 									iconType: 'png',
+								},
+								{
+									lat: -367,
+									lng: 16,
+									label: 'Back to world map',
+									type: 'text',
+									fontSize: 15,
+									mapLink: 'world_maps',
 								},
 							],
 						},
@@ -3570,6 +3566,21 @@ const CAMPAIGN_01 = {
 							imageHeight: 3072,
 						},
 						backgroundColor: '#0a1c21',
+					},
+					annotations: {
+						points_of_interest: {
+							name: 'Points of Interest',
+							items: [
+								{
+									lat: -364,
+									lng: 36,
+									label: 'Back to world map',
+									type: 'text',
+									fontSize: 15,
+									mapLink: 'world_maps',
+								},
+							],
+						},
 					},
 				},
 			},
