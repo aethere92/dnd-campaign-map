@@ -70,6 +70,8 @@ class CustomMap {
 			minZoom: 0,
 			zoomControl: true,
 			attributionControl: true,
+			rotate: true,
+			touchRotate: true,
 		});
 
 		this.#map.customMap = this;
@@ -83,6 +85,14 @@ class CustomMap {
 				UrlManager.clearTarget(this.#currentMapKey);
 			}
 		});
+
+		// this.#map.on('rotate', (e) => {
+		// 	const lc = document.querySelector(
+		// 		'#map > div.leaflet-control-container > div.leaflet-top.leaflet-right > div > a'
+		// 	);
+		// 	const bearing = e.target._bearing;
+		// 	lc.style.transform = `rotate(${bearing * 60}deg)`;
+		// });
 	}
 
 	#initializeServices() {
@@ -548,7 +558,9 @@ class CustomMap {
 			this.#services.nestedLayerControl = null;
 		}
 
-		const controlContainers = document.querySelectorAll('.leaflet-control-container .leaflet-control');
+		const controlContainers = document.querySelectorAll(
+			'.leaflet-control-container .leaflet-control:not(.leaflet-control-rotate)'
+		);
 		controlContainers.forEach((container) => {
 			if (container.parentNode && !container.classList.contains('leaflet-control-zoom')) {
 				container.parentNode.removeChild(container);
