@@ -36,6 +36,9 @@ const FILTER_CONFIGS = {
 			transform: 'scale(1.5)',
 		},
 	},
+	fight: {
+		background: 'radial-gradient(at center, rgba(63,94,251,0) 0%, rgba(63,94,251,0) 60%, rgba(231,32,72,0.6) 100%)',
+	},
 };
 
 class MapFilterManager {

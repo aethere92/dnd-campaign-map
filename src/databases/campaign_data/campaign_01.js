@@ -1075,9 +1075,11 @@ const CAMPAIGN_01 = {
 										timer: 3,
 										type: 'fight',
 									},
+									filter: 'fight',
 								},
 								{
 									coordinates: [-192.5, 196.625],
+									filter: null,
 								},
 								{
 									coordinates: [-191.5625, 172.6875],
@@ -1154,22 +1156,22 @@ const CAMPAIGN_01 = {
 										timer: 2,
 										type: 'conversation',
 									},
-									filter: 'night',
 								},
 								{
 									coordinates: [-138.9375, 337.9375],
-									filter: null,
 								},
 								{
 									coordinates: [-137.875, 342.5],
 									text: "We went back to the farmer's wife and gave her the pan. She gave us food to eat. After that, we talked to the lead farmer again and slept in the barn.",
 									animation: {
-										timer: 2,
+										timer: 3,
 										type: 'rest',
 									},
+									filter: 'night',
 								},
 								{
 									coordinates: [-137.6875, 347.75],
+									filter: null,
 								},
 								{
 									coordinates: [-140.25, 358.625],
@@ -1233,6 +1235,7 @@ const CAMPAIGN_01 = {
 										timer: 5,
 										type: 'rest',
 									},
+									filter: 'night',
 								},
 							],
 						},
@@ -1336,9 +1339,11 @@ const CAMPAIGN_01 = {
 										timer: 3,
 										type: 'fight',
 									},
+									filter: 'fight',
 								},
 								{
 									coordinates: [-204.6875, 564.75],
+									filter: null,
 								},
 								{
 									coordinates: [-209.375, 566.1875],
@@ -1523,6 +1528,7 @@ const CAMPAIGN_01 = {
 										timer: 5,
 										type: 'rest',
 									},
+									filter: 'night',
 								},
 							],
 						},
@@ -1631,9 +1637,11 @@ const CAMPAIGN_01 = {
 										timer: 5,
 										type: 'fight',
 									},
+									filter: 'fight',
 								},
 								{
 									coordinates: [-100.875, 322.5],
+									filter: null,
 								},
 								{
 									coordinates: [-98.5625, 318.5],
@@ -1663,9 +1671,11 @@ const CAMPAIGN_01 = {
 										timer: 3,
 										type: 'fight',
 									},
+									filter: 'fight',
 								},
 								{
 									coordinates: [-91.9375, 351.625],
+									filter: null,
 								},
 								{
 									coordinates: [-90.9375, 340.4375],
@@ -1776,6 +1786,7 @@ const CAMPAIGN_01 = {
 										timer: 5,
 										type: 'rest',
 									},
+									filter: 'night',
 								},
 							],
 						},
@@ -2017,11 +2028,13 @@ const CAMPAIGN_01 = {
 										timer: 5,
 										type: 'fight',
 									},
+									filter: 'fight',
 								},
 								{
 									coordinates: [-111.21875, 558.65625],
 									pointWidth: 1,
 									pointColor: 'yellow',
+									filter: null,
 								},
 								{
 									coordinates: [-199.53125, 655.65625],
@@ -2405,6 +2418,7 @@ const CAMPAIGN_01 = {
 										timer: 5,
 										type: 'fight',
 									},
+									filter: 'fight',
 								},
 							],
 						},
@@ -2582,9 +2596,11 @@ const CAMPAIGN_01 = {
 										timer: 3,
 										type: 'fight',
 									},
+									filter: 'fight',
 								},
 								{
 									coordinates: [-393.875, 717.5],
+									filter: 'night',
 								},
 								{
 									coordinates: [-395.375, 713.25],
