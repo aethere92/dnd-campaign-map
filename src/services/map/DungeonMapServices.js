@@ -130,7 +130,7 @@ class CustomMap {
 	}
 
 	// Map Loading Methods
-	async loadMap(mapKey, pushState = true) {
+	async loadMap(mapKey, pushState = true, extra = null) {
 		const mapConfig = this.#getMapConfig(mapKey);
 		if (!mapConfig) {
 			throw new Error(`Map key '${mapKey}' not found in MAP_DATABASE`);
@@ -144,6 +144,10 @@ class CustomMap {
 			await this.#setupNewMap(mapConfig);
 			await this.#loadMapFeatures(mapConfig);
 			await this.#handleTargetFocus(pushState);
+
+			if (extra?.exitCoordinates) {
+				setTimeout(() => this.#map.setView(extra.exitCoordinates, extra.exitZoom), 300);
+			}
 		} catch (error) {
 			console.error('Error loading map:', error);
 			throw error;

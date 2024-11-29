@@ -3198,6 +3198,10 @@ const CAMPAIGN_01 = {
 												animationType: 'spin',
 												iconType: 'png',
 												mapLink: 'korinis_pyramid',
+												map: {
+													exitCoordinates: [-370, 610],
+													exitZoom: 2,
+												},
 											},
 										],
 									},
@@ -3212,6 +3216,10 @@ const CAMPAIGN_01 = {
 												icon: 'arrowDirectionUp',
 												iconType: 'png',
 												mapLink: 'korinis_island',
+												map: {
+													exitCoordinates: [-195, 656],
+													exitZoom: 4,
+												},
 											},
 										],
 									},
@@ -3239,6 +3247,10 @@ const CAMPAIGN_01 = {
 												icon: 'arrowDirectionDown',
 												iconType: 'png',
 												mapLink: 'korinis_island',
+												map: {
+													exitCoordinates: [-43, 580],
+													exitZoom: 4,
+												},
 											},
 										],
 									},
@@ -3268,6 +3280,10 @@ const CAMPAIGN_01 = {
 												icon: 'arrowDirectionDown',
 												iconType: 'png',
 												mapLink: 'korinis_island',
+												map: {
+													exitCoordinates: [-99, 318],
+													exitZoom: 4,
+												},
 											},
 											{
 												lat: -200,
@@ -3303,6 +3319,10 @@ const CAMPAIGN_01 = {
 												icon: 'arrowDirectionDown',
 												iconType: 'png',
 												mapLink: 'korinis_island',
+												map: {
+													exitCoordinates: [-395, 710],
+													exitZoom: 4,
+												},
 											},
 											{
 												lat: -10.5,
@@ -3312,6 +3332,10 @@ const CAMPAIGN_01 = {
 												icon: 'arrowDirectionUp',
 												iconType: 'png',
 												mapLink: 'korinis_island',
+												map: {
+													exitCoordinates: [-395, 710],
+													exitZoom: 4,
+												},
 											},
 										],
 									},

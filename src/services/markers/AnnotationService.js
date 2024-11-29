@@ -307,8 +307,13 @@ class AnnotationService {
 	_createMarkerContent(point) {
 		const image = point.image ? `<img class="label-image" src="images/assets/${point.image}"/>` : '';
 		const description = point.description ? `<span class="label-description">${point.description}</span>` : '';
+		const exitObject = point?.map?.exitCoordinates
+			? { exitCoordinates: point?.map?.exitCoordinates, exitZoom: point?.map?.exitZoom || 2 }
+			: null;
 		const mapLink = point.mapLink
-			? `<button onclick="customMap.loadMap('${point.mapLink}')" class="map-button">View map</button>`
+			? `<button onclick='customMap.loadMap("${point.mapLink}", true, ${JSON.stringify(
+					exitObject
+			  )})' class="map-button">View map</button>`
 			: '';
 
 		return {
