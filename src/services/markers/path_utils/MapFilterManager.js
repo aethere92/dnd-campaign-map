@@ -1,195 +1,103 @@
-// Define filter configurations separately for better maintainability
-const FILTER_CONFIGS = {
-	night: {
-		filter: 'brightness(0.6) saturate(0.7)',
-		background: 'linear-gradient(to bottom, rgb(0 0 73 / 44%) 0%, rgb(0 0 81 / 44%) 100%)',
-	},
-	'night-half': {
-		filter: 'brightness(0.6) saturate(0.7)',
-		background: 'linear-gradient(to bottom, rgb(0 0 73 / 30%) 0%, rgb(0 0 81 / 30%) 100%)',
-	},
-	dusk: {
-		filter: 'brightness(0.6) saturate(0.7)',
-		background: 'linear-gradient(to bottom, rgb(139 52 0 / 61%) 0%, rgb(159 155 0 / 28%) 100%)',
-	},
-	rain: {
-		filter: 'brightness(0.9) saturate(0.9) invert(0.7)',
-		background: 'url("images/assets/rain_texture.png")',
-		animation: 'rain 0.6s linear infinite',
-	},
-	snow: {
-		filter: 'brightness(1.1) contrast(0.95)',
-		background: 'rgba(255, 255, 255, 0.3)',
-		backgroundImage: 'url("images/assets/snow_texture.png")',
-		backgroundSize: '7%',
-		animation: 'snow 1s linear infinite',
-	},
-	fog: {
-		filter: 'contrast(0.9) brightness(0.95)',
-		background: 'linear-gradient(45deg, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0.2) 100%)',
-		pseudo: {
-			content: '""',
-			background:
-				"url(\"data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.005' numOctaves='5' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E\")",
-			opacity: 0.4,
-			animation: 'fog 20s linear infinite',
-			transform: 'scale(1.5)',
-		},
-	},
-	fight: {
-		background: 'radial-gradient(at center, rgba(63,94,251,0) 0%, rgba(63,94,251,0) 60%, rgba(231,32,72,0.6) 100%)',
-	},
-};
-
 class MapFilterManager {
-	static ANIMATIONS = `
-        @keyframes rain {
-            0% { background-position: 0px 0px; }
-            100% { background-position: -50px 50px; }
-        }
-        @keyframes snow {
-            0% { background-position: 0px 0px; }
-            100% { background-position: -24px 24px; }
-        }
-        @keyframes fog {
-            0% { transform: translate(0%, 0%) scale(1.5); }
-            100% { transform: translate(-50%, -50%) scale(1.5); }
-        }
-    `;
-
 	constructor(map) {
 		this.map = map;
 		this.activeFilters = new Map();
-		this.filterContainer = null;
-		this.styleSheet = null;
-
-		this.init();
+		this.filterElement = this._createFilterElement();
+		this.filterLayers = new Map();
 	}
 
-	init() {
-		this._createStyleSheet();
-		this._createFilterContainer();
-	}
-
-	_createStyleSheet() {
-		const style = document.createElement('style');
-		style.id = 'map-filter-styles';
-		style.textContent = MapFilterManager.ANIMATIONS;
-		document.head.appendChild(style);
-		this.styleSheet = style;
-	}
-
-	_createFilterContainer() {
-		const container = document.createElement('div');
-		container.className = 'map-filter-container';
-		Object.assign(container.style, {
+	_createFilterElement() {
+		const element = document.createElement('div');
+		element.className = 'map-filter-container';
+		Object.assign(element.style, {
 			position: 'absolute',
-			top: '0',
-			left: '0',
-			right: '0',
-			bottom: '0',
+			inset: '0',
 			pointerEvents: 'none',
 			zIndex: '400',
 		});
-
-		this.map.getContainer().appendChild(container);
-		this.filterContainer = container;
-	}
-
-	_createFilterElement(mode) {
-		const config = FILTER_CONFIGS[mode];
-		if (!config) return null;
-
-		const element = document.createElement('div');
-		element.className = `map-filter map-filter-${mode}`;
-
-		Object.assign(element.style, {
-			position: 'absolute',
-			top: '0',
-			left: '0',
-			right: '0',
-			bottom: '0',
-			opacity: '0',
-			transition: 'opacity 0.5s ease',
-			filter: config.filter,
-			background: config.background,
-			animation: config.animation,
-			backgroundImage: config?.backgroundImage,
-			backgroundSize: config?.backgroundSize,
-		});
-
-		if (config.pseudo) {
-			const pseudoStyles = `
-                .map-filter-${mode}::before {
-                    position: absolute;
-                    width: 100%;
-                    height: 100%;
-                    ${Object.entries(config.pseudo)
-											.map(([key, value]) => `${key}: ${value};`)
-											.join('\n')}
-                }
-            `;
-			this.styleSheet.textContent += pseudoStyles;
-		}
-
+		this.map.getContainer().appendChild(element);
 		return element;
 	}
 
-	async applyFilter(filterConfig) {
-		const { mode, enabled } = filterConfig;
+	_parseFilterName(filterName) {
+		// Parse filter string (e.g., "night-50" -> { base: "night", intensity: 50 })
+		const match = filterName.match(/^([a-zA-Z]+)(?:-(\d+))?$/);
+		if (!match) return null;
 
-		if (enabled) {
-			if (!this.activeFilters.has(mode)) {
-				const element = this._createFilterElement(mode);
-				if (!element) return;
+		return {
+			base: match[1],
+			intensity: match[2] ? parseInt(match[2]) : 100,
+		};
+	}
 
-				this.filterContainer.appendChild(element);
-				this.activeFilters.set(mode, element);
+	_createFilterLayer(filterName) {
+		const parsed = this._parseFilterName(filterName);
+		if (!parsed) return null;
 
-				// Force reflow and fade in
-				await new Promise((resolve) => {
-					requestAnimationFrame(() => {
-						element.style.opacity = '1';
-						setTimeout(resolve, 500);
-					});
+		const layer = document.createElement('div');
+		layer.className = `map-filter map-filter-${parsed.base}`;
+
+		// Apply intensity through opacity
+		const intensity = parsed.intensity / 100;
+		layer.style.setProperty('--filter-intensity', intensity);
+
+		// Store the parsed data for later reference
+		this.activeFilters.set(filterName, {
+			base: parsed.base,
+			intensity: parsed.intensity,
+		});
+
+		return layer;
+	}
+
+	setFilters(filters) {
+		const filterArray = Array.isArray(filters) ? filters : [filters];
+
+		// Remove filters that are no longer active
+		for (const [existingFilter] of this.filterLayers) {
+			if (!filterArray.includes(existingFilter)) {
+				this.filterLayers.get(existingFilter).remove();
+				this.filterLayers.delete(existingFilter);
+				this.activeFilters.delete(existingFilter);
+			}
+		}
+
+		// Add or update new filters
+		filterArray.forEach((filter) => {
+			if (!this.filterLayers.has(filter)) {
+				const layer = this._createFilterLayer(filter);
+				if (layer) {
+					this.filterElement.appendChild(layer);
+					this.filterLayers.set(filter, layer);
+				}
+			}
+		});
+	}
+
+	updateFilterIntensity(filterName, intensity) {
+		const layer = this.filterLayers.get(filterName);
+		if (layer) {
+			layer.style.setProperty('--filter-intensity', intensity / 100);
+
+			// Update stored data
+			const parsed = this._parseFilterName(filterName);
+			if (parsed) {
+				this.activeFilters.set(filterName, {
+					...parsed,
+					intensity: intensity,
 				});
 			}
-		} else {
-			await this.removeFilter(mode);
 		}
 	}
 
-	async removeFilter(mode) {
-		const element = this.activeFilters.get(mode);
-		if (!element) return;
-
-		element.style.opacity = '0';
-		await new Promise((resolve) => setTimeout(resolve, 500));
-
-		if (element.parentNode) {
-			element.remove();
-		}
-		this.activeFilters.delete(mode);
-	}
-
-	async clearFilters() {
-		const removePromises = Array.from(this.activeFilters.keys()).map((mode) => this.removeFilter(mode));
-
-		await Promise.all(removePromises);
+	clearFilters() {
+		this.filterLayers.forEach((layer) => layer.remove());
+		this.filterLayers.clear();
 		this.activeFilters.clear();
 	}
 
 	destroy() {
 		this.clearFilters();
-		this.styleSheet?.remove();
-		this.filterContainer?.remove();
-	}
-
-	toggleAllFilters() {
-		// Toggle the state of all active filters
-		this.activeFilters.forEach((filter) => {
-			filter.enabled = !filter.enabled;
-			this.applyFilter(filter);
-		});
+		this.filterElement.remove();
 	}
 }

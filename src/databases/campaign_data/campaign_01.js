@@ -1075,7 +1075,7 @@ const CAMPAIGN_01 = {
 										timer: 3,
 										type: 'fight',
 									},
-									filter: 'fight',
+									filter: ['fight'],
 								},
 								{
 									coordinates: [-192.5, 196.625],
@@ -1139,6 +1139,7 @@ const CAMPAIGN_01 = {
 										timer: 2,
 										type: 'conversation',
 									},
+									filter: ['night-10'],
 								},
 								{
 									coordinates: [-139.1875, 288.1875],
@@ -1148,6 +1149,7 @@ const CAMPAIGN_01 = {
 								},
 								{
 									coordinates: [-139.8125, 330.125],
+									filter: ['night-30'],
 								},
 								{
 									coordinates: [-133.75, 335.3125],
@@ -1156,9 +1158,11 @@ const CAMPAIGN_01 = {
 										timer: 2,
 										type: 'conversation',
 									},
+									filter: ['night-50'],
 								},
 								{
 									coordinates: [-138.9375, 337.9375],
+									filter: ['night-70'],
 								},
 								{
 									coordinates: [-137.875, 342.5],
@@ -1167,7 +1171,7 @@ const CAMPAIGN_01 = {
 										timer: 3,
 										type: 'rest',
 									},
-									filter: 'night',
+									filter: ['night'],
 								},
 								{
 									coordinates: [-137.6875, 347.75],
@@ -1339,7 +1343,7 @@ const CAMPAIGN_01 = {
 										timer: 3,
 										type: 'fight',
 									},
-									filter: 'fight',
+									filter: ['fight'],
 								},
 								{
 									coordinates: [-204.6875, 564.75],
@@ -1637,7 +1641,7 @@ const CAMPAIGN_01 = {
 										timer: 5,
 										type: 'fight',
 									},
-									filter: 'fight',
+									filter: ['fight'],
 								},
 								{
 									coordinates: [-100.875, 322.5],
@@ -1671,7 +1675,7 @@ const CAMPAIGN_01 = {
 										timer: 3,
 										type: 'fight',
 									},
-									filter: 'fight',
+									filter: ['fight'],
 								},
 								{
 									coordinates: [-91.9375, 351.625],
@@ -2028,7 +2032,7 @@ const CAMPAIGN_01 = {
 										timer: 5,
 										type: 'fight',
 									},
-									filter: 'fight',
+									filter: ['fight'],
 								},
 								{
 									coordinates: [-111.21875, 558.65625],
@@ -2418,7 +2422,7 @@ const CAMPAIGN_01 = {
 										timer: 5,
 										type: 'fight',
 									},
-									filter: 'fight',
+									filter: ['fight'],
 								},
 							],
 						},
@@ -2429,9 +2433,11 @@ const CAMPAIGN_01 = {
 								{
 									coordinates: [-242.625, 686.375],
 									text: 'This is where the last session ended.',
+									filter: ['night-10'],
 								},
 								{
 									coordinates: [-250.375, 691.625],
+									filter: ['night-20'],
 								},
 								{
 									coordinates: [-254.375, 698.625],
@@ -2440,27 +2446,35 @@ const CAMPAIGN_01 = {
 										timer: 2,
 										type: 'conversation',
 									},
+									filter: ['night-30'],
 								},
 								{
 									coordinates: [-226, 698.375],
+									filter: ['night-40'],
 								},
 								{
 									coordinates: [-201.875, 698.875],
+									filter: ['night-50'],
 								},
 								{
 									coordinates: [-185.75, 697.5],
+									filter: ['night-60'],
 								},
 								{
 									coordinates: [-173, 695.25],
+									filter: ['night-70'],
 								},
 								{
 									coordinates: [-162.75, 692.375],
+									filter: ['night-80'],
 								},
 								{
 									coordinates: [-160.375, 684.625],
+									filter: ['night-90'],
 								},
 								{
 									coordinates: [-162.25, 678.75],
+									filter: ['night-95'],
 								},
 								{
 									coordinates: [-173.125, 678.875],
@@ -2469,7 +2483,7 @@ const CAMPAIGN_01 = {
 										type: 'rest',
 										timer: 5,
 									},
-									filter: 'night',
+									filter: ['night'],
 								},
 								{
 									coordinates: [-174.875, 673.125],
@@ -2558,6 +2572,7 @@ const CAMPAIGN_01 = {
 								},
 								{
 									coordinates: [-241.625, 701.375],
+									filter: ['night-90'],
 								},
 								{
 									coordinates: [-293.125, 701.875],
@@ -2578,6 +2593,7 @@ const CAMPAIGN_01 = {
 								},
 								{
 									coordinates: [-368.75, 703.75],
+									filter: ['night-70'],
 								},
 								{
 									coordinates: [-380.875, 704.5],
@@ -2596,11 +2612,11 @@ const CAMPAIGN_01 = {
 										timer: 3,
 										type: 'fight',
 									},
-									filter: 'fight',
+									filter: ['night-70', 'fight'],
 								},
 								{
 									coordinates: [-393.875, 717.5],
-									filter: 'night',
+									filter: ['night-70'],
 								},
 								{
 									coordinates: [-395.375, 713.25],
@@ -2611,6 +2627,7 @@ const CAMPAIGN_01 = {
 								{
 									coordinates: [-395.75, 689.75],
 									text: 'Entered the abandoned mines',
+									filter: ['night-70'],
 								},
 								{
 									coordinates: [-396, 681],
@@ -2660,6 +2677,7 @@ const CAMPAIGN_01 = {
 								},
 								{
 									coordinates: [-399.125, 657.75],
+									filter: ['night-60'],
 								},
 								{
 									coordinates: [-399.375, 663.375],
@@ -2693,7 +2711,6 @@ const CAMPAIGN_01 = {
 								},
 								{
 									coordinates: [-411.625, 654.75],
-									filter: 'night-half',
 								},
 								{
 									coordinates: [-420.5, 653.25],
@@ -2761,6 +2778,7 @@ const CAMPAIGN_01 = {
 											type: 'item',
 										},
 									],
+									filter: ['night-50'],
 								},
 								{
 									coordinates: [-430.5, 595.125],
@@ -2786,6 +2804,7 @@ const CAMPAIGN_01 = {
 									animation: {
 										type: 'walk',
 									},
+									filter: ['night-20'],
 								},
 								{
 									coordinates: [-436.5, 566.5],

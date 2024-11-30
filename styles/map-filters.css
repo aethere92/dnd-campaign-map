@@ -1,0 +1,104 @@
+.map-filter-container {
+	position: absolute;
+	inset: 0;
+}
+
+.map-filter {
+	position: absolute;
+	inset: 0;
+	opacity: var(--filter-intensity, 1);
+	transition: opacity 0.5s;
+	mix-blend-mode: multiply;
+}
+
+/* Night filter */
+.map-filter-night {
+	background: linear-gradient(
+		to bottom,
+		rgb(0 0 73 / calc(44% * var(--filter-intensity))) 0%,
+		rgb(0 0 81 / calc(44% * var(--filter-intensity))) 100%
+	);
+}
+
+/* Dusk filter */
+.map-filter-dusk {
+	background: linear-gradient(
+		to bottom,
+		rgb(139 52 0 / calc(61% * var(--filter-intensity))) 0%,
+		rgb(159 155 0 / calc(28% * var(--filter-intensity))) 100%
+	);
+}
+
+/* Rain filter */
+.map-filter-rain {
+	background: url('images/assets/rain_texture.png');
+	animation: rain 0.6s linear infinite;
+	mix-blend-mode: soft-light;
+}
+
+/* Snow filter */
+.map-filter-snow {
+	background: url('images/assets/snow_texture.png');
+	background-size: 7%;
+	animation: snow 1s linear infinite;
+	mix-blend-mode: screen;
+}
+
+/* Fog filter */
+.map-filter-fog {
+	background: linear-gradient(
+		45deg,
+		rgba(255, 255, 255, calc(0.4 * var(--filter-intensity))) 0%,
+		rgba(255, 255, 255, calc(0.2 * var(--filter-intensity))) 100%
+	);
+	mix-blend-mode: overlay;
+}
+
+.map-filter-fog::after {
+	content: '';
+	position: absolute;
+	inset: 0;
+	background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.005' numOctaves='5' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+	opacity: calc(0.4 * var(--filter-intensity));
+	animation: fog 20s linear infinite;
+	transform: scale(1.5);
+}
+
+/* Fight filter */
+.map-filter-fight {
+	background: radial-gradient(
+		at center,
+		rgba(63, 94, 251, 0) 0%,
+		rgba(63, 94, 251, 0) 60%,
+		rgba(231, 32, 72, calc(0.6 * var(--filter-intensity))) 100%
+	);
+	mix-blend-mode: screen;
+}
+
+/* Animations */
+@keyframes rain {
+	0% {
+		background-position: 0px 0px;
+	}
+	100% {
+		background-position: -50px 50px;
+	}
+}
+
+@keyframes snow {
+	0% {
+		background-position: 0px 0px;
+	}
+	100% {
+		background-position: -24px 24px;
+	}
+}
+
+@keyframes fog {
+	0% {
+		transform: translate(0%, 0%) scale(1.5);
+	}
+	100% {
+		transform: translate(-50%, -50%) scale(1.5);
+	}
+}

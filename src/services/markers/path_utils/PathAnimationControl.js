@@ -1,27 +1,10 @@
-class PathAnimationControl {
-	constructor(map) {
-		this.map = map;
-		this.animations = new Map();
-		this.markers = new Map();
-		this.currentPoints = new Map();
-		this.pathVisibility = new Map();
-		this.isAnimating = new Map();
-		this.effects = new Map();
-		this.passedPoints = new Map(); // Track points that have been passed
-		this.textModal = this.createTextModal();
-		this.isModalCollapsed = window.innerWidth < 768; // Collapsed by default on mobile
-		this.filterManager = new MapFilterManager(map);
-		this.currentFilter = null;
-
-		// Cache for path distance calculations
-		this.pathDistanceCache = new Map();
-		// Cache for DOM elements to avoid repeated queries
+// Handles the animation marker appearance and effects
+class PathAnimationMarker {
+	constructor() {
 		this.domCache = new Map();
-		// Use performance.now() for more precise timing
-		this.performanceOffset = performance.timing.navigationStart + performance.now();
 	}
 
-	createMarker() {
+	createMarkerIcon() {
 		return L.divIcon({
 			className: 'animated-marker',
 			html: `
@@ -53,8 +36,92 @@ class PathAnimationControl {
 		});
 	}
 
+	createMarker(position) {
+		return L.marker(position, {
+			icon: this.createMarkerIcon(),
+			interactive: false,
+			zIndexOffset: 1000,
+		});
+	}
+
+	showEffect(marker, type) {
+		const cacheKey = marker._leaflet_id;
+		let elements = this.domCache.get(cacheKey);
+
+		if (!elements) {
+			elements = {
+				container: marker.getElement().querySelector('.effect-container'),
+				markerImg: marker.getElement().querySelector('img'),
+			};
+			this.domCache.set(cacheKey, elements);
+		}
+
+		const { container, markerImg } = elements;
+
+		markerImg.style.transform = 'scale3d(1.2, 1.2, 1)';
+
+		requestAnimationFrame(() => {
+			container.textContent = this.getEffectContent(type);
+			container.style.display = 'block';
+
+			requestAnimationFrame(() => {
+				container.style.transform = 'translate3d(-50%, 0, 0) scale3d(1, 1, 1)';
+				container.style.opacity = '1';
+
+				setTimeout(() => {
+					markerImg.style.transform = 'scale3d(1, 1, 1)';
+				}, 300);
+			});
+		});
+	}
+
+	hideEffect(marker) {
+		const container = marker.getElement().querySelector('.effect-container');
+		const markerImg = marker.getElement().querySelector('img');
+
+		container.style.transform = 'translateX(-50%) scale(0)';
+		container.style.opacity = '0';
+
+		markerImg.style.transform = 'scale(0.8)';
+		setTimeout(() => {
+			markerImg.style.transform = 'scale(1)';
+		}, 300);
+
+		setTimeout(() => {
+			container.style.display = 'none';
+		}, 300);
+	}
+
+	getEffectContent(type) {
+		const effectMap = {
+			fight: '⚔️',
+			merchant: '💰',
+			rest: '💤',
+			conversation: '💬',
+			loot: '💎',
+			walk: '👣',
+			question: '❓',
+		};
+		return effectMap[type] || '👣';
+	}
+}
+
+// Handles the text recap modal
+class PathAnimationRecap {
+	constructor() {
+		this.isModalCollapsed = window.innerWidth < 768;
+		// Create the modal but don't update state yet
+		this.textModal = null;
+		this.initialize();
+	}
+
+	initialize() {
+		this.textModal = this.createTextModal();
+		// Now that the DOM elements exist, we can update the state
+		this.updateModalState();
+	}
+
 	createTextModal() {
-		// Create modal container
 		const modal = L.DomUtil.create('div', 'path-text-modal');
 		const header = L.DomUtil.create('div', 'path-text-header', modal);
 
@@ -65,44 +132,34 @@ class PathAnimationControl {
 		toggleButton.innerHTML =
 			'<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M6 9l6 6l6 -6"></path></svg>';
 
-		// Create list container
 		const listContainer = L.DomUtil.create('div', 'path-text-list-container', modal);
-
-		// Create list container
 		const list = L.DomUtil.create('ul', 'path-text-list', listContainer);
 
-		// Add click handler for toggle
 		header.addEventListener('click', () => this.toggleModal());
 
-		document.querySelector('.leaflet-container').appendChild(modal);
-
-		// Initialize the state after the modal is fully created
-		if (this.isModalCollapsed) {
-			toggleButton.style.transform = 'rotate(-90deg)';
-		} else {
-			toggleButton.style.transform = 'rotate(0deg)';
+		// Make sure the leaflet container exists
+		const leafletContainer = document.querySelector('.leaflet-container');
+		if (!leafletContainer) {
+			console.error('Leaflet container not found');
+			return modal;
 		}
 
+		leafletContainer.appendChild(modal);
 		return modal;
 	}
 
 	toggleModal() {
+		if (!this.textModal) return;
 		this.isModalCollapsed = !this.isModalCollapsed;
-		const listContainer = this.textModal.querySelector('.path-text-list-container');
-		const toggleButton = this.textModal.querySelector('.path-text-toggle');
-
-		if (this.isModalCollapsed) {
-			toggleButton.style.transform = 'rotate(-90deg)';
-			listContainer.style.display = 'none';
-		} else {
-			toggleButton.style.transform = 'rotate(0deg)';
-			listContainer.style.display = 'block';
-		}
+		this.updateModalState();
 	}
 
 	updateModalState() {
+		if (!this.textModal) return;
 		const listContainer = this.textModal.querySelector('.path-text-list-container');
 		const toggleButton = this.textModal.querySelector('.path-text-toggle');
+
+		if (!listContainer || !toggleButton) return;
 
 		if (this.isModalCollapsed) {
 			toggleButton.style.transform = 'rotate(-90deg)';
@@ -115,12 +172,14 @@ class PathAnimationControl {
 		}
 	}
 
-	addTextToModal(text, pathId, type, loot, level) {
+	addText(text, type, loot, level) {
+		if (!this.textModal) return;
 		const list = this.textModal.querySelector('.path-text-list');
+		if (!list) return;
+
 		const listItem = document.createElement('li');
 		listItem.classList.add('path-text-item');
 
-		// Add icon based on animation type
 		let icon = '';
 		switch (type) {
 			case 'fight':
@@ -146,9 +205,9 @@ class PathAnimationControl {
 		}
 
 		listItem.innerHTML = `<div class="path-item-row">
-			<span class="path-text">${text}</span>
-			<span class="path-event-icon">${icon}</span>
-		</div>`;
+            <span class="path-text">${text}</span>
+            <span class="path-event-icon">${icon}</span>
+        </div>`;
 
 		if (loot || level) {
 			const itemRow = document.createElement('div');
@@ -157,18 +216,15 @@ class PathAnimationControl {
 			if (loot) {
 				const lootContainer = document.createElement('div');
 				lootContainer.className = 'path-item-loot-container';
-
 				lootContainer.innerHTML = '<span class="path-item-loot-title">New loot</span>';
 
 				loot.forEach((item) => {
 					const itemContainer = document.createElement('div');
 					itemContainer.className = 'path-item-loot-container-item';
-
 					itemContainer.innerHTML = `<div class="loot-item-icon icon-${item?.rarity ?? 'common'}"></div>
-						<span class='loot-item rarity-${item?.rarity ?? 'common'}' title='${item?.description ?? 'No description.'}'>${
-						item.name
-					}</span>`;
-
+                        <span class='loot-item rarity-${item?.rarity ?? 'common'}' title='${
+						item?.description ?? 'No description.'
+					}'>${item.name}</span>`;
 					lootContainer.append(itemContainer);
 				});
 
@@ -184,9 +240,9 @@ class PathAnimationControl {
 
 			listItem.append(itemRow);
 		}
+
 		list.appendChild(listItem);
 
-		// Show modal if it's the first item
 		if (list.children.length === 1) {
 			this.textModal.style.display = 'block';
 		}
@@ -194,83 +250,23 @@ class PathAnimationControl {
 		list.scrollTo({ left: 0, top: list.scrollHeight, behavior: 'smooth' });
 	}
 
-	clearTextModal(pathId) {
+	clear() {
+		if (!this.textModal) return;
 		const list = this.textModal.querySelector('.path-text-list');
+		if (!list) return;
+
 		list.innerHTML = '';
-		this.passedPoints.set(pathId, new Set());
 		this.textModal.style.display = 'none';
 	}
+}
 
-	showEffect(marker, type) {
-		// Cache DOM elements
-		const cacheKey = marker._leaflet_id;
-		let elements = this.domCache.get(cacheKey);
-
-		if (!elements) {
-			elements = {
-				container: marker.getElement().querySelector('.effect-container'),
-				markerImg: marker.getElement().querySelector('img'),
-			};
-			this.domCache.set(cacheKey, elements);
-		}
-
-		const { container, markerImg } = elements;
-
-		// Use CSS transform instead of scale for better performance
-		markerImg.style.transform = 'scale3d(1.2, 1.2, 1)';
-
-		// Use requestAnimationFrame for smoother animations
-		requestAnimationFrame(() => {
-			container.textContent = this.getEffectContent(type);
-			container.style.display = 'block';
-
-			requestAnimationFrame(() => {
-				container.style.transform = 'translate3d(-50%, 0, 0) scale3d(1, 1, 1)';
-				container.style.opacity = '1';
-
-				setTimeout(() => {
-					markerImg.style.transform = 'scale3d(1, 1, 1)';
-				}, 300);
-			});
-		});
-	}
-
-	// Cache effect content
-	getEffectContent(type) {
-		const effectMap = {
-			fight: '⚔️',
-			merchant: '💰',
-			rest: '💤',
-			conversation: '💬',
-			loot: '💎',
-			walk: '👣',
-			question: '❓',
-		};
-		return effectMap[type] || '👣';
-	}
-
-	hideEffect(marker) {
-		const container = marker.getElement().querySelector('.effect-container');
-		const markerImg = marker.getElement().querySelector('img');
-
-		// Fade out animation
-		container.style.transform = 'translateX(-50%) scale(0)';
-		container.style.opacity = '0';
-
-		// Bounce animation for marker
-		markerImg.style.transform = 'scale(0.8)';
-		setTimeout(() => {
-			markerImg.style.transform = 'scale(1)';
-		}, 300);
-
-		// Clean up after animation
-		setTimeout(() => {
-			container.style.display = 'none';
-		}, 300);
+// Handles position interpolation
+class PathAnimationInterpolator {
+	constructor() {
+		this.pathDistanceCache = new Map();
 	}
 
 	calculatePathDistance(points) {
-		// Cache path distance calculations
 		const cacheKey = points.map((p) => p.toString()).join('|');
 		if (this.pathDistanceCache.has(cacheKey)) {
 			return this.pathDistanceCache.get(cacheKey);
@@ -288,7 +284,6 @@ class PathAnimationControl {
 	}
 
 	interpolatePosition(points, percentage) {
-		// Quick return for end points
 		if (percentage >= 0.99) {
 			const lastPoint = points[points.length - 1];
 			return {
@@ -307,7 +302,6 @@ class PathAnimationControl {
 		let currentDistance = 0;
 		let lastPassedPoint = points[0];
 
-		// Use a more efficient loop
 		const len = points.length - 1;
 		for (let i = 0; i < len; i++) {
 			const p1 = L.latLng(points[i].coordinates);
@@ -317,7 +311,6 @@ class PathAnimationControl {
 			if (currentDistance + segmentDistance >= targetDistance) {
 				const ratio = (targetDistance - currentDistance) / segmentDistance;
 
-				// Use more efficient calculations
 				return {
 					position: [p1.lat + (p2.lat - p1.lat) * ratio, p1.lng + (p2.lng - p1.lng) * ratio],
 					animation: ratio < 0.01 ? points[i].animation : ratio > 0.99 ? points[i + 1].animation : points[i].animation,
@@ -344,13 +337,33 @@ class PathAnimationControl {
 			loot: lastPoint.loot,
 		};
 	}
+}
+
+// Main controller class that coordinates everything
+class PathAnimationControl {
+	constructor(map) {
+		this.map = map;
+		this.animations = new Map();
+		this.markers = new Map();
+		this.currentPoints = new Map();
+		this.pathVisibility = new Map();
+		this.isAnimating = new Map();
+		this.passedPoints = new Map();
+		this.initialFilters = new Map(); // Store initial filters for reset
+
+		this.markerManager = new PathAnimationMarker();
+		this.recapManager = new PathAnimationRecap();
+		this.interpolator = new PathAnimationInterpolator();
+		this.filterManager = new MapFilterManager(map);
+	}
 
 	createAnimation(pathId, points, duration = 5000) {
-		const marker = L.marker([points[0].coordinates[0], points[0].coordinates[1]], {
-			icon: this.createMarker(),
-			interactive: false,
-			zIndexOffset: 1000,
-		});
+		const marker = this.markerManager.createMarker([points[0].coordinates[0], points[0].coordinates[1]]);
+
+		// Store initial filters if present in first point
+		if (points[0].filter) {
+			this.initialFilters.set(pathId, Array.isArray(points[0].filter) ? points[0].filter : [points[0].filter]);
+		}
 
 		this.markers.set(pathId, marker);
 		this.currentPoints.set(pathId, points);
@@ -367,7 +380,13 @@ class PathAnimationControl {
 
 		this.isAnimating.set(pathId, true);
 		const marker = this.markers.get(pathId);
-		let currentFilter = null;
+		let currentFilters = null;
+
+		// Apply initial filters if they exist
+		if (this.initialFilters.has(pathId)) {
+			this.filterManager.setFilters(this.initialFilters.get(pathId));
+			currentFilters = this.initialFilters.get(pathId);
+		}
 
 		if (!this.passedPoints.has(pathId)) {
 			this.passedPoints.set(pathId, new Set());
@@ -380,12 +399,11 @@ class PathAnimationControl {
 		let startTime = null;
 		let pauseStartTime = null;
 		let totalPausedTime = 0;
-		let currentanimation = null;
+		let currentAnimation = null;
 		let hasReachedEnd = false;
 		let lastFrameTime = 0;
 
 		const animate = (timestamp) => {
-			// Throttle to 60fps
 			if (timestamp - lastFrameTime < 16.67) {
 				const animationId = requestAnimationFrame(animate);
 				this.animations.set(pathId, animationId);
@@ -400,9 +418,8 @@ class PathAnimationControl {
 
 			if (!startTime) startTime = timestamp;
 
-			// Fixed pause timing logic
 			if (pauseStartTime !== null) {
-				const pauseDuration = (currentanimation?.timer || 0) * 1000;
+				const pauseDuration = (currentAnimation?.timer || 0) * 1000;
 				if (timestamp - pauseStartTime < pauseDuration) {
 					const animationId = requestAnimationFrame(animate);
 					this.animations.set(pathId, animationId);
@@ -420,38 +437,40 @@ class PathAnimationControl {
 				hasReachedEnd = true;
 			}
 
-			const interpolated = this.interpolatePosition(points, progress);
+			const interpolated = this.interpolator.interpolatePosition(points, progress);
 
 			if (marker) {
 				marker.setLatLng(interpolated.position);
 
-				if (interpolated.filter !== currentFilter) {
-					this.updateFilter(currentFilter, interpolated.filter);
-					currentFilter = interpolated.filter;
+				if (interpolated.filter !== undefined && !this.areFiltersEqual(currentFilters, interpolated.filter)) {
+					this.updateFilter(currentFilters, interpolated.filter);
+					currentFilters =
+						interpolated.filter === null
+							? null
+							: Array.isArray(interpolated.filter)
+							? interpolated.filter
+							: [interpolated.filter];
 				}
 
-				// Check for new animation info and handle pausing
-				if (interpolated.animation && interpolated.animation !== currentanimation) {
+				if (interpolated.animation && interpolated.animation !== currentAnimation) {
 					if (interpolated.animation.timer && pauseStartTime === null) {
 						pauseStartTime = timestamp;
 					}
 
 					if (interpolated.animation.type) {
-						this.showEffect(marker, interpolated.animation.type);
+						this.markerManager.showEffect(marker, interpolated.animation.type);
 						setTimeout(() => {
-							this.hideEffect(marker);
+							this.markerManager.hideEffect(marker);
 						}, (interpolated.animation.timer || 1) * 1000);
 					}
 
-					currentanimation = interpolated.animation;
+					currentAnimation = interpolated.animation;
 				}
 
-				// Handle text updates
 				if (interpolated.text && !this.passedPoints.get(pathId).has(interpolated.text)) {
 					this.passedPoints.get(pathId).add(interpolated.text);
-					this.addTextToModal(
+					this.recapManager.addText(
 						interpolated.text,
-						pathId,
 						interpolated.animation?.type,
 						interpolated?.loot,
 						interpolated?.level
@@ -465,6 +484,25 @@ class PathAnimationControl {
 
 		const animationId = requestAnimationFrame(animate);
 		this.animations.set(pathId, animationId);
+	}
+
+	areFiltersEqual(current, next) {
+		if (current === next) return true;
+		if (current === null || next === null) return false;
+
+		const currentArray = Array.isArray(current) ? current : [current];
+		const nextArray = Array.isArray(next) ? next : [next];
+
+		return currentArray.length === nextArray.length && currentArray.every((filter) => nextArray.includes(filter));
+	}
+
+	updateFilter(currentFilters, newFilters) {
+		if (newFilters === null) {
+			this.filterManager.clearFilters();
+		} else {
+			const newFilterArray = Array.isArray(newFilters) ? newFilters : [newFilters];
+			this.filterManager.setFilters(newFilterArray);
+		}
 	}
 
 	stopAnimation(pathId) {
@@ -482,45 +520,11 @@ class PathAnimationControl {
 			}
 		}
 
-		// Clear any active filters
-		this.filterManager.clearFilters();
-	}
-
-	updateFilter(currentFilter, newFilter) {
-		if (currentFilter) {
-			this.filterManager.applyFilter({
-				mode: currentFilter,
-				enabled: false,
-			});
-		}
-		if (newFilter) {
-			this.filterManager.applyFilter({
-				mode: newFilter,
-				enabled: true,
-			});
-		}
-	}
-
-	updateTextAndEffects(pathId, marker, interpolated, currentanimation, timestamp) {
-		const { text, animation } = interpolated;
-		const passedPoints = this.passedPoints.get(pathId);
-
-		if (text && !passedPoints.has(text)) {
-			passedPoints.add(text);
-			this.addTextToModal(text, pathId, animation?.type);
-		}
-
-		if (animation && animation !== currentanimation) {
-			if (animation.timer) {
-				this.pauseStartTime = timestamp;
-			}
-
-			if (animation.type) {
-				this.showEffect(marker, animation.type);
-				setTimeout(() => {
-					this.hideEffect(marker);
-				}, (animation.timer || 1) * 1000);
-			}
+		// Reset to initial filters if they exist, otherwise clear
+		if (this.initialFilters.has(pathId)) {
+			this.filterManager.setFilters(this.initialFilters.get(pathId));
+		} else {
+			this.filterManager.clearFilters();
 		}
 	}
 
@@ -532,7 +536,7 @@ class PathAnimationControl {
 			if (points) {
 				const duration = Math.max(5000, points.length * 1000);
 				if (this.markers.has(pathId)) {
-					this.clearTextModal(pathId); // Clear modal when starting new animation
+					this.recapManager.clear();
 					this.startAnimation(pathId, points, duration);
 				} else {
 					this.createAnimation(pathId, points, duration);
@@ -540,7 +544,7 @@ class PathAnimationControl {
 			}
 		} else {
 			this.stopAnimation(pathId);
-			this.clearTextModal(pathId); // Clear modal when hiding animation
+			this.recapManager.clear();
 		}
 	}
 }

@@ -9,7 +9,6 @@ class PathManager {
 		this.areaLayerGroup = L.layerGroup();
 		this.pathAnimationControl = new PathAnimationControl(this.map);
 		this.pathAnimations = new Map();
-		this.filterManager = new MapFilterManager(map);
 	}
 
 	// Initialization Methods

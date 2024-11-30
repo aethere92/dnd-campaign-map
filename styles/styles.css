@@ -4,6 +4,7 @@
 @import url('leaflet-overrules.css');
 @import url('leaflet-controls.css');
 @import url('modals.css');
+@import url('map-filters.css');
 
 body,
 html {
