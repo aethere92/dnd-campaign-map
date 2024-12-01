@@ -26,6 +26,7 @@ class CustomMap {
 	#exportButton;
 	#coordinatesDiv;
 	#campaignData;
+	#debugs;
 
 	constructor(mapElementId, options = {}) {
 		const { initialMapKey = 'korinis_island', isDebugMode = false, campaignData = null } = options;
@@ -44,6 +45,9 @@ class CustomMap {
 			paths: null,
 			sidebar: null,
 			nestedLayerControl: null,
+		};
+		this.#debugs = {
+			lightsCoords: [],
 		};
 
 		window.customMap = this;
@@ -305,9 +309,20 @@ class CustomMap {
 
 	#handleMapClick(e) {
 		this.#handleMouseMove(e);
+
 		if (this.#config.isDebugMode) {
-			const { lat, lng } = e.latlng;
-			navigator.clipboard.writeText(`lat: ${lat}, lng: ${lng},`).catch((err) => console.error('Failed to copy:', err));
+			const IS_LIGHTS_DEBUG = true;
+
+			if (!IS_LIGHTS_DEBUG) {
+				const { lat, lng } = e.latlng;
+				navigator.clipboard
+					.writeText(`lat: ${lat}, lng: ${lng},`)
+					.catch((err) => console.error('Failed to copy:', err));
+			} else {
+				const { lat, lng } = e.latlng;
+				this.#debugs.lightsCoords.push([lat, lng]);
+				console.log(JSON.stringify(this.#debugs.lightsCoords));
+			}
 		}
 	}
 

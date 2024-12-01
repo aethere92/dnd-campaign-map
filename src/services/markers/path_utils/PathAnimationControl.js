@@ -293,6 +293,7 @@ class PathAnimationInterpolator {
 				filter: lastPoint.filter,
 				level: lastPoint.level,
 				loot: lastPoint.loot,
+				lights: lastPoint.lights,
 			};
 		}
 
@@ -318,11 +319,16 @@ class PathAnimationInterpolator {
 					filter: points[i].filter || lastPassedPoint.filter,
 					loot: points[i]?.loot ?? null,
 					level: points[i]?.level ?? null,
+					lights: points[i].lights || lastPassedPoint.lights,
 				};
 			}
 
 			currentDistance += segmentDistance;
 			if (points[i].filter !== undefined) {
+				lastPassedPoint = points[i];
+			}
+
+			if (points[i].lights !== undefined) {
 				lastPassedPoint = points[i];
 			}
 		}
@@ -335,6 +341,7 @@ class PathAnimationInterpolator {
 			filter: lastPoint.filter,
 			level: lastPoint.level,
 			loot: lastPoint.loot,
+			lights: lastPoint.lights,
 		};
 	}
 }
@@ -452,6 +459,8 @@ class PathAnimationControl {
 							: [interpolated.filter];
 				}
 
+				this.updateLights(interpolated);
+
 				if (interpolated.animation && interpolated.animation !== currentAnimation) {
 					if (interpolated.animation.timer && pauseStartTime === null) {
 						pauseStartTime = timestamp;
@@ -502,6 +511,12 @@ class PathAnimationControl {
 		} else {
 			const newFilterArray = Array.isArray(newFilters) ? newFilters : [newFilters];
 			this.filterManager.setFilters(newFilterArray);
+		}
+	}
+
+	updateLights(interpolated) {
+		if (interpolated.lights !== undefined) {
+			this.filterManager.updateLights(interpolated.lights);
 		}
 	}
 
