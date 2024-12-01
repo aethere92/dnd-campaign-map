@@ -543,7 +543,7 @@ html {
 .path-text-modal {
 	position: absolute;
 	left: 12px;
-	top: 150px;
+	top: 160px;
 	background: white;
 	padding: 0.25rem;
 	border-radius: 0.25rem;
@@ -552,6 +552,8 @@ html {
 	z-index: 1000;
 	display: none;
 	cursor: default;
+	flex-direction: column;
+	gap: 0.25rem;
 }
 
 .path-text-list {
@@ -755,4 +757,26 @@ html {
 
 .icon-barbarian.icon-barbarian {
 	border-color: #6d1b1b;
+}
+
+.path-text-controls {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.25rem;
+	border-bottom: 1px solid #ddd;
+	border-top: 1px solid #ddd;
+	padding: 0.25rem 0;
+	background: #eee;
+}
+
+.path-text-control {
+	cursor: pointer;
+	background: none;
+	border: none;
+	padding: 0;
+
+	&:hover {
+		background: #eee;
+	}
 }

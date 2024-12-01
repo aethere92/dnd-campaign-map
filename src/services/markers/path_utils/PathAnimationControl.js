@@ -62,7 +62,7 @@ class PathAnimationMarker {
 
 		requestAnimationFrame(() => {
 			container.textContent = this.getEffectContent(type);
-			container.style.display = 'block';
+			container.style.display = 'flex';
 
 			requestAnimationFrame(() => {
 				container.style.transform = 'translate3d(-50%, 0, 0) scale3d(1, 1, 1)';
@@ -110,15 +110,127 @@ class PathAnimationMarker {
 class PathAnimationRecap {
 	constructor() {
 		this.isModalCollapsed = window.innerWidth < 768;
-		// Create the modal but don't update state yet
 		this.textModal = null;
+		this.speechSynth = window.speechSynthesis;
+		this.isNarrating = false;
+		this.narratorVoice = null;
+		this.currentLineIndex = 0;
+		this.isPaused = false;
+		this.currentUtterance = null;
+		this.narrationQueue = [];
+		this.voiceSelector = null;
 		this.initialize();
+		this.initializeVoice();
 	}
 
 	initialize() {
 		this.textModal = this.createTextModal();
 		// Now that the DOM elements exist, we can update the state
 		this.updateModalState();
+	}
+
+	async initializeVoice() {
+		// Wait for voices to be loaded
+		if (speechSynthesis.getVoices().length === 0) {
+			await new Promise((resolve) => {
+				speechSynthesis.addEventListener('voiceschanged', resolve, { once: true });
+			});
+		}
+
+		// Create and populate voice selector
+		this.createVoiceSelector();
+
+		// Set initial voice
+		const selectedVoice = localStorage.getItem('selectedVoice');
+		const voices = speechSynthesis.getVoices();
+
+		if (selectedVoice) {
+			this.narratorVoice = voices.find((voice) => voice.name === selectedVoice);
+		}
+
+		if (!this.narratorVoice) {
+			// Default to a deep male voice if available, otherwise use default
+			this.narratorVoice =
+				voices.find((voice) => {
+					const nameToFind = 'Google UK English Male';
+					return (
+						voice.name.toLowerCase().includes(nameToFind.toLowerCase()) || voice.name.toLowerCase().includes('deep')
+					);
+				}) || voices[0];
+		}
+
+		// Update selector to show current voice
+		if (this.voiceSelector) {
+			this.voiceSelector.value = this.narratorVoice.name;
+		}
+	}
+
+	createVoiceSelector() {
+		const controlsContainer = this.textModal.querySelector('.path-text-controls');
+		if (!controlsContainer) return;
+
+		// Create voice selector container
+		const voiceContainer = L.DomUtil.create('div', 'path-voice-selector-container', controlsContainer);
+
+		// Create select element
+		this.voiceSelector = L.DomUtil.create('select', 'path-voice-selector', voiceContainer);
+		this.voiceSelector.title = 'Select Voice';
+
+		// Populate voices
+		const voices = speechSynthesis.getVoices();
+		voices.forEach((voice) => {
+			const option = document.createElement('option');
+			option.value = voice.name;
+			option.textContent = `${voice.name} (${voice.lang})`;
+			this.voiceSelector.appendChild(option);
+		});
+
+		// Add change event listener
+		this.voiceSelector.addEventListener('change', (e) => {
+			const selectedVoice = voices.find((voice) => voice.name === e.target.value);
+			if (selectedVoice) {
+				this.narratorVoice = selectedVoice;
+				localStorage.setItem('selectedVoice', selectedVoice.name);
+
+				// If currently narrating, restart the current line with new voice
+				if (this.isNarrating) {
+					this.narrateFromIndex(this.currentLineIndex);
+				}
+			}
+		});
+
+		// Stop click event propagation
+		this.voiceSelector.addEventListener('click', (e) => {
+			e.stopPropagation();
+		});
+
+		// Add styles
+		const style = document.createElement('style');
+		style.textContent = `
+            .path-voice-selector-container {
+                margin-right: 10px;
+                display: flex;
+                align-items: center;
+            }
+            .path-voice-selector {
+                padding: 4px;
+                border-radius: 4px;
+                border: 1px solid #ccc;
+                background: white;
+                font-size: 12px;
+                max-width: 200px;
+            }
+            .path-voice-selector:focus {
+                outline: none;
+                border-color: #666;
+            }
+            @media (max-width: 768px) {
+                .path-voice-selector {
+                    max-width: 150px;
+                }
+            }
+        `;
+		document.head.appendChild(style);
 	}
 
 	createTextModal() {
@@ -132,12 +244,24 @@ class PathAnimationRecap {
 		toggleButton.innerHTML =
 			'<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M6 9l6 6l6 -6"></path></svg>';
 
+		// Create controls container
+		const controlsContainer = L.DomUtil.create('div', 'path-text-controls', modal);
+
+		// Create control buttons with specific IDs
+		this.createControlButton(controlsContainer, 'prev-button', '⏮️', 'Previous Line', () => this.previousLine());
+		this.createControlButton(controlsContainer, 'play-button', '🎙️', 'Play/Pause Narration', () =>
+			this.toggleNarration()
+		);
+		this.createControlButton(controlsContainer, 'next-button', '⏭️', 'Next Line', () => this.nextLine());
+		this.createControlButton(controlsContainer, 'restart-button', '🔄', 'Restart Narration', () =>
+			this.restartNarration()
+		);
+
 		const listContainer = L.DomUtil.create('div', 'path-text-list-container', modal);
 		const list = L.DomUtil.create('ul', 'path-text-list', listContainer);
 
 		header.addEventListener('click', () => this.toggleModal());
 
-		// Make sure the leaflet container exists
 		const leafletContainer = document.querySelector('.leaflet-container');
 		if (!leafletContainer) {
 			console.error('Leaflet container not found');
@@ -146,6 +270,195 @@ class PathAnimationRecap {
 
 		leafletContainer.appendChild(modal);
 		return modal;
+	}
+
+	createControlButton(container, id, icon, title, clickHandler) {
+		const button = L.DomUtil.create('button', 'path-text-control', container);
+		button.id = id;
+		button.innerHTML = icon;
+		button.title = title;
+		button.addEventListener('click', (e) => {
+			e.stopPropagation();
+			clickHandler();
+		});
+		return button;
+	}
+
+	toggleNarration() {
+		if (this.isNarrating) {
+			this.pauseNarration();
+		} else {
+			this.resumeNarration();
+		}
+	}
+
+	pauseNarration() {
+		if (this.currentUtterance) {
+			// Store the current position in the text
+			this.pausedPosition = Array.from(this.textModal.querySelector('.path-text-list').children).findIndex((item) =>
+				item.classList.contains('currently-narrating')
+			);
+
+			this.speechSynth.pause();
+			this.isPaused = true;
+			this.isNarrating = false;
+			this.updateNarrationButton();
+		}
+	}
+	resumeNarration() {
+		if (this.isPaused && this.pausedPosition !== undefined) {
+			this.speechSynth.resume();
+			this.isPaused = false;
+			this.isNarrating = true;
+		} else {
+			this.narrateFromIndex(this.currentLineIndex);
+		}
+		this.updateNarrationButton();
+	}
+
+	restartNarration() {
+		// Remove error listener before canceling
+		if (this.currentUtterance) {
+			this.currentUtterance.onerror = null;
+		}
+		this.speechSynth.cancel();
+		this.isPaused = false;
+		this.currentLineIndex = 0;
+		this.pausedPosition = undefined;
+		this.narrateFromIndex(0);
+		this.updateNarrationButton();
+	}
+
+	previousLine() {
+		// Remove error-triggering event listener before canceling
+		if (this.currentUtterance) {
+			this.currentUtterance.onerror = null;
+		}
+		this.speechSynth.cancel();
+		this.isPaused = false;
+		this.pausedPosition = undefined;
+		this.currentLineIndex = Math.max(0, this.currentLineIndex - 1);
+		this.narrateFromIndex(this.currentLineIndex);
+		this.highlightCurrentLine();
+	}
+
+	nextLine() {
+		// Remove error-triggering event listener before canceling
+		if (this.currentUtterance) {
+			this.currentUtterance.onerror = null;
+		}
+		this.speechSynth.cancel();
+		this.isPaused = false;
+		this.pausedPosition = undefined;
+		const list = this.textModal.querySelector('.path-text-list');
+		if (!list) return;
+
+		this.currentLineIndex = Math.min(list.children.length - 1, this.currentLineIndex + 1);
+		this.narrateFromIndex(this.currentLineIndex);
+		this.highlightCurrentLine();
+	}
+
+	narrateFromIndex(startIndex) {
+		const list = this.textModal.querySelector('.path-text-list');
+		if (!list || list.children.length === 0) return;
+
+		this.isNarrating = true;
+		this.updateNarrationButton();
+
+		// Remove error listener from current utterance before canceling
+		if (this.currentUtterance) {
+			this.currentUtterance.onerror = null;
+		}
+		this.speechSynth.cancel();
+		this.narrationQueue = [];
+
+		// Remove any existing highlights
+		this.clearHighlights();
+
+		// Create and queue utterances
+		const entries = Array.from(list.children).slice(startIndex);
+
+		const speakEntry = (index) => {
+			if (index >= entries.length) {
+				this.isNarrating = false;
+				this.isPaused = false;
+				this.updateNarrationButton();
+				this.clearHighlights();
+				return;
+			}
+
+			const item = entries[index];
+			const textElement = item.querySelector('.path-text');
+			if (!textElement) return;
+
+			const utterance = new SpeechSynthesisUtterance(textElement.textContent);
+			utterance.voice = this.narratorVoice;
+			utterance.rate = 0.9;
+			utterance.pitch = 0.9;
+			utterance.volume = 1.0;
+
+			this.currentUtterance = utterance;
+			this.currentLineIndex = startIndex + index;
+			this.highlightCurrentLine();
+
+			utterance.onend = () => {
+				// Add a small pause between entries
+				setTimeout(() => {
+					if (!this.isPaused) {
+						speakEntry(index + 1);
+					}
+				}, 500);
+			};
+
+			utterance.onerror = (event) => {
+				// Only log errors that aren't from intentional interruptions
+				if (event.error !== 'interrupted') {
+					console.error('Speech synthesis error:', event);
+					this.isNarrating = false;
+					this.updateNarrationButton();
+				}
+			};
+
+			this.speechSynth.speak(utterance);
+		};
+
+		speakEntry(0);
+	}
+
+	updateNarrationButton() {
+		const playButton = this.textModal.querySelector('#play-button');
+		if (playButton) {
+			if (this.isPaused) {
+				playButton.innerHTML = '▶️';
+				playButton.title = 'Resume Narration';
+			} else if (this.isNarrating) {
+				playButton.innerHTML = '⏸️';
+				playButton.title = 'Pause Narration';
+			} else {
+				playButton.innerHTML = '🎙️';
+				playButton.title = 'Start Narration';
+			}
+		}
+	}
+
+	highlightCurrentLine() {
+		this.clearHighlights();
+		const list = this.textModal.querySelector('.path-text-list');
+		if (!list) return;
+
+		const currentItem = list.children[this.currentLineIndex];
+		if (currentItem) {
+			currentItem.classList.add('currently-narrating');
+		}
+	}
+
+	clearHighlights() {
+		const list = this.textModal.querySelector('.path-text-list');
+		if (!list) return;
+
+		Array.from(list.children).forEach((item) => {
+			item.classList.remove('currently-narrating');
+		});
 	}
 
 	toggleModal() {
@@ -168,7 +481,7 @@ class PathAnimationRecap {
 		} else {
 			toggleButton.style.transform = 'rotate(0deg)';
 			this.textModal.style.transform = 'translateY(0)';
-			listContainer.style.display = 'block';
+			listContainer.style.display = 'flex';
 		}
 	}
 
@@ -244,10 +557,26 @@ class PathAnimationRecap {
 		list.appendChild(listItem);
 
 		if (list.children.length === 1) {
-			this.textModal.style.display = 'block';
+			this.textModal.style.display = 'flex';
 		}
 
 		list.scrollTo({ left: 0, top: list.scrollHeight, behavior: 'smooth' });
+
+		// If narration is active, narrate the new text
+		if (this.isNarrating) {
+			const utterance = new SpeechSynthesisUtterance(text);
+			utterance.voice = this.narratorVoice;
+			utterance.rate = 0.9;
+			utterance.pitch = 0.9;
+			utterance.volume = 1.0;
+
+			utterance.onstart = () => {
+				this.currentLineIndex = list.children.length - 1;
+				this.highlightCurrentLine();
+			};
+
+			this.speechSynth.speak(utterance);
+		}
 	}
 
 	clear() {
@@ -257,6 +586,14 @@ class PathAnimationRecap {
 
 		list.innerHTML = '';
 		this.textModal.style.display = 'none';
+		this.speechSynth.cancel();
+		this.isNarrating = false;
+		this.isPaused = false;
+		this.currentLineIndex = 0;
+		this.currentUtterance = null;
+		this.narrationQueue = [];
+		this.updateNarrationButton();
+		this.clearHighlights();
 	}
 }
 
