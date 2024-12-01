@@ -224,7 +224,29 @@ class CustomMap {
 			}
 		}
 
+		// Add overlays if they exist in the map config
+		if (mapConfig.overlays) {
+			this.#loadOverlays(mapConfig.overlays);
+		}
+
 		this.#createExportButton();
+	}
+
+	#loadOverlays(overlays) {
+		// Remove the group creation since it's now done in initialization
+		overlays.forEach((overlay) => {
+			// Create image overlay
+			const imageOverlay = L.imageOverlay(overlay.image, overlay.bounds, {
+				opacity: 1,
+				interactive: true,
+			});
+
+			// Add to layer group
+			this.#map.layerGroups.overlays.layers[overlay.name] = imageOverlay;
+
+			// Add to layer control
+			this.#services.nestedLayerControl.addLayerToGroup(imageOverlay, overlay.name, 'overlays');
+		});
 	}
 
 	// Layer Control Methods
@@ -236,6 +258,7 @@ class CustomMap {
 			});
 			this.#services.nestedLayerControl.addTo(this.#map);
 
+			// Initialize all groups first
 			this.#services.nestedLayerControl.addGroup('markers', {
 				label: '🎯 Markers',
 				collapsed: false,
@@ -253,6 +276,13 @@ class CustomMap {
 				defaultVisible: false,
 			});
 
+			// Add overlays group during initialization
+			this.#services.nestedLayerControl.addGroup('overlays', {
+				label: '🖼️ Overlays',
+				collapsed: false,
+				defaultVisible: false,
+			});
+
 			this.#map.layerGroups = {
 				markers: {
 					group: L.layerGroup().addTo(this.#map),
@@ -263,6 +293,10 @@ class CustomMap {
 					layers: {},
 				},
 				areas: {
+					group: L.layerGroup(),
+					layers: {},
+				},
+				overlays: {
 					group: L.layerGroup(),
 					layers: {},
 				},

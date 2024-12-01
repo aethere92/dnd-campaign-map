@@ -294,6 +294,7 @@ class PathAnimationInterpolator {
 				level: lastPoint.level,
 				loot: lastPoint.loot,
 				lights: lastPoint.lights,
+				overlays: lastPoint.overlays,
 			};
 		}
 
@@ -302,6 +303,7 @@ class PathAnimationInterpolator {
 
 		let currentDistance = 0;
 		let lastPassedPoint = points[0];
+		let currentOverlays = lastPassedPoint.overlays; // Add this line
 
 		const len = points.length - 1;
 		for (let i = 0; i < len; i++) {
@@ -320,6 +322,7 @@ class PathAnimationInterpolator {
 					loot: points[i]?.loot ?? null,
 					level: points[i]?.level ?? null,
 					lights: points[i].lights || lastPassedPoint.lights,
+					overlays: currentOverlays, // Add this line
 				};
 			}
 
@@ -330,6 +333,10 @@ class PathAnimationInterpolator {
 
 			if (points[i].lights !== undefined) {
 				lastPassedPoint = points[i];
+			}
+
+			if (points[i].overlays !== undefined) {
+				currentOverlays = points[i].overlays;
 			}
 		}
 
@@ -342,6 +349,7 @@ class PathAnimationInterpolator {
 			level: lastPoint.level,
 			loot: lastPoint.loot,
 			lights: lastPoint.lights,
+			overlays: lastPoint.overlays,
 		};
 	}
 }
@@ -357,11 +365,38 @@ class PathAnimationControl {
 		this.isAnimating = new Map();
 		this.passedPoints = new Map();
 		this.initialFilters = new Map(); // Store initial filters for reset
+		this.currentLights = new Map(); // Track current lights for each path
 
 		this.markerManager = new PathAnimationMarker();
 		this.recapManager = new PathAnimationRecap();
 		this.interpolator = new PathAnimationInterpolator();
 		this.filterManager = new MapFilterManager(map);
+
+		this.currentOverlays = new Map(); // Track current overlays for each path
+	}
+
+	updateOverlays(overlayNames) {
+		if (!this.map.layerGroups?.overlays?.layers) return;
+
+		// Get all overlay layers
+		const overlayLayers = this.map.layerGroups.overlays.layers;
+
+		// Hide all overlays first
+		Object.entries(overlayLayers).forEach(([name, layer]) => {
+			if (this.map.hasLayer(layer)) {
+				this.map.removeLayer(layer);
+			}
+		});
+
+		// Show requested overlays
+		if (Array.isArray(overlayNames) && overlayNames.length > 0) {
+			overlayNames.forEach((name) => {
+				const layer = overlayLayers[name];
+				if (layer && !this.map.hasLayer(layer)) {
+					this.map.addLayer(layer);
+				}
+			});
+		}
 	}
 
 	createAnimation(pathId, points, duration = 5000) {
@@ -388,6 +423,7 @@ class PathAnimationControl {
 		this.isAnimating.set(pathId, true);
 		const marker = this.markers.get(pathId);
 		let currentFilters = null;
+		let currentOverlays = null;
 
 		// Apply initial filters if they exist
 		if (this.initialFilters.has(pathId)) {
@@ -459,7 +495,14 @@ class PathAnimationControl {
 							: [interpolated.filter];
 				}
 
-				this.updateLights(interpolated);
+				this.updateLights(interpolated, pathId);
+
+				// Handle overlay updates
+				if (interpolated.overlays !== undefined && !this.areOverlaysEqual(currentOverlays, interpolated.overlays)) {
+					this.updateOverlays(interpolated.overlays);
+					currentOverlays = interpolated.overlays;
+					this.currentOverlays.set(pathId, currentOverlays);
+				}
 
 				if (interpolated.animation && interpolated.animation !== currentAnimation) {
 					if (interpolated.animation.timer && pauseStartTime === null) {
@@ -495,6 +538,12 @@ class PathAnimationControl {
 		this.animations.set(pathId, animationId);
 	}
 
+	areOverlaysEqual(current, next) {
+		if (!current && !next) return true;
+		if (!current || !next) return false;
+		return current.length === next.length && current.every((name) => next.includes(name));
+	}
+
 	areFiltersEqual(current, next) {
 		if (current === next) return true;
 		if (current === null || next === null) return false;
@@ -514,9 +563,11 @@ class PathAnimationControl {
 		}
 	}
 
-	updateLights(interpolated) {
+	updateLights(interpolated, pathId) {
 		if (interpolated.lights !== undefined) {
 			this.filterManager.updateLights(interpolated.lights);
+			// Store current lights configuration
+			this.currentLights.set(pathId, interpolated.lights);
 		}
 	}
 
@@ -540,6 +591,17 @@ class PathAnimationControl {
 			this.filterManager.setFilters(this.initialFilters.get(pathId));
 		} else {
 			this.filterManager.clearFilters();
+		}
+
+		// Clear lights associated with this path
+		if (this.currentLights.has(pathId)) {
+			this.filterManager.clearLights();
+			this.currentLights.delete(pathId);
+		}
+
+		if (this.currentOverlays.has(pathId)) {
+			this.updateOverlays([]);
+			this.currentOverlays.delete(pathId);
 		}
 	}
 

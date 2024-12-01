@@ -864,7 +864,7 @@ const CAMPAIGN_01 = {
 								},
 								{
 									lat: -384.9375,
-									lng: 710.6875,
+									lng: 713,
 									label: 'Cave shortcut entrance',
 									type: 'people',
 									icon: 'poiCave',
@@ -988,7 +988,7 @@ const CAMPAIGN_01 = {
 								},
 								{
 									lat: -385.75,
-									lng: 716.8125,
+									lng: 719,
 									label: 'Cave spiders encounter',
 									type: 'people',
 									icon: 'poiCombat',
@@ -2634,6 +2634,7 @@ const CAMPAIGN_01 = {
 								},
 								{
 									coordinates: [-380.875, 704.5],
+									overlays: ['Penal Colony Spider Cave'],
 								},
 								{
 									coordinates: [-385.875, 710.875],
@@ -2654,6 +2655,7 @@ const CAMPAIGN_01 = {
 								{
 									coordinates: [-393.875, 717.5],
 									filter: ['night-70'],
+									overlays: [],
 								},
 								{
 									coordinates: [-395.375, 713.25],
@@ -2665,92 +2667,140 @@ const CAMPAIGN_01 = {
 									coordinates: [-395.75, 689.75],
 									text: 'Entered the abandoned mines',
 									filter: ['night-70'],
+									overlays: ['Penal Colony Mine Cave'],
 								},
 								{
-									coordinates: [-396, 681],
+									coordinates: [-395.6875, 686.0625],
+								},
+								{
+									coordinates: [-395.75, 682.5625],
+								},
+								{
+									coordinates: [-395.9375, 679.25],
+								},
+								{
+									coordinates: [-397.25, 677.375],
 									animation: {
 										timer: 2,
 										type: 'question',
 									},
 								},
 								{
-									coordinates: [-396, 673.375],
+									coordinates: [-398.625, 676.375],
 								},
 								{
-									coordinates: [-394.25, 672.25],
+									coordinates: [-397.75, 670.5625],
 								},
 								{
-									coordinates: [-391.125, 670.25],
+									coordinates: [-392.4375, 667.875],
 								},
 								{
-									coordinates: [-390, 667.25],
+									coordinates: [-391.5625, 663.6875],
 								},
 								{
-									coordinates: [-389.875, 662.375],
+									coordinates: [-392.3125, 657.375],
 								},
 								{
-									coordinates: [-390, 656.125],
+									coordinates: [-392.5625, 653.75],
 								},
 								{
-									coordinates: [-390.875, 651.25],
+									coordinates: [-389.875, 652.5],
 								},
 								{
-									coordinates: [-392.75, 646.875],
+									coordinates: [-386.9375, 650.9375],
 								},
 								{
-									coordinates: [-395.75, 643.75],
+									coordinates: [-386.5, 646.6875],
 								},
 								{
-									coordinates: [-399, 642.75],
+									coordinates: [-387.4375, 642.8125],
 								},
 								{
-									coordinates: [-399.875, 643.75],
+									coordinates: [-389.1875, 640.75],
 								},
 								{
-									coordinates: [-401, 648.5],
+									coordinates: [-393, 643],
 								},
 								{
-									coordinates: [-400, 653.375],
+									coordinates: [-396.5, 644.1875],
 								},
 								{
-									coordinates: [-399.125, 657.75],
-									filter: ['night-60'],
+									coordinates: [-398.25, 642.375],
 								},
 								{
-									coordinates: [-399.375, 663.375],
+									coordinates: [-398.6875, 636.875],
 								},
 								{
-									coordinates: [-402.625, 667.875],
+									coordinates: [-398.0625, 633.4375],
 								},
 								{
-									coordinates: [-405, 668.25],
+									coordinates: [-400.9375, 629.6875],
 								},
 								{
-									coordinates: [-406.625, 660.875],
+									coordinates: [-404.6875, 628.875],
 								},
 								{
-									coordinates: [-406.875, 653.125],
+									coordinates: [-406.9375, 628.25],
 								},
 								{
-									coordinates: [-405.625, 647.875],
+									coordinates: [-407.5625, 631.75],
 								},
 								{
-									coordinates: [-404.125, 641.375],
+									coordinates: [-407.9375, 634.125],
 								},
 								{
-									coordinates: [-406.125, 637.625],
+									coordinates: [-407.5, 635.5625],
 								},
 								{
-									coordinates: [-412, 641.25],
+									coordinates: [-405.5, 637],
 								},
 								{
-									coordinates: [-412.25, 649.25],
+									coordinates: [-405.4375, 638.9375],
 								},
 								{
-									coordinates: [-411.625, 654.75],
+									coordinates: [-406.0625, 640.4375],
 								},
 								{
-									coordinates: [-420.5, 653.25],
+									coordinates: [-408, 640.25],
+								},
+								{
+									coordinates: [-410.3125, 640],
+								},
+								{
+									coordinates: [-411.1875, 643.125],
+								},
+								{
+									coordinates: [-411.4375, 646.5625],
+								},
+								{
+									coordinates: [-408.9375, 648],
+								},
+								{
+									coordinates: [-407.3125, 648.125],
+								},
+								{
+									coordinates: [-407.3125, 650.3125],
+								},
+								{
+									coordinates: [-407.5, 653.1875],
+								},
+								{
+									coordinates: [-409.25, 654.0625],
+								},
+								{
+									coordinates: [-411.5625, 653.0625],
+								},
+								{
+									coordinates: [-413.25, 651],
+								},
+								{
+									coordinates: [-415.75, 650.625],
+								},
+								{
+									coordinates: [-420.1875, 651.625],
+								},
+								{
+									coordinates: [-420.5, 651.25],
 									text: 'Got to the exit of the mines, which were on a ledge. Tied some rope and climbed down.',
 									animation: {
 										timer: 2,
@@ -2760,6 +2810,7 @@ const CAMPAIGN_01 = {
 								},
 								{
 									coordinates: [-422.25, 650.625],
+									overlays: [],
 								},
 								{
 									coordinates: [-426.875, 651.375],
@@ -3246,6 +3297,24 @@ const CAMPAIGN_01 = {
 							],
 						},
 					},
+					overlays: [
+						{
+							name: 'Penal Colony Mine Cave',
+							bounds: [
+								[-380, 620],
+								[-420, 686],
+							],
+							image: 'images/overlays/korinis_island/korinis_island_penal_colony_mine_cave.png',
+						},
+						{
+							name: 'Penal Colony Spider Cave',
+							bounds: [
+								[-381, 712],
+								[-392, 723],
+							],
+							image: 'images/overlays/korinis_island/korinis_island_penal_colony_spider_cave.png',
+						},
+					],
 					submaps: {
 						interiors: {
 							korinis_island_interior_pyramid_teleporter_c: {
