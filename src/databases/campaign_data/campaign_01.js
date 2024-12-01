@@ -2877,10 +2877,11 @@ const CAMPAIGN_01 = {
 								},
 								{
 									coordinates: [-430.125, 597.75],
+									overlays: ['Penal Colony Merchants Cave'],
 								},
 								{
 									coordinates: [-427, 594.75],
-									text: 'Climbing up a ladder, they met two merchants—a penguin and a drugged rabbit - they purchased some items, and took a long rest to replenish their stamina and health.',
+									text: 'Climbing up a ladder, they met two merchants — a penguin and a drugged rabbit - they purchased some items, and took a long rest to replenish their stamina and health.',
 									animation: {
 										timer: 5,
 										type: 'merchant',
@@ -2913,6 +2914,7 @@ const CAMPAIGN_01 = {
 								},
 								{
 									coordinates: [-438.25, 597.25],
+									overlays: [],
 								},
 								{
 									coordinates: [-441.625, 599.625],
@@ -3352,6 +3354,14 @@ const CAMPAIGN_01 = {
 								[-392, 723],
 							],
 							image: 'images/overlays/korinis_island/korinis_island_penal_colony_spider_cave.png',
+						},
+						{
+							name: 'Penal Colony Merchants Cave',
+							bounds: [
+								[-406, 583],
+								[-428, 601],
+							],
+							image: 'images/overlays/korinis_island/korinis_island_penal_colony_merchants_cave.png',
 						},
 					],
 					submaps: {
