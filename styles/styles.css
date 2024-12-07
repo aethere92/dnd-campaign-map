@@ -496,6 +496,10 @@ html {
 	.character-card-icon.character-card-icon {
 		margin: unset;
 	}
+
+	.path-voice-selector-container {
+		display: none;
+	}
 }
 
 /* Tablet Optimizations */
