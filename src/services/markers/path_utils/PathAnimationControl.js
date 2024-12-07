@@ -471,17 +471,20 @@ class PathAnimationRecap {
 		if (!this.textModal) return;
 		const listContainer = this.textModal.querySelector('.path-text-list-container');
 		const toggleButton = this.textModal.querySelector('.path-text-toggle');
+		const recapControls = this.textModal.querySelector('.path-text-controls');
 
-		if (!listContainer || !toggleButton) return;
+		if (!listContainer || !toggleButton || !recapControls) return;
 
 		if (this.isModalCollapsed) {
 			toggleButton.style.transform = 'rotate(-90deg)';
 			this.textModal.style.transform = 'translateY(calc(100% - 45px))';
 			listContainer.style.display = 'none';
+			recapControls.style.display = 'none';
 		} else {
 			toggleButton.style.transform = 'rotate(0deg)';
 			this.textModal.style.transform = 'translateY(0)';
 			listContainer.style.display = 'flex';
+			recapControls.style.display = 'flex';
 		}
 	}
 
