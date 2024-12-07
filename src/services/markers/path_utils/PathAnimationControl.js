@@ -181,7 +181,7 @@ class PathAnimationRecap {
 		voices.forEach((voice) => {
 			const option = document.createElement('option');
 			option.value = voice.name;
-			option.textContent = `${voice.name} (${voice.lang})`;
+			option.textContent = `${voice.name.replace(/google|microsoft/gi, '').trim()} (${voice.lang})`;
 			this.voiceSelector.appendChild(option);
 		});
 

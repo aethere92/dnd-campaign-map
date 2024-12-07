@@ -689,16 +689,16 @@ const CAMPAIGN_01 = {
 									iconType: 'png',
 								},
 								{
-									lat: -361.875,
-									lng: 702.75,
+									lat: -356.875,
+									lng: 698.75,
 									label: 'Penal Colony Paladin Guards',
 									type: 'people',
 									icon: 'poiGenericNPC',
 									iconType: 'png',
 								},
 								{
-									lat: -424.25,
-									lng: 594.25,
+									lat: -423.25,
+									lng: 590.25,
 									label: 'Quickse and the Penguin',
 									type: 'people',
 									icon: 'tradeCamp',
@@ -864,7 +864,7 @@ const CAMPAIGN_01 = {
 								},
 								{
 									lat: -384.9375,
-									lng: 713,
+									lng: 708,
 									label: 'Cave shortcut entrance',
 									type: 'people',
 									icon: 'poiCave',
@@ -873,7 +873,7 @@ const CAMPAIGN_01 = {
 								},
 								{
 									lat: -392.5,
-									lng: 717.6875,
+									lng: 714.6875,
 									label: 'Cave shortcut exit',
 									type: 'people',
 									icon: 'poiCave',
@@ -881,8 +881,8 @@ const CAMPAIGN_01 = {
 									mapLink: 'korinis_spider_cave',
 								},
 								{
-									lat: -395.625,
-									lng: 687.1875,
+									lat: -391.625,
+									lng: 686.1875,
 									label: 'Mine entrance',
 									type: 'people',
 									icon: 'poiCave',
@@ -890,7 +890,7 @@ const CAMPAIGN_01 = {
 								},
 								{
 									lat: -418.3125,
-									lng: 651.9375,
+									lng: 646.9375,
 									label: 'Mine shortcut exit',
 									type: 'people',
 									icon: 'poiCave',
@@ -987,8 +987,8 @@ const CAMPAIGN_01 = {
 									iconType: 'png',
 								},
 								{
-									lat: -385.75,
-									lng: 719,
+									lat: -386.5,
+									lng: 716,
 									label: 'Cave spiders encounter',
 									type: 'people',
 									icon: 'poiCombat',
@@ -2621,7 +2621,7 @@ const CAMPAIGN_01 = {
 									coordinates: [-348, 703.75],
 								},
 								{
-									coordinates: [-364.25, 704.375],
+									coordinates: [-359.25, 699.0625],
 									text: 'Upon reaching 2 Paladins guarding the entrance, they received 2 keys and passage into the Penal Colony.',
 									animation: {
 										timer: 2,
@@ -2629,22 +2629,32 @@ const CAMPAIGN_01 = {
 									},
 								},
 								{
-									coordinates: [-368.75, 703.75],
+									coordinates: [-364.25, 702.625],
 									filter: ['night-70'],
 								},
 								{
-									coordinates: [-380.875, 704.5],
-									overlays: ['Penal Colony Spider Cave'],
+									coordinates: [-369.875, 703],
 								},
 								{
-									coordinates: [-385.875, 710.875],
+									coordinates: [-376.625, 704.0625],
+								},
+								{
+									coordinates: [-381.5625, 705.1875],
+									overlays: ['Penal Colony Spider Cave'],
+								},
+
+								{
+									coordinates: [-385.34375, 708.34375],
 									text: 'The adventurers entered the shortcut as Lee had advised.',
 									animation: {
 										type: 'null',
 									},
 								},
 								{
-									coordinates: [-386.625, 717.25],
+									coordinates: [-385.125, 714.84375],
+								},
+								{
+									coordinates: [-386.4375, 716.5625],
 									text: 'However, in the middle of the cave, they were ambushed by spiders and barely escaped.',
 									animation: {
 										timer: 3,
@@ -2653,193 +2663,142 @@ const CAMPAIGN_01 = {
 									filter: ['night-70', 'fight'],
 								},
 								{
-									coordinates: [-393.875, 717.5],
+									coordinates: [-388.1875, 716],
+								},
+								{
+									coordinates: [-389.78125, 714.625],
+								},
+								{
+									coordinates: [-393.28125, 714.71875],
 									filter: ['night-70'],
 									overlays: [],
 								},
 								{
-									coordinates: [-395.375, 713.25],
+									coordinates: [-395.78125, 714.46875],
 								},
 								{
-									coordinates: [-395.75, 700.125],
+									coordinates: [-394.40625, 699.40625],
 								},
 								{
-									coordinates: [-395.75, 689.75],
+									coordinates: [-392.90625, 691.84375],
 									text: 'In front of them there were abandoned mines, which they figured were the way Lee had suggested to go.',
 									filter: ['night-70'],
 									overlays: ['Penal Colony Mine Cave'],
 								},
 								{
-									coordinates: [-395.71875, 686.53125],
+									coordinates: [-391.90625, 687.6875],
 								},
 								{
-									coordinates: [-395.46875, 682.3125],
+									coordinates: [-390.875, 680.53125],
 								},
 								{
-									coordinates: [-395.84375, 679.375],
+									coordinates: [-391.53125, 676.34375],
+								},
+								{
+									coordinates: [-393.625, 672.84375],
 									animation: {
 										timer: 2,
 										type: 'question',
 									},
 								},
 								{
-									coordinates: [-397.15625, 678.15625],
+									coordinates: [-393.4375, 668.96875],
 								},
 								{
-									coordinates: [-398.1875, 676.5],
+									coordinates: [-392.25, 666.6875],
 								},
 								{
-									coordinates: [-398.1875, 673.625],
+									coordinates: [-389.09375, 666.625],
 								},
 								{
-									coordinates: [-397.75, 671.6875],
+									coordinates: [-386.4375, 664.1875],
 								},
 								{
-									coordinates: [-396.625, 670.3125],
+									coordinates: [-386.0625, 658.78125],
 								},
 								{
-									coordinates: [-395.65625, 670],
+									coordinates: [-387.25, 649.5],
 								},
 								{
-									coordinates: [-394.375, 670.15625],
+									coordinates: [-383.28125, 647.78125],
 								},
 								{
-									coordinates: [-393.28125, 669.78125],
+									coordinates: [-381.125, 645.8125],
 								},
 								{
-									coordinates: [-392.125, 668.875],
+									coordinates: [-380.75, 639.84375],
 								},
 								{
-									coordinates: [-391.71875, 667.5625],
+									coordinates: [-382.625, 635.8125],
 								},
 								{
-									coordinates: [-391.28125, 664.75],
+									coordinates: [-387.1875, 636.84375],
 								},
 								{
-									coordinates: [-391.1875, 661.8125],
+									coordinates: [-391.4375, 639.15625],
 								},
 								{
-									coordinates: [-391.90625, 660.09375],
+									coordinates: [-394.03125, 637.3125],
 								},
 								{
-									coordinates: [-391.96875, 654.9375],
+									coordinates: [-393.875, 631.0625],
 								},
 								{
-									coordinates: [-390.96875, 653.84375],
+									coordinates: [-394.34375, 624.5],
 								},
 								{
-									coordinates: [-388.03125, 653.125],
+									coordinates: [-397.875, 622.875],
 								},
 								{
-									coordinates: [-386.6875, 651.09375],
+									coordinates: [-401.78125, 622.25],
 								},
 								{
-									coordinates: [-386.6875, 647.6875],
+									coordinates: [-403.21875, 623.875],
 								},
 								{
-									coordinates: [-386.875, 644.90625],
+									coordinates: [-404.125, 628.0625],
 								},
 								{
-									coordinates: [-387.90625, 642.59375],
+									coordinates: [-402.875, 630.5],
 								},
 								{
-									coordinates: [-390.53125, 642.6875],
+									coordinates: [-401.03125, 631.3125],
 								},
 								{
-									coordinates: [-393.46875, 644.40625],
+									coordinates: [-402, 633.78125],
 								},
 								{
-									coordinates: [-395.25, 645.53125],
+									coordinates: [-403.59375, 634.75],
 								},
 								{
-									coordinates: [-396.9375, 645.5],
+									coordinates: [-407.5625, 634.59375],
 								},
 								{
-									coordinates: [-398, 644],
+									coordinates: [-407.34375, 640.09375],
 								},
 								{
-									coordinates: [-398.1875, 641.5625],
+									coordinates: [-406.84375, 642.15625],
 								},
 								{
-									coordinates: [-398.21875, 638.1875],
+									coordinates: [-403.84375, 642.6875],
 								},
 								{
-									coordinates: [-398.125, 636.40625],
+									coordinates: [-403.46875, 647.6875],
 								},
 								{
-									coordinates: [-398.28125, 633.6875],
+									coordinates: [-404.65625, 650.15625],
 								},
 								{
-									coordinates: [-401.65625, 630.9375],
+									coordinates: [-407.53125, 648.875],
 								},
 								{
-									coordinates: [-405.5, 630.625],
+									coordinates: [-410.03125, 646.59375],
 								},
 								{
-									coordinates: [-406.65625, 632.125],
+									coordinates: [-414.1875, 646.21875],
 								},
 								{
-									coordinates: [-407.25, 634.03125],
-								},
-								{
-									coordinates: [-407.40625, 636.21875],
-								},
-								{
-									coordinates: [-405.3125, 638.34375],
-								},
-								{
-									coordinates: [-404.46875, 639.375],
-								},
-								{
-									coordinates: [-405.46875, 641.125],
-								},
-								{
-									coordinates: [-407.15625, 642.25],
-								},
-								{
-									coordinates: [-410.46875, 642.28125],
-								},
-								{
-									coordinates: [-410.40625, 645.15625],
-								},
-								{
-									coordinates: [-410.59375, 647.34375],
-								},
-								{
-									coordinates: [-410.59375, 648.65625],
-								},
-								{
-									coordinates: [-408.28125, 648.9375],
-								},
-								{
-									coordinates: [-407.0625, 649.125],
-								},
-								{
-									coordinates: [-406.6875, 650.4375],
-								},
-								{
-									coordinates: [-406.71875, 653],
-								},
-								{
-									coordinates: [-407.59375, 655.34375],
-								},
-								{
-									coordinates: [-409.03125, 655.5625],
-								},
-								{
-									coordinates: [-411, 653.59375],
-								},
-								{
-									coordinates: [-413.40625, 652.28125],
-								},
-								{
-									coordinates: [-415.375, 651.75],
-								},
-								{
-									coordinates: [-418.96875, 652.375],
-								},
-								{
-									coordinates: [-420.5, 651.25],
+									coordinates: [-418.84375, 646.25],
 									text: 'Approaching the mine exit, they found themselves on a ledge, from which they could see the Paladin citadel in the distance. Deciding the best course of action, they tied roped to the cave wall and climbed down from the ledge safely.',
 									animation: {
 										timer: 2,
@@ -2848,39 +2807,41 @@ const CAMPAIGN_01 = {
 									lights: null,
 								},
 								{
-									coordinates: [-422.25, 650.625],
-									overlays: [],
+									coordinates: [-421.9375, 646.28125],
 								},
 								{
-									coordinates: [-426.875, 651.375],
+									coordinates: [-429, 648.46875],
 								},
 								{
-									coordinates: [-428.5, 646.25],
+									coordinates: [-428.65625, 643.5625],
 								},
 								{
-									coordinates: [-422.875, 634.75],
+									coordinates: [-423.34375, 635.6875],
 								},
 								{
-									coordinates: [-425.25, 625.25],
+									coordinates: [-423.15625, 629.0625],
 								},
 								{
-									coordinates: [-435.5, 615.125],
+									coordinates: [-430.5, 619.21875],
 								},
 								{
-									coordinates: [-440.625, 610.625],
+									coordinates: [-437.625, 612.8125],
 								},
 								{
-									coordinates: [-442.875, 605.5],
+									coordinates: [-444.9375, 608.125],
 								},
 								{
-									coordinates: [-437, 599.25],
+									coordinates: [-442.96875, 603.71875],
 								},
 								{
-									coordinates: [-430.125, 597.75],
+									coordinates: [-436.75, 597.375],
+								},
+								{
+									coordinates: [-431.375, 596.71875],
 									overlays: ['Penal Colony Merchants Cave'],
 								},
 								{
-									coordinates: [-427, 594.75],
+									coordinates: [-424.4375, 590.15625],
 									text: 'Climbing up a ladder, they met two merchants — a penguin and a drugged rabbit - they purchased some items, and took a long rest to replenish their stamina and health.',
 									animation: {
 										timer: 5,
@@ -2910,17 +2871,20 @@ const CAMPAIGN_01 = {
 									filter: ['night-50'],
 								},
 								{
-									coordinates: [-430.5, 595.125],
+									coordinates: [-431.46875, 594.75],
 								},
 								{
-									coordinates: [-438.25, 597.25],
+									coordinates: [-437.375, 596],
+								},
+								{
+									coordinates: [-444.71875, 603.40625],
+								},
+								{
+									coordinates: [-453.65625, 597.5],
 									overlays: [],
 								},
 								{
-									coordinates: [-441.625, 599.625],
-								},
-								{
-									coordinates: [-446.625, 586.875],
+									coordinates: [-445.96875, 583.9375],
 									text: 'The adventurers were ambushed by dinosaurs and nearly wiped out.',
 									animation: {
 										timer: 4,
@@ -2929,7 +2893,10 @@ const CAMPAIGN_01 = {
 									level: 7,
 								},
 								{
-									coordinates: [-444.375, 578.875],
+									coordinates: [-442.875, 579.53125],
+								},
+								{
+									coordinates: [-438.875, 576.90625],
 									text: 'Just as the battle was ending, Diego appeared, clearly a werewolf. After talking with the adventurers, he decided to take them to his hideout.',
 									animation: {
 										type: 'walk',
@@ -2937,26 +2904,25 @@ const CAMPAIGN_01 = {
 									filter: ['night-20'],
 								},
 								{
-									coordinates: [-436.5, 566.5],
+									coordinates: [-436.15625, 562.75],
 								},
 								{
-									coordinates: [-430.125, 559.875],
+									coordinates: [-429.375, 554.40625],
 								},
 								{
-									coordinates: [-428.25, 550.375],
+									coordinates: [-425.96875, 546.09375],
 								},
 								{
-									coordinates: [-422.5, 543.5],
+									coordinates: [-420.28125, 543.34375],
 								},
 								{
-									coordinates: [-420.75, 542.125],
-									filter: null,
+									coordinates: [-420.3125, 537.6875],
 								},
 								{
-									coordinates: [-420.25, 537.625],
+									coordinates: [-417.5625, 531.875],
 								},
 								{
-									coordinates: [-417.5, 532.25],
+									coordinates: [-415.65625, 531.46875],
 									text: "They reached Diego's hideout, concluding the session.",
 									animation: {
 										timer: 5,
@@ -3342,24 +3308,25 @@ const CAMPAIGN_01 = {
 						{
 							name: 'Penal Colony Mine Cave',
 							bounds: [
-								[-364, 613],
-								[-420, 688],
+								[-356, 602],
+								[-418, 687],
 							],
+							rotate: 2,
 							image: 'images/overlays/korinis_island/korinis_island_penal_colony_mine_cave.png',
 						},
 						{
 							name: 'Penal Colony Spider Cave',
 							bounds: [
-								[-381, 712],
-								[-392, 723],
+								[-381.5, 709.5],
+								[-392, 720],
 							],
 							image: 'images/overlays/korinis_island/korinis_island_penal_colony_spider_cave.png',
 						},
 						{
 							name: 'Penal Colony Merchants Cave',
 							bounds: [
-								[-406, 583],
-								[-428, 601],
+								[-411, 580],
+								[-433, 604],
 							],
 							image: 'images/overlays/korinis_island/korinis_island_penal_colony_merchants_cave.png',
 						},
