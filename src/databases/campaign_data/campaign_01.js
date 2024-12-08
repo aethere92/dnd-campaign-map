@@ -699,7 +699,7 @@ const CAMPAIGN_01 = {
 								{
 									lat: -423.25,
 									lng: 590.25,
-									label: 'Quickse and the Penguin',
+									label: 'Quickse and Zero',
 									type: 'people',
 									icon: 'tradeCamp',
 									iconType: 'png',
@@ -1027,7 +1027,7 @@ const CAMPAIGN_01 = {
 							points: [
 								{
 									coordinates: [-275.25, 138.375],
-									text: 'Landing zone for the party.',
+									text: 'Coming from the pirate ship, this is where the party landed on the Korinis Island.',
 								},
 								{
 									coordinates: [-260.75, 144.0625],
@@ -1037,7 +1037,7 @@ const CAMPAIGN_01 = {
 								},
 								{
 									coordinates: [-240.1875, 148],
-									text: 'Went up the path towards the mountains.',
+									text: 'Seeing a path up the mountains, they decided to take it and go towards the mountains.',
 								},
 								{
 									coordinates: [-229.0625, 147.125],
@@ -1056,7 +1056,7 @@ const CAMPAIGN_01 = {
 								},
 								{
 									coordinates: [-192.25, 161.1875],
-									text: 'At the crossroads, they met up with a guy who told them to follow him in the caves as there were some people looking for them. The party, after arguing a bit, agreed.',
+									text: 'At the crossroads, they encountered a man who advised them to follow him into the caves, warning that some individuals were searching for them. After some debate, the party agreed to follow.',
 									animation: {
 										timer: 2,
 										type: 'conversation',
@@ -1134,7 +1134,7 @@ const CAMPAIGN_01 = {
 								},
 								{
 									coordinates: [-144.4375, 284.8125],
-									text: "Reached Lobart farm and talked to its master. Learned the cost of entry into the city and were told to do deeds to gain money for it. Talked to the lead farmer's wife and got a task from her.",
+									text: "They arrived at Lobart's farm and spoke with its master, learning the cost of entry into the city. They were advised to perform deeds to earn money. They also spoke with the lead farmer's wife and received a task from her.",
 									animation: {
 										timer: 2,
 										type: 'conversation',
@@ -1153,7 +1153,7 @@ const CAMPAIGN_01 = {
 								},
 								{
 									coordinates: [-133.75, 335.3125],
-									text: "Down the road, we met a merchant which sold us entry to the city for a favour once inside. Also got a pan for the lead farmer's wife as part of her task.",
+									text: "Further down the road, they met a merchant who offered them entry to the city in exchange for a favor once inside. They also acquired a pan for the lead farmer's wife as part of her task.",
 									animation: {
 										timer: 2,
 										type: 'conversation',
@@ -1166,7 +1166,7 @@ const CAMPAIGN_01 = {
 								},
 								{
 									coordinates: [-137.875, 342.5],
-									text: "We went back to the farmer's wife and gave her the pan. She gave us food to eat. After that, we talked to the lead farmer again and slept in the barn.",
+									text: "They returned to the farmer's wife and gave her the pan. In return, she provided them with food. Afterward, they spoke with the lead farmer again and spent the night in the barn.",
 									animation: {
 										timer: 3,
 										type: 'rest',
@@ -1185,7 +1185,7 @@ const CAMPAIGN_01 = {
 								},
 								{
 									coordinates: [-143.1875, 377.1875],
-									text: 'Talked to the guards and showed them our entry pass. They allowed us into the city.',
+									text: 'They spoke with the guards and presented their entry pass, gaining access to the city.',
 									animation: {
 										timer: 2,
 										type: 'conversation',
@@ -1196,7 +1196,7 @@ const CAMPAIGN_01 = {
 								},
 								{
 									coordinates: [-142.875, 406.625],
-									text: 'Talked to the master paladin guarding the door and learned of the city rules and some whereabouts of the locations we were interested in.',
+									text: 'They talked with the master paladin guarding the door, learning about the city rules and the locations of interest.',
 									animation: {
 										timer: 2,
 										type: 'conversation',
@@ -1234,7 +1234,7 @@ const CAMPAIGN_01 = {
 								},
 								{
 									coordinates: [-149.375, 496.8125],
-									text: 'Walked into the inn and slept. During the night, some of the gold and some of our belongings were stolen.',
+									text: 'They entered the inn and slept. During the night, some of their gold and belongings were stolen.',
 									animation: {
 										timer: 5,
 										type: 'rest',
@@ -2842,7 +2842,7 @@ const CAMPAIGN_01 = {
 								},
 								{
 									coordinates: [-424.4375, 590.15625],
-									text: 'Climbing up a ladder, they met two merchants — a penguin and a drugged rabbit - they purchased some items, and took a long rest to replenish their stamina and health.',
+									text: 'Climbing up a ladder, they met two merchants — a penguin named Zero and a drugged rabbit called Quickse - they purchased some items, and took a long rest to replenish their stamina and health.',
 									animation: {
 										timer: 5,
 										type: 'merchant',
@@ -2885,7 +2885,7 @@ const CAMPAIGN_01 = {
 								},
 								{
 									coordinates: [-445.96875, 583.9375],
-									text: 'The adventurers were ambushed by dinosaurs and nearly wiped out.',
+									text: 'The adventurers were ambushed by dinosaurs and were nearly wiped out.',
 									animation: {
 										timer: 4,
 										type: 'fight',
