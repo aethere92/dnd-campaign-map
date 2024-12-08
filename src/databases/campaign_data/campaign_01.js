@@ -2688,114 +2688,244 @@ const CAMPAIGN_01 = {
 								{
 									coordinates: [-391.90625, 687.6875],
 								},
+								// {
+								// 	coordinates: [-390.875, 680.53125],
+								// },
+								// {
+								// 	coordinates: [-391.53125, 676.34375],
+								// },
+								// {
+								// 	coordinates: [-393.625, 672.84375],
+								// 	animation: {
+								// 		timer: 2,
+								// 		type: 'question',
+								// 	},
+								// },
+								// {
+								// 	coordinates: [-393.4375, 668.96875],
+								// },
+								// {
+								// 	coordinates: [-392.25, 666.6875],
+								// },
+								// {
+								// 	coordinates: [-389.09375, 666.625],
+								// },
+								// {
+								// 	coordinates: [-386.4375, 664.1875],
+								// },
+								// {
+								// 	coordinates: [-386.0625, 658.78125],
+								// },
+								// {
+								// 	coordinates: [-387.25, 649.5],
+								// },
+								// {
+								// 	coordinates: [-383.28125, 647.78125],
+								// },
+								// {
+								// 	coordinates: [-381.125, 645.8125],
+								// },
+								// {
+								// 	coordinates: [-380.75, 639.84375],
+								// },
+								// {
+								// 	coordinates: [-382.625, 635.8125],
+								// },
+								// {
+								// 	coordinates: [-387.1875, 636.84375],
+								// },
+								// {
+								// 	coordinates: [-391.4375, 639.15625],
+								// },
+								// {
+								// 	coordinates: [-394.03125, 637.3125],
+								// },
+								// {
+								// 	coordinates: [-393.875, 631.0625],
+								// },
+								// {
+								// 	coordinates: [-394.34375, 624.5],
+								// },
+								// {
+								// 	coordinates: [-397.875, 622.875],
+								// },
+								// {
+								// 	coordinates: [-401.78125, 622.25],
+								// },
+								// {
+								// 	coordinates: [-403.21875, 623.875],
+								// },
+								// {
+								// 	coordinates: [-404.125, 628.0625],
+								// },
+								// {
+								// 	coordinates: [-402.875, 630.5],
+								// },
+								// {
+								// 	coordinates: [-401.03125, 631.3125],
+								// },
+								// {
+								// 	coordinates: [-402, 633.78125],
+								// },
+								// {
+								// 	coordinates: [-403.59375, 634.75],
+								// },
+								// {
+								// 	coordinates: [-407.5625, 634.59375],
+								// },
+								// {
+								// 	coordinates: [-407.34375, 640.09375],
+								// },
+								// {
+								// 	coordinates: [-406.84375, 642.15625],
+								// },
+								// {
+								// 	coordinates: [-403.84375, 642.6875],
+								// },
+								// {
+								// 	coordinates: [-403.46875, 647.6875],
+								// },
+								// {
+								// 	coordinates: [-404.65625, 650.15625],
+								// },
+								// {
+								// 	coordinates: [-407.53125, 648.875],
+								// },
+								// {
+								// 	coordinates: [-410.03125, 646.59375],
+								// },
+								// {
+								// 	coordinates: [-414.1875, 646.21875],
+								// },
 								{
-									coordinates: [-390.875, 680.53125],
+									coordinates: [-391.625, 684.75],
 								},
 								{
-									coordinates: [-391.53125, 676.34375],
+									coordinates: [-389.8125, 678.8125],
 								},
 								{
-									coordinates: [-393.625, 672.84375],
+									coordinates: [-390.8125, 671.1875],
 									animation: {
 										timer: 2,
 										type: 'question',
 									},
 								},
 								{
-									coordinates: [-393.4375, 668.96875],
+									coordinates: [-391.375, 667.84375],
 								},
 								{
-									coordinates: [-392.25, 666.6875],
+									coordinates: [-388.65625, 666.125],
 								},
 								{
-									coordinates: [-389.09375, 666.625],
+									coordinates: [-385.4375, 666.625],
 								},
 								{
-									coordinates: [-386.4375, 664.1875],
+									coordinates: [-382.71875, 666.40625],
 								},
 								{
-									coordinates: [-386.0625, 658.78125],
+									coordinates: [-381.03125, 663.65625],
 								},
 								{
-									coordinates: [-387.25, 649.5],
+									coordinates: [-377.96875, 660.875],
 								},
 								{
-									coordinates: [-383.28125, 647.78125],
+									coordinates: [-376.71875, 655.5],
 								},
 								{
-									coordinates: [-381.125, 645.8125],
+									coordinates: [-378.0625, 649.3125],
 								},
 								{
-									coordinates: [-380.75, 639.84375],
+									coordinates: [-380.09375, 644.4375],
 								},
 								{
-									coordinates: [-382.625, 635.8125],
+									coordinates: [-381.09375, 641],
 								},
 								{
-									coordinates: [-387.1875, 636.84375],
+									coordinates: [-383.15625, 637.25],
 								},
 								{
-									coordinates: [-391.4375, 639.15625],
+									coordinates: [-384.21875, 634.09375],
 								},
 								{
-									coordinates: [-394.03125, 637.3125],
+									coordinates: [-387.46875, 630.8125],
 								},
 								{
-									coordinates: [-393.875, 631.0625],
+									coordinates: [-390.0625, 627.1875],
 								},
 								{
-									coordinates: [-394.34375, 624.5],
+									coordinates: [-391.28125, 624.3125],
 								},
 								{
-									coordinates: [-397.875, 622.875],
+									coordinates: [-390.8125, 619.90625],
 								},
 								{
-									coordinates: [-401.78125, 622.25],
+									coordinates: [-390.5625, 614.78125],
 								},
 								{
-									coordinates: [-403.21875, 623.875],
+									coordinates: [-390, 608.75],
 								},
 								{
-									coordinates: [-404.125, 628.0625],
+									coordinates: [-392.71875, 608.0625],
 								},
 								{
-									coordinates: [-402.875, 630.5],
+									coordinates: [-393.875, 611.21875],
 								},
 								{
-									coordinates: [-401.03125, 631.3125],
+									coordinates: [-394.84375, 613.78125],
 								},
 								{
-									coordinates: [-402, 633.78125],
+									coordinates: [-398.375, 614.34375],
 								},
 								{
-									coordinates: [-403.59375, 634.75],
+									coordinates: [-401.84375, 615.3125],
 								},
 								{
-									coordinates: [-407.5625, 634.59375],
+									coordinates: [-401.59375, 619.21875],
 								},
 								{
-									coordinates: [-407.34375, 640.09375],
+									coordinates: [-400.3125, 621.6875],
 								},
 								{
-									coordinates: [-406.84375, 642.15625],
+									coordinates: [-397.96875, 623.34375],
 								},
 								{
-									coordinates: [-403.84375, 642.6875],
+									coordinates: [-395.21875, 625.65625],
 								},
 								{
-									coordinates: [-403.46875, 647.6875],
+									coordinates: [-395.78125, 629.5625],
 								},
 								{
-									coordinates: [-404.65625, 650.15625],
+									coordinates: [-399.0625, 631.09375],
 								},
 								{
-									coordinates: [-407.53125, 648.875],
+									coordinates: [-402.59375, 631.71875],
 								},
 								{
-									coordinates: [-410.03125, 646.59375],
+									coordinates: [-404.25, 636.9375],
 								},
 								{
-									coordinates: [-414.1875, 646.21875],
+									coordinates: [-404.09375, 644.09375],
+								},
+								{
+									coordinates: [-406.71875, 647.5],
+								},
+								{
+									coordinates: [-409.34375, 646.375],
+								},
+								{
+									coordinates: [-410.28125, 643.03125],
+								},
+								{
+									coordinates: [-411, 640.875],
+								},
+								{
+									coordinates: [-413.375, 641.96875],
+								},
+								{
+									coordinates: [-415.78125, 645.375],
+								},
+								{
+									coordinates: [-418.125, 645.71875],
 								},
 								{
 									coordinates: [-418.84375, 646.25],
@@ -3307,12 +3437,19 @@ const CAMPAIGN_01 = {
 					overlays: [
 						{
 							name: 'Penal Colony Mine Cave',
+							// V1 CODE
+							// bounds: [
+							// 	[-356, 602],
+							// 	[-418, 687],
+							// ],
+							// image: 'images/overlays/korinis_island/korinis_island_penal_colony_mine_cave.png',
+
+							// V2 CODE
 							bounds: [
-								[-356, 602],
-								[-418, 687],
+								[-347.5, 596],
+								[-420, 690],
 							],
-							rotate: 2,
-							image: 'images/overlays/korinis_island/korinis_island_penal_colony_mine_cave.png',
+							image: 'images/overlays/korinis_island/korinis_island_penal_colony_mine_cave_v2.png',
 						},
 						{
 							name: 'Penal Colony Spider Cave',
