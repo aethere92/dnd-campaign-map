@@ -101,6 +101,8 @@ class PathAnimationMarker {
 			loot: '💎',
 			walk: '👣',
 			question: '❓',
+			potion: '🧪',
+			danger: '💀',
 		};
 		return effectMap[type] || '👣';
 	}
@@ -515,6 +517,12 @@ class PathAnimationRecap {
 				break;
 			case 'question':
 				icon = '❓';
+				break;
+			case 'potion':
+				icon = '🧪';
+				break;
+			case 'danger':
+				icon = '💀';
 				break;
 			default:
 				icon = '👣';

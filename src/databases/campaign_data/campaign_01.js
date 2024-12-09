@@ -3218,7 +3218,7 @@ const CAMPAIGN_01 = {
 									text: 'They executed their plan: the sorcerer, bard, and ranger transformed into wargs, Mitzy started to run, the barbarian consumed drugs, and the cleric flew invisibly into the sky.',
 									animation: {
 										timer: 3,
-										type: 'walk',
+										type: 'potion',
 									},
 								},
 								{
@@ -3325,7 +3325,7 @@ const CAMPAIGN_01 = {
 									text: 'They got three Fly potions from the dragon riders.',
 									animation: {
 										timer: 3,
-										type: 'conversation',
+										type: 'merchant',
 									},
 								},
 								{
@@ -3336,7 +3336,7 @@ const CAMPAIGN_01 = {
 									text: "They put their plan into action: the sorcerer cast Dimension Door to Diego's Hut, while the others drank the Fly potions and got Invisibile. They had to go slower, because the Ranger was also carrying Mitzy. The Fire Mage and the Mercenary used a spell to teleport towards the open sea and swim towards Korinis.",
 									animation: {
 										timer: 3,
-										type: 'question',
+										type: 'potion',
 									},
 									overlays: [],
 								},
@@ -3385,7 +3385,7 @@ const CAMPAIGN_01 = {
 									text: "At Diego's, they took turns resting. Six hours in, Diego returned with trolls and a huge coffer. The coffer exploded during opening, containing 10 otter hides and some gold, which Diego split with the party. They decided to leave the Penal Colony, taking the route they came from.",
 									animation: {
 										timer: 7,
-										type: 'sleep',
+										type: 'rest',
 									},
 								},
 								{
@@ -3675,6 +3675,10 @@ const CAMPAIGN_01 = {
 								{
 									coordinates: [-92.125, 897.125],
 									text: 'To their right, up in the abandoned tower, there were more seekers waiting to ambush.',
+									animation: {
+										timer: 1,
+										type: 'danger',
+									},
 								},
 								{
 									coordinates: [-86, 893.5],
