@@ -566,7 +566,7 @@ const CAMPAIGN_01 = {
 						sizes: {
 							maxZoom: 5,
 							imageWidth: 32069,
-							imageHeight: 16845,
+							imageHeight: 19161,
 						},
 						backgroundColor: `linear-gradient(rgba(26, 20, 18, 0.97), rgba(26, 20, 18, 0.97)),url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 0l30 30-30 30L0 30z' fill='%23241c1a' fill-opacity='0.4' fill-rule='evenodd'/%3E%3C/svg%3E")`,
 					},
@@ -702,6 +702,14 @@ const CAMPAIGN_01 = {
 									label: 'Quickse and Zero',
 									type: 'people',
 									icon: 'tradeCamp',
+									iconType: 'png',
+								},
+								{
+									lat: -206.25,
+									lng: 401.8125,
+									label: 'Salamander',
+									type: 'people',
+									icon: 'tradeShop',
 									iconType: 'png',
 								},
 							],
@@ -905,11 +913,35 @@ const CAMPAIGN_01 = {
 									iconType: 'png',
 								},
 								{
-									lat: -503.75,
-									lng: 534.5,
-									label: 'Paladin Citadel',
-									type: 'people',
+									lat: -522.6875,
+									lng: 511.8125,
+									label: 'Paladin Citadel Barracks',
+									type: 'place',
 									icon: 'city',
+									iconType: 'png',
+								},
+								{
+									lat: -534.78125,
+									lng: 533.5625,
+									label: 'Fire Mages Chapel',
+									type: 'place',
+									icon: 'templeShrine',
+									iconType: 'png',
+								},
+								{
+									lat: -327.125,
+									lng: 519.625,
+									label: 'Lizardmen Harbour',
+									type: 'place',
+									icon: 'cityLizard',
+									iconType: 'png',
+								},
+								{
+									lat: -436.25,
+									lng: 453.125,
+									label: 'Penal Colony Ore Encounter',
+									type: 'place',
+									icon: 'poiDanger',
 									iconType: 'png',
 								},
 							],
@@ -973,7 +1005,7 @@ const CAMPAIGN_01 = {
 								{
 									lat: -238.9375,
 									lng: 683.5625,
-									label: 'Ruined Tower Mages',
+									label: 'Ruined Tower Seekers',
 									type: 'people',
 									icon: 'poiCombat',
 									iconType: 'png',
@@ -1002,6 +1034,14 @@ const CAMPAIGN_01 = {
 									icon: 'poiCombat',
 									iconType: 'png',
 								},
+								{
+									lat: -428.6875,
+									lng: 552.9375,
+									label: 'Seekers ambush',
+									type: 'place',
+									icon: 'poiCombat',
+									iconType: 'png',
+								},
 							],
 						},
 						landmarks: {
@@ -1017,12 +1057,28 @@ const CAMPAIGN_01 = {
 									description: `The main town of Korinis is a captivating town of contrasts. Nestled between the open waters and rugged hills, its bustling harbour is alive with the scent of saltwater and the sounds of merchants peddling their wares amidst poverty and resourcefulness. The lower city, a maze of alleys and market squares, thrives with commerce and crafts, shadowed by the vigilant paladins who ensure safety at the cost of freedom. The upper city, dominated by the paladins' formidable barracks, exudes grandeur and control, with wide streets and grand homes. In this town of Korinis, prosperity and poverty coexist, and every street tells a story.`,
 									image: '797410b1-f8a8-4d16-810c-011927fa1f8d.jpg',
 								},
+								{
+									lat: -488.75,
+									lng: 539.6875,
+									label: 'Paladin Citadel',
+									type: 'landmark',
+									icon: 'poiLandmarks3',
+									iconType: 'png',
+								},
+								{
+									lat: -85.375,
+									lng: 882.25,
+									label: 'General Lee Encampment',
+									type: 'landmark',
+									icon: 'poiLandmarks3',
+									iconType: 'png',
+								},
 							],
 						},
 					},
 					paths: [
 						{
-							name: 'Session 1 Recap',
+							name: '01. Session 1 Recap',
 							lineColor: '#e2b203',
 							points: [
 								{
@@ -1244,7 +1300,7 @@ const CAMPAIGN_01 = {
 							],
 						},
 						{
-							name: 'Session 3 Recap',
+							name: '03. Session 3 Recap',
 							lineColor: '#2898bd',
 							points: [
 								{
@@ -1537,7 +1593,7 @@ const CAMPAIGN_01 = {
 							],
 						},
 						{
-							name: 'Session 4 Recap',
+							name: '04. Session 4 Recap',
 							lineColor: '#ff7e55',
 							points: [
 								{
@@ -1795,7 +1851,7 @@ const CAMPAIGN_01 = {
 							],
 						},
 						{
-							name: 'Session 7 Recap',
+							name: '07. Session 7 Recap',
 							lineColor: '#84d8e3',
 							points: [
 								{
@@ -2058,7 +2114,7 @@ const CAMPAIGN_01 = {
 							],
 						},
 						{
-							name: 'Session 8 Recap',
+							name: '08. Session 8 Recap',
 							lineColor: '#ff5722',
 							points: [
 								{
@@ -2427,7 +2483,7 @@ const CAMPAIGN_01 = {
 							],
 						},
 						{
-							name: 'Session 9 Recap',
+							name: '09. Session 9 Recap',
 							lineColor: 'rgb(188 64 255)',
 							points: [
 								{
@@ -3060,6 +3116,794 @@ const CAMPAIGN_01 = {
 								},
 							],
 						},
+						{
+							name: '10. Session 10 Recap',
+							lineColor: '#bf3636',
+							points: [
+								{
+									coordinates: [-418.625, 534.5],
+									text: "This is where the session started. At Diego's, the party took a long rest to prepare for their journey to the paladin citadel.",
+									animation: {
+										timer: 3,
+									},
+								},
+								{
+									coordinates: [-419.5, 530.25],
+									text: 'Hearing a loud bang, they looked to the harbour area and witnessed a dragon demolishing a large wall from the sea filled with portals. After that, they saw the Wicked Wench bombing the harbour.',
+									animation: {
+										timer: 3,
+										type: 'question',
+									},
+								},
+								{
+									coordinates: [-422.5, 536],
+								},
+								{
+									coordinates: [-421.875, 541.375],
+									text: 'Some of the lizardmen retreated after a gong was sounded, revealing it was their weekend, which they spent not taking part in any fights.',
+									animation: {
+										timer: 3,
+									},
+								},
+								{
+									coordinates: [-427.25, 545.75],
+								},
+								{
+									coordinates: [-429.5, 551.375],
+								},
+								{
+									coordinates: [-439.875, 549],
+								},
+								{
+									coordinates: [-448.25, 538.5],
+								},
+								{
+									coordinates: [-451.875, 521.75],
+									text: 'The group headed towards the citadel, taking the route leading to the battering ram section of the wall.',
+								},
+								{
+									coordinates: [-454.5, 509],
+								},
+								{
+									coordinates: [-458.375, 494.625],
+								},
+								{
+									coordinates: [-460.875, 484.75],
+									text: 'In the distance, they spotted a wooden fence with a fallen paladin nearby.',
+									animation: {
+										timer: 3,
+										type: 'walk',
+									},
+								},
+								{
+									coordinates: [-456, 478.25],
+								},
+								{
+									coordinates: [-449.5, 472.125],
+								},
+								{
+									coordinates: [-445.25, 467.875],
+								},
+								{
+									coordinates: [-443.75, 461.375],
+								},
+								{
+									coordinates: [-440.75, 457.875],
+								},
+								{
+									coordinates: [-437.25, 460.75],
+									text: 'The ranger stealthily approached and discovered the dead paladin, two more deceased members who looked like prisoners, and several holes in the ground. Nearby were six carts filled with ore and a letter inside the shack.',
+									animation: {
+										timer: 3,
+										type: 'question',
+									},
+								},
+								{
+									coordinates: [-438.625, 455.125],
+								},
+								{
+									coordinates: [-445.75, 455.875],
+								},
+								{
+									coordinates: [-448.75, 465.375],
+								},
+								{
+									coordinates: [-458, 471.375],
+								},
+								{
+									coordinates: [-467.5, 478.875],
+								},
+								{
+									coordinates: [-468, 485.46875],
+									text: 'They executed their plan: the sorcerer, bard, and ranger transformed into wargs, Mitzy started to run, the barbarian consumed drugs, and the cleric flew invisibly into the sky.',
+									animation: {
+										timer: 3,
+										type: 'walk',
+									},
+								},
+								{
+									coordinates: [-475.875, 488.375],
+									pointColor: 'lightblue',
+								},
+								{
+									coordinates: [-483.75, 479.625],
+									pointColor: 'lightblue',
+								},
+								{
+									coordinates: [-497.5, 480.125],
+									pointColor: 'lightblue',
+								},
+								{
+									coordinates: [-505, 486.25],
+									pointColor: 'lightblue',
+									overlays: ['Penal Colony Chapel', 'Penal Colony Paladin Barracks'],
+								},
+								{
+									coordinates: [-509, 492.625],
+									text: "The cleric reached the citadel and informed the guards of the party's arrival while discussing soup recipes. The barbarian and two wargs arrived at the citadel after several failed attempts; the barbarian got impaled on barbs, and the wargs struggled with the jumps. The last warg, the bard, failed an intelligence check and chased squirrels but eventually made it.",
+									animation: {
+										timer: 5,
+										type: 'question',
+									},
+								},
+								{
+									coordinates: [-513.625, 498],
+								},
+								{
+									coordinates: [-512.5, 507.375],
+									text: 'Upon reaching the citadel, they dispelled their warg transformations.',
+								},
+								{
+									coordinates: [-515.875, 513.25],
+								},
+								{
+									coordinates: [-523.875, 509.625],
+									text: 'They spoke to the paladin in charge - a guy called Garrond — and learned only 11 carts had been mined.',
+									animation: {
+										timer: 3,
+										type: 'conversation',
+									},
+								},
+								{
+									coordinates: [-519.875, 516.375],
+								},
+								{
+									coordinates: [-519.625, 528.625],
+								},
+								{
+									coordinates: [-522.375, 535.25],
+									text: 'Two members visited the chapel to talk to the fire mage while the other three spoke with new riders. The riders were dragon hunters who arrived on flying beasts after hearing a dragon was spotted in these lands. Upon request, they agreed to helping the party escape the citadel again either by carrying them or by casting Fly on them.',
+									animation: {
+										timer: 5,
+										type: 'conversation',
+									},
+								},
+								{
+									coordinates: [-527.875, 531.25],
+								},
+								{
+									coordinates: [-536.25, 535.125],
+									text: 'In the chapel, they learned the other party member was imprisoned with a ransom of 1000 gold. The fire mage would contribute 250, they had an idol/statue worth 250, and they pooled the remaining 500 in gold and jewelry.',
+									animation: {
+										timer: 5,
+										type: 'conversation',
+									},
+								},
+								{
+									coordinates: [-523.25, 526.375],
+									animation: {
+										type: 'walk',
+									},
+								},
+								{
+									coordinates: [-524.75, 515.625],
+								},
+								{
+									coordinates: [-526.625, 509.5],
+									text: 'They went back to rescue Gorn, Diegos comrade. After that, they chose to go back to the chapel to devise a plan.',
+									animation: {
+										timer: 3,
+										type: 'conversation',
+									},
+								},
+								{
+									coordinates: [-527.5, 522.25],
+								},
+								{
+									coordinates: [-545.75, 539.375],
+									text: "After a long talk, they formulated the plan: two members (Bard and Sorcerer) would teleport via Dimension Door to Diego's hut, while the others would inquire the help of the dragon hunters. If they could cast Fly on them, then the Sorcerer would cast Invisibility on each of them and they would fly. If they couldn't fly themselves, then the riders would carry them, though that would be more dangerous.",
+									animation: {
+										timer: 5,
+										type: 'conversation',
+									},
+								},
+								{
+									coordinates: [-542.375, 540.375],
+								},
+								{
+									coordinates: [-528.375, 539],
+									text: 'They got three Fly potions from the dragon riders.',
+									animation: {
+										timer: 3,
+										type: 'conversation',
+									},
+								},
+								{
+									coordinates: [-514.75, 536],
+								},
+								{
+									coordinates: [-509, 532.875],
+									text: "They put their plan into action: the sorcerer cast Dimension Door to Diego's Hut, while the others drank the Fly potions and got Invisibile. They had to go slower, because the Ranger was also carrying Mitzy. The Fire Mage and the Mercenary used a spell to teleport towards the open sea and swim towards Korinis.",
+									animation: {
+										timer: 3,
+										type: 'question',
+									},
+									overlays: [],
+								},
+								{
+									coordinates: [-469.125, 545.75],
+									pointColor: 'lightblue',
+								},
+								{
+									coordinates: [-448.75, 553.25],
+									filter: ['fight'],
+									pointColor: 'lightblue',
+								},
+								{
+									coordinates: [-429.75, 555.875],
+									text: "Near Diego's hut, they were ambushed by hooded figures: four mages, one barbarian, and one rogue. After a fierce battle, they emerged victorious.",
+									animation: {
+										timer: 6,
+										type: 'fight',
+									},
+									loot: [
+										{
+											name: 'Cloak of Shifting Patterns',
+											description:
+												'Your body is blurred. Any attack on you is made with disadvantage. If the attack hits, the blur drops and is reapplied after 3 turns.',
+											rarity: 'uncommon',
+											type: 'item',
+										},
+										{
+											name: 'Belt of the Trickster',
+											description:
+												'After a successful 1h melee attack you can use your BONUS ATTACK or REACTION to turn invisible for 1 round.',
+											rarity: 'uncommon',
+											type: 'item',
+										},
+									],
+								},
+								{
+									coordinates: [-426.125, 549],
+									filter: null,
+								},
+								{
+									coordinates: [-419.625, 543],
+								},
+								{
+									coordinates: [-417.875, 536.875],
+									text: "At Diego's, they took turns resting. Six hours in, Diego returned with trolls and a huge coffer. The coffer exploded during opening, containing 10 otter hides and some gold, which Diego split with the party. They decided to leave the Penal Colony, taking the route they came from.",
+									animation: {
+										timer: 7,
+										type: 'sleep',
+									},
+								},
+								{
+									coordinates: [-416.25, 542.625],
+								},
+								{
+									coordinates: [-424.125, 550.125],
+								},
+								{
+									coordinates: [-428.375, 559],
+								},
+								{
+									coordinates: [-437.75, 565.625],
+								},
+								{
+									coordinates: [-439.625, 577.75],
+								},
+								{
+									coordinates: [-441.375, 595.625],
+								},
+								{
+									coordinates: [-444.75, 608.125],
+								},
+								{
+									coordinates: [-435, 614.5],
+								},
+								{
+									coordinates: [-424.875, 625.375],
+								},
+								{
+									coordinates: [-423.125, 634.25],
+								},
+								{
+									coordinates: [-427.625, 643.75],
+									overlays: ['Penal Colony Mine Cave'],
+								},
+								{
+									coordinates: [-422.125, 645.75],
+								},
+								{
+									coordinates: [-414.125, 643.625],
+								},
+								{
+									coordinates: [-411.375, 640.625],
+								},
+								{
+									coordinates: [-409.375, 646.625],
+								},
+								{
+									coordinates: [-405.125, 646.375],
+								},
+								{
+									coordinates: [-404.25, 633.25],
+								},
+								{
+									coordinates: [-401.5, 630.875],
+								},
+								{
+									coordinates: [-398.625, 631.625],
+								},
+								{
+									coordinates: [-395, 627.625],
+								},
+								{
+									coordinates: [-397.25, 623.75],
+								},
+								{
+									coordinates: [-401.125, 621.875],
+								},
+								{
+									coordinates: [-401.75, 615.75],
+								},
+								{
+									coordinates: [-397.625, 614.375],
+								},
+								{
+									coordinates: [-394.25, 614.125],
+								},
+								{
+									coordinates: [-393.25, 608.625],
+								},
+								{
+									coordinates: [-391, 607.625],
+								},
+								{
+									coordinates: [-390, 614.125],
+								},
+								{
+									coordinates: [-391.25, 622.125],
+								},
+								{
+									coordinates: [-388.125, 630],
+								},
+								{
+									coordinates: [-382.75, 636.875],
+								},
+								{
+									coordinates: [-378.125, 646.75],
+								},
+								{
+									coordinates: [-376.125, 655.5],
+								},
+								{
+									coordinates: [-380.125, 661.5],
+								},
+								{
+									coordinates: [-384.375, 668],
+								},
+								{
+									coordinates: [-388, 666.25],
+								},
+								{
+									coordinates: [-392.125, 667.75],
+								},
+								{
+									coordinates: [-389.75, 674.25],
+									overlays: [],
+								},
+								{
+									coordinates: [-393.375, 692.75],
+								},
+								{
+									coordinates: [-395.125, 713.625],
+									overlays: ['Penal Colony Spider Cave'],
+								},
+								{
+									coordinates: [-393.5625, 714.53125],
+								},
+								{
+									coordinates: [-388.75, 715.28125],
+								},
+								{
+									coordinates: [-386.90625, 714.71875],
+								},
+								{
+									coordinates: [-385.09375, 709.4375],
+									overlays: [],
+								},
+								{
+									coordinates: [-384.1875, 705.875],
+								},
+								{
+									coordinates: [-381.375, 705.15625],
+									text: 'Made it safely to the paladin checkpoint.',
+									animation: {
+										timer: 1,
+									},
+								},
+								{
+									coordinates: [-367.5625, 703.0625],
+								},
+								{
+									coordinates: [-365.71875, 703.40625],
+									text: "As they approached the checkpoint, they saw that its entrance had been destroyed and that the two paladin guards had been killed. They contacted Lee, who sent reinforcements to help them flee. In the conversation, they learned that those creatures' names were seekers.",
+									animation: {
+										timer: 5,
+										type: 'conversation',
+									},
+								},
+								{
+									coordinates: [-355, 702.375],
+								},
+								{
+									coordinates: [-333.5, 703.375],
+								},
+								{
+									coordinates: [-307, 703],
+								},
+								{
+									coordinates: [-285.5, 700.625],
+									text: 'They chose to head back to the tavern and then towards Lee.',
+								},
+								{
+									coordinates: [-265.625, 700.875],
+								},
+								{
+									coordinates: [-239.375, 700.25],
+								},
+								{
+									coordinates: [-215, 700.75],
+								},
+								{
+									coordinates: [-181.25, 698.125],
+								},
+								{
+									coordinates: [-167.875, 694.375],
+									text: "At the crossroads, they saw other seekers waiting to ambush them, so they decided to take a detour through the lake and towards Erol's house.",
+									animation: {
+										timer: 2,
+										type: 'question',
+									},
+								},
+								{
+									coordinates: [-167.25, 699.875],
+								},
+								{
+									coordinates: [-175.75, 704.5],
+								},
+								{
+									coordinates: [-182.625, 707.625],
+								},
+								{
+									coordinates: [-177.75, 712.25],
+								},
+								{
+									coordinates: [-171.75, 717.375],
+								},
+								{
+									coordinates: [-171.125, 721.75],
+								},
+								{
+									coordinates: [-171.875, 728],
+								},
+								{
+									coordinates: [-176.5, 733.25],
+								},
+								{
+									coordinates: [-185.875, 734.5],
+								},
+								{
+									coordinates: [-193.875, 736.125],
+								},
+								{
+									coordinates: [-197.625, 741.5],
+								},
+								{
+									coordinates: [-202.75, 746.25],
+								},
+								{
+									coordinates: [-199.375, 751.875],
+								},
+								{
+									coordinates: [-194.375, 761.875],
+								},
+								{
+									coordinates: [-189.5, 772],
+								},
+								{
+									coordinates: [-187.875, 782.625],
+								},
+								{
+									coordinates: [-185.125, 791],
+								},
+								{
+									coordinates: [-181.5, 793.5],
+									text: "Reaching Erol's house (barely, for the party Cleric), they talked with him and then went onwards to General Lee.",
+									animation: {
+										timer: 3,
+										type: 'conversation',
+									},
+								},
+								{
+									coordinates: [-176, 797.25],
+								},
+								{
+									coordinates: [-161.5, 796.75],
+								},
+								{
+									coordinates: [-159.25, 813.875],
+								},
+								{
+									coordinates: [-159.875, 838.875],
+								},
+								{
+									coordinates: [-159, 868.5],
+								},
+								{
+									coordinates: [-159.5, 884.75],
+									text: "They saw more seekers straight ahead, guarding the entrance towards the mountain path. They had their backs turned towards them, so they didn't spot the party.",
+									animation: {
+										timer: 2,
+										type: 'question',
+									},
+								},
+								{
+									coordinates: [-159.25, 897.875],
+								},
+								{
+									coordinates: [-149.125, 898.25],
+								},
+								{
+									coordinates: [-126.5, 897.125],
+								},
+								{
+									coordinates: [-99, 896.75],
+								},
+								{
+									coordinates: [-92.125, 897.125],
+									text: 'To their right, up in the abandoned tower, there were more seekers waiting to ambush.',
+								},
+								{
+									coordinates: [-86, 893.5],
+									text: 'Talked to Zero and Quixie and learned that she had bought some more items.',
+									animation: {
+										timer: 5,
+										type: 'conversation',
+									},
+								},
+								{
+									coordinates: [-85, 884.25],
+								},
+								{
+									coordinates: [-76.25, 886.375],
+								},
+								{
+									coordinates: [-71, 888.25],
+									text: 'They arranged to meet Lee at the pyramids the next day and received 2000 gold as thanks for their aid.',
+									animation: {
+										timer: 5,
+										type: 'conversation',
+									},
+								},
+								{
+									coordinates: [-79.75, 900.875],
+								},
+								{
+									coordinates: [-94.5, 898.75],
+									animation: {
+										timer: 2,
+										type: 'wait',
+									},
+									text: 'They all turned invisible in order to avoid the seekers and started to go back towards the tavern, to use the teleporter to the city.',
+								},
+								{
+									coordinates: [-157.875, 895.875],
+								},
+								{
+									coordinates: [-158.5, 786.125],
+								},
+								{
+									coordinates: [-159.75, 714.625],
+								},
+								{
+									coordinates: [-159.625, 695.125],
+									text: 'Near the tavern they saw Diego and shouted towards him to come with them via the teleporters.',
+								},
+								{
+									coordinates: [-160.5, 679.875],
+								},
+								{
+									coordinates: [-167.75, 676.625],
+								},
+								{
+									coordinates: [-174.875, 669.5],
+								},
+								{
+									coordinates: [-182.5, 666.875],
+								},
+								{
+									coordinates: [-201, 655.875],
+									text: 'Reaching the teleporter location, they entered the cave and used the teleporter.',
+									animation: {
+										timer: 2,
+										type: 'wait',
+									},
+								},
+								{
+									coordinates: [-201, 655.875],
+									pointColor: 'yellow',
+									pointWidth: 1,
+								},
+								{
+									coordinates: [-42.625, 580.75],
+									text: 'Upon reaching the pyramid, they saw 4 black mercenary guards guarding the teleporter, and then proceeded towards the other location.',
+									animation: {
+										timer: 2,
+										type: 'wait',
+									},
+								},
+								{
+									coordinates: [-42.625, 580.75],
+									pointColor: 'yellow',
+									pointWidth: 1,
+								},
+								{
+									coordinates: [-113.25, 560.125],
+									text: 'Exiting the cave and the teleporter, they decided to go towards the city.',
+									animation: {
+										timer: 2,
+										type: 'wait',
+									},
+								},
+								{
+									coordinates: [-117.75, 561],
+								},
+								{
+									coordinates: [-120.75, 552.75],
+									text: 'They saw a few more seekers, some of them were waiting to ambush them on the road to Korinis, while the others were waiting on the path towards the lighthouse.',
+								},
+								{
+									coordinates: [-126.25, 552.25],
+								},
+								{
+									coordinates: [-138.625, 546],
+								},
+								{
+									coordinates: [-141.875, 534.625],
+								},
+								{
+									coordinates: [-141.875, 511.625],
+								},
+								{
+									coordinates: [-142.375, 489.125],
+									text: 'Safely into the city, they parted ways with Diego, who had some business to attend to in the upper city.',
+									animation: {
+										timer: 1,
+										type: 'conversation',
+									},
+								},
+								{
+									coordinates: [-151.375, 490],
+								},
+								{
+									coordinates: [-152.125, 474.625],
+								},
+								{
+									coordinates: [-157.75, 469.875],
+								},
+								{
+									coordinates: [-156.875, 458.125],
+								},
+								{
+									coordinates: [-158.375, 442.125],
+								},
+								{
+									coordinates: [-167.625, 435.875],
+								},
+								{
+									coordinates: [-168.25, 430],
+								},
+								{
+									coordinates: [-165.625, 427.75],
+									text: 'They visited Thorben, who reprimanded the Ranger for being the worst apprentice he had ever had. The ranger did buy 40 +hit arrows and 100 normal arrows. After that, they decided to go to the merchants area to buy some potions.',
+									animation: {
+										timer: 3,
+										type: 'conversation',
+									},
+								},
+								{
+									coordinates: [-158.5, 429.875],
+								},
+								{
+									coordinates: [-153.75, 434.875],
+								},
+								{
+									coordinates: [-148.875, 437.375],
+								},
+								{
+									coordinates: [-142.875, 437.5],
+								},
+								{
+									coordinates: [-141.25, 483.875],
+								},
+								{
+									coordinates: [-135.625, 493.375],
+								},
+								{
+									coordinates: [-135.125, 500],
+								},
+								{
+									coordinates: [-130.625, 507.625],
+									text: 'Having reached the merchants, they bought some mana and healing potions.',
+									animation: {
+										timer: 2,
+										type: 'merchant',
+									},
+								},
+								{
+									coordinates: [-132.125, 519.625],
+								},
+								{
+									coordinates: [-139.25, 520.875],
+								},
+								{
+									coordinates: [-141.75, 422.125],
+								},
+								{
+									coordinates: [-147.375, 414.5],
+								},
+								{
+									coordinates: [-156.5, 413.625],
+								},
+								{
+									coordinates: [-163.375, 406.875],
+								},
+								{
+									coordinates: [-172.875, 403.5],
+								},
+								{
+									coordinates: [-181.25, 405.5],
+								},
+								{
+									coordinates: [-189.75, 402.5],
+								},
+								{
+									coordinates: [-191.75, 395.625],
+									text: 'Saw Diego again as he was kicking out someone who had betrayed him. He offered the party a place to sleep in any time they wanted.',
+									animation: {
+										timer: 3,
+										type: 'conversation',
+									},
+								},
+								{
+									coordinates: [-200.28125, 398.90625],
+								},
+								{
+									coordinates: [-206.5, 398.125],
+								},
+								{
+									coordinates: [-206.28125, 401.53125],
+									text: 'Entered Salamander and found out he had been scammed by the pirate. Session end.',
+									animation: {
+										timer: 7,
+										type: 'conversation',
+									},
+								},
+							],
+						},
 					],
 					areas: {
 						korinis_city: {
@@ -3466,6 +4310,22 @@ const CAMPAIGN_01 = {
 								[-433, 604],
 							],
 							image: 'images/overlays/korinis_island/korinis_island_penal_colony_merchants_cave.png',
+						},
+						{
+							name: 'Penal Colony Chapel',
+							bounds: [
+								[-531, 527],
+								[-556, 550],
+							],
+							image: 'images/overlays/korinis_island/korinis_island_penal_colony_chapel.png',
+						},
+						{
+							name: 'Penal Colony Paladin Barracks',
+							bounds: [
+								[-516, 488],
+								[-549, 521],
+							],
+							image: 'images/overlays/korinis_island/korinis_island_penal_colony_paladin_barracks.png',
 						},
 					],
 					submaps: {
