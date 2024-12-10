@@ -229,7 +229,7 @@ class CustomMap {
 			this.#loadOverlays(mapConfig.overlays);
 		}
 
-		this.#createExportButton();
+		this.#setupExportButton();
 	}
 
 	// Add this method to the CustomMap class
@@ -589,72 +589,34 @@ class CustomMap {
 	}
 
 	// Export functionality
-	#createExportButton() {
-		if (this.#exportButton) return;
+	#setupExportButton() {
+		const exportMapBtn = document.getElementById('export-map');
+		const zoomSelect = this.#setupZoomSelect();
 
-		const exportButton = L.control({ position: 'topleft' });
-		exportButton.onAdd = () => {
-			const container = this.#createExportContainer();
-			const button = this.#createExportButtonElement(container);
-			const zoomSelect = this.#createZoomSelect(container);
+		zoomSelect.addEventListener('click', (e) => {
+			e.stopPropagation();
+		});
 
-			L.DomEvent.on(button, 'click', () => this.#handleExportClick(parseInt(zoomSelect.value)));
-			L.DomEvent.disableClickPropagation(container);
-
-			return container;
-		};
-
-		this.#exportButton = exportButton.addTo(this.#map);
+		exportMapBtn.addEventListener('click', () => {
+			const exportZoom = parseInt(zoomSelect.value);
+			this.#handleExportClick(parseInt(zoomSelect.value));
+		});
 	}
 
-	#createExportContainer() {
-		const container = L.DomUtil.create('div', 'leaflet-bar leaflet-control');
-		container.style.cssText = 'border: none;';
-		return container;
-	}
-
-	#createExportButtonElement(container) {
-		const button = L.DomUtil.create('button', 'leaflet-control-custom', container);
-		button.innerHTML = 'Export Map';
-		button.classList.add('button');
-		button.style.cssText = `
-            background-color: #fff;
-            padding: 5px 10px;
-            cursor: pointer;
-            display: block;
-            border: 2px solid rgba(0, 0, 0, 0.2);
-            background-clip: padding-box;
-            border-radius: 0.25rem;
-            font-family: system-ui;
-        `;
-		return button;
-	}
-
-	#createZoomSelect(container) {
-		const select = L.DomUtil.create('select', 'leaflet-control-custom', container);
-		select.style.cssText = `
-            display: block;
-            width: 100%;
-            padding: 5px;
-            border: 2px solid rgba(0, 0, 0, 0.2);
-            background-clip: padding-box;
-            border-radius: 0.25rem;
-            color: black;
-            font-family: system-ui;
-            background-color: #fff;
-        `;
-
+	#setupZoomSelect() {
 		const currentMapConfig = this.#getMapConfig(this.#currentMapKey);
 		const maxZoom = currentMapConfig.metadata.sizes.maxZoom;
 
-		for (let i = 0; i <= maxZoom; i++) {
-			const option = L.DomUtil.create('option', '', select);
+		const zoomSelect = document.getElementById('zoom-select');
+		// You can set maxZoom based on your map configuration
+		for (let i = 0; i < maxZoom; i++) {
+			const option = document.createElement('option');
 			option.value = i;
 			option.text = `Zoom ${i + 1}`;
+			zoomSelect.appendChild(option);
 		}
-
-		select.value = maxZoom;
-		return select;
+		zoomSelect.value = maxZoom - 1;
+		return zoomSelect;
 	}
 
 	async #handleExportClick(exportZoom) {

@@ -144,12 +144,8 @@ class CampaignManager {
 		mapView.className = 'view';
 
 		// Add back button to map view
-		const backButton = document.createElement('button');
-		backButton.id = 'back-to-campaigns';
-		backButton.className = 'back-button';
-		backButton.textContent = 'Campaign selection';
+		const backButton = document.getElementById('campaign-select');
 		backButton.addEventListener('click', () => this.showCampaignSelection());
-		document.getElementById('actions').prepend(backButton);
 	}
 
 	#getCampaignDefaultMap(campaign) {

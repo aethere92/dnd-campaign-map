@@ -32,7 +32,6 @@
 		<script defer src="src/services/markers/path_utils/DebugPolyLineManager.js"></script>
 		<!-- CORE SERVICES CONT -->
 		<script defer src="src/services/markers/PathManager.js"></script>
-		<script defer src="src/services/markers/NoteManager.js"></script>
 		<script defer src="src/services/map/DungeonMapServices.js"></script>
 		<!-- CORE SCRIPTS -->
 		<script defer src="src/core/Initialization.js"></script>
@@ -41,18 +40,35 @@
 
 	<body>
 		<div id="root">
-			<!-- Campaign selection view and map view will be created dynamically -->
 			<div id="map"></div>
-			<div id="actions">
+			<!-- <div id="actions">
 				<div id="buttons">
 					<button data-role="toggle-markers" class="button" data-toggled="off">Toggle names</button>
 				</div>
 			</div>
-			<div id="note-form" style="display: none">
-				<textarea id="note-content" placeholder="Enter your note"></textarea>
-				<button id="save-note">Save Note</button>
-				<button id="cancel-note">Cancel</button>
+ -->
+
+
+			<div id="actions" class="action-menu">
+				<button class="menu-toggle">
+					<span>Actions</span>
+					<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+						<path d="M6 9l6 6 6-6"/>
+					</svg>
+				</button>
+				
+				<div class="menu-content">
+					<button class="menu-item" id="campaign-select">
+						<span>Campaign selection</span>
+					</button>
+					<div class="menu-divider"></div>
+					<button class="menu-item" id="export-map">
+						<span>Export Map</span>
+						<select id="zoom-select"></select>
+					</button>
+					<div class="menu-divider"></div>
+					<button class="menu-item" data-role="toggle-markers">Toggle names</button>
+				</div>
 			</div>
-		</div>
 	</body>
 </html>
