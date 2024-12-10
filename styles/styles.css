@@ -5,6 +5,7 @@
 @import url('leaflet-controls.css');
 @import url('modals.css');
 @import url('map-filters.css');
+@import url('story-recap.css');
 
 body,
 html {
@@ -369,13 +370,23 @@ html {
 }
 
 /* Campaign Card Elements */
-.campaign-level {
+.campaign-level,
+.campaign-recap {
 	background: rgba(139, 107, 74, 0.1);
 	padding: 0.25rem 0.75rem;
 	border-radius: 3px;
 	color: #6d4c33;
 	font-size: 0.75rem;
 	border: 1px solid rgba(139, 107, 74, 0.3);
+}
+
+.campaign-recap {
+	cursor: pointer;
+	padding: 0.35rem 0.75rem;
+
+	&:hover {
+		background: rgba(139, 107, 74, 0.2);
+	}
 }
 
 .campaign-info {

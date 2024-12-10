@@ -25,6 +25,7 @@ const CAMPAIGN_01 = {
 	world_maps: {
 		metadata: {
 			path: 'maps/world_maps/world_map',
+			mapId: 'world_maps',
 			sizes: {
 				maxZoom: 5,
 				imageWidth: 8192,
@@ -563,6 +564,7 @@ const CAMPAIGN_01 = {
 				korinis_island: {
 					metadata: {
 						path: 'maps/world_maps/korinis_island',
+						mapId: 'korinis_island',
 						sizes: {
 							maxZoom: 5,
 							imageWidth: 32069,
@@ -1080,6 +1082,7 @@ const CAMPAIGN_01 = {
 						{
 							name: '01. Session 1 Recap',
 							lineColor: '#e2b203',
+							sessionId: 2,
 							points: [
 								{
 									coordinates: [-275.25, 138.375],
@@ -1302,6 +1305,7 @@ const CAMPAIGN_01 = {
 						{
 							name: '03. Session 3 Recap',
 							lineColor: '#2898bd',
+							sessionId: 3,
 							points: [
 								{
 									coordinates: [-150.0625, 495.75],
@@ -1595,6 +1599,7 @@ const CAMPAIGN_01 = {
 						{
 							name: '04. Session 4 Recap',
 							lineColor: '#ff7e55',
+							sessionId: 4,
 							points: [
 								{
 									coordinates: [-150.1875, 495.6875],
@@ -1853,6 +1858,7 @@ const CAMPAIGN_01 = {
 						{
 							name: '07. Session 7 Recap',
 							lineColor: '#84d8e3',
+							sessionId: 5,
 							points: [
 								{
 									coordinates: [-166.625, 440.6875],
@@ -2116,6 +2122,7 @@ const CAMPAIGN_01 = {
 						{
 							name: '08. Session 8 Recap',
 							lineColor: '#ff5722',
+							sessionId: 6,
 							points: [
 								{
 									coordinates: [-111.625, 558.9375],
@@ -2485,6 +2492,7 @@ const CAMPAIGN_01 = {
 						{
 							name: '09. Session 9 Recap',
 							lineColor: 'rgb(188 64 255)',
+							sessionId: 7,
 							points: [
 								{
 									coordinates: [-242.625, 686.375],
@@ -3119,6 +3127,7 @@ const CAMPAIGN_01 = {
 						{
 							name: '10. Session 10 Recap',
 							lineColor: '#bf3636',
+							sessionId: 8,
 							points: [
 								{
 									coordinates: [-418.625, 534.5],
@@ -4339,6 +4348,7 @@ const CAMPAIGN_01 = {
 							korinis_island_interior_pyramid_teleporter_c: {
 								metadata: {
 									path: 'maps/interiors/korinis_island/pyramid_teleporter/teleporter_c',
+									mapId: 'korinis_teleporter_c',
 									sizes: {
 										maxZoom: 3,
 										imageWidth: 1800,
@@ -4389,6 +4399,7 @@ const CAMPAIGN_01 = {
 							korinis_island_interior_water_mages_pyramid: {
 								metadata: {
 									path: 'maps/interiors/korinis_island/water_mages_pyramid',
+									mapId: 'korinis_pyramid',
 									sizes: {
 										maxZoom: 3,
 										imageWidth: 7800,
@@ -4422,6 +4433,7 @@ const CAMPAIGN_01 = {
 							korinis_island_encounters_bandits_01: {
 								metadata: {
 									path: 'maps/encounters/korinis_island/bandit_encounters/bandit_encounter_01',
+									mapId: 'korinis_bandits_01',
 									sizes: {
 										maxZoom: 3,
 										imageWidth: 4800,
@@ -4461,6 +4473,7 @@ const CAMPAIGN_01 = {
 							korinis_island_spider_cave: {
 								metadata: {
 									path: 'maps/encounters/korinis_island/spider_cave_encounter',
+									mapId: 'korinis_spider_cave',
 									sizes: {
 										maxZoom: 3,
 										imageWidth: 4095,
@@ -4508,6 +4521,7 @@ const CAMPAIGN_01 = {
 				unnamed_island_01: {
 					metadata: {
 						path: 'maps/world_maps/unnamed_island_01',
+						mapId: 'unnamed_island_01',
 						sizes: {
 							maxZoom: 3,
 							imageWidth: 4096,
@@ -4563,6 +4577,7 @@ const CAMPAIGN_01 = {
 					paths: [
 						{
 							name: 'Session 1 Recap',
+							sessionId: 1,
 							points: [
 								{
 									coordinates: [-329.5, 180.75],
@@ -4729,6 +4744,7 @@ const CAMPAIGN_01 = {
 							finneas_encounter: {
 								metadata: {
 									path: 'maps/encounters/unnamed_island_01/finneas_dungeon',
+									mapId: 'finneas_encounter',
 									sizes: {
 										maxZoom: 3,
 										imageWidth: 7800,
@@ -4745,6 +4761,7 @@ const CAMPAIGN_01 = {
 				bone_wraiths_encounter_01: {
 					metadata: {
 						path: 'maps/encounters/world_map/bone_wraiths_encounter_01',
+						mapId: 'bone_wraiths_01',
 						sizes: {
 							maxZoom: 3,
 							imageWidth: 6144,
