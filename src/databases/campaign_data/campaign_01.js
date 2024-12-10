@@ -4302,8 +4302,10 @@ const CAMPAIGN_01 = {
 						{
 							name: 'Penal Colony Spider Cave',
 							bounds: [
-								[-381.5, 709.5],
-								[-392, 720],
+								// [-381.5, 709.5],
+								// [-392, 720],
+								[-380.2, 709.5],
+								[-391.9, 720.4],
 							],
 							image: 'images/overlays/korinis_island/korinis_island_penal_colony_spider_cave.png',
 						},
@@ -4318,8 +4320,8 @@ const CAMPAIGN_01 = {
 						{
 							name: 'Penal Colony Chapel',
 							bounds: [
-								[-531, 527],
-								[-556, 550],
+								[-530.9, 527.2],
+								[-556.6, 550.0],
 							],
 							image: 'images/overlays/korinis_island/korinis_island_penal_colony_chapel.png',
 						},

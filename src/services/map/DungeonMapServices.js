@@ -232,14 +232,94 @@ class CustomMap {
 		this.#createExportButton();
 	}
 
-	#loadOverlays(overlays) {
-		// Remove the group creation since it's now done in initialization
-		overlays.forEach((overlay) => {
-			// Create image overlay
-			const imageOverlay = L.imageOverlay(overlay.image, overlay.bounds, {
-				opacity: 1,
-				interactive: true,
+	// Add this method to the CustomMap class
+	#createDraggableImageOverlay(overlay) {
+		// Create the image overlay
+		const imageOverlay = L.imageOverlay(overlay.image, overlay.bounds, {
+			opacity: 1,
+			interactive: true,
+		});
+
+		if (this.#config.isDebugMode) {
+			// Create markers for the corners
+			const southWest = L.marker(overlay.bounds[0], {
+				draggable: true,
+				icon: L.divIcon({
+					className: 'corner-marker',
+					html: '◢',
+					iconSize: [20, 20],
+				}),
 			});
+
+			const northEast = L.marker(overlay.bounds[1], {
+				draggable: true,
+				icon: L.divIcon({
+					className: 'corner-marker',
+					html: '◣',
+					iconSize: [20, 20],
+				}),
+			});
+
+			// Add CSS for corner markers
+			const style = document.createElement('style');
+			style.textContent = `
+            .corner-marker {
+                color: blue;
+                font-size: 20px;
+                text-shadow: 2px 2px white;
+                background: none;
+                border: none;
+            }
+        `;
+			document.head.appendChild(style);
+
+			// Update overlay bounds when markers are dragged
+			southWest.on('drag', () => {
+				const newBounds = [southWest.getLatLng(), northEast.getLatLng()];
+				imageOverlay.setBounds(newBounds);
+				this.#logOverlayConfig(overlay.name, newBounds);
+			});
+
+			northEast.on('drag', () => {
+				const newBounds = [southWest.getLatLng(), northEast.getLatLng()];
+				imageOverlay.setBounds(newBounds);
+				this.#logOverlayConfig(overlay.name, newBounds);
+			});
+
+			// Add markers to the map when overlay is added
+			imageOverlay.on('add', () => {
+				southWest.addTo(this.#map);
+				northEast.addTo(this.#map);
+			});
+
+			// Remove markers when overlay is removed
+			imageOverlay.on('remove', () => {
+				southWest.remove();
+				northEast.remove();
+			});
+		}
+
+		return imageOverlay;
+	}
+
+	// Helper method to log the current overlay configuration
+	#logOverlayConfig(name, bounds) {
+		const config = {
+			name: name,
+			bounds: [
+				[parseFloat(bounds[0].lat.toFixed(1)), parseFloat(bounds[0].lng.toFixed(1))],
+				[parseFloat(bounds[1].lat.toFixed(1)), parseFloat(bounds[1].lng.toFixed(1))],
+			],
+		};
+		console.log('Current overlay configuration:');
+		console.log(JSON.stringify(config, null, 2));
+	}
+
+	// Modified overlay loading method
+	#loadOverlays(overlays) {
+		overlays.forEach((overlay) => {
+			// Create draggable image overlay
+			const imageOverlay = this.#createDraggableImageOverlay(overlay);
 
 			// Add to layer group
 			this.#map.layerGroups.overlays.layers[overlay.name] = imageOverlay;
