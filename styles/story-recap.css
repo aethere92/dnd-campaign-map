@@ -13,11 +13,49 @@
 	z-index: 500;
 	font-family: system-ui;
 	background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0h100v100H0z' fill='%23d4c39c' fill-opacity='0.2'/%3E%3C/svg%3E");
+	transition: all 150ms ease-in;
+
+	&.is-sidebar {
+		top: 0;
+		left: 0;
+		transform: none;
+		width: 40vw;
+		height: 100%;
+
+		& .story-recap-content {
+			padding: 0.5rem;
+		}
+
+		& .story-recap-close {
+			top: 0.5rem;
+		}
+
+		& .story-recap-sidebar-toggle {
+			top: 0.5rem;
+
+			&.sidebar-active {
+				transform: rotate(180deg);
+				top: calc(0.5rem - 5px);
+			}
+		}
+	}
 }
 
 .story-recap-close {
 	position: absolute;
 	right: 1rem;
+	top: 1rem;
+	font-size: 24px;
+	cursor: pointer;
+	border: none;
+	background: none;
+	color: #704214;
+	transition: transform 0.2s;
+}
+
+.story-recap-sidebar-toggle {
+	position: absolute;
+	right: 3rem;
 	top: 1rem;
 	font-size: 24px;
 	cursor: pointer;
@@ -93,6 +131,7 @@
 	padding: 0.5rem;
 	border: 1px solid transparent;
 	position: relative;
+	font-size: 10pt;
 }
 
 .session-item:hover {
@@ -150,7 +189,7 @@
 	border-left: 3px solid #704214;
 	background-color: rgba(255, 255, 255, 0.5);
 	position: relative;
-	font-size: 11pt;
+	font-size: 10pt;
 	line-height: 1.5;
 }
 

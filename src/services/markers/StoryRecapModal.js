@@ -59,6 +59,16 @@ class StoryRecapModal {
 		closeButton.innerHTML = '×';
 		closeButton.onclick = () => this.hide();
 
+		// Create close button
+		const sidebarButton = document.createElement('button');
+		sidebarButton.className = 'story-recap-sidebar-toggle';
+		sidebarButton.innerHTML = `<svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="currentColor"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M18 3a3 3 0 0 1 2.995 2.824l.005 .176v12a3 3 0 0 1 -2.824 2.995l-.176 .005h-12a3 3 0 0 1 -2.995 -2.824l-.005 -.176v-12a3 3 0 0 1 2.824 -2.995l.176 -.005h12zm-3 2h-9a1 1 0 0 0 -.993 .883l-.007 .117v12a1 1 0 0 0 .883 .993l.117 .007h9v-14zm-3.293 4.293a1 1 0 0 1 .083 1.32l-.083 .094l-1.292 1.293l1.292 1.293a1 1 0 0 1 .083 1.32l-.083 .094a1 1 0 0 1 -1.32 .083l-.094 -.083l-2 -2a1 1 0 0 1 -.083 -1.32l.083 -.094l2 -2a1 1 0 0 1 1.414 0z" /></svg>`;
+		sidebarButton.onclick = (e) => {
+			const target = e.target.closest('button');
+			target.classList.toggle('sidebar-active');
+			this.modal.classList.toggle('is-sidebar');
+		};
+
 		// Create modal content container
 		const modalContent = document.createElement('div');
 		modalContent.className = 'story-recap-content';
@@ -75,6 +85,7 @@ class StoryRecapModal {
 		modalContent.appendChild(this.sidebar);
 		modalContent.appendChild(this.mainContent);
 		this.modal.appendChild(closeButton);
+		this.modal.appendChild(sidebarButton);
 		this.modal.appendChild(modalContent);
 
 		// Populate sidebar
@@ -189,7 +200,14 @@ class StoryRecapModal {
 						const mapKey = session.mapPath;
 
 						// Update the URL with the new location
-						UrlManager.updateUrl(mapKey, true, target);
+						// UrlManager.updateUrl(mapKey, true, target);
+
+						const map = window.customMap.getCurrentMap();
+						try {
+							setTimeout(() => map.flyTo(point.coordinates, map.getMaxZoom() - 1), 100);
+						} catch (err) {
+							console.err('Could not zoom to point due to: ' + err.message);
+						}
 
 						// Hide the modal after clicking
 						// this.hide();
@@ -210,8 +228,8 @@ class StoryRecapModal {
 													.map(
 														(item) => `
                             <li>
-                                <strong>${item.name}</strong> (${item.rarity})
-                                <p>${item.description}</p>
+                                <span class="loot-name"><strong>${item.name}</strong> (${item.rarity})</span>
+                                <p class="loot-description">${item.description}</p>
                             </li>
                         `
 													)
@@ -227,7 +245,7 @@ class StoryRecapModal {
 				levelSection.className = 'level-up';
 				levelSection.innerHTML = `
                     <h3>Level Up!</h3>
-                    <p>The party reached level ${point.level}</p>
+                    <p>The party reached level ${point.level}.</p>
                 `;
 				recapSection.appendChild(levelSection);
 			}

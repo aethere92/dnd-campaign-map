@@ -658,6 +658,10 @@ class CustomMap {
 	getCurrentMapKey() {
 		return this.#currentMapKey;
 	}
+
+	getCurrentMap() {
+		return this.#map;
+	}
 }
 
 // Custom Tile Layer implementation
