@@ -359,12 +359,16 @@ class StoryRecapModal {
 
 // 		const title = document.createElement('h2');
 // 		title.textContent = session.name;
+// 		title.className = 'recap-session-title';
 // 		this.mainContent.appendChild(title);
 
 // 		const mapInfo = document.createElement('div');
 // 		mapInfo.className = 'map-info';
 // 		mapInfo.textContent = `Location: ${session.map}`;
 // 		this.mainContent.appendChild(mapInfo);
+
+// 		const chapters = document.createElement('div');
+// 		chapters.className = 'recap-chapters';
 
 // 		session.chapters.forEach((chapter) => {
 // 			const chapterSection = document.createElement('div');
@@ -393,8 +397,8 @@ class StoryRecapModal {
 // 															.map(
 // 																(lootItem) => `
 //                                 <li>
-//                                     <strong>${lootItem.name}</strong> (${lootItem.rarity})
-//                                     <p>${lootItem.description}</p>
+//                                     <span class="loot-name"><strong>${lootItem.name}</strong> (${lootItem.rarity})</span>
+//                                     <p class="loot-description">${lootItem.description}</p>
 //                                 </li>
 //                             `
 // 															)
@@ -403,11 +407,22 @@ class StoryRecapModal {
 //                     `;
 // 					chapterSection.appendChild(lootSection);
 // 				}
+
+// 				if (item.level) {
+// 					const levelSection = document.createElement('div');
+// 					levelSection.className = 'level-up';
+// 					levelSection.innerHTML = `
+// 						<h3>Level Up!</h3>
+// 						<p>The party reached level ${item.level}.</p>
+// 					`;
+// 					chapterSection.appendChild(levelSection);
+// 				}
 // 			});
 
-// 			this.mainContent.appendChild(chapterSection);
+// 			chapters.appendChild(chapterSection);
 // 		});
 
+// 		this.mainContent.append(chapters);
 // 		this.currentSession = session;
 // 	}
 
