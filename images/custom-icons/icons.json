@@ -7,14 +7,6 @@
 , 
     {"id": "arrowDirectionUp", "name": "arrowDirectionUp"} 
 , 
-    {"id": "cardinalPointEast", "name": "cardinalPointEast"} 
-, 
-    {"id": "cardinalPointNorth", "name": "cardinalPointNorth"} 
-, 
-    {"id": "cardinalPointSouth", "name": "cardinalPointSouth"} 
-, 
-    {"id": "cardinalPointWest", "name": "cardinalPointWest"} 
-, 
     {"id": "city", "name": "city"} 
 , 
     {"id": "cityBarbarian", "name": "cityBarbarian"} 
@@ -37,11 +29,13 @@
 , 
     {"id": "fortTower", "name": "fortTower"} 
 , 
+    {"id": "iconPortal", "name": "iconPortal"} 
+, 
     {"id": "mageTower", "name": "mageTower"} 
 , 
-    {"id": "poiBed", "name": "poiBed"} 
+    {"id": "poiAlchemist", "name": "poiAlchemist"} 
 , 
-    {"id": "poiBed_map", "name": "poiBed map"} 
+    {"id": "poiBed", "name": "poiBed"} 
 , 
     {"id": "poiBramble", "name": "poiBramble"} 
 , 
@@ -49,21 +43,19 @@
 , 
     {"id": "poiCombat", "name": "poiCombat"} 
 , 
-    {"id": "poiCombat_map", "name": "poiCombat map"} 
-, 
     {"id": "poiDanger", "name": "poiDanger"} 
-, 
-    {"id": "poiDanger2", "name": "poiDanger2"} 
 , 
     {"id": "poiFarm", "name": "poiFarm"} 
 , 
     {"id": "poiGenericNPC", "name": "poiGenericNPC"} 
 , 
-    {"id": "poiLandmarks", "name": "poiLandmarks"} 
+    {"id": "poiInn", "name": "poiInn"} 
 , 
-    {"id": "poiLandmarks2", "name": "poiLandmarks2"} 
+    {"id": "poiLandmarkCitadel", "name": "poiLandmarkCitadel"} 
 , 
-    {"id": "poiLandmarks3", "name": "poiLandmarks3"} 
+    {"id": "poiLandmarkCity", "name": "poiLandmarkCity"} 
+, 
+    {"id": "poiLandmarkFarm", "name": "poiLandmarkFarm"} 
 , 
     {"id": "poiMine", "name": "poiMine"} 
 , 

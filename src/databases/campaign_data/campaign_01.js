@@ -19,6 +19,9 @@ const CAMPAIGN_01_ALIASES = {
 	korinis_bandits_01:
 		'world_maps.submaps.islands.korinis_island.submaps.encounters.korinis_island_encounters_bandits_01',
 	korinis_spider_cave: 'world_maps.submaps.islands.korinis_island.submaps.encounters.korinis_island_spider_cave',
+
+	// FINAL LOCATION
+	final_location: 'world_maps.submaps.islands.final_location',
 };
 
 const CAMPAIGN_01 = {
@@ -3917,6 +3920,323 @@ const CAMPAIGN_01 = {
 								},
 							],
 						},
+						{
+							name: '11. Session 11 Recap',
+							lineColor: '#000000',
+							sessionId: 9,
+							points: [
+								{
+									coordinates: [-207.375, 401],
+									text: 'This is where the previous session ended. The party went to Lord Heigan to get the pass to get the Eye of Sherridan.',
+									animation: {
+										timer: 3,
+										type: 'null',
+									},
+								},
+								{
+									coordinates: [-208.4375, 396.75],
+								},
+								{
+									coordinates: [-210.6875, 395.5],
+								},
+								{
+									coordinates: [-214.6875, 396],
+								},
+								{
+									coordinates: [-216.375, 393.3125],
+								},
+								{
+									coordinates: [-220.625, 391.0625],
+									text: 'Talked to Heigan and got the pass.',
+									animation: {
+										timer: 5,
+										type: 'conversation',
+									},
+								},
+								{
+									coordinates: [-218.9375, 390.375],
+								},
+								{
+									coordinates: [-214.3125, 392.5625],
+								},
+								{
+									coordinates: [-209.8125, 394.4375],
+								},
+								{
+									coordinates: [-204.25, 397.4375],
+								},
+								{
+									coordinates: [-193.125, 397.625],
+								},
+								{
+									coordinates: [-188.0625, 403],
+								},
+								{
+									coordinates: [-182.5625, 404.6875],
+								},
+								{
+									coordinates: [-174.125, 404],
+								},
+								{
+									coordinates: [-165.5, 404.375],
+								},
+								{
+									coordinates: [-161.5625, 408.5625],
+								},
+								{
+									coordinates: [-153.125, 413.75],
+								},
+								{
+									coordinates: [-148, 413.9375],
+								},
+								{
+									coordinates: [-145.375, 416.3125],
+								},
+								{
+									coordinates: [-141.875, 419.8125],
+								},
+								{
+									coordinates: [-141.75, 439.4375],
+								},
+								{
+									coordinates: [-142.0625, 472],
+								},
+								{
+									coordinates: [-142.3125, 495.9375],
+								},
+								{
+									coordinates: [-141.75, 515.6875],
+								},
+								{
+									coordinates: [-140.8125, 533.6875],
+								},
+								{
+									coordinates: [-141.125, 543.5],
+								},
+								{
+									coordinates: [-138.4375, 546],
+								},
+								{
+									coordinates: [-132.875, 548.5625],
+								},
+								{
+									coordinates: [-127.8125, 551.5],
+								},
+								{
+									coordinates: [-124.8125, 552.5625],
+								},
+								{
+									coordinates: [-121.25, 552.1875],
+								},
+								{
+									coordinates: [-119.25, 557],
+								},
+								{
+									coordinates: [-117.625, 560.1875],
+								},
+								{
+									coordinates: [-114.375, 559.8125],
+								},
+								{
+									coordinates: [-111.625, 558.3125],
+									pointColor: 'yellow',
+								},
+								{
+									coordinates: [-41.5625, 578.875],
+									text: 'Went to the pyramids and slept. Got food and dicks drawn on face.',
+									animation: {
+										timer: 5,
+										type: 'rest',
+									},
+									pointColor: 'yellow',
+									textColor: 'black',
+								},
+								{
+									coordinates: [-196.65625, 656.8125],
+									text: 'Teleported to the inn and went towards the monastery.',
+									animation: {
+										timer: 2,
+										type: 'walk',
+									},
+									pointColor: 'yellow',
+									textColor: 'black',
+								},
+								{
+									coordinates: [-191.8125, 658.0625],
+									pointColor: 'black',
+								},
+								{
+									coordinates: [-186.875, 655.9375],
+									pointColor: 'black',
+								},
+								{
+									coordinates: [-184, 658.4375],
+								},
+								{
+									coordinates: [-181.0625, 657.875],
+								},
+								{
+									coordinates: [-179.3125, 660.875],
+								},
+								{
+									coordinates: [-172.8125, 661.9375],
+								},
+								{
+									coordinates: [-168.3125, 664.5625],
+								},
+								{
+									coordinates: [-166.4375, 667.25],
+								},
+								{
+									coordinates: [-168.625, 672.875],
+								},
+								{
+									coordinates: [-168.0625, 675.875],
+								},
+								{
+									coordinates: [-167, 677.5],
+								},
+								{
+									coordinates: [-165.125, 677.375],
+								},
+								{
+									coordinates: [-158, 679.125],
+								},
+								{
+									coordinates: [-152.0625, 676.6875],
+								},
+								{
+									coordinates: [-142.4375, 673.875],
+								},
+								{
+									coordinates: [-129, 674.8125],
+								},
+								{
+									coordinates: [-126.6875, 678.75],
+									text: 'Found dead mage with trails.',
+									animation: {
+										timer: 5,
+										type: 'question',
+									},
+								},
+								{
+									coordinates: [-123.8125, 675.875],
+								},
+								{
+									coordinates: [-116.875, 673.9375],
+								},
+								{
+									coordinates: [-108.5625, 672.6875],
+								},
+								{
+									coordinates: [-101.625, 672.6875],
+								},
+								{
+									coordinates: [-98.6875, 666.75],
+								},
+								{
+									coordinates: [-97.5625, 655],
+									text: 'Found Isgaroth dead.',
+									animation: {
+										timer: 5,
+										type: 'fight',
+									},
+								},
+								{
+									coordinates: [-96.9375, 664.6875],
+								},
+								{
+									coordinates: [-97.9375, 672.75],
+								},
+								{
+									coordinates: [-89.0625, 672.3125],
+								},
+								{
+									coordinates: [-78.75, 672.5625],
+								},
+								{
+									coordinates: [-68.375, 671.5625],
+								},
+								{
+									coordinates: [-60.1875, 670.4375],
+									text: 'Talked to Milton and found out things.',
+									animation: {
+										timer: 2,
+										type: 'conversation',
+									},
+								},
+								{
+									coordinates: [-55.75, 673],
+								},
+								{
+									coordinates: [-54, 679.375],
+									text: 'Went inside and drank wine, bought things.',
+									animation: {
+										timer: 4,
+										type: 'loot',
+									},
+									loot: [
+										{
+											name: '7x Scroll of Fly',
+											description:
+												'Single use, grants Fly: You touch a willing creature. The target gains a flying speed of 60 feet for the duration. When the spell ends, the target falls if it is still aloft, unless it can stop the fall.',
+											rarity: 'uncommon',
+											type: 'item',
+										},
+										{
+											name: '4x Scroll of Magic Weapon',
+											description:
+												'Single use, grants Magic Weapon: You touch a nonmagical weapon. Until the spell ends, that weapon becomes a magic weapon with a +1 bonus to attack rolls and damage rolls.',
+											rarity: 'uncommon',
+											type: 'item',
+										},
+										{
+											name: "Scroll of Nystul's Magic Aura",
+											description:
+												"Single use, grants Nystul's Magic Aura: You place an illusion on a creature or an object you touch so that divination spells reveal false information about it. The target can be a willing creature or an object that isn't being carried or worn by another creature.",
+											rarity: 'uncommon',
+											type: 'item',
+										},
+									],
+								},
+								{
+									coordinates: [-53.875, 671.3125],
+								},
+								{
+									coordinates: [-60.6875, 668.8125],
+								},
+								{
+									coordinates: [-65.6875, 669.25],
+								},
+								{
+									coordinates: [-65.5625, 661.375],
+									text: 'Used fly to go to the pyramids.',
+									animation: {
+										timer: 3,
+										type: 'walk',
+									},
+									pointColor: 'white',
+									textColor: 'black',
+								},
+								{
+									coordinates: [-63, 625],
+									pointColor: 'white',
+								},
+								{
+									coordinates: [-43.25, 584],
+									text: 'Reached the pyramids and did long rest then used the eye of Sherridan to teleport to the final place. ',
+									animation: {
+										timer: 5,
+										type: 'rest',
+									},
+									map: {
+										name: 'final_location',
+										exitZoom: 3,
+										exitCoordinates: [-63.38, 89.25],
+									},
+								},
+							],
+						},
 					],
 					areas: {
 						korinis_city: {
@@ -4424,6 +4744,20 @@ const CAMPAIGN_01 = {
 													exitZoom: 4,
 												},
 											},
+											{
+												lat: -520.5,
+												lng: 348,
+												label: 'Final Location',
+												type: 'place',
+												icon: 'iconPortal',
+												iconType: 'png',
+												animationType: 'spin',
+												mapLink: 'final_location',
+												map: {
+													exitZoom: 3,
+													exitCoordinates: [-63.38, 89.25],
+												},
+											},
 										],
 									},
 								},
@@ -4515,6 +4849,39 @@ const CAMPAIGN_01 = {
 									},
 								},
 							},
+						},
+					},
+				},
+				final_location: {
+					metadata: {
+						path: 'maps/world_maps/final_location/beach_landing',
+						mapId: 'final_location_beach_landing',
+						sizes: {
+							maxZoom: 5,
+							imageWidth: 6144,
+							imageHeight: 4128,
+						},
+						backgroundColor: `linear-gradient(rgba(26, 20, 18, 0.97), rgba(26, 20, 18, 0.97)),url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 0l30 30-30 30L0 30z' fill='%23241c1a' fill-opacity='0.4' fill-rule='evenodd'/%3E%3C/svg%3E")`,
+					},
+					annotations: {
+						navigation: {
+							name: 'Navigation',
+							items: [
+								{
+									lat: -91.4375,
+									lng: 89.75,
+									label: 'Korinis Island',
+									type: 'icon',
+									icon: 'iconPortal',
+									iconType: 'png',
+									animationType: 'spin',
+									mapLink: 'korinis_island',
+									map: {
+										exitCoordinates: [-44, 581],
+										exitZoom: 4,
+									},
+								},
+							],
 						},
 					},
 				},

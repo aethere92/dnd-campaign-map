@@ -107,15 +107,15 @@ class PolylineManager {
 			}
 
 			if (waitTimer) {
-				this.points[pointIndex].animationInfo = this.points[pointIndex].animationInfo || {};
-				this.points[pointIndex].animationInfo.waitTimer = parseInt(waitTimer);
+				this.points[pointIndex].animation = this.points[pointIndex].animation || {};
+				this.points[pointIndex].animation.timer = parseInt(waitTimer);
 			}
 
 			if (waitType) {
 				if (!waitTimer && waitType == 'null') {
 				} else {
-					this.points[pointIndex].animationInfo = this.points[pointIndex].animationInfo || {};
-					this.points[pointIndex].animationInfo.animationType = waitType;
+					this.points[pointIndex].animation = this.points[pointIndex].animation || {};
+					this.points[pointIndex].animation.type = waitType;
 				}
 			}
 
@@ -237,13 +237,13 @@ class PolylineManager {
 				if (point.text) {
 					pointData.text = point.text;
 				}
-				if (point.animationInfo && point.animationInfo.waitTimer) {
-					pointData.animationInfo = pointData.animationInfo || {};
-					pointData.animationInfo.waitTimer = point.animationInfo.waitTimer;
+				if (point.animation && point.animation.timer) {
+					pointData.animation = pointData.animation || {};
+					pointData.animation.timer = point.animation.timer;
 				}
-				if (point.animationInfo && point.animationInfo.animationType) {
-					pointData.animationInfo = pointData.animationInfo || {};
-					pointData.animationInfo.animationType = point.animationInfo.animationType;
+				if (point.animation && point.animation.type) {
+					pointData.animation = pointData.animation || {};
+					pointData.animation.type = point.animation.type;
 				}
 
 				if (point.filter) {

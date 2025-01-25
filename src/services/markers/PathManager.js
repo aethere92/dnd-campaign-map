@@ -221,9 +221,21 @@ class PathManager {
 				const nextButton =
 					idx < textPoints.length - 1 ? `<button class="marker-nav-btn next-marker">Next</button>` : '';
 
+				let mapButton = '';
+
+				if (point.map) {
+					const exitObject = point?.map?.exitCoordinates
+						? { exitCoordinates: point?.map?.exitCoordinates, exitZoom: point?.map?.exitZoom || 2 }
+						: null;
+					mapButton = `<button class="marker-nav-btn" style="margin-top: 2px;" onclick='customMap.loadMap("${
+						point.map.name
+					}", true, ${JSON.stringify(exitObject)})'>Next step is on another map - view map</button>`;
+				}
+
 				const popupContent = `
                     <div class="marker-popup-content">
                         <div class="marker-text">${point.text}</div>
+						${mapButton}
                         <div class="marker-navigation">
                             ${prevButton}
                             ${nextButton}
@@ -241,6 +253,7 @@ class PathManager {
 				markerDot.on('add', () => {
 					const markerElement = markerDot.getElement();
 					markerElement.style.backgroundColor = point.pointColor || pathData.lineColor || '#F15B50';
+					markerElement.style.color = point?.textColor || '#FFFFFF';
 				});
 
 				markerDot.on('popupopen', () => {
