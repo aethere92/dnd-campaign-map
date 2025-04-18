@@ -723,6 +723,20 @@ class StoryView {
         `;
 		sessionContent.appendChild(sessionHeader);
 
+		const sessionRecap = document.createElement('div');
+		sessionRecap.className = 'session-small-recap';
+
+		// Parse the content HTML string
+		const tempRecap = document.createElement('div');
+		tempRecap.innerHTML = `<h3>Small recap</h3>${session?.recap}`;
+
+		// Process images and character highlights
+		this.#processImages(tempRecap);
+		this.#processCharacterHighlights(tempRecap);
+
+		// Add processed content to main content
+		sessionRecap.appendChild(tempRecap);
+
 		// Process and add main content
 		const mainContent = document.createElement('div');
 		mainContent.className = 'session-main-content';
@@ -738,6 +752,7 @@ class StoryView {
 		// Add processed content to main content
 		mainContent.appendChild(tempDiv);
 
+		sessionContent.appendChild(sessionRecap);
 		sessionContent.appendChild(mainContent);
 		contentArea.appendChild(sessionContent);
 	}

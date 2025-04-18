@@ -134,6 +134,15 @@ const CAMPAIGN_02_RECAPS = [
 
 			<p>Now that we're all caught up with our heroes' stories, let's see what happened on the road to Drellin's Ferry!</p>
         `,
+		recap: `<p>Five strangers walk a path less traveled—through tangled weeds and whispering trees—toward the town of Drellin’s Ferry. Though their footsteps fall in unison now, each of them carries a life shaped by fate, tragedy, and a desire for something more. They are unlikely allies, bound together by choice or chance, but united in purpose... for now.</p>
+
+		<p><span class="character-highlight" data-character="Olek">Olek</span>, a Paladin of Helm, walks with the calm strength of one touched by the divine. Raised by wolves, orphaned by war, and uplifted by a celestial being, his journey is one of service and steadfast honor. With a heart full of duty and a past veiled in fire, he brings light to the dark places they travel.</p>
+
+		<p>Beside him walks <span class="character-highlight" data-character="Norr">Norr</span>, a sorcerer touched by dragon’s blood and haunted by a stolen map. Fleeing the shadows of the Arcane Brotherhood with her closest companion, she guards her secrets with sharp wit and quiet strength. Her friend, <span class="character-highlight" data-character="Soshi">Soshi</span>—a Feyborn wizard who traded whimsy for power—shares in that escape, both burdened by the Brotherhood’s darkness and driven by dreams of belonging.</p>
+
+		<p>Then there’s <span class="character-highlight" data-character="Kaedin">Kaedin</span>, the echo-walking genasi who seeks a friend lost to a trap and a mystery buried in time. Haunted by visions of other lives and trained to wield them as weapons, he wears tradition on his sleeve and carries the past on his back, each step a search for answers that lie beyond the veil of fate.</p>
+
+		<p>And finally, Bonnie—a trickster pixie exiled from the Feywild for loving too deeply and breaking too many rules. With Jacques the rat at her side and chaos in her wake, she hides a loyal heart beneath layers of mischief. Together, these five travel toward Drellin’s Ferry, carrying hope, grief, ambition, and mischief in equal measure. What awaits them on the road is still unwritten.</p>`,
 	},
 ];
 

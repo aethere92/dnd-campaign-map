@@ -442,9 +442,10 @@
 	top: -3px;
 }
 
-.session-main-content {
-	line-height: 1.6;
-	font-size: 1rem;
+.session-main-content,
+.session-small-recap {
+	/* line-height: 1.6; */
+	font-size: 11pt;
 	color: var(--color-text);
 	background-color: rgba(255, 255, 255, 0.7);
 	padding: var(--spacing-lg);
@@ -455,7 +456,14 @@
 	font-family: var(--font-system);
 }
 
-.session-main-content::before {
+.session-small-recap {
+	margin-bottom: 1rem;
+	border-color: #3f51b5;
+	background: #f2f9ff;
+}
+
+.session-main-content::before,
+.session-small-recap::before {
 	content: '';
 	position: absolute;
 	top: 0;
@@ -468,14 +476,18 @@
 	pointer-events: none;
 }
 
-.session-main-content p {
+.session-main-content p,
+.session-small-recap p {
 	margin-bottom: 1em;
 	text-align: justify;
 }
 
 .session-main-content h1,
 .session-main-content h2,
-.session-main-content h3 {
+.session-main-content h3,
+.session-small-recap h1,
+.session-small-recap h2,
+.session-small-recap h3 {
 	margin-top: 1.5em;
 	margin-bottom: 0.5em;
 	color: var(--color-primary);
@@ -484,16 +496,24 @@
 	font-family: var(--font-headers);
 }
 
-.session-main-content h1 {
+.session-main-content h1,
+.session-small-recap h1 {
 	font-size: 1.6rem;
 }
 
-.session-main-content h2 {
+.session-main-content h2,
+.session-small-recap h2 {
 	font-size: 1.4rem;
 }
 
-.session-main-content h3 {
+.session-main-content h3,
+.session-small-recap h3 {
 	font-size: 1.2rem;
+}
+
+.session-small-recap h3 {
+	margin-top: 0;
+	color: darkblue;
 }
 
 /* Image handling */
