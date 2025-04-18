@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=IM+Fell+English+SC&family=MedievalSharp&family=Oldenburg&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=IM+Fell+English+SC&family=MedievalSharp&family=Oldenburg&family=Alegreya&family=Cinzel&display=swap');
 @import url('variables.css');
 @import url('labels.css');
 @import url('leaflet-overrules.css');
@@ -6,6 +6,7 @@
 @import url('modals.css');
 @import url('map-filters.css');
 @import url('story-recap.css');
+@import url('story-view.css');
 
 body,
 html {
@@ -714,6 +715,12 @@ html {
 	top: 50%;
 	right: calc(100% + 1rem);
 	transform: translate(0, -50%);
+
+	&.card-position-right {
+		right: 0;
+		left: calc(100% + 1rem);
+		align-items: flex-start;
+	}
 }
 
 .campaign-character-card {
@@ -739,6 +746,10 @@ html {
 	flex-direction: column;
 	width: 100%;
 	text-shadow: 1px 1px 1px black;
+}
+
+.card-position-right .character-card-name {
+	text-align: left;
 }
 
 .character-card-name {

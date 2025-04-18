@@ -117,7 +117,7 @@ class StoryRecapModal {
 		const sessions = [];
 
 		const processSubmaps = (data, mapPath = '') => {
-			if (data.paths) {
+			if (data?.paths) {
 				data.paths.forEach((path) => {
 					if (path.sessionId !== undefined) {
 						sessions.push({
@@ -130,7 +130,7 @@ class StoryRecapModal {
 				});
 			}
 
-			if (data.submaps) {
+			if (data?.submaps) {
 				Object.entries(data.submaps).forEach(([key, submap]) => {
 					Object.values(submap).forEach((submapData) => {
 						processSubmaps(submapData, submapData.metadata.mapId);
