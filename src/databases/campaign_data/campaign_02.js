@@ -265,7 +265,7 @@ const CAMPAIGN_02_CHARACTERS = [
 		race: 'Pixie',
 		class: 'Rogue',
 		level: 6,
-		icon: 'images/assets/character_thumbnails/campaign_002/Bonnie.jpeg',
+		icon: 'images/assets/character_thumbnails/campaign_002/bonnie.jpeg',
 		background: CAMPAIGN_02_BACKGROUNDS.BONNIE.background,
 		shortDescription: CAMPAIGN_02_BACKGROUNDS.BONNIE.shortDescription,
 	},
