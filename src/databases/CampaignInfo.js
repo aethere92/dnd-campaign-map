@@ -482,6 +482,33 @@ class StoryView {
 	#isDebugMode;
 	#tooltipContainer;
 	#selectedCharacter = null;
+	#isSidebarCollapsed = false;
+	#apiBaseUrl = 'https://www.dnd5eapi.co/api/2014/';
+	#supportedEntityTypes = [
+		'spell',
+		'monster',
+		'class',
+		'background',
+		'race',
+		'equipment',
+		'magic-item',
+		'feat',
+		'condition',
+		'character',
+	];
+	#entityEndpoints = {
+		spell: 'spells',
+		monster: 'monsters',
+		class: 'classes',
+		background: 'backgrounds',
+		race: 'races',
+		equipment: 'equipment',
+		'magic-item': 'magic-item',
+		feat: 'feats',
+		condition: 'conditions',
+		character: 'character',
+	};
+	#customApiData = CAMPAIGN_02_API_DATA;
 
 	constructor(elementId, options = {}) {
 		this.#rootElement = document.getElementById(elementId);
@@ -495,11 +522,24 @@ class StoryView {
 		// Create tooltip container once during initialization
 		this.#createTooltipContainer();
 
+		// Check for saved sidebar state in local storage
+		const savedSidebarState = localStorage.getItem('story-sidebar-collapsed');
+		if (savedSidebarState) {
+			this.#isSidebarCollapsed = savedSidebarState === 'true';
+		}
+
 		this.updateCampaign(options.campaignData, options.initialSessionId);
 	}
 
 	updateCampaign(campaign, sessionId = null) {
 		if (!campaign) return;
+
+		if (campaign?.metadata?.characters) {
+			campaign.metadata.characters.forEach((char) => {
+				this.#customApiData.character = this.#customApiData.character || {};
+				this.#customApiData.character[char.name] = char;
+			});
+		}
 
 		this.#campaign = campaign;
 		this.#currentSessionId = sessionId || this.#getFirstSessionId();
@@ -530,6 +570,9 @@ class StoryView {
 		// Create main content area with sidebar and content
 		const mainContent = document.createElement('div');
 		mainContent.className = 'story-main-content';
+		if (this.#isSidebarCollapsed) {
+			mainContent.classList.add('sidebar-collapsed');
+		}
 
 		// Create sidebar with characters and session list
 		const sidebar = this.#createSidebar();
@@ -546,6 +589,12 @@ class StoryView {
 		container.appendChild(mainContent);
 
 		this.#rootElement.appendChild(container);
+
+		// Generate table of contents after content is loaded - only for session view
+		// Only generate TOC if we're viewing a session, not a character
+		if (!this.#selectedCharacter) {
+			this.#generateTableOfContents(contentArea);
+		}
 	}
 
 	#createHeader(container) {
@@ -566,6 +615,14 @@ class StoryView {
 		const sidebar = document.createElement('div');
 		sidebar.className = 'story-sidebar';
 
+		// Add toggle button for sidebar
+		const toggleButton = document.createElement('button');
+		toggleButton.className = 'sidebar-toggle';
+		toggleButton.innerHTML = this.#isSidebarCollapsed ? '&raquo;' : '&laquo;';
+		toggleButton.setAttribute('aria-label', this.#isSidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar');
+		toggleButton.addEventListener('click', () => this.#toggleSidebar(toggleButton));
+		sidebar.appendChild(toggleButton);
+
 		// Add characters section
 		this.#createCharacterSection(sidebar);
 
@@ -573,6 +630,23 @@ class StoryView {
 		this.#createSessionList(sidebar);
 
 		return sidebar;
+	}
+
+	#toggleSidebar(toggleButton) {
+		this.#isSidebarCollapsed = !this.#isSidebarCollapsed;
+
+		// Update button text
+		toggleButton.innerHTML = this.#isSidebarCollapsed ? '&raquo;' : '&laquo;';
+		toggleButton.setAttribute('aria-label', this.#isSidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar');
+
+		// Find and toggle the main content container
+		const mainContent = this.#rootElement.querySelector('.story-main-content');
+		if (mainContent) {
+			mainContent.classList.toggle('sidebar-collapsed', this.#isSidebarCollapsed);
+		}
+
+		// Save state to local storage
+		localStorage.setItem('story-sidebar-collapsed', this.#isSidebarCollapsed);
 	}
 
 	#createCharacterSection(sidebar) {
@@ -710,6 +784,19 @@ class StoryView {
 			return;
 		}
 
+		// Create session TOC container (will be populated later)
+		const sessionToc = document.createElement('div');
+		sessionToc.className = 'session-toc';
+
+		// Create the TOC element that will be sticky
+		const toc = document.createElement('div');
+		toc.className = 'toc';
+		toc.id = 'toc';
+		sessionToc.appendChild(toc);
+
+		// Add session TOC to content area
+		contentArea.appendChild(sessionToc);
+
 		// Create session content container
 		const sessionContent = document.createElement('div');
 		sessionContent.className = 'session-content';
@@ -718,7 +805,7 @@ class StoryView {
 		const sessionHeader = document.createElement('div');
 		sessionHeader.className = 'session-header';
 		sessionHeader.innerHTML = `
-            <h2>${session.title}</h2>
+            <h2 id="session-title">${session.title}</h2>
             ${session.date ? `<div class="session-date">${session.date}</div>` : ''}
         `;
 		sessionContent.appendChild(sessionHeader);
@@ -728,14 +815,17 @@ class StoryView {
 
 		// Parse the content HTML string
 		const tempRecap = document.createElement('div');
-		tempRecap.innerHTML = `<h3>Small recap</h3>${session?.recap}`;
+		tempRecap.innerHTML = `<h3 id="short-summary">Short summary</h3>${session?.recap}`;
 
 		// Process images and character highlights
 		this.#processImages(tempRecap);
+		this.#processCharacterReferences(tempRecap); // Add this new line
 		this.#processCharacterHighlights(tempRecap);
+		this.#processEntityReferences(tempRecap); // Add this line
 
-		// Add processed content to main content
+		// Add processed content to recap content
 		sessionRecap.appendChild(tempRecap);
+		sessionContent.appendChild(sessionRecap);
 
 		// Process and add main content
 		const mainContent = document.createElement('div');
@@ -743,18 +833,71 @@ class StoryView {
 
 		// Parse the content HTML string
 		const tempDiv = document.createElement('div');
-		tempDiv.innerHTML = session.content;
+		tempDiv.innerHTML = `<h2 id="session-recap" style="margin: 0;">Session recap</h3>${session.content}`;
 
 		// Process images and character highlights
 		this.#processImages(tempDiv);
+		this.#processCharacterReferences(tempDiv); // Add this new line
 		this.#processCharacterHighlights(tempDiv);
+		this.#processEntityReferences(tempDiv); // Add this line
 
 		// Add processed content to main content
 		mainContent.appendChild(tempDiv);
-
-		sessionContent.appendChild(sessionRecap);
 		sessionContent.appendChild(mainContent);
+
+		// Add session content to content area
 		contentArea.appendChild(sessionContent);
+	}
+
+	#generateTableOfContents(contentArea) {
+		// Find all headings in the content
+		const headings = contentArea.querySelectorAll('.session-content h1, .session-content h2, .session-content h3');
+		if (headings.length === 0) return;
+
+		// Get the TOC container
+		const tocContainer = contentArea.querySelector('.toc');
+		if (!tocContainer) return;
+
+		// Create TOC title
+		const tocTitle = document.createElement('h3');
+		tocTitle.textContent = 'Table of Contents';
+		tocTitle.className = 'toc-title';
+		tocContainer.appendChild(tocTitle);
+
+		// Create the list
+		const tocList = document.createElement('ul');
+		tocList.className = 'toc-list';
+		tocContainer.appendChild(tocList);
+
+		// Process headings and add to TOC
+		headings.forEach((heading, index) => {
+			// Skip headings without IDs and add IDs to those without
+			if (!heading.id) {
+				heading.id = `heading-${index}`;
+			}
+
+			// Create link items for TOC
+			const item = document.createElement('li');
+			item.className = `toc-item toc-level-${heading.tagName.toLowerCase()}`;
+
+			const link = document.createElement('a');
+			link.href = `#${heading.id}`;
+			link.textContent = heading.textContent;
+			link.className = 'toc-link';
+
+			// Add smooth scroll event
+			link.addEventListener('click', (e) => {
+				e.preventDefault();
+				document.getElementById(heading.id).scrollIntoView({
+					behavior: 'smooth',
+				});
+				// Update URL hash without jumping
+				history.pushState(null, null, `#${heading.id}`);
+			});
+
+			item.appendChild(link);
+			tocList.appendChild(item);
+		});
 	}
 
 	#loadCharacterBackground(contentArea) {
@@ -772,7 +915,7 @@ class StoryView {
 
 		// Create character content container
 		const characterContent = document.createElement('div');
-		characterContent.className = 'character-content';
+		characterContent.className = 'session-content character-content';
 
 		// Add character header with back button
 		const characterHeader = document.createElement('div');
@@ -799,7 +942,7 @@ class StoryView {
 			<div class="character-profile">
 				<img src="${character.icon}" alt="${character.name}" class="character-profile-image" />
 				<div class="character-profile-details">
-					<h2>${character.name}</h2>
+					<h2 id="character-name">${character.name}</h2>
 					<div class="character-profile-meta">
 						Level ${character.level} ${character.race} ${character.class}
 					</div>
@@ -819,9 +962,10 @@ class StoryView {
 			const fullBackground = document.createElement('div');
 			fullBackground.className = 'character-full-background';
 			fullBackground.innerHTML = `
-				<h3>Background</h3>
+				<h3 id="character-background">Background</h3>
 				<div class="background-text">${character.background}</div>
 			`;
+			this.#processEntityReferences(fullBackground);
 			backgroundContent.appendChild(fullBackground);
 		} else {
 			// If no background is available
@@ -978,5 +1122,278 @@ class StoryView {
 		// Apply the calculated position
 		this.#tooltipContainer.style.top = `${top}px`;
 		this.#tooltipContainer.style.left = `${left}px`;
+	}
+
+	// Add these methods to the class
+	#processEntityReferences(contentElement) {
+		// Find all references in format [ENTITY:type:name]
+		const text = contentElement.innerHTML;
+		const processedText = text.replace(/\[ENTITY:(.*?):(.*?)\]/g, (match, type, name) => {
+			// Create a span with appropriate classes and data attributes
+			return `<span class="entity-reference" data-entity-type="${type}" data-entity-name="${name}">${name}</span>`;
+		});
+
+		contentElement.innerHTML = processedText;
+
+		// Now attach event listeners to all entity references
+		const entitySpans = contentElement.querySelectorAll('.entity-reference');
+		entitySpans.forEach((span) => {
+			const entityType = span.getAttribute('data-entity-type');
+			const entityName = span.getAttribute('data-entity-name');
+
+			// Add event listeners for tooltips
+			this.#addEntityTooltipEvents(span, entityType, entityName);
+		});
+	}
+
+	#addEntityTooltipEvents(element, entityType, entityName) {
+		element.classList.add('entity-' + entityType);
+
+		element.addEventListener('mouseover', async (e) => {
+			// Show loading state
+			this.#tooltipContainer.innerHTML = `
+		<div class="entity-tooltip">
+		  <div class="tooltip-header">
+			<h3>${entityName}</h3>
+		  </div>
+		  <div class="tooltip-content">
+			<div>Loading ${entityType} information...</div>
+		  </div>
+		</div>
+	  `;
+
+			// Position and show the tooltip
+			this.#tooltipContainer.style.display = 'block';
+			this.#positionTooltip(element);
+
+			// Fetch entity data
+			try {
+				const entityData = await this.#fetchEntityData(entityType, entityName);
+
+				// Update tooltip with fetched data
+				if (entityData) {
+					this.#tooltipContainer.innerHTML = this.#generateEntityTooltipContent(entityType, entityData);
+					// Reposition in case content size changed
+					this.#positionTooltip(element);
+				} else {
+					this.#tooltipContainer.innerHTML = `
+			<div class="entity-tooltip">
+			  <div class="tooltip-header">
+				<h3>${entityName}</h3>
+			  </div>
+			  <div class="tooltip-content">
+				<div>No information found for this ${entityType}.</div>
+			  </div>
+			</div>
+		  `;
+				}
+			} catch (error) {
+				this.#tooltipContainer.innerHTML = `
+		  <div class="entity-tooltip">
+			<div class="tooltip-header">
+			  <h3>${entityName}</h3>
+			</div>
+			<div class="tooltip-content">
+			  <div>Error loading information: ${error.message}</div>
+			</div>
+		  </div>
+		`;
+				console.error(`Error fetching entity data:`, error);
+			}
+		});
+
+		element.addEventListener('mouseout', () => {
+			this.#tooltipContainer.style.display = 'none';
+		});
+	}
+
+	async #fetchEntityData(entityType, entityName) {
+		// First check our custom data for locations, guilds, etc
+		if (this.#customApiData[entityType] && this.#customApiData[entityType][entityName]) {
+			return this.#customApiData[entityType][entityName];
+		}
+
+		// For standard DND 5e API entities
+		if (this.#supportedEntityTypes.includes(entityType)) {
+			// Format the name for API (lowercase, dashes instead of spaces)
+			const formattedName = entityName.toLowerCase().replace(/\s+/g, '-');
+
+			try {
+				// First, try direct access if we know the exact endpoint
+				const response = await fetch(`${this.#apiBaseUrl}${this.#entityEndpoints[entityType]}/${formattedName}`);
+
+				if (response.ok) {
+					return await response.json();
+				}
+
+				// If direct access fails, try to search
+				const searchResponse = await fetch(
+					`${this.#apiBaseUrl}${this.#entityEndpoints[entityType]}?name=${encodeURIComponent(entityName)}`
+				);
+
+				if (searchResponse.ok) {
+					const searchData = await searchResponse.json();
+
+					// If we have results, fetch the first one
+					if (searchData.results && searchData.results.length > 0) {
+						const detailResponse = await fetch(`${this.#apiBaseUrl}${searchData.results[0].url}`);
+						if (detailResponse.ok) {
+							return await detailResponse.json();
+						}
+					}
+				}
+
+				// If all attempts fail, return null
+				return null;
+			} catch (error) {
+				console.error(`Error fetching ${entityType} data for ${entityName}:`, error);
+				throw error;
+			}
+		}
+
+		// Return null for unsupported entity types
+		return null;
+	}
+
+	#generateEntityTooltipContent(entityType, entityData) {
+		let content = `
+	  <div class="entity-tooltip entity-${entityType}-tooltip">
+		<div class="tooltip-header">
+		  ${entityType === 'character' ? `<img src="${entityData.icon}" alt="${entityData.name}" />` : ''}
+		  <h3>${entityData.name || entityData.title || 'Unknown'}</h3>
+		</div>
+		<div class="tooltip-content">
+	`;
+
+		// Different formatting based on entity type
+		switch (entityType) {
+			case 'spell':
+				content += `
+		  <div><strong>Level:</strong> ${entityData.level || 'Cantrip'}</div>
+		  <div><strong>School:</strong> ${entityData.school?.name || 'Unknown'}</div>
+		  <div><strong>Casting Time:</strong> ${entityData.casting_time || 'N/A'}</div>
+		  <div><strong>Range:</strong> ${entityData.range || 'N/A'}</div>
+		  <div><strong>Components:</strong> ${entityData.components?.join(', ') || 'None'}</div>
+		  <div><strong>Duration:</strong> ${entityData.duration || 'Instantaneous'}</div>
+		  <div class="tooltip-description">${
+				entityData.desc?.join('<br>') || entityData.description || 'No description available.'
+			}</div>
+		`;
+				break;
+
+			case 'monster':
+				content += `
+		  <div><strong>Type:</strong> ${entityData.type || 'Unknown'}</div>
+		  <div><strong>CR:</strong> ${entityData.challenge_rating || 'Unknown'}</div>
+		  <div><strong>AC:</strong> ${entityData.armor_class || 'Unknown'}</div>
+		  <div><strong>HP:</strong> ${entityData.hit_points || 'Unknown'}</div>
+		  <div class="tooltip-description">${entityData.desc || entityData.description || 'No description available.'}</div>
+		`;
+				break;
+
+			case 'class':
+				content += `
+					  <div><strong>Hit Die:</strong> d${entityData.hit_die || '?'}</div>
+					  <div><strong>Proficiencies:</strong> ${entityData.proficiencies?.map((p) => p.name).join(', ') || 'None'}</div>
+					  <div><strong>Saves:</strong> ${entityData.saving_throws?.map((s) => s.name).join(', ') || 'None'}</div>
+					  <div><strong>Spellcasting:</strong> ${entityData.spellcasting ? 'Yes' : 'No'}</div>
+					  <div><strong>Subclasses:</strong> ${entityData.subclasses?.map((p) => p.name).join(', ') || 'None'}</div>
+					`;
+				break;
+
+			case 'subclass':
+				content += `
+					  <div><strong>Subclass Of:</strong> ${entityData.class?.name || 'Unknown'}</div>
+					  <div><strong>Features:</strong> ${entityData.subclass_flavor || 'No flavor text'}</div>
+					  <div class="tooltip-description">${entityData.desc || entityData.description || 'No description available.'}</div>
+					`;
+				break;
+			case 'location':
+			case 'guild':
+				content += `
+		  <div class="tooltip-description">${entityData.description || 'No description available.'}</div>
+		`;
+				break;
+			case 'character':
+				content += `
+					<div><strong>Race:</strong> ${entityData.race || 'Unknown'}</div>
+					<div><strong>Class:</strong> ${entityData.class || 'Unknown'}</div>
+					<div><strong>Level:</strong> ${entityData.level || 'Unknown'}</div>
+					<div class="tooltip-description tooltip-background">${entityData.shortDescription || 'No description available.'}</div>
+					`;
+				break;
+			default:
+				content += `
+		  <div class="tooltip-description">${entityData.desc || entityData.description || JSON.stringify(entityData)}</div>
+		`;
+		}
+
+		content += `
+		</div>
+	  </div>
+	`;
+
+		return content;
+	}
+
+	#processCharacterReferences(contentElement) {
+		if (!this.#campaign.metadata?.characters?.length) return;
+
+		// Get character names for regex pattern
+		const characterNames = this.#campaign.metadata.characters
+			.map((char) => char.name.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&'))
+			.join('|');
+
+		// Skip if no characters
+		if (!characterNames) return;
+
+		// Create regex to find character names in text
+		const characterRegex = new RegExp(`\\[CHARACTER:(${characterNames})\\]`, 'g');
+
+		// Find all text nodes in the content
+		const textNodes = [];
+		const walker = document.createTreeWalker(contentElement, NodeFilter.SHOW_TEXT, null, false);
+
+		let node;
+		while ((node = walker.nextNode())) {
+			textNodes.push(node);
+		}
+
+		// Process each text node
+		textNodes.forEach((textNode) => {
+			const text = textNode.nodeValue;
+			if (characterRegex.test(text)) {
+				const fragment = document.createDocumentFragment();
+				let lastIndex = 0;
+				let match;
+
+				// Reset regex
+				characterRegex.lastIndex = 0;
+
+				while ((match = characterRegex.exec(text)) !== null) {
+					// Add text before the match
+					if (match.index > lastIndex) {
+						fragment.appendChild(document.createTextNode(text.substring(lastIndex, match.index)));
+					}
+
+					// Create highlighted span for character
+					const span = document.createElement('span');
+					span.className = 'character-highlight';
+					span.setAttribute('data-character', match[1]);
+					span.textContent = match[1];
+					fragment.appendChild(span);
+
+					lastIndex = characterRegex.lastIndex;
+				}
+
+				// Add remaining text
+				if (lastIndex < text.length) {
+					fragment.appendChild(document.createTextNode(text.substring(lastIndex)));
+				}
+
+				// Replace the text node with the fragment
+				textNode.parentNode.replaceChild(fragment, textNode);
+			}
+		});
 	}
 }
