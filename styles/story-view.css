@@ -1236,3 +1236,29 @@
 		font-weight: 600;
 	}
 }
+
+.tooltip-scores-container {
+	display: flex;
+	gap: 0.25rem;
+	justify-content: space-around;
+	margin-top: 0.25rem;
+}
+
+.tooltip-ability {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	background: var(--color-border);
+	padding: 0.25rem 0.5rem;
+	border-radius: 0.125rem;
+}
+
+.tooltip-ability-name {
+	font-size: 8pt;
+	font-weight: 600;
+}
+
+.tooltip-ability-value {
+	font-size: 10pt;
+}

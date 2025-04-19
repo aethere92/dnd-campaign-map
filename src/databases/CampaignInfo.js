@@ -1358,6 +1358,18 @@ class StoryView {
 					<div><strong>Race:</strong> ${entityData.race || 'Unknown'}</div>
 					<div><strong>Class:</strong> ${entityData.class || 'Unknown'}</div>
 					<div><strong>Level:</strong> ${entityData.level || 'Unknown'}</div>
+					${
+						entityData?.stats?.abilityScores
+							? '<div class="tooltip-scores-container tooltip-background">' +
+							  Object.entries(entityData?.stats?.abilityScores)
+									?.map(
+										([key, entry]) =>
+											`<div class="tooltip-ability"><span class="tooltip-ability-name">${key}</span><span class="tooltip-ability-value">${entry}</span></div>`
+									)
+									.join('') +
+							  '</div>'
+							: ''
+					}
 					<div class="tooltip-description tooltip-background">${entityData.shortDescription || 'No description available.'}</div>
 					`;
 				break;
