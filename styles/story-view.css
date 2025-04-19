@@ -1249,7 +1249,7 @@
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
-	background: var(--color-border);
+	background: var(--color-highlight);
 	padding: 0.25rem 0.5rem;
 	border-radius: 0.125rem;
 }
