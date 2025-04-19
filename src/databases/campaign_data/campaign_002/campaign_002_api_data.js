@@ -49,9 +49,8 @@ const CAMPAIGN_02_API_DATA = {
 			description:
 				"The Arcane Brotherhood is a powerful wizards' guild based in the city of Luskan on the Sword Coast North. The organization is known for its ruthlessness and the magical might of its members. The Brotherhood is led by a group of powerful archmages called the Arcane, each controlling one of the Host Towers of the Arcane.",
 			metadata: {
-				'Base of operations': 'Host Tower of the Arcane, Luskan',
+				Base: 'Host Tower of the Arcane, Luskan',
 				'Leader(s)': 'Archmage Arcane Cashaan in 1489 DR',
-				Symbol: 'Reddish-brown warship on dark waves beneath a purple-black land and a silhouette of the Host Tower',
 			},
 		},
 		Harpers: {
@@ -68,6 +67,20 @@ const CAMPAIGN_02_API_DATA = {
 			},
 			description:
 				'Echo Knights have mastered the art of summoning duplicates of themselves from alternate timelines to aid them in battle. These echoes can be used to attack foes, scout ahead, or even switch places with the knight. This martial archetype originated in the lands of Wildemount.',
+		},
+	},
+	race: {
+		'Earth Genasi': {
+			name: 'Earth Genasi',
+			description: `Tracing their ancestry to the genies of the Elemental Planes, each genasi can tap into the power of one of the elements. Air, earth, fire, and water — these are the four pillars of the Material Plane and the four types of genasi. Some genasi are direct descendants of a genie, while others were born to non-genasi parents who lived near a place suffused by a genie’s magic. A typical genasi has a life span of 120 years.`,
+			metadata: {
+				'Ability Score Increase': '2/1 or 1/1/1',
+				'Creature Type': 'Humanoid',
+				Size: 'Medium or small',
+				Speed: '30ft',
+				Languages: 'Common + 1 other',
+				Traits: 'Earth Walk, Merge with Stone',
+			},
 		},
 	},
 };

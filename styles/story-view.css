@@ -1227,8 +1227,8 @@
 }
 
 .tooltip-metadata {
-	display: grid;
-	grid-template-columns: 75px 1fr;
+	display: flex;
+	justify-content: space-between;
 	font-size: 9pt;
 	margin-bottom: 0.25rem;
 

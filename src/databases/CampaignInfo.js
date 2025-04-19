@@ -495,6 +495,7 @@ class StoryView {
 		'feat',
 		'condition',
 		'character',
+		'race',
 	];
 	#entityEndpoints = {
 		spell: 'spells',
@@ -507,6 +508,7 @@ class StoryView {
 		feat: 'feats',
 		condition: 'conditions',
 		character: 'character',
+		race: 'race',
 	};
 	#customApiData = CAMPAIGN_02_API_DATA;
 
@@ -1339,19 +1341,20 @@ class StoryView {
 				break;
 			case 'location':
 			case 'guild':
+			case 'race':
 				content += `
-									${
-										entityData?.metadata
-											? Object.entries(entityData?.metadata)
-													.map(
-														([key, entry]) =>
-															`<div class="tooltip-metadata"><span>${key}</span><span>${entry}</span></div>`
-													)
-													.join('')
-											: ''
-									}
-		 	 <div class="tooltip-description">${entityData.description || 'No description available.'}</div>
-		`;
+										${
+											entityData?.metadata
+												? Object.entries(entityData?.metadata)
+														.map(
+															([key, entry]) =>
+																`<div class="tooltip-metadata"><span>${key}</span><span>${entry}</span></div>`
+														)
+														.join('')
+												: ''
+										}
+				<div class="tooltip-description">${entityData.description || 'No description available.'}</div>
+				`;
 				break;
 			case 'character':
 				content += `
