@@ -1187,24 +1187,28 @@
 
 /* Type-specific tooltip styling */
 .entity-spell-tooltip .tooltip-header {
-	background-color: #f3e5f5;
+	background: #f3e5f5;
 }
 
 .entity-monster-tooltip .tooltip-header {
-	background-color: #ffebee;
+	background: #ffebee;
 }
 
 .entity-class-tooltip .tooltip-header,
 .entity-subclass-tooltip .tooltip-header {
-	background-color: #e3f2fd;
+	background: #2196f3;
 }
 
 .entity-location-tooltip .tooltip-header {
-	background-color: #e8f5e9;
+	background: #4caf50;
 }
 
 .entity-guild-tooltip .tooltip-header {
-	background-color: #fff3e0;
+	background: #ff9800;
+}
+
+.entity-race-tooltip .tooltip-header {
+	background: #795548;
 }
 
 /* Scrollbar styling for tooltip description */
