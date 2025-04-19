@@ -1067,61 +1067,90 @@ class StoryView {
 	}
 
 	#positionTooltip(element) {
-		// Show the tooltip so we can get its dimensions
+		// Make tooltip visible to get dimensions
 		this.#tooltipContainer.style.display = 'block';
 
 		const elementRect = element.getBoundingClientRect();
 		const tooltipRect = this.#tooltipContainer.getBoundingClientRect();
-		const viewportHeight = window.innerHeight;
-		const viewportWidth = window.innerWidth;
+		const viewport = {
+			width: window.innerWidth,
+			height: window.innerHeight,
+			scrollX: window.scrollX,
+			scrollY: window.scrollY,
+		};
 
-		// Default position (below the element)
-		let top = elementRect.bottom + window.scrollY + 10;
-		let left = elementRect.left + window.scrollX;
+		// Calculate available space in each direction
+		const space = {
+			above: elementRect.top - viewport.scrollY,
+			below: viewport.height - (elementRect.bottom - viewport.scrollY),
+			left: elementRect.left - viewport.scrollX,
+			right: viewport.width - (elementRect.right - viewport.scrollX),
+		};
 
-		// Check if tooltip would extend below viewport
-		if (elementRect.bottom + tooltipRect.height + 10 > viewportHeight) {
-			// Position above element instead
-			top = elementRect.top + window.scrollY - tooltipRect.height - 10;
+		// Default position (prioritize positions in this order: below > above > right > left)
+		let position = 'below';
+		let horizontalAlign = 'left';
 
-			// If that would go above the viewport, position to the right or left
-			if (top < window.scrollY) {
-				top = elementRect.top + window.scrollY;
+		// Choose best position based on available space
+		if (space.below < tooltipRect.height && space.above > tooltipRect.height) {
+			position = 'above';
+		} else if (space.below < tooltipRect.height && space.right > tooltipRect.width) {
+			position = 'right';
+		} else if (space.below < tooltipRect.height && space.left > tooltipRect.width) {
+			position = 'left';
+		}
 
-				// Try to position to the right
-				if (elementRect.right + tooltipRect.width < viewportWidth) {
-					left = elementRect.right + window.scrollX + 10;
-				}
-				// Otherwise position to the left if there's room
-				else if (elementRect.left - tooltipRect.width > 0) {
-					left = elementRect.left + window.scrollX - tooltipRect.width - 10;
-				}
-				// Last resort: center it and let it create a scrollbar if necessary
-				else {
-					top = Math.max(window.scrollY + 10, elementRect.top + window.scrollY - tooltipRect.height / 2);
-				}
+		// Handle horizontal alignment for above/below positions
+		if (position === 'below' || position === 'above') {
+			if (elementRect.left + tooltipRect.width > viewport.width) {
+				horizontalAlign = 'right';
 			}
 		}
 
-		// Check if tooltip would extend beyond right edge of viewport
-		if (left + tooltipRect.width > viewportWidth) {
-			// Align right edge of tooltip with right edge of element
-			left = elementRect.right + window.scrollX - tooltipRect.width;
+		// Calculate position coordinates
+		let coords = { top: 0, left: 0 };
 
-			// If still too wide, align with right edge of viewport with a margin
-			if (left + tooltipRect.width > viewportWidth) {
-				left = viewportWidth - tooltipRect.width - 10 + window.scrollX;
-			}
+		switch (position) {
+			case 'below':
+				coords.top = elementRect.bottom + viewport.scrollY + 10;
+				coords.left =
+					horizontalAlign === 'left'
+						? elementRect.left + viewport.scrollX
+						: elementRect.right + viewport.scrollX - tooltipRect.width;
+				break;
+
+			case 'above':
+				coords.top = elementRect.top + viewport.scrollY - tooltipRect.height - 10;
+				coords.left =
+					horizontalAlign === 'left'
+						? elementRect.left + viewport.scrollX
+						: elementRect.right + viewport.scrollX - tooltipRect.width;
+				break;
+
+			case 'right':
+				coords.top = elementRect.top + viewport.scrollY;
+				coords.left = elementRect.right + viewport.scrollX + 10;
+				break;
+
+			case 'left':
+				coords.top = elementRect.top + viewport.scrollY;
+				coords.left = elementRect.left + viewport.scrollX - tooltipRect.width - 10;
+				break;
 		}
 
-		// Make sure tooltip doesn't go beyond left edge
-		if (left < window.scrollX) {
-			left = window.scrollX + 10;
-		}
+		// Ensure tooltip stays within viewport bounds
+		coords.left = Math.max(
+			viewport.scrollX + 10,
+			Math.min(coords.left, viewport.scrollX + viewport.width - tooltipRect.width - 10)
+		);
+		coords.top = Math.max(
+			viewport.scrollY + 10,
+			Math.min(coords.top, viewport.scrollY + viewport.height - tooltipRect.height - 10)
+		);
 
-		// Apply the calculated position
-		this.#tooltipContainer.style.top = `${top}px`;
-		this.#tooltipContainer.style.left = `${left}px`;
+		// Apply position
+		this.#tooltipContainer.style.top = `${coords.top}px`;
+		this.#tooltipContainer.style.left = `${coords.left}px`;
 	}
 
 	// Add these methods to the class
@@ -1311,7 +1340,17 @@ class StoryView {
 			case 'location':
 			case 'guild':
 				content += `
-		  <div class="tooltip-description">${entityData.description || 'No description available.'}</div>
+									${
+										entityData?.metadata
+											? Object.entries(entityData?.metadata)
+													.map(
+														([key, entry]) =>
+															`<div class="tooltip-metadata"><span>${key}</span><span>${entry}</span></div>`
+													)
+													.join('')
+											: ''
+									}
+		 	 <div class="tooltip-description">${entityData.description || 'No description available.'}</div>
 		`;
 				break;
 			case 'character':
