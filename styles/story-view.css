@@ -1196,10 +1196,23 @@
 	.session-content {
 		align-items: center;
 	}
+
+	.session-header,
+	.session-small-recap,
+	.session-main-content {
+		max-width: calc(100% - 3rem);
+	}
 }
 
 @media (max-width: 768px) {
 	/* Mobile layout */
+
+	.session-header,
+	.session-small-recap,
+	.session-main-content {
+		max-width: calc(100% - 3rem);
+	}
+
 	.story-main-content {
 		grid-template-columns: 1fr;
 		overflow: auto;
