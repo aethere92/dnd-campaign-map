@@ -46,7 +46,7 @@ const CAMPAIGN_02_RECAPS = [
         <p>Driven by regrets, desires, and ambition, longing for home and the joyful life she left behind, [ENTITY:character:Soshi] finds herself traveling with four other companions: her friend from the Brotherhood, and three others as different as night is from day.</p>
         <p>And so, we find [ENTITY:character:Soshi], her spellbook in hand and memories of the [ENTITY:location:Feywilds] stirring in her chest, walking the winding road to [ENTITY:location:Drellin\'s Ferry].</p>
         
-        <p><h3>Kaedin, the Earth Genasi Echo Knight of the Shifting Fates aoklsdhajksfghajskdgh asdfgjosdfkghiosdfug9o23u4wnjkfhgbsdfjkhb</h3></p>
+        <p><h3>Kaedin, the Earth Genasi Echo Knight of the Shifting Fates</h3></p>
         
         <p>[ENTITY:character:Kaedin] was an unusual child in a very usual family. Born out of humans, in a small mining village blessed by a Dao genie, he lived a simple life. Clever, full of energy, and with trouble always finding him, [ENTITY:character:Kaedin] enjoyed his days, finding excitement in what others would consider mundane.</p>
         <p>He became fast friends with Thalos, the son of a deeply religious [ENTITY:race:Earth Genasi] family. They couldn't have been more different - [ENTITY:character:Kaedin] scoffed at tradition, finding it impractical, while Thalos honored it in every word, every piece of clothing, every step. But their souls were alike, and together they spent their days chasing adventure, uncovering secrets, and exploring hidden tunnels.</p>
