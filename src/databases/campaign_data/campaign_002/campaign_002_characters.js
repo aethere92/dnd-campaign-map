@@ -13,7 +13,7 @@ const CAMPAIGN_02_CHARACTERS = [
 	},
 	{
 		name: 'Kaedin',
-		race: 'Earth Genasi',
+		race: 'Genasi',
 		class: 'Echo Knight',
 		level: 6,
 		icon: 'images/assets/character_thumbnails/campaign_002/kaedin.jpeg',

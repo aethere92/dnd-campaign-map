@@ -567,7 +567,7 @@ class StoryView {
 		container.className = 'story-container';
 
 		// Add campaign header
-		this.#createHeader(container);
+		// this.#createHeader(container);
 
 		// Create main content area with sidebar and content
 		const mainContent = document.createElement('div');
@@ -625,6 +625,12 @@ class StoryView {
 		toggleButton.addEventListener('click', () => this.#toggleSidebar(toggleButton));
 		sidebar.appendChild(toggleButton);
 
+		// Add campaign name at the top of sidebar
+		const campaignName = document.createElement('div');
+		campaignName.className = 'story-campaign-name';
+		campaignName.innerHTML = `<h3>${this.#campaign.metadata?.name || 'Unnamed Campaign'}</h1>`;
+		sidebar.appendChild(campaignName);
+
 		// Add characters section
 		this.#createCharacterSection(sidebar);
 
@@ -634,6 +640,7 @@ class StoryView {
 		return sidebar;
 	}
 
+	// Modify the #toggleSidebar method to manage the animation
 	#toggleSidebar(toggleButton) {
 		this.#isSidebarCollapsed = !this.#isSidebarCollapsed;
 
@@ -643,8 +650,24 @@ class StoryView {
 
 		// Find and toggle the main content container
 		const mainContent = this.#rootElement.querySelector('.story-main-content');
+		const sidebar = this.#rootElement.querySelector('.story-sidebar');
+
 		if (mainContent) {
+			// Add transitioning class to enable animation
+			mainContent.classList.add('sidebar-transitioning');
+
+			// Toggle the collapsed class
 			mainContent.classList.toggle('sidebar-collapsed', this.#isSidebarCollapsed);
+
+			// Add animation class to sidebar content
+			if (sidebar) {
+				sidebar.classList.toggle('sidebar-content-collapsed', this.#isSidebarCollapsed);
+			}
+
+			// Remove transitioning class after animation completes
+			setTimeout(() => {
+				mainContent.classList.remove('sidebar-transitioning');
+			}, 300); // Match this with the CSS transition duration
 		}
 
 		// Save state to local storage
@@ -681,7 +704,7 @@ class StoryView {
                 <div class="character-info">
                     <h3>${character.name}</h3>
                     <div class="character-details">
-                        <span>Level ${character.level} ${character.race} ${character.class}</span>
+                        <span>Lvl ${character.level} ${character.race} ${character.class}</span>
                     </div>
                 </div>
             `;
