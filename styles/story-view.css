@@ -1289,6 +1289,13 @@
 	.story-character-list {
 		grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
 	}
+
+	.story-image-container {
+		&.image-inline {
+			float: unset;
+			margin: 0.5rem 0;
+		}
+	}
 }
 
 /* Small screen adjustments */
