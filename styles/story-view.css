@@ -673,9 +673,14 @@
 
 /* Image handling */
 .story-image-container {
-	margin: var(--spacing-lg) 0;
+	/* margin: var(--spacing-lg) 0; */
 	text-align: center;
 	position: relative;
+
+	&.image-inline {
+		float: right;
+		margin-left: 1rem;
+	}
 }
 
 .image-align-left {
@@ -1260,7 +1265,7 @@
 	.image-align-left,
 	.image-align-right {
 		float: none;
-		margin: var(--spacing-lg) auto;
+		/* margin: var(--spacing-lg) auto; */
 		max-width: 90%;
 		text-align: center;
 		display: block;

@@ -1006,20 +1006,21 @@ class StoryView {
 
 	#processImages(contentElement) {
 		// Find all image placeholders
-		// Format: [IMAGE:path/to/image.jpg:optional-caption:optional-width:optional-alignment]
+		// Format: [IMAGE:path/to/image.jpg:optional-caption:optional-width:optional-alignment:optional-inline]
 		const text = contentElement.innerHTML;
 		const processedText = text.replace(
-			/\[IMAGE:(.*?)(?::(.*?))?(?::(.*?))?(?::(.*?))?\]/g,
-			(match, src, caption = '', width = '', alignment = 'center') => {
+			/\[IMAGE:(.*?)(?::(.*?))?(?::(.*?))?(?::(.*?))?(?::(.*?))?\]/g,
+			(match, src, caption = '', width = '', alignment = 'center', inline = 'false') => {
 				const widthAttr = width ? `width="${width}"` : '';
 				const alignClass = `image-align-${alignment}`;
+				const inlineClass = inline === 'true' ? 'image-inline' : '';
 
 				return `
-                    <div class="story-image-container ${alignClass}">
-                        <img src="${src}" ${widthAttr} alt="${caption}" />
-                        ${caption ? `<div class="image-caption">${caption}</div>` : ''}
-                    </div>
-                `;
+					<div class="story-image-container ${alignClass} ${inlineClass}">
+						<img src="${src}" ${widthAttr} alt="${caption}" />
+						${caption ? `<div class="image-caption">${caption}</div>` : ''}
+					</div>
+				`;
 			}
 		);
 

@@ -79,9 +79,11 @@ const CAMPAIGN_02_RECAPS = [
 
 		<hr>
 		
-        <p>Here we are at last, on the way to [ENTITY:location:Drellin\'s Ferry] with a crew of misfits - five people, all chasing something that might fulfill their hopes and dreams, or simply trying to stop the world from unraveling.</p>
-        <p>Now that we're all caught up with our heroes' stories, let's see what happened on the road to [ENTITY:location:Drellin\'s Ferry]!</p>
+        <p>[IMAGE:images/assets/campaign_002/locations/drellin_ferry.jpg::300px::true]Here we are at last, on the way to [ENTITY:location:Drellin\'s Ferry] with a crew of misfits - five people, all chasing something that might fulfill their hopes and dreams, or simply trying to stop the world from unraveling.</p>
+        <p>Now that we're all caught up with our heroes' stories, let's see what happened on the road to [ENTITY:location:Drellin\'s Ferry]!  </p>
 		`,
+
+		// Format: [IMAGE:path/to/image.jpg:optional-caption:optional-width:optional-alignment]
 		recap: `
         <p>Five strangers walk a path less traveled—through tangled weeds and whispering trees—toward the town of [ENTITY:location:Drellin\'s Ferry]. Though their footsteps fall in unison now, each of them carries a life shaped by fate, tragedy, and a desire for something more. They are unlikely allies, bound together by choice or chance, but united in purpose... for now.</p>
 
