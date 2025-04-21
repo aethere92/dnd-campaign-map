@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>DnD Combat Tracker</title>
+		<style>
+			body {
+				font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+				max-width: 100%;
+				margin: 0 auto;
+				padding: 10px;
+				background-color: #f5f5f5;
+				color: #333;
+				font-size: 14px;
+			}
+
+			h1 {
+				text-align: center;
+				color: #7b2cbf;
+				border-bottom: 1px solid #7b2cbf;
+				padding-bottom: 5px;
+				margin: 0 0 10px 0;
+				font-size: 1.4em;
+			}
+
+			.tracker-container {
+				background-color: white;
+				border-radius: 8px;
+				padding: 10px;
+				box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+			}
+
+			.status-effect {
+				display: flex;
+				align-items: center;
+				margin-bottom: 8px;
+				padding: 6px;
+				border-radius: 5px;
+				background-color: #f9f9f9;
+				transition: background-color 0.3s;
+			}
+
+			.status-effect.active {
+				background-color: #e6f7ff;
+				border-left: 3px solid #1890ff;
+			}
+
+			.status-name {
+				flex-grow: 1;
+				font-weight: bold;
+				font-size: 0.95em;
+			}
+
+			.status-description {
+				color: #666;
+				font-size: 0.8em;
+				margin-top: 2px;
+			}
+
+			.toggle-btn {
+				margin-right: 8px;
+				width: 36px;
+				height: 20px;
+				background-color: #ccc;
+				border-radius: 10px;
+				position: relative;
+				cursor: pointer;
+				transition: background-color 0.3s;
+				flex-shrink: 0;
+			}
+
+			.toggle-btn.active {
+				background-color: #52c41a;
+			}
+
+			.toggle-btn::after {
+				content: '';
+				position: absolute;
+				width: 16px;
+				height: 16px;
+				background-color: white;
+				border-radius: 50%;
+				top: 2px;
+				left: 2px;
+				transition: left 0.3s;
+			}
+
+			.toggle-btn.active::after {
+				left: 18px;
+			}
+
+			.section-title {
+				margin-top: 10px;
+				margin-bottom: 5px;
+				color: #7b2cbf;
+				border-bottom: 1px solid #eee;
+				padding-bottom: 3px;
+				font-size: 1.1em;
+			}
+
+			.combat-log {
+				margin-top: 10px;
+				max-height: 200px;
+				overflow-y: auto;
+				padding: 5px;
+				background-color: #f0f0f0;
+				border-radius: 5px;
+				font-family: monospace;
+				font-size: 0.8em;
+			}
+
+			.log-entry {
+				margin-bottom: 3px;
+				padding: 2px 0;
+				border-bottom: 1px solid #e0e0e0;
+			}
+
+			.reset-btn {
+				display: block;
+				margin: 10px auto 0;
+				padding: 6px 12px;
+				background-color: #7b2cbf;
+				color: white;
+				border: none;
+				border-radius: 5px;
+				cursor: pointer;
+				font-weight: bold;
+				transition: background-color 0.3s;
+				font-size: 0.9em;
+			}
+
+			.reset-btn:hover {
+				background-color: #6a1b9a;
+			}
+
+			/* Checkbox styling */
+			.checkbox-container {
+				display: flex;
+				align-items: center;
+				gap: 6px;
+				flex-wrap: wrap;
+				justify-content: flex-end;
+			}
+
+			.checkbox-wrapper {
+				position: relative;
+				width: 24px;
+				height: 24px;
+				margin-left: 2px;
+			}
+
+			.resource-checkbox {
+				appearance: none;
+				-webkit-appearance: none;
+				width: 24px;
+				height: 24px;
+				border: 2px solid #7b2cbf;
+				border-radius: 4px;
+				outline: none;
+				cursor: pointer;
+				position: relative;
+				background-color: white;
+			}
+
+			.resource-checkbox:checked {
+				background-color: #7b2cbf;
+			}
+
+			.resource-checkbox:checked::after {
+				content: '';
+				position: absolute;
+				top: 4px;
+				left: 8px;
+				width: 5px;
+				height: 10px;
+				border: solid white;
+				border-width: 0 2px 2px 0;
+				transform: rotate(45deg);
+			}
+		</style>
+	</head>
+	<body>
+		<div class="tracker-container">
+			<h1>D&D Combat Tracker</h1>
+
+			<h2 class="section-title">Combat Status</h2>
+
+			<!-- Flanking status -->
+			<div id="flanking" class="status-effect">
+				<div class="toggle-btn" onclick="toggleStatus('flanking')"></div>
+				<div class="status-info">
+					<div class="status-name">Flanking</div>
+					<div class="status-description">+2 to hit and damage</div>
+				</div>
+			</div>
+
+			<!-- Graze status -->
+			<div id="graze" class="status-effect">
+				<div class="toggle-btn" onclick="toggleStatus('graze')"></div>
+				<div class="status-info">
+					<div class="status-name">Graze</div>
+					<div class="status-description">4dmg on missed attacks</div>
+				</div>
+			</div>
+
+			<!-- Critical Hit trigger for Hew -->
+			<div id="crit" class="status-effect">
+				<div class="toggle-btn" onclick="toggleStatus('crit')"></div>
+				<div class="status-info">
+					<div class="status-name">Critical Hit (Hew) (1BA)</div>
+					<div class="status-description">Extra attack on crit</div>
+				</div>
+			</div>
+
+			<h2 class="section-title">Resources</h2>
+
+			<!-- Second Wind checkboxes -->
+			<div class="status-effect">
+				<div class="status-info">
+					<div class="status-name">Second Wind (1BA)</div>
+				</div>
+				<div id="second-wind-container" class="checkbox-container">
+					<div class="checkbox-wrapper">
+						<input
+							type="checkbox"
+							id="second-wind-1"
+							class="resource-checkbox"
+							onclick="handleCheckboxClick('second-wind', 1)" />
+					</div>
+					<div class="checkbox-wrapper">
+						<input
+							type="checkbox"
+							id="second-wind-2"
+							class="resource-checkbox"
+							onclick="handleCheckboxClick('second-wind', 2)" />
+					</div>
+					<div class="checkbox-wrapper">
+						<input
+							type="checkbox"
+							id="second-wind-3"
+							class="resource-checkbox"
+							onclick="handleCheckboxClick('second-wind', 3)" />
+					</div>
+				</div>
+			</div>
+
+			<!-- Action Surge checkboxes -->
+			<div class="status-effect">
+				<div class="status-info">
+					<div class="status-name">Action Surge (Free)</div>
+				</div>
+				<div id="action-surge-container" class="checkbox-container">
+					<div class="checkbox-wrapper">
+						<input
+							type="checkbox"
+							id="action-surge-1"
+							class="resource-checkbox"
+							onclick="handleCheckboxClick('action-surge', 1)" />
+					</div>
+				</div>
+			</div>
+
+			<!-- Unleash Incarnation checkboxes -->
+			<div class="status-effect">
+				<div class="status-info">
+					<div class="status-name">Unleash Incarnation (Free)</div>
+				</div>
+				<div id="unleash-incarnation-container" class="checkbox-container">
+					<div class="checkbox-wrapper">
+						<input
+							type="checkbox"
+							id="unleash-incarnation-1"
+							class="resource-checkbox"
+							onclick="handleCheckboxClick('unleash-incarnation', 1)" />
+					</div>
+					<div class="checkbox-wrapper">
+						<input
+							type="checkbox"
+							id="unleash-incarnation-2"
+							class="resource-checkbox"
+							onclick="handleCheckboxClick('unleash-incarnation', 2)" />
+					</div>
+					<div class="checkbox-wrapper">
+						<input
+							type="checkbox"
+							id="unleash-incarnation-3"
+							class="resource-checkbox"
+							onclick="handleCheckboxClick('unleash-incarnation', 3)" />
+					</div>
+				</div>
+			</div>
+
+			<div class="combat-log" id="combat-log">
+				<div class="log-entry">Combat tracker ready.</div>
+			</div>
+
+			<button class="reset-btn" onclick="resetAll()">Reset All</button>
+			<button class="reset-btn" onclick="clearLog()">Clear Log</button>
+		</div>
+
+		<script>
+			// Initialize statuses
+			const statuses = {
+				flanking: false,
+				graze: false,
+				crit: false,
+			};
+
+			// Initialize resources
+			const resources = {
+				'second-wind': 3,
+				'action-surge': 1,
+				'unleash-incarnation': 3,
+			};
+
+			// Toggle status function
+			function toggleStatus(id) {
+				const element = document.getElementById(id);
+				const toggleBtn = element.querySelector('.toggle-btn');
+
+				statuses[id] = !statuses[id];
+
+				if (statuses[id]) {
+					element.classList.add('active');
+					toggleBtn.classList.add('active');
+					addLogEntry(`${capitalizeFirstLetter(id)} on`);
+				} else {
+					element.classList.remove('active');
+					toggleBtn.classList.remove('active');
+					addLogEntry(`${capitalizeFirstLetter(id)} off`);
+				}
+			}
+
+			// Handle checkbox click
+			function handleCheckboxClick(resource, index) {
+				const checkbox = document.getElementById(`${resource}-${index}`);
+				const resourceName = formatResourceName(resource);
+
+				if (checkbox.checked) {
+					addLogEntry(`${resourceName} ${index} used`);
+				} else {
+					addLogEntry(`${resourceName} ${index} available`);
+				}
+			}
+
+			// Add log entry function
+			function addLogEntry(text) {
+				const logElement = document.getElementById('combat-log');
+				const entry = document.createElement('div');
+				entry.className = 'log-entry';
+				entry.textContent = text;
+				logElement.appendChild(entry);
+				logElement.scrollTop = logElement.scrollHeight;
+			}
+
+			// Reset all function
+			function resetAll() {
+				// Reset statuses
+				for (const id in statuses) {
+					if (statuses[id]) {
+						toggleStatus(id);
+					}
+				}
+
+				// Reset checkboxes
+				const checkboxes = document.querySelectorAll('.resource-checkbox');
+				checkboxes.forEach((checkbox) => {
+					checkbox.checked = false;
+				});
+
+				addLogEntry('All reset');
+			}
+
+			// Helper function to format resource names for log
+			function formatResourceName(id) {
+				switch (id) {
+					case 'second-wind':
+						return 'Second Wind';
+					case 'action-surge':
+						return 'Action Surge';
+					case 'unleash-incarnation':
+						return 'Unleash Incarnation';
+					default:
+						return id;
+				}
+			}
+
+			// Helper function to capitalize first letter
+			function capitalizeFirstLetter(string) {
+				return string.charAt(0).toUpperCase() + string.slice(1);
+			}
+
+			function clearLog() {
+				document.getElementById('combat-log').innerHTML = null;
+			}
+		</script>
+	</body>
+</html>
