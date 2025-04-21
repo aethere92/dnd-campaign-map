@@ -978,7 +978,7 @@
 	position: relative;
 }
 
-.entity-spell {
+.entity-spell:not(.character-page__spell-name) {
 	color: #9c27b0;
 	border-bottom-color: #9c27b0;
 }
@@ -1070,7 +1070,7 @@
 
 /* Type-specific tooltip styling */
 .entity-spell-tooltip .tooltip-header {
-	background: #f3e5f5;
+	background: #9c27b0;
 }
 
 .entity-monster-tooltip .tooltip-header {

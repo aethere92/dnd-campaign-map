@@ -1122,7 +1122,8 @@ class StoryView {
 
 						const spellName = document.createElement('div');
 						spellName.className = 'character-page__spell-name';
-						spellName.textContent = spell.spellInfo.spellName;
+						spellName.textContent = `[ENTITY:spell:${spell.spellInfo.spellName}]`;
+						this.#processEntityReferences(spellName);
 
 						const spellMeta = document.createElement('div');
 						spellMeta.className = 'character-page__spell-meta';

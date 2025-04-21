@@ -32,6 +32,7 @@ const CAMPAIGN_02_CHARACTERS = [
 		class: 'Wizard',
 		level: 6,
 		icon: 'images/assets/character_thumbnails/campaign_002/soshi.jpeg',
+		imageBg: 'images/assets/campaign_002/characters/soshi_bg.jpeg',
 		background: CAMPAIGN_02_BACKGROUNDS.SOSHI.background,
 		shortDescription: CAMPAIGN_02_BACKGROUNDS.SOSHI.shortDescription,
 		stats: {

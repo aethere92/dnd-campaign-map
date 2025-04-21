@@ -235,9 +235,18 @@
 	.character-side-two {
 		/* width: 100%; */
 		margin-right: unset;
+		height: max-content;
 	}
 
 	.character-side-one {
 		align-items: center;
+	}
+
+	.character-page__spell-note {
+		display: none;
+	}
+
+	.character-page__spells {
+		max-height: 300px;
 	}
 }
