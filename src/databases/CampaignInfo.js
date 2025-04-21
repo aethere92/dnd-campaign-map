@@ -1060,6 +1060,45 @@ class StoryView {
 				metadataHolder.appendChild(savingThrowsContainer);
 			}
 
+			// Function to manage all descriptions
+			const descriptionManager = {
+				openDescriptions: [],
+				closeAll: function () {
+					this.openDescriptions.forEach((descEl) => {
+						descEl.classList.add('description-hidden');
+					});
+					this.openDescriptions = [];
+				},
+				open: function (descEl) {
+					this.closeAll();
+					descEl.classList.remove('description-hidden');
+					this.openDescriptions.push(descEl);
+					this.adjustPosition(descEl);
+				},
+				adjustPosition: function (descEl) {
+					// Reset any previous positioning
+					descEl.style.left = '0';
+
+					// Wait for the element to be visible to get its dimensions
+					setTimeout(() => {
+						const rect = descEl.getBoundingClientRect();
+						const parentRect = descEl.parentElement.getBoundingClientRect();
+
+						// Check if the description is going off the right edge of the viewport
+						if (rect.right > window.innerWidth) {
+							descEl.style.left = 'auto';
+							descEl.style.right = '0';
+							descEl.style.transform = 'none';
+						}
+						// Check if the description is going off the left edge of the viewport
+						else if (rect.left < 0) {
+							descEl.style.left = '0';
+							descEl.style.transform = 'none';
+						}
+					}, 0);
+				},
+			};
+
 			// Actions
 			if (character?.stats?.metadata?.actionData?.length) {
 				const actionsHeader = document.createElement('span');
@@ -1073,7 +1112,35 @@ class StoryView {
 				character.stats.metadata.actionData.forEach((action) => {
 					const actionItem = document.createElement('div');
 					actionItem.className = 'character-page__action-item';
-					actionItem.textContent = action;
+
+					const nameSpan = document.createElement('span');
+					nameSpan.className = 'character-page__action-item-name';
+					nameSpan.textContent = action.name;
+					actionItem.appendChild(nameSpan);
+
+					if (action.description) {
+						const descSpan = document.createElement('span');
+						descSpan.className = 'character-page__action-item-description description-hidden';
+						descSpan.textContent = action.description;
+						actionItem.appendChild(descSpan);
+
+						// Add clickable class to indicate it can be toggled
+						actionItem.classList.add('has-description');
+
+						// Add click handler to toggle description visibility
+						const toggleDescription = (e) => {
+							e.stopPropagation(); // Prevent bubbling
+							if (descSpan.classList.contains('description-hidden')) {
+								descriptionManager.open(descSpan);
+							} else {
+								descriptionManager.closeAll();
+							}
+						};
+
+						nameSpan.addEventListener('click', toggleDescription);
+						actionItem.addEventListener('click', toggleDescription);
+					}
+
 					actionsContainer.appendChild(actionItem);
 				});
 
@@ -1093,12 +1160,45 @@ class StoryView {
 				character.stats.metadata.features.forEach((feature) => {
 					const featureItem = document.createElement('div');
 					featureItem.className = 'character-page__feature-item';
-					featureItem.textContent = feature;
+
+					const nameSpan = document.createElement('span');
+					nameSpan.className = 'character-page__feature-item-name';
+					nameSpan.textContent = feature.name;
+					featureItem.appendChild(nameSpan);
+
+					if (feature.description) {
+						const descSpan = document.createElement('span');
+						descSpan.className = 'character-page__feature-item-description description-hidden';
+						descSpan.textContent = feature.description;
+						featureItem.appendChild(descSpan);
+
+						// Add clickable class to indicate it can be toggled
+						featureItem.classList.add('has-description');
+
+						// Add click handler to toggle description visibility
+						const toggleDescription = (e) => {
+							e.stopPropagation(); // Prevent bubbling
+							if (descSpan.classList.contains('description-hidden')) {
+								descriptionManager.open(descSpan);
+							} else {
+								descriptionManager.closeAll();
+							}
+						};
+
+						nameSpan.addEventListener('click', toggleDescription);
+						featureItem.addEventListener('click', toggleDescription);
+					}
+
 					featuresContainer.appendChild(featureItem);
 				});
 
 				metadataHolder.appendChild(featuresContainer);
 			}
+
+			// Add global click handler to close descriptions when clicking outside
+			document.addEventListener('click', () => {
+				descriptionManager.closeAll();
+			});
 
 			// Spells
 			if (character?.stats?.metadata?.spellData?.length) {

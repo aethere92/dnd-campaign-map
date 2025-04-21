@@ -175,6 +175,39 @@
 	padding: 0.25rem 0.5rem;
 	background: #e1d7c0;
 	border-radius: 0.25rem;
+	position: relative;
+}
+
+.character-page__action-item-description,
+.character-page__feature-item-description {
+	position: absolute;
+	background: #e8e3da;
+	z-index: 2;
+	width: 40ch;
+	padding: 0.25rem;
+	top: 100%;
+	border-radius: 0.25rem;
+	border: 1px solid #b9ac8e;
+	left: 0;
+}
+
+.description-hidden {
+	display: none;
+}
+
+.has-description {
+	cursor: pointer;
+
+	&:has(.character-page__action-item-description:not(.description-hidden)) .character-page__action-item-name,
+	&:has(.character-page__feature-item-description:not(.description-hidden)) .character-page__feature-item-name {
+		font-weight: 600;
+	}
+}
+
+.character-page__action-item-name,
+.character-page__feature-item-name {
+	cursor: pointer;
+	display: block;
 }
 
 .character-page__spells {
