@@ -938,70 +938,234 @@ class StoryView {
 			return;
 		}
 
-		// Create character content container
-		const characterContent = document.createElement('div');
-		characterContent.className = 'session-content character-content';
+		const addSeparator = (elm) => {
+			const separator = document.createElement('div');
+			separator.className = 'character-page__separator';
 
-		// Add character header with back button
-		const characterHeader = document.createElement('div');
-		characterHeader.className = 'character-header';
+			elm.append(separator);
+		};
 
-		// Back button to return to session view
-		const backButton = document.createElement('button');
-		backButton.className = 'back-button';
-		backButton.innerHTML = '&larr; Back to Session';
-		backButton.style.right = '0';
-		backButton.style.left = '0.75rem';
-		backButton.style.width = 'max-content';
-		backButton.addEventListener('click', () => {
-			this.#selectedCharacter = null;
-			this.render();
-		});
+		const characterPage = document.createElement('div');
+		characterPage.className = 'character-page';
 
-		characterHeader.appendChild(backButton);
+		const characterPagePartOne = document.createElement('div');
+		characterPagePartOne.className = 'character-side-one';
 
-		// Character name and details
-		const characterHeaderInfo = document.createElement('div');
-		characterHeaderInfo.className = 'character-header-info';
-		characterHeaderInfo.innerHTML = `
-			<div class="character-profile">
-				<img src="${character.icon}" alt="${character.name}" class="character-profile-image" />
-				<div class="character-profile-details">
-					<h2 id="character-name">${character.name}</h2>
-					<div class="character-profile-meta">
-						Level ${character.level} ${character.race} ${character.class}
-					</div>
-				</div>
-			</div>
-		`;
+		const characterPagePartTwo = document.createElement('div');
+		characterPagePartTwo.className = 'character-side-two';
 
-		characterHeader.appendChild(characterHeaderInfo);
-		characterContent.appendChild(characterHeader);
-
-		// Character background content
-		const backgroundContent = document.createElement('div');
-		backgroundContent.className = 'character-background-content';
-
-		// Add full background if available
-		if (character.background) {
-			const fullBackground = document.createElement('div');
-			fullBackground.className = 'character-full-background';
-			fullBackground.innerHTML = `
-				<h3 id="character-background">Background</h3>
-				<div class="background-text">${character.background}</div>
-			`;
-			this.#processEntityReferences(fullBackground);
-			backgroundContent.appendChild(fullBackground);
-		} else {
-			// If no background is available
-			const noBackground = document.createElement('div');
-			noBackground.className = 'no-background';
-			noBackground.textContent = 'No detailed background available for this character.';
-			backgroundContent.appendChild(noBackground);
+		if (character?.imageBg) {
+			const img = document.createElement('img');
+			img.src = character?.imageBg;
+			img.alt = `${character?.name} - ${character?.race} - ${character?.class}`;
+			img.className = 'character-page__image';
+			characterPagePartOne.appendChild(img);
 		}
 
-		characterContent.appendChild(backgroundContent);
-		contentArea.appendChild(characterContent);
+		if (character?.background) {
+			const itemHeader = document.createElement('span');
+			itemHeader.className = 'character-page__header';
+			itemHeader.textContent = 'Background';
+
+			const characterBg = document.createElement('div');
+			characterBg.className = 'character-page__background';
+
+			characterBg.innerHTML = character?.background;
+			this.#processEntityReferences(characterBg);
+			characterPagePartOne.appendChild(itemHeader);
+			characterPagePartOne.appendChild(characterBg);
+		}
+
+		if (character?.stats?.metadata) {
+			const metadataHolder = document.createElement('div');
+			metadataHolder.className = 'character-page__metadata';
+
+			if (character?.name) {
+				const charIdentifiers = document.createElement('div');
+				charIdentifiers.className = 'character-page__identifiers';
+
+				charIdentifiers.innerHTML = `<span class="character-page__name">${character?.name}</span>
+					<span class="character-page__identifier">Lvl ${character?.level} ${character?.race} ${character?.class}</span>`;
+
+				metadataHolder.append(charIdentifiers);
+			}
+
+			addSeparator(metadataHolder);
+
+			const characterHealth = document.createElement('div');
+			characterHealth.className = 'character-page__hp';
+			characterHealth.innerHTML = `
+				<div class="character-page__hp-item">
+					<span class="character-page__hp-item-name">Armor Class</span>
+					<span class="character-page__hp-item-value">${character?.stats?.metadata?.armorClass}</span>
+				</div>
+				<div class="character-page__hp-item">
+					<span class="character-page__hp-item-name">Hit Points</span>
+					<span class="character-page__hp-item-value">${character?.stats?.metadata?.healthPoints}</span>
+				</div>
+				<div class="character-page__hp-item">
+					<span class="character-page__hp-item-name">Speed</span>
+					<span class="character-page__hp-item-value">${character?.stats?.metadata?.walkingSpeed}</span>
+				</div>
+				`;
+
+			metadataHolder.append(characterHealth);
+
+			// Ability Scores
+			if (character?.stats?.metadata?.abilityScores?.length) {
+				const abilityScoresHeader = document.createElement('span');
+				abilityScoresHeader.className = 'character-page__header';
+				abilityScoresHeader.textContent = 'Ability Scores';
+				metadataHolder.appendChild(abilityScoresHeader);
+
+				const abilityScoresContainer = document.createElement('div');
+				abilityScoresContainer.className = 'character-page__ability-scores';
+
+				character.stats.metadata.abilityScores.forEach((ability) => {
+					const abilityBox = document.createElement('div');
+					abilityBox.className = 'character-page__ability-box';
+					abilityBox.innerHTML = `
+					<span class="character-page__ability-name">${ability.abbr.toUpperCase()}</span>
+					<div class="character-page__ability-values">
+						<span class="character-page__ability-value">${ability.value}</span>
+						<span class="character-page__ability-score">(${ability.score})</span>
+					</div>
+				`;
+					abilityScoresContainer.appendChild(abilityBox);
+				});
+
+				metadataHolder.appendChild(abilityScoresContainer);
+			}
+
+			// Saving Throws
+			if (character?.stats?.metadata?.savingThrows?.length) {
+				const savingThrowsHeader = document.createElement('span');
+				savingThrowsHeader.className = 'character-page__header';
+				savingThrowsHeader.textContent = 'Saving Throws';
+				metadataHolder.appendChild(savingThrowsHeader);
+
+				const savingThrowsContainer = document.createElement('div');
+				savingThrowsContainer.className = 'character-page__saving-throws';
+
+				character.stats.metadata.savingThrows.forEach((save) => {
+					const saveItem = document.createElement('div');
+					saveItem.className = 'character-page__save-item';
+					saveItem.innerHTML = `
+					<span class="character-page__save-name">${save.name.toUpperCase()}</span>
+					<span class="character-page__save-value">${save.value}</span>
+				`;
+					savingThrowsContainer.appendChild(saveItem);
+				});
+
+				metadataHolder.appendChild(savingThrowsContainer);
+			}
+
+			// Actions
+			if (character?.stats?.metadata?.actionData?.length) {
+				const actionsHeader = document.createElement('span');
+				actionsHeader.className = 'character-page__header';
+				actionsHeader.textContent = 'Actions';
+				metadataHolder.appendChild(actionsHeader);
+
+				const actionsContainer = document.createElement('div');
+				actionsContainer.className = 'character-page__actions';
+
+				character.stats.metadata.actionData.forEach((action) => {
+					const actionItem = document.createElement('div');
+					actionItem.className = 'character-page__action-item';
+					actionItem.textContent = action;
+					actionsContainer.appendChild(actionItem);
+				});
+
+				metadataHolder.appendChild(actionsContainer);
+			}
+
+			// Features
+			if (character?.stats?.metadata?.features?.length) {
+				const featuresHeader = document.createElement('span');
+				featuresHeader.className = 'character-page__header';
+				featuresHeader.textContent = 'Features';
+				metadataHolder.appendChild(featuresHeader);
+
+				const featuresContainer = document.createElement('div');
+				featuresContainer.className = 'character-page__features';
+
+				character.stats.metadata.features.forEach((feature) => {
+					const featureItem = document.createElement('div');
+					featureItem.className = 'character-page__feature-item';
+					featureItem.textContent = feature;
+					featuresContainer.appendChild(featureItem);
+				});
+
+				metadataHolder.appendChild(featuresContainer);
+			}
+
+			// Spells
+			if (character?.stats?.metadata?.spellData?.length) {
+				const spellsHeader = document.createElement('span');
+				spellsHeader.className = 'character-page__header';
+				spellsHeader.textContent = 'Spells';
+				metadataHolder.appendChild(spellsHeader);
+
+				const spellsContainer = document.createElement('div');
+				spellsContainer.className = 'character-page__spells';
+
+				character.stats.metadata.spellData.forEach((spellGroup) => {
+					const groupHeader = document.createElement('div');
+					groupHeader.className = 'character-page__spell-group-header';
+					groupHeader.textContent = spellGroup.groupName;
+					spellsContainer.appendChild(groupHeader);
+
+					spellGroup.spells.forEach((spell) => {
+						const spellItem = document.createElement('div');
+						spellItem.className = 'character-page__spell-item';
+
+						const spellName = document.createElement('div');
+						spellName.className = 'character-page__spell-name';
+						spellName.textContent = spell.spellInfo.spellName;
+
+						const spellMeta = document.createElement('div');
+						spellMeta.className = 'character-page__spell-meta';
+
+						const rangeInfo = document.createElement('span');
+						rangeInfo.className = 'character-page__spell-range';
+						rangeInfo.textContent = `Range: ${spell.range}`;
+
+						const slotInfo = document.createElement('span');
+						slotInfo.className = 'character-page__spell-slot';
+						slotInfo.textContent = `Slot: ${spell.slotType}`;
+
+						const effectInfo = document.createElement('span');
+						effectInfo.className = 'character-page__spell-effect';
+						effectInfo.textContent = `Effect: ${spell.effect}`;
+
+						if (spell.spellInfo.spellMetaInfo) {
+							const spellNote = document.createElement('div');
+							spellNote.className = 'character-page__spell-note';
+							spellNote.textContent = spell.spellInfo.spellMetaInfo;
+							spellMeta.appendChild(spellNote);
+						}
+
+						spellMeta.appendChild(rangeInfo);
+						spellMeta.appendChild(slotInfo);
+						spellMeta.appendChild(effectInfo);
+
+						spellItem.appendChild(spellName);
+						spellItem.appendChild(spellMeta);
+
+						spellsContainer.appendChild(spellItem);
+					});
+				});
+
+				metadataHolder.appendChild(spellsContainer);
+			}
+
+			characterPagePartTwo.append(metadataHolder);
+		}
+
+		characterPage.append(characterPagePartTwo);
+		characterPage.append(characterPagePartOne);
+		contentArea.append(characterPage);
 	}
 
 	#processImages(contentElement) {
