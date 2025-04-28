@@ -1326,3 +1326,11 @@
 		height: 100px;
 	}
 }
+
+/* Add these styles to your existing CSS */
+
+/* Basic dialogue styling */
+.dialogue {
+	/* font-style: italic; */
+	font-weight: 500;
+}

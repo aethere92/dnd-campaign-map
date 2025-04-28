@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Document</title>
+		<title>D&D Recap Entity Formatter</title>
 	</head>
 	<body>
 		<div id="formatter-container"></div>
@@ -11,19 +11,32 @@
 		<script>
 			class RecapFormatter {
 				constructor(options = {}) {
-					this.characters = options.characters || [];
+					// Initialize entity categories
+					this.entities = {
+						character: options.characters || [],
+						location: options.locations || [],
+						class: options.classes || [],
+						subclass: options.subclasses || [],
+						guild: options.guilds || [],
+						item: options.items || [],
+						race: options.races || [],
+					};
+
 					this.inputElement = null;
 					this.outputElement = null;
 					this.previewElement = null;
 					this.formatButton = null;
 					this.copyButton = null;
 
-					// Initialize character map for quick lookup
-					this.characterMap = new Map();
-					if (this.characters.length) {
-						this.characters.forEach((char) => {
-							this.characterMap.set(char.name.toLowerCase(), char.name);
-						});
+					// Initialize entity maps for quick lookup
+					this.entityMaps = {};
+					for (const [type, list] of Object.entries(this.entities)) {
+						this.entityMaps[type] = new Map();
+						if (list.length) {
+							list.forEach((entity) => {
+								this.entityMaps[type].set(entity.name.toLowerCase(), entity.name);
+							});
+						}
 					}
 				}
 
@@ -37,7 +50,7 @@
 					container.innerHTML = `
       <div class="formatter-container">
         <div class="formatter-header">
-          <h2>DnD Recap Formatter</h2>
+          <h2>D&D Recap Entity Formatter</h2>
         </div>
         <div class="formatter-main">
           <div class="formatter-input-section">
@@ -45,7 +58,7 @@
             <textarea id="recap-input" placeholder="Paste your plain text recap here..."></textarea>
             <div class="formatter-controls">
               <button id="format-button">Format Text</button>
-              <button id="add-character-button">Add Characters</button>
+              <button id="add-entity-button">Add Entity</button>
               <button id="add-image-button">Add Image</button>
             </div>
           </div>
@@ -68,13 +81,13 @@
 					this.previewElement = document.getElementById('recap-preview');
 					this.formatButton = document.getElementById('format-button');
 					this.copyButton = document.getElementById('copy-button');
-					const addCharacterButton = document.getElementById('add-character-button');
+					const addEntityButton = document.getElementById('add-entity-button');
 					const addImageButton = document.getElementById('add-image-button');
 
 					// Add event listeners
 					this.formatButton.addEventListener('click', () => this.formatText());
 					this.copyButton.addEventListener('click', () => this.copyToClipboard());
-					addCharacterButton.addEventListener('click', () => this.showCharacterModal());
+					addEntityButton.addEventListener('click', () => this.showEntityModal());
 					addImageButton.addEventListener('click', () => this.showImageModal());
 
 					// Add styles
@@ -190,12 +203,32 @@
         border: 1px solid #ddd;
         border-radius: 4px;
       }
-      /* Character highlight styles */
-      .character-highlight {
+      /* Entity highlight styles */
+      .entity-reference {
         font-weight: bold;
         cursor: pointer;
-        color: #0066cc;
         text-decoration: underline;
+      }
+      .entity-character {
+        color: #0066cc;
+      }
+      .entity-location {
+        color: #008800;
+      }
+      .entity-class {
+        color: #990000;
+      }
+      .entity-subclass {
+        color: #cc6600;
+      }
+      .entity-guild {
+        color: #6600cc;
+      }
+      .entity-item {
+        color: #cc0099;
+      }
+      .entity-race {
+        color: #006666;
       }
       /* Image styles */
       .story-image-container {
@@ -236,9 +269,14 @@
 					this.updatePreview(formattedText);
 				}
 
+				// Replace the processText() method with this:
 				processText(text) {
-					// Split text into paragraphs
-					const paragraphs = text.split(/\n\n+/);
+					// Normalize line endings
+					const normalizedText = text.replace(/\r\n/g, '\n');
+
+					// Split text into paragraphs - consider both single and multiple newlines as paragraph separators
+					// This is the key change - we now detect paragraphs with single newlines
+					const paragraphs = normalizedText.split(/\n/).filter((p) => p.trim());
 
 					// Process each paragraph
 					const formattedParagraphs = paragraphs.map((paragraph) => {
@@ -250,8 +288,8 @@
 							return paragraph; // Keep image tags as is
 						}
 
-						// Process character names within paragraph
-						let processed = this.highlightCharacters(paragraph);
+						// Process entities within paragraph (detect and add [ENTITY] tags)
+						let processed = this.detectAndTagEntities(paragraph);
 
 						// Wrap in paragraph tags
 						return `<p>${processed}</p>`;
@@ -260,25 +298,60 @@
 					return formattedParagraphs.join('\n\n');
 				}
 
-				highlightCharacters(text) {
-					// If no characters are defined, return the text as is
-					if (!this.characters.length) return text;
+				// Add this new method to detect and tag entities:
+				detectAndTagEntities(text) {
+					let processed = text;
 
-					// Sort characters by name length (descending) to prevent partial matches
-					const sortedCharacters = [...this.characters].sort((a, b) => b.name.length - a.name.length);
+					// Process each entity type separately
+					for (const [type, entityList] of Object.entries(this.entities)) {
+						if (!entityList.length) continue;
 
-					let result = text;
+						// Sort entities by name length (descending) to prevent partial matches
+						const sortedEntities = [...entityList].sort((a, b) => b.name.length - a.name.length);
 
-					// Replace character names with highlighted spans
-					sortedCharacters.forEach((character) => {
-						const regex = new RegExp(`\\b${character.name}\\b`, 'g');
-						result = result.replace(
-							regex,
-							`<span class="character-highlight" data-character="${character.name}">${character.name}</span>`
-						);
+						for (const entity of sortedEntities) {
+							// Regular expression to match whole word only,
+							// excluding text that is already within [] brackets or HTML tags
+							const regex = new RegExp(`\\b${this.escapeRegExp(entity.name)}\\b(?![^\\[]*\\])(?![^<]*>)`, 'g');
+
+							processed = processed.replace(regex, `[ENTITY:${type}:${entity.name}]`);
+						}
+					}
+
+					return processed;
+				}
+
+				processEntityTags(text) {
+					// First, convert [ENTITY:type:name] format to HTML
+					let processed = text.replace(/\[ENTITY:(\w+):([^\]]+)\]/g, (match, type, name) => {
+						return this.createEntitySpan(type, name);
 					});
 
-					return result;
+					// Then process each entity type separately for plain text references
+					for (const [type, entityList] of Object.entries(this.entities)) {
+						if (!entityList.length) continue;
+
+						// Sort entities by name length (descending) to prevent partial matches
+						const sortedEntities = [...entityList].sort((a, b) => b.name.length - a.name.length);
+
+						for (const entity of sortedEntities) {
+							// Regular expression to match whole word only
+							const regex = new RegExp(`\\b${this.escapeRegExp(entity.name)}\\b(?![^<]*>)`, 'g');
+							processed = processed.replace(regex, this.createEntitySpan(type, entity.name));
+						}
+					}
+
+					return processed;
+				}
+
+				createEntitySpan(type, name) {
+					// Clean the name to handle any escaped characters
+					const cleanName = name.replace(/\\'/g, "'");
+					return `<span class="entity-reference entity-${type}" data-entity-type="${type}" data-entity-name="${cleanName}">${cleanName}</span>`;
+				}
+
+				escapeRegExp(string) {
+					return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 				}
 
 				updatePreview(html) {
@@ -297,34 +370,45 @@
 					}, 2000);
 				}
 
-				showCharacterModal() {
+				showEntityModal() {
 					// Create modal if it doesn't exist
-					let modal = document.getElementById('character-modal');
+					let modal = document.getElementById('entity-modal');
 					if (!modal) {
 						modal = document.createElement('div');
-						modal.id = 'character-modal';
+						modal.id = 'entity-modal';
 						modal.className = 'modal';
+
+						// Generate options for each entity type
+						const entityTypeOptions = Object.keys(this.entities)
+							.map((type) => `<option value="${type}">${type.charAt(0).toUpperCase() + type.slice(1)}</option>`)
+							.join('');
+
 						modal.innerHTML = `
 							<div class="modal-content">
 							<div class="modal-header">
-								<h3>Add Character Highlight</h3>
+								<h3>Add Entity Reference</h3>
 								<span class="close-modal">&times;</span>
 							</div>
 							<div class="modal-body">
 								<div class="form-group">
-								<label for="character-name">Character Name:</label>
-								<input type="text" id="character-name" placeholder="Enter character name">
+								<label for="entity-type">Entity Type:</label>
+								<select id="entity-type">
+									${entityTypeOptions}
+								</select>
 								</div>
 								<div class="form-group">
-								<label>Existing Characters:</label>
-								<select id="existing-characters">
-									<option value="">Select a character</option>
-									${this.characters.map((char) => `<option value="${char.name}">${char.name}</option>`).join('')}
+								<label for="entity-name">Entity Name:</label>
+								<input type="text" id="entity-name" placeholder="Enter entity name">
+								</div>
+								<div class="form-group">
+								<label for="existing-entities">Existing Entities:</label>
+								<select id="existing-entities">
+									<option value="">Select an entity</option>
 								</select>
 								</div>
 							</div>
 							<div class="modal-footer">
-								<button id="insert-character">Insert Character</button>
+								<button id="insert-entity">Insert Entity</button>
 							</div>
 							</div>
 						`;
@@ -336,46 +420,85 @@
 							modal.style.display = 'none';
 						});
 
-						const insertBtn = modal.querySelector('#insert-character');
+						const insertBtn = modal.querySelector('#insert-entity');
 						insertBtn.addEventListener('click', () => {
-							this.insertCharacter();
+							this.insertEntity();
 							modal.style.display = 'none';
 						});
 
-						const existingCharSelect = modal.querySelector('#existing-characters');
-						existingCharSelect.addEventListener('change', (e) => {
+						const entityTypeSelect = modal.querySelector('#entity-type');
+						entityTypeSelect.addEventListener('change', () => {
+							this.updateExistingEntitiesDropdown();
+						});
+
+						const existingEntitiesSelect = modal.querySelector('#existing-entities');
+						existingEntitiesSelect.addEventListener('change', (e) => {
 							if (e.target.value) {
-								document.getElementById('character-name').value = e.target.value;
+								document.getElementById('entity-name').value = e.target.value;
 							}
 						});
 					}
+
+					// Update existing entities dropdown for the default selected type
+					setTimeout(() => this.updateExistingEntitiesDropdown(), 0);
 
 					// Show modal
 					modal.style.display = 'block';
 				}
 
-				insertCharacter() {
-					const characterName = document.getElementById('character-name').value.trim();
-					if (!characterName) return;
+				updateExistingEntitiesDropdown() {
+					const entityType = document.getElementById('entity-type').value;
+					const existingEntitiesSelect = document.getElementById('existing-entities');
+
+					// Clear existing options
+					existingEntitiesSelect.innerHTML = '<option value="">Select an entity</option>';
+
+					// Add options for the selected entity type
+					if (this.entities[entityType] && this.entities[entityType].length > 0) {
+						this.entities[entityType].forEach((entity) => {
+							const option = document.createElement('option');
+							option.value = entity.name;
+							option.textContent = entity.name;
+							existingEntitiesSelect.appendChild(option);
+						});
+					}
+				}
+
+				// Replace the insertEntity() method with this:
+				insertEntity() {
+					const entityType = document.getElementById('entity-type').value;
+					const entityName = document.getElementById('entity-name').value.trim();
+
+					if (!entityType || !entityName) {
+						alert('Both entity type and name are required.');
+						return;
+					}
+
+					// Format the entity tag
+					const entityTag = `[ENTITY:${entityType}:${entityName}]`;
 
 					// Get current cursor position
 					const cursorPos = this.inputElement.selectionStart;
 					const textBefore = this.inputElement.value.substring(0, cursorPos);
 					const textAfter = this.inputElement.value.substring(cursorPos);
 
-					// Add character to the list if it's new
-					if (!this.characterMap.has(characterName.toLowerCase())) {
-						this.characters.push({ name: characterName });
-						this.characterMap.set(characterName.toLowerCase(), characterName);
+					// Add entity to the list if it's new
+					if (!this.entityMaps[entityType]?.has(entityName.toLowerCase())) {
+						if (!this.entities[entityType]) {
+							this.entities[entityType] = [];
+							this.entityMaps[entityType] = new Map();
+						}
+						this.entities[entityType].push({ name: entityName });
+						this.entityMaps[entityType].set(entityName.toLowerCase(), entityName);
 					}
 
-					// Insert character at cursor position
-					this.inputElement.value = textBefore + characterName + textAfter;
+					// Insert entity tag at cursor position
+					this.inputElement.value = textBefore + entityTag + textAfter;
 
-					// Set cursor position after inserted character
+					// Set cursor position after inserted entity tag
 					this.inputElement.focus();
-					this.inputElement.selectionStart = cursorPos + characterName.length;
-					this.inputElement.selectionEnd = cursorPos + characterName.length;
+					this.inputElement.selectionStart = cursorPos + entityTag.length;
+					this.inputElement.selectionEnd = cursorPos + entityTag.length;
 				}
 
 				showImageModal() {
@@ -468,37 +591,43 @@
 					this.inputElement.selectionEnd = cursorPos + imageTag.length + 4;
 				}
 
-				updateCharacters(characters) {
-					this.characters = characters;
-					this.characterMap.clear();
-					if (this.characters.length) {
-						this.characters.forEach((char) => {
-							this.characterMap.set(char.name.toLowerCase(), char.name);
+				updateEntities(entityType, entities) {
+					this.entities[entityType] = entities;
+					this.entityMaps[entityType].clear();
+					if (this.entities[entityType].length) {
+						this.entities[entityType].forEach((entity) => {
+							this.entityMaps[entityType].set(entity.name.toLowerCase(), entity.name);
 						});
+					}
+				}
+
+				addEntity(entityType, entityName) {
+					// Create entity type array if it doesn't exist
+					if (!this.entities[entityType]) {
+						this.entities[entityType] = [];
+						this.entityMaps[entityType] = new Map();
+					}
+
+					// Add entity if it doesn't already exist
+					if (!this.entityMaps[entityType].has(entityName.toLowerCase())) {
+						this.entities[entityType].push({ name: entityName });
+						this.entityMaps[entityType].set(entityName.toLowerCase(), entityName);
 					}
 				}
 			}
 
-			// Usage example:
-			// const formatter = new RecapFormatter({
-			//   characters: [
-			//     { name: "Bonnie McStealy" },
-			//     { name: "Kaedin" },
-			//     { name: "Soshi" },
-			//     { name: "Norr" },
-			//     { name: "Olek" }
-			//   ]
-			// });
-			// formatter.init('formatter-container');
-
+			// Initialize the formatter with sample entities from each category
 			const formatter = new RecapFormatter({
-				characters: [
-					{ name: 'Bonnie' },
-					{ name: 'Kaedin' },
-					{ name: 'Soshi' },
-					{ name: 'Norr' },
-					{ name: 'Olek' },
-					// Add all your campaign characters here
+				characters: [{ name: 'Bonnie' }, { name: 'Kaedin' }, { name: 'Soshi' }, { name: 'Norr' }, { name: 'Olek' }],
+				locations: [{ name: "Drellin's Ferry" }, { name: 'Feywilds' }, { name: 'Brindol' }],
+				classes: [{ name: 'Paladin' }, { name: 'Sorcerer' }, { name: 'Rogue' }],
+				subclasses: [{ name: 'Echo Knight' }],
+				guilds: [{ name: 'Arcane Brotherhood' }],
+				items: [
+					// Add your campaign items here
+				],
+				races: [
+					// Add your campaign races here
 				],
 			});
 			formatter.init('formatter-container');
