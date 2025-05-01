@@ -58,6 +58,16 @@ const CAMPAIGN_02_API_DATA = {
 			description:
 				'The Harpers are a semi-secret organization dedicated to promoting good, preserving history, and maintaining a balance between civilization and nature. They work against tyranny, aided by a network of spies and informants throughout the land.',
 		},
+		Krynn: {
+			name: 'Krynn Dynasty',
+			description: `
+				The Calamity left northern Xhorhas a burnt and cracked wasteland surrounded by blackened marshland and jagged cliffs, and survival in the valley wasteland was difficult for centuries thereafter. The Kryn Dynasty, founded by drow who had turned from Lolth to a new faith in the Luxon, is the first nation to rise in the region after the end of that period, and though they still contend with not only the scarred landscape but also lingering abominations, they have been able to incorporate diverse humanoids and giants under their banner. The cities of the Dynasty are kept shaded or even in near-perpetual night by powerful dunamancers and other umbral magic, and the capital city of Rosohna sits under constant, sparsely broken cloud cover. Its settlements are connected by dirt roads.
+			`,
+			metadata: {
+				Base: 'Rosohna, Wildermount',
+				Religion: 'The Luxon',
+			},
+		},
 	},
 	subclass: {
 		'Echo Knight': {
@@ -112,6 +122,13 @@ const CAMPAIGN_02_API_DATA = {
 			class: 'N/A',
 			role: "Bonnie's companion",
 			description: "An antlered giant rat, he is Bonnie's companion and the closest she has to a family.",
+		},
+		'Wyrmlord Koth': {
+			name: 'Wyrmlord Koth',
+			affinity: 'Hobgoblins',
+			class: 'Sorcerer',
+			role: 'Hobgoblins Captain',
+			description: `Initially thought to be a hobgoblins warlord, but later revealed to be only a captain, he's one of the main antagonists who is gathering the hobgoblin forces for the "Day of Ruin". Information about them was found out by the party by interrogating the captured hobgoblin at the battle before Drellin's Ferry.`,
 		},
 	},
 };
