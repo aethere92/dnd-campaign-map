@@ -1597,7 +1597,7 @@ class StoryView {
 					<div><strong>Range:</strong> ${entityData.range || 'N/A'}</div>
 					<div><strong>Components:</strong> ${entityData.components?.join(', ') || 'None'}</div>
 					<div><strong>Duration:</strong> ${entityData.duration || 'Instantaneous'}</div>
-					<div class="tooltip-description">${
+					<div class="tooltip-description tooltip-background">${
 						entityData.desc?.join('<br>') || entityData.description || 'No description available.'
 					}</div>
 					`;
@@ -1609,7 +1609,9 @@ class StoryView {
 					<div><strong>CR:</strong> ${entityData.challenge_rating || 'Unknown'}</div>
 					<div><strong>AC:</strong> ${entityData.armor_class || 'Unknown'}</div>
 					<div><strong>HP:</strong> ${entityData.hit_points || 'Unknown'}</div>
-					<div class="tooltip-description">${entityData.desc || entityData.description || 'No description available.'}</div>
+					<div class="tooltip-description tooltip-background">${
+						entityData.desc || entityData.description || 'No description available.'
+					}</div>
 					`;
 				break;
 
@@ -1627,7 +1629,9 @@ class StoryView {
 				content += `
 					  <div><strong>Subclass Of:</strong> ${entityData.class?.name || 'Unknown'}</div>
 					  <div><strong>Features:</strong> ${entityData.subclass_flavor || 'No flavor text'}</div>
-					  <div class="tooltip-description">${entityData.desc || entityData.description || 'No description available.'}</div>
+					  <div class="tooltip-description tooltip-background">${
+							entityData.desc || entityData.description || 'No description available.'
+						}</div>
 					`;
 				break;
 			case 'location':
@@ -1644,7 +1648,7 @@ class StoryView {
 														.join('')
 												: ''
 										}
-				<div class="tooltip-description">${entityData.description || 'No description available.'}</div>
+				<div class="tooltip-description tooltip-background">${entityData.description || 'No description available.'}</div>
 				`;
 				break;
 			case 'character':

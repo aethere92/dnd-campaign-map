@@ -2,6 +2,10 @@ const CAMPAIGN_02_API_DATA = {
 	location: {
 		Feywilds: {
 			name: 'The Feywild',
+			metadata: {
+				Natives: 'Eladrin, elves, fey, fomorians, goblins',
+				Type: 'Dimensional plane',
+			},
 			description:
 				'Also called the Plane of Faerie, the Feywild is a realm of everlasting twilight, with glittering lights dancing in the air and stunning beauty that can captivate travelers. It exists as an "echo" of the Material Plane, overlapping with the ordinary world but containing magnificent features: towering mountains, breathtaking canyons, and vast seas. The Feywild is inhabited by sylvan creatures such as elves, dryads, satyrs, pixies, and other fey beings.',
 		},
