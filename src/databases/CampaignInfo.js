@@ -496,6 +496,7 @@ class StoryView {
 		'condition',
 		'character',
 		'race',
+		'npc',
 	];
 	#entityEndpoints = {
 		spell: 'spells',
@@ -509,6 +510,7 @@ class StoryView {
 		condition: 'conditions',
 		character: 'character',
 		race: 'race',
+		npc: 'npc',
 	};
 	#customApiData = CAMPAIGN_02_API_DATA;
 
@@ -1472,15 +1474,15 @@ class StoryView {
 		element.addEventListener('mouseover', async (e) => {
 			// Show loading state
 			this.#tooltipContainer.innerHTML = `
-		<div class="entity-tooltip">
-		  <div class="tooltip-header">
-			<h3>${entityName}</h3>
-		  </div>
-		  <div class="tooltip-content">
-			<div>Loading ${entityType} information...</div>
-		  </div>
-		</div>
-	  `;
+				<div class="entity-tooltip">
+				<div class="tooltip-header">
+					<h3>${entityName}</h3>
+				</div>
+				<div class="tooltip-content">
+					<div>Loading ${entityType} information...</div>
+				</div>
+				</div>
+			`;
 
 			// Position and show the tooltip
 			this.#tooltipContainer.style.display = 'block';
@@ -1497,27 +1499,27 @@ class StoryView {
 					this.#positionTooltip(element);
 				} else {
 					this.#tooltipContainer.innerHTML = `
-			<div class="entity-tooltip">
-			  <div class="tooltip-header">
-				<h3>${entityName}</h3>
-			  </div>
-			  <div class="tooltip-content">
-				<div>No information found for this ${entityType}.</div>
-			  </div>
-			</div>
-		  `;
+						<div class="entity-tooltip">
+						<div class="tooltip-header">
+							<h3>${entityName}</h3>
+						</div>
+						<div class="tooltip-content">
+							<div>No information found for this ${entityType}.</div>
+						</div>
+						</div>
+					`;
 				}
 			} catch (error) {
 				this.#tooltipContainer.innerHTML = `
-		  <div class="entity-tooltip">
-			<div class="tooltip-header">
-			  <h3>${entityName}</h3>
-			</div>
-			<div class="tooltip-content">
-			  <div>Error loading information: ${error.message}</div>
-			</div>
-		  </div>
-		`;
+					<div class="entity-tooltip">
+						<div class="tooltip-header">
+						<h3>${entityName}</h3>
+						</div>
+						<div class="tooltip-content">
+						<div>Error loading information: ${error.message}</div>
+						</div>
+					</div>
+					`;
 				console.error(`Error fetching entity data:`, error);
 			}
 		});
@@ -1577,38 +1579,38 @@ class StoryView {
 
 	#generateEntityTooltipContent(entityType, entityData) {
 		let content = `
-	  <div class="entity-tooltip entity-${entityType}-tooltip">
-		<div class="tooltip-header">
-		  ${entityType === 'character' ? `<img src="${entityData.icon}" alt="${entityData.name}" />` : ''}
-		  <h3>${entityData.name || entityData.title || 'Unknown'}</h3>
-		</div>
-		<div class="tooltip-content">
-	`;
+			<div class="entity-tooltip entity-${entityType}-tooltip">
+				<div class="tooltip-header">
+				${entityType === 'character' ? `<img src="${entityData.icon}" alt="${entityData.name}" />` : ''}
+				<h3>${entityData.name || entityData.title || 'Unknown'}</h3>
+				</div>
+				<div class="tooltip-content">
+			`;
 
 		// Different formatting based on entity type
 		switch (entityType) {
 			case 'spell':
 				content += `
-		  <div><strong>Level:</strong> ${entityData.level || 'Cantrip'}</div>
-		  <div><strong>School:</strong> ${entityData.school?.name || 'Unknown'}</div>
-		  <div><strong>Casting Time:</strong> ${entityData.casting_time || 'N/A'}</div>
-		  <div><strong>Range:</strong> ${entityData.range || 'N/A'}</div>
-		  <div><strong>Components:</strong> ${entityData.components?.join(', ') || 'None'}</div>
-		  <div><strong>Duration:</strong> ${entityData.duration || 'Instantaneous'}</div>
-		  <div class="tooltip-description">${
-				entityData.desc?.join('<br>') || entityData.description || 'No description available.'
-			}</div>
-		`;
+					<div><strong>Level:</strong> ${entityData.level || 'Cantrip'}</div>
+					<div><strong>School:</strong> ${entityData.school?.name || 'Unknown'}</div>
+					<div><strong>Casting Time:</strong> ${entityData.casting_time || 'N/A'}</div>
+					<div><strong>Range:</strong> ${entityData.range || 'N/A'}</div>
+					<div><strong>Components:</strong> ${entityData.components?.join(', ') || 'None'}</div>
+					<div><strong>Duration:</strong> ${entityData.duration || 'Instantaneous'}</div>
+					<div class="tooltip-description">${
+						entityData.desc?.join('<br>') || entityData.description || 'No description available.'
+					}</div>
+					`;
 				break;
 
 			case 'monster':
 				content += `
-		  <div><strong>Type:</strong> ${entityData.type || 'Unknown'}</div>
-		  <div><strong>CR:</strong> ${entityData.challenge_rating || 'Unknown'}</div>
-		  <div><strong>AC:</strong> ${entityData.armor_class || 'Unknown'}</div>
-		  <div><strong>HP:</strong> ${entityData.hit_points || 'Unknown'}</div>
-		  <div class="tooltip-description">${entityData.desc || entityData.description || 'No description available.'}</div>
-		`;
+					<div><strong>Type:</strong> ${entityData.type || 'Unknown'}</div>
+					<div><strong>CR:</strong> ${entityData.challenge_rating || 'Unknown'}</div>
+					<div><strong>AC:</strong> ${entityData.armor_class || 'Unknown'}</div>
+					<div><strong>HP:</strong> ${entityData.hit_points || 'Unknown'}</div>
+					<div class="tooltip-description">${entityData.desc || entityData.description || 'No description available.'}</div>
+					`;
 				break;
 
 			case 'class':
@@ -1665,9 +1667,17 @@ class StoryView {
 					<div class="tooltip-description tooltip-background">${entityData.shortDescription || 'No description available.'}</div>
 					`;
 				break;
+			case 'npc':
+				content += `
+					<div><strong>Class: </strong>${entityData.class || 'Unknown'}</div>
+					<div><strong>Affinity: </strong>${entityData.affinity || 'Unknown'}</div>
+					<div><strong>Role: </strong>${entityData.role || 'Unknown'}</div>
+				`;
 			default:
 				content += `
-		  <div class="tooltip-description">${entityData.desc || entityData.description || JSON.stringify(entityData)}</div>
+		  <div class="tooltip-description tooltip-background">${
+				entityData.desc || entityData.description || JSON.stringify(entityData)
+			}</div>
 		`;
 		}
 

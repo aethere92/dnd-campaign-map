@@ -20,6 +20,7 @@
 						guild: options.guilds || [],
 						item: options.items || [],
 						race: options.races || [],
+						npc: options.npc || [],
 					};
 
 					this.inputElement = null;
@@ -623,12 +624,9 @@
 				classes: [{ name: 'Paladin' }, { name: 'Sorcerer' }, { name: 'Rogue' }],
 				subclasses: [{ name: 'Echo Knight' }],
 				guilds: [{ name: 'Arcane Brotherhood' }],
-				items: [
-					// Add your campaign items here
-				],
-				races: [
-					// Add your campaign races here
-				],
+				items: [],
+				races: [],
+				npc: [{ name: 'Zella' }, { name: 'Thalos' }, { name: 'Clyde' }, { name: 'Jacques' }],
 			});
 			formatter.init('formatter-container');
 		</script>

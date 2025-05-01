@@ -83,4 +83,35 @@ const CAMPAIGN_02_API_DATA = {
 			},
 		},
 	},
+	npc: {
+		Zella: {
+			name: 'Zella',
+			affinity: 'Arcane Brotherhood',
+			class: 'Sorcerer',
+			role: 'N/A',
+			description:
+				'Powerful sorcerer, met by Norr on a rain-soaked night while being attacked by bandits. Acting a mentor to Norr, whe was the one who taught her everything she knows and sent her to the Arcane Brotherhood.',
+		},
+		Thalos: {
+			name: 'Thalos',
+			affinity: 'Earth Genasi',
+			class: 'N/A',
+			role: 'N/A',
+			description: `Kaedin's childhood best friend. Absorbed by an anciet monolith of pure energy, he was deemed lost forever. He is the reason Kaedin is who he is today and the person whom he searches for.`,
+		},
+		Clyde: {
+			name: 'Clyde',
+			affinity: 'Feywilds | Quicklings',
+			class: 'N/A',
+			role: 'N/A',
+			description: `Bonnie's best friend in the Feywilds. After being captured in one of their endeavours alongside Bonnie, Clyde was sentenced to death and only saved through Bonnie's sacrifice - she chose banishment from the Feywilds to spare Clyde.`,
+		},
+		Jacques: {
+			name: 'Jacques',
+			affinity: 'Bonnie | Rats',
+			class: 'N/A',
+			role: "Bonnie's companion",
+			description: "An antlered giant rat, he is Bonnie's companion and the closest she has to a family.",
+		},
+	},
 };
