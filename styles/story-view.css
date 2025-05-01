@@ -1116,6 +1116,10 @@
 	background: #795548;
 }
 
+.entity-npc-tooltip .tooltip-header {
+	background: #333;
+}
+
 /* Tooltip scrollbar */
 .tooltip-description::-webkit-scrollbar {
 	width: 5px;
