@@ -308,12 +308,15 @@ class CampaignManager {
 	}
 
 	#isCampaignValid(campaignId) {
-		return CAMPAIGN_DATA.some((campaign) => campaign.id === campaignId && campaign.data);
+		// Check if campaign exists and has either data or recaps (for story campaigns)
+		const campaign = CAMPAIGN_DATA.find((campaign) => campaign.id === campaignId);
+		return campaign && (campaign.data?.length > 0 || campaign.recaps?.length > 0);
 	}
 
 	loadCampaign(campaignId, mapKey = null, sessionId = null) {
 		const campaign = CAMPAIGN_DATA.find((c) => c.id === campaignId);
-		if (!campaign || !campaign.data) return;
+		// Allow loading if campaign exists, even without map data (for story)
+		if (!campaign) return;
 
 		this.#currentCampaign = campaign;
 		localStorage.setItem(CampaignManager.STORAGE_KEY, campaignId);
@@ -558,7 +561,7 @@ class StoryView {
 		return this.#campaign.recaps[0].id;
 	}
 
-	render() {
+	async render() {
 		if (!this.#rootElement || !this.#campaign) return;
 
 		// Clear the container
@@ -567,9 +570,6 @@ class StoryView {
 		// Create main container
 		const container = document.createElement('div');
 		container.className = 'story-container';
-
-		// Add campaign header
-		// this.#createHeader(container);
 
 		// Create main content area with sidebar and content
 		const mainContent = document.createElement('div');
@@ -586,8 +586,8 @@ class StoryView {
 		const contentArea = document.createElement('div');
 		contentArea.className = 'story-content-area';
 
-		// Load the session content
-		this.#loadSessionContent(contentArea);
+		// Load the session content - Await this async operation
+		await this.#loadSessionContent(contentArea);
 
 		mainContent.appendChild(contentArea);
 		container.appendChild(mainContent);
@@ -793,7 +793,8 @@ class StoryView {
 		sidebar.appendChild(sessionSection);
 	}
 
-	#loadSessionContent(contentArea) {
+	// Make the method asynchronous to handle fetch
+	async #loadSessionContent(contentArea) {
 		// If a character is selected, show their background instead of session
 		if (this.#selectedCharacter) {
 			this.#loadCharacterBackground(contentArea);
@@ -810,6 +811,35 @@ class StoryView {
 			contentArea.innerHTML = '<div class="no-content">Session not found</div>';
 			return;
 		}
+
+		// --- Helper function to fetch and parse Markdown ---
+		const fetchAndParseMd = async (filePath) => {
+			if (!filePath || typeof filePath !== 'string' || !filePath.endsWith('.md')) {
+				// If it's not a markdown path, return it directly (assuming it's HTML)
+				return filePath || '';
+			}
+
+			// Construct the full path relative to the campaign data directory
+			// Assuming the campaign ID corresponds to the folder name
+			const basePath = `src/databases/campaign_data/${this.#campaign.id.replace('-','_')}/`;
+			const fullPath = basePath + filePath;
+
+			try {
+				const response = await fetch(fullPath);
+				if (!response.ok) {
+					throw new Error(`HTTP error! status: ${response.status}`);
+				}
+				const mdContent = await response.text();
+
+				// Return the raw Markdown content directly
+				return mdContent;
+
+			} catch (error) {
+				console.error(`Error fetching or parsing Markdown file "${fullPath}":`, error);
+				return `<div class="error">Error loading content: ${error.message}</div>`;
+			}
+		};
+		// --- End Helper function ---
 
 		// Create session TOC container (will be populated later)
 		const sessionToc = document.createElement('div');
@@ -842,7 +872,8 @@ class StoryView {
 
 		// Parse the content HTML string
 		const tempRecap = document.createElement('div');
-		tempRecap.innerHTML = `<h3 id="short-summary">Short summary</h3>${session?.recap}`;
+		// Fetch and use raw MD content for recap
+		tempRecap.innerHTML = `<h3 id="short-summary">Short summary</h3>${await fetchAndParseMd(session?.recap)}`;
 
 		// Process images and character highlights
 		this.#processImages(tempRecap);
@@ -861,7 +892,8 @@ class StoryView {
 
 		// Parse the content HTML string
 		const tempDiv = document.createElement('div');
-		tempDiv.innerHTML = `<h2 id="session-recap" style="margin: 0;">Session recap</h3>${session.content}`;
+		// Fetch and use raw MD content for main content
+		tempDiv.innerHTML = `<h2 id="session-recap" style="margin: 0;">Session recap</h3>${await fetchAndParseMd(session.content)}`;
 
 		// Process images and character highlights
 		this.#processImages(tempDiv);
