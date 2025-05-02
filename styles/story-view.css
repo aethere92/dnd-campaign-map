@@ -1053,6 +1053,67 @@
 	text-underline-offset: 3px;
 	position: relative;
 	transition: color 0.2s ease;
+	display: inline-block;
+	width: max-content;
+	align-items: center;
+	justify-content: center;
+	gap: 0.125rem;
+	position: relative;
+	padding-left: calc(15px + 0.125rem);
+
+	&::before {
+		content: '';
+		background-size: contain;
+		width: 15px;
+		height: 15px;
+		display: inline-block;
+		border-radius: 100%;
+		position: absolute;
+		top: 50%;
+		transform: translate(0, -50%);
+		left: 0;
+	}
+}
+
+[data-entity-name='Olek'] {
+	color: #f48cba;
+
+	&::before {
+		background-image: url('../images/assets/character_thumbnails/campaign_002/olek.jpeg');
+	}
+}
+
+[data-entity-name='Norr'] {
+	color: #c41e3a;
+
+	&::before {
+		background-image: url('../images/assets/character_thumbnails/campaign_002/norr.jpeg');
+	}
+}
+
+[data-entity-name='Soshi'] {
+	color: #2aa6c9;
+
+	&::before {
+		background-image: url('../images/assets/character_thumbnails/campaign_002/soshi.jpeg');
+	}
+}
+
+[data-entity-name='Kaedin'] {
+	color: #507f62;
+
+	&::before {
+		background-image: url('../images/assets/character_thumbnails/campaign_002/kaedin.jpeg');
+		filter: brightness(2);
+	}
+}
+
+[data-entity-name='Bonnie'] {
+	color: #978036;
+
+	&::before {
+		background-image: url('../images/assets/character_thumbnails/campaign_002/bonnie.jpeg');
+	}
 }
 
 /* Entity tooltips */
