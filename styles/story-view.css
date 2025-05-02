@@ -605,6 +605,7 @@
 	border: 1px solid var(--color-border);
 	position: relative;
 	font-family: var(--font-system);
+	background: url('/images/assets/background_texture.png');
 }
 
 .session-small-recap {
@@ -1360,3 +1361,132 @@
 	/* font-style: italic; */
 	font-weight: 500;
 }
+
+/* Progression Elements */
+.progression-levelup,
+.progression-loot {
+	background-color: rgba(255, 255, 255, 0.85);
+	border: 1px solid var(--color-border);
+	border-radius: var(--border-radius-md);
+	padding: var(--spacing-md);
+	margin: var(--spacing-lg) 0;
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+	font-family: var(--font-system);
+	position: relative;
+	overflow: hidden;
+}
+
+.progression-levelup::before,
+.progression-loot::before {
+	content: '';
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.2' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.02'/%3E%3C/svg%3E");
+	opacity: 0.7;
+	pointer-events: none;
+	z-index: 0;
+}
+
+/* Level Up Specific Styles */
+.progression-levelup {
+	display: flex;
+	align-items: center;
+	gap: var(--spacing-md);
+	border-left: 5px solid #ffc107; /* Gold color */
+	background: linear-gradient(135deg, #fffde7, #fff8e1);
+}
+
+.levelup-icon {
+	font-size: 2.5rem;
+	filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.2));
+}
+
+.levelup-text h2 {
+	margin: 0 0 var(--spacing-xs) 0;
+	font-family: var(--font-headers);
+	color: #e65100; /* Dark orange */
+	font-size: 1.4rem;
+	border-bottom: none;
+	padding-bottom: 0;
+}
+
+.levelup-text p {
+	margin: 0;
+	color: var(--color-text);
+	font-size: 1rem;
+}
+
+/* Loot Specific Styles */
+.progression-loot {
+	border-left: 5px solid #9e9e9e; /* Grey color */
+	background: linear-gradient(135deg, #fafafa, #f5f5f5);
+}
+
+.progression-loot h4 {
+	margin: 0 0 var(--spacing-md) 0;
+	font-family: var(--font-headers);
+	color: #424242; /* Dark grey */
+	border-bottom: 1px solid #e0e0e0;
+	padding-bottom: var(--spacing-sm);
+	font-size: 1.1rem;
+}
+
+.loot-list {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+.loot-item {
+	padding: var(--spacing-sm) 0;
+	border-bottom: 1px dashed #e0e0e0;
+	font-size: 0.95rem;
+}
+
+.loot-item:last-child {
+	border-bottom: none;
+}
+
+.loot-item-name {
+	font-weight: 600;
+	color: var(--color-secondary);
+}
+
+.loot-owner {
+	font-style: italic;
+	font-size: 0.85rem;
+	color: #757575;
+	margin-left: var(--spacing-xs);
+}
+
+.loot-item-description {
+	font-size: 0.9rem;
+	color: #616161;
+	margin-top: var(--spacing-xs);
+	padding-left: var(--spacing-md);
+	border-left: 2px solid #eee;
+}
+
+/* Rarity Colors (Optional) */
+.rarity-common .loot-item-name {
+	color: var(--color-text);
+}
+.rarity-uncommon .loot-item-name {
+	color: #4caf50;
+} /* Green */
+.rarity-rare .loot-item-name {
+	color: #2196f3;
+} /* Blue */
+.rarity-very-rare .loot-item-name {
+	color: #9c27b0;
+} /* Purple */
+.rarity-legendary .loot-item-name {
+	color: #ff9800;
+} /* Orange */
+.rarity-artifact .loot-item-name {
+	color: #e53935;
+	font-weight: bold;
+} /* Red */

@@ -99,6 +99,21 @@ const CAMPAIGN_02_RECAPS = [
 		id: 'session-002',
 		title: "001 - Towards Drellin's Ferry",
 		date: '2025-04-12',
+		// SAMPLE ON HOW LOOT LOOKS.
+		// progression: {
+		// 	loot: [
+		// 		{ id: 'farmhouse-01', data: [
+		// 			{ itemName: 'Rusty Shortsword', count: 2, rarity: 'common', description: 'Standard hobgoblin issue, slightly worn.', owner: 'Party' },
+		// 			{ itemName: 'Leather Armor Scrap', count: 1, rarity: 'common', description: 'Torn leather armor piece.', owner: 'Party' },
+		// 			{ itemName: 'Gold Pieces', count: 15, rarity: 'common', description: 'Scattered coins.', owner: 'Party' }
+		// 		]},
+		// 		{ id: 'cart-01', data: [
+		// 			{ itemName: 'Poorly Made Wine', count: 1, rarity: 'common', description: 'A bottle of questionable vintage.', owner: 'Bonnie' },
+		// 			{ itemName: 'Vegetables', count: 5, rarity: 'common', description: 'Assorted fresh greens.', owner: 'Returned' },
+		// 			{ itemName: 'Simple Foods', count: 3, rarity: 'common', description: 'Basic travel rations.', owner: 'Returned' }
+		// 		]}
+		// 	]
+		// },
 		content: `<p>We begin on the fourth day of travel. Afternoon has settled in, the sun still burning, the air hot and still. The lands of Elsir Vale have blurred by now - every town looks the same, and our heroes can no longer tell one from the next.</p>
         <p>[ENTITY:location:Drellin's Ferry] lies just a few miles ahead - both their destination and their long-awaited respite from the arduous road. Conversation has grown scarce. After four days on the road, there's little left to say, and even less to want beyond a soft bed and a hot meal. A small question here and there - "So you really don't know where a fey portal is?" - and the occasional mage hand prank: a flick of the forehead, a stone in a boot. And so, our weary party presses on.</p>
         <p>The road crests a low rise and dips into a dusty grove nestled in a shallow dell. An abandoned farmhouse, half-hidden behind trees, leans tiredly by the roadside. They've passed places like this before - but something about this one feels wrong.</p>
@@ -223,30 +238,22 @@ const CAMPAIGN_02_RECAPS = [
         <p>Out of nowhere, a halfling appeared - middle-aged, with spectacles perched on his nose and a mane of grey-white hair. He echoed the fountain's question, his voice warm and casual, as if this were a perfectly normal occurrence.</p>
         <p>[ENTITY:character:Kaedin] blinked, gathering his bearings. He quickly deduced that the mansion was infused with magic, no doubt from the wizard Sertieren himself. Of course the fountain could speak. With a steady breath, [ENTITY:character:Kaedin] finally spoke up, his mind shifting gears. "<span class="dialogue">Perhaps something stronger? Do you have any spirits?</span>"</p>
         <p>The halfling's eyes lit up with delight, and he scurried to a worktable nearby, seemingly pleased by the request. In no time, he returned with a glass of what could only loosely be described as rum - or something very close to it.</p>
-        <p>[ENTITY:character:Kaedin] began explaining why he had sought out the wizard, asking questions about mysterious magic, strange disappearances - anything that could offer a hint for his quest to find Talos and bring him home.</p>
+        <p>[ENTITY:character:Kaedin] began explaining why he had sought out the wizard, asking questions about mysterious magic, strange disappearances - anything that could offer a hint for his quest to find [ENTITY:npc:Thalos] and bring him home.</p>
         <p>Sertieren, delighted to have a visitor to talk to, started rambling: he spoke of odd vanishings, though it was unclear if they were true or just the work of charlatans playing tricks. He muttered about the Chronomancers of [ENTITY:guild:Krynn], how nine people had once gone to investigate them and nine had been killed by dragons - or so the rumors said. He mentioned a magical site, a nexus of some kind where these events were said to happen, though he couldn't say exactly where - probably somewhere deep within the Witchwood.</p>
         <p>Before long, Sertieren drifted into complaining about how people had called him mad, paranoid, whenever he urged them to strengthen the city's defenses... and now, he said with a grim satisfaction, danger had come to [ENTITY:location:Drellin's Ferry] again.</p>
         <p>[ENTITY:character:Kaedin] listened quietly, filing away the important pieces of information in his mind, slowly sipping the rum Sertieren had provided.</p>
-        <p>At last, realizing Sertieren had no more real answers - only half-truths and rumors - [ENTITY:character:Kaedin] drained the last of his drink and took his leave with a brief, tight nod. The manor's heavy door creaked shut behind him, and he stood for a moment at the edge of the bluffs, the wind off the river cold against his face. Somewhere out there, Talos was still missing.</p>
-        <p>Setting his jaw, [ENTITY:character:Kaedin] pulled his cloak tighter and turned back toward the town, each step measured, purposeful, as he made his way to the meeting point to rejoin the others. </p>        
+        <p>At last, realizing Sertieren had no more real answers - only half-truths and rumors - [ENTITY:character:Kaedin] drained the last of his drink and took his leave with a brief, tight nod. The manor's heavy door creaked shut behind him, and he stood for a moment at the edge of the bluffs, the wind off the river cold against his face. Somewhere out there, [ENTITY:npc:Thalos] was still missing.</p>
+        <p>Setting his jaw, [ENTITY:character:Kaedin] pulled his cloak tighter and turned back toward the town, each step measured, purposeful, as he made his way to the meeting point to rejoin the others.</p>        
         `,
 		recap: `<p>Our weary heroes journey toward [ENTITY:location:Drellin's Ferry] on their fourth day of travel through the monotonous lands of Elsir Vale. As they crest a low rise, they discover an abandoned farmhouse in a dusty grove—the perfect setting for an ambush, as [ENTITY:character:Bonnie] shrewdly notes. Her instincts prove correct when hobgoblins attack from the brush.</p>
         <p>The ensuing battle is fierce, but our heroes display remarkable teamwork: [ENTITY:character:Norr]'s lightning combining with [ENTITY:character:Soshi]'s flames, [ENTITY:character:Kaedin]'s echo striking in tandem with [ENTITY:character:Olek]'s glowing club, and [ENTITY:character:Bonnie] delivering the final blow with precise dagger work. When the dust settles, they capture one hobgoblin alive for questioning.</p>
-
         <p>Inside the farmhouse, they discover three murdered travelers. Despite [ENTITY:character:Bonnie]'s interrogation skills and [ENTITY:character:Olek]'s [ENTITY:spell:Zone of Truth], the creature remains silent until he finally bargains: answers in exchange for a swift death from the paladin. He reveals his leader is [ENTITY:npc:Wyrmlord Koth], a sorcerer gathering tribes for "the Day of Ruin," but refuses to disclose their location. After fulfilling his promise to the hobgoblin, [ENTITY:character:Olek] and the party burn the dead to prevent necromantic misuse.</p>
-
         <p>As they travel stealthily toward town, [ENTITY:character:Olek] spots a farmer and his sons heading toward danger. In his well-meaning attempt to warn them, the glowing aasimar terrifies the family, who flee screaming—a situation [ENTITY:character:Bonnie] worsens by whispering "Boo" telepathically into the farmer's mind. [ENTITY:character:Olek], distressed by their reaction, insists on returning their abandoned supplies—though mysteriously, the cart's wine vanishes before it's restored.</p>
-
         <p>Finally reaching [ENTITY:location:Drellin's Ferry], our heroes are greeted by town guards who inform them of increased raids in the area. The party splits to pursue individual goals: [ENTITY:character:Olek] and [ENTITY:character:Bonnie] heading to the tollhouse, [ENTITY:character:Norr] and [ENTITY:character:Soshi] to the Shrine of Pelor, and [ENTITY:character:Kaedin] to find the wizard's mansion.</p>
-
         <p>[ENTITY:character:Olek] and [ENTITY:character:Bonnie]'s journey takes an unexpected turn when children approach them seeking the tooth-fairy. Amidst the magical entertainment they provide, a small boy asks for help with his abusive father. They visit his home where [ENTITY:character:Olek] heals the mother's visible injuries, though she denies any abuse. Outside, [ENTITY:character:Bonnie] attempts to slip the boy a dagger before [ENTITY:character:Olek] intervenes, and they promise to return the next day.</p>
-
         <p>At the tollhouse, [ENTITY:character:Bonnie] meets Sorana to deliver a package containing magical artifacts, learning that the "Dead Man's Boots" were last possessed by a necromancer who disappeared in the Witchwood. Meanwhile, town leader Norro explains their troubles with raiders and offers rewards for stopping them.</p>
-
         <p>Elsewhere, [ENTITY:character:Norr] and [ENTITY:character:Soshi] purchase offerings at the market before visiting the Shrine of Pelor. There, Brother Denny awkwardly attempts to hear their confessions, while the druid Avartel shares information about a cursed fortress called Wrath Keep near a lake in the Witchwood, guarded by skeletons.</p>
-
-        <p>Finally, [ENTITY:character:Kaedin] visits Sertieren's manor, where he's greeted by a talking fountain and the eccentric wizard himself. Over questionable rum, Sertieren rambles about odd vanishings, the Chronomancers of [ENTITY:guild:Krynn], and a magical nexus somewhere in the Witchwood. Though mostly offering rumors rather than concrete information about Talos's disappearance, [ENTITY:character:Kaedin] departs with new leads to pursue.</p>
-
+        <p>Finally, [ENTITY:character:Kaedin] visits Sertieren's manor, where he's greeted by a talking fountain and the eccentric wizard himself. Over questionable rum, Sertieren rambles about odd vanishings, the Chronomancers of [ENTITY:guild:Krynn], and a magical nexus somewhere in the Witchwood. Though mostly offering rumors rather than concrete information about [ENTITY:npc:Thalos]'s disappearance, [ENTITY:character:Kaedin] departs with new leads to pursue.</p>
         <p>As dusk falls over [ENTITY:location:Drellin's Ferry], our separated heroes make their way to reunite, each carrying pieces of a mystery that seems to center on the ominous Witchwood and the threats gathering within it.</p>`,
 	},
 ];

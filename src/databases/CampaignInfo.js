@@ -849,6 +849,7 @@ class StoryView {
 		this.#processCharacterReferences(tempRecap); // Add this new line
 		this.#processCharacterHighlights(tempRecap);
 		this.#processEntityReferences(tempRecap); // Add this line
+		this.#processProgressionTags(tempRecap, session); // Add this line
 
 		// Add processed content to recap content
 		sessionRecap.appendChild(tempRecap);
@@ -867,6 +868,7 @@ class StoryView {
 		this.#processCharacterReferences(tempDiv); // Add this new line
 		this.#processCharacterHighlights(tempDiv);
 		this.#processEntityReferences(tempDiv); // Add this line
+		this.#processProgressionTags(tempDiv, session); // Add this line
 
 		// Add processed content to main content
 		mainContent.appendChild(tempDiv);
@@ -1752,5 +1754,111 @@ class StoryView {
 				textNode.parentNode.replaceChild(fragment, textNode);
 			}
 		});
+	}
+
+	#processProgressionTags(contentElement, session) {
+		const progressionRegex = /\[PROGRESSION:(levelup|loot):(.*?)\]/g;
+
+		// Find all text nodes in the content
+		const textNodes = [];
+		const walker = document.createTreeWalker(contentElement, NodeFilter.SHOW_TEXT, null, false);
+
+		let node;
+		while ((node = walker.nextNode())) {
+			textNodes.push(node);
+		}
+
+		// Process each text node
+		textNodes.forEach((textNode) => {
+			const text = textNode.nodeValue;
+			if (progressionRegex.test(text)) {
+				const fragment = document.createDocumentFragment();
+				let lastIndex = 0;
+				let match;
+
+				// Reset regex
+				progressionRegex.lastIndex = 0;
+
+				while ((match = progressionRegex.exec(text)) !== null) {
+					// Add text before the match
+					if (match.index > lastIndex) {
+						fragment.appendChild(document.createTextNode(text.substring(lastIndex, match.index)));
+					}
+
+					const type = match[1];
+					const value = match[2];
+					let replacementNode = null;
+
+					if (type === 'levelup') {
+						replacementNode = this.#generateLevelUpElement(value);
+					} else if (type === 'loot') {
+						replacementNode = this.#generateLootElement(value, session);
+					}
+
+					if (replacementNode) {
+						fragment.appendChild(replacementNode);
+					}
+
+					lastIndex = progressionRegex.lastIndex;
+				}
+
+				// Add remaining text
+				if (lastIndex < text.length) {
+					fragment.appendChild(document.createTextNode(text.substring(lastIndex)));
+				}
+
+				// Replace the text node with the fragment
+				textNode.parentNode.replaceChild(fragment, textNode);
+			}
+		});
+	}
+
+	#generateLevelUpElement(level) {
+		const levelUpDiv = document.createElement('div');
+		levelUpDiv.className = 'progression-levelup';
+		levelUpDiv.innerHTML = `
+            <div class="levelup-icon">✨</div>
+            <div class="levelup-text">
+                <h2>Level Up!</h2>
+                <p>Congratulations! The party has reached level <strong>${level}</strong>!</p>
+            </div>
+        `;
+		return levelUpDiv;
+	}
+
+	#generateLootElement(lootId, session) {
+		const lootContainer = document.createElement('div');
+		lootContainer.className = 'progression-loot';
+
+		const lootData = session?.progression?.loot?.find(l => l.id === lootId);
+
+		if (!lootData || !lootData.data || lootData.data.length === 0) {
+			lootContainer.innerHTML = '<p><em>Loot information not found.</em></p>';
+			return lootContainer;
+		}
+
+		const title = document.createElement('h4');
+		title.textContent = `Loot Found (${lootId})`;
+		lootContainer.appendChild(title);
+
+		const list = document.createElement('ul');
+		list.className = 'loot-list';
+
+		lootData.data.forEach(item => {
+			const listItem = document.createElement('li');
+			listItem.className = `loot-item rarity-${item.rarity || 'common'}`;
+
+			let ownerText = item.owner ? ` <span class="loot-owner">(${item.owner})</span>` : '';
+
+			listItem.innerHTML = `
+                <span class="loot-item-name">${item.itemName} ${item.count > 1 ? `(x${item.count})` : ''}</span>
+                ${ownerText}
+                ${item.description ? `<div class="loot-item-description">${item.description}</div>` : ''}
+            `;
+			list.appendChild(listItem);
+		});
+
+		lootContainer.appendChild(list);
+		return lootContainer;
 	}
 }

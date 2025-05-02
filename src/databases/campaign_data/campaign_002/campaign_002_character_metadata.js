@@ -477,10 +477,10 @@ const CAMPAIGN_002_METADATA = {
 						effect: '1d6*',
 					},
 					{
-						spellInfo: { spellName: 'Fog Cloud', spellMetaInfo: 'Wizard' },
-						range: '120ft.',
+						spellInfo: { spellName: 'Disguise Self', spellMetaInfo: 'Wizard' },
+						range: 'Self',
 						slotType: '1A',
-						effect: 'Control*',
+						effect: 'Shapechanging',
 					},
 					{
 						spellInfo: { spellName: 'Mage Armor', spellMetaInfo: 'Wizard' },
@@ -510,12 +510,6 @@ const CAMPAIGN_002_METADATA = {
 						range: 'Self',
 						slotType: '1R',
 						effect: '2d6*',
-					},
-					{
-						spellInfo: { spellName: 'Fog Cloud', spellMetaInfo: 'Wizard' },
-						range: '120ft.',
-						slotType: '1A',
-						effect: 'Control*',
 					},
 					{
 						spellInfo: { spellName: 'Mirror Image', spellMetaInfo: 'Wizard' },
@@ -571,22 +565,16 @@ const CAMPAIGN_002_METADATA = {
 						effect: 'Movement',
 					},
 					{
-						spellInfo: { spellName: 'Fog Cloud', spellMetaInfo: 'Wizard' },
-						range: '120ft.',
-						slotType: '1A',
-						effect: 'Control*',
-					},
-					{
-						spellInfo: { spellName: 'Lightning Bolt', spellMetaInfo: 'Wizard' },
-						range: 'Self',
-						slotType: '1A',
-						effect: '8d6',
-					},
-					{
 						spellInfo: { spellName: 'Scorching Ray', spellMetaInfo: 'Evocation Savant' },
 						range: '120ft.',
 						slotType: '1A',
 						effect: '2d6',
+					},
+					{
+						spellInfo: { spellName: 'Wall of Water', spellMetaInfo: 'Wizard' },
+						range: '60ft.',
+						slotType: '1A',
+						effect: 'Control*',
 					},
 				],
 			},
@@ -708,6 +696,12 @@ const CAMPAIGN_002_METADATA = {
 						effect: '2d10',
 					},
 					{
+						spellInfo: { spellName: 'Friends', spellMetaInfo: 'Sorcerer' },
+						range: '10ft.',
+						slotType: '1A',
+						effect: 'Buff*',
+					},
+					{
 						spellInfo: { spellName: 'Guidance', spellMetaInfo: 'Magic Initiate (Cleric)' },
 						range: 'Touch',
 						slotType: '1A',
@@ -761,10 +755,10 @@ const CAMPAIGN_002_METADATA = {
 						effect: 'Creation',
 					},
 					{
-						spellInfo: { spellName: 'Detect Magic', spellMetaInfo: 'Sorcerer' },
-						range: 'Self',
+						spellInfo: { spellName: 'Grease', spellMetaInfo: 'Sorcerer' },
+						range: '60ft.',
 						slotType: '1A',
-						effect: 'Detection',
+						effect: 'Prone',
 					},
 					{
 						spellInfo: { spellName: 'Shield', spellMetaInfo: 'Sorcerer' },
@@ -796,22 +790,16 @@ const CAMPAIGN_002_METADATA = {
 						effect: 'Prone',
 					},
 					{
+						spellInfo: { spellName: 'Detect Thoughts', spellMetaInfo: 'Sorcerer' },
+						range: 'Self',
+						slotType: '1A',
+						effect: 'Social*',
+					},
+					{
 						spellInfo: { spellName: "Dragon's Breath", spellMetaInfo: 'Draconic Spells' },
 						range: 'Touch',
 						slotType: '1BA',
 						effect: '3d6*',
-					},
-					{
-						spellInfo: { spellName: 'Enhance Ability', spellMetaInfo: 'Sorcerer' },
-						range: 'Touch',
-						slotType: '1A',
-						effect: 'Buff',
-					},
-					{
-						spellInfo: { spellName: 'Magic Weapon', spellMetaInfo: 'Sorcerer' },
-						range: 'Touch',
-						slotType: '1BA',
-						effect: 'Buff',
 					},
 					{
 						spellInfo: { spellName: 'Misty Step', spellMetaInfo: 'Sorcerer' },
@@ -861,16 +849,16 @@ const CAMPAIGN_002_METADATA = {
 						effect: '4d6*',
 					},
 					{
-						spellInfo: { spellName: 'Enhance Ability', spellMetaInfo: 'Sorcerer' },
-						range: 'Touch',
-						slotType: '1A',
-						effect: 'Buff',
-					},
-					{
 						spellInfo: { spellName: 'Fear', spellMetaInfo: 'Draconic Spells' },
 						range: 'Self',
 						slotType: '1A',
 						effect: 'Frightened*',
+					},
+					{
+						spellInfo: { spellName: 'Fireball', spellMetaInfo: 'Sorcerer' },
+						range: '150ft.',
+						slotType: '1A',
+						effect: '8d6',
 					},
 					{
 						spellInfo: { spellName: 'Fly', spellMetaInfo: 'Draconic Spells' },
@@ -889,12 +877,6 @@ const CAMPAIGN_002_METADATA = {
 						range: 'Self',
 						slotType: '1A',
 						effect: '8d6',
-					},
-					{
-						spellInfo: { spellName: 'Magic Weapon', spellMetaInfo: 'Sorcerer' },
-						range: 'Touch',
-						slotType: '1BA',
-						effect: 'Buff',
 					},
 					{
 						spellInfo: { spellName: 'Slow', spellMetaInfo: 'Sorcerer' },
