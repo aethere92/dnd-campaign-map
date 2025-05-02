@@ -11,7 +11,7 @@
 <p>Then came the day of fire and chaos - a savage raid by orcs, goblins, and fouler things still. In the desperate struggle, his pack urged the siblings to flee. In the confusion, they were separated. [ENTITY:character:Olek] wandered for days beneath the trees, searching for his family, for his brother or sister, for anyone.</p>
 <p>And then, when all hope seemed lost, fate intervened. A celestial being descended - radiant and awe-inspiring, not Helm himself but a servant of his will, a divine entity bound closely to the God of Guardians. With a voice like distant thunder wrapped in warmth, the being offered [ENTITY:character:Olek] a pact, with one charge: <strong>Help as many as you can. Save those in need. Whatever you may do, walk forward with the teachings of our Father. Never stray. Never falter.</strong></p>
 <p>[ENTITY:character:Olek] accepted.</p>
-<p>He reached the town of [ENTITY:location:Brindol], where he offered help wherever it was needed. He stood beside other paladins of Helm, worked to defend the weak, and forged both likely and unlikely bonds. And now, he finds himself walking beside four others, toward the distant town of [ENTITY:location:Drellin\'s Ferry], with justice and goodness lighting his path.</p>
+<p>He reached the town of [ENTITY:location:Brindol], where he offered help wherever it was needed. He stood beside other paladins of Helm, worked to defend the weak, and forged both likely and unlikely bonds. And now, he finds himself walking beside four others, toward the distant town of [ENTITY:location:Drellin's Ferry], with justice and goodness lighting his path.</p>
 <p>Whatever awaits them there, [ENTITY:character:Olek] walks forward with purpose - for the lost, for the helpless, for the ideals he now embodies.</p>
 
 <p><h3>Norr, the Sorcerer with Dragon's Blood</h3></p>
@@ -25,7 +25,7 @@
 <p>It was a painful decision. To leave her family and everything she had known behind, or to remain and live forever as only half of herself. But the excitement - the longing to understand what she was - overwhelmed her doubt. She went with [ENTITY:npc:Zella].</p>
 <p>They spent years together. [ENTITY:npc:Zella] taught her everything she knew, drilled every bit of magical knowledge into [ENTITY:character:Norr]'s mind. When there was nothing left to teach, she sent her student onward - to [ENTITY:location:Luskan], to find the [ENTITY:guild:Arcane Brotherhood]. A place of boundless learning, where the magically gifted could find their path. A place, perhaps, to belong.</p>
 <p>[ENTITY:character:Norr] joined the Brotherhood but soon discovered that great institutions often hide terrible secrets. Together with a friend she made within its walls, she uncovered one such secret - a map leading to a great treasure. And together, they fled. The road led them to [ENTITY:location:Brindol].</p>
-<p>And so, we find [ENTITY:character:Norr] now, her secrets held tight behind guarded eyes, the stolen map close to her heart. Beside her walks her dearest companion, and three strange allies whose paths are now twined with hers. Together they journey to [ENTITY:location:Drellin\'s Ferry].</p>
+<p>And so, we find [ENTITY:character:Norr] now, her secrets held tight behind guarded eyes, the stolen map close to her heart. Beside her walks her dearest companion, and three strange allies whose paths are now twined with hers. Together they journey to [ENTITY:location:Drellin's Ferry].</p>
 <p>The future, like magic, is uncertain. But [ENTITY:character:Norr] walks forward - beautiful, dangerous, and full of lightning.</p>
 
 <p><h3>Soshi, the Eladrin Wizard from the Feywilds</h3></p>
@@ -38,7 +38,7 @@
 <p>But by now, we also know the Brotherhood isn't a place of fairytales. Its dark, twisted secrets came to light, terrifying [ENTITY:character:Soshi] - reminding her that some prices are too high to pay.</p>
 <p>And so, together with the only friend she managed to make in this unforgiving world, she stole a map - a way for them to survive in the wide, dangerous world beyond.</p>
 <p>Driven by regrets, desires, and ambition, longing for home and the joyful life she left behind, [ENTITY:character:Soshi] finds herself traveling with four other companions: her friend from the Brotherhood, and three others as different as night is from day.</p>
-<p>And so, we find [ENTITY:character:Soshi], her spellbook in hand and memories of the [ENTITY:location:Feywilds] stirring in her chest, walking the winding road to [ENTITY:location:Drellin\'s Ferry].</p>
+<p>And so, we find [ENTITY:character:Soshi], her spellbook in hand and memories of the [ENTITY:location:Feywilds] stirring in her chest, walking the winding road to [ENTITY:location:Drellin's Ferry].</p>
 
 <p><h3>Kaedin, the Earth Genasi Echo Knight of the Shifting Fates</h3></p>
 
@@ -55,7 +55,7 @@
 <p>[ENTITY:character:Kaedin] left his village, left his life behind. He looked for answers in the only place he could think of - the shadowy tunnels where exiles lived. Among them, he found one that would speak with him: a wizened mage by the name of Verenn Yorr. Verenn found that he could help [ENTITY:character:Kaedin] master his new abilities, trained him in combat while teaching him how to harness his visions and use them to his own will.</p>
 <p>When all teachings were done, [ENTITY:character:Kaedin] adventured into the world. He joined a company of soldiers, learned what he could from them. But he never forgot. His friend was still out there, waiting to be found.</p>
 <p>In memory of [ENTITY:npc:Thalos], no matter what he wore, [ENTITY:character:Kaedin] always donned the traditional garb over. This way he would never forget. This way he would never stop looking.</p>
-<p>And now we find [ENTITY:character:Kaedin] on the road to [ENTITY:location:Drellin\'s Ferry], walking beside four unlikely companions. He keeps his past close and his mission closer - his eyes on the path ahead, and his soul reaching for the one left behind.</p>
+<p>And now we find [ENTITY:character:Kaedin] on the road to [ENTITY:location:Drellin's Ferry], walking beside four unlikely companions. He keeps his past close and his mission closer - his eyes on the path ahead, and his soul reaching for the one left behind.</p>
 
 <p><h3>Bonnie, the Pixie Rogue full of mischief</h3></p>
 
@@ -69,9 +69,9 @@
 <p>[ENTITY:npc:Clyde] was spared. [ENTITY:character:Bonnie] was not. Exiled to the mortal plane, cut off from the [ENTITY:location:Feywilds], with no way back. [ENTITY:npc:Clyde] was gone. Magic was... different now.</p>
 <p>But [ENTITY:character:Bonnie] was scrappy. She carved out a life in [ENTITY:location:Brindol], adapted to the strange new shape of her magic, and stayed close to [ENTITY:npc:Jacques] - even if he was quite a bit smaller now than he once was. She spent her time with the Thieves' Guild, either waiting for something better to come along or searching for a way back home.</p>
 <p>And maybe, just maybe, that something finally did.</p>
-<p>On an errand to reach [ENTITY:location:Drellin\'s Ferry], [ENTITY:character:Bonnie] finds herself traveling with four odd companions, and while she brings trouble and pranks to their lives, she also watches their backs in her own special way.</p>
+<p>On an errand to reach [ENTITY:location:Drellin's Ferry], [ENTITY:character:Bonnie] finds herself traveling with four odd companions, and while she brings trouble and pranks to their lives, she also watches their backs in her own special way.</p>
 
 <hr>
 
-<p>[IMAGE:images/assets/campaign_002/locations/drellin_ferry.jpg::300px::true]Here we are at last, on the way to [ENTITY:location:Drellin\'s Ferry] with a crew of misfits - five people, all chasing something that might fulfill their hopes and dreams, or simply trying to stop the world from unraveling.</p>
-<p>Now that we're all caught up with our heroes' stories, let's see what happened on the road to [ENTITY:location:Drellin\'s Ferry]!  </p>
+<p>[IMAGE:images/assets/campaign_002/locations/drellin_ferry.jpg::300px::true]Here we are at last, on the way to [ENTITY:location:Drellin's Ferry] with a crew of misfits - five people, all chasing something that might fulfill their hopes and dreams, or simply trying to stop the world from unraveling.</p>
+<p>Now that we're all caught up with our heroes' stories, let's see what happened on the road to [ENTITY:location:Drellin's Ferry]!  </p>
