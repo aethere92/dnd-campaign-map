@@ -1064,7 +1064,9 @@ class StoryView {
 					subContent.className = 'timeline-content';
 
 					let subitemHTML = `
-						<h4>${typeMap[subitem.type]} ${subitem.type.charAt(0).toUpperCase() + subitem.type.slice(1)}: ${subitem.actors}</h4>
+						<h4><span style="font-size: 8pt">${typeMap[subitem.type]}</span> ${
+						subitem.type.charAt(0).toUpperCase() + subitem.type.slice(1)
+					}: ${subitem.actors}</h4>
 					`;
 
 					if (subitem.is_new_session) {

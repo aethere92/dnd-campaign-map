@@ -277,7 +277,7 @@
 .timeline-new-session {
 	position: absolute;
 	font-size: 8pt;
-	top: calc(-1.5rem - 4pt);
+	top: calc(-1.5rem - 1pt);
 	left: 50%;
 	transform: translate(-50%, 0);
 	background: #fcfbf9;
