@@ -75,6 +75,7 @@ const CAMPAIGN_DATA = [
 		data: [],
 		// aliases: CAMPAIGN_02_ALIASES,
 		recaps: CAMPAIGN_02_RECAPS,
+		timeline: CAMPAIGN_002_TIMELINE,
 	},
 ];
 
@@ -476,7 +477,6 @@ class CampaignManager {
 		document.getElementById('actions').style.display = 'none';
 	}
 }
-
 // New StoryView class for handling story campaigns
 class StoryView {
 	#rootElement;
@@ -486,6 +486,7 @@ class StoryView {
 	#tooltipContainer;
 	#selectedCharacter = null;
 	#isSidebarCollapsed = false;
+	#isTimelineVisible = false;
 	#apiBaseUrl = 'https://www.dnd5eapi.co/api/2014/';
 	#supportedEntityTypes = [
 		'spell',
@@ -596,7 +597,7 @@ class StoryView {
 
 		// Generate table of contents after content is loaded - only for session view
 		// Only generate TOC if we're viewing a session, not a character
-		if (!this.#selectedCharacter) {
+		if (!this.#selectedCharacter && !this.#isTimelineVisible) {
 			this.#generateTableOfContents(contentArea);
 		}
 	}
@@ -635,6 +636,9 @@ class StoryView {
 
 		// Add characters section
 		this.#createCharacterSection(sidebar);
+
+		// Add timeline section
+		this.#createTimelineSection(sidebar);
 
 		// Add sessions section
 		this.#createSessionList(sidebar);
@@ -705,11 +709,9 @@ class StoryView {
                 </div>
                 <div class="character-info">
                     <h3>${character.name}</h3>
-                    <div class="character-details">
-                        <span>Lvl ${character.level} ${character.race} ${character.class}</span>
-                    </div>
                 </div>
             `;
+			charCard.title = `Lvl ${character.level} ${character.race} ${character.class}`;
 
 			// Add click event to show character background
 			charCard.addEventListener('click', () => {
@@ -730,6 +732,9 @@ class StoryView {
 		} else {
 			this.#selectedCharacter = character.name;
 		}
+
+		// Hide timeline when a character is selected
+		this.#isTimelineVisible = false;
 
 		// Re-render to update the content area with character background
 		this.render();
@@ -758,17 +763,19 @@ class StoryView {
 		recaps.forEach((session) => {
 			const sessionItem = document.createElement('div');
 			sessionItem.className = 'story-session-item';
-			if (session.id === this.#currentSessionId && !this.#selectedCharacter) {
+			// Only highlight if viewing this session AND timeline is not visible
+			if (session.id === this.#currentSessionId && !this.#selectedCharacter && !this.#isTimelineVisible) {
 				sessionItem.classList.add('active');
 			}
 
 			sessionItem.innerHTML = `
-                <h3>${session.title}</h3>
-                <div class="session-date">${session.date || ''}</div>
-            `;
+				<h3>${session.title}</h3>
+				<div class="session-date">${session.date || ''}</div>
+			`;
 
 			sessionItem.addEventListener('click', () => {
 				this.#selectedCharacter = null; // Clear character selection
+				this.#isTimelineVisible = false; // Hide timeline
 				this.#currentSessionId = session.id;
 				this.render();
 
@@ -793,8 +800,149 @@ class StoryView {
 		sidebar.appendChild(sessionSection);
 	}
 
-	// Make the method asynchronous to handle fetch
+	// Add the new timeline section method
+	#createTimelineSection(sidebar) {
+		const timelineSection = document.createElement('div');
+		timelineSection.className = 'story-timeline-section';
+
+		const sectionTitle = document.createElement('h2');
+		sectionTitle.textContent = 'Campaign';
+		timelineSection.appendChild(sectionTitle);
+
+		const timelineButton = document.createElement('button');
+		timelineButton.className = 'timeline-button';
+		timelineButton.textContent = 'View Timeline';
+
+		// Change from toggle to just showing the timeline
+		timelineButton.addEventListener('click', () => {
+			this.#showTimeline();
+		});
+
+		timelineSection.appendChild(timelineButton);
+		sidebar.appendChild(timelineSection);
+	}
+
+	// Replace toggle method with show method
+	#showTimeline() {
+		this.#isTimelineVisible = true;
+		this.#selectedCharacter = null; // Clear character selection
+
+		// Re-render to show the timeline
+		this.render();
+	}
+
+	// Modify renderTimeline method to handle subitems differently
+	#renderTimeline(contentArea) {
+		// Check if the current campaign has timeline data
+		const timelineData = this.#campaign?.timeline;
+
+		if (!timelineData || !Array.isArray(timelineData) || timelineData.length === 0) {
+			console.error('Timeline data not available for this campaign:', this.#campaign?.id);
+
+			// Display an error message to the user
+			const timelineContainer = document.createElement('div');
+			timelineContainer.className = 'story-timeline-container visible';
+
+			timelineContainer.innerHTML = `
+				<div class="timeline-header">
+					<h2>Campaign Timeline</h2>
+				</div>
+				<div class="no-content">
+					Timeline data not available for this campaign.
+				</div>
+			`;
+
+			contentArea.appendChild(timelineContainer);
+			return;
+		}
+
+		// Create timeline container
+		const timelineContainer = document.createElement('div');
+		timelineContainer.className = 'story-timeline-container visible';
+
+		// Create timeline header
+		const header = document.createElement('div');
+		header.className = 'timeline-header';
+		header.innerHTML = `<h2>Campaign Timeline</h2>`;
+		timelineContainer.appendChild(header);
+
+		// Create timeline wrapper
+		const timeline = document.createElement('div');
+		timeline.className = 'timeline';
+
+		// Track which side to place the next item
+		let side = 'left';
+
+		// Process timeline data
+		timelineData.forEach((item) => {
+			// Create main item
+			const mainItem = document.createElement('div');
+			mainItem.className = `timeline-item timeline-main-item ${side}`;
+			mainItem.setAttribute('data-id', item.id);
+
+			const mainContent = document.createElement('div');
+			mainContent.className = 'timeline-content';
+			mainContent.innerHTML = `
+				<h3>${item.title}</h3>
+				<div class="timeline-location">${item.location}</div>
+				${item.session ? `<span class="timeline-item-session">Session ${item.session}</span>` : ''}
+			`;
+
+			mainItem.appendChild(mainContent);
+			timeline.appendChild(mainItem);
+
+			// Flip side for the next main item group
+			const nextSide = side === 'left' ? 'right' : 'left';
+
+			// Add subitems if any, keeping them on the same side
+			if (item.items && item.items.length > 0) {
+				item.items.forEach((subitem) => {
+					const subitemEl = document.createElement('div');
+					subitemEl.className = `timeline-item timeline-subitem ${side}`;
+					subitemEl.setAttribute('data-parent-id', item.id);
+					subitemEl.setAttribute('data-type', subitem.type);
+
+					const subContent = document.createElement('div');
+					subContent.className = 'timeline-content';
+
+					let subitemHTML = `
+						<h4>${subitem.type.charAt(0).toUpperCase() + subitem.type.slice(1)}: ${subitem.actors}</h4>
+					`;
+
+					if (subitem.is_new_session) {
+						subitemEl.classList.add('new-session-indicator');
+						subitemHTML += `<div class="timeline-new-session">New session</div>`;
+					}
+
+					// Add sublocation if any
+					if (subitem.sublocation) {
+						subitemHTML += `<div class="timeline-sublocation">${subitem.sublocation}</div>`;
+					}
+
+					subContent.innerHTML = subitemHTML;
+					subitemEl.appendChild(subContent);
+					timeline.appendChild(subitemEl);
+				});
+			}
+
+			// Switch sides for next main item group
+			side = nextSide;
+		});
+
+		timelineContainer.appendChild(timeline);
+		contentArea.appendChild(timelineContainer);
+	}
+
 	async #loadSessionContent(contentArea) {
+		// Clear previous content (including timeline if it was shown)
+		contentArea.innerHTML = '';
+
+		// If timeline is visible, render it
+		if (this.#isTimelineVisible) {
+			this.#renderTimeline(contentArea);
+			return;
+		}
+
 		// If a character is selected, show their background instead of session
 		if (this.#selectedCharacter) {
 			this.#loadCharacterBackground(contentArea);
@@ -821,7 +969,7 @@ class StoryView {
 
 			// Construct the full path relative to the campaign data directory
 			// Assuming the campaign ID corresponds to the folder name
-			const basePath = `src/databases/campaign_data/${this.#campaign.id.replace('-','_')}/`;
+			const basePath = `src/databases/campaign_data/${this.#campaign.id.replace('-', '_')}/`;
 			const fullPath = basePath + filePath;
 
 			try {
@@ -833,7 +981,6 @@ class StoryView {
 
 				// Return the raw Markdown content directly
 				return mdContent;
-
 			} catch (error) {
 				console.error(`Error fetching or parsing Markdown file "${fullPath}":`, error);
 				return `<div class="error">Error loading content: ${error.message}</div>`;
@@ -893,7 +1040,9 @@ class StoryView {
 		// Parse the content HTML string
 		const tempDiv = document.createElement('div');
 		// Fetch and use raw MD content for main content
-		tempDiv.innerHTML = `<h2 id="session-recap" style="margin: 0;">Session recap</h3>${await fetchAndParseMd(session.content)}`;
+		tempDiv.innerHTML = `<h2 id="session-recap" style="margin: 0;">Session recap</h3>${await fetchAndParseMd(
+			session.content
+		)}`;
 
 		// Process images and character highlights
 		this.#processImages(tempDiv);
@@ -1862,7 +2011,7 @@ class StoryView {
 		const lootContainer = document.createElement('div');
 		lootContainer.className = 'progression-loot';
 
-		const lootData = session?.progression?.loot?.find(l => l.id === lootId);
+		const lootData = session?.progression?.loot?.find((l) => l.id === lootId);
 
 		if (!lootData || !lootData.data || lootData.data.length === 0) {
 			lootContainer.innerHTML = '<p><em>Loot information not found.</em></p>';
@@ -1876,7 +2025,7 @@ class StoryView {
 		const list = document.createElement('ul');
 		list.className = 'loot-list';
 
-		lootData.data.forEach(item => {
+		lootData.data.forEach((item) => {
 			const listItem = document.createElement('li');
 			listItem.className = `loot-item rarity-${item.rarity || 'common'}`;
 

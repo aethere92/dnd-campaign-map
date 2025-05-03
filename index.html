@@ -1,78 +1,93 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>D&D Campaign Map</title>
-		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.css" />
-		<link rel="stylesheet" href="https://unpkg.com/@geoman-io/leaflet-geoman-free@2.17.0/dist/leaflet-geoman.css" />
-		<link rel="stylesheet" href="styles/styles.css" />
-		<link rel="icon" type="image/x-icon" href="images/pageicon.png" />
-		<!-- IMPORTS -->
-		<script defer src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.js"></script>
-		<script defer src="https://unpkg.com/@geoman-io/leaflet-geoman-free@2.17.0/dist/leaflet-geoman.js"></script>
-		<script defer src="https://cdn.jsdelivr.net/npm/leaflet-rotate@0.2.8/dist/leaflet-rotate.min.js"></script>
-		<!-- DATABASES -->
-		<script defer src="src/databases/SvgIconsDb.js"></script>
-		<script defer src="src/databases/campaign_data/campaign_01.js"></script>
-		<script defer src="src/databases/campaign_data/session_recap_01.js"></script>
-		<script defer src="src/databases/campaign_data/campaign_002/campaign_002_recap.js"></script>
-		<script defer src="src/databases/campaign_data/campaign_002/campaign_002_backgrounds.js"></script>
-		<script defer src="src/databases/campaign_data/campaign_002/campaign_002_character_metadata.js"></script>
-		<script defer src="src/databases/campaign_data/campaign_002/campaign_002_characters.js"></script>
-		<script defer src="src/databases/campaign_data/campaign_002/campaign_002_api_data.js"></script>
-		<script defer src="src/databases/campaign_data/campaign_02.js"></script>
-		<script defer src="src/databases/CampaignInfo.js"></script>
-		<!-- UTILS -->
-		<script defer src="src/services/markers/StoryRecapModal.js"></script>
-		<script defer src="src/services/utils/UrlManager.js"></script>
-		<script defer src="src/services/utils/LoadingManager.js"></script>
-		<script defer src="src/services/utils/MapStateManager.js"></script>
-		<script defer src="src/services/utils/MapExporter.js"></script>
-		<script defer src="src/services/utils/NestedLayerControl.js"></script>
-		<!-- CORE SERVICES -->
-		<script defer src="src/services/markers/SidebarService.js"></script>
-		<script defer src="src/services/markers/AnnotationService.js"></script>
-		<!-- PATH MANAGER UTILS -->
-		<script defer src="src/services/markers/path_utils/MapFilterManager.js"></script>
-		<script defer src="src/services/markers/path_utils/PathAnimationControl.js"></script>
-		<script defer src="src/services/markers/path_utils/DebugMarkerManager.js"></script>
-		<script defer src="src/services/markers/path_utils/DebugPolyLineManager.js"></script>
-		<!-- CORE SERVICES CONT -->
-		<script defer src="src/services/markers/PathManager.js"></script>
-		<script defer src="src/services/map/DungeonMapServices.js"></script>
-		<!-- CORE SCRIPTS -->
-		<script defer src="src/core/Initialization.js"></script>
-		<script defer src="src/core/EventHandlers.js"></script>
-	</head>
 
-	<body>
-		<div id="root">
-			<div id="map"></div>
-			<div id="actions" class="action-menu">
-				<button class="menu-toggle">
-					<span>Actions</span>
-					<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-						<path d="M6 9l6 6 6-6"/>
-					</svg>
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport"
+		content="width=device-width, initial-scale=1.0" />
+	<title>D&D Campaign Map</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.css" />
+	<link rel="stylesheet" href="https://unpkg.com/@geoman-io/leaflet-geoman-free@2.17.0/dist/leaflet-geoman.css" />
+	<link rel="stylesheet" href="styles/styles.css" />
+	<link rel="stylesheet" href="styles/story-timeline.css" />
+	<link rel="icon" type="image/x-icon" href="images/pageicon.png" />
+	<!-- IMPORTS -->
+	<script defer src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.js"></script>
+	<script defer src="https://unpkg.com/@geoman-io/leaflet-geoman-free@2.17.0/dist/leaflet-geoman.js"></script>
+	<script defer src="https://cdn.jsdelivr.net/npm/leaflet-rotate@0.2.8/dist/leaflet-rotate.min.js"></script>
+	<!-- DATABASES -->
+	<script defer src="src/databases/SvgIconsDb.js"></script>
+	<script defer src="src/databases/campaign_data/campaign_01.js"></script>
+	<script defer src="src/databases/campaign_data/session_recap_01.js"></script>
+	<script defer src="src/databases/campaign_data/campaign_002/campaign_002_recap.js"></script>
+	<script defer src="src/databases/campaign_data/campaign_002/campaign_002_backgrounds.js"></script>
+	<script defer src="src/databases/campaign_data/campaign_002/campaign_002_character_metadata.js"></script>
+	<script defer src="src/databases/campaign_data/campaign_002/campaign_002_characters.js"></script>
+	<script defer src="src/databases/campaign_data/campaign_002/campaign_002_api_data.js"></script>
+	<script defer src="src/databases/campaign_data/campaign_002/campaign_002_timeline.js"></script>
+	<script defer src="src/databases/campaign_data/campaign_02.js"></script>
+	<script defer src="src/databases/CampaignInfo.js"></script>
+	<!-- UTILS -->
+	<script defer src="src/services/markers/StoryRecapModal.js"></script>
+	<script defer src="src/services/utils/UrlManager.js"></script>
+	<script defer src="src/services/utils/LoadingManager.js"></script>
+	<script defer src="src/services/utils/MapStateManager.js"></script>
+	<script defer src="src/services/utils/MapExporter.js"></script>
+	<script defer src="src/services/utils/NestedLayerControl.js"></script>
+	<!-- CORE SERVICES -->
+	<script defer src="src/services/markers/SidebarService.js"></script>
+	<script defer src="src/services/markers/AnnotationService.js"></script>
+	<!-- PATH MANAGER UTILS -->
+	<script defer src="src/services/markers/path_utils/MapFilterManager.js"></script>
+	<script defer src="src/services/markers/path_utils/PathAnimationControl.js"></script>
+	<script defer src="src/services/markers/path_utils/DebugMarkerManager.js"></script>
+	<script defer src="src/services/markers/path_utils/DebugPolyLineManager.js"></script>
+	<!-- CORE SERVICES CONT -->
+	<script defer src="src/services/markers/PathManager.js"></script>
+	<script defer src="src/services/map/DungeonMapServices.js"></script>
+	<!-- CORE SCRIPTS -->
+	<script defer src="src/core/Initialization.js"></script>
+	<script defer src="src/core/EventHandlers.js"></script>
+</head>
+
+<body>
+	<div id="root">
+		<div id="map"></div>
+		<div id="actions"
+			class="action-menu">
+			<button class="menu-toggle">
+				<span>Actions</span>
+				<svg width="16"
+					height="16"
+					viewBox="0 0 24 24"
+					fill="none"
+					stroke="currentColor"
+					stroke-width="2">
+					<path d="M6 9l6 6 6-6" />
+				</svg>
+			</button>
+
+			<div class="menu-content">
+				<button class="menu-item"
+					id="campaign-select">
+					<span>Campaign selection</span>
 				</button>
-				
-				<div class="menu-content">
-					<button class="menu-item" id="campaign-select">
-						<span>Campaign selection</span>
-					</button>
-					<div class="menu-divider"></div>
-					<button class="menu-item" id="view-recap">
-						<span>View recap</span>
-					</button>
-					<div class="menu-divider"></div>
-					<button class="menu-item" id="export-map">
-						<span>Export Map</span>
-						<select id="zoom-select"></select>
-					</button>
-					<div class="menu-divider"></div>
-					<button class="menu-item" data-role="toggle-markers">Toggle names</button>
-				</div>
+				<div class="menu-divider"></div>
+				<button class="menu-item"
+					id="view-recap">
+					<span>View recap</span>
+				</button>
+				<div class="menu-divider"></div>
+				<button class="menu-item"
+					id="export-map">
+					<span>Export Map</span>
+					<select id="zoom-select"></select>
+				</button>
+				<div class="menu-divider"></div>
+				<button class="menu-item"
+					data-role="toggle-markers">Toggle names</button>
 			</div>
-	</body>
+		</div>
+</body>
+
 </html>

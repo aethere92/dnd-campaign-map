@@ -27,20 +27,6 @@ const CAMPAIGN_02_CHARACTERS = [
 		},
 	},
 	{
-		name: 'Soshi',
-		race: 'Elf',
-		class: 'Wizard',
-		level: 6,
-		icon: 'images/assets/character_thumbnails/campaign_002/soshi.jpeg',
-		imageBg: 'images/assets/campaign_002/characters/soshi_bg.jpeg',
-		background: CAMPAIGN_02_BACKGROUNDS.SOSHI.background,
-		shortDescription: CAMPAIGN_02_BACKGROUNDS.SOSHI.shortDescription,
-		stats: {
-			abilityScores: { STR: 8, DEX: 15, CON: 16, INT: 15, WIS: 12, CHA: 10 },
-			metadata: CAMPAIGN_002_METADATA.SOSHI,
-		},
-	},
-	{
 		name: 'Norr',
 		race: 'Human',
 		class: 'Sorcerer',
@@ -64,6 +50,20 @@ const CAMPAIGN_02_CHARACTERS = [
 		stats: {
 			abilityScores: { STR: 14, DEX: 8, CON: 14, INT: 10, WIS: 12, CHA: 18 },
 			metadata: CAMPAIGN_002_METADATA.OLEK,
+		},
+	},
+	{
+		name: 'Soshi',
+		race: 'Elf',
+		class: 'Wizard',
+		level: 6,
+		icon: 'images/assets/character_thumbnails/campaign_002/soshi.jpeg',
+		imageBg: 'images/assets/campaign_002/characters/soshi_bg.jpeg',
+		background: CAMPAIGN_02_BACKGROUNDS.SOSHI.background,
+		shortDescription: CAMPAIGN_02_BACKGROUNDS.SOSHI.shortDescription,
+		stats: {
+			abilityScores: { STR: 8, DEX: 15, CON: 16, INT: 15, WIS: 12, CHA: 10 },
+			metadata: CAMPAIGN_002_METADATA.SOSHI,
 		},
 	},
 ];
