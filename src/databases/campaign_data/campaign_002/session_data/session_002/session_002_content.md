@@ -58,6 +58,7 @@
 <h3>Reaching Drellin's Ferry</h3>
 
 [IMAGE:images/assets/campaign_002/locations/drellin_ferry_map.png::300px::true]
+
 <p>The town lay mostly along the banks of a broad, sluggish river. Six old stone piers jutted from the water, marking the place where a bridge once stood - but the span itself had long since disappeared. In its place, thick ropes stretched across the river, anchored to a pair of flat-bottomed ferryboats. Brown fields and green orchards surrounded the town, and five newly built watchtowers stood tall - a curious sight for a place like this.</p>
 <p>As they moved forward, they were met by a group of armed townsfolk - three clad in leather, one in mail. </p><p>"<span class="dialogue">Halt and state your business, strangers,</span>" one of the guards called out, clearly wary of unfamiliar faces.</p>
 <p>"<span class="dialogue">We mean you no harm,</span>" [ENTITY:character:Bonnie] said, her voice light and sweet. "<span class="dialogue">We're travelers from [ENTITY:location:Brindol], here on business in town. You should know - we ran into trouble on the road. Might want to send someone to check on a farmer and his sons heading that way.</span>"</p>

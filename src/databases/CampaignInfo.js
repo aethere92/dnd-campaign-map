@@ -84,7 +84,7 @@ class CampaignManager {
 	static STORAGE_KEY = 'lastCampaignId';
 	#currentCampaign = null;
 	#mapInstance = null;
-	#storyInstance = null; // Add this for story campaigns
+	#storyInstance = null;
 	#rootElement;
 	#recapModal = null;
 
@@ -102,14 +102,16 @@ class CampaignManager {
 		const campaignId = urlParams.get('campaign');
 		const mapKey = urlParams.get('map');
 		const sessionId = urlParams.get('session'); // Add param for story sessions
+		const characterName = urlParams.get('character');
+		const viewType = urlParams.get('view'); // e.g., 'timeline'
 
 		if (campaignId && this.#isCampaignValid(campaignId)) {
-			this.loadCampaign(campaignId, mapKey, sessionId);
+			this.loadCampaign(campaignId, mapKey, sessionId, characterName, viewType);
 		} else {
 			// Try loading last used campaign
 			const lastCampaign = localStorage.getItem(CampaignManager.STORAGE_KEY);
 			if (lastCampaign && this.#isCampaignValid(lastCampaign)) {
-				this.loadCampaign(lastCampaign);
+				this.loadCampaign(lastCampaign); // Load default view for last campaign
 			} else {
 				// Show campaign selection if no valid campaign is found
 				this.showCampaignSelection();
@@ -121,7 +123,13 @@ class CampaignManager {
 			if (event.state?.view === 'campaigns') {
 				this.showCampaignSelection();
 			} else if (event.state?.campaignId) {
-				this.loadCampaign(event.state.campaignId, event.state.mapKey, event.state.sessionId);
+				this.loadCampaign(
+					event.state.campaignId,
+					event.state.mapKey,
+					event.state.sessionId,
+					event.state.characterName,
+					event.state.viewType
+				);
 			}
 		});
 	}
@@ -152,18 +160,15 @@ class CampaignManager {
 
 		selectionView.appendChild(campaignList);
 		this.#rootElement.appendChild(selectionView);
-
 		// Create map view (reuse existing map div)
 		const mapView = document.getElementById('map');
 		mapView.className = 'view';
-
 		// Create story view
 		const storyView = document.createElement('div');
 		storyView.id = 'story-view';
 		storyView.className = 'view';
 		storyView.style.display = 'none';
 		this.#rootElement.appendChild(storyView);
-
 		// Add back button to map view
 		const backButton = document.getElementById('campaign-select');
 		backButton.addEventListener('click', () => this.showCampaignSelection());
@@ -172,7 +177,6 @@ class CampaignManager {
 	#getCampaignDefaultMap(campaign) {
 		// Helper function to get the default map key for a campaign
 		if (campaign.defaultMap) return campaign.defaultMap;
-
 		// If no default map is specified, try to find the first available map
 		const data = campaign.data;
 		if (!data) return null;
@@ -180,7 +184,6 @@ class CampaignManager {
 		// Helper function to find the first map key in the object
 		const findFirstMap = (obj) => {
 			if (!obj || typeof obj !== 'object') return null;
-
 			for (const key in obj) {
 				if (obj[key]?.image) return key;
 				const result = findFirstMap(obj[key]);
@@ -188,7 +191,6 @@ class CampaignManager {
 			}
 			return null;
 		};
-
 		return findFirstMap(data);
 	}
 
@@ -210,7 +212,6 @@ class CampaignManager {
 		const typeBadge = `<div class="campaign-type-badge ${campaignType}">${
 			campaignType.charAt(0).toUpperCase() + campaignType.slice(1)
 		}</div>`;
-
 		card.innerHTML = `
             ${typeBadge}
             <h2>${campaign.metadata?.name}</h2>
@@ -229,7 +230,6 @@ class CampaignManager {
 								}
             </div>
         `;
-
 		if (campaign?.metadata?.characters) {
 			const characterCards = this.#createCampaignCharacters(campaign);
 			const characterCardsContainer = document.createElement('div');
@@ -243,7 +243,7 @@ class CampaignManager {
 			card.append(characterCardsContainer);
 		}
 
-		if (campaign.data) {
+		if (campaign.data || (campaign.metadata?.campaignType === 'story' && campaign.recaps?.length > 0)) {
 			card.addEventListener('click', () => {
 				// Determine what to load based on campaign type
 				const campaignType = campaign.metadata?.campaignType || 'map';
@@ -253,8 +253,9 @@ class CampaignManager {
 					const defaultMap = this.#getCampaignDefaultMap(campaign);
 					this.loadCampaign(campaign.id, defaultMap);
 				} else if (campaignType === 'story') {
-					// For story campaigns, get first session
+					// For story campaigns, get first session by default
 					const firstSessionId = this.#getFirstSessionId(campaign);
+					// Load the campaign, defaulting to the first session
 					this.loadCampaign(campaign.id, null, firstSessionId);
 				}
 			});
@@ -265,9 +266,9 @@ class CampaignManager {
 		return card;
 	}
 
+	// #createCampaignCharacters remains the same...
 	#createCampaignCharacters(campaign) {
 		if (!campaign?.metadata?.characters) return [];
-
 		const characterCards = campaign.metadata.characters.map((character) => {
 			const characterCard = document.createElement('div');
 			characterCard.className = `campaign-character-card`;
@@ -279,13 +280,15 @@ class CampaignManager {
                         <span class="character-card-info">Lvl ${character.level} | ${character.race} | ${
 					character.class
 				}</span>
-                    </div>
+
+               </div>
                     <div class="character-card-item">
                         <img src="${character?.icon}" class="character-card-icon icon-${character.class
 					.toLowerCase()
 					.replace(/\s+/g, '-')}"/>
                     </div>
-                `;
+
+`;
 			} else {
 				characterCard.innerHTML = `
                     <div class="character-card-item">
@@ -294,10 +297,10 @@ class CampaignManager {
 					.replace(/\s+/g, '-')}"/>
                     </div>
                     <div class="character-card-item item-row">
-                        <span class="character-card-name">${character.name}</span>
-                        <span class="character-card-info">Lvl ${character.level} | ${character.race} | ${
-					character.class
-				}</span>
+
+                   <span class="character-card-name">${character.name}</span>
+                        <span class="character-card-info">Lvl ${character.level} |
+${character.race} | ${character.class}</span>
                     </div>
                 `;
 			}
@@ -308,20 +311,20 @@ class CampaignManager {
 		return characterCards;
 	}
 
+	// #isCampaignValid remains the same...
 	#isCampaignValid(campaignId) {
 		// Check if campaign exists and has either data or recaps (for story campaigns)
 		const campaign = CAMPAIGN_DATA.find((campaign) => campaign.id === campaignId);
-		return campaign && (campaign.data?.length > 0 || campaign.recaps?.length > 0);
+		return campaign && (campaign.data || campaign.recaps?.length > 0); // Allow story campaigns without map data
 	}
 
-	loadCampaign(campaignId, mapKey = null, sessionId = null) {
+	loadCampaign(campaignId, mapKey = null, sessionId = null, characterName = null, viewType = null) {
 		const campaign = CAMPAIGN_DATA.find((c) => c.id === campaignId);
 		// Allow loading if campaign exists, even without map data (for story)
 		if (!campaign) return;
 
 		this.#currentCampaign = campaign;
 		localStorage.setItem(CampaignManager.STORAGE_KEY, campaignId);
-
 		// Initialize the recap modal with the campaign data
 		this.#recapModal = StoryRecapModal.getInstance(campaign?.recaps, campaign?.aliases);
 
@@ -332,45 +335,66 @@ class CampaignManager {
 			document.getElementById('story-view').style.display = 'none';
 		}
 		document.getElementById('actions').style.display = 'block';
-
 		// Determine which type of campaign and load accordingly
 		const campaignType = campaign.metadata?.campaignType || 'map';
 
 		if (campaignType === 'map') {
+			const currentUrl = new URL(window.location.href);
+			currentUrl.searchParams.delete('session');
+			currentUrl.searchParams.delete('character');
+			currentUrl.searchParams.delete('view');
+			// Update history without these params before loading map
+			window.history.replaceState(null, '', currentUrl.toString());
+
 			this.#loadMapCampaign(campaign, mapKey);
 		} else if (campaignType === 'story') {
-			this.#loadStoryCampaign(campaign, sessionId);
+			this.#loadStoryCampaign(campaign, sessionId, characterName, viewType);
 		}
 
 		this.#setupRecapButton();
 	}
 
 	#loadMapCampaign(campaign, mapKey = null) {
+		// ... (map loading logic remains the same, URL update happens below) ...
 		// Determine which map to load
 		const defaultMap = mapKey || this.#getCampaignDefaultMap(campaign);
 		if (!defaultMap) {
 			console.error('No valid map found for campaign:', campaign.id);
+			this.showCampaignSelection(); // Go back if no map
 			return;
 		}
 
-		// Update URL with both campaign and map parameters
+		// Update URL with campaign and map parameters, remove story params
 		const currentUrl = new URL(window.location.href);
 		const params = currentUrl.searchParams;
 		params.set('campaign', campaign.id);
 		params.set('map', defaultMap);
+		params.delete('session');
+		params.delete('character');
+		params.delete('view');
 
 		// Preserve any existing target parameter if present
 		const targetParam = params.get('t');
 		if (targetParam) {
 			params.set('t', targetParam);
+		} else {
+			params.delete('t'); // Clean up target if not needed
 		}
 
-		const newUrl = `${window.location.pathname}?${params.toString()}`;
-		window.history.pushState({ campaignId: campaign.id, mapKey: defaultMap, view: 'map' }, '', newUrl);
+		const newUrl = `${window.location.pathname}?${params.toString()}${window.location.hash}`;
+		const state = {
+			campaignId: campaign.id,
+			mapKey: defaultMap,
+			view: 'map',
+		};
+		if (window.history.state?.campaignId === campaign.id && window.history.state?.view === 'map') {
+			window.history.replaceState(state, '', newUrl);
+		} else {
+			window.history.pushState(state, '', newUrl);
+		}
 
 		// Show map view
 		document.getElementById('map').style.display = 'block';
-
 		// Initialize or update map
 		if (!this.#mapInstance) {
 			this.#mapInstance = new CustomMap('map', {
@@ -379,47 +403,96 @@ class CampaignManager {
 				isDebugMode: this.isDebugMode,
 			});
 		} else {
-			// Reload map with new campaign data
-			this.#mapInstance.updateCampaignData(campaign.data);
-			this.#mapInstance.loadMap(defaultMap);
+			// Reload map with new campaign data and map key
+			this.#mapInstance.updateCampaignData(campaign.data); // Update data first
+			this.#mapInstance.loadMap(defaultMap); // Then load the specific map
 		}
 	}
 
-	#loadStoryCampaign(campaign, sessionId = null) {
-		// Get first session if none provided
-		if (!sessionId) {
-			sessionId = this.#getFirstSessionId(campaign);
-			if (!sessionId) {
-				console.error('No valid session found for story campaign:', campaign.id);
-				return;
+	#loadStoryCampaign(campaign, sessionId = null, characterName = null, viewType = null) {
+		// Determine initial state based on URL params passed in
+		let initialView = 'session'; // Default to session view
+		let initialSessionId = sessionId;
+		let initialCharacterName = characterName;
+
+		if (viewType === 'timeline') {
+			initialView = 'timeline';
+			initialSessionId = null; // Not showing a session
+			initialCharacterName = null; // Not showing a character
+		} else if (characterName) {
+			initialView = 'character';
+			initialSessionId = null; // Not showing a session
+			initialCharacterName = characterName;
+		} else {
+			// If no specific view/character, ensure we have a session ID
+			if (!initialSessionId) {
+				initialSessionId = this.#getFirstSessionId(campaign);
+				if (!initialSessionId) {
+					console.error('No valid session found for story campaign:', campaign.id);
+					this.showCampaignSelection(); // Go back if no session
+					return;
+				}
 			}
+			initialView = 'session';
+			initialCharacterName = null; // Ensure character is cleared
 		}
 
-		// Update URL with campaign and session parameters
+		// Update URL with current state
 		const currentUrl = new URL(window.location.href);
 		const params = currentUrl.searchParams;
 		params.set('campaign', campaign.id);
-		params.set('session', sessionId);
+		params.delete('map');
+		params.delete('t');
 
-		const newUrl = `${window.location.pathname}?${params.toString()}`;
-		window.history.pushState({ campaignId: campaign.id, sessionId, view: 'story' }, '', newUrl);
+		// Set/delete params based on the determined view
+		if (initialView === 'timeline') {
+			params.set('view', 'timeline');
+			params.delete('session');
+			params.delete('character');
+		} else if (initialView === 'character') {
+			params.set('character', initialCharacterName);
+			params.delete('session');
+			params.delete('view');
+		} else {
+			// Session view
+			params.set('session', initialSessionId);
+			params.delete('character');
+			params.delete('view');
+		}
+
+		const newUrl = `${window.location.pathname}?${params.toString()}${window.location.hash}`;
+		const state = {
+			campaignId: campaign.id,
+			sessionId: initialView === 'session' ? initialSessionId : null,
+			characterName: initialView === 'character' ? initialCharacterName : null,
+			viewType: initialView === 'timeline' ? 'timeline' : null, // Store the specific view type if needed
+			view: 'story', // Generic view state for popstate handling
+		};
+
+		if (window.history.state?.campaignId === campaign.id && window.history.state?.view === 'story') {
+			window.history.replaceState(state, '', newUrl);
+		} else {
+			window.history.pushState(state, '', newUrl);
+		}
 
 		// Show story view
 		document.getElementById('story-view').style.display = 'block';
-
 		// Initialize or update story view
 		if (!this.#storyInstance) {
 			this.#storyInstance = new StoryView('story-view', {
 				campaignData: campaign,
-				initialSessionId: sessionId,
+
+				initialSessionId: initialSessionId,
+				initialCharacterName: initialCharacterName,
+				initialViewType: viewType, // Pass timeline/character view preference
 				isDebugMode: this.isDebugMode,
 			});
 		} else {
-			// Update with new campaign data
-			this.#storyInstance.updateCampaign(campaign, sessionId);
+			this.#storyInstance.updateCampaign(campaign, initialSessionId, initialCharacterName, viewType);
 		}
 	}
 
+	// #setupRecapButton remains the same...
 	#setupRecapButton() {
 		const recapButton = document.getElementById('view-recap');
 		if (recapButton) {
@@ -436,9 +509,9 @@ class CampaignManager {
 		}
 	}
 
+	// toggleRecap remains the same...
 	toggleRecap() {
 		if (!this.#recapModal) return;
-
 		const recapButton = document.getElementById('view-recap');
 		if (!this.#recapModal.isVisible) {
 			// Use the modal's state
@@ -450,14 +523,17 @@ class CampaignManager {
 		}
 	}
 
+	// showCampaignSelection remains the same...
 	showCampaignSelection() {
 		// Update URL while preserving campaign parameter
 		const currentUrl = new URL(window.location.href);
 		const params = currentUrl.searchParams;
-		const campaignId = params.get('campaign'); // Preserve campaign ID if it exists
+		const campaignId = params.get('campaign');
+		// Preserve campaign ID if it exists
 
 		// Clear other parameters but keep campaign if it exists
 		currentUrl.search = '';
+		currentUrl.hash = ''; // Clear hash too
 		if (campaignId) {
 			currentUrl.searchParams.set('campaign', campaignId);
 		}
@@ -477,17 +553,18 @@ class CampaignManager {
 		document.getElementById('actions').style.display = 'none';
 	}
 }
-// New StoryView class for handling story campaigns
+
 class StoryView {
 	#rootElement;
 	#campaign;
 	#currentSessionId;
+	#currentView = 'session'; // 'session', 'character', 'timeline'
+	#selectedCharacterName = null;
 	#isDebugMode;
 	#tooltipContainer;
-	#selectedCharacter = null;
 	#isSidebarCollapsed = false;
-	#isTimelineVisible = false;
-	#apiBaseUrl = 'https://www.dnd5eapi.co/api/2014/';
+	// #isTimelineVisible = false; // Replaced by #currentView
+	#apiBaseUrl = 'https://www.dnd5eapi.co/api/2014/'; // Example API
 	#supportedEntityTypes = [
 		'spell',
 		'monster',
@@ -516,32 +593,40 @@ class StoryView {
 		race: 'race',
 		npc: 'npc',
 	};
-	#customApiData = CAMPAIGN_02_API_DATA;
+	#customApiData = CAMPAIGN_02_API_DATA; // Initialize properly CAMPAIGN_02_API_DATA; // Needs actual data source
 
 	constructor(elementId, options = {}) {
 		this.#rootElement = document.getElementById(elementId);
 		this.#isDebugMode = options.isDebugMode || false;
-
 		if (!this.#rootElement) {
 			console.error('StoryView: Root element not found:', elementId);
 			return;
 		}
+		// Load custom data if available
+		if (window.CAMPAIGN_02_API_DATA) {
+			this.#customApiData = window.CAMPAIGN_02_API_DATA;
+		}
 
 		// Create tooltip container once during initialization
 		this.#createTooltipContainer();
-
 		// Check for saved sidebar state in local storage
 		const savedSidebarState = localStorage.getItem('story-sidebar-collapsed');
 		if (savedSidebarState) {
 			this.#isSidebarCollapsed = savedSidebarState === 'true';
 		}
 
-		this.updateCampaign(options.campaignData, options.initialSessionId);
+		this.updateCampaign(
+			options.campaignData,
+			options.initialSessionId,
+			options.initialCharacterName,
+			options.initialViewType
+		);
 	}
 
-	updateCampaign(campaign, sessionId = null) {
+	updateCampaign(campaign, sessionId = null, characterName = null, viewType = null) {
 		if (!campaign) return;
 
+		// Process characters for custom API data
 		if (campaign?.metadata?.characters) {
 			campaign.metadata.characters.forEach((char) => {
 				this.#customApiData.character = this.#customApiData.character || {};
@@ -550,7 +635,32 @@ class StoryView {
 		}
 
 		this.#campaign = campaign;
-		this.#currentSessionId = sessionId || this.#getFirstSessionId();
+
+		// Determine the initial state based on parameters
+		if (viewType === 'timeline') {
+			this.#currentView = 'timeline';
+			this.#selectedCharacterName = null;
+			this.#currentSessionId = sessionId || this.#getFirstSessionId(); // Keep track of a session even if not displayed
+		} else if (characterName) {
+			this.#currentView = 'character';
+			this.#selectedCharacterName = characterName;
+			this.#currentSessionId = sessionId || this.#getFirstSessionId(); // Keep track of a session
+		} else {
+			this.#currentView = 'session';
+			this.#selectedCharacterName = null;
+			this.#currentSessionId = sessionId || this.#getFirstSessionId(); // Must have a session ID here
+		}
+
+		// Ensure we have a valid session ID if needed
+		if (this.#currentView === 'session' && !this.#currentSessionId) {
+			console.error('StoryView: Attempting to show session view without a valid session ID.');
+			// Potentially switch to a default state or show an error
+			this.#currentSessionId = this.#getFirstSessionId();
+			if (!this.#currentSessionId) {
+				this.#rootElement.innerHTML = '<p>Error: No sessions found for this campaign.</p>';
+				return; // Stop if no sessions exist at all
+			}
+		}
 
 		this.render();
 	}
@@ -582,38 +692,21 @@ class StoryView {
 		// Create sidebar with characters and session list
 		const sidebar = this.#createSidebar();
 		mainContent.appendChild(sidebar);
-
 		// Create content area
 		const contentArea = document.createElement('div');
 		contentArea.className = 'story-content-area';
-
-		// Load the session content - Await this async operation
-		await this.#loadSessionContent(contentArea);
+		// Load the appropriate content based on the current view - Await this async operation
+		await this.#loadContentArea(contentArea);
 
 		mainContent.appendChild(contentArea);
 		container.appendChild(mainContent);
 
 		this.#rootElement.appendChild(container);
-
-		// Generate table of contents after content is loaded - only for session view
-		// Only generate TOC if we're viewing a session, not a character
-		if (!this.#selectedCharacter && !this.#isTimelineVisible) {
+		// Generate table of contents AFTER content is loaded - only for session view
+		if (this.#currentView === 'session') {
 			this.#generateTableOfContents(contentArea);
+			this.#scrollToHash();
 		}
-	}
-
-	#createHeader(container) {
-		const header = document.createElement('div');
-		header.className = 'story-header';
-
-		header.innerHTML = `
-            <h1>${this.#campaign.metadata?.name || 'Unnamed Campaign'}</h1>
-            <div class="story-description">
-                ${this.#campaign.metadata?.description || ''}
-            </div>
-        `;
-
-		container.appendChild(header);
 	}
 
 	#createSidebar() {
@@ -631,7 +724,7 @@ class StoryView {
 		// Add campaign name at the top of sidebar
 		const campaignName = document.createElement('div');
 		campaignName.className = 'story-campaign-name';
-		campaignName.innerHTML = `<h3>${this.#campaign.metadata?.name || 'Unnamed Campaign'}</h1>`;
+		campaignName.innerHTML = `<h3>${this.#campaign.metadata?.name || 'Unnamed Campaign'}</h3>`;
 		sidebar.appendChild(campaignName);
 
 		// Add characters section
@@ -646,25 +739,21 @@ class StoryView {
 		return sidebar;
 	}
 
-	// Modify the #toggleSidebar method to manage the animation
+	// #toggleSidebar remains the same...
 	#toggleSidebar(toggleButton) {
 		this.#isSidebarCollapsed = !this.#isSidebarCollapsed;
-
 		// Update button text
 		toggleButton.innerHTML = this.#isSidebarCollapsed ? '&raquo;' : '&laquo;';
 		toggleButton.setAttribute('aria-label', this.#isSidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar');
-
 		// Find and toggle the main content container
 		const mainContent = this.#rootElement.querySelector('.story-main-content');
 		const sidebar = this.#rootElement.querySelector('.story-sidebar');
-
 		if (mainContent) {
 			// Add transitioning class to enable animation
 			mainContent.classList.add('sidebar-transitioning');
 
 			// Toggle the collapsed class
 			mainContent.classList.toggle('sidebar-collapsed', this.#isSidebarCollapsed);
-
 			// Add animation class to sidebar content
 			if (sidebar) {
 				sidebar.classList.toggle('sidebar-content-collapsed', this.#isSidebarCollapsed);
@@ -673,7 +762,7 @@ class StoryView {
 			// Remove transitioning class after animation completes
 			setTimeout(() => {
 				mainContent.classList.remove('sidebar-transitioning');
-			}, 300); // Match this with the CSS transition duration
+			}, 300); // Match CSS transition duration
 		}
 
 		// Save state to local storage
@@ -692,14 +781,14 @@ class StoryView {
 		const sectionTitle = document.createElement('h2');
 		sectionTitle.textContent = 'Characters';
 		characterSection.appendChild(sectionTitle);
-
 		const characterList = document.createElement('div');
 		characterList.className = 'story-character-list';
 
 		characters.forEach((character) => {
 			const charCard = document.createElement('div');
 			charCard.className = 'story-character-card';
-			if (this.#selectedCharacter === character.name) {
+
+			if (this.#currentView === 'character' && this.#selectedCharacterName === character.name) {
 				charCard.classList.add('active');
 			}
 
@@ -708,35 +797,68 @@ class StoryView {
                     <img src="${character.icon}" alt="${character.name}" />
                 </div>
                 <div class="character-info">
-                    <h3>${character.name}</h3>
+
+             <h3>${character.name}</h3>
                 </div>
             `;
 			charCard.title = `Lvl ${character.level} ${character.race} ${character.class}`;
 
 			// Add click event to show character background
 			charCard.addEventListener('click', () => {
-				this.#handleCharacterClick(character);
+				this.#handleCharacterClick(character.name);
 			});
 
 			characterList.appendChild(charCard);
 		});
-
 		characterSection.appendChild(characterList);
 		sidebar.appendChild(characterSection);
 	}
 
-	#handleCharacterClick(character) {
-		// Toggle selection if clicking the same character
-		if (this.#selectedCharacter === character.name) {
-			this.#selectedCharacter = null;
+	#handleCharacterClick(characterName) {
+		// Toggle selection
+		if (this.#currentView === 'character' && this.#selectedCharacterName === characterName) {
+			// Deselecting the current character - go back to the current session view
+			this.#currentView = 'session';
+			this.#selectedCharacterName = null;
 		} else {
-			this.#selectedCharacter = character.name;
+			// Selecting a new character (or the first time)
+			this.#currentView = 'character';
+			this.#selectedCharacterName = characterName;
 		}
 
-		// Hide timeline when a character is selected
-		this.#isTimelineVisible = false;
+		// Update URL
+		const currentUrl = new URL(window.location.href);
+		const params = currentUrl.searchParams;
+		params.set('campaign', this.#campaign.id); // Ensure campaign is set
+		params.delete('map'); // Clean up other view params
+		params.delete('view');
+		params.delete('session'); // Usually hide session when showing character
 
-		// Re-render to update the content area with character background
+		if (this.#currentView === 'character') {
+			params.set('character', this.#selectedCharacterName);
+		} else {
+			// Switched back to session view
+			params.delete('character');
+			// Make sure a session param exists if we fell back to session view
+			if (this.#currentSessionId) {
+				params.set('session', this.#currentSessionId);
+			} else {
+				// If no current session somehow, try getting the first one
+				const firstSession = this.#getFirstSessionId();
+				if (firstSession) params.set('session', firstSession);
+			}
+		}
+
+		const state = {
+			campaignId: this.#campaign.id,
+			sessionId: this.#currentView === 'session' ? this.#currentSessionId : null,
+			characterName: this.#currentView === 'character' ? this.#selectedCharacterName : null,
+			view: 'story', // Keep the main view type
+		};
+		// Use replaceState as we are interacting within the story view
+		window.history.replaceState(state, '', `${currentUrl.pathname}?${params.toString()}`);
+
+		// Re-render to update the content area
 		this.render();
 	}
 
@@ -759,12 +881,11 @@ class StoryView {
 
 		const sessionList = document.createElement('div');
 		sessionList.className = 'story-session-list';
-
 		recaps.forEach((session) => {
 			const sessionItem = document.createElement('div');
 			sessionItem.className = 'story-session-item';
-			// Only highlight if viewing this session AND timeline is not visible
-			if (session.id === this.#currentSessionId && !this.#selectedCharacter && !this.#isTimelineVisible) {
+
+			if (this.#currentView === 'session' && session.id === this.#currentSessionId) {
 				sessionItem.classList.add('active');
 			}
 
@@ -774,23 +895,31 @@ class StoryView {
 			`;
 
 			sessionItem.addEventListener('click', () => {
-				this.#selectedCharacter = null; // Clear character selection
-				this.#isTimelineVisible = false; // Hide timeline
-				this.#currentSessionId = session.id;
-				this.render();
+				this.#currentView = 'session';
+				this.#selectedCharacterName = null; // Clear character selection
+				this.#currentSessionId = session.id; // Set the clicked session as current
 
-				// Update URL
+				// Update URL - Remove character/view params, set session
 				const currentUrl = new URL(window.location.href);
-				currentUrl.searchParams.set('session', session.id);
-				window.history.pushState(
-					{
-						campaignId: this.#campaign.id,
-						sessionId: session.id,
-						view: 'story',
-					},
-					'',
-					currentUrl.toString()
-				);
+				const params = currentUrl.searchParams;
+				params.set('session', session.id);
+				params.delete('character');
+				params.delete('view');
+				params.set('campaign', this.#campaign.id); // Ensure campaign stays
+				params.delete('map'); // Clean map param
+
+				const state = {
+					campaignId: this.#campaign.id,
+					sessionId: session.id,
+					characterName: null, // Ensure cleared
+					viewType: null, // Ensure cleared
+					view: 'story', // Main view type
+				};
+				// Use replaceState for intra-story navigation
+				window.history.replaceState(state, '', `${currentUrl.pathname}?${params.toString()}`);
+
+				// Re-render to show the new session
+				this.render();
 			});
 
 			sessionList.appendChild(sessionItem);
@@ -800,11 +929,9 @@ class StoryView {
 		sidebar.appendChild(sessionSection);
 	}
 
-	// Add the new timeline section method
 	#createTimelineSection(sidebar) {
 		const timelineSection = document.createElement('div');
 		timelineSection.className = 'story-timeline-section';
-
 		const sectionTitle = document.createElement('h2');
 		sectionTitle.textContent = 'Campaign';
 		timelineSection.appendChild(sectionTitle);
@@ -812,37 +939,57 @@ class StoryView {
 		const timelineButton = document.createElement('button');
 		timelineButton.className = 'timeline-button';
 		timelineButton.textContent = 'View Timeline';
+		if (this.#currentView === 'timeline') {
+			timelineButton.classList.add('active');
+		}
 
-		// Change from toggle to just showing the timeline
 		timelineButton.addEventListener('click', () => {
-			this.#showTimeline();
+			this.#handleTimelineClick();
 		});
 
 		timelineSection.appendChild(timelineButton);
 		sidebar.appendChild(timelineSection);
 	}
 
-	// Replace toggle method with show method
-	#showTimeline() {
-		this.#isTimelineVisible = true;
-		this.#selectedCharacter = null; // Clear character selection
+	#handleTimelineClick() {
+		// Don't do anything if already on timeline vieactw
+		if (this.#currentView === 'timeline') return;
+
+		this.#currentView = 'timeline';
+		this.#selectedCharacterName = null; // Clear character selection
+
+		// Update URL
+		const currentUrl = new URL(window.location.href);
+		const params = currentUrl.searchParams;
+		params.set('campaign', this.#campaign.id); // Ensure campaign
+		params.set('view', 'timeline'); // Set the view param
+		params.delete('session'); // Remove other view params
+		params.delete('character');
+		params.delete('map');
+
+		const state = {
+			campaignId: this.#campaign.id,
+			sessionId: null,
+			characterName: null,
+			viewType: 'timeline', // Specific view type
+			view: 'story', // Main view type
+		};
+		// Use replaceState for intra-story navigation
+		window.history.replaceState(state, '', `${currentUrl.pathname}?${params.toString()}`);
 
 		// Re-render to show the timeline
 		this.render();
 	}
 
-	// Modify renderTimeline method to handle subitems differently
+	// #renderTimeline remains the same...
 	#renderTimeline(contentArea) {
 		// Check if the current campaign has timeline data
 		const timelineData = this.#campaign?.timeline;
-
 		if (!timelineData || !Array.isArray(timelineData) || timelineData.length === 0) {
 			console.error('Timeline data not available for this campaign:', this.#campaign?.id);
-
 			// Display an error message to the user
 			const timelineContainer = document.createElement('div');
 			timelineContainer.className = 'story-timeline-container visible';
-
 			timelineContainer.innerHTML = `
 				<div class="timeline-header">
 					<h2>Campaign Timeline</h2>
@@ -869,10 +1016,8 @@ class StoryView {
 		// Create timeline wrapper
 		const timeline = document.createElement('div');
 		timeline.className = 'timeline';
-
 		// Track which side to place the next item
 		let side = 'left';
-
 		// Process timeline data
 		timelineData.forEach((item) => {
 			// Create main item
@@ -880,7 +1025,7 @@ class StoryView {
 			mainItem.className = `timeline-item timeline-main-item ${side}`;
 			mainItem.setAttribute('data-id', item.id);
 
-			const mainContent = document.createElement('div');
+			const mainContent = document.createElement('a');
 			mainContent.className = 'timeline-content';
 			mainContent.innerHTML = `
 				<h3>${item.title}</h3>
@@ -888,11 +1033,24 @@ class StoryView {
 				${item.session ? `<span class="timeline-item-session">Session ${item.session}</span>` : ''}
 			`;
 
+			if (item.url) {
+				const params = `?campaign=${item.url.campaign}&session=${item.url.session}${
+					item.url.target ? `#${item.url.target}` : ''
+				}`;
+				mainContent.href = params;
+				mainContent.title = 'Go to this session recap point.';
+			}
+
 			mainItem.appendChild(mainContent);
 			timeline.appendChild(mainItem);
 
 			// Flip side for the next main item group
 			const nextSide = side === 'left' ? 'right' : 'left';
+
+			const typeMap = {
+				narrative: '💬',
+				encounter: '⚔️',
+			};
 
 			// Add subitems if any, keeping them on the same side
 			if (item.items && item.items.length > 0) {
@@ -902,11 +1060,11 @@ class StoryView {
 					subitemEl.setAttribute('data-parent-id', item.id);
 					subitemEl.setAttribute('data-type', subitem.type);
 
-					const subContent = document.createElement('div');
+					const subContent = document.createElement('a');
 					subContent.className = 'timeline-content';
 
 					let subitemHTML = `
-						<h4>${subitem.type.charAt(0).toUpperCase() + subitem.type.slice(1)}: ${subitem.actors}</h4>
+						<h4>${typeMap[subitem.type]} ${subitem.type.charAt(0).toUpperCase() + subitem.type.slice(1)}: ${subitem.actors}</h4>
 					`;
 
 					if (subitem.is_new_session) {
@@ -917,6 +1075,14 @@ class StoryView {
 					// Add sublocation if any
 					if (subitem.sublocation) {
 						subitemHTML += `<div class="timeline-sublocation">${subitem.sublocation}</div>`;
+					}
+
+					if (subitem.url) {
+						const params = `?campaign=${subitem.url.campaign}&session=${subitem.url.session}${
+							subitem.url.target ? `#${subitem.url.target}` : ''
+						}`;
+						subContent.href = params;
+						subContent.title = 'Go to this session recap point.';
 					}
 
 					subContent.innerHTML = subitemHTML;
@@ -933,78 +1099,75 @@ class StoryView {
 		contentArea.appendChild(timelineContainer);
 	}
 
-	async #loadSessionContent(contentArea) {
-		// Clear previous content (including timeline if it was shown)
+	async #loadContentArea(contentArea) {
+		// Clear previous content
 		contentArea.innerHTML = '';
 
-		// If timeline is visible, render it
-		if (this.#isTimelineVisible) {
-			this.#renderTimeline(contentArea);
-			return;
+		switch (this.#currentView) {
+			case 'timeline':
+				this.#renderTimeline(contentArea);
+				break;
+			case 'character':
+				this.#loadCharacterBackground(contentArea);
+				break;
+			case 'session':
+			default:
+				await this.#loadSessionContent(contentArea); // Needs await
+				break;
 		}
+	}
 
-		// If a character is selected, show their background instead of session
-		if (this.#selectedCharacter) {
-			this.#loadCharacterBackground(contentArea);
-			return;
-		}
+	async #loadSessionContent(contentArea) {
+		// Assume contentArea is already cleared by #loadContentArea
+		// If timeline is visible, render it (Handled by #loadContentArea)
+		// if (this.#isTimelineVisible) { ... }
+		// If a character is selected, show their background (Handled by #loadContentArea)
+		// if (this.#selectedCharacterName) { ... }
 
 		if (!this.#currentSessionId || !this.#campaign.recaps) {
-			contentArea.innerHTML = '<div class="no-content">No session content available</div>';
+			contentArea.innerHTML = '<div class="no-content">Select a session to view its content.</div>';
 			return;
 		}
 
 		const session = this.#campaign.recaps.find((s) => s.id === this.#currentSessionId);
 		if (!session) {
-			contentArea.innerHTML = '<div class="no-content">Session not found</div>';
+			console.error(`Session not found: ${this.#currentSessionId}`);
+			contentArea.innerHTML = '<div class="no-content">Session not found. Please select another session.</div>';
 			return;
 		}
 
-		// --- Helper function to fetch and parse Markdown ---
+		// Helper function to fetch and parse Markdown (remains the same)
 		const fetchAndParseMd = async (filePath) => {
 			if (!filePath || typeof filePath !== 'string' || !filePath.endsWith('.md')) {
-				// If it's not a markdown path, return it directly (assuming it's HTML)
-				return filePath || '';
+				return filePath || ''; // Return non-MD paths/content directly
 			}
-
-			// Construct the full path relative to the campaign data directory
-			// Assuming the campaign ID corresponds to the folder name
 			const basePath = `src/databases/campaign_data/${this.#campaign.id.replace('-', '_')}/`;
 			const fullPath = basePath + filePath;
-
 			try {
 				const response = await fetch(fullPath);
 				if (!response.ok) {
 					throw new Error(`HTTP error! status: ${response.status}`);
 				}
 				const mdContent = await response.text();
-
-				// Return the raw Markdown content directly
-				return mdContent;
+				return `${mdContent}`; // Fallback: display as preformatted text
 			} catch (error) {
 				console.error(`Error fetching or parsing Markdown file "${fullPath}":`, error);
 				return `<div class="error">Error loading content: ${error.message}</div>`;
 			}
 		};
-		// --- End Helper function ---
 
-		// Create session TOC container (will be populated later)
+		// Create session TOC container (will be populated by #generateTableOfContents)
 		const sessionToc = document.createElement('div');
 		sessionToc.className = 'session-toc';
-
-		// Create the TOC element that will be sticky
 		const toc = document.createElement('div');
 		toc.className = 'toc';
-		toc.id = 'toc';
+		toc.id = 'toc'; // Keep the ID for potential styling/JS hooks
 		sessionToc.appendChild(toc);
-
-		// Add session TOC to content area
-		contentArea.appendChild(sessionToc);
+		contentArea.appendChild(sessionToc); // Add TOC container to content area
 
 		// Create session content container
 		const sessionContent = document.createElement('div');
 		sessionContent.className = 'session-content';
-
 		// Add session header
 		const sessionHeader = document.createElement('div');
 		sessionHeader.className = 'session-header';
@@ -1014,95 +1177,118 @@ class StoryView {
         `;
 		sessionContent.appendChild(sessionHeader);
 
+		// Process Short Summary (Recap)
 		const sessionRecap = document.createElement('div');
 		sessionRecap.className = 'session-small-recap';
-
-		// Parse the content HTML string
 		const tempRecap = document.createElement('div');
-		// Fetch and use raw MD content for recap
-		tempRecap.innerHTML = `<h3 id="short-summary">Short summary</h3>${await fetchAndParseMd(session?.recap)}`;
-
-		// Process images and character highlights
-		this.#processImages(tempRecap);
-		this.#processCharacterReferences(tempRecap); // Add this new line
-		this.#processCharacterHighlights(tempRecap);
-		this.#processEntityReferences(tempRecap); // Add this line
-		this.#processProgressionTags(tempRecap, session); // Add this line
-
-		// Add processed content to recap content
+		tempRecap.innerHTML = `<h3 id="short-summary">Short Summary</h3>${await fetchAndParseMd(session?.recap)}`;
+		this.#processPlaceholders(tempRecap, session);
 		sessionRecap.appendChild(tempRecap);
 		sessionContent.appendChild(sessionRecap);
 
-		// Process and add main content
-		const mainContent = document.createElement('div');
-		mainContent.className = 'session-main-content';
-
-		// Parse the content HTML string
-		const tempDiv = document.createElement('div');
-		// Fetch and use raw MD content for main content
-		tempDiv.innerHTML = `<h2 id="session-recap" style="margin: 0;">Session recap</h3>${await fetchAndParseMd(
-			session.content
-		)}`;
-
-		// Process images and character highlights
-		this.#processImages(tempDiv);
-		this.#processCharacterReferences(tempDiv); // Add this new line
-		this.#processCharacterHighlights(tempDiv);
-		this.#processEntityReferences(tempDiv); // Add this line
-		this.#processProgressionTags(tempDiv, session); // Add this line
-
-		// Add processed content to main content
-		mainContent.appendChild(tempDiv);
-		sessionContent.appendChild(mainContent);
+		// Process Main Content
+		const mainContentEl = document.createElement('div');
+		mainContentEl.className = 'session-main-content';
+		const tempMain = document.createElement('div');
+		tempMain.innerHTML = `<h2 id="session-recap">Session Recap</h2>${await fetchAndParseMd(session.content)}`;
+		this.#processPlaceholders(tempMain, session);
+		mainContentEl.appendChild(tempMain);
+		sessionContent.appendChild(mainContentEl);
 
 		// Add session content to content area
 		contentArea.appendChild(sessionContent);
 	}
 
+	#processPlaceholders(contentElement, session = null) {
+		this.#processImages(contentElement);
+		this.#processCharacterReferences(contentElement);
+		this.#processEntityReferences(contentElement);
+		// Process progression tags only if session data is available
+		if (session) {
+			this.#processProgressionTags(contentElement, session);
+		}
+		// Needs to run *after* character/entity references have created the spans
+		this.#processCharacterHighlights(contentElement);
+	}
+
+	#scrollToHash() {
+		const hash = window.location.hash;
+		if (hash) {
+			try {
+				// Use substring(1) to remove the '#'
+				const element = document.getElementById(hash.substring(1));
+				if (element) {
+					// Use setTimeout to ensure rendering is complete, especially after async ops
+					setTimeout(() => {
+						element.scrollIntoView({
+							behavior: 'smooth',
+							block: 'start', // Align to top
+						});
+					}, 100); // Small delay might be needed
+				}
+			} catch (e) {
+				// Catch potential errors if ID is invalid for querySelector
+				console.warn(`Could not find or scroll to element with ID: ${hash}`, e);
+			}
+		}
+	}
+
 	#generateTableOfContents(contentArea) {
-		// Find all headings in the content
-		const headings = contentArea.querySelectorAll('.session-content h1, .session-content h2, .session-content h3');
+		// Find headings only within the main session content, not the TOC itself
+		const sessionContent = contentArea.querySelector('.session-content');
+		if (!sessionContent) return; // No session content rendered
+
+		const headings = sessionContent.querySelectorAll('h1, h2, h3, h4'); // Include h4 if needed
 		if (headings.length === 0) return;
 
-		// Get the TOC container
+		// Get the TOC container (already created in #loadSessionContent)
 		const tocContainer = contentArea.querySelector('.toc');
 		if (!tocContainer) return;
+		tocContainer.innerHTML = ''; // Clear previous TOC content
 
 		// Create TOC title
 		const tocTitle = document.createElement('h3');
-		tocTitle.textContent = 'Table of Contents';
+		tocTitle.textContent = 'On this page'; // More common TOC title
 		tocTitle.className = 'toc-title';
 		tocContainer.appendChild(tocTitle);
-
 		// Create the list
 		const tocList = document.createElement('ul');
 		tocList.className = 'toc-list';
 		tocContainer.appendChild(tocList);
-
 		// Process headings and add to TOC
 		headings.forEach((heading, index) => {
-			// Skip headings without IDs and add IDs to those without
+			// Ensure heading has an ID for linking
 			if (!heading.id) {
-				heading.id = `heading-${index}`;
+				// Create a simple slug from text content
+				const slug = heading.textContent
+					.toLowerCase()
+					.trim()
+					.replace(/\s+/g, '-') // Replace spaces with dashes
+					.replace(/[^\w-]+/g, ''); // Remove non-word characters except dashes
+				heading.id = slug || `heading-${index}`; // Fallback to index if slug is empty
 			}
 
 			// Create link items for TOC
 			const item = document.createElement('li');
-			item.className = `toc-item toc-level-${heading.tagName.toLowerCase()}`;
+			item.className = `toc-item toc-level-${heading.tagName.toLowerCase()}`; // e.g., toc-level-h2
 
 			const link = document.createElement('a');
-			link.href = `#${heading.id}`;
+			link.href = `#${heading.id}`; // Link to the heading ID
 			link.textContent = heading.textContent;
 			link.className = 'toc-link';
 
-			// Add smooth scroll event
+			// Add smooth scroll event AND update URL hash without reloading
 			link.addEventListener('click', (e) => {
 				e.preventDefault();
-				document.getElementById(heading.id).scrollIntoView({
-					behavior: 'smooth',
-				});
-				// Update URL hash without jumping
-				history.pushState(null, null, `#${heading.id}`);
+				const targetElement = document.getElementById(heading.id);
+				if (targetElement) {
+					targetElement.scrollIntoView({
+						behavior: 'smooth',
+						block: 'start',
+					});
+					// Update URL hash without triggering navigation or adding to history stack
+					history.replaceState(null, '', `#${heading.id}`);
+				}
 			});
 
 			item.appendChild(link);
@@ -1111,22 +1297,32 @@ class StoryView {
 	}
 
 	#loadCharacterBackground(contentArea) {
+		// Assume contentArea is cleared by #loadContentArea
+		if (!this.#selectedCharacterName) {
+			contentArea.innerHTML = '<div class="no-content">No character selected.</div>';
+			return;
+		}
+
 		if (!this.#campaign.metadata?.characters) {
-			contentArea.innerHTML = '<div class="no-content">Character information not available</div>';
+			contentArea.innerHTML = '<div class="no-content">Character information not available for this campaign.</div>';
 			return;
 		}
 
-		const character = this.#campaign.metadata.characters.find((c) => c.name === this.#selectedCharacter);
-
+		const character = this.#campaign.metadata.characters.find((c) => c.name === this.#selectedCharacterName);
 		if (!character) {
-			contentArea.innerHTML = '<div class="no-content">Character not found</div>';
+			console.error(`Character not found: ${this.#selectedCharacterName}`);
+			contentArea.innerHTML = '<div class="no-content">Character details not found.</div>';
 			return;
 		}
+
+		// --- Character Page rendering logic ---
+		// This part remains largely the same as your provided code
+		// It builds the character sheet HTML.
+		// Ensure #processEntityReferences is called on relevant parts (like background).
 
 		const addSeparator = (elm) => {
 			const separator = document.createElement('div');
 			separator.className = 'character-page__separator';
-
 			elm.append(separator);
 		};
 
@@ -1135,7 +1331,6 @@ class StoryView {
 
 		const characterPagePartOne = document.createElement('div');
 		characterPagePartOne.className = 'character-side-one';
-
 		const characterPagePartTwo = document.createElement('div');
 		characterPagePartTwo.className = 'character-side-two';
 
@@ -1155,7 +1350,7 @@ class StoryView {
 			const characterBg = document.createElement('div');
 			characterBg.className = 'character-page__background';
 
-			characterBg.innerHTML = character?.background;
+			characterBg.innerHTML = character?.background; // Assuming background is HTML or plain text
 			this.#processEntityReferences(characterBg);
 			characterPagePartOne.appendChild(itemHeader);
 			characterPagePartOne.appendChild(characterBg);
@@ -1168,10 +1363,8 @@ class StoryView {
 			if (character?.name) {
 				const charIdentifiers = document.createElement('div');
 				charIdentifiers.className = 'character-page__identifiers';
-
 				charIdentifiers.innerHTML = `<span class="character-page__name">${character?.name}</span>
 					<span class="character-page__identifier">Lvl ${character?.level} ${character?.race} ${character?.class}</span>`;
-
 				metadataHolder.append(charIdentifiers);
 			}
 
@@ -1182,18 +1375,17 @@ class StoryView {
 			characterHealth.innerHTML = `
 				<div class="character-page__hp-item">
 					<span class="character-page__hp-item-name">Armor Class</span>
-					<span class="character-page__hp-item-value">${character?.stats?.metadata?.armorClass}</span>
+					<span class="character-page__hp-item-value">${character?.stats?.metadata?.armorClass || '-'}</span>
 				</div>
 				<div class="character-page__hp-item">
 					<span class="character-page__hp-item-name">Hit Points</span>
-					<span class="character-page__hp-item-value">${character?.stats?.metadata?.healthPoints}</span>
+					<span class="character-page__hp-item-value">${character?.stats?.metadata?.healthPoints || '-'}</span>
 				</div>
 				<div class="character-page__hp-item">
 					<span class="character-page__hp-item-name">Speed</span>
-					<span class="character-page__hp-item-value">${character?.stats?.metadata?.walkingSpeed}</span>
+					<span class="character-page__hp-item-value">${character?.stats?.metadata?.walkingSpeed || '-'}</span>
 				</div>
 				`;
-
 			metadataHolder.append(characterHealth);
 
 			// Ability Scores
@@ -1205,7 +1397,6 @@ class StoryView {
 
 				const abilityScoresContainer = document.createElement('div');
 				abilityScoresContainer.className = 'character-page__ability-scores';
-
 				character.stats.metadata.abilityScores.forEach((ability) => {
 					const abilityBox = document.createElement('div');
 					abilityBox.className = 'character-page__ability-box';
@@ -1213,12 +1404,11 @@ class StoryView {
 					<span class="character-page__ability-name">${ability.abbr.toUpperCase()}</span>
 					<div class="character-page__ability-values">
 						<span class="character-page__ability-value">${ability.value}</span>
-						<span class="character-page__ability-score">(${ability.score})</span>
+						<span class="character-page__ability-score">(${ability.score >= 0 ? '+' : ''}${ability.score})</span>
 					</div>
-				`;
+				`; // Added sign for score
 					abilityScoresContainer.appendChild(abilityBox);
 				});
-
 				metadataHolder.appendChild(abilityScoresContainer);
 			}
 
@@ -1231,21 +1421,20 @@ class StoryView {
 
 				const savingThrowsContainer = document.createElement('div');
 				savingThrowsContainer.className = 'character-page__saving-throws';
-
 				character.stats.metadata.savingThrows.forEach((save) => {
 					const saveItem = document.createElement('div');
 					saveItem.className = 'character-page__save-item';
 					saveItem.innerHTML = `
 					<span class="character-page__save-name">${save.name.toUpperCase()}</span>
-					<span class="character-page__save-value">${save.value}</span>
-				`;
+					<span class="character-page__save-value">${save.value >= 0 ? '+' : ''}${save.value}</span>
+				`; // Added sign
 					savingThrowsContainer.appendChild(saveItem);
 				});
-
 				metadataHolder.appendChild(savingThrowsContainer);
 			}
 
-			// Function to manage all descriptions
+			// --- Description Manager (for Actions/Features) ---
+			// This logic can remain the same as in your original code
 			const descriptionManager = {
 				openDescriptions: [],
 				closeAll: function () {
@@ -1293,7 +1482,6 @@ class StoryView {
 
 				const actionsContainer = document.createElement('div');
 				actionsContainer.className = 'character-page__actions';
-
 				character.stats.metadata.actionData.forEach((action) => {
 					const actionItem = document.createElement('div');
 					actionItem.className = 'character-page__action-item';
@@ -1306,29 +1494,23 @@ class StoryView {
 					if (action.description) {
 						const descSpan = document.createElement('span');
 						descSpan.className = 'character-page__action-item-description description-hidden';
-						descSpan.textContent = action.description;
+						descSpan.innerHTML = action.description; // Use innerHTML if description contains HTML
+						this.#processEntityReferences(descSpan); // Process entities in description
 						actionItem.appendChild(descSpan);
-
-						// Add clickable class to indicate it can be toggled
 						actionItem.classList.add('has-description');
 
-						// Add click handler to toggle description visibility
 						const toggleDescription = (e) => {
-							e.stopPropagation(); // Prevent bubbling
+							e.stopPropagation();
 							if (descSpan.classList.contains('description-hidden')) {
 								descriptionManager.open(descSpan);
 							} else {
 								descriptionManager.closeAll();
 							}
 						};
-
-						nameSpan.addEventListener('click', toggleDescription);
 						actionItem.addEventListener('click', toggleDescription);
 					}
-
 					actionsContainer.appendChild(actionItem);
 				});
-
 				metadataHolder.appendChild(actionsContainer);
 			}
 
@@ -1341,7 +1523,6 @@ class StoryView {
 
 				const featuresContainer = document.createElement('div');
 				featuresContainer.className = 'character-page__features';
-
 				character.stats.metadata.features.forEach((feature) => {
 					const featureItem = document.createElement('div');
 					featureItem.className = 'character-page__feature-item';
@@ -1354,38 +1535,30 @@ class StoryView {
 					if (feature.description) {
 						const descSpan = document.createElement('span');
 						descSpan.className = 'character-page__feature-item-description description-hidden';
-						descSpan.textContent = feature.description;
+						descSpan.innerHTML = feature.description; // Use innerHTML
+						this.#processEntityReferences(descSpan); // Process entities
 						featureItem.appendChild(descSpan);
-
-						// Add clickable class to indicate it can be toggled
 						featureItem.classList.add('has-description');
 
-						// Add click handler to toggle description visibility
 						const toggleDescription = (e) => {
-							e.stopPropagation(); // Prevent bubbling
+							e.stopPropagation();
 							if (descSpan.classList.contains('description-hidden')) {
 								descriptionManager.open(descSpan);
 							} else {
 								descriptionManager.closeAll();
 							}
 						};
-
-						nameSpan.addEventListener('click', toggleDescription);
 						featureItem.addEventListener('click', toggleDescription);
 					}
-
 					featuresContainer.appendChild(featureItem);
 				});
-
 				metadataHolder.appendChild(featuresContainer);
 			}
 
-			// Add global click handler to close descriptions when clicking outside
-			document.addEventListener('click', () => {
-				descriptionManager.closeAll();
-			});
+			// Global click handler to close descriptions
+			document.addEventListener('click', () => descriptionManager.closeAll(), true); // Use capture phase
 
-			// Spells
+			// Spells (remains largely the same, ensure #processEntityReferences runs on spell name)
 			if (character?.stats?.metadata?.spellData?.length) {
 				const spellsHeader = document.createElement('span');
 				spellsHeader.className = 'character-page__header';
@@ -1394,12 +1567,12 @@ class StoryView {
 
 				const spellsContainer = document.createElement('div');
 				spellsContainer.className = 'character-page__spells';
-
 				character.stats.metadata.spellData.forEach((spellGroup) => {
-					const groupHeader = document.createElement('div');
-					groupHeader.className = 'character-page__spell-group-header';
-					groupHeader.textContent = spellGroup.groupName;
-					spellsContainer.appendChild(groupHeader);
+					// ... (spell group header logic) ... [cite: 161]
+					const groupHeader = document.createElement('div'); // Added
+					groupHeader.className = 'character-page__spell-group-header'; // Added
+					groupHeader.textContent = spellGroup.groupName; // Added
+					spellsContainer.appendChild(groupHeader); // Added
 
 					spellGroup.spells.forEach((spell) => {
 						const spellItem = document.createElement('div');
@@ -1407,23 +1580,27 @@ class StoryView {
 
 						const spellName = document.createElement('div');
 						spellName.className = 'character-page__spell-name';
-						spellName.textContent = `[ENTITY:spell:${spell.spellInfo.spellName}]`;
-						this.#processEntityReferences(spellName);
+
+						spellName.innerHTML = `[ENTITY:spell:${spell.spellInfo.spellName}]`;
+						this.#processEntityReferences(spellName); // Process the entity reference
 
 						const spellMeta = document.createElement('div');
 						spellMeta.className = 'character-page__spell-meta';
+						// ... (range, slot, effect info) ...
+						const rangeInfo = document.createElement('span'); // Added
+						rangeInfo.className = 'character-page__spell-range'; // Added
+						rangeInfo.textContent = `Range: ${spell.range}`; // Added
+						spellMeta.appendChild(rangeInfo); // Added
 
-						const rangeInfo = document.createElement('span');
-						rangeInfo.className = 'character-page__spell-range';
-						rangeInfo.textContent = `Range: ${spell.range}`;
+						const slotInfo = document.createElement('span'); // Added
+						slotInfo.className = 'character-page__spell-slot'; // Added
+						slotInfo.textContent = `Slot: ${spell.slotType}`; // Added
+						spellMeta.appendChild(slotInfo); // Added
 
-						const slotInfo = document.createElement('span');
-						slotInfo.className = 'character-page__spell-slot';
-						slotInfo.textContent = `Slot: ${spell.slotType}`;
-
-						const effectInfo = document.createElement('span');
-						effectInfo.className = 'character-page__spell-effect';
-						effectInfo.textContent = `Effect: ${spell.effect}`;
+						const effectInfo = document.createElement('span'); // Added
+						effectInfo.className = 'character-page__spell-effect'; // Added
+						effectInfo.textContent = `Effect: ${spell.effect}`; // Added
+						spellMeta.appendChild(effectInfo); // Added
 
 						if (spell.spellInfo.spellMetaInfo) {
 							const spellNote = document.createElement('div');
@@ -1432,27 +1609,24 @@ class StoryView {
 							spellMeta.appendChild(spellNote);
 						}
 
-						spellMeta.appendChild(rangeInfo);
-						spellMeta.appendChild(slotInfo);
-						spellMeta.appendChild(effectInfo);
-
 						spellItem.appendChild(spellName);
 						spellItem.appendChild(spellMeta);
-
 						spellsContainer.appendChild(spellItem);
 					});
 				});
-
 				metadataHolder.appendChild(spellsContainer);
 			}
 
 			characterPagePartTwo.append(metadataHolder);
-		}
+		} // End of if (character?.stats?.metadata)
 
-		characterPage.append(characterPagePartTwo);
-		characterPage.append(characterPagePartOne);
-		contentArea.append(characterPage);
+		// Assemble character page parts
+		characterPage.append(characterPagePartTwo); // Metadata side
+		characterPage.append(characterPagePartOne); // Image/Background side
+		contentArea.append(characterPage); // Add to the main content area
 	}
+
+	// --- Placeholder Processing Methods ---
 
 	#processImages(contentElement) {
 		// Find all image placeholders
@@ -1477,177 +1651,260 @@ class StoryView {
 		contentElement.innerHTML = processedText;
 	}
 
-	#processCharacterHighlights(contentElement) {
+	#processCharacterReferences(contentElement) {
 		if (!this.#campaign.metadata?.characters?.length) return;
 
-		// Get character names and create a map for quick lookup
+		// Get character names for regex pattern
+		const characterNames = this.#campaign.metadata.characters
+			.map((char) => char.name.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&'))
+			.join('|');
+
+		// Skip if no characters
+		if (!characterNames) return;
+
+		// Create regex to find character names in text
+		const characterRegex = new RegExp(`\\[CHARACTER:(${characterNames})\\]`, 'g');
+
+		// Find all text nodes in the content
+		const textNodes = [];
+		const walker = document.createTreeWalker(contentElement, NodeFilter.SHOW_TEXT, null, false);
+
+		let node;
+		while ((node = walker.nextNode())) {
+			textNodes.push(node);
+		}
+
+		// Process each text node
+		textNodes.forEach((textNode) => {
+			const text = textNode.nodeValue;
+			if (characterRegex.test(text)) {
+				const fragment = document.createDocumentFragment();
+				let lastIndex = 0;
+				let match;
+
+				// Reset regex
+				characterRegex.lastIndex = 0;
+
+				while ((match = characterRegex.exec(text)) !== null) {
+					// Add text before the match
+					if (match.index > lastIndex) {
+						fragment.appendChild(document.createTextNode(text.substring(lastIndex, match.index)));
+					}
+
+					// Create highlighted span for character
+					const span = document.createElement('span');
+					span.className = 'character-highlight';
+					span.setAttribute('data-character', match[1]);
+					span.textContent = match[1];
+					fragment.appendChild(span);
+
+					lastIndex = characterRegex.lastIndex;
+				}
+
+				// Add remaining text
+				if (lastIndex < text.length) {
+					fragment.appendChild(document.createTextNode(text.substring(lastIndex)));
+				}
+
+				// Replace the text node with the fragment
+				textNode.parentNode.replaceChild(fragment, textNode);
+			}
+		});
+	}
+
+	#processCharacterHighlights(contentElement) {
+		// Attaches tooltips to spans with 'character-highlight' class
+		if (!this.#campaign.metadata?.characters?.length) return;
+
 		const characterMap = new Map();
 		this.#campaign.metadata.characters.forEach((char) => {
 			characterMap.set(char.name, char);
 		});
 
-		// Find all spans with character-highlight class
-		const spans = contentElement.querySelectorAll('.character-highlight');
+		const spans = contentElement.querySelectorAll('span.character-highlight'); // Target the spans created by #processCharacterReferences
 		spans.forEach((span) => {
 			const characterName = span.getAttribute('data-character');
 			if (characterMap.has(characterName)) {
-				// Replace the span content to ensure it's just the character name
+				// Ensure text content matches (might be redundant if #processCharacterReferences works)
 				span.textContent = characterName;
-
-				// Add event listeners for tooltips
+				// Add tooltip events
 				this.#addCharacterTooltipEvents(span, characterMap.get(characterName));
+			} else {
+				// Optional: Remove attribute or class if character data is missing
+				// span.removeAttribute('data-character');
+				// span.classList.remove('character-highlight');
 			}
 		});
 	}
 
+	#processEntityReferences(contentElement) {
+		// Finds [ENTITY:type:name] and replaces with spans for tooltips
+		// This should run *before* tooltip attachment logic if separated
+		const text = contentElement.innerHTML;
+		const processedText = text.replace(/\[ENTITY:([\w-]+):(.*?)\]/gi, (match, type, name) => {
+			// More specific type regex
+			const cleanType = type.toLowerCase().trim();
+			const cleanName = name.trim();
+			// Basic validation
+			if (!cleanType || !cleanName) return match; // Return original if malformed
+			return `<span class="entity-reference entity-${cleanType}" data-entity-type="${cleanType}" data-entity-name="${cleanName}">${cleanName}</span>`;
+		});
+		contentElement.innerHTML = processedText;
+
+		// Attach event listeners
+		const entitySpans = contentElement.querySelectorAll('.entity-reference');
+		entitySpans.forEach((span) => {
+			const entityType = span.getAttribute('data-entity-type');
+			const entityName = span.getAttribute('data-entity-name');
+			if (entityType && entityName) {
+				this.#addEntityTooltipEvents(span, entityType, entityName);
+			}
+		});
+	}
+
+	#processProgressionTags(contentElement, session) {
+		// Finds [PROGRESSION:type:value] - remains the same
+		const progressionRegex = /\[PROGRESSION:(levelup|loot):(.*?)\]/g;
+		const walker = document.createTreeWalker(contentElement, NodeFilter.SHOW_TEXT, null, false);
+		const textNodes = [];
+		while (walker.nextNode()) textNodes.push(walker.currentNode);
+
+		textNodes.forEach((node) => {
+			const text = node.nodeValue;
+			if (!progressionRegex.test(text)) return;
+
+			const fragment = document.createDocumentFragment();
+			let lastIndex = 0;
+			let match;
+			progressionRegex.lastIndex = 0;
+
+			while ((match = progressionRegex.exec(text)) !== null) {
+				if (match.index > lastIndex) {
+					fragment.appendChild(document.createTextNode(text.substring(lastIndex, match.index)));
+				}
+				const type = match[1];
+				const value = match[2];
+				let replacementNode = null;
+				if (type === 'levelup') {
+					replacementNode = this.#generateLevelUpElement(value);
+				} else if (type === 'loot') {
+					replacementNode = this.#generateLootElement(value, session);
+				}
+				if (replacementNode) fragment.appendChild(replacementNode);
+				lastIndex = progressionRegex.lastIndex;
+			}
+			if (lastIndex < text.length) {
+				fragment.appendChild(document.createTextNode(text.substring(lastIndex)));
+			}
+			node.parentNode.replaceChild(fragment, node);
+		});
+	}
+
+	#generateLevelUpElement(level) {
+		/* ... remains the same ... */ //
+		const levelUpDiv = document.createElement('div');
+		levelUpDiv.className = 'progression-levelup';
+		levelUpDiv.innerHTML = `
+            <div class="levelup-icon">✨</div>
+            <div class="levelup-text">
+                <h2>Level Up!</h2>
+                <p>Congratulations!
+The party has reached level <strong>${level}</strong>!</p>
+            </div>
+        `;
+		return levelUpDiv;
+	}
+	#generateLootElement(lootId, session) {
+		/* ... remains the same ... */ //
+		const lootContainer = document.createElement('div');
+		lootContainer.className = 'progression-loot';
+
+		const lootData = session?.progression?.loot?.find((l) => l.id === lootId);
+		if (!lootData || !lootData.data || lootData.data.length === 0) {
+			lootContainer.innerHTML = '<p><em>Loot information not found.</em></p>';
+			return lootContainer;
+		}
+
+		const title = document.createElement('h4');
+		title.textContent = `Loot Found (${lootId})`;
+		lootContainer.appendChild(title);
+
+		const list = document.createElement('ul');
+		list.className = 'loot-list';
+		lootData.data.forEach((item) => {
+			const listItem = document.createElement('li');
+			listItem.className = `loot-item rarity-${item.rarity || 'common'}`;
+
+			let ownerText = item.owner ? ` <span class="loot-owner">(${item.owner})</span>` : '';
+			// Process item name for entities
+			const itemNameSpan = document.createElement('span');
+			itemNameSpan.className = 'loot-item-name';
+			itemNameSpan.innerHTML = item.itemName; // Assume item name might contain entity refs
+			this.#processEntityReferences(itemNameSpan);
+
+			listItem.innerHTML = `
+                ${itemNameSpan.outerHTML} ${item.count > 1 ? `(x${item.count})` : ''}
+                ${ownerText}
+                ${item.description ? `<div class="loot-item-description">${item.description}</div>` : ''}
+            `;
+			// Process description for entities if it exists
+			if (item.description) {
+				const descDiv = listItem.querySelector('.loot-item-description');
+				if (descDiv) this.#processEntityReferences(descDiv);
+			}
+
+			list.appendChild(listItem);
+		});
+		lootContainer.appendChild(list);
+		return lootContainer;
+	}
+
+	// --- Tooltip Methods ---
+
 	#createTooltipContainer() {
+		/* ... remains the same ... */
 		this.#tooltipContainer = document.getElementById('character-tooltip-container');
 		if (!this.#tooltipContainer) {
 			this.#tooltipContainer = document.createElement('div');
 			this.#tooltipContainer.id = 'character-tooltip-container';
-			this.#tooltipContainer.className = 'character-tooltip-container';
+			this.#tooltipContainer.className = 'character-tooltip-container'; // Use a more generic name maybe? 'dynamic-tooltip-container'
+			this.#tooltipContainer.style.position = 'absolute'; // Ensure positioning works
+			this.#tooltipContainer.style.zIndex = '1000'; // Keep on top
 			this.#tooltipContainer.style.display = 'none';
 			document.body.appendChild(this.#tooltipContainer);
 		}
 	}
 
 	#addCharacterTooltipEvents(element, character) {
+		/* ... remains the same ... */ //
 		element.addEventListener('mouseover', (e) => {
-			// Create tooltip content
+			// Prevent triggering parent tooltips if nested
+			e.stopPropagation();
 			this.#tooltipContainer.innerHTML = `
                 <div class="character-tooltip">
                     <div class="tooltip-header">
                         <img src="${character.icon}" alt="${character.name}" />
                         <h3>${character.name}</h3>
-                    </div>
+
+                   </div>
                     <div class="tooltip-content">
                         <div><strong>Race:</strong> ${character.race}</div>
                         <div><strong>Class:</strong> ${character.class}</div>
-                        <div><strong>Level:</strong> ${character.level}</div>
+
+              <div><strong>Level:</strong> ${character.level}</div>
                         ${
 													character.shortDescription
-														? `<div class="tooltip-background">${character.shortDescription}</div>`
+														? `<div class="tooltip-description tooltip-background">${character.shortDescription}</div>`
 														: ''
 												}
                     </div>
                 </div>
             `;
-
-			// Position the tooltip with smart positioning to avoid scrollbars
-			this.#positionTooltip(element);
+			this.#positionTooltip(element); // Position and show
 		});
 
 		element.addEventListener('mouseout', () => {
 			this.#tooltipContainer.style.display = 'none';
-		});
-	}
-
-	#positionTooltip(element) {
-		// Make tooltip visible to get dimensions
-		this.#tooltipContainer.style.display = 'block';
-
-		const elementRect = element.getBoundingClientRect();
-		const tooltipRect = this.#tooltipContainer.getBoundingClientRect();
-		const viewport = {
-			width: window.innerWidth,
-			height: window.innerHeight,
-			scrollX: window.scrollX,
-			scrollY: window.scrollY,
-		};
-
-		// Calculate available space in each direction
-		const space = {
-			above: elementRect.top - viewport.scrollY,
-			below: viewport.height - (elementRect.bottom - viewport.scrollY),
-			left: elementRect.left - viewport.scrollX,
-			right: viewport.width - (elementRect.right - viewport.scrollX),
-		};
-
-		// Default position (prioritize positions in this order: below > above > right > left)
-		let position = 'below';
-		let horizontalAlign = 'left';
-
-		// Choose best position based on available space
-		if (space.below < tooltipRect.height && space.above > tooltipRect.height) {
-			position = 'above';
-		} else if (space.below < tooltipRect.height && space.right > tooltipRect.width) {
-			position = 'right';
-		} else if (space.below < tooltipRect.height && space.left > tooltipRect.width) {
-			position = 'left';
-		}
-
-		// Handle horizontal alignment for above/below positions
-		if (position === 'below' || position === 'above') {
-			if (elementRect.left + tooltipRect.width > viewport.width) {
-				horizontalAlign = 'right';
-			}
-		}
-
-		// Calculate position coordinates
-		let coords = { top: 0, left: 0 };
-
-		switch (position) {
-			case 'below':
-				coords.top = elementRect.bottom + viewport.scrollY + 10;
-				coords.left =
-					horizontalAlign === 'left'
-						? elementRect.left + viewport.scrollX
-						: elementRect.right + viewport.scrollX - tooltipRect.width;
-				break;
-
-			case 'above':
-				coords.top = elementRect.top + viewport.scrollY - tooltipRect.height - 10;
-				coords.left =
-					horizontalAlign === 'left'
-						? elementRect.left + viewport.scrollX
-						: elementRect.right + viewport.scrollX - tooltipRect.width;
-				break;
-
-			case 'right':
-				coords.top = elementRect.top + viewport.scrollY;
-				coords.left = elementRect.right + viewport.scrollX + 10;
-				break;
-
-			case 'left':
-				coords.top = elementRect.top + viewport.scrollY;
-				coords.left = elementRect.left + viewport.scrollX - tooltipRect.width - 10;
-				break;
-		}
-
-		// Ensure tooltip stays within viewport bounds
-		coords.left = Math.max(
-			viewport.scrollX + 10,
-			Math.min(coords.left, viewport.scrollX + viewport.width - tooltipRect.width - 10)
-		);
-		coords.top = Math.max(
-			viewport.scrollY + 10,
-			Math.min(coords.top, viewport.scrollY + viewport.height - tooltipRect.height - 10)
-		);
-
-		// Apply position
-		this.#tooltipContainer.style.top = `${coords.top}px`;
-		this.#tooltipContainer.style.left = `${coords.left}px`;
-	}
-
-	// Add these methods to the class
-	#processEntityReferences(contentElement) {
-		// Find all references in format [ENTITY:type:name]
-		const text = contentElement.innerHTML;
-		const processedText = text.replace(/\[ENTITY:(.*?):(.*?)\]/g, (match, type, name) => {
-			// Create a span with appropriate classes and data attributes
-			return `<span class="entity-reference" data-entity-type="${type}" data-entity-name="${name}">${name}</span>`;
-		});
-
-		contentElement.innerHTML = processedText;
-
-		// Now attach event listeners to all entity references
-		const entitySpans = contentElement.querySelectorAll('.entity-reference');
-		entitySpans.forEach((span) => {
-			const entityType = span.getAttribute('data-entity-type');
-			const entityName = span.getAttribute('data-entity-name');
-
-			// Add event listeners for tooltips
-			this.#addEntityTooltipEvents(span, entityType, entityName);
 		});
 	}
 
@@ -1710,6 +1967,116 @@ class StoryView {
 		element.addEventListener('mouseout', () => {
 			this.#tooltipContainer.style.display = 'none';
 		});
+	}
+
+	#positionTooltip(element) {
+		/* ... remains the same ... */ //
+		// Make tooltip visible to calculate dimensions, but keep off-screen initially
+		this.#tooltipContainer.style.visibility = 'hidden';
+		this.#tooltipContainer.style.display = 'block';
+		this.#tooltipContainer.style.top = '-9999px';
+		this.#tooltipContainer.style.left = '-9999px';
+
+		const elementRect = element.getBoundingClientRect();
+		const tooltipRect = this.#tooltipContainer.getBoundingClientRect();
+		const viewport = {
+			width: window.innerWidth,
+			height: window.innerHeight,
+			scrollX: window.scrollX,
+			scrollY: window.scrollY,
+		};
+		// Calculate available space
+		const space = {
+			above: elementRect.top, // Distance from top of element to top of viewport
+			below: viewport.height - elementRect.bottom, // Distance from bottom of element to bottom of viewport
+			left: elementRect.left, // Distance from left of element to left of viewport
+			right: viewport.width - elementRect.right, // Distance from right of element to right of viewport
+		};
+
+		// Default position: below, aligned left
+		let position = 'below';
+		let horizontalAlign = 'left'; // 'left', 'right', 'center' (for element)
+		let verticalAlign = 'top'; // 'top', 'bottom', 'center' (for element)
+
+		// Determine best vertical position
+		if (space.below >= tooltipRect.height) {
+			position = 'below';
+		} else if (space.above >= tooltipRect.height) {
+			position = 'above';
+		} else if (space.right >= tooltipRect.width) {
+			// Try side if below/above don't fit
+			position = 'right';
+		} else if (space.left >= tooltipRect.width) {
+			position = 'left';
+		} // else: stick with 'below' and let overflow logic handle it
+
+		// Determine horizontal alignment for above/below
+		if (position === 'below' || position === 'above') {
+			if (elementRect.left + tooltipRect.width > viewport.width - 10) {
+				// Check overflow right (10px buffer)
+				horizontalAlign = 'right'; // Align tooltip right edge with element right edge
+			} else {
+				horizontalAlign = 'left'; // Align tooltip left edge with element left edge
+			}
+		}
+		// Determine vertical alignment for left/right
+		if (position === 'left' || position === 'right') {
+			if (elementRect.top + tooltipRect.height > viewport.height - 10) {
+				verticalAlign = 'bottom'; // Align tooltip bottom with element bottom
+			} else {
+				verticalAlign = 'top'; // Align tooltip top with element top
+			}
+		}
+
+		// Calculate position coordinates based on elementRect and viewport scroll offset
+		let coords = { top: 0, left: 0 };
+		const buffer = 8; // Small gap between element and tooltip
+
+		switch (position) {
+			case 'below':
+				coords.top = elementRect.bottom + viewport.scrollY + buffer;
+				coords.left =
+					horizontalAlign === 'left'
+						? elementRect.left + viewport.scrollX
+						: elementRect.right + viewport.scrollX - tooltipRect.width;
+				break;
+			case 'above':
+				coords.top = elementRect.top + viewport.scrollY - tooltipRect.height - buffer;
+				coords.left =
+					horizontalAlign === 'left'
+						? elementRect.left + viewport.scrollX
+						: elementRect.right + viewport.scrollX - tooltipRect.width;
+				break;
+			case 'right':
+				coords.top =
+					verticalAlign === 'top'
+						? elementRect.top + viewport.scrollY
+						: elementRect.bottom + viewport.scrollY - tooltipRect.height;
+				coords.left = elementRect.right + viewport.scrollX + buffer;
+				break;
+			case 'left':
+				coords.top =
+					verticalAlign === 'top'
+						? elementRect.top + viewport.scrollY
+						: elementRect.bottom + viewport.scrollY - tooltipRect.height;
+				coords.left = elementRect.left + viewport.scrollX - tooltipRect.width - buffer;
+				break;
+		}
+
+		// Ensure tooltip stays within viewport bounds (add 10px margin)
+		coords.left = Math.max(
+			viewport.scrollX + 10,
+			Math.min(coords.left, viewport.scrollX + viewport.width - tooltipRect.width - 10)
+		);
+		coords.top = Math.max(
+			viewport.scrollY + 10,
+			Math.min(coords.top, viewport.scrollY + viewport.height - tooltipRect.height - 10)
+		);
+
+		// Apply final position and make visible
+		this.#tooltipContainer.style.top = `${coords.top}px`;
+		this.#tooltipContainer.style.left = `${coords.left}px`;
+		this.#tooltipContainer.style.visibility = 'visible'; // Make visible now that it's positioned
 	}
 
 	async #fetchEntityData(entityType, entityName) {
@@ -1874,172 +2241,5 @@ class StoryView {
 	`;
 
 		return content;
-	}
-
-	#processCharacterReferences(contentElement) {
-		if (!this.#campaign.metadata?.characters?.length) return;
-
-		// Get character names for regex pattern
-		const characterNames = this.#campaign.metadata.characters
-			.map((char) => char.name.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&'))
-			.join('|');
-
-		// Skip if no characters
-		if (!characterNames) return;
-
-		// Create regex to find character names in text
-		const characterRegex = new RegExp(`\\[CHARACTER:(${characterNames})\\]`, 'g');
-
-		// Find all text nodes in the content
-		const textNodes = [];
-		const walker = document.createTreeWalker(contentElement, NodeFilter.SHOW_TEXT, null, false);
-
-		let node;
-		while ((node = walker.nextNode())) {
-			textNodes.push(node);
-		}
-
-		// Process each text node
-		textNodes.forEach((textNode) => {
-			const text = textNode.nodeValue;
-			if (characterRegex.test(text)) {
-				const fragment = document.createDocumentFragment();
-				let lastIndex = 0;
-				let match;
-
-				// Reset regex
-				characterRegex.lastIndex = 0;
-
-				while ((match = characterRegex.exec(text)) !== null) {
-					// Add text before the match
-					if (match.index > lastIndex) {
-						fragment.appendChild(document.createTextNode(text.substring(lastIndex, match.index)));
-					}
-
-					// Create highlighted span for character
-					const span = document.createElement('span');
-					span.className = 'character-highlight';
-					span.setAttribute('data-character', match[1]);
-					span.textContent = match[1];
-					fragment.appendChild(span);
-
-					lastIndex = characterRegex.lastIndex;
-				}
-
-				// Add remaining text
-				if (lastIndex < text.length) {
-					fragment.appendChild(document.createTextNode(text.substring(lastIndex)));
-				}
-
-				// Replace the text node with the fragment
-				textNode.parentNode.replaceChild(fragment, textNode);
-			}
-		});
-	}
-
-	#processProgressionTags(contentElement, session) {
-		const progressionRegex = /\[PROGRESSION:(levelup|loot):(.*?)\]/g;
-
-		// Find all text nodes in the content
-		const textNodes = [];
-		const walker = document.createTreeWalker(contentElement, NodeFilter.SHOW_TEXT, null, false);
-
-		let node;
-		while ((node = walker.nextNode())) {
-			textNodes.push(node);
-		}
-
-		// Process each text node
-		textNodes.forEach((textNode) => {
-			const text = textNode.nodeValue;
-			if (progressionRegex.test(text)) {
-				const fragment = document.createDocumentFragment();
-				let lastIndex = 0;
-				let match;
-
-				// Reset regex
-				progressionRegex.lastIndex = 0;
-
-				while ((match = progressionRegex.exec(text)) !== null) {
-					// Add text before the match
-					if (match.index > lastIndex) {
-						fragment.appendChild(document.createTextNode(text.substring(lastIndex, match.index)));
-					}
-
-					const type = match[1];
-					const value = match[2];
-					let replacementNode = null;
-
-					if (type === 'levelup') {
-						replacementNode = this.#generateLevelUpElement(value);
-					} else if (type === 'loot') {
-						replacementNode = this.#generateLootElement(value, session);
-					}
-
-					if (replacementNode) {
-						fragment.appendChild(replacementNode);
-					}
-
-					lastIndex = progressionRegex.lastIndex;
-				}
-
-				// Add remaining text
-				if (lastIndex < text.length) {
-					fragment.appendChild(document.createTextNode(text.substring(lastIndex)));
-				}
-
-				// Replace the text node with the fragment
-				textNode.parentNode.replaceChild(fragment, textNode);
-			}
-		});
-	}
-
-	#generateLevelUpElement(level) {
-		const levelUpDiv = document.createElement('div');
-		levelUpDiv.className = 'progression-levelup';
-		levelUpDiv.innerHTML = `
-            <div class="levelup-icon">✨</div>
-            <div class="levelup-text">
-                <h2>Level Up!</h2>
-                <p>Congratulations! The party has reached level <strong>${level}</strong>!</p>
-            </div>
-        `;
-		return levelUpDiv;
-	}
-
-	#generateLootElement(lootId, session) {
-		const lootContainer = document.createElement('div');
-		lootContainer.className = 'progression-loot';
-
-		const lootData = session?.progression?.loot?.find((l) => l.id === lootId);
-
-		if (!lootData || !lootData.data || lootData.data.length === 0) {
-			lootContainer.innerHTML = '<p><em>Loot information not found.</em></p>';
-			return lootContainer;
-		}
-
-		const title = document.createElement('h4');
-		title.textContent = `Loot Found (${lootId})`;
-		lootContainer.appendChild(title);
-
-		const list = document.createElement('ul');
-		list.className = 'loot-list';
-
-		lootData.data.forEach((item) => {
-			const listItem = document.createElement('li');
-			listItem.className = `loot-item rarity-${item.rarity || 'common'}`;
-
-			let ownerText = item.owner ? ` <span class="loot-owner">(${item.owner})</span>` : '';
-
-			listItem.innerHTML = `
-                <span class="loot-item-name">${item.itemName} ${item.count > 1 ? `(x${item.count})` : ''}</span>
-                ${ownerText}
-                ${item.description ? `<div class="loot-item-description">${item.description}</div>` : ''}
-            `;
-			list.appendChild(listItem);
-		});
-
-		lootContainer.appendChild(list);
-		return lootContainer;
 	}
 }
