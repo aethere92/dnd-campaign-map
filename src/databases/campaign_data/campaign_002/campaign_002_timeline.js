@@ -1,7 +1,7 @@
 const CAMPAIGN_002_TIMELINE = [
 	{
 		id: 1,
-		title: `Woods before Drellyn's Ferry`,
+		title: `Woods before Drellin's Ferry`,
 		location: `Near [ENTITY:location:Drellin's Ferry]`,
 		session: '1',
 		url: {
