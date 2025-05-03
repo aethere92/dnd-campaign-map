@@ -138,7 +138,7 @@ const CAMPAIGN_02_API_DATA = {
 			role: 'Hobgoblins Captain',
 			description: `Initially thought to be a hobgoblins warlord, but later revealed to be only a captain, he's one of the main antagonists who is gathering the hobgoblin forces for the "Day of Ruin". Information about them was found out by the party by interrogating the captured hobgoblin at the battle before Drellin's Ferry.`,
 		},
-		Sorana: {
+		Soranna: {
 			name: 'Soranna Anitah',
 			affinity: "Drellin's Ferry",
 			class: 'N/A',
