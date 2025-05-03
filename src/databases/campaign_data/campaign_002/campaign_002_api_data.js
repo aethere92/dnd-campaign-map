@@ -46,6 +46,10 @@ const CAMPAIGN_02_API_DATA = {
 				Ruler: 'Jarlaxle Baenre (1489 DR)',
 			},
 		},
+		Witchwood: {
+			name: 'The Witchwood',
+			description: `Generally held to be haunted by the restless spirits of the ancient human druidic folk who once dwelt here, the Witchwood is a lush, wet woodland interspersed with swampy stretches in the vicinity of the larger rivers.The Witchwood is a warm forest with a mix of oaks, subtropical evergreens, and plenty of undergrowth. Any party cutting cross-country through the forest without following a trail stands an excellent chance of getting very lost.`,
+		},
 	},
 	guild: {
 		'Arcane Brotherhood': {
@@ -133,6 +137,13 @@ const CAMPAIGN_02_API_DATA = {
 			class: 'Sorcerer',
 			role: 'Hobgoblins Captain',
 			description: `Initially thought to be a hobgoblins warlord, but later revealed to be only a captain, he's one of the main antagonists who is gathering the hobgoblin forces for the "Day of Ruin". Information about them was found out by the party by interrogating the captured hobgoblin at the battle before Drellin's Ferry.`,
+		},
+		Sorana: {
+			name: 'Soranna Anitah',
+			affinity: "Drellin's Ferry",
+			class: 'N/A',
+			role: 'Leader of the Town Guard',
+			description: `Leader of the Town Guard, captain of the militia, and chief constable, Soranna is a tall, strong-boned woman with simple good looks hidden behind an unsmiling manner. As leader of the town’s guardsmen, Soranna holds a seat on the council.`,
 		},
 	},
 };

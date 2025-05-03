@@ -2,7 +2,7 @@ const CAMPAIGN_002_TIMELINE = [
 	{
 		id: 1,
 		title: `Woods before Drellyn's Ferry`,
-		location: `Near Drellyn's Ferry`,
+		location: `Near [ENTITY:location:Drellin's Ferry]`,
 		session: '1',
 		url: {
 			campaign: 'campaign-002',
@@ -12,28 +12,20 @@ const CAMPAIGN_002_TIMELINE = [
 			{
 				type: 'encounter',
 				actors: 'Hobgoblins',
-				url: {
-					campaign: 'campaign-002',
-					session: 'session-002',
-					target: 'the-fight',
-				},
+				url: { campaign: 'campaign-002', session: 'session-002', target: 'the-fight' },
 			},
 			{
 				type: 'narrative',
 				actors: 'Hobgoblin interrogation',
 				sublocation: 'Abandoned farmhouse',
-				url: {
-					campaign: 'campaign-002',
-					session: 'session-002',
-					target: 'interrogation',
-				},
+				url: { campaign: 'campaign-002', session: 'session-002', target: 'interrogation' },
 			},
 		],
 	},
 	{
 		id: 2,
-		title: `Reaching Drellyn's Ferry`,
-		location: `Drellyn's Ferry`,
+		title: `Reaching Drellin's Ferry`,
+		location: `[ENTITY:location:Drellin's Ferry]`,
 		session: '1 & 2',
 		url: {
 			campaign: 'campaign-002',
@@ -43,37 +35,25 @@ const CAMPAIGN_002_TIMELINE = [
 		items: [
 			{
 				type: 'narrative',
-				actors: 'Bonnie & Olek',
+				actors: '[ENTITY:character:Bonnie] & [ENTITY:character:Olek]',
 				sublocation: 'Tollhouse',
-				url: {
-					campaign: 'campaign-002',
-					session: 'session-002',
-					target: 'olek-and-bonnie',
-				},
+				url: { campaign: 'campaign-002', session: 'session-002', target: 'olek-and-bonnie' },
 			},
 			{
 				type: 'narrative',
-				actors: 'Soshi & Norr',
+				actors: '[ENTITY:character:Soshi] & [ENTITY:character:Norr]',
 				sublocation: 'Shrine of Pelor',
-				url: {
-					campaign: 'campaign-002',
-					session: 'session-002',
-					target: 'norr-and-soshi',
-				},
+				url: { campaign: 'campaign-002', session: 'session-002', target: 'norr-and-soshi' },
 			},
 			{
 				type: 'narrative',
-				actors: 'Kaedin',
+				actors: '[ENTITY:character:Kaedin]',
 				sublocation: 'House of Sertieren',
-				url: {
-					campaign: 'campaign-002',
-					session: 'session-002',
-					target: 'kaedin',
-				},
+				url: { campaign: 'campaign-002', session: 'session-002', target: 'kaedin' },
 			},
 			{
 				type: 'narrative',
-				actors: 'Entire party',
+				actors: '[ENTITY:character:Entire party]',
 				sublocation: 'Town Inn',
 				is_new_session: true,
 			},
@@ -81,8 +61,8 @@ const CAMPAIGN_002_TIMELINE = [
 	},
 	{
 		id: 3,
-		title: 'Going into Witchwoods',
-		location: 'Witchwoods',
+		title: 'Going into the Witchwood',
+		location: 'The [ENTITY:location:Witchwood]',
 		session: '2',
 		items: [
 			{
@@ -97,13 +77,13 @@ const CAMPAIGN_002_TIMELINE = [
 	},
 	{
 		id: 4,
-		title: "Back to Drellyn's Ferry",
-		location: `Drellyn's Ferry`,
+		title: "Back to Drellin's Ferry",
+		location: `[ENTITY:location:Drellin's Ferry]`,
 		session: '2',
 		items: [
 			{
 				type: 'narrative',
-				actors: 'Entire party',
+				actors: '[ENTITY:character:Entire party]',
 				sublocation: null,
 			},
 		],

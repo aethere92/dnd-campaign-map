@@ -1114,6 +1114,12 @@
 	}
 }
 
+[data-entity-name='Entire party'] {
+	&::before {
+		background-image: url('../images/pageicon.png');
+	}
+}
+
 /* Entity tooltips */
 .entity-tooltip {
 	font-family: var(--font-system);

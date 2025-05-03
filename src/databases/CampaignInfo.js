@@ -269,32 +269,34 @@ class CampaignManager {
 	// #createCampaignCharacters remains the same...
 	#createCampaignCharacters(campaign) {
 		if (!campaign?.metadata?.characters) return [];
-		const characterCards = campaign.metadata.characters.map((character) => {
-			const characterCard = document.createElement('div');
-			characterCard.className = `campaign-character-card`;
+		const characterCards = campaign.metadata.characters
+			.filter((character) => character?.is_included)
+			.map((character) => {
+				const characterCard = document.createElement('div');
+				characterCard.className = `campaign-character-card`;
 
-			if (campaign?.metadata?.charactersPosition === 'left' || !campaign?.metadata?.charactersPosition) {
-				characterCard.innerHTML = `
+				if (campaign?.metadata?.charactersPosition === 'left' || !campaign?.metadata?.charactersPosition) {
+					characterCard.innerHTML = `
                     <div class="character-card-item item-row">
                         <span class="character-card-name">${character.name}</span>
                         <span class="character-card-info">Lvl ${character.level} | ${character.race} | ${
-					character.class
-				}</span>
+						character.class
+					}</span>
 
                </div>
                     <div class="character-card-item">
                         <img src="${character?.icon}" class="character-card-icon icon-${character.class
-					.toLowerCase()
-					.replace(/\s+/g, '-')}"/>
+						.toLowerCase()
+						.replace(/\s+/g, '-')}"/>
                     </div>
 
 `;
-			} else {
-				characterCard.innerHTML = `
+				} else {
+					characterCard.innerHTML = `
                     <div class="character-card-item">
                         <img src="${character?.icon}" class="character-card-icon icon-${character.class
-					.toLowerCase()
-					.replace(/\s+/g, '-')}"/>
+						.toLowerCase()
+						.replace(/\s+/g, '-')}"/>
                     </div>
                     <div class="character-card-item item-row">
 
@@ -303,10 +305,10 @@ class CampaignManager {
 ${character.race} | ${character.class}</span>
                     </div>
                 `;
-			}
+				}
 
-			return characterCard;
-		});
+				return characterCard;
+			});
 
 		return characterCards;
 	}
@@ -770,7 +772,7 @@ class StoryView {
 	}
 
 	#createCharacterSection(sidebar) {
-		const characters = this.#campaign.metadata?.characters;
+		const characters = this.#campaign.metadata?.characters.filter((character) => character?.is_included);
 		if (!characters?.length) {
 			return;
 		}
@@ -981,6 +983,37 @@ class StoryView {
 		this.render();
 	}
 
+	#processTimelinePlaceholders(timelineContainer) {
+		// Process all timeline items inside the container
+		const timelineItems = timelineContainer.querySelectorAll('.timeline-item');
+
+		timelineItems.forEach((item) => {
+			// Get the content div inside each timeline item
+			const contentElement = item.querySelector('.timeline-content');
+			if (!contentElement) return;
+
+			// Process the same elements as in the session content
+			this.#processImages(contentElement);
+			this.#processCharacterReferences(contentElement);
+			this.#processEntityReferences(contentElement);
+
+			// If this is a main timeline item, we might want to process progression tags
+			if (item.classList.contains('timeline-main-item')) {
+				const itemId = item.getAttribute('data-id');
+				const timelineData = this.#campaign?.timeline;
+				if (timelineData && Array.isArray(timelineData)) {
+					const itemData = timelineData.find((data) => data.id === itemId);
+					if (itemData) {
+						this.#processProgressionTags(contentElement, itemData);
+					}
+				}
+			}
+
+			// Process character highlights after references have been created
+			this.#processCharacterHighlights(contentElement);
+		});
+	}
+
 	// #renderTimeline remains the same...
 	#renderTimeline(contentArea) {
 		// Check if the current campaign has timeline data
@@ -1099,6 +1132,7 @@ class StoryView {
 
 		timelineContainer.appendChild(timeline);
 		contentArea.appendChild(timelineContainer);
+		this.#processTimelinePlaceholders(timelineContainer);
 	}
 
 	async #loadContentArea(contentArea) {
