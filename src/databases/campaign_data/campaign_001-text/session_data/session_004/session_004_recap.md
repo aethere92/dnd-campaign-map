@@ -1,0 +1,5 @@
+<p>Stepping off their pirate ship onto the rugged shores of Korinis Island, the party felt the lingering embrace of the sea breeze as they embarked on their next journey. Their path led them up a winding mountain trail, where a mysterious stranger urged them to seek refuge in nearby caves. Trusting his warning, they entered only to face an ambush by lurking bandits. A brutal battle unfolded, leaving them victorious but scarred.</p>
+
+<p>Emerging from the confrontation, they pressed forward toward civilization. The sight of a distant city brought hope, though an entry fee threatened to halt their progress. Seeking alternatives, they accepted an errand from a farmer's wife and later struck a tempting deal with a merchant. Their efforts granted them shelter for the night in a humble barn.</p>
+
+<p>With dawn, they finally entered the city, greeted by a master paladin who outlined its rules and points of interest. Relief was short-lived. As night fell, unseen thieves stole some of their belongings, leaving them with a new mystery to solve. Their adventure in Korinis was far from over.</p>

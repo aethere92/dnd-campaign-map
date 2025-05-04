@@ -102,6 +102,7 @@
 	font-family: var(--font-system);
 	gap: 1rem;
 	width: 50%;
+	margin-bottom: 4rem;
 
 	&::before {
 		content: '';
@@ -327,6 +328,16 @@
 .timeline-subitem[data-type='narrative'] {
 	border-left: 3px solid #2aa6c9;
 	border-color: #a5d6e4;
+}
+
+.timeline-subitem[data-type='investigation'] {
+	border-left: 3px solid #5e3a9c;
+	border-color: #c2b5dd;
+}
+
+.timeline-subitem[data-type='traversal'] {
+	border-left: 3px solid #3a9c5e;
+	border-color: #b5ddc2;
 }
 
 /* Responsive styles */

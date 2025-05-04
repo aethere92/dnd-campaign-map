@@ -1,0 +1,5 @@
+<p>The party’s adventure begins as they land on a sun-scorched beach, immediately setting out on a treacherous mountain climb. Their instincts prove right when they are ambushed by dinosaurs, forcing them into a ferocious battle where steel and magic collide. Emerging victorious, they press onward to a tranquil but ominous lake, scaling platforms that lead them deeper into the unknown.</p>
+
+<p>Upon entering a doorway, they meet Finneas, a suspicious murloc, but their conversation is cut short as undead swarm toward them. With grit and skill, they fend off the restless dead, securing their position and shifting their focus. A flare is fired into the sky to signal their crew—they have found water.</p>
+
+<p>On their descent, they discover fallen allies, the remains of lost crew members claimed by the merciless wilderness. Salvaging what they can, they push forward, only to realize their ship is leaving without them. Panic sets in as they race toward the departing vessel, exhaustion and fear battling against their will to survive. With a final desperate leap, they manage to board just before it slips away, securing their escape.</p>

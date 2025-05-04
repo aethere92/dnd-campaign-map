@@ -1,55 +1,13 @@
 const CAMPAIGN_DATA = [
 	{
 		id: 'campaign-001',
+		campaignId: 1,
 		metadata: {
 			name: "A quest, a questin' we shall go",
 			description:
 				'Six adventurers — a cleric, ranger, sorcerer, bard, and two barbarians — receive mysterious invitations to a strange, distant land. Teaming up with a band of pirates, they embark on an epic journey, battling fearsome monsters and navigating treacherous seas. Their quest takes an unexpected turn as they find themselves stranded on the enigmatic island of Korinis, where new challenges and hidden secrets await.',
 			levelRange: '3-8',
-			characters: [
-				{
-					name: 'Aenwyn',
-					class: 'Sorcerer',
-					race: 'Elf',
-					level: 7,
-					icon: 'images/assets/character_thumbnails/campaign_001/aenwyn.jpeg',
-				},
-				{
-					name: 'Aethere',
-					class: 'Bard',
-					race: 'Half-Elf',
-					level: 7,
-					icon: 'images/assets/character_thumbnails/campaign_001/aethere.jpeg',
-				},
-				{
-					name: 'Alezander',
-					class: 'Barbarian',
-					race: 'Half-Orc',
-					level: 7,
-					icon: 'images/assets/character_thumbnails/campaign_001/alezander.jpeg',
-				},
-				{
-					name: 'Nora',
-					class: 'Ranger',
-					race: 'Half-Elf',
-					level: 7,
-					icon: 'images/assets/character_thumbnails/campaign_001/nora.png',
-				},
-				{
-					name: 'Samantha',
-					class: 'Cleric',
-					race: 'Halfling',
-					level: 7,
-					icon: 'images/assets/character_thumbnails/campaign_001/samantha.jpeg',
-				},
-				{
-					name: 'Smasherina',
-					class: 'Barbarian',
-					race: 'Halfling',
-					level: 7,
-					icon: 'images/assets/character_thumbnails/campaign_001/smasherina.jpg',
-				},
-			],
+			characters: CAMPAIGN_01_CHARACTERS,
 			charactersPosition: 'left',
 			campaignType: 'map',
 		},
@@ -63,7 +21,27 @@ const CAMPAIGN_DATA = [
 		recaps: SESSION_RECAPS,
 	},
 	{
+		id: 'campaign-001-text',
+		campaignId: 1,
+		metadata: {
+			name: "A quest, a questin' we shall go",
+			description:
+				'Six adventurers — a cleric, ranger, sorcerer, bard, and two barbarians — receive mysterious invitations to a strange, distant land. Teaming up with a band of pirates, they embark on an epic journey, battling fearsome monsters and navigating treacherous seas. Their quest takes an unexpected turn as they find themselves stranded on the enigmatic island of Korinis, where new challenges and hidden secrets await.',
+			levelRange: '3-8',
+			characters: CAMPAIGN_01_CHARACTERS,
+			charactersPosition: 'left',
+			campaignType: 'story',
+		},
+		styling: {
+			icon: 'images/pageicon.png',
+		},
+		data: [],
+		recaps: CAMPAIGN_01_RECAPS,
+		timeline: CAMPAIGN_001_TIMELINE,
+	},
+	{
 		id: 'campaign-002',
+		campaignId: 2,
 		metadata: {
 			name: 'The Red Hand of Doom',
 			description: `Five unlikely heroes—diverse in race and origin—journey together through a lush subtropical forest, their past encounters ranging from friendly to conflicting. Bound now by shared purpose or hidden motives, they travel in harmony, their story beginning not on a well-worn road, but along a wild path where camaraderie grows with each step.`,
@@ -71,6 +49,9 @@ const CAMPAIGN_DATA = [
 			characters: CAMPAIGN_02_CHARACTERS,
 			charactersPosition: 'right',
 			campaignType: 'story',
+		},
+		styling: {
+			icon: 'images/pageicon.png',
 		},
 		data: [],
 		// aliases: CAMPAIGN_02_ALIASES,
@@ -87,6 +68,8 @@ class CampaignManager {
 	#storyInstance = null;
 	#rootElement;
 	#recapModal = null;
+	#currentCarouselIndex = 0;
+	#campaignDetailsVisible = false;
 
 	constructor(rootElementId, isDebugMode = false) {
 		this.#rootElement = document.getElementById(rootElementId);
@@ -135,43 +118,249 @@ class CampaignManager {
 	}
 
 	#createViews() {
-		// Create campaign selection view
+		// Create campaign selection view with grid layout
 		const selectionView = document.createElement('div');
 		selectionView.id = 'campaign-selection';
 		selectionView.className = 'view';
 		selectionView.style.display = 'none';
 
-		// Create header
+		// Create header with DnD themed styling
 		const header = document.createElement('header');
+		header.className = 'campaign-header';
 		header.innerHTML = `
-            <h1>Select Your Campaign</h1>
-            <p>Choose a campaign to begin your adventure</p>
-        `;
+			<h1>Select Your Campaign</h1>
+			<p>Choose a campaign to begin your adventure</p>
+		`;
 		selectionView.appendChild(header);
 
-		// Create campaign list
-		const campaignList = document.createElement('div');
-		campaignList.className = 'campaign-list';
+		// Create campaign grid container
+		const campaignGrid = document.createElement('div');
+		campaignGrid.className = 'campaign-grid-container';
 
-		CAMPAIGN_DATA.forEach((campaign) => {
-			const card = this.#createCampaignCard(campaign);
-			campaignList.appendChild(card);
-		});
+		// Create campaign cards grid
+		const campaignCards = document.createElement('div');
+		campaignCards.className = 'campaign-cards-grid';
+		campaignGrid.appendChild(campaignCards);
 
-		selectionView.appendChild(campaignList);
+		// Add campaign details panel (initially hidden)
+		const detailsPanel = document.createElement('div');
+		detailsPanel.className = 'campaign-details-panel hidden';
+		campaignGrid.appendChild(detailsPanel);
+
+		selectionView.appendChild(campaignGrid);
 		this.#rootElement.appendChild(selectionView);
+
 		// Create map view (reuse existing map div)
 		const mapView = document.getElementById('map');
 		mapView.className = 'view';
+
 		// Create story view
 		const storyView = document.createElement('div');
 		storyView.id = 'story-view';
 		storyView.className = 'view';
 		storyView.style.display = 'none';
 		this.#rootElement.appendChild(storyView);
+
 		// Add back button to map view
 		const backButton = document.getElementById('campaign-select');
 		backButton.addEventListener('click', () => this.showCampaignSelection());
+	}
+
+	#updateCampaignGrid() {
+		const campaignCards = document.querySelector('.campaign-cards-grid');
+		campaignCards.innerHTML = '';
+
+		// Add all campaigns to the grid
+		CAMPAIGN_DATA.forEach((campaign) => {
+			const card = this.#createCampaignCard(campaign);
+			campaignCards.appendChild(card);
+		});
+	}
+
+	#createCampaignCard(campaign) {
+		const card = document.createElement('div');
+		card.className = 'campaign-card';
+		card.dataset.campaignId = campaign.id;
+
+		// Add campaign type badge
+		const campaignType = campaign.metadata?.campaignType || 'map';
+		const typeBadge = `<div class="campaign-type-badge ${campaignType}">${
+			campaignType.charAt(0).toUpperCase() + campaignType.slice(1)
+		}</div>`;
+
+		// Create main content
+		card.innerHTML = `
+			${typeBadge}
+			<div class="campaign-card-content">
+				<h2>${campaign.metadata?.name || 'Unnamed Campaign'}</h2>
+				${
+					campaign.styling?.icon
+						? `<img src="${campaign.styling.icon}" alt="${
+								campaign.metadata?.name || 'Campaign'
+						  } icon" class="campaign-icon">`
+						: '<div class="campaign-icon-placeholder"></div>'
+				}
+				${
+					campaign?.metadata?.description
+						? `<div class="campaign-short-description">${campaign?.metadata?.description}</div>`
+						: ''
+				}
+			</div>
+			<div class="campaign-card-actions">
+				<button class="view-details-btn">View Details</button>
+				<button class="select-campaign-btn" ${
+					!campaign?.data && !(campaign.metadata?.campaignType === 'story' && campaign.recaps?.length) ? 'disabled' : ''
+				}>
+					Select Campaign
+				</button>
+			</div>
+		`;
+
+		// Add event listeners for buttons
+		if (campaign.data || (campaign.metadata?.campaignType === 'story' && campaign.recaps?.length > 0)) {
+			const selectBtn = card.querySelector('.select-campaign-btn');
+			selectBtn.addEventListener('click', (e) => {
+				e.stopPropagation();
+
+				// Determine what to load based on campaign type
+				const campaignType = campaign.metadata?.campaignType || 'map';
+
+				if (campaignType === 'map') {
+					// For map campaigns, get default map
+					const defaultMap = this.#getCampaignDefaultMap(campaign);
+					this.loadCampaign(campaign.id, defaultMap);
+				} else if (campaignType === 'story') {
+					// For story campaigns, get first session by default
+					const firstSessionId = this.#getFirstSessionId(campaign);
+					// Load the campaign, defaulting to the first session
+					this.loadCampaign(campaign.id, null, firstSessionId);
+				}
+			});
+		}
+
+		const detailsBtn = card.querySelector('.view-details-btn');
+		detailsBtn.addEventListener('click', (e) => {
+			e.stopPropagation();
+			this.#showCampaignDetails(campaign);
+
+			// Mark this card as active
+			document.querySelectorAll('.campaign-card').forEach((c) => {
+				c.classList.remove('active');
+			});
+			card.classList.add('active');
+		});
+
+		return card;
+	}
+	#showCampaignDetails(campaign) {
+		const detailsPanel = document.querySelector('.campaign-details-panel');
+
+		// Populate details panel
+		let charactersHTML = '';
+		if (campaign?.metadata?.characters) {
+			charactersHTML = '<div class="details-characters-section"><h3>Characters</h3><div class="details-characters">';
+
+			campaign.metadata.characters
+				.filter((character) => character?.is_included)
+				.forEach((character) => {
+					charactersHTML += `
+						<div class="details-character">
+							<img src="${character?.icon}" class="character-icon icon-${character.class.toLowerCase().replace(/\s+/g, '-')}"/>
+							<div class="character-info">
+								<span class="character-name">${character.name}</span>
+								<span class="character-stats">${character.class}</span>
+							</div>
+						</div>
+					`;
+				});
+
+			charactersHTML += '</div></div>';
+		}
+
+		detailsPanel.innerHTML = `
+			<div class="details-header">
+				<h2>${campaign.metadata?.name || 'Campaign Details'}</h2>
+				<button class="details-close-button">×</button>
+			</div>
+			<div class="details-content">
+				<div class="details-description">
+					<h3>Description</h3>
+					<p>${campaign.metadata?.description || 'No description available.'}</p>
+				</div>
+				${
+					campaign?.metadata?.levelRange
+						? `<div class="details-levels">
+						<h3>Level Range</h3>
+						<p>Levels ${campaign.metadata.levelRange}</p>
+					</div>`
+						: ''
+				}
+				${charactersHTML}
+				${
+					campaign.data || (campaign.metadata?.campaignType === 'story' && campaign.recaps?.length > 0)
+						? `<div class="details-action">
+							<button class="start-campaign-btn">Begin Adventure</button>
+						</div>`
+						: ''
+				}
+			</div>
+		`;
+
+		// Add event listener to close button
+		const closeButton = detailsPanel.querySelector('.details-close-button');
+		closeButton.addEventListener('click', () => {
+			this.#toggleDetailsPanel(false);
+			// Remove active state from all cards
+			document.querySelectorAll('.campaign-card').forEach((card) => {
+				card.classList.remove('active');
+			});
+		});
+
+		// Add event listener for start campaign button
+		const startBtn = detailsPanel.querySelector('.start-campaign-btn');
+		if (startBtn) {
+			startBtn.addEventListener('click', () => {
+				// Determine what to load based on campaign type
+				const campaignType = campaign.metadata?.campaignType || 'map';
+
+				if (campaignType === 'map') {
+					// For map campaigns, get default map
+					const defaultMap = this.#getCampaignDefaultMap(campaign);
+					this.loadCampaign(campaign.id, defaultMap);
+				} else if (campaignType === 'story') {
+					// For story campaigns, get first session by default
+					const firstSessionId = this.#getFirstSessionId(campaign);
+					// Load the campaign, defaulting to the first session
+					this.loadCampaign(campaign.id, null, firstSessionId);
+				}
+			});
+		}
+
+		// Show the panel
+		this.#toggleDetailsPanel(true);
+	}
+
+	#toggleDetailsPanel(show) {
+		const detailsPanel = document.querySelector('.campaign-details-panel');
+
+		if (show) {
+			this.#campaignDetailsVisible = true;
+
+			// Add animation class
+			setTimeout(() => {
+				detailsPanel.classList.add('visible');
+				detailsPanel.classList.remove('hidden');
+			}, 10);
+		} else {
+			detailsPanel.classList.remove('visible');
+			this.#campaignDetailsVisible = false;
+
+			// Wait for animation to complete before hiding
+			if (!this.#campaignDetailsVisible) {
+				detailsPanel.classList.add('hidden');
+				detailsPanel.classList.remove('visible');
+			}
+		}
 	}
 
 	#getCampaignDefaultMap(campaign) {
@@ -202,118 +391,6 @@ class CampaignManager {
 		return campaign.recaps[0].id;
 	}
 
-	#createCampaignCard(campaign) {
-		const card = document.createElement('div');
-		card.className = 'campaign-card';
-		card.style.backgroundColor = campaign?.styling?.backgroundColor || '#2c3e50';
-
-		// Add campaign type badge
-		const campaignType = campaign.metadata?.campaignType || 'map';
-		const typeBadge = `<div class="campaign-type-badge ${campaignType}">${
-			campaignType.charAt(0).toUpperCase() + campaignType.slice(1)
-		}</div>`;
-		card.innerHTML = `
-            ${typeBadge}
-            <h2>${campaign.metadata?.name}</h2>
-            <p>${campaign.metadata?.description}</p>
-            ${!campaign?.data ? '<div class="campaign-status">Coming Soon</div>' : ''}
-            <div class="campaign-info">
-                ${
-									campaign.styling?.icon
-										? `<img src="${campaign?.styling?.icon}" alt="${campaign.metadata.name} icon">`
-										: ''
-								}
-                ${
-									campaign?.metadata?.levelRange
-										? `<span class="campaign-level">Levels ${campaign?.metadata?.levelRange}</span>`
-										: ''
-								}
-            </div>
-        `;
-		if (campaign?.metadata?.characters) {
-			const characterCards = this.#createCampaignCharacters(campaign);
-			const characterCardsContainer = document.createElement('div');
-			characterCardsContainer.className = 'campaign-characters';
-
-			if (campaign?.metadata?.charactersPosition) {
-				characterCardsContainer.classList.add(`card-position-${campaign?.metadata?.charactersPosition}`);
-			}
-			characterCards.forEach((card) => characterCardsContainer.appendChild(card));
-
-			card.append(characterCardsContainer);
-		}
-
-		if (campaign.data || (campaign.metadata?.campaignType === 'story' && campaign.recaps?.length > 0)) {
-			card.addEventListener('click', () => {
-				// Determine what to load based on campaign type
-				const campaignType = campaign.metadata?.campaignType || 'map';
-
-				if (campaignType === 'map') {
-					// For map campaigns, get default map
-					const defaultMap = this.#getCampaignDefaultMap(campaign);
-					this.loadCampaign(campaign.id, defaultMap);
-				} else if (campaignType === 'story') {
-					// For story campaigns, get first session by default
-					const firstSessionId = this.#getFirstSessionId(campaign);
-					// Load the campaign, defaulting to the first session
-					this.loadCampaign(campaign.id, null, firstSessionId);
-				}
-			});
-		} else {
-			card.classList.add('disabled');
-		}
-
-		return card;
-	}
-
-	// #createCampaignCharacters remains the same...
-	#createCampaignCharacters(campaign) {
-		if (!campaign?.metadata?.characters) return [];
-		const characterCards = campaign.metadata.characters
-			.filter((character) => character?.is_included)
-			.map((character) => {
-				const characterCard = document.createElement('div');
-				characterCard.className = `campaign-character-card`;
-
-				if (campaign?.metadata?.charactersPosition === 'left' || !campaign?.metadata?.charactersPosition) {
-					characterCard.innerHTML = `
-                    <div class="character-card-item item-row">
-                        <span class="character-card-name">${character.name}</span>
-                        <span class="character-card-info">Lvl ${character.level} | ${character.race} | ${
-						character.class
-					}</span>
-
-               </div>
-                    <div class="character-card-item">
-                        <img src="${character?.icon}" class="character-card-icon icon-${character.class
-						.toLowerCase()
-						.replace(/\s+/g, '-')}"/>
-                    </div>
-
-`;
-				} else {
-					characterCard.innerHTML = `
-                    <div class="character-card-item">
-                        <img src="${character?.icon}" class="character-card-icon icon-${character.class
-						.toLowerCase()
-						.replace(/\s+/g, '-')}"/>
-                    </div>
-                    <div class="character-card-item item-row">
-
-                   <span class="character-card-name">${character.name}</span>
-                        <span class="character-card-info">Lvl ${character.level} |
-${character.race} | ${character.class}</span>
-                    </div>
-                `;
-				}
-
-				return characterCard;
-			});
-
-		return characterCards;
-	}
-
-	// #isCampaignValid remains the same...
 	#isCampaignValid(campaignId) {
 		// Check if campaign exists and has either data or recaps (for story campaigns)
 		const campaign = CAMPAIGN_DATA.find((campaign) => campaign.id === campaignId);
@@ -336,9 +413,9 @@ ${character.race} | ${character.class}</span>
 		if (document.getElementById('story-view')) {
 			document.getElementById('story-view').style.display = 'none';
 		}
-		document.getElementById('actions').style.display = 'block';
 		// Determine which type of campaign and load accordingly
 		const campaignType = campaign.metadata?.campaignType || 'map';
+		document.getElementById('actions').style.display = campaignType === 'story' ? 'none' : 'block';
 
 		if (campaignType === 'map') {
 			const currentUrl = new URL(window.location.href);
@@ -357,7 +434,6 @@ ${character.race} | ${character.class}</span>
 	}
 
 	#loadMapCampaign(campaign, mapKey = null) {
-		// ... (map loading logic remains the same, URL update happens below) ...
 		// Determine which map to load
 		const defaultMap = mapKey || this.#getCampaignDefaultMap(campaign);
 		if (!defaultMap) {
@@ -410,6 +486,8 @@ ${character.race} | ${character.class}</span>
 			this.#mapInstance.loadMap(defaultMap); // Then load the specific map
 		}
 	}
+
+	// Replace the #loadStoryCampaign method with this fixed version:
 
 	#loadStoryCampaign(campaign, sessionId = null, characterName = null, viewType = null) {
 		// Determine initial state based on URL params passed in
@@ -479,22 +557,27 @@ ${character.race} | ${character.class}</span>
 
 		// Show story view
 		document.getElementById('story-view').style.display = 'block';
-		// Initialize or update story view
+
+		// Initialize or update story view with a reference to this campaign manager
 		if (!this.#storyInstance) {
 			this.#storyInstance = new StoryView('story-view', {
 				campaignData: campaign,
-
 				initialSessionId: initialSessionId,
 				initialCharacterName: initialCharacterName,
 				initialViewType: viewType, // Pass timeline/character view preference
 				isDebugMode: this.isDebugMode,
 			});
+
+			// Pass the campaign manager and selection callback to the StoryView
+			this.#storyInstance.setCampaignManager(this, () => this.showCampaignSelection());
 		} else {
 			this.#storyInstance.updateCampaign(campaign, initialSessionId, initialCharacterName, viewType);
+
+			// Make sure the story instance has access to the campaign manager and selection callback
+			this.#storyInstance.setCampaignManager(this, () => this.showCampaignSelection());
 		}
 	}
 
-	// #setupRecapButton remains the same...
 	#setupRecapButton() {
 		const recapButton = document.getElementById('view-recap');
 		if (recapButton) {
@@ -511,7 +594,6 @@ ${character.race} | ${character.class}</span>
 		}
 	}
 
-	// toggleRecap remains the same...
 	toggleRecap() {
 		if (!this.#recapModal) return;
 		const recapButton = document.getElementById('view-recap');
@@ -525,7 +607,6 @@ ${character.race} | ${character.class}</span>
 		}
 	}
 
-	// showCampaignSelection remains the same...
 	showCampaignSelection() {
 		// Update URL while preserving campaign parameter
 		const currentUrl = new URL(window.location.href);
@@ -553,6 +634,17 @@ ${character.race} | ${character.class}</span>
 			document.getElementById('story-view').style.display = 'none';
 		}
 		document.getElementById('actions').style.display = 'none';
+
+		// Update grid with current campaigns
+		this.#updateCampaignGrid();
+
+		// Hide details panel when showing selection
+		this.#toggleDetailsPanel(false);
+
+		// Remove active state from all cards
+		document.querySelectorAll('.campaign-card').forEach((card) => {
+			card.classList.remove('active');
+		});
 	}
 }
 
@@ -595,7 +687,7 @@ class StoryView {
 		race: 'race',
 		npc: 'npc',
 	};
-	#customApiData = CAMPAIGN_02_API_DATA; // Initialize properly CAMPAIGN_02_API_DATA; // Needs actual data source
+	#customApiData = CAMPAIGN_02_API_DATA;
 
 	constructor(elementId, options = {}) {
 		this.#rootElement = document.getElementById(elementId);
@@ -623,6 +715,51 @@ class StoryView {
 			options.initialCharacterName,
 			options.initialViewType
 		);
+	}
+
+	/**
+	 * Returns the sidebar DOM element.
+	 * @returns {HTMLElement|null} The sidebar element or null if not found.
+	 */
+	getSidebarElement() {
+		// Ensure the root element is valid before querying
+		if (!this.#rootElement) return null;
+		return this.#rootElement.querySelector('.story-sidebar');
+	}
+
+	setCampaignManager(campaignManager, showCampaignSelectionCallback) {
+		this.campaignManager = campaignManager;
+		this.showCampaignSelection = showCampaignSelectionCallback;
+		this.ensureCampaignSelectionButton();
+	}
+
+	ensureCampaignSelectionButton() {
+		// This needs to be called whenever the sidebar is refreshed
+		const sidebar = this.getSidebarElement();
+		if (sidebar) {
+			// First remove any existing button to avoid duplicates
+			const existingButton = sidebar.querySelector('.story-campaign-selection');
+			if (existingButton) {
+				existingButton.remove();
+			}
+
+			// Create and add the button
+			const buttonContainer = document.createElement('div');
+			buttonContainer.className = 'story-campaign-selection';
+			buttonContainer.style.marginTop = 'auto';
+			buttonContainer.style.padding = '10px';
+
+			const backToSelectionButton = document.createElement('button');
+			backToSelectionButton.textContent = 'Campaign selection';
+			backToSelectionButton.className = 'sidebar-back-button button-secondary';
+			backToSelectionButton.style.width = '100%';
+
+			// Use the callback provided by CampaignManager
+			backToSelectionButton.addEventListener('click', this.showCampaignSelection);
+
+			buttonContainer.appendChild(backToSelectionButton);
+			sidebar.appendChild(buttonContainer);
+		}
 	}
 
 	updateCampaign(campaign, sessionId = null, characterName = null, viewType = null) {
@@ -709,6 +846,7 @@ class StoryView {
 			this.#generateTableOfContents(contentArea);
 			this.#scrollToHash();
 		}
+		this.ensureCampaignSelectionButton();
 	}
 
 	#createSidebar() {
@@ -1083,6 +1221,8 @@ class StoryView {
 			const typeMap = {
 				narrative: '💬',
 				encounter: '⚔️',
+				investigation: '🔎',
+				traversal: '👣',
 			};
 
 			// Add subitems if any, keeping them on the same side
