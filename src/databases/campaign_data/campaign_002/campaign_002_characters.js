@@ -1,4 +1,4 @@
-const CAMPAIGN_02_CHARACTERS = [
+const CAMPAIGN_002_CHARACTERS = [
 	{
 		name: 'Bonnie',
 		race: 'Pixie',

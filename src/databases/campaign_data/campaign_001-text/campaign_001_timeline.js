@@ -22,11 +22,13 @@ const CAMPAIGN_001_TIMELINE = [
 				type: 'encounter',
 				actors: 'Dinosaurs',
 				sublocation: 'Forest',
+				description: `Got ambushed by dinosaurs in the forest and fought them off.`,
 			},
 			{
 				type: 'narrative',
 				actors: 'Entire party',
 				sublocation: 'Lake',
+				description: `Reached a lake which had multiple platforms floating in the air and climbed on top of them.`,
 			},
 			{
 				type: 'encounter',
@@ -199,6 +201,109 @@ const CAMPAIGN_001_TIMELINE = [
 				type: 'narrative',
 				actors: 'Party & Water Mages',
 				sublocation: 'Pyramid',
+			},
+			{
+				type: 'narrative',
+				actors: 'Entire party',
+				sublocation: 'Pyramid portals',
+			},
+		],
+	},
+	{
+		id: 10,
+		title: "To Oviedo's Farms",
+		location: `Oviedo's Farms`,
+		session: 8,
+		items: [
+			{
+				type: 'traversal',
+				actors: 'Entire party',
+				sublocation: 'Crossroads inn',
+			},
+			{
+				type: 'narrative',
+				actors: 'Party & Errol',
+				sublocation: "Errol's Hut",
+			},
+			{
+				type: 'narrative',
+				actors: 'Entire party',
+				sublocation: 'Chocolate Contest Tavern',
+			},
+			{
+				type: 'narrative',
+				actors: 'Party & General Lee',
+				sublocation: "Lee's house",
+			},
+		],
+	},
+	{
+		id: 11,
+		title: 'To the Penal Colony',
+		location: 'Penal Colony',
+		session: '8 & 9',
+		items: [
+			{
+				type: 'traversal',
+				actors: 'Party',
+				sublocation: 'Korinis Island',
+			},
+			{
+				type: 'encounter',
+				actors: 'Seekers',
+				sublocation: 'Ruined Tower',
+			},
+			{
+				type: 'traversal',
+				actors: 'Party',
+				sublocation: 'Korinis Inn',
+				is_new_session: true,
+			},
+		],
+	},
+	{
+		id: 12,
+		title: 'Back to General Lee',
+		location: "Oviedo's Farm",
+		session: 9,
+		items: [
+			{
+				type: 'narrative',
+				actors: 'Party & Silvestro',
+				sublocation: `Oviedo's Farm`,
+			},
+			{
+				type: 'narrative',
+				actors: 'Party & Lee',
+				sublocation: `Lee's house`,
+			},
+		],
+	},
+	{
+		id: 13,
+		title: 'Back to Penal Colony',
+		location: `Penal Conoly`,
+		session: '9 & 10',
+		items: [
+			{
+				type: 'traversal',
+				actors: 'Party',
+				sublocation: 'Korinis Island',
+			},
+			{
+				type: 'narrative',
+				actors: 'Party & Guards',
+				sublocation: 'Penal Colony Entrance',
+			},
+			{
+				type: 'encounter',
+				actors: 'Cave Spiders',
+				sublocation: 'Mountain Shortcut',
+			},
+			{
+				type: 'traversal',
+				actors: 'Party',
+				sublocation: `Mountain mine system`,
 			},
 		],
 	},

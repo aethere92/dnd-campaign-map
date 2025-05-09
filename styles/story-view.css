@@ -1090,6 +1090,54 @@
 	}
 }
 
+[data-entity-name='Aenwyn'] {
+	color: #2aa6c9;
+
+	&::before {
+		background-image: url('../images/assets/character_thumbnails/campaign_001/aenwyn.jpeg');
+	}
+}
+
+[data-entity-name='Aethere'] {
+	color: #978036;
+
+	&::before {
+		background-image: url('../images/assets/character_thumbnails/campaign_001/aethere.jpeg');
+	}
+}
+
+[data-entity-name='Alezander'] {
+	color: #978036;
+
+	&::before {
+		background-image: url('../images/assets/character_thumbnails/campaign_001/alezander.jpeg');
+	}
+}
+
+[data-entity-name='Nora'] {
+	color: #978036;
+
+	&::before {
+		background-image: url('../images/assets/character_thumbnails/campaign_001/nora.png');
+	}
+}
+
+[data-entity-name='Samantha'] {
+	color: #978036;
+
+	&::before {
+		background-image: url('../images/assets/character_thumbnails/campaign_001/samantha.jpeg');
+	}
+}
+
+[data-entity-name='Smasherina'] {
+	color: #978036;
+
+	&::before {
+		background-image: url('../images/assets/character_thumbnails/campaign_001/smasherina.jpg');
+	}
+}
+
 [data-entity-name='Entire party'] {
 	&::before {
 		background-image: url('../images/pageicon.png');

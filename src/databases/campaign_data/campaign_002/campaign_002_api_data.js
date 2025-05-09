@@ -1,4 +1,4 @@
-const CAMPAIGN_02_API_DATA = {
+const CAMPAIGN_002_API_DATA = {
 	location: {
 		Feywilds: {
 			name: 'The Feywild',

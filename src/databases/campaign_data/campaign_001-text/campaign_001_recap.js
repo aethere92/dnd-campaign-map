@@ -1,4 +1,4 @@
-const CAMPAIGN_01_RECAPS = [
+const CAMPAIGN_001_RECAPS = [
 	{
 		id: 'session-001',
 		title: 'Introduction',

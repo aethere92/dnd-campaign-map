@@ -1,4 +1,4 @@
-const CAMPAIGN_01_CHARACTERS = [
+const CAMPAIGN_001_CHARACTERS = [
 	{
 		name: 'Aenwyn',
 		class: 'Sorcerer',

@@ -14,7 +14,7 @@
 // 	]
 // },
 
-const CAMPAIGN_02_RECAPS = [
+const CAMPAIGN_002_RECAPS = [
 	{
 		id: 'session-001',
 		title: 'Introduction',

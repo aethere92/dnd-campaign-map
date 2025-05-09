@@ -7,7 +7,7 @@ const CAMPAIGN_DATA = [
 			description:
 				'Six adventurers — a cleric, ranger, sorcerer, bard, and two barbarians — receive mysterious invitations to a strange, distant land. Teaming up with a band of pirates, they embark on an epic journey, battling fearsome monsters and navigating treacherous seas. Their quest takes an unexpected turn as they find themselves stranded on the enigmatic island of Korinis, where new challenges and hidden secrets await.',
 			levelRange: '3-8',
-			characters: CAMPAIGN_01_CHARACTERS,
+			characters: CAMPAIGN_001_CHARACTERS,
 			charactersPosition: 'left',
 			campaignType: 'map',
 		},
@@ -19,6 +19,7 @@ const CAMPAIGN_DATA = [
 		data: CAMPAIGN_01,
 		aliases: CAMPAIGN_01_ALIASES,
 		recaps: SESSION_RECAPS,
+		api_data: null,
 	},
 	{
 		id: 'campaign-001-text',
@@ -28,16 +29,16 @@ const CAMPAIGN_DATA = [
 			description:
 				'Six adventurers — a cleric, ranger, sorcerer, bard, and two barbarians — receive mysterious invitations to a strange, distant land. Teaming up with a band of pirates, they embark on an epic journey, battling fearsome monsters and navigating treacherous seas. Their quest takes an unexpected turn as they find themselves stranded on the enigmatic island of Korinis, where new challenges and hidden secrets await.',
 			levelRange: '3-8',
-			characters: CAMPAIGN_01_CHARACTERS,
+			characters: CAMPAIGN_001_CHARACTERS,
 			charactersPosition: 'left',
 			campaignType: 'story',
 		},
 		styling: {
 			icon: 'images/pageicon.png',
 		},
-		data: [],
-		recaps: CAMPAIGN_01_RECAPS,
+		recaps: CAMPAIGN_001_RECAPS,
 		timeline: CAMPAIGN_001_TIMELINE,
+		api_data: CAMPAIGN_001_API_DATA,
 	},
 	{
 		id: 'campaign-002',
@@ -46,17 +47,16 @@ const CAMPAIGN_DATA = [
 			name: 'The Red Hand of Doom',
 			description: `Five unlikely heroes—diverse in race and origin—journey together through a lush subtropical forest, their past encounters ranging from friendly to conflicting. Bound now by shared purpose or hidden motives, they travel in harmony, their story beginning not on a well-worn road, but along a wild path where camaraderie grows with each step.`,
 			levelRange: '6-',
-			characters: CAMPAIGN_02_CHARACTERS,
+			characters: CAMPAIGN_002_CHARACTERS,
 			charactersPosition: 'right',
 			campaignType: 'story',
 		},
 		styling: {
 			icon: 'images/pageicon.png',
 		},
-		data: [],
-		// aliases: CAMPAIGN_02_ALIASES,
-		recaps: CAMPAIGN_02_RECAPS,
+		recaps: CAMPAIGN_002_RECAPS,
 		timeline: CAMPAIGN_002_TIMELINE,
+		api_data: CAMPAIGN_002_API_DATA,
 	},
 ];
 
@@ -68,7 +68,6 @@ class CampaignManager {
 	#storyInstance = null;
 	#rootElement;
 	#recapModal = null;
-	#currentCarouselIndex = 0;
 	#campaignDetailsVisible = false;
 
 	constructor(rootElementId, isDebugMode = false) {
@@ -687,7 +686,7 @@ class StoryView {
 		race: 'race',
 		npc: 'npc',
 	};
-	#customApiData = CAMPAIGN_02_API_DATA;
+	#customApiData;
 
 	constructor(elementId, options = {}) {
 		this.#rootElement = document.getElementById(elementId);
@@ -696,9 +695,9 @@ class StoryView {
 			console.error('StoryView: Root element not found:', elementId);
 			return;
 		}
-		// Load custom data if available
-		if (window.CAMPAIGN_02_API_DATA) {
-			this.#customApiData = window.CAMPAIGN_02_API_DATA;
+
+		if (options.campaignData?.api_data) {
+			this.#customApiData = options.campaignData?.api_data;
 		}
 
 		// Create tooltip container once during initialization
@@ -1196,23 +1195,52 @@ class StoryView {
 			mainItem.className = `timeline-item timeline-main-item ${side}`;
 			mainItem.setAttribute('data-id', item.id);
 
-			const mainContent = document.createElement('a');
+			const mainContent = document.createElement('div'); // Changed from <a> to <div>
 			mainContent.className = 'timeline-content';
 			mainContent.innerHTML = `
 				<h3>${item.title}</h3>
-				<div class="timeline-location">${item.location}</div>
+				<div class="timeline-location" style="margin-left: auto">${item.location}</div>
+				${item.is_new_session ? `<div class="timeline-new-session">New session</div>` : ''}
 				${item.session ? `<span class="timeline-item-session">Session ${item.session}</span>` : ''}
 			`;
 
+			// If URL exists, wrap mainContent in an anchor tag
 			if (item.url) {
+				const linkWrapper = document.createElement('a');
 				const params = `?campaign=${item.url.campaign}&session=${item.url.session}${
 					item.url.target ? `#${item.url.target}` : ''
 				}`;
-				mainContent.href = params;
-				mainContent.title = 'Go to this session recap point.';
+				linkWrapper.href = params;
+				linkWrapper.title = 'Go to this session recap point.';
+				linkWrapper.appendChild(mainContent);
+				mainItem.appendChild(linkWrapper);
+			} else {
+				mainItem.appendChild(mainContent);
 			}
 
-			mainItem.appendChild(mainContent);
+			if (item.description) {
+				// Create button outside of mainContent
+				const button = document.createElement('button');
+				button.className = 'timeline-main-button';
+				button.textContent = '›';
+				button.type = 'button'; // Explicitly set button type
+
+				// Add the button to the mainItem instead of mainContent
+				mainItem.appendChild(button);
+
+				const descriptionElement = document.createElement('div');
+				descriptionElement.className = 'timeline-main-description';
+				descriptionElement.innerHTML = item.description;
+				mainItem.appendChild(descriptionElement);
+
+				// Add event listener directly to the button
+				button.onclick = function (event) {
+					event.preventDefault();
+					event.stopPropagation();
+					descriptionElement.classList.toggle('active');
+				};
+			}
+
 			timeline.appendChild(mainItem);
 
 			// Flip side for the next main item group
@@ -1233,11 +1261,11 @@ class StoryView {
 					subitemEl.setAttribute('data-parent-id', item.id);
 					subitemEl.setAttribute('data-type', subitem.type);
 
-					const subContent = document.createElement('a');
+					const subContent = document.createElement('div'); // Changed from <a> to <div>
 					subContent.className = 'timeline-content';
 
 					let subitemHTML = `
-						<h4><span style="font-size: 8pt">${typeMap[subitem.type]}</span> ${
+						<h4><span style="font-size: 8pt">${typeMap[subitem.type] || '❓'}</span> ${
 						subitem.type.charAt(0).toUpperCase() + subitem.type.slice(1)
 					}: ${subitem.actors}</h4>
 					`;
@@ -1252,16 +1280,47 @@ class StoryView {
 						subitemHTML += `<div class="timeline-sublocation">${subitem.sublocation}</div>`;
 					}
 
+					subContent.innerHTML = subitemHTML;
+
+					// If URL exists, wrap subContent in an anchor tag
 					if (subitem.url) {
+						const linkWrapper = document.createElement('a');
 						const params = `?campaign=${subitem.url.campaign}&session=${subitem.url.session}${
 							subitem.url.target ? `#${subitem.url.target}` : ''
 						}`;
-						subContent.href = params;
-						subContent.title = 'Go to this session recap point.';
+						linkWrapper.href = params;
+						linkWrapper.title = 'Go to this session recap point.';
+						linkWrapper.appendChild(subContent);
+						subitemEl.appendChild(linkWrapper);
+					} else {
+						subitemEl.appendChild(subContent);
 					}
 
-					subContent.innerHTML = subitemHTML;
-					subitemEl.appendChild(subContent);
+					// Add description toggle button for subitems if they have a description
+					if (subitem.description) {
+						// Create button for subitem
+						const subButton = document.createElement('button');
+						subButton.className = 'timeline-sub-button';
+						subButton.textContent = '›';
+						subButton.type = 'button'; // Explicitly set button type
+
+						// Add the button to the subitemEl
+						subitemEl.appendChild(subButton);
+
+						// Create description element for subitem
+						const subDescriptionElement = document.createElement('div');
+						subDescriptionElement.className = 'timeline-sub-description';
+						subDescriptionElement.innerHTML = subitem.description;
+						subitemEl.appendChild(subDescriptionElement);
+
+						// Add event listener directly to the subitem button
+						subButton.onclick = function (event) {
+							event.preventDefault();
+							event.stopPropagation();
+							subDescriptionElement.classList.toggle('active');
+						};
+					}
+
 					timeline.appendChild(subitemEl);
 				});
 			}
