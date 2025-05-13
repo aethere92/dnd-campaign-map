@@ -1126,32 +1126,35 @@ class StoryView {
 
 		timelineItems.forEach((item) => {
 			// Get the content div inside each timeline item
-			const contentElement = item.querySelector('.timeline-content');
-			if (!contentElement) return;
+			const contentElements = item.querySelectorAll(
+				'.timeline-content, .timeline-sub-description, .timeline-main-description'
+			);
+			if (!contentElements) return;
 
-			// Process the same elements as in the session content
-			this.#processImages(contentElement);
-			this.#processCharacterReferences(contentElement);
-			this.#processEntityReferences(contentElement);
+			contentElements.forEach((contentElement) => {
+				// Process the same elements as in the session content
+				this.#processImages(contentElement);
+				this.#processCharacterReferences(contentElement);
+				this.#processEntityReferences(contentElement);
 
-			// If this is a main timeline item, we might want to process progression tags
-			if (item.classList.contains('timeline-main-item')) {
-				const itemId = item.getAttribute('data-id');
-				const timelineData = this.#campaign?.timeline;
-				if (timelineData && Array.isArray(timelineData)) {
-					const itemData = timelineData.find((data) => data.id === itemId);
-					if (itemData) {
-						this.#processProgressionTags(contentElement, itemData);
+				// If this is a main timeline item, we might want to process progression tags
+				if (item.classList.contains('timeline-main-item')) {
+					const itemId = item.getAttribute('data-id');
+					const timelineData = this.#campaign?.timeline;
+					if (timelineData && Array.isArray(timelineData)) {
+						const itemData = timelineData.find((data) => data.id === itemId);
+						if (itemData) {
+							this.#processProgressionTags(contentElement, itemData);
+						}
 					}
 				}
-			}
 
-			// Process character highlights after references have been created
-			this.#processCharacterHighlights(contentElement);
+				// Process character highlights after references have been created
+				this.#processCharacterHighlights(contentElement);
+			});
 		});
 	}
 
-	// #renderTimeline remains the same...
 	#renderTimeline(contentArea) {
 		// Check if the current campaign has timeline data
 		const timelineData = this.#campaign?.timeline;
