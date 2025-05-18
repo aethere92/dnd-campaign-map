@@ -87,7 +87,7 @@ const SESSION_RECAPS = {
 						text: 'Setting out for the citadel, the group took the route leading to the battering ram section of the wall. Along the way, they spotted a wooden fence with a fallen paladin nearby. The ranger stealthily approached and discovered the scene: a dead paladin killed by punctured holes in their chest, two deceased prisoners, and several ominous holes in the ground. Six carts filled with ore and a letter in a nearby shack hinted at something darker.',
 					},
 					{
-						text: 'Deciding to press on, the party devised a bold plan: the sorcerer, bard, and ranger transformed into wargs for speed; Mitzy sprinted ahead; the barbarian consumed a concoction of drugs for a boost; and the cleric flew invisibly to scout from above. The cleric reached the citadel first, alerting the guards to their arrival—and casually discussing soup recipes. Meanwhile, the barbarian and the wargs struggled to traverse the terrain. The barbarian was impaled on barbs, and the bard (in warg form) failed an intelligence check, chasing squirrels before finally reuniting with the group at the citadel.',
+						text: 'Deciding to press on, the party devised a bold plan: the sorcerer, bard, and ranger transformed into wargs for speed; Mitzy sprinted ahead; the barbarian consumed a concoction of drugs for a boost; and the cleric flew invisibly to scout from above. The cleric reached the citadel first, alerting the guards to their arrival-and casually discussing soup recipes. Meanwhile, the barbarian and the wargs struggled to traverse the terrain. The barbarian was impaled on barbs, and the bard (in warg form) failed an intelligence check, chasing squirrels before finally reuniting with the group at the citadel.',
 					},
 				],
 			},

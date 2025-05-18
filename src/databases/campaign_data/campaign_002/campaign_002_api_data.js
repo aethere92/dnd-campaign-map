@@ -90,7 +90,7 @@ const CAMPAIGN_002_API_DATA = {
 	race: {
 		'Earth Genasi': {
 			name: 'Earth Genasi',
-			description: `Tracing their ancestry to the genies of the Elemental Planes, each genasi can tap into the power of one of the elements. Air, earth, fire, and water — these are the four pillars of the Material Plane and the four types of genasi. Some genasi are direct descendants of a genie, while others were born to non-genasi parents who lived near a place suffused by a genie’s magic. A typical genasi has a life span of 120 years.`,
+			description: `Tracing their ancestry to the genies of the Elemental Planes, each genasi can tap into the power of one of the elements. Air, earth, fire, and water - these are the four pillars of the Material Plane and the four types of genasi. Some genasi are direct descendants of a genie, while others were born to non-genasi parents who lived near a place suffused by a genie’s magic. A typical genasi has a life span of 120 years.`,
 			metadata: {
 				'Ability Score Increase': '2/1 or 1/1/1',
 				'Creature Type': 'Humanoid',

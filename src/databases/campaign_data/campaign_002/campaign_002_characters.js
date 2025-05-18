@@ -80,8 +80,8 @@ const CAMPAIGN_002_CHARACTERS = [
 		is_included: false,
 		shortDescription: `<p style="margin: 0; padding-block: 0"><strong>Olek</strong>, a Paladin of Helm, walks with the calm strength of one touched by the divine.<br>
 			<strong>Norr</strong>, a Sorcerer touched by dragon's blood and haunted by a stolen map. <br>
-			<strong>Soshi</strong> — a Feyborn wizard who traded whimsy for power. <br>
+			<strong>Soshi</strong> - a Feyborn wizard who traded whimsy for power. <br>
 			<strong>Kaedin</strong>, the Echo Knight genasi who seeks a friend lost to a trap and a mystery buried in time.<br>
-			<strong>Bonnie</strong> — a rogue pixie exiled from the Feywilds for loving too deeply and breaking too many rules.</p>`,
+			<strong>Bonnie</strong> - a rogue pixie exiled from the Feywilds for loving too deeply and breaking too many rules.</p>`,
 	},
 ];

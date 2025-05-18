@@ -3039,7 +3039,7 @@ const CAMPAIGN_01 = {
 								},
 								{
 									coordinates: [-424.4375, 590.15625],
-									text: 'Climbing up a ladder, they met two merchants — a penguin named Zero and a drugged rabbit called Quickse - they purchased some items, and took a long rest to replenish their stamina and health.',
+									text: 'Climbing up a ladder, they met two merchants - a penguin named Zero and a drugged rabbit called Quickse - they purchased some items, and took a long rest to replenish their stamina and health.',
 									animation: {
 										timer: 5,
 										type: 'merchant',
@@ -3270,7 +3270,7 @@ const CAMPAIGN_01 = {
 								},
 								{
 									coordinates: [-523.875, 509.625],
-									text: 'They spoke to the paladin in charge - a guy called Garrond — and learned only 11 carts had been mined.',
+									text: 'They spoke to the paladin in charge - a guy called Garrond - and learned only 11 carts had been mined.',
 									animation: {
 										timer: 3,
 										type: 'conversation',

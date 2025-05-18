@@ -5,7 +5,7 @@ const CAMPAIGN_DATA = [
 		metadata: {
 			name: "A quest, a questin' we shall go",
 			description:
-				'Six adventurers — a cleric, ranger, sorcerer, bard, and two barbarians — receive mysterious invitations to a strange, distant land. Teaming up with a band of pirates, they embark on an epic journey, battling fearsome monsters and navigating treacherous seas. Their quest takes an unexpected turn as they find themselves stranded on the enigmatic island of Korinis, where new challenges and hidden secrets await.',
+				'Six adventurers - a cleric, ranger, sorcerer, bard, and two barbarians - receive mysterious invitations to a strange, distant land. Teaming up with a band of pirates, they embark on an epic journey, battling fearsome monsters and navigating treacherous seas. Their quest takes an unexpected turn as they find themselves stranded on the enigmatic island of Korinis, where new challenges and hidden secrets await.',
 			levelRange: '3-8',
 			characters: CAMPAIGN_001_CHARACTERS,
 			charactersPosition: 'left',
@@ -27,7 +27,7 @@ const CAMPAIGN_DATA = [
 		metadata: {
 			name: "A quest, a questin' we shall go",
 			description:
-				'Six adventurers — a cleric, ranger, sorcerer, bard, and two barbarians — receive mysterious invitations to a strange, distant land. Teaming up with a band of pirates, they embark on an epic journey, battling fearsome monsters and navigating treacherous seas. Their quest takes an unexpected turn as they find themselves stranded on the enigmatic island of Korinis, where new challenges and hidden secrets await.',
+				'Six adventurers - a cleric, ranger, sorcerer, bard, and two barbarians - receive mysterious invitations to a strange, distant land. Teaming up with a band of pirates, they embark on an epic journey, battling fearsome monsters and navigating treacherous seas. Their quest takes an unexpected turn as they find themselves stranded on the enigmatic island of Korinis, where new challenges and hidden secrets await.',
 			levelRange: '3-8',
 			characters: CAMPAIGN_001_CHARACTERS,
 			charactersPosition: 'left',
@@ -45,8 +45,8 @@ const CAMPAIGN_DATA = [
 		campaignId: 2,
 		metadata: {
 			name: 'The Red Hand of Doom',
-			description: `Five unlikely heroes—diverse in race and origin—journey together through a lush subtropical forest, their past encounters ranging from friendly to conflicting. Bound now by shared purpose or hidden motives, they travel in harmony, their story beginning not on a well-worn road, but along a wild path where camaraderie grows with each step.`,
-			levelRange: '6-',
+			description: `Five unlikely heroes - diverse in race and origin - journey together through a lush subtropical forest, their past encounters ranging from friendly to conflicting. Bound now by shared purpose or hidden motives, they travel in harmony, their story beginning not on a well-worn road, but along a wild path where camaraderie grows with each step.`,
+			levelRange: '6 - ',
 			characters: CAMPAIGN_002_CHARACTERS,
 			charactersPosition: 'right',
 			campaignType: 'story',
@@ -81,11 +81,18 @@ class CampaignManager {
 
 		// Check URL parameters first
 		const urlParams = new URLSearchParams(window.location.search);
+		const state = urlParams.get('state');
 		const campaignId = urlParams.get('campaign');
 		const mapKey = urlParams.get('map');
-		const sessionId = urlParams.get('session'); // Add param for story sessions
+		const sessionId = urlParams.get('session');
 		const characterName = urlParams.get('character');
-		const viewType = urlParams.get('view'); // e.g., 'timeline'
+		const viewType = urlParams.get('view');
+
+		// If state is campaign-selection, show selection view regardless of other params
+		if (state === 'campaign-selection') {
+			this.showCampaignSelection();
+			return;
+		}
 
 		if (campaignId && this.#isCampaignValid(campaignId)) {
 			this.loadCampaign(campaignId, mapKey, sessionId, characterName, viewType);
@@ -102,7 +109,7 @@ class CampaignManager {
 
 		// Handle browser navigation
 		window.addEventListener('popstate', (event) => {
-			if (event.state?.view === 'campaigns') {
+			if (event.state?.view === 'campaigns' || event.state?.state === 'campaign-selection') {
 				this.showCampaignSelection();
 			} else if (event.state?.campaignId) {
 				this.loadCampaign(
@@ -221,6 +228,10 @@ class CampaignManager {
 			selectBtn.addEventListener('click', (e) => {
 				e.stopPropagation();
 
+				// Clear the campaign-selection state from URL
+				const currentUrl = new URL(window.location.href);
+				currentUrl.searchParams.delete('state');
+
 				// Determine what to load based on campaign type
 				const campaignType = campaign.metadata?.campaignType || 'map';
 
@@ -298,7 +309,7 @@ class CampaignManager {
 				${
 					campaign.data || (campaign.metadata?.campaignType === 'story' && campaign.recaps?.length > 0)
 						? `<div class="details-action">
-							<button class="start-campaign-btn">Begin Adventure</button>
+							<button class="start-campaign-btn">Select campaign</button>
 						</div>`
 						: ''
 				}
@@ -416,8 +427,11 @@ class CampaignManager {
 		const campaignType = campaign.metadata?.campaignType || 'map';
 		document.getElementById('actions').style.display = campaignType === 'story' ? 'none' : 'block';
 
+		// Update URL - clear campaign-selection state
+		const currentUrl = new URL(window.location.href);
+		currentUrl.searchParams.delete('state'); // Remove campaign-selection state
+
 		if (campaignType === 'map') {
-			const currentUrl = new URL(window.location.href);
 			currentUrl.searchParams.delete('session');
 			currentUrl.searchParams.delete('character');
 			currentUrl.searchParams.delete('view');
@@ -486,8 +500,6 @@ class CampaignManager {
 		}
 	}
 
-	// Replace the #loadStoryCampaign method with this fixed version:
-
 	#loadStoryCampaign(campaign, sessionId = null, characterName = null, viewType = null) {
 		// Determine initial state based on URL params passed in
 		let initialView = 'session'; // Default to session view
@@ -522,6 +534,7 @@ class CampaignManager {
 		params.set('campaign', campaign.id);
 		params.delete('map');
 		params.delete('t');
+		params.delete('state'); // Clear campaign-selection state
 
 		// Set/delete params based on the determined view
 		if (initialView === 'timeline') {
@@ -607,24 +620,28 @@ class CampaignManager {
 	}
 
 	showCampaignSelection() {
-		// Update URL while preserving campaign parameter
+		// Create a clean URL for campaign selection
 		const currentUrl = new URL(window.location.href);
-		const params = currentUrl.searchParams;
-		const campaignId = params.get('campaign');
-		// Preserve campaign ID if it exists
+		currentUrl.search = ''; // Clear all search params
+		currentUrl.hash = ''; // Clear hash
 
-		// Clear other parameters but keep campaign if it exists
-		currentUrl.search = '';
-		currentUrl.hash = ''; // Clear hash too
-		if (campaignId) {
-			currentUrl.searchParams.set('campaign', campaignId);
-		}
+		// Add campaign-selection state parameter
+		currentUrl.searchParams.set('state', 'campaign-selection');
 
+		// Hide recap modal if it exists
 		if (this.#recapModal) {
 			this.#recapModal.hide();
 		}
 
-		window.history.pushState({ view: 'campaigns', campaignId }, '', currentUrl.toString());
+		// Create state object for history
+		const state = {
+			view: 'campaigns',
+			state: 'campaign-selection',
+			campaignId: null, // Clear campaign ID when showing selection
+		};
+
+		// Update history with new state
+		window.history.pushState(state, '', currentUrl.toString());
 
 		// Show/hide appropriate views
 		document.getElementById('campaign-selection').style.display = 'flex';

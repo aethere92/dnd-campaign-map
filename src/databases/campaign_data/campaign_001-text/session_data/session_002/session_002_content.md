@@ -6,11 +6,11 @@
 
 <p>At last, they entered a doorway, where they encountered Finneas, a murloc with questionable intentions. Before they could process his presence, undead surged forth, threatening their survival once more. The battle was fierce, but the party triumphed, pushing back the restless dead.</p>
 
-<p>With their objectives shifting, they shot a flare into the sky, signaling their crew—water had been found.</p>
+<p>With their objectives shifting, they shot a flare into the sky, signaling their crew-water had been found.</p>
 
-<p>Navigating a different path down the mountain, they stumbled upon fallen allies—the remains of lost crew members, their lives claimed by the merciless wilds. They looted their belongings, recovering whatever was still of use.</p>
+<p>Navigating a different path down the mountain, they stumbled upon fallen allies-the remains of lost crew members, their lives claimed by the merciless wilds. They looted their belongings, recovering whatever was still of use.</p>
 
-<p>Then, disaster struck. Their ship was preparing to leave—without them.</p>
+<p>Then, disaster struck. Their ship was preparing to leave-without them.</p>
 
 <p>The realization sent a shock through them. A mad dash began, legs burning as they sprinted toward the departing vessel, the fear of being stranded gnawing at their heels.</p>
 
