@@ -915,7 +915,7 @@ class StoryManager {
 	}
 
 	#loadCharacterBackground(contentArea) {
-		// Assume contentArea is cleared by #loadContentArea
+		// Clear and validate
 		if (!this.#selectedCharacterName) {
 			contentArea.innerHTML = '<div class="no-content">No character selected.</div>';
 			return;
@@ -933,318 +933,479 @@ class StoryManager {
 			return;
 		}
 
-		// --- Character Page rendering logic ---
-		// This part remains largely the same as your provided code
-		// It builds the character sheet HTML.
-		// Ensure #processEntityReferences is called on relevant parts (like background).
+		// Create main container with parchment-like background
+		const characterSheet = document.createElement('div');
+		characterSheet.className = 'character-sheet';
 
-		const addSeparator = (elm) => {
-			const separator = document.createElement('div');
-			separator.className = 'character-page__separator';
-			elm.append(separator);
-		};
+		// Header section with character identity
+		const headerSection = this.#createCharacterHeader(character);
+		characterSheet.appendChild(headerSection);
 
-		const characterPage = document.createElement('div');
-		characterPage.className = 'character-page';
+		// Two-column layout for character details
+		const columnsContainer = document.createElement('div');
+		columnsContainer.className = 'character-columns';
 
-		const characterPagePartOne = document.createElement('div');
-		characterPagePartOne.className = 'character-side-one';
-		const characterPagePartTwo = document.createElement('div');
-		characterPagePartTwo.className = 'character-side-two';
+		// Left column (character image and background)
+		const leftColumn = this.#createLeftColumn(character);
+		columnsContainer.appendChild(leftColumn);
 
-		if (character?.imageBg) {
+		// Right column (stats, abilities, features)
+		const rightColumn = this.#createRightColumn(character);
+		columnsContainer.appendChild(rightColumn);
+
+		characterSheet.appendChild(columnsContainer);
+		contentArea.appendChild(characterSheet);
+	}
+
+	// Helper methods for modular construction
+	#createCharacterHeader(character) {
+		const header = document.createElement('header');
+		header.className = 'character-header';
+
+		const title = document.createElement('h1');
+		title.className = 'character-title';
+		title.textContent = character.name;
+
+		const subtitle = document.createElement('h2');
+		subtitle.className = 'character-subtitle';
+		subtitle.textContent = `${character.race} ${character.class} • Level ${character.level}`;
+
+		header.appendChild(title);
+		header.appendChild(subtitle);
+
+		return header;
+	}
+
+	#createLeftColumn(character) {
+		const column = document.createElement('div');
+		column.className = 'character-column character-column--left';
+
+		if (character.imageBg) {
+			const portrait = document.createElement('div');
+			portrait.className = 'character-portrait';
+
 			const img = document.createElement('img');
-			img.src = character?.imageBg;
-			img.alt = `${character?.name} - ${character?.race} - ${character?.class}`;
-			img.className = 'character-page__image';
-			characterPagePartOne.appendChild(img);
+			img.src = character.imageBg;
+			img.alt = `${character.name} portrait`;
+			img.className = 'character-portrait__image';
+
+			portrait.appendChild(img);
+			column.appendChild(portrait);
 		}
 
-		if (character?.background) {
-			const itemHeader = document.createElement('span');
-			itemHeader.className = 'character-page__header';
-			itemHeader.textContent = 'Background';
+		if (character.background) {
+			const section = document.createElement('section');
+			section.className = 'character-section character-background';
 
-			const characterBg = document.createElement('div');
-			characterBg.className = 'character-page__background';
+			const header = document.createElement('h3');
+			header.className = 'character-section__header';
+			header.textContent = 'Background';
+			section.appendChild(header);
 
-			characterBg.innerHTML = character?.background; // Assuming background is HTML or plain text
-			this.#processEntityReferences(characterBg);
-			characterPagePartOne.appendChild(itemHeader);
-			characterPagePartOne.appendChild(characterBg);
+			const content = document.createElement('div');
+			content.className = 'character-section__content';
+			content.innerHTML = character.background;
+			this.#processEntityReferences(content);
+			section.appendChild(content);
+
+			column.appendChild(section);
 		}
 
-		if (character?.stats?.metadata) {
-			const metadataHolder = document.createElement('div');
-			metadataHolder.className = 'character-page__metadata';
+		// Spells
+		if (character.stats.metadata.spellData?.length) {
+			const spells = this.#createSpellsSection(character.stats.metadata.spellData);
+			column.appendChild(spells);
+		}
 
-			if (character?.name) {
-				const charIdentifiers = document.createElement('div');
-				charIdentifiers.className = 'character-page__identifiers';
-				charIdentifiers.innerHTML = `<span class="character-page__name">${character?.name}</span>
-					<span class="character-page__identifier">Lvl ${character?.level} ${character?.race} ${character?.class}</span>`;
-				metadataHolder.append(charIdentifiers);
+		return column;
+	}
+
+	#createRightColumn(character) {
+		const column = document.createElement('div');
+		column.className = 'character-column character-column--right';
+
+		if (character.stats?.metadata) {
+			// Vital Stats
+			if (
+				character.stats.metadata.armorClass ||
+				character.stats.metadata.healthPoints ||
+				character.stats.metadata.walkingSpeed
+			) {
+				const vitals = this.#createVitalsSection(character.stats.metadata);
+				column.appendChild(vitals);
 			}
 
-			addSeparator(metadataHolder);
-
-			const characterHealth = document.createElement('div');
-			characterHealth.className = 'character-page__hp';
-			characterHealth.innerHTML = `
-				<div class="character-page__hp-item">
-					<span class="character-page__hp-item-name">Armor Class</span>
-					<span class="character-page__hp-item-value">${character?.stats?.metadata?.armorClass || '-'}</span>
-				</div>
-				<div class="character-page__hp-item">
-					<span class="character-page__hp-item-name">Hit Points</span>
-					<span class="character-page__hp-item-value">${character?.stats?.metadata?.healthPoints || '-'}</span>
-				</div>
-				<div class="character-page__hp-item">
-					<span class="character-page__hp-item-name">Speed</span>
-					<span class="character-page__hp-item-value">${character?.stats?.metadata?.walkingSpeed || '-'}</span>
-				</div>
-				`;
-			metadataHolder.append(characterHealth);
-
 			// Ability Scores
-			if (character?.stats?.metadata?.abilityScores?.length) {
-				const abilityScoresHeader = document.createElement('span');
-				abilityScoresHeader.className = 'character-page__header';
-				abilityScoresHeader.textContent = 'Ability Scores';
-				metadataHolder.appendChild(abilityScoresHeader);
-
-				const abilityScoresContainer = document.createElement('div');
-				abilityScoresContainer.className = 'character-page__ability-scores';
-				character.stats.metadata.abilityScores.forEach((ability) => {
-					const abilityBox = document.createElement('div');
-					abilityBox.className = 'character-page__ability-box';
-					abilityBox.innerHTML = `
-					<span class="character-page__ability-name">${ability.abbr.toUpperCase()}</span>
-					<div class="character-page__ability-values">
-						<span class="character-page__ability-value">${ability.value}</span>
-						<span class="character-page__ability-score">(${ability.score})</span>
-					</div>
-				`; // Added sign for score
-					abilityScoresContainer.appendChild(abilityBox);
-				});
-				metadataHolder.appendChild(abilityScoresContainer);
+			if (character.stats.metadata.abilityScores?.length) {
+				const abilities = this.#createAbilitiesSection(character.stats.metadata.abilityScores);
+				column.appendChild(abilities);
 			}
 
 			// Saving Throws
-			if (character?.stats?.metadata?.savingThrows?.length) {
-				const savingThrowsHeader = document.createElement('span');
-				savingThrowsHeader.className = 'character-page__header';
-				savingThrowsHeader.textContent = 'Saving Throws';
-				metadataHolder.appendChild(savingThrowsHeader);
-
-				const savingThrowsContainer = document.createElement('div');
-				savingThrowsContainer.className = 'character-page__saving-throws';
-				character.stats.metadata.savingThrows.forEach((save) => {
-					const saveItem = document.createElement('div');
-					saveItem.className = 'character-page__save-item';
-					saveItem.innerHTML = `
-					<span class="character-page__save-name">${save.name.toUpperCase()}</span>
-					<span class="character-page__save-value">${save.value}</span>
-				`; // Added sign
-					savingThrowsContainer.appendChild(saveItem);
-				});
-				metadataHolder.appendChild(savingThrowsContainer);
+			if (character.stats.metadata.savingThrows?.length) {
+				const saves = this.#createSavingThrowsSection(character.stats.metadata.savingThrows);
+				column.appendChild(saves);
 			}
 
-			// --- Description Manager (for Actions/Features) ---
-			// This logic can remain the same as in your original code
-			const descriptionManager = {
-				openDescriptions: [],
-				closeAll: function () {
-					this.openDescriptions.forEach((descEl) => {
-						descEl.classList.add('description-hidden');
-					});
-					this.openDescriptions = [];
-				},
-				open: function (descEl) {
-					this.closeAll();
-					descEl.classList.remove('description-hidden');
-					this.openDescriptions.push(descEl);
-					this.adjustPosition(descEl);
-				},
-				adjustPosition: function (descEl) {
-					// Reset any previous positioning
-					descEl.style.left = '0';
-
-					// Wait for the element to be visible to get its dimensions
-					setTimeout(() => {
-						const rect = descEl.getBoundingClientRect();
-						const parentRect = descEl.parentElement.getBoundingClientRect();
-
-						// Check if the description is going off the right edge of the viewport
-						if (rect.right > window.innerWidth) {
-							descEl.style.left = 'auto';
-							descEl.style.right = '0';
-							descEl.style.transform = 'none';
-						}
-						// Check if the description is going off the left edge of the viewport
-						else if (rect.left < 0) {
-							descEl.style.left = '0';
-							descEl.style.transform = 'none';
-						}
-					}, 0);
-				},
-			};
-
 			// Actions
-			if (character?.stats?.metadata?.actionData?.length) {
-				const actionsHeader = document.createElement('span');
-				actionsHeader.className = 'character-page__header';
-				actionsHeader.textContent = 'Actions';
-				metadataHolder.appendChild(actionsHeader);
-
-				const actionsContainer = document.createElement('div');
-				actionsContainer.className = 'character-page__actions';
-				character.stats.metadata.actionData.forEach((action) => {
-					const actionItem = document.createElement('div');
-					actionItem.className = 'character-page__action-item';
-
-					const nameSpan = document.createElement('span');
-					nameSpan.className = 'character-page__action-item-name';
-					nameSpan.textContent = action.name;
-					actionItem.appendChild(nameSpan);
-
-					if (action.description) {
-						const descSpan = document.createElement('span');
-						descSpan.className = 'character-page__action-item-description description-hidden';
-						descSpan.innerHTML = action.description; // Use innerHTML if description contains HTML
-						this.#processEntityReferences(descSpan); // Process entities in description
-						actionItem.appendChild(descSpan);
-						actionItem.classList.add('has-description');
-
-						const toggleDescription = (e) => {
-							e.stopPropagation();
-							if (descSpan.classList.contains('description-hidden')) {
-								descriptionManager.open(descSpan);
-							} else {
-								descriptionManager.closeAll();
-							}
-						};
-						actionItem.addEventListener('click', toggleDescription);
-					}
-					actionsContainer.appendChild(actionItem);
-				});
-				metadataHolder.appendChild(actionsContainer);
+			if (character.stats.metadata.actionData?.length) {
+				const actions = this.#createActionsSection(character.stats.metadata.actionData);
+				column.appendChild(actions);
 			}
 
 			// Features
-			if (character?.stats?.metadata?.features?.length) {
-				const featuresHeader = document.createElement('span');
-				featuresHeader.className = 'character-page__header';
-				featuresHeader.textContent = 'Features';
-				metadataHolder.appendChild(featuresHeader);
-
-				const featuresContainer = document.createElement('div');
-				featuresContainer.className = 'character-page__features';
-				character.stats.metadata.features.forEach((feature) => {
-					const featureItem = document.createElement('div');
-					featureItem.className = 'character-page__feature-item';
-
-					const nameSpan = document.createElement('span');
-					nameSpan.className = 'character-page__feature-item-name';
-					nameSpan.textContent = feature.name;
-					featureItem.appendChild(nameSpan);
-
-					if (feature.description) {
-						const descSpan = document.createElement('span');
-						descSpan.className = 'character-page__feature-item-description description-hidden';
-						descSpan.innerHTML = feature.description; // Use innerHTML
-						this.#processEntityReferences(descSpan); // Process entities
-						featureItem.appendChild(descSpan);
-						featureItem.classList.add('has-description');
-
-						const toggleDescription = (e) => {
-							e.stopPropagation();
-							if (descSpan.classList.contains('description-hidden')) {
-								descriptionManager.open(descSpan);
-							} else {
-								descriptionManager.closeAll();
-							}
-						};
-						featureItem.addEventListener('click', toggleDescription);
-					}
-					featuresContainer.appendChild(featureItem);
-				});
-				metadataHolder.appendChild(featuresContainer);
+			if (character.stats.metadata.features?.length) {
+				const features = this.#createFeaturesSection(character.stats.metadata.features);
+				column.appendChild(features);
 			}
+		}
 
-			// Global click handler to close descriptions
-			document.addEventListener('click', () => descriptionManager.closeAll(), true); // Use capture phase
-
-			// Spells (remains largely the same, ensure #processEntityReferences runs on spell name)
-			if (character?.stats?.metadata?.spellData?.length) {
-				const spellsHeader = document.createElement('span');
-				spellsHeader.className = 'character-page__header';
-				spellsHeader.textContent = 'Spells';
-				metadataHolder.appendChild(spellsHeader);
-
-				const spellsContainer = document.createElement('div');
-				spellsContainer.className = 'character-page__spells';
-				character.stats.metadata.spellData.forEach((spellGroup) => {
-					// ... (spell group header logic) ... [cite: 161]
-					const groupHeader = document.createElement('div'); // Added
-					groupHeader.className = 'character-page__spell-group-header'; // Added
-					groupHeader.textContent = spellGroup.groupName; // Added
-					spellsContainer.appendChild(groupHeader); // Added
-
-					spellGroup.spells.forEach((spell) => {
-						const spellItem = document.createElement('div');
-						spellItem.className = 'character-page__spell-item';
-
-						const spellName = document.createElement('div');
-						spellName.className = 'character-page__spell-name';
-
-						spellName.innerHTML = `[ENTITY:spell:${spell.spellInfo.spellName}]`;
-						this.#processEntityReferences(spellName); // Process the entity reference
-
-						const spellMeta = document.createElement('div');
-						spellMeta.className = 'character-page__spell-meta';
-						// ... (range, slot, effect info) ...
-						const rangeInfo = document.createElement('span'); // Added
-						rangeInfo.className = 'character-page__spell-range'; // Added
-						rangeInfo.textContent = `Range: ${spell.range}`; // Added
-						spellMeta.appendChild(rangeInfo); // Added
-
-						const slotInfo = document.createElement('span'); // Added
-						slotInfo.className = 'character-page__spell-slot'; // Added
-						slotInfo.textContent = `Slot: ${spell.slotType}`; // Added
-						spellMeta.appendChild(slotInfo); // Added
-
-						const effectInfo = document.createElement('span'); // Added
-						effectInfo.className = 'character-page__spell-effect'; // Added
-						effectInfo.textContent = `Effect: ${spell.effect}`; // Added
-						spellMeta.appendChild(effectInfo); // Added
-
-						if (spell.spellInfo.spellMetaInfo) {
-							const spellNote = document.createElement('div');
-							spellNote.className = 'character-page__spell-note';
-							spellNote.textContent = spell.spellInfo.spellMetaInfo;
-							spellMeta.appendChild(spellNote);
-						}
-
-						spellItem.appendChild(spellName);
-						spellItem.appendChild(spellMeta);
-						spellsContainer.appendChild(spellItem);
-					});
-				});
-				metadataHolder.appendChild(spellsContainer);
-			}
-
-			characterPagePartTwo.append(metadataHolder);
-		} // End of if (character?.stats?.metadata)
-
-		// Assemble character page parts
-		characterPage.append(characterPagePartTwo); // Metadata side
-		characterPage.append(characterPagePartOne); // Image/Background side
-		contentArea.append(characterPage); // Add to the main content area
+		return column;
 	}
 
-	// --- Placeholder Processing Methods ---
+	#createVitalsSection(metadata) {
+		const section = document.createElement('section');
+		section.className = 'character-section character-vitals';
+
+		const header = document.createElement('h3');
+		header.className = 'character-section__header';
+		header.textContent = 'Vital Statistics';
+		section.appendChild(header);
+
+		const grid = document.createElement('div');
+		grid.className = 'character-vitals__grid';
+
+		const vitals = [
+			{ name: 'Armor Class', value: metadata.armorClass || '-', class: 'ac' },
+			{ name: 'Hit Points', value: metadata.healthPoints || '-', class: 'hp' },
+			{ name: 'Speed', value: metadata.walkingSpeed || '-', class: 'speed' },
+		];
+
+		vitals.forEach((vital) => {
+			const item = document.createElement('div');
+			item.className = `character-vitals__item character-vitals__item--${vital.class}`;
+
+			const label = document.createElement('span');
+			label.className = 'character-vitals__label';
+			label.textContent = vital.name;
+
+			const value = document.createElement('span');
+			value.className = 'character-vitals__value';
+			value.textContent = vital.value;
+
+			item.appendChild(label);
+			item.appendChild(value);
+			grid.appendChild(item);
+		});
+
+		section.appendChild(grid);
+		return section;
+	}
+
+	#createAbilitiesSection(abilityScores) {
+		const section = document.createElement('section');
+		section.className = 'character-section character-abilities';
+
+		const header = document.createElement('h3');
+		header.className = 'character-section__header';
+		header.textContent = 'Ability Scores';
+		section.appendChild(header);
+
+		const grid = document.createElement('div');
+		grid.className = 'character-abilities__grid';
+
+		abilityScores.forEach((ability) => {
+			const item = document.createElement('div');
+			item.className = 'character-abilities__item';
+
+			const name = document.createElement('div');
+			name.className = 'character-abilities__name';
+			name.textContent = ability.abbr.toUpperCase();
+
+			const value = document.createElement('div');
+			value.className = 'character-abilities__value';
+			value.textContent = ability.value;
+
+			const modifier = document.createElement('div');
+			modifier.className = 'character-abilities__modifier';
+			modifier.textContent = `(${ability.score})`;
+
+			item.appendChild(name);
+			item.appendChild(value);
+			item.appendChild(modifier);
+			grid.appendChild(item);
+		});
+
+		section.appendChild(grid);
+		return section;
+	}
+
+	#createSavingThrowsSection(savingThrows) {
+		const section = document.createElement('section');
+		section.className = 'character-section character-saves';
+
+		const header = document.createElement('h3');
+		header.className = 'character-section__header';
+		header.textContent = 'Saving Throws';
+		section.appendChild(header);
+
+		const list = document.createElement('div');
+		list.className = 'character-saves__list';
+
+		savingThrows.forEach((save) => {
+			const item = document.createElement('div');
+			item.className = 'character-saves__item';
+
+			const name = document.createElement('span');
+			name.className = 'character-saves__name';
+			name.textContent = save.name.toUpperCase();
+
+			const value = document.createElement('span');
+			value.className = 'character-saves__value';
+			value.textContent = save.value;
+
+			item.appendChild(name);
+			item.appendChild(value);
+			list.appendChild(item);
+		});
+
+		section.appendChild(list);
+		return section;
+	}
+
+	#createActionsSection(actions) {
+		const section = document.createElement('section');
+		section.className = 'character-section character-actions';
+
+		const headerRow = document.createElement('div');
+		headerRow.className = 'character-section__header-row';
+
+		const header = document.createElement('h3');
+		header.className = 'character-section__header';
+		header.textContent = 'Actions';
+		headerRow.appendChild(header);
+
+		// Add toggle all button
+		if (actions.some((action) => action.description)) {
+			const toggleAll = document.createElement('button');
+			toggleAll.className = 'character-section__toggle-all';
+			toggleAll.textContent = 'Toggle All';
+			toggleAll.addEventListener('click', () => {
+				const allDescriptions = section.querySelectorAll('.character-actions__description');
+				const anyVisible = Array.from(allDescriptions).some((d) => d.style.display !== 'none');
+
+				allDescriptions.forEach((desc) => {
+					desc.style.display = anyVisible ? 'none' : 'block';
+				});
+
+				// Update individual toggle buttons
+				section.querySelectorAll('.character-actions__toggle').forEach((btn) => {
+					btn.textContent = anyVisible ? 'Show' : 'Hide';
+				});
+			});
+			headerRow.appendChild(toggleAll);
+		}
+
+		section.appendChild(headerRow);
+
+		const list = document.createElement('div');
+		list.className = 'character-actions__list';
+
+		actions.forEach((action) => {
+			const item = document.createElement('div');
+			item.className = 'character-actions__item';
+
+			const nameRow = document.createElement('div');
+			nameRow.className = 'character-actions__name-row';
+
+			const name = document.createElement('h4');
+			name.className = 'character-actions__name';
+			name.textContent = action.name;
+			nameRow.appendChild(name);
+
+			if (action.description) {
+				const toggle = document.createElement('button');
+				toggle.className = 'character-actions__toggle';
+				toggle.textContent = 'Show';
+				toggle.addEventListener('click', () => {
+					const desc = item.querySelector('.character-actions__description');
+					if (desc.style.display === 'none') {
+						desc.style.display = 'block';
+						toggle.textContent = 'Hide';
+					} else {
+						desc.style.display = 'none';
+						toggle.textContent = 'Show';
+					}
+				});
+				nameRow.appendChild(toggle);
+			}
+
+			item.appendChild(nameRow);
+
+			if (action.description) {
+				const desc = document.createElement('div');
+				desc.className = 'character-actions__description';
+				desc.innerHTML = action.description;
+				desc.style.display = 'none'; // Hidden by default
+				this.#processEntityReferences(desc);
+				item.appendChild(desc);
+			}
+
+			list.appendChild(item);
+		});
+
+		section.appendChild(list);
+		return section;
+	}
+
+	#createFeaturesSection(features) {
+		const section = document.createElement('section');
+		section.className = 'character-section character-features';
+
+		const headerRow = document.createElement('div');
+		headerRow.className = 'character-section__header-row';
+
+		const header = document.createElement('h3');
+		header.className = 'character-section__header';
+		header.textContent = 'Features & Traits';
+		headerRow.appendChild(header);
+
+		// Add toggle all button
+		if (features.some((feature) => feature.description)) {
+			const toggleAll = document.createElement('button');
+			toggleAll.className = 'character-section__toggle-all';
+			toggleAll.textContent = 'Toggle All';
+			toggleAll.addEventListener('click', () => {
+				const allDescriptions = section.querySelectorAll('.character-features__description');
+				const anyVisible = Array.from(allDescriptions).some((d) => d.style.display !== 'none');
+
+				allDescriptions.forEach((desc) => {
+					desc.style.display = anyVisible ? 'none' : 'block';
+				});
+
+				// Update individual toggle buttons
+				section.querySelectorAll('.character-features__toggle').forEach((btn) => {
+					btn.textContent = anyVisible ? 'Show' : 'Hide';
+				});
+			});
+			headerRow.appendChild(toggleAll);
+		}
+
+		section.appendChild(headerRow);
+
+		const list = document.createElement('div');
+		list.className = 'character-features__list';
+
+		features.forEach((feature) => {
+			const item = document.createElement('div');
+			item.className = 'character-features__item';
+
+			const nameRow = document.createElement('div');
+			nameRow.className = 'character-features__name-row';
+
+			const name = document.createElement('h4');
+			name.className = 'character-features__name';
+			name.textContent = feature.name;
+			nameRow.appendChild(name);
+
+			if (feature.description) {
+				const toggle = document.createElement('button');
+				toggle.className = 'character-features__toggle';
+				toggle.textContent = 'Show';
+				toggle.addEventListener('click', () => {
+					const desc = item.querySelector('.character-features__description');
+					if (desc.style.display === 'none') {
+						desc.style.display = 'block';
+						toggle.textContent = 'Hide';
+					} else {
+						desc.style.display = 'none';
+						toggle.textContent = 'Show';
+					}
+				});
+				nameRow.appendChild(toggle);
+			}
+
+			item.appendChild(nameRow);
+
+			if (feature.description) {
+				const desc = document.createElement('div');
+				desc.className = 'character-features__description';
+				desc.innerHTML = feature.description;
+				desc.style.display = 'none'; // Hidden by default
+				this.#processEntityReferences(desc);
+				item.appendChild(desc);
+			}
+
+			list.appendChild(item);
+		});
+
+		section.appendChild(list);
+		return section;
+	}
+
+	#createSpellsSection(spellData) {
+		const section = document.createElement('section');
+		section.className = 'character-section character-spells';
+
+		const header = document.createElement('h3');
+		header.className = 'character-section__header';
+		header.textContent = 'Spells';
+		section.appendChild(header);
+
+		spellData.forEach((group) => {
+			const groupHeader = document.createElement('h4');
+			groupHeader.className = 'character-spells__group-header';
+			groupHeader.textContent = group.groupName;
+			section.appendChild(groupHeader);
+
+			const list = document.createElement('div');
+			list.className = 'character-spells__list';
+
+			group.spells.forEach((spell) => {
+				const item = document.createElement('div');
+				item.className = 'character-spells__item';
+
+				const name = document.createElement('div');
+				name.className = 'character-spells__name';
+				name.innerHTML = `[ENTITY:spell:${spell.spellInfo.spellName}]`;
+				this.#processEntityReferences(name);
+
+				const meta = document.createElement('div');
+				meta.className = 'character-spells__meta';
+
+				const range = document.createElement('span');
+				range.className = 'character-spells__range';
+				range.textContent = spell.range;
+
+				const slot = document.createElement('span');
+				slot.className = 'character-spells__slot';
+				slot.textContent = spell.slotType;
+
+				const effect = document.createElement('span');
+				effect.className = 'character-spells__effect';
+				effect.textContent = spell.effect;
+
+				meta.appendChild(range);
+				meta.appendChild(slot);
+				meta.appendChild(effect);
+
+				if (spell.spellInfo.spellMetaInfo) {
+					const note = document.createElement('div');
+					note.className = 'character-spells__note';
+					note.textContent = spell.spellInfo.spellMetaInfo;
+					meta.appendChild(note);
+				}
+
+				item.appendChild(name);
+				item.appendChild(meta);
+				list.appendChild(item);
+			});
+
+			section.appendChild(list);
+		});
+
+		return section;
+	}
 
 	#processImages(contentElement) {
 		// Find all image placeholders
