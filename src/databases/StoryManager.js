@@ -1544,17 +1544,22 @@ class StoryManager {
 	}
 
 	#processEntityReferences(contentElement) {
-		// Finds [ENTITY:type:name] and replaces with spans for tooltips
+		// Finds [ENTITY:type:name] or [ENTITY:type:name:givenName] and replaces with spans for tooltips
 		// This should run *before* tooltip attachment logic if separated
 		const text = contentElement.innerHTML;
-		const processedText = text.replace(/\[ENTITY:([\w-]+):(.*?)\]/gi, (match, type, name) => {
-			// More specific type regex
-			const cleanType = type.toLowerCase().trim();
-			const cleanName = name.trim();
-			// Basic validation
-			if (!cleanType || !cleanName) return match; // Return original if malformed
-			return `<span class="entity-reference entity-${cleanType}" data-entity-type="${cleanType}" data-entity-name="${cleanName}">${cleanName}</span>`;
-		});
+		const processedText = text.replace(
+			/\[ENTITY:([\w-]+):([^:\]]+)(?::([^\]]+))?\]/gi,
+			(match, type, name, givenName) => {
+				// More specific type regex
+				const cleanType = type.toLowerCase().trim();
+				const cleanName = name.trim();
+				// Basic validation
+				if (!cleanType || !cleanName) return match; // Return original if malformed
+
+				const displayText = givenName ? givenName.trim() : cleanName;
+				return `<span class="entity-reference entity-${cleanType}" data-entity-type="${cleanType}" data-entity-name="${cleanName}">${displayText}</span>`;
+			}
+		);
 		contentElement.innerHTML = processedText;
 
 		// Attach event listeners
