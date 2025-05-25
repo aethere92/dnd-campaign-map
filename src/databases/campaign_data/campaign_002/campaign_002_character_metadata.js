@@ -1059,7 +1059,7 @@ const CAMPAIGN_002_METADATA = {
 						effect: 'Communication*',
 					},
 					{
-						spellInfo: { spellName: 'Shillelagh*', spellMetaInfo: 'Eldritch Invocations' },
+						spellInfo: { spellName: 'Shillelagh', spellMetaInfo: 'Eldritch Invocations' },
 						range: 'Self',
 						slotType: '1BA',
 						effect: '1d10+6*',

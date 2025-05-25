@@ -146,4 +146,5 @@ const CAMPAIGN_002_API_DATA = {
 			description: `Leader of the Town Guard, captain of the militia, and chief constable, Soranna is a tall, strong-boned woman with simple good looks hidden behind an unsmiling manner. As leader of the town’s guardsmen, Soranna holds a seat on the council.`,
 		},
 	},
+	spell: DND_SPELL_DB,
 };

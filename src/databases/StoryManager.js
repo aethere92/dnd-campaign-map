@@ -1943,7 +1943,7 @@ The party has reached level <strong>${level}</strong>!</p>
 			<div class="entity-tooltip entity-${entityType}-tooltip">
 				<div class="tooltip-header">
 				${entityType === 'character' ? `<img src="${entityData.icon}" alt="${entityData.name}" />` : ''}
-				<h3>${entityData.name || entityData.title || 'Unknown'}</h3>
+				<h3>${entityData.name || entityData.title || entityData.spellName || 'Unknown'}</h3>
 				</div>
 				<div class="tooltip-content">
 			`;
@@ -1952,16 +1952,20 @@ The party has reached level <strong>${level}</strong>!</p>
 		switch (entityType) {
 			case 'spell':
 				content += `
-					<div><strong>Level:</strong> ${entityData.level || 'Cantrip'}</div>
-					<div><strong>School:</strong> ${entityData.school?.name || 'Unknown'}</div>
-					<div><strong>Casting Time:</strong> ${entityData.casting_time || 'N/A'}</div>
-					<div><strong>Range:</strong> ${entityData.range || 'N/A'}</div>
-					<div><strong>Components:</strong> ${entityData.components?.join(', ') || 'None'}</div>
-					<div><strong>Duration:</strong> ${entityData.duration || 'Instantaneous'}</div>
-					<div class="tooltip-description tooltip-background">${
-						entityData.desc?.join('<br>') || entityData.description || 'No description available.'
-					}</div>
-					`;
+				<div><strong>Level:</strong> ${entityData.level || 'Cantrip'}</div>
+				<div><strong>School:</strong> ${
+					entityData.spellClass
+						? entityData.spellClass.charAt(0).toUpperCase() + entityData.spellClass.slice(1)
+						: 'Unknown'
+				}</div>
+				<div><strong>Casting Time:</strong> ${entityData.castingTime || 'N/A'}</div>
+				<div><strong>Range:</strong> ${entityData.range || 'N/A'}</div>
+				<div><strong>Components:</strong> ${entityData.components || 'None'}</div>
+				<div><strong>Duration:</strong> ${entityData.duration || 'Instantaneous'}</div>
+				<div><strong>Classes:</strong> ${entityData.classes?.join(', ') || 'N/A'}</div>
+				<div><strong>Source:</strong> ${entityData.source || 'Unknown'}</div>
+				<div class="tooltip-description tooltip-background">${entityData.description || 'No description available.'}</div>
+				`;
 				break;
 
 			case 'monster':
