@@ -16,6 +16,6 @@
 <li><strong>[ENTITY:character:Smasherina]</strong>, another [ENTITY:class:Barbarian], carrying an unstoppable force with every strike.</li>
 </ul>
 
-<p>As introductions unfolded and speculation mounted, it wasn’t long before their collective curiosity and shared goals led them to an opportunity-a place aboard a pirate ship, the infamous Wicked Wench.</p>
+<p>As introductions unfolded and speculation mounted, it wasn’t long before their collective curiosity and shared goals led them to an opportunity-a place aboard a pirate ship, the infamous [ENTITY:location:Wicked Wench].</p>
 
 <p>With the map’s growing mystery, a crew of rogues and outlaws, and an uncharted adventure ahead, the party embarked on their newest journey, unknowingly stepping into the pages of a legend waiting to be written.</p>

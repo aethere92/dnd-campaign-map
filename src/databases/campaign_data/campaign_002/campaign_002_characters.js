@@ -5,6 +5,7 @@ const CAMPAIGN_002_CHARACTERS = [
 		class: 'Rogue',
 		level: 6,
 		icon: 'images/assets/character_thumbnails/campaign_002/bonnie.jpeg',
+		imageBg: 'images/assets/campaign_002/characters/bonnie_bg.jpeg',
 		background: CAMPAIGN_02_BACKGROUNDS.BONNIE.background,
 		shortDescription: CAMPAIGN_02_BACKGROUNDS.BONNIE.shortDescription,
 		stats: {
@@ -48,6 +49,7 @@ const CAMPAIGN_002_CHARACTERS = [
 		class: 'Paladin',
 		level: 6,
 		icon: 'images/assets/character_thumbnails/campaign_002/olek.jpeg',
+		imageBg: 'images/assets/campaign_002/characters/olek_bg.jpg',
 		background: CAMPAIGN_02_BACKGROUNDS.OLEK.background,
 		shortDescription: CAMPAIGN_02_BACKGROUNDS.OLEK.shortDescription,
 		stats: {

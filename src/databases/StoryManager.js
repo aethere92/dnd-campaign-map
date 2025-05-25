@@ -1353,10 +1353,36 @@ class StoryManager {
 		section.appendChild(header);
 
 		spellData.forEach((group) => {
+			const groupContainer = document.createElement('div');
+			groupContainer.className = 'character-spells__group';
+
+			const groupHeaderRow = document.createElement('div');
+			groupHeaderRow.className = 'character-spells__group-header-row';
+
 			const groupHeader = document.createElement('h4');
 			groupHeader.className = 'character-spells__group-header';
 			groupHeader.textContent = group.groupName;
-			section.appendChild(groupHeader);
+			groupHeaderRow.appendChild(groupHeader);
+
+			// Add toggle button for this spell group
+			if (group.spells.length > 0) {
+				const toggleGroup = document.createElement('button');
+				toggleGroup.className = 'character-spells__group-toggle';
+				toggleGroup.textContent = 'Hide spells';
+				toggleGroup.addEventListener('click', () => {
+					const list = groupContainer.querySelector('.character-spells__list');
+					if (list.style.display === 'none') {
+						list.style.display = 'flex';
+						toggleGroup.textContent = 'Hide spells';
+					} else {
+						list.style.display = 'none';
+						toggleGroup.textContent = 'Show spells';
+					}
+				});
+				groupHeaderRow.appendChild(toggleGroup);
+			}
+
+			groupContainer.appendChild(groupHeaderRow);
 
 			const list = document.createElement('div');
 			list.className = 'character-spells__list';
@@ -1401,7 +1427,8 @@ class StoryManager {
 				list.appendChild(item);
 			});
 
-			section.appendChild(list);
+			groupContainer.appendChild(list);
+			section.appendChild(groupContainer);
 		});
 
 		return section;

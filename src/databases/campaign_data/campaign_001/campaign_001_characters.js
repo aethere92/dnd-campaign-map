@@ -79,7 +79,7 @@ const CAMPAIGN_001_CHARACTERS = [
 		shortDescription: null,
 		stats: {
 			abilityScores: null,
-			metadata: null,
+			metadata: CAMPAIGN_001_METADATA.SMASHERINA,
 		},
 		is_included: true,
 	},

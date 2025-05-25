@@ -1,4 +1,4 @@
-<p>The salty breeze of the open sea still clung to their clothes as the party disembarked from the pirate ship, stepping onto the rugged shores of Korinis Island. The scent of damp earth mingled with the faint traces of brine, and the distant squawking of gulls reminded them that their journey had only just begun.</p>
+<p>The salty breeze of the open sea still clung to their clothes as the party disembarked from the pirate ship, stepping onto the rugged shores of [ENTITY:location:Korinis Island]. The scent of damp earth mingled with the faint traces of brine, and the distant squawking of gulls reminded them that their journey had only just begun.</p>
 
 <p>Ahead, a winding mountain path snaked upward, cutting through the dense, whispering foliage. The group exchanged determined glances before setting out, their boots crunching against loose gravel as they ascended, each step taking them deeper into the unknown.</p>
 
@@ -18,4 +18,4 @@
 
 <p>Seeking sanctuary, they entered the inn, its warm glow inviting them to finally lay their heads down in comfort. But peace was fleeting. As night fell and the world slumbered, unseen hands crept through the shadows. Morning arrived with an unpleasant surprise-some of their gold and belongings were missing, stolen right from under their noses.</p>
 
-<p>Now, with losses to recover and mysteries to unravel, their adventure in Korinis was only beginning.</p>
+<p>Now, with losses to recover and mysteries to unravel, their adventure in [ENTITY:location:Korinis Island] was only beginning.</p>

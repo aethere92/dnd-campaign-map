@@ -4,7 +4,7 @@
 
 <p>Pushing onward, they reached a lake, its surface eerily still under the weight of their exhaustion. Using their surroundings to their advantage, they scaled platforms, each climb bringing them closer to an unknown fate.</p>
 
-<p>At last, they entered a doorway, where they encountered Finneas, a murloc with questionable intentions. Before they could process his presence, undead surged forth, threatening their survival once more. The battle was fierce, but the party triumphed, pushing back the restless dead.</p>
+<p>At last, they entered a doorway, where they encountered [ENTITY:npc:Finneas], a murloc with questionable intentions. Before they could process his presence, undead surged forth, threatening their survival once more. The battle was fierce, but the party triumphed, pushing back the restless dead.</p>
 
 <p>With their objectives shifting, they shot a flare into the sky, signaling their crew-water had been found.</p>
 

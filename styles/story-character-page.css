@@ -47,6 +47,52 @@
 	letter-spacing: 1px;
 }
 
+.character-section__header-row {
+	display: flex;
+	border-bottom: 1px solid #e0d5c3;
+	padding-bottom: 0.5rem;
+
+	&:has(.character-section__toggle-all) .character-section__header {
+		border-bottom: none;
+		padding-bottom: 0;
+		margin: 0;
+	}
+}
+
+.character-section__toggle-all {
+	background: none;
+	border: none;
+	border-radius: 4px;
+	padding: 0.25rem 0.5rem;
+	color: #5c2c0a;
+	font-weight: 600;
+	cursor: pointer;
+	font-family: 'Noto sans', var(--font-system);
+	width: max-content;
+	margin-left: auto;
+}
+
+.character-actions__name-row,
+.character-features__name-row {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.character-actions__toggle,
+.character-features__toggle,
+.character-spells__group-toggle {
+	background: none;
+	border: none;
+	border-radius: 4px;
+	padding: 0.25rem 0.5rem;
+	color: #5c2c0a;
+	font-weight: 600;
+	cursor: pointer;
+	width: max-content;
+	font-family: 'Noto sans', var(--font-system);
+}
+
 /* Two-column layout */
 .character-columns {
 	display: grid;
@@ -195,11 +241,33 @@
 	gap: 0.5rem;
 }
 
+.character-spells__group {
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+}
+
+.character-spells__group-header-row {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-top: 10px;
+}
+
+.character-spells__group-header {
+	margin: 0;
+}
+
+.character-spells__group {
+	margin-bottom: 15px;
+}
+
 .character-actions__list,
 .character-features__list {
 	display: flex;
 	flex-direction: column;
 	gap: 0.5rem;
+	margin-top: 1rem;
 }
 
 .character-saves__item {
@@ -289,6 +357,7 @@
 @media (max-width: 768px) {
 	.character-sheet {
 		width: unset;
+		padding: 0.5rem;
 	}
 
 	.character-columns {
@@ -306,46 +375,4 @@
 	.character-abilities__grid {
 		grid-template-columns: 1fr;
 	}
-}
-
-.character-section__header-row {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-
-	& .character-section__header {
-		width: 100%;
-	}
-}
-
-.character-section__toggle-all {
-	background: none;
-	border: none;
-	border-radius: 4px;
-	padding: 0.25rem 0.5rem;
-	color: #5c2c0a;
-	font-weight: 600;
-	cursor: pointer;
-	font-family: 'Noto sans', var(--font-system);
-	width: max-content;
-}
-
-.character-actions__name-row,
-.character-features__name-row {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-}
-
-.character-actions__toggle,
-.character-features__toggle {
-	background: none;
-	border: none;
-	border-radius: 4px;
-	padding: 0.25rem 0.5rem;
-	color: #5c2c0a;
-	font-weight: 600;
-	cursor: pointer;
-	width: max-content;
-	font-family: 'Noto sans', var(--font-system);
 }
