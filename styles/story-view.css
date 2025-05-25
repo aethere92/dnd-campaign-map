@@ -401,7 +401,9 @@
 .story-content-area {
 	display: flex;
 	/* padding: var(--spacing-lg); */
-	background-color: var(--color-parchment);
+	/* background-color: var(--color-parchment); */
+	background-color: #fffae9;
+	background-image: url('https://transparenttextures.com/patterns/rice-paper-3.png');
 	position: relative;
 	height: 100vh;
 	/* max-height: calc(100vh - var(--spacing-lg) * 2 - 10px); */
@@ -593,7 +595,8 @@
 /* Session content styles */
 .session-main-content,
 .session-small-recap {
-	font-size: 11pt;
+	font-size: 10.5pt;
+	line-height: 15pt;
 	color: var(--color-text);
 	background-color: rgba(255, 255, 255, 0.7);
 	padding: var(--spacing-lg);
@@ -601,7 +604,7 @@
 	box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
 	border: 1px solid var(--color-border);
 	position: relative;
-	font-family: var(--font-system);
+	font-family: 'Noto Sans', var(--font-system);
 	background: url('../images/assets/background_texture.png');
 }
 

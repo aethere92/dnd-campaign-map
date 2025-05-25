@@ -537,6 +537,35 @@ class StoryManager {
 		header.innerHTML = `<h2>Campaign Timeline</h2>`;
 		timelineContainer.appendChild(header);
 
+		const toggleAllButton = document.createElement('button');
+		toggleAllButton.className = 'timeline-toggle-all-button';
+		toggleAllButton.textContent = 'Toggle descriptions';
+		toggleAllButton.type = 'button';
+		header.appendChild(toggleAllButton);
+
+		toggleAllButton.addEventListener('click', () => {
+			const allDescriptions = timelineContainer.querySelectorAll(
+				'.timeline-main-description, .timeline-sub-description'
+			);
+
+			// Check if any descriptions are currently active
+			const anyActive = Array.from(allDescriptions).some((desc) => desc.classList.contains('active'));
+
+			// First, untoggle all descriptions
+			allDescriptions.forEach((desc) => {
+				desc.classList.remove('active');
+			});
+
+			// If none were active, toggle them all on after a brief delay
+			if (!anyActive) {
+				setTimeout(() => {
+					allDescriptions.forEach((desc) => {
+						desc.classList.add('active');
+					});
+				}, 50);
+			}
+		});
+
 		// Create timeline wrapper
 		const timeline = document.createElement('div');
 		timeline.className = 'timeline';
