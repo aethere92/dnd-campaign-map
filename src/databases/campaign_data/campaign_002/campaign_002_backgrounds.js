@@ -79,7 +79,7 @@ const CAMPAIGN_02_BACKGROUNDS = {
 
 		<p>And so, we find [ENTITY:character:Soshi], her spellbook in hand and memories of the [ENTITY:location:Feywilds] stirring in her chest, walking the winding road to [ENTITY:location:Drellin\'s Ferry].</p>`,
 		shortDescription:
-			"Born of magic in the Feywilds, Soshi crossed into the harsh world of mortals as a child, lost and alone in the unforgiving streets of [ENTITY:location:Luskan]. Stripped of her fey joy, she buried herself in wizardry, desperate to belong. The Arcane Brotherhood gave her power-but at a terrible cost. Fleeing its darkness with her only friend and a stolen map, Soshi now travels toward Drellin's Ferry with a band of unlikely allies, her spellbook in hand and the echo of the Feywild still stirring in her soul.",
+			"Born of magic in the Feywilds, Soshi crossed into the harsh world of mortals as a child, lost and alone in the unforgiving streets of Luskan. Stripped of her fey joy, she buried herself in wizardry, desperate to belong. The Arcane Brotherhood gave her power-but at a terrible cost. Fleeing its darkness with her only friend and a stolen map, Soshi now travels toward Drellin's Ferry with a band of unlikely allies, her spellbook in hand and the echo of the Feywild still stirring in her soul.",
 	},
 	NORR: {
 		background: `<p>[ENTITY:character:Norr], like so many other gifted children born into this world, did not have an easy start in life. Born into a poor family, with a father who enjoyed his drink a bit too much, and a mother unable to defend herself or her daughter, [ENTITY:character:Norr] learned early to keep quiet and keep to herself.</p>

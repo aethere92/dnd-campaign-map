@@ -20,7 +20,7 @@ const CAMPAIGN_002_CHARACTERS = [
 		class: 'Echo Knight',
 		level: 6,
 		icon: 'images/assets/character_thumbnails/campaign_002/kaedin.jpeg',
-		imageBg: 'images/assets/campaign_002/characters/kaedin_bg.jpg',
+		imageBg: 'images/assets/campaign_002/characters/kaedin_bg.png',
 		background: CAMPAIGN_02_BACKGROUNDS.KAEDIN.background,
 		shortDescription: CAMPAIGN_02_BACKGROUNDS.KAEDIN.shortDescription,
 		stats: {
