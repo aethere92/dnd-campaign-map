@@ -36,4 +36,30 @@ const CAMPAIGN_002_RECAPS = [
 		content: 'session_data/session_003/session_003_content.md',
 		recap: 'session_data/session_003/session_003_recap.md',
 	},
+	{
+		id: 'session-004',
+		title: '003 - Into the Depths',
+		date: 'June 7th',
+		content: 'session_data/session_004/session_004_content.md',
+		recap: 'session_data/session_004/session_004_recap.md',
+		progression: {
+			loot: [
+				{
+					id: 'reptile-loot-01',
+					data: [
+						{ itemName: 'Old jewelry', count: 1, rarity: 'common', description: 'Worth 10 pieces', owner: 'Party' },
+						{
+							itemName: 'Vials with misterious elixirs',
+							count: 2,
+							rarity: 'uncommon',
+							description: 'N/A',
+							owner: 'Bonnie',
+						},
+						{ itemName: 'Magical Bow', count: 1, rarity: 'uncommon', description: 'N/A', owner: 'Party' },
+						{ itemName: 'Enchanted Helmet', count: 1, rarity: 'uncommon', description: 'N/A', owner: 'Party' },
+					],
+				},
+			],
+		},
+	},
 ];
