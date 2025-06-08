@@ -47,7 +47,13 @@ const CAMPAIGN_002_RECAPS = [
 				{
 					id: 'reptile-loot-01',
 					data: [
-						{ itemName: 'Old jewelry', count: 1, rarity: 'common', description: 'Worth 10 pieces', owner: 'Party' },
+						{
+							itemName: 'Old jewelry',
+							count: 1,
+							rarity: 'common',
+							description: 'Worth 10 gold pieces',
+							owner: 'Party',
+						},
 						{
 							itemName: 'Vials with misterious elixirs',
 							count: 2,

@@ -50,6 +50,10 @@ const CAMPAIGN_002_API_DATA = {
 			name: 'The Witchwood',
 			description: `Generally held to be haunted by the restless spirits of the ancient human druidic folk who once dwelt here, the Witchwood is a lush, wet woodland interspersed with swampy stretches in the vicinity of the larger rivers.The Witchwood is a warm forest with a mix of oaks, subtropical evergreens, and plenty of undergrowth. Any party cutting cross-country through the forest without following a trail stands an excellent chance of getting very lost.`,
 		},
+		'Green Apple Inn': {
+			name: 'The Green Apple Inn',
+			description: `One of the inns in Drellin's Ferry, where the party currently resides.`,
+		},
 	},
 	guild: {
 		'Arcane Brotherhood': {
@@ -75,6 +79,20 @@ const CAMPAIGN_002_API_DATA = {
 				Base: 'Rosohna, Wildermount',
 				Religion: 'The Luxon',
 			},
+		},
+		'Winter Rose': {
+			name: 'The Winter Rose',
+			description: `The Winter Rose was an adventuring fellowship from Amn, named after the beautiful winter flower – frostrose. It was assembled by a paladin who was guided by his unwavering commitment to justice and duty. The name was inspired by the resilience of a frostrose that kept its petals bright red against all odds and cold of the harsh northern winter. The Winter Rose proclaimed themselves to be defenders of the north`,
+			metadata: {
+				Base: 'Athkatla, Amn - North Faerûn',
+				Leader: 'Sirge de La Sunya',
+			},
+		},
+		'Thieves Guild': {
+			name: "The Thieves' Guild",
+			description: `A thieves' guild was a guild of organized thieves and rogues. Most major cities in Faerûn, and some smaller ones, had one or more thieves' guilds. Some were powerful enough to hold significant political power, which they often obtained through bribery and intimidation. Most local guilds were short-lived groups that revolved around a particular individual.
+
+			Members of thieves' guild often served one of the following roles, which were divided into divisions in larger guilds: assassins, beggars, bounty hunters, burglars, con artists and tricksters, cutpurses and pickpockets, enforcers and thugs, racketeers, scouts and spies, and fences, smugglers, and pirates.`,
 		},
 	},
 	subclass: {
@@ -144,6 +162,69 @@ const CAMPAIGN_002_API_DATA = {
 			class: 'N/A',
 			role: 'Leader of the Town Guard',
 			description: `Leader of the Town Guard, captain of the militia, and chief constable, Soranna is a tall, strong-boned woman with simple good looks hidden behind an unsmiling manner. As leader of the town’s guardsmen, Soranna holds a seat on the council.`,
+		},
+		Anya: {
+			name: 'Anya',
+			affinity: "Drellin's Ferry",
+			class: 'N/A',
+			role: 'N/A',
+			description: `Described as 1.8m, redheaded and freckled, Anya used to work as a barmaid at the Green Apple Inn, until she was taken into the druid Avarthel\'s care to give birth and mend her physical and mental injuries.`,
+		},
+		Lem: {
+			name: 'Lem',
+			affinity: "Drellin's Ferry",
+			class: 'N/A',
+			role: 'Town guard',
+			description: `Anya's love interest, he is described as a fat, short (1.5m) human who works as a Town guard. He got injured in one of the Warg raids.`,
+		},
+		Kat: {
+			name: 'Kat',
+			affinity: "Drellin's Ferry | Thieves Guild",
+			class: 'Trickster',
+			role: 'Town guard',
+			description: `Thief. Loves cats.`,
+		},
+		Yoghurt: {
+			name: 'Yoghurt',
+			affinity: "Drellin's Ferry | Thieves Guild",
+			class: 'Assassin',
+			role: 'Town guard',
+			description: `Thief. Lactose intolerant.`,
+		},
+		Avarthel: {
+			name: 'Avarthel',
+			affinity: "Drellin's Ferry | Circle of the Land",
+			class: 'Druid',
+			role: 'Healer',
+			description: `Druid. Healer.`,
+		},
+		Vandal: {
+			name: 'Vandal',
+			affinity: 'The Winter Rose',
+			class: 'N/A',
+			role: 'Mercenary',
+			description: `Mercenary.`,
+		},
+		Summoner: {
+			name: 'Summoner',
+			affinity: 'The Winter Rose',
+			class: 'N/A',
+			role: 'Mercenary',
+			description: `Mercenary.`,
+		},
+		Jareth: {
+			name: 'Jareth',
+			affinity: "Drellin's Ferry | House Corzina",
+			class: 'N/A',
+			role: 'Merchant',
+			description: `Merchant. Buffed.`,
+		},
+		Tharma: {
+			name: 'Tharma',
+			affinity: "Drellin's Ferry",
+			class: 'N/A',
+			role: 'Barmaid',
+			description: `Barmaid of the Green Apple. Lover of novels.`,
 		},
 	},
 	spell: DND_SPELL_DB,

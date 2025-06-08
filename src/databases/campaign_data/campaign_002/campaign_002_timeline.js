@@ -100,6 +100,19 @@ const CAMPAIGN_002_TIMELINE = [
 				actors: '[ENTITY:character:Entire party]',
 				sublocation: null,
 			},
+			{
+				type: 'narrative',
+				actors: '[ENTITY:npc:Soranna]',
+				sublocation: 'Tollhouse',
+				is_new_session: true,
+				description: `Talked to Soranna, found out about Kat and Yoghurt and tunnel.`,
+			},
+			{
+				type: 'narrative',
+				actors: '[ENTITY:character:Entire party]',
+				sublocation: '[ENTITY:location:Green Apple Inn]',
+				description: 'N/A',
+			},
 		],
 	},
 ];
