@@ -93,7 +93,7 @@ const CAMPAIGN_002_TIMELINE = [
 		id: 4,
 		title: "Back to Drellin's Ferry",
 		location: `[ENTITY:location:Drellin's Ferry]`,
-		session: '2',
+		session: '2 & 3',
 		items: [
 			{
 				type: 'narrative',
@@ -112,6 +112,43 @@ const CAMPAIGN_002_TIMELINE = [
 				actors: '[ENTITY:character:Entire party]',
 				sublocation: '[ENTITY:location:Green Apple Inn]',
 				description: 'N/A',
+			},
+			{
+				type: 'investigation',
+				actors: '[ENTITY:character:Entire party]',
+				sublocation: `Anya's house`,
+				description: 'N/A',
+			},
+			{
+				type: 'narrative',
+				actors: '[ENTITY:character:Entire party], [ENTITY:npc:Summoner], [ENTITY:npc:Vandal]',
+				sublocation: `[ENTITY:location:Green Apple Inn]`,
+				description: 'Talked with Winter Rose',
+			},
+		],
+	},
+	{
+		id: 5,
+		title: 'Dawn of a new day',
+		location: `[ENTITY:location:Drellin's Ferry]`,
+		session: '3',
+		items: [
+			{
+				type: 'narrative',
+				actors: '[ENTITY:character:Entire party], [ENTITY:npc:Kat], [ENTITY:npc:Yoghurt]',
+				sublocation: `[ENTITY:location:Green Apple Inn]`,
+				description: 'Talked with the two guards.',
+			},
+			{
+				type: 'traversal',
+				actors: '[ENTITY:character:Entire party]',
+				sublocation: 'To Avarthel',
+			},
+			{
+				type: 'narrative',
+				actors: '[ENTITY:character:Entire party], [ENTITY:npc:Avarthel]',
+				sublocation: "Avarthel's Grove",
+				description: 'Talked about eggs.',
 			},
 		],
 	},

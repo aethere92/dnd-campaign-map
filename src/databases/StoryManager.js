@@ -1637,8 +1637,9 @@ class StoryManager {
 			return lootContainer;
 		}
 
-		const title = document.createElement('h4');
+		const title = document.createElement('span');
 		title.textContent = `Loot found`;
+		title.className = 'progression-loot-title';
 		lootContainer.appendChild(title);
 
 		const list = document.createElement('ul');
@@ -1647,18 +1648,20 @@ class StoryManager {
 			const listItem = document.createElement('li');
 			listItem.className = `loot-item rarity-${item.rarity || 'common'}`;
 
-			let ownerText = item.owner ? ` <span class="loot-owner">(${item.owner})</span>` : '';
+			let ownerText = item.owner ? ` <span class="loot-owner">[ENTITY:character:${item.owner}]</span>` : '';
 			// Process item name for entities
 			const itemNameSpan = document.createElement('span');
 			itemNameSpan.className = 'loot-item-name';
-			itemNameSpan.innerHTML = item.itemName; // Assume item name might contain entity refs
-			this.#processEntityReferences(itemNameSpan);
+			itemNameSpan.innerHTML = `${item.itemName}${item.count > 1 ? ` (x${item.count})` : ''}`; // Assume item name might contain entity refs
 
 			listItem.innerHTML = `
-                ${itemNameSpan.outerHTML} ${item.count > 1 ? `(x${item.count})` : ''}
-                ${ownerText}
-                ${item.description ? `<div class="loot-item-description">${item.description}</div>` : ''}
+				<div class="loot-item-metadata">
+					${itemNameSpan.outerHTML} 
+					${item.description ? `<span class="loot-item-description">${item.description}</span>` : ''}
+				</div>
+				${ownerText}
             `;
+			this.#processEntityReferences(listItem);
 			// Process description for entities if it exists
 			if (item.description) {
 				const descDiv = listItem.querySelector('.loot-item-description');

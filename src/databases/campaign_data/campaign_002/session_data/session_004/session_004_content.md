@@ -29,7 +29,7 @@
 
 <h3>Morning Revelations</h3>
 
-<p>The next morning brought the promised meeting with the two exiled thieves. Over breakfast, the party observed [ENTITY:npc:Yoghurt] approaching dressed in an elegant kimono with two [ENTITY:npc:katanas] at his side, while [ENTITY:npc:Kat] appeared as one of the most unremarkable individuals imaginable - forgettable in every way except for the several large globes attached to his waist.</p>
+<p>The next morning brought the promised meeting with the two exiled thieves. Over breakfast, the party observed [ENTITY:npc:Yoghurt] approaching dressed in an elegant kimono with two katanas at his side, while [ENTITY:npc:Kat] appeared as one of the most unremarkable individuals imaginable - forgettable in every way except for the several large globes attached to his waist.</p>
 <p>Through conversation conducted partly in thieves' cant, with [ENTITY:character:Bonnie] taking the lead, they learned that the pair harbored ambitions of robbing the local wizard. More importantly, [ENTITY:npc:Soranna] had tasked them with researching the cave system, and their findings were illuminating:</p>
 <p>The caves extended beneath the city and were largely flooded. They connected to the temple near town but were protected by a barrier of light that prevented anyone affiliated with the city from passing through. This meant the party - and possibly the [ENTITY:guild:Winter Rose] mercenaries - could potentially bypass this magical obstacle. The wizard had described this barrier as a curse.</p>
 <p>[ENTITY:character:Bonnie]'s keen observation revealed that [ENTITY:npc:Kat]'s mysterious globes were actually cats and even a large tiger. The tiefling was in desperate need of 2 gold pieces to settle debts owed to wealthy townspeople, though none of the party felt inclined to assist with this particular financial burden.</p>
@@ -66,7 +66,7 @@
 <h3>Tavern Brawl</h3>
 
 <p>Returning to the [ENTITY:location:Green Apple Inn], the party walked directly into chaos. Bottles flew through the air and random punches were being thrown as 10-15 intoxicated townspeople engaged in a massive brawl. At the center of the conflict were [ENTITY:npc:Vandal] and [ENTITY:npc:Summoner], the [ENTITY:guild:Winter Rose] mercenaries.</p>
-<p>The party quickly intervened, carefully avoiding serious injury to the drunk participants while efficiently knocking them unconscious to end the fight. [ENTITY:npc:Tharma] expressed her gratitude for their assistance as they helped remove the unconscious troub[ENTITY:npc:Lem]akers from her establishment.</p>
+<p>The party quickly intervened, carefully avoiding serious injury to the drunk participants while efficiently knocking them unconscious to end the fight. [ENTITY:npc:Tharma] expressed her gratitude for their assistance as they helped remove the unconscious troublemakers from her establishment.</p>
 <p>Once order was restored, they learned from [ENTITY:npc:Vandal] and [ENTITY:npc:Summoner] that the brawl had erupted when the drunken townspeople had attempted to inappropriately grab [ENTITY:npc:Vandal]'s chest.</p>
 
 <h3>Into the Depths</h3>
