@@ -88,7 +88,7 @@
 
 <h3>The Laboratory of Horrors</h3>
 
-<p>They emerged into a vast chamber measuring 40 by 30 feet, partially flooded and containing the ruins of what had once been a substantial structure. Within the remains of a house, they discovered a crumpled note that revealed the sinister purpose of this place:</p>
+<p>They emerged into a vast chamber, partially flooded and containing the ruins of what had once been a substantial structure. Within the remains of a house, they discovered a crumpled note that revealed the sinister purpose of this place:</p>
 <p><blockquote><i>"The experiment is going well. Me and the other disciples opened several gates to two of the Demon Lords' domains. We should be close to easily lure out enough creatures to start a breeding program to provide enough competitors for the games."</i></blockquote></p>
 <p>The chamber also contained a mysterious red glow emanating from beneath the water, where a chest rested on the bottom. However, the water teemed with piranhas and snakes, making retrieval extremely dangerous. Above them, they realized the source of the shrieking sounds they had been hearing - human-sized bats roosted in the chamber's upper reaches.</p>
 <p>As they continued deeper, the environment grew noticeably colder, and they began to notice that the tracks on the floor had become slimy and sticky, suggesting the presence of some large creature.</p>

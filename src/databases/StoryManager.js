@@ -1616,11 +1616,12 @@ class StoryManager {
 		const levelUpDiv = document.createElement('div');
 		levelUpDiv.className = 'progression-levelup';
 		levelUpDiv.innerHTML = `
-            <div class="levelup-icon">✨</div>
+            <div class="levelup-icon">
+				<img src="../images/assets/d20.png"/>
+			</div>
             <div class="levelup-text">
-                <h2>Level Up!</h2>
-                <p>Congratulations!
-The party has reached level <strong>${level}</strong>!</p>
+                <span>Level Up!</span>
+                <p>Congratulations! The party has reached level <strong>${level}</strong>!</p>
             </div>
         `;
 		return levelUpDiv;
@@ -1637,7 +1638,7 @@ The party has reached level <strong>${level}</strong>!</p>
 		}
 
 		const title = document.createElement('h4');
-		title.textContent = `Loot Found (${lootId})`;
+		title.textContent = `Loot found`;
 		lootContainer.appendChild(title);
 
 		const list = document.createElement('ul');
