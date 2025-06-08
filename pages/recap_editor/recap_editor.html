@@ -11,7 +11,7 @@
 		<script>
 			class RecapFormatter {
 				constructor(options = {}) {
-					// Initialize entity categories
+					// Initialize entity categories - now accepting simple arrays of strings
 					this.entities = {
 						character: options.characters || [],
 						location: options.locations || [],
@@ -34,8 +34,8 @@
 					for (const [type, list] of Object.entries(this.entities)) {
 						this.entityMaps[type] = new Map();
 						if (list.length) {
-							list.forEach((entity) => {
-								this.entityMaps[type].set(entity.name.toLowerCase(), entity.name);
+							list.forEach((entityName) => {
+								this.entityMaps[type].set(entityName.toLowerCase(), entityName);
 							});
 						}
 					}
@@ -270,13 +270,11 @@
 					this.updatePreview(formattedText);
 				}
 
-				// Replace the processText() method with this:
 				processText(text) {
 					// Normalize line endings
 					const normalizedText = text.replace(/\r\n/g, '\n');
 
 					// Split text into paragraphs - consider both single and multiple newlines as paragraph separators
-					// This is the key change - we now detect paragraphs with single newlines
 					const paragraphs = normalizedText.split(/\n/).filter((p) => p.trim());
 
 					// Process each paragraph
@@ -299,7 +297,6 @@
 					return formattedParagraphs.join('\n\n');
 				}
 
-				// Add this new method to detect and tag entities:
 				detectAndTagEntities(text) {
 					let processed = text;
 
@@ -308,14 +305,14 @@
 						if (!entityList.length) continue;
 
 						// Sort entities by name length (descending) to prevent partial matches
-						const sortedEntities = [...entityList].sort((a, b) => b.name.length - a.name.length);
+						const sortedEntities = [...entityList].sort((a, b) => b.length - a.length);
 
-						for (const entity of sortedEntities) {
+						for (const entityName of sortedEntities) {
 							// Regular expression to match whole word only,
 							// excluding text that is already within [] brackets or HTML tags
-							const regex = new RegExp(`\\b${this.escapeRegExp(entity.name)}\\b(?![^\\[]*\\])(?![^<]*>)`, 'g');
+							const regex = new RegExp(`\\b${this.escapeRegExp(entityName)}\\b(?![^\\[]*\\])(?![^<]*>)`, 'g');
 
-							processed = processed.replace(regex, `[ENTITY:${type}:${entity.name}]`);
+							processed = processed.replace(regex, `[ENTITY:${type}:${entityName}]`);
 						}
 					}
 
@@ -333,12 +330,12 @@
 						if (!entityList.length) continue;
 
 						// Sort entities by name length (descending) to prevent partial matches
-						const sortedEntities = [...entityList].sort((a, b) => b.name.length - a.name.length);
+						const sortedEntities = [...entityList].sort((a, b) => b.length - a.length);
 
-						for (const entity of sortedEntities) {
+						for (const entityName of sortedEntities) {
 							// Regular expression to match whole word only
-							const regex = new RegExp(`\\b${this.escapeRegExp(entity.name)}\\b(?![^<]*>)`, 'g');
-							processed = processed.replace(regex, this.createEntitySpan(type, entity.name));
+							const regex = new RegExp(`\\b${this.escapeRegExp(entityName)}\\b(?![^<]*>)`, 'g');
+							processed = processed.replace(regex, this.createEntitySpan(type, entityName));
 						}
 					}
 
@@ -456,16 +453,15 @@
 
 					// Add options for the selected entity type
 					if (this.entities[entityType] && this.entities[entityType].length > 0) {
-						this.entities[entityType].forEach((entity) => {
+						this.entities[entityType].forEach((entityName) => {
 							const option = document.createElement('option');
-							option.value = entity.name;
-							option.textContent = entity.name;
+							option.value = entityName;
+							option.textContent = entityName;
 							existingEntitiesSelect.appendChild(option);
 						});
 					}
 				}
 
-				// Replace the insertEntity() method with this:
 				insertEntity() {
 					const entityType = document.getElementById('entity-type').value;
 					const entityName = document.getElementById('entity-name').value.trim();
@@ -489,7 +485,7 @@
 							this.entities[entityType] = [];
 							this.entityMaps[entityType] = new Map();
 						}
-						this.entities[entityType].push({ name: entityName });
+						this.entities[entityType].push(entityName);
 						this.entityMaps[entityType].set(entityName.toLowerCase(), entityName);
 					}
 
@@ -596,8 +592,8 @@
 					this.entities[entityType] = entities;
 					this.entityMaps[entityType].clear();
 					if (this.entities[entityType].length) {
-						this.entities[entityType].forEach((entity) => {
-							this.entityMaps[entityType].set(entity.name.toLowerCase(), entity.name);
+						this.entities[entityType].forEach((entityName) => {
+							this.entityMaps[entityType].set(entityName.toLowerCase(), entityName);
 						});
 					}
 				}
@@ -611,22 +607,36 @@
 
 					// Add entity if it doesn't already exist
 					if (!this.entityMaps[entityType].has(entityName.toLowerCase())) {
-						this.entities[entityType].push({ name: entityName });
+						this.entities[entityType].push(entityName);
 						this.entityMaps[entityType].set(entityName.toLowerCase(), entityName);
 					}
 				}
 			}
 
-			// Initialize the formatter with sample entities from each category
+			// Initialize the formatter with sample entities as simple arrays of strings
 			const formatter = new RecapFormatter({
-				characters: [{ name: 'Bonnie' }, { name: 'Kaedin' }, { name: 'Soshi' }, { name: 'Norr' }, { name: 'Olek' }],
-				locations: [{ name: "Drellin's Ferry" }, { name: 'Feywilds' }, { name: 'Brindol' }],
-				classes: [{ name: 'Paladin' }, { name: 'Sorcerer' }, { name: 'Rogue' }],
-				subclasses: [{ name: 'Echo Knight' }],
-				guilds: [{ name: 'Arcane Brotherhood' }],
+				characters: ['Bonnie', 'Kaedin', 'Soshi', 'Norr', 'Olek'],
+				locations: ["Drellin's Ferry", 'Feywilds', 'Brindol', 'Green Apple Inn'],
+				classes: ['Paladin', 'Sorcerer', 'Rogue'],
+				subclasses: ['Echo Knight'],
+				guilds: ['Arcane Brotherhood', 'Winter Rose', 'Thieves Guild'],
 				items: [],
 				races: [],
-				npc: [{ name: 'Zella' }, { name: 'Thalos' }, { name: 'Clyde' }, { name: 'Jacques' }],
+				npc: [
+					'Zella',
+					'Thalos',
+					'Clyde',
+					'Jacques',
+					'Vandal',
+					'Soranna',
+					'Summoner',
+					'Lem',
+					'Kat',
+					'Yoghurt',
+					'Anya',
+					'Avarthel',
+					'Jareth',
+				],
 			});
 			formatter.init('formatter-container');
 		</script>

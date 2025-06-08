@@ -1617,7 +1617,7 @@ class StoryManager {
 		levelUpDiv.className = 'progression-levelup';
 		levelUpDiv.innerHTML = `
             <div class="levelup-icon">
-				<img src="../images/assets/d20.png"/>
+				<img src="images/assets/d20.png"/>
 			</div>
             <div class="levelup-text">
                 <span>Level Up!</span>
