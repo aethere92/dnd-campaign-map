@@ -85,10 +85,22 @@ const CAMPAIGN_002_METADATA = {
 				groupName: '2nd Level',
 				spells: [
 					{
+						spellInfo: { spellName: 'Absorb Elements', spellMetaInfo: 'Rogue' },
+						range: 'Self',
+						slotType: '1R',
+						effect: '2d6*',
+					},
+					{
 						spellInfo: { spellName: 'Enlarge/Reduce', spellMetaInfo: 'Fairy Magic' },
 						range: '30ft.',
 						slotType: '1A',
 						effect: 'Buff',
+					},
+					{
+						spellInfo: { spellName: 'Misty Step', spellMetaInfo: 'Rogue' },
+						range: 'Self',
+						slotType: '1BA',
+						effect: 'Teleportation',
 					},
 				],
 			},
@@ -99,26 +111,6 @@ const CAMPAIGN_002_METADATA = {
 				name: 'Nick (Dagger) ',
 				description:
 					'Nick. When you make the extra attack of the Light property, you can make it as part of the Attack action instead of as a Bonus Action. This extra attack can only be made once per turn.',
-			},
-			{
-				name: 'Sneak Attack ',
-				description:
-					'Once per turn you can deal an extra 3d6 damage to one creature you hit with an attack if you have Advantage on the roll and the attack uses a Finesse or Ranged weapon. The extra damage’s type is the same as the weapon’s type.You don’t need Advantage on the attack if at least one of your allies is within 5 ft. of the target, the ally doesn’t have the Incapacitated condition, and you don’t have Disadvantage on the attack roll.',
-			},
-			{
-				name: 'Sneak Attack: Poison (Cost: 1d6) ',
-				description:
-					'You add a toxin to your strike, forcing the target to make a DC 15 Con. saving throw. On a failed save, the target has the Poisoned condition for 1 minute, and at the end of each of its turns, the Poisoned target repeats the save, ending the effect on itself on a success. You must have a Poisoner’s Kit on your person to use this effect.',
-			},
-			{
-				name: 'Sneak Attack: Trip (Cost: 1d6) ',
-				description:
-					'If the target is Large or smaller, it must succeed on a DC 15 Dex. saving throw or have the Prone condition.',
-			},
-			{
-				name: 'Sneak Attack: Withdraw (Cost: 1d6) ',
-				description:
-					'Immediately after the attack, you move up to half your Speed without provoking Opportunity Attacks.',
 			},
 			{
 				name: 'Unarmed Strike ',
@@ -145,6 +137,26 @@ const CAMPAIGN_002_METADATA = {
 				description:
 					'When an attacker you can see hits you with an attack, you can take a Reaction to halve the attack’s damage against you (round down).',
 			},
+			{
+				name: 'Sneak Attack (Special)',
+				description:
+					'Once per turn you can deal an extra 4d6 damage to one creature you hit with an attack if you have Advantage on the roll and the attack uses a Finesse or Ranged weapon. The extra damage’s type is the same as the weapon’s type.You don’t need Advantage on the attack if at least one of your allies is within 5 ft. of the target, the ally doesn’t have the Incapacitated condition, and you don’t have Disadvantage on the attack roll.',
+			},
+			{
+				name: 'Sneak Attack: Poison (Cost: 1d6) (No Action)',
+				description:
+					'You add a toxin to your strike, forcing the target to make a DC 15 Con. saving throw. On a failed save, the target has the Poisoned condition for 1 minute, and at the end of each of its turns, the Poisoned target repeats the save, ending the effect on itself on a success. You must have a Poisoner’s Kit on your person to use this effect.',
+			},
+			{
+				name: 'Sneak Attack: Trip (Cost: 1d6) (No Action)',
+				description:
+					'If the target is Large or smaller, it must succeed on a DC 15 Dex. saving throw or have the Prone condition.',
+			},
+			{
+				name: 'Sneak Attack: Withdraw (Cost: 1d6) (No Action)',
+				description:
+					'Immediately after the attack, you move up to half your Speed without provoking Opportunity Attacks.',
+			},
 		],
 		features: [
 			{ name: 'Core Rogue Traits' },
@@ -152,7 +164,7 @@ const CAMPAIGN_002_METADATA = {
 			{
 				name: 'Sneak Attack',
 				description:
-					'Once per turn you can deal an extra 3d6 damage to one creature you hit with an attack if you have Advantage on the roll and the attack uses a Finesse or Ranged weapon. The extra damage’s type is the same as the weapon’s type.',
+					'Once per turn you can deal an extra 4d6 damage to one creature you hit with an attack if you have Advantage on the roll and the attack uses a Finesse or Ranged weapon. The extra damage’s type is the same as the weapon’s type.',
 			},
 			{ name: 'Thieves’ Cant', description: 'You know Thieves’ Cant and one other language of your choice.' },
 			{
@@ -193,6 +205,16 @@ const CAMPAIGN_002_METADATA = {
 				description: 'You gain Expertise in two more of your skill proficiencies of your choice.',
 			},
 			{
+				name: 'Evasion',
+				description:
+					'When you’re subjected to an effect that allows you to make a Dex. saving throw to take only half damage, you instead take no damage if you succeed on the saving throw and only half damage if you fail. You can’t use this feature if you have the Incapacitated condition.',
+			},
+			{
+				name: 'Reliable Talent',
+				description:
+					'Whenever you make an ability check that uses one of your skill or tool proficiencies, you can treat a d20 roll of 9 or lower as a 10.',
+			},
+			{
 				name: 'Fairy Magic',
 				description:
 					' You know the Druidcraft cantrip. Starting at 3rd level, you can cast the Faerie Fire spell with this trait. Starting at 5th level, you can also cast the Enlarge/Reduce spell with this trait.',
@@ -203,7 +225,7 @@ const CAMPAIGN_002_METADATA = {
 			},
 			{ name: 'Ability Score Improvement', description: 'Increase one ability score by 2 or two ability scores by 1.' },
 		],
-		healthPoints: '41',
+		healthPoints: '50',
 		armorClass: '16',
 		walkingSpeed: '30ft.',
 	},
@@ -249,6 +271,11 @@ const CAMPAIGN_002_METADATA = {
 					'Cleave. Once per turn, if you hit a creature with a melee attack using a Halberd, you can make another melee attack with it against a second creature within 5 ft. of the first that’s within your reach. On a hit, the second creature takes the Halberd’s damage, but without your ability modifier (unless the modifier is negative).',
 			},
 			{
+				name: 'Echo Avatar ',
+				description:
+					'As an Action, you temporarily transfer your consciousness to your echo allowing you to see through your echo’s eyes and hear through its ears. For up to 10 minutes or until you cancel it (requires no action), you are deafened and blinded however, while your echo is being used in this way, it can be up to 1,000 feet away from you without being destroyed.',
+			},
+			{
 				name: 'Graze (Glaive) ',
 				description:
 					'Graze. If your attack roll with a Glaive misses a creature, you can deal damage to it equal to the ability modifier used to make the attack. This damage is the same type dealt by the Glaive, and can only be increased by increasing the ability modifier.',
@@ -286,7 +313,7 @@ const CAMPAIGN_002_METADATA = {
 			{
 				name: 'Second Wind ',
 				description:
-					'You can draw upon a limited well of physical and mental stamina and regain 1d10+6 HP.You can use this 3 times per Long Rest, and can regain one expended use when you finish a Short Rest.',
+					'You can draw upon a limited well of physical and mental stamina and regain 1d10+7 HP.You can use this 3 times per Long Rest, and can regain one expended use when you finish a Short Rest.',
 			},
 			{
 				name: 'Second Wind: Tactical Shift ',
@@ -333,7 +360,7 @@ const CAMPAIGN_002_METADATA = {
 			{
 				name: 'Second Wind',
 				description:
-					'As a Bonus Action, you can draw upon a limited well of physical and mental stamina and regain 1d10+6 HP.',
+					'As a Bonus Action, you can draw upon a limited well of physical and mental stamina and regain 1d10+7 HP.',
 			},
 			{
 				name: 'Weapon Mastery',
@@ -377,6 +404,11 @@ const CAMPAIGN_002_METADATA = {
 			},
 			{ name: '6: Ability Score Improvement' },
 			{
+				name: 'Echo Avatar',
+				description:
+					'As an Action, you temporarily transfer your consciousness to your echo allowing you to see through your echo’s eyes and hear through its ears. For up to 10 minutes or until you cancel it (requires no action), you are deafened and blinded however, while your echo is being used in this way, it can be up to 1,000 feet away from you without being destroyed.',
+			},
+			{
 				name: 'Earth Walk',
 				description: 'You can move across difficult terrain made of earth or stone without expending extra movement.',
 			},
@@ -398,7 +430,7 @@ const CAMPAIGN_002_METADATA = {
 					'Once per turn when you hit a target with a weapon, you can roll the weapon’s damage dice twice and use either roll against the target.',
 			},
 		],
-		healthPoints: '58',
+		healthPoints: '67',
 		armorClass: '16',
 		walkingSpeed: '30ft.',
 	},
@@ -477,12 +509,6 @@ const CAMPAIGN_002_METADATA = {
 						effect: '1d6*',
 					},
 					{
-						spellInfo: { spellName: 'Disguise Self', spellMetaInfo: 'Wizard' },
-						range: 'Self',
-						slotType: '1A',
-						effect: 'Shapechanging',
-					},
-					{
 						spellInfo: { spellName: 'Mage Armor', spellMetaInfo: 'Wizard' },
 						range: 'Touch',
 						slotType: '1A',
@@ -512,6 +538,12 @@ const CAMPAIGN_002_METADATA = {
 						effect: '2d6*',
 					},
 					{
+						spellInfo: { spellName: 'Detect Thoughts', spellMetaInfo: 'Wizard' },
+						range: 'Self',
+						slotType: '1A',
+						effect: 'Social*',
+					},
+					{
 						spellInfo: { spellName: 'Mirror Image', spellMetaInfo: 'Wizard' },
 						range: 'Self',
 						slotType: '1A',
@@ -528,6 +560,12 @@ const CAMPAIGN_002_METADATA = {
 						range: '120ft.',
 						slotType: '1A',
 						effect: '2d6',
+					},
+					{
+						spellInfo: { spellName: 'See Invisibility', spellMetaInfo: 'Wizard' },
+						range: 'Self',
+						slotType: '1A',
+						effect: 'Detection',
 					},
 				],
 			},
@@ -570,11 +608,46 @@ const CAMPAIGN_002_METADATA = {
 						slotType: '1A',
 						effect: '2d6',
 					},
+				],
+			},
+			{
+				groupName: '4th Level',
+				spells: [
 					{
-						spellInfo: { spellName: 'Wall of Water', spellMetaInfo: 'Wizard' },
+						spellInfo: { spellName: 'Absorb Elements', spellMetaInfo: 'Wizard' },
+						range: 'Self',
+						slotType: '1R',
+						effect: '4d6*',
+					},
+					{
+						spellInfo: { spellName: 'Dispel Magic', spellMetaInfo: 'Wizard' },
+						range: '120ft.',
+						slotType: '1A',
+						effect: 'Control',
+					},
+					{
+						spellInfo: { spellName: 'Fireball', spellMetaInfo: 'Wizard' },
+						range: '150ft.',
+						slotType: '1A',
+						effect: '9d6',
+					},
+					{
+						spellInfo: { spellName: 'Fly', spellMetaInfo: 'Wizard' },
+						range: 'Touch',
+						slotType: '1A',
+						effect: 'Movement',
+					},
+					{
+						spellInfo: { spellName: 'Polymorph', spellMetaInfo: 'Wizard' },
 						range: '60ft.',
 						slotType: '1A',
 						effect: 'Control*',
+					},
+					{
+						spellInfo: { spellName: 'Scorching Ray', spellMetaInfo: 'Evocation Savant' },
+						range: '120ft.',
+						slotType: '1A',
+						effect: '2d6',
 					},
 				],
 			},
@@ -588,7 +661,7 @@ const CAMPAIGN_002_METADATA = {
 			{
 				name: 'Arcane Recovery (Special)',
 				description:
-					'Once per Long Rest, whenever you finish a Short Rest, you can choose expended spell slots to recover. The spell slots can have a combined level up to 3.',
+					'Once per Long Rest, whenever you finish a Short Rest, you can choose expended spell slots to recover. The spell slots can have a combined level up to 4.',
 			},
 			{ name: 'Elemental Acuity Stacks (No Action)' },
 			{
@@ -604,7 +677,7 @@ const CAMPAIGN_002_METADATA = {
 			{
 				name: 'Arcane Recovery',
 				description:
-					'When you finish a Short Rest, you can choose expended spell slots to recover. The spell slots can have a combined level equal to 3, but none of the slots can be level 6 or higher.',
+					'When you finish a Short Rest, you can choose expended spell slots to recover. The spell slots can have a combined level equal to 4, but none of the slots can be level 6 or higher.',
 			},
 			{
 				name: 'Scholar',
@@ -664,7 +737,7 @@ const CAMPAIGN_002_METADATA = {
 					'Gain 1d4 of same element added to next damaging attack whenever 15 elemental damage is dealt within 15ft of you by an ally. Stackable.',
 			},
 		],
-		healthPoints: '44',
+		healthPoints: '51',
 		armorClass: '12',
 		walkingSpeed: '30ft.',
 	},
