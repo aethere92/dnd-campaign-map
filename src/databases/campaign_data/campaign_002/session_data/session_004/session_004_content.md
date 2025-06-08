@@ -23,7 +23,7 @@
 
 <p>Returning to the inn, the party reunited with the [ENTITY:guild:Winter Rose] mercenaries, who had their own harrowing tale to share. Their recent expedition to the east had nearly ended in disaster when they were ambushed while pursuing a hidden stash. Giant raptors and Thylacoleos - fearsome panther-bear hybrids - had attacked them, devouring their horses. Ironically, this grisly sacrifice had provided the mercenaries with the distraction they needed to escape with their lives.</p>
 <p>The mercenaries shared valuable tactical information: the raptors showed a marked fear of fire and strong light, and notably, there had been no hobgoblins among their attackers. However, the raptors bore distinctive markings that resembled shackles, suggesting they belonged to a different hobgoblin clan than those previously encountered.</p>
-<p>After parting ways with the mercenaries, the party sought out [ENTITY:npc:Tharma] once more. They discovered she was an avid reader of Sandra Brown novels and even gifted one to the interested [ENTITY:character:Bonnie]. When asked about [ENTITY:npc:Lem], [ENTITY:npc:Tharma] revealed he was a member of the town guard.</p>
+<p>After parting ways with the mercenaries, the party sought out [ENTITY:npc:Tharma] once more. They discovered she was an avid reader of novels of ...questionable nature and interactions and even gifted one to the interested [ENTITY:character:Bonnie]. When asked about [ENTITY:npc:Lem], [ENTITY:npc:Tharma] revealed he was a member of the town guard.</p>
 <p>With this information gathered, the party retired to their rooms for a well-deserved rest, and through their experiences, they felt themselves grow stronger, reaching the 7th level of their abilities.</p>
 <p>[PROGRESSION:levelup:7]</p>
 
