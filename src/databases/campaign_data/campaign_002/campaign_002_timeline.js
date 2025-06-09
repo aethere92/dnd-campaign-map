@@ -14,7 +14,7 @@ const CAMPAIGN_002_TIMELINE = [
 				type: 'encounter',
 				actors: 'Hobgoblins',
 				url: { campaign: 'campaign-002', session: 'session-002', target: 'the-fight' },
-				description: `The [ENTITY:character:Entire party] engages into a fight with hobgoblins. They fight as a team and manage to defeat the hobgoblins, killing their captain and making the remaining still alive run in defeat. `,
+				description: `The [ENTITY:character:Entire party:Party] engages into a fight with hobgoblins. They fight as a team and manage to defeat the hobgoblins, killing their captain and making the remaining still alive run in defeat. `,
 			},
 			{
 				type: 'narrative',
@@ -25,7 +25,7 @@ const CAMPAIGN_002_TIMELINE = [
 			},
 			{
 				type: 'traversal',
-				actors: '[ENTITY:character:Entire party]',
+				actors: '[ENTITY:character:Entire party:Party]',
 				url: { campaign: 'campaign-002', session: 'session-002', target: 'towards-drellins-ferry' },
 				description: `As they made their way towards [ENTITY:location:Drellin's Ferry], [ENTITY:character:Olek] and [ENTITY:character:Bonnie] scared a farmer and their son who were going on the way towards the abandoned farmhouse.`,
 			},
@@ -62,7 +62,7 @@ const CAMPAIGN_002_TIMELINE = [
 			},
 			{
 				type: 'narrative',
-				actors: '[ENTITY:character:Entire party]',
+				actors: '[ENTITY:character:Entire party:Party]',
 				sublocation: 'Town Inn',
 				is_new_session: true,
 			},
@@ -76,7 +76,7 @@ const CAMPAIGN_002_TIMELINE = [
 		items: [
 			{
 				type: 'traversal',
-				actors: '[ENTITY:character:Entire party]',
+				actors: '[ENTITY:character:Entire party:Party]',
 				sublocation: 'Into the woods',
 			},
 			{
@@ -97,7 +97,7 @@ const CAMPAIGN_002_TIMELINE = [
 		items: [
 			{
 				type: 'narrative',
-				actors: '[ENTITY:character:Entire party]',
+				actors: '[ENTITY:character:Entire party:Party]',
 				sublocation: null,
 			},
 			{
@@ -109,19 +109,19 @@ const CAMPAIGN_002_TIMELINE = [
 			},
 			{
 				type: 'narrative',
-				actors: '[ENTITY:character:Entire party]',
+				actors: '[ENTITY:character:Entire party:Party]',
 				sublocation: '[ENTITY:location:Green Apple Inn]',
 				description: 'N/A',
 			},
 			{
 				type: 'investigation',
-				actors: '[ENTITY:character:Entire party]',
+				actors: '[ENTITY:character:Entire party:Party]',
 				sublocation: `Anya's house`,
 				description: 'N/A',
 			},
 			{
 				type: 'narrative',
-				actors: '[ENTITY:character:Entire party], [ENTITY:npc:Summoner], [ENTITY:npc:Vandal]',
+				actors: '[ENTITY:character:Entire party:Party], [ENTITY:npc:Summoner], [ENTITY:npc:Vandal]',
 				sublocation: `[ENTITY:location:Green Apple Inn]`,
 				description: 'Talked with Winter Rose',
 			},
@@ -135,20 +135,93 @@ const CAMPAIGN_002_TIMELINE = [
 		items: [
 			{
 				type: 'narrative',
-				actors: '[ENTITY:character:Entire party], [ENTITY:npc:Kat], [ENTITY:npc:Yoghurt]',
+				actors: '[ENTITY:character:Entire party:Party], [ENTITY:npc:Kat], [ENTITY:npc:Yoghurt]',
 				sublocation: `[ENTITY:location:Green Apple Inn]`,
 				description: 'Talked with the two guards.',
 			},
 			{
 				type: 'traversal',
-				actors: '[ENTITY:character:Entire party]',
+				actors: '[ENTITY:character:Entire party:Party]',
 				sublocation: 'To Avarthel',
 			},
 			{
 				type: 'narrative',
-				actors: '[ENTITY:character:Entire party], [ENTITY:npc:Avarthel]',
+				actors: 'Hydra eggs talk',
 				sublocation: "Avarthel's Grove",
 				description: 'Talked about eggs.',
+			},
+			{
+				type: 'narrative',
+				actors: 'Potions from [ENTITY:npc:Jareth]',
+				sublocation: 'Town market',
+				description: 'Met potion seller Jareth.',
+			},
+			{
+				type: 'narrative',
+				actors: 'Talking to [ENTITY:npc:Lem]',
+				sublocation: `Tollhouse`,
+				description: 'Spoke to Lem about Anya.',
+			},
+			{
+				type: 'investigation',
+				actors: 'Finding [ENTITY:npc:Anya]',
+				sublocation: `Forest Pond`,
+				description: 'Found Anya in the woods, brought her to Avarthel.',
+			},
+			{
+				type: 'encounter',
+				actors: '[ENTITY:character:Entire party:Party], [ENTITY:npc:Vandal], [ENTITY:npc:Summoner]',
+				sublocation: `[ENTITY:location:Green Apple Inn]`,
+				description: 'Helped break up tavern brawl non-lethally.',
+			},
+			{
+				type: 'traversal',
+				actors: '[ENTITY:character:Entire party:Party], [ENTITY:npc:Kat], [ENTITY:npc:Yoghurt]',
+				sublocation: 'Temple tunnel entrance',
+			},
+			{
+				type: 'narrative',
+				actors: '[ENTITY:character:Entire party:Party], [ENTITY:npc:Kat], [ENTITY:npc:Yoghurt]',
+				sublocation: `Temple entrance`,
+				description: 'Passed through magical barrier; Kat & Yoghurt blocked.',
+			},
+		],
+	},
+	{
+		id: 7,
+		title: 'The Sunken Temple',
+		location: `Sunken Temple`,
+		session: '3',
+		items: [
+			{
+				type: 'traversal',
+				actors: '[ENTITY:character:Entire party:Party]',
+				sublocation: 'Temple Hallways',
+				description: 'Chose the reptile path. Encountered traps and poisonous creatures.',
+			},
+			{
+				type: 'traversal',
+				actors: '[ENTITY:character:Entire party:Party]',
+				sublocation: 'Leech pond',
+				description: 'Bypassed massive guardian creature using stealth.',
+			},
+			{
+				type: 'investigation',
+				actors: '[ENTITY:character:Entire party:Party]',
+				sublocation: 'Flooded room',
+				description: 'Found note about Demon Lord disciples creating monsters.',
+			},
+			{
+				type: 'encounter',
+				actors: 'Reptile',
+				sublocation: 'Underground Lab',
+				description: 'Fought and polymorphed monstrous reptile; looted magical items.',
+			},
+			{
+				type: 'narrative',
+				actors: '[ENTITY:character:Entire party:Party], [ENTITY:npc:Vandal], [ENTITY:npc:Summoner]',
+				sublocation: 'Rune platform',
+				description: 'Activated rune with Winter Rose, opening new path.',
 			},
 		],
 	},
