@@ -68,4 +68,14 @@ const CAMPAIGN_002_RECAPS = [
 			],
 		},
 	},
+	{
+		id: 'session-007',
+		title: '007 - Assault on the Fortress',
+		date: 'August 4th',
+		content: 'session_data/session_007/session_007_content.md',
+		recap: 'session_data/session_007/session_007_recap.md',
+		progression: {
+			loot: [],
+		},
+	},
 ];
