@@ -225,10 +225,271 @@ const CAMPAIGN_002_TIMELINE = [
 			},
 		],
 	},
-
-	// SESSION 008
 	{
 		id: 8,
+		title: 'The Collapsing Cavern and The Pirate Paladins',
+		location: 'Cavern Network / Luskan Coast',
+		session: '4',
+		items: [
+			{
+				type: 'investigation',
+				actors: '[ENTITY:character:Entire party:Party]',
+				sublocation: 'Ritual Chamber/Camp',
+				description:
+					"Found evidence of dark rituals, decay, and cages. Identified the camp as belonging to Calistra of the Brotherhood (Norr's former teacher). Discovered a ledger detailing creature collection for 'Kilgor' and the 'Festival of Life,' along with a failed Brotherhood reinforcement note and a reference to a hidden treasure at 'the old fort north of the woods.'",
+			},
+			{
+				type: 'discovery',
+				actors: '[ENTITY:character:Norr]',
+				sublocation: 'Ritual Chamber/Camp',
+				description:
+					'Norr suffered a psychic spike, recognizing Calistra as a harsh former teacher specializing in alteration magic who vanished a decade prior.',
+			},
+			{
+				type: 'discovery',
+				actors: '[ENTITY:character:Norr], [ENTITY:character:Bonnie]',
+				sublocation: 'Deep Cavern',
+				description:
+					"Encountered Megatherium, massive prehistoric bear-sloth creatures marked by the Broken Shackle orc tribe. Norr's mind-spike identified them as herbivores used for insect consumption. Bonnie befriended two (Gică and Mișu), learning their handlers left two weeks prior for the Red Hand.",
+			},
+			{
+				type: 'encounter',
+				actors: '[ENTITY:character:Entire party:Party], [ENTITY:creature:Megatherium]',
+				sublocation: 'Deep Cavern',
+				description:
+					"Ambushed by Spitters (acidic millipede-like creatures of the Te Snatchers goblin clan) and their Drider handlers. Olek's armor was severely damaged by acid. The Megatherium became aggressive and helped defeat the monsters. The party harvested valuable venom and identified toxic Garlic Agaricoms.",
+			},
+			{
+				type: 'reunion',
+				actors: '[ENTITY:character:Entire party:Party], [ENTITY:npc:Vandal], [ENTITY:npc:Summoner]',
+				sublocation: 'Cavern River',
+				description: 'Vandal and the Summoner reunited with the group, having found a partially submerged ship.',
+			},
+			{
+				type: 'traversal',
+				actors: '[ENTITY:character:Entire party:Party], [ENTITY:npc:Vandal], [ENTITY:npc:Summoner]',
+				sublocation: 'Collapsing Cave System',
+				description:
+					"Vandal's spell blew out a cavern wall. The ship was caught in a massive surge, rocketing through the collapsing cave system until it shot out of a mountain waterfall and crashed into the sea.",
+			},
+			{
+				type: 'narrative',
+				actors: '[ENTITY:character:Entire party:Party], [ENTITY:npc:Captain Bianca Turiados]',
+				sublocation: 'Luskan Coast',
+				description:
+					'The battered survivors were rescued by a galleon flying a jolly roger, crewed by a bizarre mix of pirates and fully armored paladins. The captain, Bianca Turiados, was recognized by Olek as the paladin commander he was seeking, suggesting a vast conspiracy.',
+			},
+		],
+	},
+	{
+		id: 9,
+		title: "The Pirate's Debt and The Thylacoleo Cubs",
+		location: 'The Leviathan’s Hall / Desolate Beach / Drellin’s Ferry',
+		session: '5',
+		items: [
+			{
+				type: 'discovery',
+				actors: '[ENTITY:character:Soshi]',
+				sublocation: 'The Leviathan’s Hall (Galleon)',
+				description:
+					"The party was brought before commanders Turiados (Sahuagin Shaman) and Bianca (Fey-touched Queen of Pelagos). Soshi recognized Turiados's cutlass, the **Breaker of Hulls**, and Bianca's thunder-blade, **Winder**, as relics stolen from her organization, the Brotherhood.",
+			},
+			{
+				type: 'negotiation',
+				actors: '[ENTITY:character:Entire party:Party], [ENTITY:npc:Glass]',
+				sublocation: 'The Leviathan’s Hall (Quarterdeck)',
+				description:
+					'Bianca demanded a 20% rescue fee. Bonnie confessed their gold was **cursed copper** (nearly worthless) due to a pirate coin. Quartermaster Glass, an Ice Elemental, refused the cursed money but took 20% of their non-monetary assets: Olek’s javelins, Norr’s climbing rope, and eight precious pearls.',
+			},
+			{
+				type: 'intelligence',
+				actors: '[ENTITY:character:Entire party:Party], [ENTITY:npc:Marise Curs]',
+				sublocation: 'The Leviathan’s Hall (Deck)',
+				description:
+					'A drunken pirate, Marise Curs, revealed the crew were former slaves, liberated by General Ilie, whom Bianca betrayed to steal the ship. Vandal and Scoundrel confirmed they would pay their share and warned the party against trouble.',
+			},
+			{
+				type: 'conflict',
+				actors: '[ENTITY:character:Bonnie], [ENTITY:npc:Bianca]',
+				sublocation: 'The Leviathan’s Hall (Deck)',
+				description:
+					"Turiados offered to trade his spinning compass (which pointed to Soshi's greatest desire) for a lock of King Sandro's hair. When Bonnie slyly dropped a cursed coin, Bianca instantly blasted her with a powerful bolt of force, knocking her down.",
+			},
+			{
+				type: 'traversal',
+				actors: '[ENTITY:character:Entire party:Party]',
+				sublocation: 'Desolate Beach / Forest',
+				description:
+					"The party was dumped on a beach. Vandal and Scoundrel warned them of local undead pirates before departing. After a night's rest (marked by a giant seagull caught in Bonnie's bear trap and eaten by crabs), the party trekked toward Drellin's Ferry.",
+			},
+			{
+				type: 'encounter',
+				actors: '[ENTITY:character:Entire party:Party], [ENTITY:creature:Thylacoleos]',
+				sublocation: 'Oak Clearing',
+				description:
+					'Ambushed by three **Thylacoleos** (massive, pouched predators). Soshi was grappled and Kaedin was dragged up a tree. Bonnie used Misty Step to strike, Kaedin manifested his Echo Knight double, and Soshi cast **Polymorph** to turn Norr into a **Giant Ape**. The beasts were defeated, though the Ape took heavy damage.',
+			},
+			{
+				type: 'discovery',
+				actors: '[ENTITY:character:Kaedin], [ENTITY:character:Entire party:Party]',
+				sublocation: 'Oak Clearing',
+				description:
+					'Kaedin salvaged three pelts and fangs. The party found the reason for the attack: seven impossibly cute **Thylacoleo cubs** in a hollow tree, which they took in.',
+			},
+			{
+				type: 'negotiation',
+				actors: '[ENTITY:character:Bonnie], [ENTITY:npc:Sertieren]',
+				sublocation: "Drellin's Ferry (Wizard's Mansion)",
+				description:
+					'The party fed the cubs with a local goat-herd’s milk. Bonnie successfully convinced the wizard Sertieren to sell her seven **containment spheres** on credit. Sertieren placed a magical, glowing brand on Bonnie’s wrist as collateral for the 7 gold debt.',
+			},
+			{
+				type: 'transaction',
+				actors: '[ENTITY:character:Kaedin], [ENTITY:character:Soshi], [ENTITY:npc:Sertieren]',
+				sublocation: "Drellin's Ferry (Wizard's Mansion)",
+				description:
+					'Kaedin and Soshi paid the 7 gold debt. The party sold Sertieren half a kilo of **Storm Dust** (15g) and a preserved cave worm head/Artus Plura mushrooms (10g). Sertieren also identified the vials: a celerity potion and a potent anti-poison with the side effect of “severe, explosive dysentery.”',
+			},
+			{
+				type: 'investigation',
+				actors: '[ENTITY:character:Soshi], [ENTITY:npc:Sertieren]',
+				sublocation: "Drellin's Ferry (Wizard's Mansion)",
+				description:
+					"Soshi inquired about the mage Calistra. Sertieren revealed they were former adventuring partners ('Crazy Hogs') but he stole her spellbook to stop her from casting an earthquake spell. He warned the party that a storm is coming (referencing hydras, potions, and tribal unity) and that he plans to leave town.",
+			},
+		],
+	},
+	{
+		id: 10,
+		title: 'The Menagerie and The Fort Siege',
+		location: 'Drellin’s Ferry / Witchwood / Ruined Fort',
+		session: '6',
+		items: [
+			{
+				type: 'discovery',
+				actors: '[ENTITY:character:Entire party:Party]',
+				sublocation: 'The Inn',
+				description: 'Arrived at the inn weary. Consumed a mushroom/herb stew that granted them temporary hit points.',
+			},
+			{
+				type: 'animal_care',
+				actors: '[ENTITY:character:Entire party:Party]',
+				sublocation: 'The Inn',
+				description:
+					'The party released their juvenile, leopard-sized magical cats for their 48-hour maturation period. The cats caused immense chaos and destruction: Kaedin’s pets chewed a massive hole in his room, Norr’s scaled her walls, and Olek’s cat, Palo, ransacked the kitchen, causing the innkeeper to pass out. Olek paid a gold piece for kitchen damages, and Kaedin incurred an expensive ongoing repair fee for his wall. The creatures were returned to their spheres.',
+			},
+			{
+				type: 'transaction',
+				actors: '[ENTITY:character:Entire party:Party]',
+				sublocation: 'Market/Armorer',
+				description:
+					"Restocked with supplies, milk, and various honeys (for training mounts). Bonnie contacted a thieves’ guild acquaintance. Used a discount note to purchase new armor (Splint Mail for Kaedin, Chain Mail for Olek). Sold two 'Taylas' pelts and used the third to reinforce the new armor and Bonnie’s leather gear for added damage resistance.",
+			},
+			{
+				type: 'mission_update',
+				actors: '[ENTITY:character:Entire party:Party], [ENTITY:npc:Captain Sorana]',
+				sublocation: 'Town Hall/Office',
+				description:
+					'Reported their temple investigation to Captain Sorana. She confirmed pirates were in the harbor and paid the party 20 gold. Assigned a new mission: investigate the disappearance of four barbarian riders in the **Witchwood** forest to the northwest.',
+			},
+			{
+				type: 'discovery',
+				actors: '[ENTITY:character:Bonnie], [ENTITY:character:Entire party:Party]',
+				sublocation: 'Road to Witchwood',
+				description:
+					'Encountered the smoldering wreckage of two caravans and a massacre of ten innocents. Bonnie’s tracking revealed the culprits were at least twenty **Orcs on Warg-back**, heading toward the ruined fort.',
+			},
+			{
+				type: 'scouting',
+				actors: '[ENTITY:character:Entire party:Party]',
+				sublocation: 'Ruined Fort',
+				description:
+					'Located a ruined fortress. The land felt cleansed by powerful abjuration magic. Identified a stable with **Hobgoblins** playing dice and a **skeleton** patrolling the main keep wall. Realized the enemy was expecting them.',
+			},
+			{
+				type: 'encounter',
+				actors: '[ENTITY:character:Entire party:Party], [ENTITY:creature:Wormlord Faction]',
+				sublocation: 'Ruined Fort Courtyard',
+				description:
+					'Launched a surprise attack: Soshi cast **Grease** and Norr followed with a devastating **Fireball**, igniting the stable and killing several enemies. The courtyard erupted with two Wargs, two Hobgoblin Warg-riders, a hulking **Minotaur**, a **Mud Elemental**, and a terrifying **Manticore**.',
+			},
+			{
+				type: 'combat',
+				actors:
+					'[ENTITY:character:Olek], [ENTITY:character:Norr], [ENTITY:character:Bonnie], [ENTITY:character:Kaedin]',
+				sublocation: 'Ruined Fort Courtyard',
+				description:
+					'Olek was immediately snatched and poisoned by the Manticore. A Hobgoblin shaman blinded Norr. Bonnie, using invisibility, assassinated a shaman. Kaedin used his **Echo Knight** abilities to flank the riders. Olek crashed-landed on the battlement and killed the last archer. Kaedin destroyed the Mud Elemental.',
+			},
+			{
+				type: 'victory',
+				actors: '[ENTITY:character:Entire party:Party], [ENTITY:creature:Wormlord Faction]',
+				sublocation: 'Ruined Fort Courtyard',
+				description:
+					'The final shaman and the Minotaur fled through the main gate, shouting an ominous warning: **"Alert the Wormlord!"** The party stood victorious, having survived the siege and identified a new primary threat.',
+			},
+		],
+	},
+	{
+		id: 11,
+		title: 'The Blood Ritual and The Dragon’s Arrival',
+		location: 'Ruined Fort / Underground Temple',
+		session: '7',
+		items: [
+			{
+				type: 'traversal',
+				actors: '[ENTITY:character:Entire party:Party]',
+				sublocation: 'Ruined Fort Barracks',
+				description:
+					'Party recovered health but avoided a full short rest. They chose stealth through the burned-out barracks (the main gate was locked). The attempt at silence was compromised by Kaedin’s noisy armor and Soshi snagging her cloak. Bonnie scouted, finding an abandoned throne room with signs of recent violence.',
+			},
+			{
+				type: 'investigation',
+				actors: '[ENTITY:character:Entire party:Party], [ENTITY:character:Bonnie]',
+				sublocation: 'Underground Tunnel',
+				description:
+					"Found a map detailing a major enemy force (thirty units, 19x stronger than what they’d faced) gathering to strike **Drellin's Ferry** in four days. Identified a key vulnerability: destroying a bridge one day away could delay the attack by two to three days. Bonnie found the magical signature of a **Red Dragon** in the area.",
+			},
+			{
+				type: 'discovery',
+				actors: '[ENTITY:character:Entire party:Party], [ENTITY:character:Bonnie]',
+				sublocation: 'Ritual Chamber',
+				description:
+					'Entered a circular stone chamber with a large, blood-stained ritual circle. Found half-dozen corpses, including their former teacher, **Calistra**, who had apparently sacrificed herself in a blood binding ritual to open a sealed stone door. Markings indicated the involvement of both the **Arcane Seekers** and the **Brotherhood**.',
+			},
+			{
+				type: 'conflict',
+				actors: '[ENTITY:character:Entire party:Party], [ENTITY:creature:Spectral Entities]',
+				sublocation: 'Ritual Chamber',
+				description:
+					"The party performed the ritual to open the door, which awakened the souls of the dead mercenaries who rose as wraith-like spectral entities. The ghosts' attacks tore away the party members' traumatic memories. Soshi debated drawing more energy from the tortured souls than was needed.",
+			},
+			{
+				type: 'sacrifice',
+				actors: '[ENTITY:character:Norr]',
+				sublocation: 'Ritual Chamber',
+				description:
+					"**Norr** maintained the magical channel for the ritual. A surge of green electrical energy erupted, striking her, channelling into the stone door, and instantly refreshing all her spell slots. She was critically injured, briefly became a ghostly visage, and collapsed. With a final check, she **shattered the door**. Norr's Intelligence was permanently reduced by two, but her alignment shifted to **Neutral**, and she gained **permanent additional spell slots**.",
+			},
+			{
+				type: 'combat',
+				actors: '[ENTITY:character:Kaedin], [ENTITY:character:Olek]',
+				sublocation: 'Temple Entrance',
+				description:
+					"Entered the temple and engaged in fierce combat. A support caster revived the unconscious Norr from a wall of fire. Kaedin and Olek delivered devastating critical hits against enemy casters, with Olek's **Divine Smite** ending a major threat.",
+			},
+			{
+				type: 'climactic_discovery',
+				actors: '[ENTITY:character:Entire party:Party], [ENTITY:npc:Calistra], [ENTITY:creature:Red Dragon]',
+				sublocation: 'Blackstone Vault',
+				description:
+					'Found the artifact, the **Null Brand**, on a pedestal. Calistra (their former teacher) was there, one hand fused to the cursed object, using her life force to contain its corrupting influence. As the party debated helping her, a wall of **twenty armored orcs** and a booming **Red Dragon** appeared, commanded to take the Brand, creating a sudden, chaotic final battle.',
+			},
+		],
+	},
+	// SESSION 008
+	{
+		id: 12,
 		title: 'The Shattered Artifact',
 		location: `Corrupted Fortress`,
 		session: '8',

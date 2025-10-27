@@ -1,4 +1,4 @@
-<p>The party——emerged from a subterranean ordeal only to be rescued by the colossal pirate warship, The Leviathan’s Hall. They were hauled aboard and brought before the ship's commanders, Turiados and Bianca.</p>
+<p>The party emerged from a subterranean ordeal only to be rescued by the colossal pirate warship, The Leviathan’s Hall. They were hauled aboard and brought before the ship's commanders, Turiados and Bianca.</p>
 
 <p>Turiados, a towering man with Sahuagin shamanistic tattoos and a scent of brine and blood, wielded the Breaker of Hulls, a legendary cutlass [ENTITY:character:Soshi] recognized as stolen from her organization, the Brotherhood. Bianca, a Fey-touched woman with eyes that crackled with lightning, wore a velvet gown and possessed another stolen relic, the delicate, thunder-humming blade Winder. [ENTITY:character:Soshi] instantly recognized both weapons, confirming the commanders were highly dangerous and connected to a life she thought she’d left behind.</p>
 
