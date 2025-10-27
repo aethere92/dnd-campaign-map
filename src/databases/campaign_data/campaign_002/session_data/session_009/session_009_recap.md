@@ -1,0 +1,19 @@
+<p>The session opens as the adventurers—[ENTITY:character:Olek], [ENTITY:character:Norr], [ENTITY:character:Kaedin], [ENTITY:character:Bonnie], and [ENTITY:character:Soshi]—find themselves trapped in a ritual chamber with a Red-Hand army pouring through a newly breached wall. Their initial confrontation with the force is desperate and immediate. [ENTITY:character:Olek], a paladin, is dismayed to find his divine connection severed by the chamber's corrupting magic, forcing him to rely on pure martial skill. The chaotic nature of [ENTITY:character:Norr]'s wild magic manifests catastrophically, unleashing a devastating Fireball that wipes out several enemies but also wounds herself and her companion, [ENTITY:character:Soshi].</p>
+
+<p>The warriors at the breach, [ENTITY:character:Olek] and [ENTITY:character:Kaedin], are momentarily overwhelmed and thrown prone by a surge of orcs. However, the tide begins to turn through a coordinated counterattack. [ENTITY:character:Norr] unleashes a lightning bolt that incinerates a line of enemies, and [ENTITY:character:Soshi] summons spectral cats to harass the foe. [ENTITY:character:Bonnie], utilizing her superior stealth and a newly acquired teleportation medallion, appears behind a dragonkin leader and kills it with a rapid, decisive flurry of blades.</p>
+
+<p>The battle concludes abruptly when the artifact at the center of the chamber, no longer controlled by the ritualist, flares with necrotic energy and then detonates in a blinding explosion. The blast cleanses the area of oppressive magic but hurls the heroes into shared, apocalyptic visions of the future.</p>
+
+<p>The visions revealed a grim, unified enemy force:</p>
+
+<p>[ENTITY:character:Olek] and [ENTITY:character:Norr] saw a [ENTITY:class:Paladin] fortress corrupted and destroyed by Lamashtu’s cults, who infiltrated after a devastating defeat at a key battle called the "Battle for Bremen." The fortress fell when an Angevin fleet landed at the harbor, led by a resurrected god, Kresimir.</p>
+
+<p>[ENTITY:character:Kaedin] witnessed his home region being overrun by invaders bearing the sigil of a snarling blue bear, who were taking captives for a ritual. The Blue Bear forces were allied with the Red Hand.</p>
+
+<p>[ENTITY:character:Bonnie] saw the Feywild in ruins, with the Queens of Summer and Winter defeated by the same Blue Bear and Red Hand alliance, aided by Chromatic Dragons.</p>
+
+<p>[ENTITY:character:Soshi] was a prisoner in a siege against the great city of Neverwinter, where the Blue Bear banners and Chromatic Dragons were prominently displayed. The siege was being orchestrated by the [ENTITY:guild:Arcane Brotherhood] and a Red Wizard of Thay, who were using the life force of prisoners to fuel a destructive ritual.</p>
+
+<p>Regrouping in the ruined chamber, the party understands their immediate victory is secondary to the terrifying future they must prevent. They connect the common threads: a looming, unified enemy led by the Blue Bear and the Red Hand, with treachery from the [ENTITY:guild:Arcane Brotherhood] and the deadly threat of Chromatic Dragons. The Battle for Bremen is revealed as a critical point of failure that must be averted.</p>
+
+<p>As they prepare to leave, their friendly acquaintance, the ninja-ogre [ENTITY:npc:Yoghurt], arrives, having dispatched two enemy spies. [ENTITY:character:Bonnie] takes charge, writing an urgent letter to Captain [ENTITY:npc:Soranna] in Drellin’s Ferry. The letter details the approaching army, the four-day deadline, the apocalyptic visions, and a dire warning not to trust the [ENTITY:guild:Arcane Brotherhood]. She entrusts [ENTITY:npc:Yoghurt] with the delivery, stressing the secrecy of the message. With the heavy knowledge of the future weighing on them, the adventurers reaffirm their original, most immediate goal: they must reach the bridge and destroy it to buy the North essential time to prepare for the coming war.</p>

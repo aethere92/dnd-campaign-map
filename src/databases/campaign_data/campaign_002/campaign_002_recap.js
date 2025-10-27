@@ -24,21 +24,21 @@ const CAMPAIGN_002_RECAPS = [
 	},
 	{
 		id: 'session-002',
-		title: "001 - To Drellin's Ferry",
+		title: "01 - To Drellin's Ferry",
 		date: 'Apr 12th',
 		content: 'session_data/session_002/session_002_content.md',
 		recap: 'session_data/session_002/session_002_recap.md',
 	},
 	{
 		id: 'session-003',
-		title: '002 - Witchwood',
+		title: '02 - Witchwood',
 		date: 'May 1st',
 		content: 'session_data/session_003/session_003_content.md',
 		recap: 'session_data/session_003/session_003_recap.md',
 	},
 	{
 		id: 'session-004',
-		title: '003 - Into the Depths',
+		title: '03 - Into the Depths',
 		date: 'Jun 7th',
 		content: 'session_data/session_004/session_004_content.md',
 		recap: 'session_data/session_004/session_004_recap.md',
@@ -69,8 +69,18 @@ const CAMPAIGN_002_RECAPS = [
 		},
 	},
 	{
+		id: 'session-005',
+		title: '04 - Echoes of the Arena',
+		date: 'Jul 8th',
+		content: 'session_data/session_005/session_005_content.md',
+		recap: 'session_data/session_005/session_005_recap.md',
+		progression: {
+			loot: [],
+		},
+	},
+	{
 		id: 'session-006',
-		title: '006 - The Ruined Fortress',
+		title: '05 - Pirates, Pelts, and Cargo',
 		date: 'Jul 8th',
 		content: 'session_data/session_006/session_006_content.md',
 		recap: 'session_data/session_006/session_006_recap.md',
@@ -80,8 +90,8 @@ const CAMPAIGN_002_RECAPS = [
 	},
 	{
 		id: 'session-007',
-		title: '007 - Assault on the Fortress',
-		date: 'Aug 4th',
+		title: '06 - The Ruined Fortress',
+		date: 'Jul 8th',
 		content: 'session_data/session_007/session_007_content.md',
 		recap: 'session_data/session_007/session_007_recap.md',
 		progression: {
@@ -90,10 +100,20 @@ const CAMPAIGN_002_RECAPS = [
 	},
 	{
 		id: 'session-008',
-		title: '008 - The Shattered Artifact',
-		date: 'Oct 18th',
+		title: '07 - Assault on the Fortress',
+		date: 'Aug 4th',
 		content: 'session_data/session_008/session_008_content.md',
 		recap: 'session_data/session_008/session_008_recap.md',
+		progression: {
+			loot: [],
+		},
+	},
+	{
+		id: 'session-009',
+		title: '08 - The Shattered Artifact',
+		date: 'Oct 18th',
+		content: 'session_data/session_009/session_009_content.md',
+		recap: 'session_data/session_009/session_009_recap.md',
 		progression: {
 			loot: [],
 		},
