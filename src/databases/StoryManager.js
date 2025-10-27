@@ -808,7 +808,7 @@ class StoryManager {
 		const mainContentEl = document.createElement('div');
 		mainContentEl.className = 'session-main-content';
 		const tempMain = document.createElement('div');
-		tempMain.innerHTML = `<h2 id="session-recap">Session Recap</h2>${await fetchAndParseMd(session.content)}`;
+		tempMain.innerHTML = `${await fetchAndParseMd(session.content)}`;
 		this.#processPlaceholders(tempMain, session);
 		mainContentEl.appendChild(tempMain);
 		sessionContent.appendChild(mainContentEl);

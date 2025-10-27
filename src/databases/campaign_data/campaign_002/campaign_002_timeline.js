@@ -225,4 +225,68 @@ const CAMPAIGN_002_TIMELINE = [
 			},
 		],
 	},
+
+	// SESSION 008
+	{
+		id: 8,
+		title: 'The Shattered Artifact',
+		location: `Corrupted Fortress`,
+		session: '8',
+		items: [
+			{
+				type: 'encounter',
+				actors: '[ENTITY:character:Entire party:Party], Red Hand Army, Dragonkin',
+				sublocation: 'Ritual Chamber',
+				description: `An army breaches the chamber wall. [ENTITY:character:Bonnie] uses Fairy Fire while [ENTITY:character:Olek] discovers his divine connection is severed by corrupting magic. [ENTITY:character:Norr]'s wild magic triggers a Fireball centered on herself, devastating both party and enemies. [ENTITY:character:Soshi] summons spectral cats while [ENTITY:character:Kaedin] and [ENTITY:character:Olek] form a defensive line. The party battles orcs, soldiers, and dragonkin leaders. [ENTITY:character:Bonnie] assassinates a dragonkin using her medallion's teleportation and greater invisibility.`,
+			},
+			{
+				type: 'narrative',
+				actors: 'Ritualist death & Artifact',
+				sublocation: 'Ritual Chamber',
+				description: `With the ritualist's death, the artifact releases uncontrolled necrotic energy, intensifying the land's corruption. The artifact becomes unstable and detonates in a catastrophic explosion, casting the party into apocalyptic visions.`,
+			},
+			{
+				type: 'vision',
+				actors: '[ENTITY:character:Olek], [ENTITY:character:Norr]',
+				sublocation: 'Blighted Paladin Fortress',
+				description: `[ENTITY:character:Olek] and [ENTITY:character:Norr] witness a corrupted fortress overrun by crystalline growths. The impaled commander reveals [ENTITY:npc:Lamashtu]'s cults infiltrated after the Battle for Bremen depleted their ranks. He speaks of defeat caused by the Angevin fleet and their resurrected god [ENTITY:npc:Kresimir] attacking from the harbor. [ENTITY:character:Norr] notices her right arm is replaced by a prosthetic in this dark future.`,
+			},
+			{
+				type: 'vision',
+				actors: '[ENTITY:character:Kaedin]',
+				sublocation: 'Burning Village',
+				description: `[ENTITY:character:Kaedin] finds his neighboring village ablaze. He rescues two children who reveal invaders bearing a yellow banner with a blue bear sigil, accompanied by Red Hand symbols, came two days prior and took villagers as slaves for a ritual. They warn his home village is next.`,
+			},
+			{
+				type: 'vision',
+				actors: '[ENTITY:character:Bonnie]',
+				sublocation: 'The Feywild',
+				description: `[ENTITY:character:Bonnie] witnesses Titania and the Queen of Air and Darkness fighting together against a warrior wielding energy spears. Chromatic dragons destroy pegasus knights and hippogriff riders while Spring and Autumn courts are annihilated. Only unknown paladins hold the line against Red Hand forces, black orcs, and blue bear warriors. The warrior defeats both queens and steals their crowns, dooming the Feywild to wither.`,
+			},
+			{
+				type: 'vision',
+				actors: '[ENTITY:character:Soshi]',
+				sublocation: 'Siege of Neverwinter',
+				description: `[ENTITY:character:Soshi] finds herself chained on a platform with hundreds of prisoners before Neverwinter's walls. A Red Wizard of Thay forces them to power a ritual to breach the city. Blue Bear banners dominate the siege, with chromatic dragons circling overhead and the Arcane Brotherhood overseeing the death ritual.`,
+			},
+			{
+				type: 'narrative',
+				actors: '[ENTITY:character:Entire party:Party], [ENTITY:npc:Yoghurt]',
+				sublocation: 'Outside the Fortress',
+				description: `The party recovers from the explosion and their shared visions. [ENTITY:npc:Yoghurt] appears, having followed them, dragging corpses of shadow-clad scouts with blackened veins. [ENTITY:character:Bonnie] discovers they're foreigners, likely corrupted agents.`,
+			},
+			{
+				type: 'narrative',
+				actors: '[ENTITY:character:Bonnie], [ENTITY:npc:Yoghurt]',
+				sublocation: 'Outside the Fortress',
+				description: `[ENTITY:character:Bonnie] writes an urgent letter to [ENTITY:npc:Soranna] detailing the approaching army's four-day timeline, the visions, enemy factions (Red Hand, Blue Bear, Arcane Brotherhood, chromatic dragons), and warns against trusting the Arcane Brotherhood. She pays [ENTITY:npc:Yoghurt] three gold and makes him swear to deliver it only to [ENTITY:npc:Soranna], not [ENTITY:npc:Kat], promising his Raven master will hear of his service.`,
+			},
+			{
+				type: 'traversal',
+				actors: '[ENTITY:character:Entire party:Party]',
+				sublocation: 'Towards the Bridge',
+				description: `Armed with knowledge of the apocalyptic future, the party sets off toward their immediate goal: reaching and destroying the bridge to buy the North time against the coming war.`,
+			},
+		],
+	},
 ];

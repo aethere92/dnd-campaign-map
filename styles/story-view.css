@@ -653,6 +653,14 @@
 	font-family: var(--font-headers);
 }
 
+.session-main-content h4 {
+	text-decoration: underline;
+	font-size: 12pt;
+	text-underline-offset: 3px;
+	color: var(--color-primary);
+	text-decoration-color: var(--color-border);
+}
+
 .session-main-content h1,
 .session-small-recap h1 {
 	font-size: 1.6rem;

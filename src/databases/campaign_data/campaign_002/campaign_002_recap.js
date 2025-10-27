@@ -18,14 +18,14 @@ const CAMPAIGN_002_RECAPS = [
 	{
 		id: 'session-001',
 		title: 'Introduction',
-		date: 'April 12th',
+		date: 'Apr 12th',
 		content: 'session_data/session_001/session_001_content.md',
 		recap: 'session_data/session_001/session_001_recap.md',
 	},
 	{
 		id: 'session-002',
 		title: "001 - To Drellin's Ferry",
-		date: 'April 12th',
+		date: 'Apr 12th',
 		content: 'session_data/session_002/session_002_content.md',
 		recap: 'session_data/session_002/session_002_recap.md',
 	},
@@ -39,7 +39,7 @@ const CAMPAIGN_002_RECAPS = [
 	{
 		id: 'session-004',
 		title: '003 - Into the Depths',
-		date: 'June 7th',
+		date: 'Jun 7th',
 		content: 'session_data/session_004/session_004_content.md',
 		recap: 'session_data/session_004/session_004_recap.md',
 		progression: {
@@ -69,11 +69,31 @@ const CAMPAIGN_002_RECAPS = [
 		},
 	},
 	{
+		id: 'session-006',
+		title: '006 - The Ruined Fortress',
+		date: 'Jul 8th',
+		content: 'session_data/session_006/session_006_content.md',
+		recap: 'session_data/session_006/session_006_recap.md',
+		progression: {
+			loot: [],
+		},
+	},
+	{
 		id: 'session-007',
 		title: '007 - Assault on the Fortress',
-		date: 'August 4th',
+		date: 'Aug 4th',
 		content: 'session_data/session_007/session_007_content.md',
 		recap: 'session_data/session_007/session_007_recap.md',
+		progression: {
+			loot: [],
+		},
+	},
+	{
+		id: 'session-008',
+		title: '008 - The Shattered Artifact',
+		date: 'Oct 18th',
+		content: 'session_data/session_008/session_008_content.md',
+		recap: 'session_data/session_008/session_008_recap.md',
 		progression: {
 			loot: [],
 		},
