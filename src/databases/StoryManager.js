@@ -804,6 +804,84 @@ class StoryManager {
 		sessionRecap.appendChild(tempRecap);
 		sessionContent.appendChild(sessionRecap);
 
+		// Process Factual Recap
+		if (session?.factual_recap) {
+			const factualRecap = document.createElement('div');
+			factualRecap.className = 'session-factual';
+
+			const factualHeader = document.createElement('div');
+			factualHeader.className = 'session-factual-header';
+			factualHeader.innerHTML = `
+			<h3 id="factual-recap">Factual Recap</h3>
+			<button class="factual-toggle" aria-expanded="false" aria-controls="factual-content">
+				<span class="toggle-icon">▶</span>
+			</button>
+			`;
+
+			const factualContent = document.createElement('div');
+			factualContent.className = 'session-factual-content';
+			factualContent.id = 'factual-content';
+			factualContent.style.display = 'none';
+
+			const tempFactual = document.createElement('div');
+			tempFactual.innerHTML = await fetchAndParseMd(session?.factual_recap);
+			this.#processPlaceholders(tempFactual, session);
+			factualContent.appendChild(tempFactual);
+
+			factualRecap.appendChild(factualHeader);
+			factualRecap.appendChild(factualContent);
+
+			// Add toggle functionality
+			const toggleBtn = factualHeader.querySelector('.factual-toggle');
+			toggleBtn.addEventListener('click', () => {
+				const isExpanded = factualContent.style.display !== 'none';
+				factualContent.style.display = isExpanded ? 'none' : 'block';
+				toggleBtn.setAttribute('aria-expanded', !isExpanded);
+				toggleBtn.querySelector('.toggle-icon').textContent = isExpanded ? '▶' : '▼';
+			});
+
+			sessionContent.appendChild(factualRecap);
+		}
+
+		if (session?.name_db) {
+			// Process Name, Items and Location Database
+			const nameDb = document.createElement('div');
+			nameDb.className = 'session-factual';
+
+			const nameDbHeader = document.createElement('div');
+			nameDbHeader.className = 'session-factual-header';
+			nameDbHeader.innerHTML = `
+			<h3 id="name-db">Name, Items and Location Database</h3>
+			<button class="factual-toggle" aria-expanded="false" aria-controls="name-db-content">
+				<span class="toggle-icon">▶</span>
+			</button>
+			`;
+
+			const nameDbContent = document.createElement('div');
+			nameDbContent.className = 'session-factual-content';
+			nameDbContent.id = 'name-db-content';
+			nameDbContent.style.display = 'none';
+
+			const tempNameDb = document.createElement('div');
+			tempNameDb.innerHTML = await fetchAndParseMd(session?.name_db);
+			this.#processPlaceholders(tempNameDb, session);
+			nameDbContent.appendChild(tempNameDb);
+
+			nameDb.appendChild(nameDbHeader);
+			nameDb.appendChild(nameDbContent);
+
+			// Add toggle functionality
+			const nameDbToggleBtn = nameDbHeader.querySelector('.factual-toggle');
+			nameDbToggleBtn.addEventListener('click', () => {
+				const isExpanded = nameDbContent.style.display !== 'none';
+				nameDbContent.style.display = isExpanded ? 'none' : 'block';
+				nameDbToggleBtn.setAttribute('aria-expanded', !isExpanded);
+				nameDbToggleBtn.querySelector('.toggle-icon').textContent = isExpanded ? '▶' : '▼';
+			});
+
+			sessionContent.appendChild(nameDb);
+		}
+
 		// Process Main Content
 		const mainContentEl = document.createElement('div');
 		mainContentEl.className = 'session-main-content';
@@ -853,7 +931,7 @@ class StoryManager {
 
 	#generateTableOfContents(contentArea) {
 		// Find headings only within the main session content, not the TOC itself
-		const sessionContent = contentArea.querySelector('.session-content');
+		const sessionContent = contentArea.querySelector('.session-main-content');
 		if (!sessionContent) return; // No session content rendered
 
 		const headings = sessionContent.querySelectorAll('h1, h2, h3, h4'); // Include h4 if needed

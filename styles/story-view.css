@@ -681,6 +681,88 @@
 	color: darkblue;
 }
 
+.session-factual {
+	max-width: 950px;
+	margin-bottom: var(--spacing-lg);
+
+	&:not(:has(.factual-toggle[aria-expanded='true'])) {
+		width: 100%;
+	}
+}
+
+.session-factual-header {
+	/* width: 100%; */
+	padding: var(--spacing-sm) var(--spacing-md);
+	background-color: rgba(255, 255, 255, 0.7);
+	border-radius: var(--border-radius-lg);
+	box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
+	border: 1px solid var(--color-border);
+	background: url('../images/assets/background_texture.png');
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	cursor: pointer;
+
+	&:has(.factual-toggle[aria-expanded='true']) {
+		border-radius: var(--border-radius-lg) var(--border-radius-lg) 0 0;
+	}
+}
+
+.session-factual-header h3 {
+	margin: 0;
+	font-size: 1rem;
+	color: var(--color-primary);
+	font-family: var(--font-headers);
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
+}
+
+.factual-toggle {
+	background: none;
+	border: none;
+	cursor: pointer;
+	padding: var(--spacing-xs);
+	color: var(--color-primary);
+	font-size: 1.2rem;
+	transition: transform 0.2s ease;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.factual-toggle:hover {
+	transform: scale(1.1);
+}
+
+.toggle-icon {
+	display: inline-block;
+	transition: transform 0.2s ease;
+}
+
+.session-factual-content {
+	font-size: 10.5pt;
+	line-height: 1.75;
+	color: var(--color-text);
+	background-color: rgba(255, 255, 255, 0.7);
+	padding: var(--spacing-lg);
+	border-radius: var(--border-radius-lg);
+	box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
+	border: 1px solid var(--color-border);
+	border-top: none;
+	border-top-left-radius: 0;
+	border-top-right-radius: 0;
+	margin-top: -1px;
+	font-family: 'Noto Sans', var(--font-system);
+	background: url('../images/assets/background_texture.png');
+	max-width: 900px;
+	/* width: 100%; */
+
+	& h3:first-of-type,
+	p:first-of-type {
+		margin-top: 0;
+	}
+}
+
 /* Image handling */
 .story-image-container {
 	/* margin: var(--spacing-lg) 0; */
@@ -1332,7 +1414,9 @@
 
 	.session-header,
 	.session-small-recap,
-	.session-main-content {
+	.session-main-content,
+	.session-factual-content,
+	.session-factual-header {
 		max-width: calc(100% - 3rem);
 	}
 }
@@ -1342,7 +1426,9 @@
 
 	.session-header,
 	.session-small-recap,
-	.session-main-content {
+	.session-main-content,
+	.session-factual-content,
+	.session-factual-header {
 		max-width: calc(100% - 3rem);
 	}
 

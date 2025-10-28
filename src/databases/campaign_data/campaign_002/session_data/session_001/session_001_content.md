@@ -1,3 +1,4 @@
+<h3> The beginnings</h3>
 <p>The story of our five heroes begins, as many do, on a road leading toward a town.</p>
 <p>But this is no well-traveled path of cobblestones and dust - instead, it winds through a thick tangle of knee-high weeds and scattered trees, draped in the vibrant green of a subtropical forest. The air is heavy with the scent of life and growth, and the sound of distant creatures echoes beneath the canopy.</p>
 <p>Our heroes are quite the unlikely bunch - a rare mix of races and origins - but they travel together in good spirits, friendly and merry, sharing tales and learning more of one another with each step.</p>

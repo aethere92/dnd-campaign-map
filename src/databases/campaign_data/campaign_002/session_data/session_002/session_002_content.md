@@ -1,3 +1,5 @@
+<h3>First encounter</h3>
+
 <p>We begin on the fourth day of travel. Afternoon has settled in, the sun still burning, the air hot and still. The lands of Elsir Vale have blurred by now - every town looks the same, and our heroes can no longer tell one from the next.</p>
 <p>[ENTITY:location:Drellin's Ferry] lies just a few miles ahead - both their destination and their long-awaited respite from the arduous road. Conversation has grown scarce. After four days on the road, there's little left to say, and even less to want beyond a soft bed and a hot meal. A small question here and there - "<span class="dialogue">So you really don't know where a fey portal is?</span>" - and the occasional mage hand prank: a flick of the forehead, a stone in a boot. And so, our weary party presses on.</p>
 <p>The road crests a low rise and dips into a dusty grove nestled in a shallow dell. An abandoned farmhouse, half-hidden behind trees, leans tiredly by the roadside. They've passed places like this before - but something about this one feels wrong.</p>

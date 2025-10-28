@@ -28,6 +28,8 @@ const CAMPAIGN_002_RECAPS = [
 		date: 'Apr 12th',
 		content: 'session_data/session_002/session_002_content.md',
 		recap: 'session_data/session_002/session_002_recap.md',
+		factual_recap: 'session_data/session_002/session_002_factual.md',
+		name_db: 'session_data/session_002/session_002_name_db.md',
 	},
 	{
 		id: 'session-003',
@@ -35,6 +37,8 @@ const CAMPAIGN_002_RECAPS = [
 		date: 'May 1st',
 		content: 'session_data/session_003/session_003_content.md',
 		recap: 'session_data/session_003/session_003_recap.md',
+		factual_recap: 'session_data/session_003/session_003_factual.md',
+		name_db: 'session_data/session_003/session_003_name_db.md',
 	},
 	{
 		id: 'session-004',
@@ -42,6 +46,8 @@ const CAMPAIGN_002_RECAPS = [
 		date: 'Jun 7th',
 		content: 'session_data/session_004/session_004_content.md',
 		recap: 'session_data/session_004/session_004_recap.md',
+		factual_recap: 'session_data/session_004/session_004_factual.md',
+		name_db: 'session_data/session_004/session_004_name_db.md',
 		progression: {
 			loot: [
 				{
@@ -74,6 +80,8 @@ const CAMPAIGN_002_RECAPS = [
 		date: 'Jul 8th',
 		content: 'session_data/session_005/session_005_content.md',
 		recap: 'session_data/session_005/session_005_recap.md',
+		factual_recap: 'session_data/session_005/session_005_factual.md',
+		name_db: 'session_data/session_005/session_005_name_db.md',
 		progression: {
 			loot: [],
 		},
@@ -84,6 +92,8 @@ const CAMPAIGN_002_RECAPS = [
 		date: 'Jul 8th',
 		content: 'session_data/session_006/session_006_content.md',
 		recap: 'session_data/session_006/session_006_recap.md',
+		factual_recap: 'session_data/session_006/session_006_factual.md',
+		name_db: 'session_data/session_006/session_006_name_db.md',
 		progression: {
 			loot: [],
 		},
@@ -94,6 +104,8 @@ const CAMPAIGN_002_RECAPS = [
 		date: 'Jul 8th',
 		content: 'session_data/session_007/session_007_content.md',
 		recap: 'session_data/session_007/session_007_recap.md',
+		factual_recap: 'session_data/session_007/session_007_factual.md',
+		name_db: 'session_data/session_007/session_007_name_db.md',
 		progression: {
 			loot: [],
 		},
@@ -104,6 +116,8 @@ const CAMPAIGN_002_RECAPS = [
 		date: 'Aug 4th',
 		content: 'session_data/session_008/session_008_content.md',
 		recap: 'session_data/session_008/session_008_recap.md',
+		factual_recap: 'session_data/session_008/session_008_factual.md',
+		name_db: 'session_data/session_008/session_008_name_db.md',
 		progression: {
 			loot: [],
 		},
@@ -114,6 +128,8 @@ const CAMPAIGN_002_RECAPS = [
 		date: 'Oct 18th',
 		content: 'session_data/session_009/session_009_content.md',
 		recap: 'session_data/session_009/session_009_recap.md',
+		factual_recap: 'session_data/session_009/session_009_factual.md',
+		name_db: 'session_data/session_009/session_009_name_db.md',
 		progression: {
 			loot: [],
 		},
