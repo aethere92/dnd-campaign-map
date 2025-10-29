@@ -567,6 +567,7 @@
 	border-bottom: 2px solid var(--color-border);
 	position: relative;
 	text-align: center;
+	padding-inline: var(--spacing-lg);
 }
 
 .session-header h2 {

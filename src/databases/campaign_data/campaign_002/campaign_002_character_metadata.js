@@ -1,19 +1,19 @@
 const CAMPAIGN_002_METADATA = {
 	BONNIE: {
 		abilityScores: [
-			{ name: 'Strength', abbr: 'str', score: '-1', value: '8' },
+			{ name: 'Strength', abbr: 'str', score: '+4', value: '18' },
 			{ name: 'Dexterity', abbr: 'dex', score: '+4', value: '19' },
 			{ name: 'Constitution', abbr: 'con', score: '+2', value: '14' },
 			{ name: 'Intelligence', abbr: 'int', score: '+2', value: '14' },
-			{ name: 'Wisdom', abbr: 'wis', score: '+0', value: '10' },
+			{ name: 'Wisdom', abbr: 'wis', score: '+2', value: '14' },
 			{ name: 'Charisma', abbr: 'cha', score: '+1', value: '12' },
 		],
 		savingThrows: [
-			{ name: 'str', value: '-1' },
+			{ name: 'str', value: '+4' },
 			{ name: 'dex', value: '+7' },
 			{ name: 'con', value: '+2' },
 			{ name: 'int', value: '+5' },
-			{ name: 'wis', value: '+0' },
+			{ name: 'wis', value: '+2' },
 			{ name: 'cha', value: '+1' },
 		],
 		spellData: [
@@ -33,9 +33,9 @@ const CAMPAIGN_002_METADATA = {
 						effect: '1d8*',
 					},
 					{
-						spellInfo: { spellName: 'Mage Hand', spellMetaInfo: 'Mage Hand Legerdemain' },
+						spellInfo: { spellName: 'Mage Hand', spellMetaInfo: 'Rogue' },
 						range: '30ft.',
-						slotType: '1BA',
+						slotType: '1A',
 						effect: 'Utility',
 					},
 					{
@@ -43,6 +43,18 @@ const CAMPAIGN_002_METADATA = {
 						range: '120ft.',
 						slotType: '1A',
 						effect: 'Communication*',
+					},
+					{
+						spellInfo: { spellName: 'Produce Flame', spellMetaInfo: 'Druid' },
+						range: 'Self',
+						slotType: '1BA',
+						effect: '2d8*',
+					},
+					{
+						spellInfo: { spellName: 'Spare the Dying', spellMetaInfo: 'Druid' },
+						range: '',
+						slotType: '1A',
+						effect: 'Healing',
 					},
 				],
 			},
@@ -56,10 +68,10 @@ const CAMPAIGN_002_METADATA = {
 						effect: '1d6*',
 					},
 					{
-						spellInfo: { spellName: 'Comprehend Languages', spellMetaInfo: 'Rogue' },
-						range: 'Self',
+						spellInfo: { spellName: 'Cure Wounds', spellMetaInfo: 'Druid' },
+						range: 'Touch',
 						slotType: '1A',
-						effect: 'Social',
+						effect: '2d8+2 ',
 					},
 					{
 						spellInfo: { spellName: 'Faerie Fire', spellMetaInfo: 'Fairy Magic' },
@@ -74,10 +86,34 @@ const CAMPAIGN_002_METADATA = {
 						effect: 'Summoning',
 					},
 					{
+						spellInfo: { spellName: 'Fog Cloud', spellMetaInfo: 'Druid' },
+						range: '120ft.',
+						slotType: '1A',
+						effect: 'Control*',
+					},
+					{
+						spellInfo: { spellName: 'Healing Word', spellMetaInfo: 'Druid' },
+						range: '60ft.',
+						slotType: '1BA',
+						effect: '2d4+2 ',
+					},
+					{
+						spellInfo: { spellName: 'Identify', spellMetaInfo: 'Rogue' },
+						range: 'Touch',
+						slotType: '1m',
+						effect: 'Detection',
+					},
+					{
 						spellInfo: { spellName: 'Shield', spellMetaInfo: 'Rogue' },
 						range: 'Self',
 						slotType: '1R',
 						effect: 'Warding',
+					},
+					{
+						spellInfo: { spellName: 'Thunderwave', spellMetaInfo: 'Druid' },
+						range: 'Self',
+						slotType: '1A',
+						effect: '2d8*',
 					},
 				],
 			},
@@ -91,16 +127,34 @@ const CAMPAIGN_002_METADATA = {
 						effect: '2d6*',
 					},
 					{
+						spellInfo: { spellName: 'Cure Wounds', spellMetaInfo: 'Druid' },
+						range: 'Touch',
+						slotType: '1A',
+						effect: '4d8+2 ',
+					},
+					{
 						spellInfo: { spellName: 'Enlarge/Reduce', spellMetaInfo: 'Fairy Magic' },
 						range: '30ft.',
 						slotType: '1A',
 						effect: 'Buff',
 					},
 					{
-						spellInfo: { spellName: 'Misty Step', spellMetaInfo: 'Rogue' },
-						range: 'Self',
+						spellInfo: { spellName: 'Fog Cloud', spellMetaInfo: 'Druid' },
+						range: '120ft.',
+						slotType: '1A',
+						effect: 'Control*',
+					},
+					{
+						spellInfo: { spellName: 'Healing Word', spellMetaInfo: 'Druid' },
+						range: '60ft.',
 						slotType: '1BA',
-						effect: 'Teleportation',
+						effect: '4d4+2 ',
+					},
+					{
+						spellInfo: { spellName: 'Thunderwave', spellMetaInfo: 'Druid' },
+						range: 'Self',
+						slotType: '1A',
+						effect: '3d8*',
 					},
 				],
 			},
@@ -108,111 +162,119 @@ const CAMPAIGN_002_METADATA = {
 		actionData: [
 			{ name: 'Invisibility ' },
 			{
-				name: 'Nick (Dagger) ',
-				description:
-					'Nick. When you make the extra attack of the Light property, you can make it as part of the Attack action instead of as a Bonus Action. This extra attack can only be made once per turn.',
-			},
-			{
 				name: 'Unarmed Strike ',
 				description:
 					'You make a melee attack that involves using your body to deal one of the following effects:Damage. You make an attack roll against the creature, and on a hit, you deal 1 + STR Bludgeoning damage.Grapple. The target must succeed on a Str./Dex. (it chooses which) saving throw (DC = 8 + Prof. Bonus + Str.) or it has the Grappled condition.Shove. The target must succeed on a Str./Dex. (it chooses which) saving throw (DC = 8 + Prof. Bonus + Str.) or you can either push it 5 ft. away or cause it to have the Prone condition.',
 			},
 			{
-				name: 'Vex (Shortsword) ',
+				name: 'Wild Shape ',
 				description:
-					'Vex. If you hit a creature with a Shortsword and deal damage to it, you have Advantage on your next attack roll against that creature before the end of your next turn.',
+					'As an action, you can magically assume the shape of a beast that you have seen before twice per short rest. [2nd] Max CR 1/4 (no flying or swimming speed) [4th] Max CR 1/2 (no flying speed) [8th] Max CR 1You can stay in beast shape for 1 hours before reverting back to your normal form (or as a bonus action earlier or if you fall unconscious, drop to 0 hit points, or die).',
 			},
 			{
 				name: 'Cunning Action ',
-				description:
-					'On your turn, you can take one of the following actions as a Bonus Actions: Dash, Disengage, or Hide.',
+				description: 'You can take a bonus action on each of your turns to take the Dash, Disengage, or Hide action.',
 			},
 			{
-				name: 'Steady Aim ',
+				name: 'Spirit Totem ',
 				description:
-					'You give yourself Advantage on your next attack roll on the current turn, provided that you haven’t moved during this turn. After you use it, your Speed is 0 until the end of the current turn.',
+					"As a bonus action, you can magically summon a spirit to a point you can see within 60 ft. that lasts for 1 minute (or until you're incapacitated). The spirit creates an aura in a 30-ft. radius around that point and can be moved up to 60 ft. as a bonus action. The spirit's aura effect depends on its type: Bear, Hawk, Unicorn",
 			},
+			{ name: 'Steady aim ' },
 			{
 				name: 'Uncanny Dodge ',
 				description:
-					'When an attacker you can see hits you with an attack, you can take a Reaction to halve the attack’s damage against you (round down).',
+					'When an attacker that you can see hits you with an attack, you can use your reaction to halve the attack’s damage against you.',
+			},
+			{
+				name: 'Uncanny dodge ',
+				description:
+					'When an attacker that you can see hits you with an attack roll, you can take a Reaction to halve the attack’s damage against you (round down).',
+			},
+			{ name: 'Cunning strike (No Action)' },
+			{
+				name: 'Dagger Nick (No Action)',
+				description:
+					'The Nick property allows you to make an additional attack as part of your attack action whenever you wield a light weapon in both your main and off-hand.',
 			},
 			{
 				name: 'Sneak Attack (Special)',
 				description:
-					'Once per turn you can deal an extra 4d6 damage to one creature you hit with an attack if you have Advantage on the roll and the attack uses a Finesse or Ranged weapon. The extra damage’s type is the same as the weapon’s type.You don’t need Advantage on the attack if at least one of your allies is within 5 ft. of the target, the ally doesn’t have the Incapacitated condition, and you don’t have Disadvantage on the attack roll.',
+					'Once per turn, you can deal an extra 3d6 damage to one creature you hit with an attack with a finesse or ranged weapon if you have advantage on the attack roll. You don’t need advantage on the attack roll if another enemy of the target is within 5 ft. of it, that enemy isn’t incapacitated, and you don’t have disadvantage on the attack roll.',
 			},
 			{
-				name: 'Sneak Attack: Poison (Cost: 1d6) (No Action)',
+				name: 'Speech of the Woods (Special)',
 				description:
-					'You add a toxin to your strike, forcing the target to make a DC 15 Con. saving throw. On a failed save, the target has the Poisoned condition for 1 minute, and at the end of each of its turns, the Poisoned target repeats the save, ending the effect on itself on a success. You must have a Poisoner’s Kit on your person to use this effect.',
+					'Beasts can understand your speech, and you gain the ability to decipher their noises and motions. ',
 			},
 			{
-				name: 'Sneak Attack: Trip (Cost: 1d6) (No Action)',
+				name: 'shortsword vex (No Action)',
 				description:
-					'If the target is Large or smaller, it must succeed on a DC 15 Dex. saving throw or have the Prone condition.',
-			},
-			{
-				name: 'Sneak Attack: Withdraw (Cost: 1d6) (No Action)',
-				description:
-					'Immediately after the attack, you move up to half your Speed without provoking Opportunity Attacks.',
+					'With the Vex property, whenever you hit a target with a Vex weapon, you gain advantage on your next attack roll against that same target.',
 			},
 		],
 		features: [
-			{ name: 'Core Rogue Traits' },
-			{ name: 'Expertise', description: 'You gain Expertise in two of your skill proficiencies of your choice.' },
+			{ name: 'Hit Points' },
+			{ name: 'Proficiencies' },
+			{ name: 'Druidic', description: 'You know Druidic, the secret language of druids.' },
+			{
+				name: 'Spellcasting',
+				description:
+					'You can cast prepared druid spells using WIS as your spellcasting modifier (Spell DC 13, Spell Attack +5) and prepared druid spells as rituals if they have the ritual tag. You can use a druidic focus as a spellcasting focus.',
+			},
+			{
+				name: 'Wild Shape',
+				description:
+					'As an action, you can magically assume the shape of a beast that you have seen before twice per short rest.',
+			},
+			{ name: 'Druid Circle' },
+			{
+				name: 'Speech of the Woods',
+				description:
+					'You learn to speak, read, and write Sylvan, and beasts can understand your speech, and you gain the ability to decipher their noises and motions. ',
+			},
+			{
+				name: 'Spirit Totem',
+				description:
+					"As a bonus action, you can magically summon a spirit to a point you can see within 60 ft. that lasts for 1 minute (or until you're incapacitated). The spirit creates an aura in a 30-ft. radius around that point and can be moved up to 60 ft. as a bonus action. The spirit's aura effect depends on its type:",
+			},
+			{ name: 'Hit Points' },
+			{ name: 'Proficiencies' },
+			{
+				name: 'Expertise',
+				description:
+					'Your proficiency bonus is doubled for any ability check you make that uses any of the chosen proficiencies.',
+			},
 			{
 				name: 'Sneak Attack',
 				description:
-					'Once per turn you can deal an extra 4d6 damage to one creature you hit with an attack if you have Advantage on the roll and the attack uses a Finesse or Ranged weapon. The extra damage’s type is the same as the weapon’s type.',
+					'Once per turn, you can deal an extra 3d6 damage to one creature you hit with an attack with a finesse or ranged weapon if you have advantage on the attack roll. You don’t need advantage on the attack roll if another enemy of the target is within 5 ft. of it, that enemy isn’t incapacitated, and you don’t have disadvantage on the attack roll.',
 			},
-			{ name: 'Thieves’ Cant', description: 'You know Thieves’ Cant and one other language of your choice.' },
 			{
-				name: 'Weapon Mastery',
+				name: 'Thieves’ Cant',
 				description:
-					'Vex. If you hit a creature with a Shortsword and deal damage to it, you have Advantage on your next attack roll against that creature before the end of your next turn.',
+					'You have learned thieves’ cant, a secret mix of dialect, jargon, and code that allows you to hide messages in seemingly normal conversation. It takes four times longer to convey such a message than it does to speak the same idea plainly.',
 			},
 			{
 				name: 'Cunning Action',
-				description:
-					'On your turn, you can take one of the following actions as a Bonus Actions: Dash, Disengage, or Hide.',
+				description: 'You can take a bonus action on each of your turns to take the Dash, Disengage, or Hide action.',
 			},
-			{ name: 'Rogue Subclass' },
+			{ name: 'Roguish Archetype' },
 			{
-				name: 'Steady Aim',
+				name: 'Spellcasting',
 				description:
-					'As a Bonus Action, you give yourself Advantage on your next attack roll on the current turn, provided that you haven’t moved during this turn. After you use it, your Speed is 0 until the end of the current turn.',
+					'You can cast known wizard spells using INT as your spellcasting modifier (Spell DC 13, Spell Attack +5).',
 			},
-			{ name: 'Spellcasting' },
 			{
 				name: 'Mage Hand Legerdemain',
 				description:
-					'When you cast Mage Hand, you can cast it as a Bonus Action, and make it Invisible. You can control the hand as a Bonus Action, and through it, you can make Dexterity (Sleight of Hand) checks.',
+					'When you cast mage hand, you can make the spectral hand invisible, stow or retrieve objects, or use thieves’ tools to pick locks and disarm traps at range. You can disguise this with a Sleight of Hand check, and you can use the bonus action granted by your Cunning Action to control the hand.',
 			},
 			{ name: 'Ability Score Improvement' },
 			{
-				name: 'Cunning Strike',
-				description:
-					'When you deal Sneak Attack damage you can add one of the following Cunning Strike effects. Each effect has a die cost, which is the number of Sneak Attack damage dice you must forgo to add the effect. You remove the die before rolling, and the effect occurs immediately after the attack’s damage is dealt.',
-			},
-			{
 				name: 'Uncanny Dodge',
 				description:
-					'When an attacker you can see hits you with an attack, you can take a Reaction to halve the attack’s damage against you (round down).',
-			},
-			{
-				name: '6: Expertise',
-				description: 'You gain Expertise in two more of your skill proficiencies of your choice.',
-			},
-			{
-				name: 'Evasion',
-				description:
-					'When you’re subjected to an effect that allows you to make a Dex. saving throw to take only half damage, you instead take no damage if you succeed on the saving throw and only half damage if you fail. You can’t use this feature if you have the Incapacitated condition.',
-			},
-			{
-				name: 'Reliable Talent',
-				description:
-					'Whenever you make an ability check that uses one of your skill or tool proficiencies, you can treat a d20 roll of 9 or lower as a 10.',
+					'When an attacker that you can see hits you with an attack, you can use your reaction to halve the attack’s damage against you.',
 			},
 			{
 				name: 'Fairy Magic',
@@ -223,9 +285,8 @@ const CAMPAIGN_002_METADATA = {
 				name: 'Hidden Tricksters.',
 				description: 'Your innate magic helps you stay hidden from the dark creatures of the world.',
 			},
-			{ name: 'Ability Score Improvement', description: 'Increase one ability score by 2 or two ability scores by 1.' },
 		],
-		healthPoints: '50',
+		healthPoints: '66',
 		armorClass: '16',
 		walkingSpeed: '30ft.',
 	},
@@ -235,7 +296,7 @@ const CAMPAIGN_002_METADATA = {
 			{ name: 'Dexterity', abbr: 'dex', score: '+1', value: '12' },
 			{ name: 'Constitution', abbr: 'con', score: '+3', value: '16' },
 			{ name: 'Intelligence', abbr: 'int', score: '+0', value: '10' },
-			{ name: 'Wisdom', abbr: 'wis', score: '+1', value: '13' },
+			{ name: 'Wisdom', abbr: 'wis', score: '+2', value: '14' },
 			{ name: 'Charisma', abbr: 'cha', score: '-1', value: '8' },
 		],
 		savingThrows: [
@@ -243,7 +304,7 @@ const CAMPAIGN_002_METADATA = {
 			{ name: 'dex', value: '+1' },
 			{ name: 'con', value: '+6' },
 			{ name: 'int', value: '+0' },
-			{ name: 'wis', value: '+1' },
+			{ name: 'wis', value: '+5' },
 			{ name: 'cha', value: '-1' },
 		],
 		spellData: [
@@ -313,7 +374,7 @@ const CAMPAIGN_002_METADATA = {
 			{
 				name: 'Second Wind ',
 				description:
-					'You can draw upon a limited well of physical and mental stamina and regain 1d10+7 HP.You can use this 3 times per Long Rest, and can regain one expended use when you finish a Short Rest.',
+					'You can draw upon a limited well of physical and mental stamina and regain 1d10+8 HP.You can use this 3 times per Long Rest, and can regain one expended use when you finish a Short Rest.',
 			},
 			{
 				name: 'Second Wind: Tactical Shift ',
@@ -360,7 +421,7 @@ const CAMPAIGN_002_METADATA = {
 			{
 				name: 'Second Wind',
 				description:
-					'As a Bonus Action, you can draw upon a limited well of physical and mental stamina and regain 1d10+7 HP.',
+					'As a Bonus Action, you can draw upon a limited well of physical and mental stamina and regain 1d10+8 HP.',
 			},
 			{
 				name: 'Weapon Mastery',
@@ -408,6 +469,7 @@ const CAMPAIGN_002_METADATA = {
 				description:
 					'As an Action, you temporarily transfer your consciousness to your echo allowing you to see through your echo’s eyes and hear through its ears. For up to 10 minutes or until you cancel it (requires no action), you are deafened and blinded however, while your echo is being used in this way, it can be up to 1,000 feet away from you without being destroyed.',
 			},
+			{ name: '8: Ability Score Improvement' },
 			{
 				name: 'Earth Walk',
 				description: 'You can move across difficult terrain made of earth or stone without expending extra movement.',
@@ -425,13 +487,18 @@ const CAMPAIGN_002_METADATA = {
 			{ name: 'Sentinel', description: 'Ability Score Increase. Increase your Str. or Dex. by 1.' },
 			{ name: 'Great Weapon Master', description: 'Ability Score Increase.  Your Str. is increased by 1.' },
 			{
+				name: 'Resilient',
+				description:
+					'Ability Score Increase.  Choose one ability in which you lack saving throw proficiency and increase the chosen ability score by 1.',
+			},
+			{
 				name: 'Savage Attacker',
 				description:
 					'Once per turn when you hit a target with a weapon, you can roll the weapon’s damage dice twice and use either roll against the target.',
 			},
 		],
-		healthPoints: '67',
-		armorClass: '16',
+		healthPoints: '76',
+		armorClass: '17',
 		walkingSpeed: '30ft.',
 	},
 	SOSHI: {
@@ -439,7 +506,7 @@ const CAMPAIGN_002_METADATA = {
 			{ name: 'Strength', abbr: 'str', score: '-1', value: '8' },
 			{ name: 'Dexterity', abbr: 'dex', score: '+2', value: '15' },
 			{ name: 'Constitution', abbr: 'con', score: '+3', value: '16' },
-			{ name: 'Intelligence', abbr: 'int', score: '+2', value: '15' },
+			{ name: 'Intelligence', abbr: 'int', score: '+4', value: '18' },
 			{ name: 'Wisdom', abbr: 'wis', score: '+1', value: '12' },
 			{ name: 'Charisma', abbr: 'cha', score: '+0', value: '10' },
 		],
@@ -447,7 +514,7 @@ const CAMPAIGN_002_METADATA = {
 			{ name: 'str', value: '-1' },
 			{ name: 'dex', value: '+2' },
 			{ name: 'con', value: '+6' },
-			{ name: 'int', value: '+5' },
+			{ name: 'int', value: '+7' },
 			{ name: 'wis', value: '+4' },
 			{ name: 'cha', value: '+0' },
 		],
@@ -460,12 +527,6 @@ const CAMPAIGN_002_METADATA = {
 						range: '60ft.',
 						slotType: '1A',
 						effect: '2d6',
-					},
-					{
-						spellInfo: { spellName: 'Booming Blade', spellMetaInfo: 'Wizard' },
-						range: 'Self',
-						slotType: '1A',
-						effect: '1d8*',
 					},
 					{
 						spellInfo: { spellName: 'Chill Touch', spellMetaInfo: 'Wizard' },
@@ -538,10 +599,10 @@ const CAMPAIGN_002_METADATA = {
 						effect: '2d6*',
 					},
 					{
-						spellInfo: { spellName: 'Detect Thoughts', spellMetaInfo: 'Wizard' },
-						range: 'Self',
+						spellInfo: { spellName: 'Hold Person', spellMetaInfo: 'Wizard' },
+						range: '60ft.',
 						slotType: '1A',
-						effect: 'Social*',
+						effect: 'Paralyzed',
 					},
 					{
 						spellInfo: { spellName: 'Mirror Image', spellMetaInfo: 'Wizard' },
@@ -561,12 +622,6 @@ const CAMPAIGN_002_METADATA = {
 						slotType: '1A',
 						effect: '2d6',
 					},
-					{
-						spellInfo: { spellName: 'See Invisibility', spellMetaInfo: 'Wizard' },
-						range: 'Self',
-						slotType: '1A',
-						effect: 'Detection',
-					},
 				],
 			},
 			{
@@ -585,10 +640,16 @@ const CAMPAIGN_002_METADATA = {
 						effect: 'Utility',
 					},
 					{
-						spellInfo: { spellName: 'Dispel Magic', spellMetaInfo: 'Wizard' },
-						range: '120ft.',
+						spellInfo: { spellName: "Chain Heal (Witch's Flow)", spellMetaInfo: 'Veilbranch of the Drowned Grove' },
+						range: '30ft.',
 						slotType: '1A',
-						effect: 'Control',
+						effect: '',
+					},
+					{
+						spellInfo: { spellName: 'Counterspell', spellMetaInfo: 'Wizard' },
+						range: '60ft.',
+						slotType: '1R',
+						effect: 'Negation',
 					},
 					{
 						spellInfo: { spellName: 'Fireball', spellMetaInfo: 'Wizard' },
@@ -597,16 +658,28 @@ const CAMPAIGN_002_METADATA = {
 						effect: '8d6',
 					},
 					{
-						spellInfo: { spellName: 'Fly', spellMetaInfo: 'Wizard' },
-						range: 'Touch',
+						spellInfo: { spellName: 'Hold Person', spellMetaInfo: 'Wizard' },
+						range: '60ft.',
 						slotType: '1A',
-						effect: 'Movement',
+						effect: 'Paralyzed',
+					},
+					{
+						spellInfo: { spellName: 'Hypnotic Pattern', spellMetaInfo: 'Wizard' },
+						range: '120ft.',
+						slotType: '1A',
+						effect: 'Charmed*',
 					},
 					{
 						spellInfo: { spellName: 'Scorching Ray', spellMetaInfo: 'Evocation Savant' },
 						range: '120ft.',
 						slotType: '1A',
 						effect: '2d6',
+					},
+					{
+						spellInfo: { spellName: 'Wall of Water', spellMetaInfo: 'Wizard' },
+						range: '60ft.',
+						slotType: '1A',
+						effect: 'Control*',
 					},
 				],
 			},
@@ -620,8 +693,8 @@ const CAMPAIGN_002_METADATA = {
 						effect: '4d6*',
 					},
 					{
-						spellInfo: { spellName: 'Dispel Magic', spellMetaInfo: 'Wizard' },
-						range: '120ft.',
+						spellInfo: { spellName: 'Confusion', spellMetaInfo: 'Wizard' },
+						range: '90ft.',
 						slotType: '1A',
 						effect: 'Control',
 					},
@@ -632,10 +705,10 @@ const CAMPAIGN_002_METADATA = {
 						effect: '9d6',
 					},
 					{
-						spellInfo: { spellName: 'Fly', spellMetaInfo: 'Wizard' },
-						range: 'Touch',
+						spellInfo: { spellName: 'Hold Person', spellMetaInfo: 'Wizard' },
+						range: '60ft.',
 						slotType: '1A',
-						effect: 'Movement',
+						effect: 'Paralyzed',
 					},
 					{
 						spellInfo: { spellName: 'Polymorph', spellMetaInfo: 'Wizard' },
@@ -661,7 +734,7 @@ const CAMPAIGN_002_METADATA = {
 			{
 				name: 'Arcane Recovery (Special)',
 				description:
-					'Once per Long Rest, whenever you finish a Short Rest, you can choose expended spell slots to recover. The spell slots can have a combined level up to 4.',
+					'When you finish a Short Rest, you can recover expended spell slots. The spell slots can have a combined level equal to no more than 4, and none of the slots can be level 6 or higher.You can use this feature once per Long Rest.',
 			},
 			{ name: 'Elemental Acuity Stacks (No Action)' },
 			{
@@ -677,7 +750,7 @@ const CAMPAIGN_002_METADATA = {
 			{
 				name: 'Arcane Recovery',
 				description:
-					'When you finish a Short Rest, you can choose expended spell slots to recover. The spell slots can have a combined level equal to 4, but none of the slots can be level 6 or higher.',
+					'When you finish a Short Rest, you can recover expended spell slots. The spell slots can have a combined level equal to no more than 4, and none of the slots can be level 6 or higher.',
 			},
 			{
 				name: 'Scholar',
@@ -705,6 +778,7 @@ const CAMPAIGN_002_METADATA = {
 				description:
 					'When you cast an Evocation spell that affects other creatures that you can see, you can choose a number of them equal to 1 + the spell’s level. The chosen creatures automatically succeed on their saving throws, and take no damage if they would normally take half on a successful save.',
 			},
+			{ name: '8: Ability Score Improvement' },
 			{ name: 'Darkvision', description: 'You can see in darkness (shades of gray) up to 60 ft.' },
 			{ name: 'Keen Senses', description: 'You have proficiency in the Perception skill.' },
 			{
@@ -726,6 +800,7 @@ const CAMPAIGN_002_METADATA = {
 				description:
 					'Ability Score Increase.  Choose one ability in which you lack saving throw proficiency and increase the chosen ability score by 1.',
 			},
+			{ name: 'Ability Score Improvement', description: 'Increase one ability score by 2 or two ability scores by 1.' },
 			{
 				name: 'Magic Initiate (Wizard)',
 				description:
@@ -737,7 +812,7 @@ const CAMPAIGN_002_METADATA = {
 					'Gain 1d4 of same element added to next damaging attack whenever 15 elemental damage is dealt within 15ft of you by an ally. Stackable.',
 			},
 		],
-		healthPoints: '51',
+		healthPoints: '58',
 		armorClass: '12',
 		walkingSpeed: '30ft.',
 	},
@@ -746,7 +821,7 @@ const CAMPAIGN_002_METADATA = {
 			{ name: 'Strength', abbr: 'str', score: '-1', value: '8' },
 			{ name: 'Dexterity', abbr: 'dex', score: '+2', value: '14' },
 			{ name: 'Constitution', abbr: 'con', score: '+2', value: '14' },
-			{ name: 'Intelligence', abbr: 'int', score: '+0', value: '10' },
+			{ name: 'Intelligence', abbr: 'int', score: '-1', value: '8' },
 			{ name: 'Wisdom', abbr: 'wis', score: '+1', value: '12' },
 			{ name: 'Charisma', abbr: 'cha', score: '+4', value: '18' },
 		],
@@ -754,7 +829,7 @@ const CAMPAIGN_002_METADATA = {
 			{ name: 'str', value: '-1' },
 			{ name: 'dex', value: '+2' },
 			{ name: 'con', value: '+5' },
-			{ name: 'int', value: '+0' },
+			{ name: 'int', value: '-1' },
 			{ name: 'wis', value: '+1' },
 			{ name: 'cha', value: '+7' },
 		],
@@ -959,6 +1034,77 @@ const CAMPAIGN_002_METADATA = {
 					},
 				],
 			},
+			{
+				groupName: '4th Level',
+				spells: [
+					{
+						spellInfo: { spellName: 'Alter Self', spellMetaInfo: 'Draconic Spells' },
+						range: 'Self',
+						slotType: '1A',
+						effect: 'Shapechanging',
+					},
+					{
+						spellInfo: { spellName: 'Arcane Eye', spellMetaInfo: 'Draconic Spells' },
+						range: '30ft.',
+						slotType: '1A',
+						effect: 'Detection',
+					},
+					{
+						spellInfo: { spellName: 'Charm Monster', spellMetaInfo: 'Draconic Spells' },
+						range: '30ft.',
+						slotType: '1A',
+						effect: 'Charmed',
+					},
+					{
+						spellInfo: { spellName: 'Chromatic Orb', spellMetaInfo: 'Draconic Spells' },
+						range: '90ft.',
+						slotType: '1A',
+						effect: '6d8*',
+					},
+					{
+						spellInfo: { spellName: 'Command', spellMetaInfo: 'Draconic Spells' },
+						range: '60ft.',
+						slotType: '1A',
+						effect: 'Prone',
+					},
+					{
+						spellInfo: { spellName: "Dragon's Breath", spellMetaInfo: 'Draconic Spells' },
+						range: 'Touch',
+						slotType: '1BA',
+						effect: '5d6*',
+					},
+					{
+						spellInfo: { spellName: 'Fear', spellMetaInfo: 'Draconic Spells' },
+						range: 'Self',
+						slotType: '1A',
+						effect: 'Frightened*',
+					},
+					{
+						spellInfo: { spellName: 'Fireball', spellMetaInfo: 'Sorcerer' },
+						range: '150ft.',
+						slotType: '1A',
+						effect: '9d6',
+					},
+					{
+						spellInfo: { spellName: 'Fly', spellMetaInfo: 'Draconic Spells' },
+						range: 'Touch',
+						slotType: '1A',
+						effect: 'Movement',
+					},
+					{
+						spellInfo: { spellName: 'Lightning Bolt', spellMetaInfo: 'Sorcerer' },
+						range: 'Self',
+						slotType: '1A',
+						effect: '9d6',
+					},
+					{
+						spellInfo: { spellName: 'Wall of Fire', spellMetaInfo: 'Sorcerer' },
+						range: '120ft.',
+						slotType: '1A',
+						effect: '5d8*',
+					},
+				],
+			},
 		],
 		actionData: [
 			{
@@ -982,9 +1128,18 @@ const CAMPAIGN_002_METADATA = {
 					'You can transform 5 unexpended Sorcery Points into a level 3 spell slot, which vanishes when you finish a Long Rest.',
 			},
 			{
+				name: 'Font of Magic: Create Spell Slot Level 4 ',
+				description:
+					'You can transform 6 unexpended Sorcery Points into a level 4 spell slot, which vanishes when you finish a Long Rest.',
+			},
+			{
 				name: 'Innate Sorcery ',
 				description:
 					'Twice per Long Rest, you can take a Bonus Action to unleash the simmering magic within you for 1 minute.',
+			},
+			{
+				name: 'Innate Sorcery: Sorcery Incarnate ',
+				description: 'While Innate Sorcery is active, you can use up to two Metamagic options on each spell you cast.',
 			},
 			{
 				name: 'Font of Magic: Convert Spell Slots (No Action)',
@@ -994,7 +1149,7 @@ const CAMPAIGN_002_METADATA = {
 			{
 				name: 'Font of Magic: Sorcery Points (Special)',
 				description:
-					'You can tap into the wellspring of magic within yourself, which is represented by Sorcery Points (SP). Sorcery Points fuel various magical effects. You have 6 SP and regain all expended points when you finish a Long Rest.',
+					'You can tap into the wellspring of magic within yourself, which is represented by Sorcery Points (SP). Sorcery Points fuel various magical effects. You have 7 SP and regain all expended points when you finish a Long Rest.',
 			},
 			{
 				name: 'Metamagic: Empowered Spell (Special)',
@@ -1006,6 +1161,8 @@ const CAMPAIGN_002_METADATA = {
 				description:
 					'When you cast a spell with a casting time of an action, you can spend 2 Sorcery Points to change the casting time to a Bonus Action for this casting. You can’t modify a spell in this way if you’ve already cast a level 1+ spell on the current turn, nor can you cast a level 1+ spell on the current turn after modifying a spell in this way.',
 			},
+			{ name: 'Overcharge Level 2 Slots (No Action)' },
+			{ name: 'Overcharge Level 3 Slots (No Action)' },
 			{
 				name: 'Sorcerous Restoration (Special)',
 				description:
@@ -1035,7 +1192,7 @@ const CAMPAIGN_002_METADATA = {
 			{
 				name: 'Draconic Resilience',
 				description:
-					'Your HP maximum increases by 6, and while you aren’t wearing armor, your base AC equals 10 + Dex. modifier + Cha. modifier.',
+					'Your HP maximum increases by 7, and while you aren’t wearing armor, your base AC equals 10 + Dex. modifier + Cha. modifier.',
 			},
 			{
 				name: 'Draconic Spells',
@@ -1052,6 +1209,11 @@ const CAMPAIGN_002_METADATA = {
 				name: 'Elemental Affinity',
 				description:
 					'You choose a damage type associated with Dragons: Acid, Cold, Fire, Lightning, or Poison. You gain the following benefits:',
+			},
+			{
+				name: 'Sorcery Incarnate',
+				description:
+					'If you have no uses of Innate Sorcery left, you can use it by spending 2 Sorcery Points when you take the Bonus Action to activate it.',
 			},
 			{ name: 'Creature Type', description: "You're a Humanoid." },
 			{ name: 'Size', description: 'Your Size is Medium or Small, chosen when you select this species.' },
@@ -1073,11 +1235,15 @@ const CAMPAIGN_002_METADATA = {
 			{
 				name: 'Tough',
 				description:
-					'When you take this feat, your HP maximum increases by 12. Whenever you gain a character level thereafter, your HP maximum increases an additional 2 HP.',
+					'When you take this feat, your HP maximum increases by 14. Whenever you gain a character level thereafter, your HP maximum increases an additional 2 HP.',
+			},
+			{
+				name: 'Overcharged Blood Ritual',
+				description: 'Gain 2 level 3 spell slots and 2 level 2 spell slots. Your Intelligence stat is reduced by 2.',
 			},
 		],
-		healthPoints: '56',
-		armorClass: '16',
+		healthPoints: '65',
+		armorClass: '18',
 		walkingSpeed: '30ft.',
 	},
 	OLEK: {
@@ -1090,12 +1256,12 @@ const CAMPAIGN_002_METADATA = {
 			{ name: 'Charisma', abbr: 'cha', score: '+4', value: '18' },
 		],
 		savingThrows: [
-			{ name: 'str', value: '+2' },
-			{ name: 'dex', value: '-1' },
-			{ name: 'con', value: '+2' },
-			{ name: 'int', value: '+0' },
-			{ name: 'wis', value: '+4' },
-			{ name: 'cha', value: '+7' },
+			{ name: 'str', value: '+6' },
+			{ name: 'dex', value: '+3' },
+			{ name: 'con', value: '+6' },
+			{ name: 'int', value: '+4' },
+			{ name: 'wis', value: '+8' },
+			{ name: 'cha', value: '+11' },
 		],
 		spellData: [
 			{
@@ -1108,34 +1274,16 @@ const CAMPAIGN_002_METADATA = {
 						effect: '1d8*',
 					},
 					{
-						spellInfo: { spellName: 'Guidance', spellMetaInfo: 'Eldritch Invocations' },
-						range: 'Touch',
+						spellInfo: { spellName: 'Green-Flame Blade', spellMetaInfo: 'Warlock' },
+						range: 'Self',
 						slotType: '1A',
-						effect: 'Buff',
+						effect: '1d8*',
 					},
 					{
 						spellInfo: { spellName: 'Light', spellMetaInfo: 'Light Bearer' },
 						range: 'Touch',
 						slotType: '1A',
 						effect: 'Creation*',
-					},
-					{
-						spellInfo: { spellName: 'Mage Hand', spellMetaInfo: 'Warlock' },
-						range: '30ft.',
-						slotType: '1A',
-						effect: 'Utility',
-					},
-					{
-						spellInfo: { spellName: 'Message', spellMetaInfo: 'Eldritch Invocations' },
-						range: '120ft.',
-						slotType: '1A',
-						effect: 'Communication*',
-					},
-					{
-						spellInfo: { spellName: 'Shillelagh', spellMetaInfo: 'Eldritch Invocations' },
-						range: 'Self',
-						slotType: '1BA',
-						effect: '1d10+6*',
 					},
 				],
 			},
@@ -1149,16 +1297,16 @@ const CAMPAIGN_002_METADATA = {
 						effect: 'Buff',
 					},
 					{
+						spellInfo: { spellName: 'Command', spellMetaInfo: 'Paladin' },
+						range: '60ft.',
+						slotType: '1A',
+						effect: 'Prone',
+					},
+					{
 						spellInfo: { spellName: 'Cure Wounds', spellMetaInfo: 'Paladin' },
 						range: 'Touch',
 						slotType: '1A',
 						effect: '2d8+4 ',
-					},
-					{
-						spellInfo: { spellName: 'Detect Magic', spellMetaInfo: 'Eldritch Invocations' },
-						range: 'Self',
-						slotType: '1A',
-						effect: 'Detection',
 					},
 					{
 						spellInfo: { spellName: 'Divine Smite', spellMetaInfo: 'Paladin’s Smite' },
@@ -1179,12 +1327,6 @@ const CAMPAIGN_002_METADATA = {
 						effect: 'Buff*',
 					},
 					{
-						spellInfo: { spellName: 'Searing Smite', spellMetaInfo: 'Paladin' },
-						range: 'Self',
-						slotType: '1BA',
-						effect: '1d6*',
-					},
-					{
 						spellInfo: { spellName: 'Shield of Faith', spellMetaInfo: 'Oath of Devotion Spells' },
 						range: '60ft.',
 						slotType: '1BA',
@@ -1201,12 +1343,6 @@ const CAMPAIGN_002_METADATA = {
 						range: '30ft.',
 						slotType: '1A',
 						effect: 'Prone*',
-					},
-					{
-						spellInfo: { spellName: "Tenser's Floating Disk", spellMetaInfo: 'Eldritch Invocations' },
-						range: '30ft.',
-						slotType: '1A',
-						effect: 'Movement*',
 					},
 				],
 			},
@@ -1226,16 +1362,16 @@ const CAMPAIGN_002_METADATA = {
 						effect: 'Buff',
 					},
 					{
+						spellInfo: { spellName: 'Command', spellMetaInfo: 'Paladin' },
+						range: '60ft.',
+						slotType: '1A',
+						effect: 'Prone',
+					},
+					{
 						spellInfo: { spellName: 'Cure Wounds', spellMetaInfo: 'Paladin' },
 						range: 'Touch',
 						slotType: '1A',
 						effect: '4d8+4 ',
-					},
-					{
-						spellInfo: { spellName: 'Detect Magic', spellMetaInfo: 'Eldritch Invocations' },
-						range: 'Self',
-						slotType: '1A',
-						effect: 'Detection',
 					},
 					{
 						spellInfo: { spellName: 'Divine Smite', spellMetaInfo: 'Paladin’s Smite' },
@@ -1256,28 +1392,22 @@ const CAMPAIGN_002_METADATA = {
 						effect: 'Summoning',
 					},
 					{
-						spellInfo: { spellName: 'Locate Object', spellMetaInfo: 'Paladin' },
-						range: 'Self',
-						slotType: '1A',
-						effect: 'Detection',
-					},
-					{
-						spellInfo: { spellName: 'Magic Weapon', spellMetaInfo: 'Paladin' },
+						spellInfo: { spellName: 'Lesser Restoration', spellMetaInfo: 'Paladin' },
 						range: 'Touch',
 						slotType: '1BA',
-						effect: 'Buff',
+						effect: 'Blinded*',
+					},
+					{
+						spellInfo: { spellName: 'Prayer of Healing', spellMetaInfo: 'Paladin' },
+						range: '30ft.',
+						slotType: '10m',
+						effect: '2d8 ',
 					},
 					{
 						spellInfo: { spellName: 'Protection from Evil and Good', spellMetaInfo: 'Oath of Devotion Spells' },
 						range: 'Touch',
 						slotType: '1A',
 						effect: 'Buff*',
-					},
-					{
-						spellInfo: { spellName: 'Searing Smite', spellMetaInfo: 'Paladin' },
-						range: 'Self',
-						slotType: '1BA',
-						effect: '2d6*',
 					},
 					{
 						spellInfo: { spellName: 'Shield of Faith', spellMetaInfo: 'Oath of Devotion Spells' },
@@ -1296,12 +1426,6 @@ const CAMPAIGN_002_METADATA = {
 						range: '30ft.',
 						slotType: '1A',
 						effect: 'Prone*',
-					},
-					{
-						spellInfo: { spellName: "Tenser's Floating Disk", spellMetaInfo: 'Eldritch Invocations' },
-						range: '30ft.',
-						slotType: '1A',
-						effect: 'Movement*',
 					},
 					{
 						spellInfo: { spellName: 'Zone of Truth', spellMetaInfo: 'Oath of Devotion Spells' },
@@ -1333,9 +1457,9 @@ const CAMPAIGN_002_METADATA = {
 					'When you take the Attack action, you can expend one use of Channel Divinity to imbue a Melee weapon with positive energy. For 10 minutes or until you use this feature again, you add +4 to attack rolls made with that weapon and each time you can cause it to deal its normal damage type or Radiant damage. The weapon also emits a Bright Light in a 20-ft.-radius and Dim Light 20 ft. beyond that.You can end this effect early (no action required), and it ends early if you aren’t carrying the weapon.',
 			},
 			{
-				name: 'Topple (Quarterstaff) ',
+				name: 'Topple (Battleaxe) ',
 				description:
-					'Topple. If you hit a creature with a Quarterstaff, you can force it to make a Con. saving throw (DC 8 + 3 + the ability modifier used to make the attack). On a failed save, the creature has the Prone condition.',
+					'Topple. If you hit a creature with a Battleaxe, you can force it to make a Con. saving throw (DC 8 + 3 + the ability modifier used to make the attack). On a failed save, the creature has the Prone condition.',
 			},
 			{
 				name: 'Unarmed Strike ',
@@ -1345,7 +1469,7 @@ const CAMPAIGN_002_METADATA = {
 			{
 				name: 'Celestial Revelation ',
 				description:
-					'Once per Long Rest, you transform using one of the options below (choose the option each time you transform). The transformation lasts for 1 minute or until you end it (no action required).Once on each of your turns before the transformation ends, you can deal 3 extra damage (Necrotic for Necrotic Shroud or Radiant for Heavenly Wings and Inner Radiance) to one target when you deal damage to it with an attack or a spell.Heavenly Wings. You have a Fly Speed equal to your Speed.Inner Radiance. You shed Bright Light in a 10-ft. radius and Dim Light for an additional 10 ft., and at the end of each of your turns, each creature within 10 ft. of you takes 3 Radiant damage.Necrotic Shroud. Creatures other than your allies within 10 ft. of you must succeed on a Cha. saving throw (DC 15) or have the Frightened condition until the end of your next turn.',
+					'Once per Long Rest, you transform using one of the options available to you (choose the option each time you transform). The transformation lasts for 1 minute or until you end it (no action required).',
 			},
 			{
 				name: 'Channel Divinity: Divine Sense ',
@@ -1360,12 +1484,21 @@ const CAMPAIGN_002_METADATA = {
 			{
 				name: 'Lay On Hands: Healing Pool ',
 				description:
-					'You have a pool of healing power that replenishes when you finish a Long Rest. With that pool, you can restore a total of 25 HP.',
+					'You have a pool of healing power that replenishes when you finish a Long Rest. With that pool, you can restore a total of 30 HP.',
 			},
 			{
 				name: 'Lay On Hands: Purify Poison ',
 				description:
 					'You can expend 5 HP from the pool of healing to remove the Poisoned condition from the creature; those points don’t also restore HP to the creature.',
+			},
+			{
+				name: 'Pact of the Blade: Bond ',
+				description:
+					'You can create a bond with a magic weapon you touch. You can’t bond with a magic weapon if someone else attuned to it or another Warlock is bonded with it. Until the bond ends, you’re proficient with it and can use it as a Spellcasting Focus.Your bond with the weapons ends if you use this feature’s Bonus Action again, if the weapon is more than 5 ft. away from you for more than 1 minute, or if you die. A conjured weapon disappears when the bond ends.',
+			},
+			{
+				name: 'Pact of the Blade: Conjure ',
+				description: 'As a Bonus Action, you can conjure a pact weapon in your hand.',
 			},
 			{
 				name: 'Reactive Spell ',
@@ -1378,13 +1511,13 @@ const CAMPAIGN_002_METADATA = {
 			{
 				name: 'Lay On Hands',
 				description:
-					'You have a pool of healing power that replenishes when you finish a Long Rest. With that pool, you can restore a total of 25 HP.',
+					'You have a pool of healing power that replenishes when you finish a Long Rest. With that pool, you can restore a total of 30 HP.',
 			},
 			{ name: 'Spellcasting' },
 			{
 				name: 'Weapon Mastery',
 				description:
-					'Topple. If you hit a creature with a Quarterstaff, you can force it to make a Con. saving throw (DC 8 + 3 + the ability modifier used to make the attack). On a failed save, the creature has the Prone condition.',
+					'Topple. If you hit a creature with a Battleaxe, you can force it to make a Con. saving throw (DC 8 + 3 + the ability modifier used to make the attack). On a failed save, the creature has the Prone condition.',
 			},
 			{ name: 'Fighting Style' },
 			{
@@ -1413,6 +1546,11 @@ const CAMPAIGN_002_METADATA = {
 				name: 'Faithful Steed',
 				description:
 					'You always have Find Steed prepared, and can cast it once per Long Rest without expending a spell slot.',
+			},
+			{
+				name: 'Aura of Protection',
+				description:
+					'You radiate a protective aura in a 10-ft. Emanation that originates from you. The aura is inactive if you have the Incapacitated condition.',
 			},
 			{ name: 'Core Warlock Traits' },
 			{
@@ -1451,9 +1589,10 @@ const CAMPAIGN_002_METADATA = {
 				description:
 					'While holding a Melee weapon in one hand and no other weapons, you gain a +2 bonus to damage rolls with that weapon.',
 			},
+			{ name: 'Boots of the Jungle Strider Feat', description: 'Your walking speed increases by 10 feet.' },
 		],
-		healthPoints: '51',
-		armorClass: '18',
-		walkingSpeed: '30ft.',
+		healthPoints: '59',
+		armorClass: '19',
+		walkingSpeed: '40ft.',
 	},
 };

@@ -1,62 +1,423 @@
+// ===== HELPER: CONTENT RENDERER =====
+class StoryHelperContent {
+	#placeholderProcessor;
+	#getCampaign;
+	#getCurrentSessionId;
+
+	constructor(placeholderProcessor, getCampaign, getCurrentSessionId) {
+		this.#placeholderProcessor = placeholderProcessor;
+		this.#getCampaign = getCampaign;
+		this.#getCurrentSessionId = getCurrentSessionId;
+	}
+
+	async renderSession(contentArea) {
+		const campaign = this.#getCampaign();
+		const sessionId = this.#getCurrentSessionId();
+
+		if (!sessionId || !campaign.recaps) {
+			contentArea.innerHTML = '<div class="no-content">Select a session to view its content.</div>';
+			return;
+		}
+
+		const session = campaign.recaps.find((s) => s.id === sessionId);
+		if (!session) {
+			console.error(`Session not found: ${sessionId}`);
+			contentArea.innerHTML = '<div class="no-content">Session not found. Please select another session.</div>';
+			return;
+		}
+
+		const sessionToc = document.createElement('div');
+		sessionToc.className = 'session-toc';
+		const toc = document.createElement('div');
+		toc.className = 'toc';
+		toc.id = 'toc';
+		sessionToc.appendChild(toc);
+		contentArea.appendChild(sessionToc);
+
+		const sessionContent = document.createElement('div');
+		sessionContent.className = 'session-content';
+
+		const header = this.#createSessionHeader(session);
+		const recap = await this.#createRecapSection(session);
+		const factual = session.factual_recap ? await this.#createFactualSection(session) : null;
+		const nameDb = session.name_db ? await this.#createNameDbSection(session) : null;
+		const mainContent = await this.#createMainContent(session);
+
+		sessionContent.append(header, recap);
+		if (factual) sessionContent.appendChild(factual);
+		if (nameDb) sessionContent.appendChild(nameDb);
+		sessionContent.appendChild(mainContent);
+
+		contentArea.appendChild(sessionContent);
+	}
+
+	#createSessionHeader(session) {
+		const header = document.createElement('div');
+		header.className = 'session-header';
+		header.innerHTML = `
+			<h2 id="session-title">${session.title}</h2>
+			${session.date ? `<div class="session-date">${session.date}</div>` : ''}
+		`;
+		return header;
+	}
+
+	async #createRecapSection(session) {
+		const recap = document.createElement('div');
+		recap.className = 'session-small-recap';
+
+		const temp = document.createElement('div');
+		temp.innerHTML = `<h3 id="short-summary">Short Summary</h3>${await this.#fetchAndParseMd(session.recap)}`;
+		this.#placeholderProcessor.processAll(temp, session);
+
+		recap.appendChild(temp);
+		return recap;
+	}
+
+	async #createFactualSection(session) {
+		const section = document.createElement('div');
+		section.className = 'session-factual';
+
+		const header = document.createElement('div');
+		header.className = 'session-factual-header';
+		header.innerHTML = `
+			<h3 id="factual-recap">Factual Recap</h3>
+			<button class="factual-toggle" aria-expanded="false" aria-controls="factual-content">
+				<span class="toggle-icon">▶</span>
+			</button>
+		`;
+
+		const content = document.createElement('div');
+		content.className = 'session-factual-content';
+		content.id = 'factual-content';
+		content.style.display = 'none';
+
+		const temp = document.createElement('div');
+		temp.innerHTML = await this.#fetchAndParseMd(session.factual_recap);
+		this.#placeholderProcessor.processAll(temp, session);
+		content.appendChild(temp);
+
+		const toggleBtn = header.querySelector('.factual-toggle');
+		toggleBtn.addEventListener('click', () => {
+			const isExpanded = content.style.display !== 'none';
+			content.style.display = isExpanded ? 'none' : 'block';
+			toggleBtn.setAttribute('aria-expanded', !isExpanded);
+			toggleBtn.querySelector('.toggle-icon').textContent = isExpanded ? '▶' : '▼';
+		});
+
+		section.append(header, content);
+		return section;
+	}
+
+	async #createNameDbSection(session) {
+		const section = document.createElement('div');
+		section.className = 'session-factual';
+
+		const header = document.createElement('div');
+		header.className = 'session-factual-header';
+		header.innerHTML = `
+			<h3 id="name-db">Name, Items and Location Database</h3>
+			<button class="factual-toggle" aria-expanded="false" aria-controls="name-db-content">
+				<span class="toggle-icon">▶</span>
+			</button>
+		`;
+
+		const content = document.createElement('div');
+		content.className = 'session-factual-content';
+		content.id = 'name-db-content';
+		content.style.display = 'none';
+
+		const temp = document.createElement('div');
+		temp.innerHTML = await this.#fetchAndParseMd(session.name_db);
+		this.#placeholderProcessor.processAll(temp, session);
+		content.appendChild(temp);
+
+		const toggleBtn = header.querySelector('.factual-toggle');
+		toggleBtn.addEventListener('click', () => {
+			const isExpanded = content.style.display !== 'none';
+			content.style.display = isExpanded ? 'none' : 'block';
+			toggleBtn.setAttribute('aria-expanded', !isExpanded);
+			toggleBtn.querySelector('.toggle-icon').textContent = isExpanded ? '▶' : '▼';
+		});
+
+		section.append(header, content);
+		return section;
+	}
+
+	async #createMainContent(session) {
+		const main = document.createElement('div');
+		main.className = 'session-main-content';
+
+		const temp = document.createElement('div');
+		temp.innerHTML = await this.#fetchAndParseMd(session.content);
+		this.#placeholderProcessor.processAll(temp, session);
+
+		main.appendChild(temp);
+		return main;
+	}
+
+	async #fetchAndParseMd(filePath) {
+		if (!filePath || typeof filePath !== 'string' || !filePath.endsWith('.md')) {
+			return filePath || '';
+		}
+
+		const campaign = this.#getCampaign();
+		const basePath = `src/databases/campaign_data/${campaign.id.replace('-', '_')}/`;
+		const fullPath = basePath + filePath;
+
+		try {
+			const response = await fetch(fullPath);
+			if (!response.ok) {
+				throw new Error(`HTTP error! status: ${response.status}`);
+			}
+			return await response.text();
+		} catch (error) {
+			console.error(`Error fetching Markdown file "${fullPath}":`, error);
+			return `<div class="error">Error loading content: ${error.message}</div>`;
+		}
+	}
+
+	renderTimeline(contentArea) {
+		const campaign = this.#getCampaign();
+		const timelineRenderer = new StoryHelperTimeline(campaign, this.#placeholderProcessor);
+		timelineRenderer.render(contentArea);
+	}
+
+	renderCharacter(contentArea, characterName) {
+		const campaign = this.#getCampaign();
+		const characterRenderer = new StoryHelperCharacter(campaign, this.#placeholderProcessor);
+		characterRenderer.render(contentArea, characterName);
+	}
+}
+
+// ===== HELPER: SIDEBAR =====
+class StoryHelperSidebar {
+	#getCampaign;
+	#getCurrentView;
+	#getCurrentSessionId;
+	#getSelectedCharacterName;
+	#onToggle;
+	#onCharacterClick;
+	#onSessionClick;
+	#onTimelineClick;
+
+	constructor(
+		getCampaign,
+		getCurrentView,
+		getCurrentSessionId,
+		getSelectedCharacterName,
+		onToggle,
+		onCharacterClick,
+		onSessionClick,
+		onTimelineClick
+	) {
+		this.#getCampaign = getCampaign;
+		this.#getCurrentView = getCurrentView;
+		this.#getCurrentSessionId = getCurrentSessionId;
+		this.#getSelectedCharacterName = getSelectedCharacterName;
+		this.#onToggle = onToggle;
+		this.#onCharacterClick = onCharacterClick;
+		this.#onSessionClick = onSessionClick;
+		this.#onTimelineClick = onTimelineClick;
+	}
+
+	createSidebar(isCollapsed) {
+		const sidebar = document.createElement('div');
+		sidebar.className = 'story-sidebar';
+
+		const campaignName = this.#createCampaignHeader();
+
+		sidebar.append(
+			campaignName,
+			this.#createCharacterSection(),
+			this.#createTimelineSection(),
+			this.#createSessionList()
+		);
+
+		return sidebar;
+	}
+
+	#createCampaignHeader() {
+		const campaign = this.#getCampaign();
+		const header = document.createElement('div');
+		header.className = 'story-campaign-name';
+		header.innerHTML = `<h3>${campaign.metadata?.name || 'Unnamed Campaign'}</h3>`;
+		return header;
+	}
+
+	#createCharacterSection() {
+		const campaign = this.#getCampaign();
+		const characters = campaign.metadata?.characters?.filter((char) => char?.is_included);
+
+		if (!characters?.length) {
+			return document.createDocumentFragment();
+		}
+
+		const section = document.createElement('div');
+		section.className = 'story-characters-section';
+
+		const title = document.createElement('h2');
+		title.textContent = 'Characters';
+
+		const list = document.createElement('div');
+		list.className = 'story-character-list';
+
+		characters.forEach((character) => {
+			const card = document.createElement('div');
+			card.className = 'story-character-card';
+
+			if (this.#getCurrentView() === 'character' && this.#getSelectedCharacterName() === character.name) {
+				card.classList.add('active');
+			}
+
+			card.innerHTML = `
+				<div class="character-avatar">
+					<img src="${character.icon}" alt="${character.name}" />
+				</div>
+				<div class="character-info">
+					<h3>${character.name}</h3>
+				</div>
+			`;
+			card.title = `Lvl ${character.level} ${character.race} ${character.class}`;
+
+			card.addEventListener('click', () => this.#onCharacterClick(character.name));
+
+			list.appendChild(card);
+		});
+
+		section.append(title, list);
+		return section;
+	}
+
+	#createTimelineSection() {
+		const section = document.createElement('div');
+		section.className = 'story-timeline-section';
+
+		const title = document.createElement('h2');
+		title.textContent = 'Campaign';
+
+		const button = document.createElement('button');
+		button.className = 'timeline-button';
+		button.textContent = 'View Timeline';
+
+		if (this.#getCurrentView() === 'timeline') {
+			button.classList.add('active');
+		}
+
+		button.addEventListener('click', () => this.#onTimelineClick());
+
+		section.append(title, button);
+		return section;
+	}
+
+	#createSessionList() {
+		const campaign = this.#getCampaign();
+		const recaps = campaign.recaps;
+
+		if (!recaps?.length) {
+			const noSessions = document.createElement('div');
+			noSessions.className = 'no-sessions';
+			noSessions.textContent = 'No sessions available';
+			return noSessions;
+		}
+
+		const section = document.createElement('div');
+		section.className = 'story-sessions-section';
+
+		const title = document.createElement('h2');
+		title.textContent = 'Sessions';
+
+		const list = document.createElement('div');
+		list.className = 'story-session-list';
+
+		recaps.forEach((session) => {
+			const item = document.createElement('div');
+			item.className = 'story-session-item';
+
+			if (this.#getCurrentView() === 'session' && session.id === this.#getCurrentSessionId()) {
+				item.classList.add('active');
+			}
+
+			item.innerHTML = `
+				<h3>${session.title}</h3>
+				<div class="session-date">${session.date || ''}</div>
+			`;
+
+			item.addEventListener('click', () => this.#onSessionClick(session.id));
+
+			list.appendChild(item);
+		});
+
+		section.append(title, list);
+		return section;
+	}
+}
+
+// ===== HELPER: NAVIGATION =====
+class StoryHelperNavigation {
+	scrollToHash() {
+		const hash = window.location.hash;
+		if (!hash) return;
+
+		try {
+			const element = document.getElementById(hash.substring(1));
+			if (element) {
+				setTimeout(() => {
+					element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+				}, 100);
+			}
+		} catch (e) {
+			console.warn(`Could not scroll to element: ${hash}`, e);
+		}
+	}
+}
+
+// ===== MAIN STORY MANAGER =====
 class StoryManager {
 	#rootElement;
 	#campaign;
 	#currentSessionId;
-	#currentView = 'session'; // 'session', 'character', 'timeline'
+	#currentView = 'session';
 	#selectedCharacterName = null;
-	#isDebugMode;
-	#tooltipContainer;
 	#isSidebarCollapsed = false;
-	// #isTimelineVisible = false; // Replaced by #currentView
-	#apiBaseUrl = 'https://www.dnd5eapi.co/api/2014/'; // Example API
-	#supportedEntityTypes = [
-		'spell',
-		'monster',
-		'class',
-		'background',
-		'race',
-		'equipment',
-		'magic-item',
-		'feat',
-		'condition',
-		'character',
-		'race',
-		'npc',
-	];
-	#entityEndpoints = {
-		spell: 'spells',
-		monster: 'monsters',
-		class: 'classes',
-		background: 'backgrounds',
-		race: 'races',
-		equipment: 'equipment',
-		'magic-item': 'magic-item',
-		feat: 'feats',
-		condition: 'conditions',
-		character: 'character',
-		race: 'race',
-		npc: 'npc',
-	};
-	#customApiData;
+
+	// Helper instances
+	#contentRenderer;
+	#sidebarManager;
+	#tooltipManager;
+	#placeholderProcessor;
+	#navigationManager;
 
 	constructor(elementId, options = {}) {
 		this.#rootElement = document.getElementById(elementId);
-		this.#isDebugMode = options.isDebugMode || false;
 		if (!this.#rootElement) {
-			console.error('StoryView: Root element not found:', elementId);
+			console.error('StoryManager: Root element not found:', elementId);
 			return;
 		}
 
-		if (options.campaignData?.api_data) {
-			this.#customApiData = options.campaignData?.api_data;
-		}
+		// Initialize helpers
+		this.#tooltipManager = new StoryHelperTooltip(options.campaignData?.api_data);
+		this.#placeholderProcessor = new StoryHelperPlaceholder(this.#tooltipManager, options.campaignData);
+		this.#navigationManager = new StoryHelperNavigation();
+		this.#sidebarManager = new StoryHelperSidebar(
+			() => this.#campaign,
+			() => this.#currentView,
+			() => this.#currentSessionId,
+			() => this.#selectedCharacterName,
+			(collapsed) => this.#handleSidebarToggle(collapsed),
+			(characterName) => this.#handleCharacterClick(characterName),
+			(sessionId) => this.#handleSessionClick(sessionId),
+			() => this.#handleTimelineClick()
+		);
+		this.#contentRenderer = new StoryHelperContent(
+			this.#placeholderProcessor,
+			() => this.#campaign,
+			() => this.#currentSessionId
+		);
 
-		// Create tooltip container once during initialization
-		this.#createTooltipContainer();
-		// Check for saved sidebar state in local storage
-		const savedSidebarState = localStorage.getItem('story-sidebar-collapsed');
-		if (savedSidebarState) {
-			this.#isSidebarCollapsed = savedSidebarState === 'true';
+		// Load saved sidebar state
+		const savedState = localStorage.getItem('story-sidebar-collapsed');
+		if (savedState) {
+			this.#isSidebarCollapsed = savedState === 'true';
 		}
 
 		this.updateCampaign(
@@ -67,87 +428,78 @@ class StoryManager {
 		);
 	}
 
-	/**
-	 * Returns the sidebar DOM element.
-	 * @returns {HTMLElement|null} The sidebar element or null if not found.
-	 */
 	getSidebarElement() {
-		// Ensure the root element is valid before querying
-		if (!this.#rootElement) return null;
-		return this.#rootElement.querySelector('.story-sidebar');
+		return this.#rootElement?.querySelector('.story-sidebar');
 	}
 
 	setCampaignManager(campaignManager, showCampaignSelectionCallback) {
 		this.campaignManager = campaignManager;
 		this.showCampaignSelection = showCampaignSelectionCallback;
-		this.ensureCampaignSelectionButton();
+		this.#ensureCampaignSelectionButton();
 	}
 
-	ensureCampaignSelectionButton() {
-		// This needs to be called whenever the sidebar is refreshed
+	#ensureCampaignSelectionButton() {
 		const sidebar = this.getSidebarElement();
-		if (sidebar) {
-			// First remove any existing button to avoid duplicates
-			const existingButton = sidebar.querySelector('.story-campaign-selection');
-			if (existingButton) {
-				existingButton.remove();
-			}
+		if (!sidebar) return;
 
-			// Create and add the button
-			const buttonContainer = document.createElement('div');
-			buttonContainer.className = 'story-campaign-selection';
-			buttonContainer.style.marginTop = 'auto';
-			buttonContainer.style.padding = '10px';
+		const existingButton = sidebar.querySelector('.story-campaign-selection');
+		existingButton?.remove();
 
-			const backToSelectionButton = document.createElement('button');
-			backToSelectionButton.textContent = 'Campaign selection';
-			backToSelectionButton.className = 'sidebar-back-button button-secondary';
-			backToSelectionButton.style.width = '100%';
+		const buttonContainer = document.createElement('div');
+		buttonContainer.className = 'story-campaign-selection';
+		Object.assign(buttonContainer.style, {
+			marginTop: 'auto',
+			padding: '10px',
+		});
 
-			// Use the callback provided by CampaignManager
-			backToSelectionButton.addEventListener('click', this.showCampaignSelection);
+		const button = document.createElement('button');
+		button.textContent = 'Campaign selection';
+		button.className = 'sidebar-back-button button-secondary';
+		button.style.width = '100%';
+		button.addEventListener('click', this.showCampaignSelection);
 
-			buttonContainer.appendChild(backToSelectionButton);
-			sidebar.appendChild(buttonContainer);
-		}
+		buttonContainer.appendChild(button);
+		sidebar.appendChild(buttonContainer);
 	}
 
 	updateCampaign(campaign, sessionId = null, characterName = null, viewType = null) {
 		if (!campaign) return;
 
-		// Process characters for custom API data
+		// Process character data for custom API
 		if (campaign?.metadata?.characters) {
+			const customApiData = this.#tooltipManager.getCustomApiData();
+			customApiData.character = customApiData.character || {};
+
 			campaign.metadata.characters.forEach((char) => {
-				this.#customApiData.character = this.#customApiData.character || {};
-				this.#customApiData.character[char.name] = char;
+				customApiData.character[char.name] = char;
 			});
 		}
 
 		this.#campaign = campaign;
 
-		// Determine the initial state based on parameters
+		// Determine initial state
 		if (viewType === 'timeline') {
 			this.#currentView = 'timeline';
 			this.#selectedCharacterName = null;
-			this.#currentSessionId = sessionId || this.#getFirstSessionId(); // Keep track of a session even if not displayed
+			this.#currentSessionId = sessionId || this.#getFirstSessionId();
 		} else if (characterName) {
 			this.#currentView = 'character';
 			this.#selectedCharacterName = characterName;
-			this.#currentSessionId = sessionId || this.#getFirstSessionId(); // Keep track of a session
+			this.#currentSessionId = sessionId || this.#getFirstSessionId();
 		} else {
 			this.#currentView = 'session';
 			this.#selectedCharacterName = null;
-			this.#currentSessionId = sessionId || this.#getFirstSessionId(); // Must have a session ID here
+			this.#currentSessionId = sessionId || this.#getFirstSessionId();
 		}
 
-		// Ensure we have a valid session ID if needed
+		// Validate session view
 		if (this.#currentView === 'session' && !this.#currentSessionId) {
-			console.error('StoryView: Attempting to show session view without a valid session ID.');
-			// Potentially switch to a default state or show an error
+			console.error('StoryManager: No valid session ID for session view');
 			this.#currentSessionId = this.#getFirstSessionId();
+
 			if (!this.#currentSessionId) {
 				this.#rootElement.innerHTML = '<p>Error: No sessions found for this campaign.</p>';
-				return; // Stop if no sessions exist at all
+				return;
 			}
 		}
 
@@ -155,834 +507,168 @@ class StoryManager {
 	}
 
 	#getFirstSessionId() {
-		if (!this.#campaign?.recaps?.length) {
-			return null;
-		}
-		return this.#campaign.recaps[0].id;
+		return this.#campaign?.recaps?.[0]?.id ?? null;
 	}
 
 	async render() {
 		if (!this.#rootElement || !this.#campaign) return;
 
-		// Clear the container
 		this.#rootElement.innerHTML = '';
 
-		// Create main container
 		const container = document.createElement('div');
 		container.className = 'story-container';
 
-		// Create main content area with sidebar and content
 		const mainContent = document.createElement('div');
 		mainContent.className = 'story-main-content';
 		if (this.#isSidebarCollapsed) {
 			mainContent.classList.add('sidebar-collapsed');
 		}
 
-		// Create sidebar with characters and session list
-		const sidebar = this.#createSidebar();
-		mainContent.appendChild(sidebar);
-		// Create content area
+		const sidebar = this.#sidebarManager.createSidebar(this.#isSidebarCollapsed);
 		const contentArea = document.createElement('div');
 		contentArea.className = 'story-content-area';
-		// Load the appropriate content based on the current view - Await this async operation
+
 		await this.#loadContentArea(contentArea);
 
-		mainContent.appendChild(contentArea);
+		mainContent.append(sidebar, contentArea);
 		container.appendChild(mainContent);
-
 		this.#rootElement.appendChild(container);
-		// Generate table of contents AFTER content is loaded - only for session view
+
 		if (this.#currentView === 'session') {
 			this.#generateTableOfContents(contentArea);
-			this.#scrollToHash();
-		}
-		this.ensureCampaignSelectionButton();
-	}
-
-	#createSidebar() {
-		const sidebar = document.createElement('div');
-		sidebar.className = 'story-sidebar';
-
-		// Add toggle button for sidebar
-		const toggleButton = document.createElement('button');
-		toggleButton.className = 'sidebar-toggle';
-		toggleButton.innerHTML = this.#isSidebarCollapsed ? '&raquo;' : '&laquo;';
-		toggleButton.setAttribute('aria-label', this.#isSidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar');
-		toggleButton.addEventListener('click', () => this.#toggleSidebar(toggleButton));
-		sidebar.appendChild(toggleButton);
-
-		// Add campaign name at the top of sidebar
-		const campaignName = document.createElement('div');
-		campaignName.className = 'story-campaign-name';
-		campaignName.innerHTML = `<h3>${this.#campaign.metadata?.name || 'Unnamed Campaign'}</h3>`;
-		sidebar.appendChild(campaignName);
-
-		// Add characters section
-		this.#createCharacterSection(sidebar);
-
-		// Add timeline section
-		this.#createTimelineSection(sidebar);
-
-		// Add sessions section
-		this.#createSessionList(sidebar);
-
-		return sidebar;
-	}
-
-	// #toggleSidebar remains the same...
-	#toggleSidebar(toggleButton) {
-		this.#isSidebarCollapsed = !this.#isSidebarCollapsed;
-		// Update button text
-		toggleButton.innerHTML = this.#isSidebarCollapsed ? '&raquo;' : '&laquo;';
-		toggleButton.setAttribute('aria-label', this.#isSidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar');
-		// Find and toggle the main content container
-		const mainContent = this.#rootElement.querySelector('.story-main-content');
-		const sidebar = this.#rootElement.querySelector('.story-sidebar');
-		if (mainContent) {
-			// Add transitioning class to enable animation
-			mainContent.classList.add('sidebar-transitioning');
-
-			// Toggle the collapsed class
-			mainContent.classList.toggle('sidebar-collapsed', this.#isSidebarCollapsed);
-			// Add animation class to sidebar content
-			if (sidebar) {
-				sidebar.classList.toggle('sidebar-content-collapsed', this.#isSidebarCollapsed);
-			}
-
-			// Remove transitioning class after animation completes
-			setTimeout(() => {
-				mainContent.classList.remove('sidebar-transitioning');
-			}, 300); // Match CSS transition duration
+			this.#navigationManager.scrollToHash();
 		}
 
-		// Save state to local storage
-		localStorage.setItem('story-sidebar-collapsed', this.#isSidebarCollapsed);
+		this.#ensureCampaignSelectionButton();
 	}
 
-	#createCharacterSection(sidebar) {
-		const characters = this.#campaign.metadata?.characters.filter((character) => character?.is_included);
-		if (!characters?.length) {
-			return;
-		}
-
-		const characterSection = document.createElement('div');
-		characterSection.className = 'story-characters-section';
-
-		const sectionTitle = document.createElement('h2');
-		sectionTitle.textContent = 'Characters';
-		characterSection.appendChild(sectionTitle);
-		const characterList = document.createElement('div');
-		characterList.className = 'story-character-list';
-
-		characters.forEach((character) => {
-			const charCard = document.createElement('div');
-			charCard.className = 'story-character-card';
-
-			if (this.#currentView === 'character' && this.#selectedCharacterName === character.name) {
-				charCard.classList.add('active');
-			}
-
-			charCard.innerHTML = `
-                <div class="character-avatar">
-                    <img src="${character.icon}" alt="${character.name}" />
-                </div>
-                <div class="character-info">
-
-             <h3>${character.name}</h3>
-                </div>
-            `;
-			charCard.title = `Lvl ${character.level} ${character.race} ${character.class}`;
-
-			// Add click event to show character background
-			charCard.addEventListener('click', () => {
-				this.#handleCharacterClick(character.name);
-			});
-
-			characterList.appendChild(charCard);
-		});
-		characterSection.appendChild(characterList);
-		sidebar.appendChild(characterSection);
+	#handleSidebarToggle(collapsed) {
+		this.#isSidebarCollapsed = collapsed;
+		localStorage.setItem('story-sidebar-collapsed', collapsed);
 	}
 
 	#handleCharacterClick(characterName) {
-		// Toggle selection
 		if (this.#currentView === 'character' && this.#selectedCharacterName === characterName) {
-			// Deselecting the current character - go back to the current session view
 			this.#currentView = 'session';
 			this.#selectedCharacterName = null;
 		} else {
-			// Selecting a new character (or the first time)
 			this.#currentView = 'character';
 			this.#selectedCharacterName = characterName;
 		}
 
-		// Update URL
-		const currentUrl = new URL(window.location.href);
-		const params = currentUrl.searchParams;
-		params.set('campaign', this.#campaign.id); // Ensure campaign is set
-		params.delete('map'); // Clean up other view params
-		params.delete('view');
-		params.delete('session'); // Usually hide session when showing character
+		this.#updateURL();
+		this.render();
+	}
 
-		if (this.#currentView === 'character') {
-			params.set('character', this.#selectedCharacterName);
-		} else {
-			// Switched back to session view
+	#handleSessionClick(sessionId) {
+		this.#currentView = 'session';
+		this.#selectedCharacterName = null;
+		this.#currentSessionId = sessionId;
+
+		this.#updateURL();
+		this.render();
+	}
+
+	#handleTimelineClick() {
+		if (this.#currentView === 'timeline') return;
+
+		this.#currentView = 'timeline';
+		this.#selectedCharacterName = null;
+
+		this.#updateURL();
+		this.render();
+	}
+
+	#updateURL() {
+		const url = new URL(window.location.href);
+		const params = url.searchParams;
+
+		params.set('campaign', this.#campaign.id);
+		params.delete('map');
+
+		if (this.#currentView === 'timeline') {
+			params.set('view', 'timeline');
+			params.delete('session');
 			params.delete('character');
-			// Make sure a session param exists if we fell back to session view
-			if (this.#currentSessionId) {
-				params.set('session', this.#currentSessionId);
-			} else {
-				// If no current session somehow, try getting the first one
-				const firstSession = this.#getFirstSessionId();
-				if (firstSession) params.set('session', firstSession);
-			}
+		} else if (this.#currentView === 'character') {
+			params.set('character', this.#selectedCharacterName);
+			params.delete('session');
+			params.delete('view');
+		} else {
+			params.set('session', this.#currentSessionId);
+			params.delete('character');
+			params.delete('view');
 		}
 
 		const state = {
 			campaignId: this.#campaign.id,
 			sessionId: this.#currentView === 'session' ? this.#currentSessionId : null,
 			characterName: this.#currentView === 'character' ? this.#selectedCharacterName : null,
-			view: 'story', // Keep the main view type
+			view: 'story',
 		};
-		// Use replaceState as we are interacting within the story view
-		window.history.replaceState(state, '', `${currentUrl.pathname}?${params.toString()}`);
 
-		// Re-render to update the content area
-		this.render();
-	}
-
-	#createSessionList(sidebar) {
-		const recaps = this.#campaign.recaps;
-		if (!recaps?.length) {
-			const noSessions = document.createElement('div');
-			noSessions.className = 'no-sessions';
-			noSessions.textContent = 'No sessions available';
-			sidebar.appendChild(noSessions);
-			return;
-		}
-
-		const sessionSection = document.createElement('div');
-		sessionSection.className = 'story-sessions-section';
-
-		const sectionTitle = document.createElement('h2');
-		sectionTitle.textContent = 'Sessions';
-		sessionSection.appendChild(sectionTitle);
-
-		const sessionList = document.createElement('div');
-		sessionList.className = 'story-session-list';
-		recaps.forEach((session) => {
-			const sessionItem = document.createElement('div');
-			sessionItem.className = 'story-session-item';
-
-			if (this.#currentView === 'session' && session.id === this.#currentSessionId) {
-				sessionItem.classList.add('active');
-			}
-
-			sessionItem.innerHTML = `
-				<h3>${session.title}</h3>
-				<div class="session-date">${session.date || ''}</div>
-			`;
-
-			sessionItem.addEventListener('click', () => {
-				this.#currentView = 'session';
-				this.#selectedCharacterName = null; // Clear character selection
-				this.#currentSessionId = session.id; // Set the clicked session as current
-
-				// Update URL - Remove character/view params, set session
-				const currentUrl = new URL(window.location.href);
-				const params = currentUrl.searchParams;
-				params.set('session', session.id);
-				params.delete('character');
-				params.delete('view');
-				params.set('campaign', this.#campaign.id); // Ensure campaign stays
-				params.delete('map'); // Clean map param
-
-				const state = {
-					campaignId: this.#campaign.id,
-					sessionId: session.id,
-					characterName: null, // Ensure cleared
-					viewType: null, // Ensure cleared
-					view: 'story', // Main view type
-				};
-				// Use replaceState for intra-story navigation
-				window.history.replaceState(state, '', `${currentUrl.pathname}?${params.toString()}`);
-
-				// Re-render to show the new session
-				this.render();
-			});
-
-			sessionList.appendChild(sessionItem);
-		});
-
-		sessionSection.appendChild(sessionList);
-		sidebar.appendChild(sessionSection);
-	}
-
-	#createTimelineSection(sidebar) {
-		const timelineSection = document.createElement('div');
-		timelineSection.className = 'story-timeline-section';
-		const sectionTitle = document.createElement('h2');
-		sectionTitle.textContent = 'Campaign';
-		timelineSection.appendChild(sectionTitle);
-
-		const timelineButton = document.createElement('button');
-		timelineButton.className = 'timeline-button';
-		timelineButton.textContent = 'View Timeline';
-		if (this.#currentView === 'timeline') {
-			timelineButton.classList.add('active');
-		}
-
-		timelineButton.addEventListener('click', () => {
-			this.#handleTimelineClick();
-		});
-
-		timelineSection.appendChild(timelineButton);
-		sidebar.appendChild(timelineSection);
-	}
-
-	#handleTimelineClick() {
-		// Don't do anything if already on timeline vieactw
-		if (this.#currentView === 'timeline') return;
-
-		this.#currentView = 'timeline';
-		this.#selectedCharacterName = null; // Clear character selection
-
-		// Update URL
-		const currentUrl = new URL(window.location.href);
-		const params = currentUrl.searchParams;
-		params.set('campaign', this.#campaign.id); // Ensure campaign
-		params.set('view', 'timeline'); // Set the view param
-		params.delete('session'); // Remove other view params
-		params.delete('character');
-		params.delete('map');
-
-		const state = {
-			campaignId: this.#campaign.id,
-			sessionId: null,
-			characterName: null,
-			viewType: 'timeline', // Specific view type
-			view: 'story', // Main view type
-		};
-		// Use replaceState for intra-story navigation
-		window.history.replaceState(state, '', `${currentUrl.pathname}?${params.toString()}`);
-
-		// Re-render to show the timeline
-		this.render();
-	}
-
-	#processTimelinePlaceholders(timelineContainer) {
-		// Process all timeline items inside the container
-		const timelineItems = timelineContainer.querySelectorAll('.timeline-item');
-
-		timelineItems.forEach((item) => {
-			// Get the content div inside each timeline item
-			const contentElements = item.querySelectorAll(
-				'.timeline-content, .timeline-sub-description, .timeline-main-description'
-			);
-			if (!contentElements) return;
-
-			contentElements.forEach((contentElement) => {
-				// Process the same elements as in the session content
-				this.#processImages(contentElement);
-				this.#processCharacterReferences(contentElement);
-				this.#processEntityReferences(contentElement);
-
-				// If this is a main timeline item, we might want to process progression tags
-				if (item.classList.contains('timeline-main-item')) {
-					const itemId = item.getAttribute('data-id');
-					const timelineData = this.#campaign?.timeline;
-					if (timelineData && Array.isArray(timelineData)) {
-						const itemData = timelineData.find((data) => data.id === itemId);
-						if (itemData) {
-							this.#processProgressionTags(contentElement, itemData);
-						}
-					}
-				}
-
-				// Process character highlights after references have been created
-				this.#processCharacterHighlights(contentElement);
-			});
-		});
-	}
-
-	#renderTimeline(contentArea) {
-		// Check if the current campaign has timeline data
-		const timelineData = this.#campaign?.timeline;
-		if (!timelineData || !Array.isArray(timelineData) || timelineData.length === 0) {
-			console.error('Timeline data not available for this campaign:', this.#campaign?.id);
-			// Display an error message to the user
-			const timelineContainer = document.createElement('div');
-			timelineContainer.className = 'story-timeline-container visible';
-			timelineContainer.innerHTML = `
-				<div class="timeline-header">
-					<h2>Campaign Timeline</h2>
-				</div>
-				<div class="no-content">
-					Timeline data not available for this campaign.
-				</div>
-			`;
-
-			contentArea.appendChild(timelineContainer);
-			return;
-		}
-
-		// Create timeline container
-		const timelineContainer = document.createElement('div');
-		timelineContainer.className = 'story-timeline-container visible';
-
-		// Create timeline header
-		const header = document.createElement('div');
-		header.className = 'timeline-header';
-		header.innerHTML = `<h2>Campaign Timeline</h2>`;
-		timelineContainer.appendChild(header);
-
-		const toggleAllButton = document.createElement('button');
-		toggleAllButton.className = 'timeline-toggle-all-button';
-		toggleAllButton.textContent = 'Toggle descriptions';
-		toggleAllButton.type = 'button';
-		header.appendChild(toggleAllButton);
-
-		toggleAllButton.addEventListener('click', () => {
-			const allDescriptions = timelineContainer.querySelectorAll(
-				'.timeline-main-description, .timeline-sub-description'
-			);
-
-			// Check if any descriptions are currently active
-			const anyActive = Array.from(allDescriptions).some((desc) => desc.classList.contains('active'));
-
-			// First, untoggle all descriptions
-			allDescriptions.forEach((desc) => {
-				desc.classList.remove('active');
-			});
-
-			// If none were active, toggle them all on after a brief delay
-			if (!anyActive) {
-				setTimeout(() => {
-					allDescriptions.forEach((desc) => {
-						desc.classList.add('active');
-					});
-				}, 50);
-			}
-		});
-
-		// Create timeline wrapper
-		const timeline = document.createElement('div');
-		timeline.className = 'timeline';
-		// Track which side to place the next item
-		let side = 'left';
-		// Process timeline data
-		timelineData.forEach((item) => {
-			// Create main item
-			const mainItem = document.createElement('div');
-			mainItem.className = `timeline-item timeline-main-item ${side}`;
-			mainItem.setAttribute('data-id', item.id);
-
-			const mainContent = document.createElement('div'); // Changed from <a> to <div>
-			mainContent.className = 'timeline-content';
-			mainContent.innerHTML = `
-				<h3>${item.title}</h3>
-				<div class="timeline-location" style="margin-left: auto">${item.location}</div>
-				${item.is_new_session ? `<div class="timeline-new-session">New session</div>` : ''}
-				${item.session ? `<span class="timeline-item-session">Session ${item.session}</span>` : ''}
-			`;
-
-			// If URL exists, wrap mainContent in an anchor tag
-			if (item.url) {
-				const linkWrapper = document.createElement('a');
-				const params = `?campaign=${item.url.campaign}&session=${item.url.session}${
-					item.url.target ? `#${item.url.target}` : ''
-				}`;
-				linkWrapper.href = params;
-				linkWrapper.title = 'Go to this session recap point.';
-				linkWrapper.appendChild(mainContent);
-				mainItem.appendChild(linkWrapper);
-			} else {
-				mainItem.appendChild(mainContent);
-			}
-
-			if (item.description) {
-				// Create button outside of mainContent
-				const button = document.createElement('button');
-				button.className = 'timeline-main-button';
-				button.textContent = '›';
-				button.type = 'button'; // Explicitly set button type
-
-				// Add the button to the mainItem instead of mainContent
-				mainItem.appendChild(button);
-
-				const descriptionElement = document.createElement('div');
-				descriptionElement.className = 'timeline-main-description';
-				descriptionElement.innerHTML = item.description;
-				mainItem.appendChild(descriptionElement);
-
-				// Add event listener directly to the button
-				button.onclick = function (event) {
-					event.preventDefault();
-					event.stopPropagation();
-					descriptionElement.classList.toggle('active');
-				};
-			}
-
-			timeline.appendChild(mainItem);
-
-			// Flip side for the next main item group
-			const nextSide = side === 'left' ? 'right' : 'left';
-
-			const typeMap = {
-				narrative: '💬',
-				encounter: '⚔️',
-				investigation: '🔎',
-				traversal: '👣',
-			};
-
-			// Add subitems if any, keeping them on the same side
-			if (item.items && item.items.length > 0) {
-				item.items.forEach((subitem) => {
-					const subitemEl = document.createElement('div');
-					subitemEl.className = `timeline-item timeline-subitem ${side}`;
-					subitemEl.setAttribute('data-parent-id', item.id);
-					subitemEl.setAttribute('data-type', subitem.type);
-
-					const subContent = document.createElement('div'); // Changed from <a> to <div>
-					subContent.className = 'timeline-content';
-
-					let subitemHTML = `
-						<h4><span style="font-size: 8pt">${typeMap[subitem.type] || '❓'}</span> ${
-						subitem.type.charAt(0).toUpperCase() + subitem.type.slice(1)
-					}: ${subitem.actors}</h4>
-					`;
-
-					if (subitem.is_new_session) {
-						subitemEl.classList.add('new-session-indicator');
-						subitemHTML += `<div class="timeline-new-session">New session</div>`;
-					}
-
-					// Add sublocation if any
-					if (subitem.sublocation) {
-						subitemHTML += `<div class="timeline-sublocation">${subitem.sublocation}</div>`;
-					}
-
-					subContent.innerHTML = subitemHTML;
-
-					// If URL exists, wrap subContent in an anchor tag
-					if (subitem.url) {
-						const linkWrapper = document.createElement('a');
-						const params = `?campaign=${subitem.url.campaign}&session=${subitem.url.session}${
-							subitem.url.target ? `#${subitem.url.target}` : ''
-						}`;
-						linkWrapper.href = params;
-						linkWrapper.title = 'Go to this session recap point.';
-						linkWrapper.appendChild(subContent);
-						subitemEl.appendChild(linkWrapper);
-					} else {
-						subitemEl.appendChild(subContent);
-					}
-
-					// Add description toggle button for subitems if they have a description
-					if (subitem.description) {
-						// Create button for subitem
-						const subButton = document.createElement('button');
-						subButton.className = 'timeline-sub-button';
-						subButton.textContent = '›';
-						subButton.type = 'button'; // Explicitly set button type
-
-						// Add the button to the subitemEl
-						subitemEl.appendChild(subButton);
-
-						// Create description element for subitem
-						const subDescriptionElement = document.createElement('div');
-						subDescriptionElement.className = 'timeline-sub-description';
-						subDescriptionElement.innerHTML = subitem.description;
-						subitemEl.appendChild(subDescriptionElement);
-
-						// Add event listener directly to the subitem button
-						subButton.onclick = function (event) {
-							event.preventDefault();
-							event.stopPropagation();
-							subDescriptionElement.classList.toggle('active');
-						};
-					}
-
-					timeline.appendChild(subitemEl);
-				});
-			}
-
-			// Switch sides for next main item group
-			side = nextSide;
-		});
-
-		timelineContainer.appendChild(timeline);
-		contentArea.appendChild(timelineContainer);
-		this.#processTimelinePlaceholders(timelineContainer);
+		window.history.replaceState(state, '', `${url.pathname}?${params.toString()}`);
 	}
 
 	async #loadContentArea(contentArea) {
-		// Clear previous content
 		contentArea.innerHTML = '';
 
 		switch (this.#currentView) {
 			case 'timeline':
-				this.#renderTimeline(contentArea);
+				this.#contentRenderer.renderTimeline(contentArea);
 				break;
 			case 'character':
-				this.#loadCharacterBackground(contentArea);
+				this.#contentRenderer.renderCharacter(contentArea, this.#selectedCharacterName);
 				break;
 			case 'session':
 			default:
-				await this.#loadSessionContent(contentArea); // Needs await
+				await this.#contentRenderer.renderSession(contentArea);
 				break;
-		}
-	}
-
-	async #loadSessionContent(contentArea) {
-		// Assume contentArea is already cleared by #loadContentArea
-		// If timeline is visible, render it (Handled by #loadContentArea)
-		// if (this.#isTimelineVisible) { ... }
-		// If a character is selected, show their background (Handled by #loadContentArea)
-		// if (this.#selectedCharacterName) { ... }
-
-		if (!this.#currentSessionId || !this.#campaign.recaps) {
-			contentArea.innerHTML = '<div class="no-content">Select a session to view its content.</div>';
-			return;
-		}
-
-		const session = this.#campaign.recaps.find((s) => s.id === this.#currentSessionId);
-		if (!session) {
-			console.error(`Session not found: ${this.#currentSessionId}`);
-			contentArea.innerHTML = '<div class="no-content">Session not found. Please select another session.</div>';
-			return;
-		}
-
-		// Helper function to fetch and parse Markdown (remains the same)
-		const fetchAndParseMd = async (filePath) => {
-			if (!filePath || typeof filePath !== 'string' || !filePath.endsWith('.md')) {
-				return filePath || ''; // Return non-MD paths/content directly
-			}
-			const basePath = `src/databases/campaign_data/${this.#campaign.id.replace('-', '_')}/`;
-			const fullPath = basePath + filePath;
-			try {
-				const response = await fetch(fullPath);
-				if (!response.ok) {
-					throw new Error(`HTTP error! status: ${response.status}`);
-				}
-				const mdContent = await response.text();
-				return `${mdContent}`; // Fallback: display as preformatted text
-			} catch (error) {
-				console.error(`Error fetching or parsing Markdown file "${fullPath}":`, error);
-				return `<div class="error">Error loading content: ${error.message}</div>`;
-			}
-		};
-
-		// Create session TOC container (will be populated by #generateTableOfContents)
-		const sessionToc = document.createElement('div');
-		sessionToc.className = 'session-toc';
-		const toc = document.createElement('div');
-		toc.className = 'toc';
-		toc.id = 'toc'; // Keep the ID for potential styling/JS hooks
-		sessionToc.appendChild(toc);
-		contentArea.appendChild(sessionToc); // Add TOC container to content area
-
-		// Create session content container
-		const sessionContent = document.createElement('div');
-		sessionContent.className = 'session-content';
-		// Add session header
-		const sessionHeader = document.createElement('div');
-		sessionHeader.className = 'session-header';
-		sessionHeader.innerHTML = `
-            <h2 id="session-title">${session.title}</h2>
-            ${session.date ? `<div class="session-date">${session.date}</div>` : ''}
-        `;
-		sessionContent.appendChild(sessionHeader);
-
-		// Process Short Summary (Recap)
-		const sessionRecap = document.createElement('div');
-		sessionRecap.className = 'session-small-recap';
-		const tempRecap = document.createElement('div');
-		tempRecap.innerHTML = `<h3 id="short-summary">Short Summary</h3>${await fetchAndParseMd(session?.recap)}`;
-		this.#processPlaceholders(tempRecap, session);
-		sessionRecap.appendChild(tempRecap);
-		sessionContent.appendChild(sessionRecap);
-
-		// Process Factual Recap
-		if (session?.factual_recap) {
-			const factualRecap = document.createElement('div');
-			factualRecap.className = 'session-factual';
-
-			const factualHeader = document.createElement('div');
-			factualHeader.className = 'session-factual-header';
-			factualHeader.innerHTML = `
-			<h3 id="factual-recap">Factual Recap</h3>
-			<button class="factual-toggle" aria-expanded="false" aria-controls="factual-content">
-				<span class="toggle-icon">▶</span>
-			</button>
-			`;
-
-			const factualContent = document.createElement('div');
-			factualContent.className = 'session-factual-content';
-			factualContent.id = 'factual-content';
-			factualContent.style.display = 'none';
-
-			const tempFactual = document.createElement('div');
-			tempFactual.innerHTML = await fetchAndParseMd(session?.factual_recap);
-			this.#processPlaceholders(tempFactual, session);
-			factualContent.appendChild(tempFactual);
-
-			factualRecap.appendChild(factualHeader);
-			factualRecap.appendChild(factualContent);
-
-			// Add toggle functionality
-			const toggleBtn = factualHeader.querySelector('.factual-toggle');
-			toggleBtn.addEventListener('click', () => {
-				const isExpanded = factualContent.style.display !== 'none';
-				factualContent.style.display = isExpanded ? 'none' : 'block';
-				toggleBtn.setAttribute('aria-expanded', !isExpanded);
-				toggleBtn.querySelector('.toggle-icon').textContent = isExpanded ? '▶' : '▼';
-			});
-
-			sessionContent.appendChild(factualRecap);
-		}
-
-		if (session?.name_db) {
-			// Process Name, Items and Location Database
-			const nameDb = document.createElement('div');
-			nameDb.className = 'session-factual';
-
-			const nameDbHeader = document.createElement('div');
-			nameDbHeader.className = 'session-factual-header';
-			nameDbHeader.innerHTML = `
-			<h3 id="name-db">Name, Items and Location Database</h3>
-			<button class="factual-toggle" aria-expanded="false" aria-controls="name-db-content">
-				<span class="toggle-icon">▶</span>
-			</button>
-			`;
-
-			const nameDbContent = document.createElement('div');
-			nameDbContent.className = 'session-factual-content';
-			nameDbContent.id = 'name-db-content';
-			nameDbContent.style.display = 'none';
-
-			const tempNameDb = document.createElement('div');
-			tempNameDb.innerHTML = await fetchAndParseMd(session?.name_db);
-			this.#processPlaceholders(tempNameDb, session);
-			nameDbContent.appendChild(tempNameDb);
-
-			nameDb.appendChild(nameDbHeader);
-			nameDb.appendChild(nameDbContent);
-
-			// Add toggle functionality
-			const nameDbToggleBtn = nameDbHeader.querySelector('.factual-toggle');
-			nameDbToggleBtn.addEventListener('click', () => {
-				const isExpanded = nameDbContent.style.display !== 'none';
-				nameDbContent.style.display = isExpanded ? 'none' : 'block';
-				nameDbToggleBtn.setAttribute('aria-expanded', !isExpanded);
-				nameDbToggleBtn.querySelector('.toggle-icon').textContent = isExpanded ? '▶' : '▼';
-			});
-
-			sessionContent.appendChild(nameDb);
-		}
-
-		// Process Main Content
-		const mainContentEl = document.createElement('div');
-		mainContentEl.className = 'session-main-content';
-		const tempMain = document.createElement('div');
-		tempMain.innerHTML = `${await fetchAndParseMd(session.content)}`;
-		this.#processPlaceholders(tempMain, session);
-		mainContentEl.appendChild(tempMain);
-		sessionContent.appendChild(mainContentEl);
-
-		// Add session content to content area
-		contentArea.appendChild(sessionContent);
-	}
-
-	#processPlaceholders(contentElement, session = null) {
-		this.#processImages(contentElement);
-		this.#processCharacterReferences(contentElement);
-		this.#processEntityReferences(contentElement);
-		// Process progression tags only if session data is available
-		if (session) {
-			this.#processProgressionTags(contentElement, session);
-		}
-		// Needs to run *after* character/entity references have created the spans
-		this.#processCharacterHighlights(contentElement);
-	}
-
-	#scrollToHash() {
-		const hash = window.location.hash;
-		if (hash) {
-			try {
-				// Use substring(1) to remove the '#'
-				const element = document.getElementById(hash.substring(1));
-				if (element) {
-					// Use setTimeout to ensure rendering is complete, especially after async ops
-					setTimeout(() => {
-						element.scrollIntoView({
-							behavior: 'smooth',
-							block: 'start', // Align to top
-						});
-					}, 100); // Small delay might be needed
-				}
-			} catch (e) {
-				// Catch potential errors if ID is invalid for querySelector
-				console.warn(`Could not find or scroll to element with ID: ${hash}`, e);
-			}
 		}
 	}
 
 	#generateTableOfContents(contentArea) {
-		// Find headings only within the main session content, not the TOC itself
 		const sessionContent = contentArea.querySelector('.session-main-content');
-		if (!sessionContent) return; // No session content rendered
+		if (!sessionContent) return;
 
-		const headings = sessionContent.querySelectorAll('h1, h2, h3, h4'); // Include h4 if needed
+		const headings = sessionContent.querySelectorAll('h1, h2, h3, h4');
 		if (headings.length === 0) return;
 
-		// Get the TOC container (already created in #loadSessionContent)
 		const tocContainer = contentArea.querySelector('.toc');
 		if (!tocContainer) return;
-		tocContainer.innerHTML = ''; // Clear previous TOC content
 
-		// Create TOC title
+		tocContainer.innerHTML = '';
+
 		const tocTitle = document.createElement('h3');
-		tocTitle.textContent = 'On this page'; // More common TOC title
+		tocTitle.textContent = 'On this page';
 		tocTitle.className = 'toc-title';
-		tocContainer.appendChild(tocTitle);
-		// Create the list
+
 		const tocList = document.createElement('ul');
 		tocList.className = 'toc-list';
-		tocContainer.appendChild(tocList);
-		// Process headings and add to TOC
+
 		headings.forEach((heading, index) => {
-			// Ensure heading has an ID for linking
 			if (!heading.id) {
-				// Create a simple slug from text content
 				const slug = heading.textContent
 					.toLowerCase()
 					.trim()
-					.replace(/\s+/g, '-') // Replace spaces with dashes
-					.replace(/[^\w-]+/g, ''); // Remove non-word characters except dashes
-				heading.id = slug || `heading-${index}`; // Fallback to index if slug is empty
+					.replace(/\s+/g, '-')
+					.replace(/[^\w-]+/g, '');
+				heading.id = slug || `heading-${index}`;
 			}
 
-			// Create link items for TOC
 			const item = document.createElement('li');
-			item.className = `toc-item toc-level-${heading.tagName.toLowerCase()}`; // e.g., toc-level-h2
+			item.className = `toc-item toc-level-${heading.tagName.toLowerCase()}`;
 
 			const link = document.createElement('a');
-			link.href = `#${heading.id}`; // Link to the heading ID
+			link.href = `#${heading.id}`;
 			link.textContent = heading.textContent;
 			link.className = 'toc-link';
 
-			// Add smooth scroll event AND update URL hash without reloading
 			link.addEventListener('click', (e) => {
 				e.preventDefault();
 				const targetElement = document.getElementById(heading.id);
 				if (targetElement) {
-					targetElement.scrollIntoView({
-						behavior: 'smooth',
-						block: 'start',
-					});
-					// Update URL hash without triggering navigation or adding to history stack
+					targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
 					history.replaceState(null, '', `#${heading.id}`);
 				}
 			});
@@ -990,11 +676,226 @@ class StoryManager {
 			item.appendChild(link);
 			tocList.appendChild(item);
 		});
+
+		tocContainer.append(tocTitle, tocList);
+	}
+}
+
+// ===== HELPER: TIMELINE RENDERER =====
+class StoryHelperTimeline {
+	#campaign;
+	#placeholderProcessor;
+
+	constructor(campaign, placeholderProcessor) {
+		this.#campaign = campaign;
+		this.#placeholderProcessor = placeholderProcessor;
 	}
 
-	#loadCharacterBackground(contentArea) {
-		// Clear and validate
-		if (!this.#selectedCharacterName) {
+	render(contentArea) {
+		const timelineData = this.#campaign?.timeline;
+
+		if (!timelineData?.length) {
+			contentArea.innerHTML = `
+				<div class="story-timeline-container visible">
+					<div class="timeline-header"><h2>Campaign Timeline</h2></div>
+					<div class="no-content">Timeline data not available for this campaign.</div>
+				</div>
+			`;
+			return;
+		}
+
+		const container = document.createElement('div');
+		container.className = 'story-timeline-container visible';
+
+		const header = this.#createHeader();
+		const timeline = this.#createTimeline(timelineData);
+
+		container.append(header, timeline);
+		contentArea.appendChild(container);
+
+		this.#placeholderProcessor.processTimelinePlaceholders(container);
+	}
+
+	#createHeader() {
+		const header = document.createElement('div');
+		header.className = 'timeline-header';
+		header.innerHTML = '<h2>Campaign Timeline</h2>';
+
+		const toggleButton = document.createElement('button');
+		toggleButton.className = 'timeline-toggle-all-button';
+		toggleButton.textContent = 'Toggle descriptions';
+		toggleButton.type = 'button';
+
+		toggleButton.addEventListener('click', (e) => {
+			const container = e.target.closest('.story-timeline-container');
+			const descriptions = container.querySelectorAll('.timeline-main-description, .timeline-sub-description');
+			const anyActive = Array.from(descriptions).some((desc) => desc.classList.contains('active'));
+
+			descriptions.forEach((desc) => desc.classList.remove('active'));
+
+			if (!anyActive) {
+				setTimeout(() => {
+					descriptions.forEach((desc) => desc.classList.add('active'));
+				}, 50);
+			}
+		});
+
+		header.appendChild(toggleButton);
+		return header;
+	}
+
+	#createTimeline(timelineData) {
+		const timeline = document.createElement('div');
+		timeline.className = 'timeline';
+
+		const typeMap = {
+			narrative: '💬',
+			encounter: '⚔️',
+			investigation: '🔎',
+			traversal: '👣',
+		};
+
+		let side = 'left';
+
+		timelineData.forEach((item) => {
+			const mainItem = this.#createMainItem(item, side);
+			timeline.appendChild(mainItem);
+
+			if (item.items?.length) {
+				item.items.forEach((subitem) => {
+					const subitemEl = this.#createSubItem(subitem, item.id, side, typeMap);
+					timeline.appendChild(subitemEl);
+				});
+			}
+
+			side = side === 'left' ? 'right' : 'left';
+		});
+
+		return timeline;
+	}
+
+	#createMainItem(item, side) {
+		const mainItem = document.createElement('div');
+		mainItem.className = `timeline-item timeline-main-item ${side}`;
+		mainItem.setAttribute('data-id', item.id);
+
+		const mainContent = document.createElement('div');
+		mainContent.className = 'timeline-content';
+		mainContent.innerHTML = `
+			<h3>${item.title}</h3>
+			<div class="timeline-location" style="margin-left: auto">${item.location}</div>
+			${item.is_new_session ? '<div class="timeline-new-session">New session</div>' : ''}
+			${item.session ? `<span class="timeline-item-session">Session ${item.session}</span>` : ''}
+		`;
+
+		if (item.url) {
+			const link = document.createElement('a');
+			link.href = `?campaign=${item.url.campaign}&session=${item.url.session}${
+				item.url.target ? `#${item.url.target}` : ''
+			}`;
+			link.title = 'Go to this session recap point.';
+			link.appendChild(mainContent);
+			mainItem.appendChild(link);
+		} else {
+			mainItem.appendChild(mainContent);
+		}
+
+		if (item.description) {
+			const button = document.createElement('button');
+			button.className = 'timeline-main-button';
+			button.textContent = '›';
+			button.type = 'button';
+
+			const description = document.createElement('div');
+			description.className = 'timeline-main-description';
+			description.innerHTML = item.description;
+
+			button.onclick = (e) => {
+				e.preventDefault();
+				e.stopPropagation();
+				description.classList.toggle('active');
+			};
+
+			mainItem.append(button, description);
+		}
+
+		return mainItem;
+	}
+
+	#createSubItem(subitem, parentId, side, typeMap) {
+		const subitemEl = document.createElement('div');
+		subitemEl.className = `timeline-item timeline-subitem ${side}`;
+		subitemEl.setAttribute('data-parent-id', parentId);
+		subitemEl.setAttribute('data-type', subitem.type);
+
+		const subContent = document.createElement('div');
+		subContent.className = 'timeline-content';
+
+		let html = `
+			<h4>
+				<span style="font-size: 8pt">${typeMap[subitem.type] || '❓'}</span>
+				${subitem.type.charAt(0).toUpperCase() + subitem.type.slice(1)}: ${subitem.actors}
+			</h4>
+		`;
+
+		if (subitem.is_new_session) {
+			subitemEl.classList.add('new-session-indicator');
+			html += '<div class="timeline-new-session">New session</div>';
+		}
+
+		if (subitem.sublocation) {
+			html += `<div class="timeline-sublocation">${subitem.sublocation}</div>`;
+		}
+
+		subContent.innerHTML = html;
+
+		if (subitem.url) {
+			const link = document.createElement('a');
+			link.href = `?campaign=${subitem.url.campaign}&session=${subitem.url.session}${
+				subitem.url.target ? `#${subitem.url.target}` : ''
+			}`;
+			link.title = 'Go to this session recap point.';
+			link.appendChild(subContent);
+			subitemEl.appendChild(link);
+		} else {
+			subitemEl.appendChild(subContent);
+		}
+
+		if (subitem.description) {
+			const button = document.createElement('button');
+			button.className = 'timeline-sub-button';
+			button.textContent = '›';
+			button.type = 'button';
+
+			const description = document.createElement('div');
+			description.className = 'timeline-sub-description';
+			description.innerHTML = subitem.description;
+
+			button.onclick = (e) => {
+				e.preventDefault();
+				e.stopPropagation();
+				description.classList.toggle('active');
+			};
+
+			subitemEl.append(button, description);
+		}
+
+		return subitemEl;
+	}
+}
+
+// ===== HELPER: CHARACTER RENDERER =====
+class StoryHelperCharacter {
+	#campaign;
+	#placeholderProcessor;
+
+	constructor(campaign, placeholderProcessor) {
+		this.#campaign = campaign;
+		this.#placeholderProcessor = placeholderProcessor;
+	}
+
+	render(contentArea, characterName) {
+		if (!characterName) {
 			contentArea.innerHTML = '<div class="no-content">No character selected.</div>';
 			return;
 		}
@@ -1004,39 +905,24 @@ class StoryManager {
 			return;
 		}
 
-		const character = this.#campaign.metadata.characters.find((c) => c.name === this.#selectedCharacterName);
+		const character = this.#campaign.metadata.characters.find((c) => c.name === characterName);
 		if (!character) {
-			console.error(`Character not found: ${this.#selectedCharacterName}`);
+			console.error(`Character not found: ${characterName}`);
 			contentArea.innerHTML = '<div class="no-content">Character details not found.</div>';
 			return;
 		}
 
-		// Create main container with parchment-like background
-		const characterSheet = document.createElement('div');
-		characterSheet.className = 'character-sheet';
+		const sheet = document.createElement('div');
+		sheet.className = 'character-sheet';
 
-		// Header section with character identity
-		const headerSection = this.#createCharacterHeader(character);
-		characterSheet.appendChild(headerSection);
+		const header = this.#createHeader(character);
+		const columns = this.#createColumns(character);
 
-		// Two-column layout for character details
-		const columnsContainer = document.createElement('div');
-		columnsContainer.className = 'character-columns';
-
-		// Left column (character image and background)
-		const leftColumn = this.#createLeftColumn(character);
-		columnsContainer.appendChild(leftColumn);
-
-		// Right column (stats, abilities, features)
-		const rightColumn = this.#createRightColumn(character);
-		columnsContainer.appendChild(rightColumn);
-
-		characterSheet.appendChild(columnsContainer);
-		contentArea.appendChild(characterSheet);
+		sheet.append(header, columns);
+		contentArea.appendChild(sheet);
 	}
 
-	// Helper methods for modular construction
-	#createCharacterHeader(character) {
+	#createHeader(character) {
 		const header = document.createElement('header');
 		header.className = 'character-header';
 
@@ -1048,10 +934,19 @@ class StoryManager {
 		subtitle.className = 'character-subtitle';
 		subtitle.textContent = `${character.race} ${character.class} • Level ${character.level}`;
 
-		header.appendChild(title);
-		header.appendChild(subtitle);
-
+		header.append(title, subtitle);
 		return header;
+	}
+
+	#createColumns(character) {
+		const container = document.createElement('div');
+		container.className = 'character-columns';
+
+		const leftColumn = this.#createLeftColumn(character);
+		const rightColumn = this.#createRightColumn(character);
+
+		container.append(leftColumn, rightColumn);
+		return container;
 	}
 
 	#createLeftColumn(character) {
@@ -1072,25 +967,11 @@ class StoryManager {
 		}
 
 		if (character.background) {
-			const section = document.createElement('section');
-			section.className = 'character-section character-background';
-
-			const header = document.createElement('h3');
-			header.className = 'character-section__header';
-			header.textContent = 'Background';
-			section.appendChild(header);
-
-			const content = document.createElement('div');
-			content.className = 'character-section__content';
-			content.innerHTML = character.background;
-			this.#processEntityReferences(content);
-			section.appendChild(content);
-
+			const section = this.#createBackgroundSection(character.background);
 			column.appendChild(section);
 		}
 
-		// Spells
-		if (character.stats.metadata.spellData?.length) {
+		if (character.stats?.metadata?.spellData?.length) {
 			const spells = this.#createSpellsSection(character.stats.metadata.spellData);
 			column.appendChild(spells);
 		}
@@ -1098,44 +979,48 @@ class StoryManager {
 		return column;
 	}
 
+	#createBackgroundSection(background) {
+		const section = document.createElement('section');
+		section.className = 'character-section character-background';
+
+		const header = document.createElement('h3');
+		header.className = 'character-section__header';
+		header.textContent = 'Background';
+
+		const content = document.createElement('div');
+		content.className = 'character-section__content';
+		content.innerHTML = background;
+		this.#placeholderProcessor.processEntityReferences(content);
+
+		section.append(header, content);
+		return section;
+	}
+
 	#createRightColumn(character) {
 		const column = document.createElement('div');
 		column.className = 'character-column character-column--right';
 
-		if (character.stats?.metadata) {
-			// Vital Stats
-			if (
-				character.stats.metadata.armorClass ||
-				character.stats.metadata.healthPoints ||
-				character.stats.metadata.walkingSpeed
-			) {
-				const vitals = this.#createVitalsSection(character.stats.metadata);
-				column.appendChild(vitals);
-			}
+		const metadata = character.stats?.metadata;
+		if (!metadata) return column;
 
-			// Ability Scores
-			if (character.stats.metadata.abilityScores?.length) {
-				const abilities = this.#createAbilitiesSection(character.stats.metadata.abilityScores);
-				column.appendChild(abilities);
-			}
+		if (metadata.armorClass || metadata.healthPoints || metadata.walkingSpeed) {
+			column.appendChild(this.#createVitalsSection(metadata));
+		}
 
-			// Saving Throws
-			if (character.stats.metadata.savingThrows?.length) {
-				const saves = this.#createSavingThrowsSection(character.stats.metadata.savingThrows);
-				column.appendChild(saves);
-			}
+		if (metadata.abilityScores?.length) {
+			column.appendChild(this.#createAbilitiesSection(metadata.abilityScores));
+		}
 
-			// Actions
-			if (character.stats.metadata.actionData?.length) {
-				const actions = this.#createActionsSection(character.stats.metadata.actionData);
-				column.appendChild(actions);
-			}
+		if (metadata.savingThrows?.length) {
+			column.appendChild(this.#createSavingThrowsSection(metadata.savingThrows));
+		}
 
-			// Features
-			if (character.stats.metadata.features?.length) {
-				const features = this.#createFeaturesSection(character.stats.metadata.features);
-				column.appendChild(features);
-			}
+		if (metadata.actionData?.length) {
+			column.appendChild(this.#createActionsSection(metadata.actionData));
+		}
+
+		if (metadata.features?.length) {
+			column.appendChild(this.#createFeaturesSection(metadata.features));
 		}
 
 		return column;
@@ -1148,7 +1033,6 @@ class StoryManager {
 		const header = document.createElement('h3');
 		header.className = 'character-section__header';
 		header.textContent = 'Vital Statistics';
-		section.appendChild(header);
 
 		const grid = document.createElement('div');
 		grid.className = 'character-vitals__grid';
@@ -1162,21 +1046,14 @@ class StoryManager {
 		vitals.forEach((vital) => {
 			const item = document.createElement('div');
 			item.className = `character-vitals__item character-vitals__item--${vital.class}`;
-
-			const label = document.createElement('span');
-			label.className = 'character-vitals__label';
-			label.textContent = vital.name;
-
-			const value = document.createElement('span');
-			value.className = 'character-vitals__value';
-			value.textContent = vital.value;
-
-			item.appendChild(label);
-			item.appendChild(value);
+			item.innerHTML = `
+				<span class="character-vitals__label">${vital.name}</span>
+				<span class="character-vitals__value">${vital.value}</span>
+			`;
 			grid.appendChild(item);
 		});
 
-		section.appendChild(grid);
+		section.append(header, grid);
 		return section;
 	}
 
@@ -1187,7 +1064,6 @@ class StoryManager {
 		const header = document.createElement('h3');
 		header.className = 'character-section__header';
 		header.textContent = 'Ability Scores';
-		section.appendChild(header);
 
 		const grid = document.createElement('div');
 		grid.className = 'character-abilities__grid';
@@ -1195,26 +1071,15 @@ class StoryManager {
 		abilityScores.forEach((ability) => {
 			const item = document.createElement('div');
 			item.className = 'character-abilities__item';
-
-			const name = document.createElement('div');
-			name.className = 'character-abilities__name';
-			name.textContent = ability.abbr.toUpperCase();
-
-			const value = document.createElement('div');
-			value.className = 'character-abilities__value';
-			value.textContent = ability.value;
-
-			const modifier = document.createElement('div');
-			modifier.className = 'character-abilities__modifier';
-			modifier.textContent = `(${ability.score})`;
-
-			item.appendChild(name);
-			item.appendChild(value);
-			item.appendChild(modifier);
+			item.innerHTML = `
+				<div class="character-abilities__name">${ability.abbr.toUpperCase()}</div>
+				<div class="character-abilities__value">${ability.value}</div>
+				<div class="character-abilities__modifier">(${ability.score})</div>
+			`;
 			grid.appendChild(item);
 		});
 
-		section.appendChild(grid);
+		section.append(header, grid);
 		return section;
 	}
 
@@ -1225,7 +1090,6 @@ class StoryManager {
 		const header = document.createElement('h3');
 		header.className = 'character-section__header';
 		header.textContent = 'Saving Throws';
-		section.appendChild(header);
 
 		const list = document.createElement('div');
 		list.className = 'character-saves__list';
@@ -1233,21 +1097,14 @@ class StoryManager {
 		savingThrows.forEach((save) => {
 			const item = document.createElement('div');
 			item.className = 'character-saves__item';
-
-			const name = document.createElement('span');
-			name.className = 'character-saves__name';
-			name.textContent = save.name.toUpperCase();
-
-			const value = document.createElement('span');
-			value.className = 'character-saves__value';
-			value.textContent = save.value;
-
-			item.appendChild(name);
-			item.appendChild(value);
+			item.innerHTML = `
+				<span class="character-saves__name">${save.name.toUpperCase()}</span>
+				<span class="character-saves__value">${save.value}</span>
+			`;
 			list.appendChild(item);
 		});
 
-		section.appendChild(list);
+		section.append(header, list);
 		return section;
 	}
 
@@ -1263,20 +1120,15 @@ class StoryManager {
 		header.textContent = 'Actions';
 		headerRow.appendChild(header);
 
-		// Add toggle all button
 		if (actions.some((action) => action.description)) {
 			const toggleAll = document.createElement('button');
 			toggleAll.className = 'character-section__toggle-all';
 			toggleAll.textContent = 'Toggle All';
 			toggleAll.addEventListener('click', () => {
-				const allDescriptions = section.querySelectorAll('.character-actions__description');
-				const anyVisible = Array.from(allDescriptions).some((d) => d.style.display !== 'none');
+				const descriptions = section.querySelectorAll('.character-actions__description');
+				const anyVisible = Array.from(descriptions).some((d) => d.style.display !== 'none');
 
-				allDescriptions.forEach((desc) => {
-					desc.style.display = anyVisible ? 'none' : 'block';
-				});
-
-				// Update individual toggle buttons
+				descriptions.forEach((desc) => (desc.style.display = anyVisible ? 'none' : 'block'));
 				section.querySelectorAll('.character-actions__toggle').forEach((btn) => {
 					btn.textContent = anyVisible ? 'Show' : 'Hide';
 				});
@@ -1290,50 +1142,50 @@ class StoryManager {
 		list.className = 'character-actions__list';
 
 		actions.forEach((action) => {
-			const item = document.createElement('div');
-			item.className = 'character-actions__item';
-
-			const nameRow = document.createElement('div');
-			nameRow.className = 'character-actions__name-row';
-
-			const name = document.createElement('h4');
-			name.className = 'character-actions__name';
-			name.textContent = action.name;
-			nameRow.appendChild(name);
-
-			if (action.description) {
-				const toggle = document.createElement('button');
-				toggle.className = 'character-actions__toggle';
-				toggle.textContent = 'Show';
-				toggle.addEventListener('click', () => {
-					const desc = item.querySelector('.character-actions__description');
-					if (desc.style.display === 'none') {
-						desc.style.display = 'block';
-						toggle.textContent = 'Hide';
-					} else {
-						desc.style.display = 'none';
-						toggle.textContent = 'Show';
-					}
-				});
-				nameRow.appendChild(toggle);
-			}
-
-			item.appendChild(nameRow);
-
-			if (action.description) {
-				const desc = document.createElement('div');
-				desc.className = 'character-actions__description';
-				desc.innerHTML = action.description;
-				desc.style.display = 'none'; // Hidden by default
-				this.#processEntityReferences(desc);
-				item.appendChild(desc);
-			}
-
+			const item = this.#createActionItem(action);
 			list.appendChild(item);
 		});
 
 		section.appendChild(list);
 		return section;
+	}
+
+	#createActionItem(action) {
+		const item = document.createElement('div');
+		item.className = 'character-actions__item';
+
+		const nameRow = document.createElement('div');
+		nameRow.className = 'character-actions__name-row';
+
+		const name = document.createElement('h4');
+		name.className = 'character-actions__name';
+		name.textContent = action.name;
+		nameRow.appendChild(name);
+
+		if (action.description) {
+			const toggle = document.createElement('button');
+			toggle.className = 'character-actions__toggle';
+			toggle.textContent = 'Show';
+
+			const desc = document.createElement('div');
+			desc.className = 'character-actions__description';
+			desc.innerHTML = action.description;
+			desc.style.display = 'none';
+			this.#placeholderProcessor.processEntityReferences(desc);
+
+			toggle.addEventListener('click', () => {
+				const isVisible = desc.style.display !== 'none';
+				desc.style.display = isVisible ? 'none' : 'block';
+				toggle.textContent = isVisible ? 'Show' : 'Hide';
+			});
+
+			nameRow.appendChild(toggle);
+			item.append(nameRow, desc);
+		} else {
+			item.appendChild(nameRow);
+		}
+
+		return item;
 	}
 
 	#createFeaturesSection(features) {
@@ -1348,20 +1200,15 @@ class StoryManager {
 		header.textContent = 'Features & Traits';
 		headerRow.appendChild(header);
 
-		// Add toggle all button
 		if (features.some((feature) => feature.description)) {
 			const toggleAll = document.createElement('button');
 			toggleAll.className = 'character-section__toggle-all';
 			toggleAll.textContent = 'Toggle All';
 			toggleAll.addEventListener('click', () => {
-				const allDescriptions = section.querySelectorAll('.character-features__description');
-				const anyVisible = Array.from(allDescriptions).some((d) => d.style.display !== 'none');
+				const descriptions = section.querySelectorAll('.character-features__description');
+				const anyVisible = Array.from(descriptions).some((d) => d.style.display !== 'none');
 
-				allDescriptions.forEach((desc) => {
-					desc.style.display = anyVisible ? 'none' : 'block';
-				});
-
-				// Update individual toggle buttons
+				descriptions.forEach((desc) => (desc.style.display = anyVisible ? 'none' : 'block'));
 				section.querySelectorAll('.character-features__toggle').forEach((btn) => {
 					btn.textContent = anyVisible ? 'Show' : 'Hide';
 				});
@@ -1375,50 +1222,50 @@ class StoryManager {
 		list.className = 'character-features__list';
 
 		features.forEach((feature) => {
-			const item = document.createElement('div');
-			item.className = 'character-features__item';
-
-			const nameRow = document.createElement('div');
-			nameRow.className = 'character-features__name-row';
-
-			const name = document.createElement('h4');
-			name.className = 'character-features__name';
-			name.textContent = feature.name;
-			nameRow.appendChild(name);
-
-			if (feature.description) {
-				const toggle = document.createElement('button');
-				toggle.className = 'character-features__toggle';
-				toggle.textContent = 'Show';
-				toggle.addEventListener('click', () => {
-					const desc = item.querySelector('.character-features__description');
-					if (desc.style.display === 'none') {
-						desc.style.display = 'block';
-						toggle.textContent = 'Hide';
-					} else {
-						desc.style.display = 'none';
-						toggle.textContent = 'Show';
-					}
-				});
-				nameRow.appendChild(toggle);
-			}
-
-			item.appendChild(nameRow);
-
-			if (feature.description) {
-				const desc = document.createElement('div');
-				desc.className = 'character-features__description';
-				desc.innerHTML = feature.description;
-				desc.style.display = 'none'; // Hidden by default
-				this.#processEntityReferences(desc);
-				item.appendChild(desc);
-			}
-
+			const item = this.#createFeatureItem(feature);
 			list.appendChild(item);
 		});
 
 		section.appendChild(list);
 		return section;
+	}
+
+	#createFeatureItem(feature) {
+		const item = document.createElement('div');
+		item.className = 'character-features__item';
+
+		const nameRow = document.createElement('div');
+		nameRow.className = 'character-features__name-row';
+
+		const name = document.createElement('h4');
+		name.className = 'character-features__name';
+		name.textContent = feature.name;
+		nameRow.appendChild(name);
+
+		if (feature.description) {
+			const toggle = document.createElement('button');
+			toggle.className = 'character-features__toggle';
+			toggle.textContent = 'Show';
+
+			const desc = document.createElement('div');
+			desc.className = 'character-features__description';
+			desc.innerHTML = feature.description;
+			desc.style.display = 'none';
+			this.#placeholderProcessor.processEntityReferences(desc);
+
+			toggle.addEventListener('click', () => {
+				const isVisible = desc.style.display !== 'none';
+				desc.style.display = isVisible ? 'none' : 'block';
+				toggle.textContent = isVisible ? 'Show' : 'Hide';
+			});
+
+			nameRow.appendChild(toggle);
+			item.append(nameRow, desc);
+		} else {
+			item.appendChild(nameRow);
+		}
+
+		return item;
 	}
 
 	#createSpellsSection(spellData) {
@@ -1428,93 +1275,174 @@ class StoryManager {
 		const header = document.createElement('h3');
 		header.className = 'character-section__header';
 		header.textContent = 'Spells';
+
 		section.appendChild(header);
 
 		spellData.forEach((group) => {
-			const groupContainer = document.createElement('div');
-			groupContainer.className = 'character-spells__group';
-
-			const groupHeaderRow = document.createElement('div');
-			groupHeaderRow.className = 'character-spells__group-header-row';
-
-			const groupHeader = document.createElement('h4');
-			groupHeader.className = 'character-spells__group-header';
-			groupHeader.textContent = group.groupName;
-			groupHeaderRow.appendChild(groupHeader);
-
-			// Add toggle button for this spell group
-			if (group.spells.length > 0) {
-				const toggleGroup = document.createElement('button');
-				toggleGroup.className = 'character-spells__group-toggle';
-				toggleGroup.textContent = 'Hide spells';
-				toggleGroup.addEventListener('click', () => {
-					const list = groupContainer.querySelector('.character-spells__list');
-					if (list.style.display === 'none') {
-						list.style.display = 'flex';
-						toggleGroup.textContent = 'Hide spells';
-					} else {
-						list.style.display = 'none';
-						toggleGroup.textContent = 'Show spells';
-					}
-				});
-				groupHeaderRow.appendChild(toggleGroup);
-			}
-
-			groupContainer.appendChild(groupHeaderRow);
-
-			const list = document.createElement('div');
-			list.className = 'character-spells__list';
-
-			group.spells.forEach((spell) => {
-				const item = document.createElement('div');
-				item.className = 'character-spells__item';
-
-				const name = document.createElement('div');
-				name.className = 'character-spells__name';
-				name.innerHTML = `[ENTITY:spell:${spell.spellInfo.spellName}]`;
-				this.#processEntityReferences(name);
-
-				const meta = document.createElement('div');
-				meta.className = 'character-spells__meta';
-
-				const range = document.createElement('span');
-				range.className = 'character-spells__range';
-				range.textContent = spell.range;
-
-				const slot = document.createElement('span');
-				slot.className = 'character-spells__slot';
-				slot.textContent = spell.slotType;
-
-				const effect = document.createElement('span');
-				effect.className = 'character-spells__effect';
-				effect.textContent = spell.effect;
-
-				meta.appendChild(range);
-				meta.appendChild(slot);
-				meta.appendChild(effect);
-
-				if (spell.spellInfo.spellMetaInfo) {
-					const note = document.createElement('div');
-					note.className = 'character-spells__note';
-					note.textContent = spell.spellInfo.spellMetaInfo;
-					meta.appendChild(note);
-				}
-
-				item.appendChild(name);
-				item.appendChild(meta);
-				list.appendChild(item);
-			});
-
-			groupContainer.appendChild(list);
+			const groupContainer = this.#createSpellGroup(group);
 			section.appendChild(groupContainer);
 		});
 
 		return section;
 	}
 
+	#createSpellGroup(group) {
+		const container = document.createElement('div');
+		container.className = 'character-spells__group';
+
+		const headerRow = document.createElement('div');
+		headerRow.className = 'character-spells__group-header-row';
+
+		const header = document.createElement('h4');
+		header.className = 'character-spells__group-header';
+		header.textContent = group.groupName;
+		headerRow.appendChild(header);
+
+		const list = document.createElement('div');
+		list.className = 'character-spells__list';
+
+		if (group.spells.length > 0) {
+			const toggle = document.createElement('button');
+			toggle.className = 'character-spells__group-toggle';
+			toggle.textContent = 'Hide spells';
+			toggle.addEventListener('click', () => {
+				const isVisible = list.style.display !== 'none';
+				list.style.display = isVisible ? 'none' : 'flex';
+				toggle.textContent = isVisible ? 'Show spells' : 'Hide spells';
+			});
+			headerRow.appendChild(toggle);
+		}
+
+		container.appendChild(headerRow);
+
+		group.spells.forEach((spell) => {
+			const item = this.#createSpellItem(spell);
+			list.appendChild(item);
+		});
+
+		container.appendChild(list);
+		return container;
+	}
+
+	#createSpellItem(spell) {
+		const item = document.createElement('div');
+		item.className = 'character-spells__item';
+
+		const name = document.createElement('div');
+		name.className = 'character-spells__name';
+		name.innerHTML = `[ENTITY:spell:${spell.spellInfo.spellName}]`;
+		this.#placeholderProcessor.processEntityReferences(name);
+
+		const meta = document.createElement('div');
+		meta.className = 'character-spells__meta';
+
+		const range = document.createElement('span');
+		range.className = 'character-spells__range';
+		range.textContent = spell.range;
+
+		const slot = document.createElement('span');
+		slot.className = 'character-spells__slot';
+		slot.textContent = spell.slotType;
+
+		const effect = document.createElement('span');
+		effect.className = 'character-spells__effect';
+		effect.textContent = spell.effect;
+
+		meta.append(range, slot, effect);
+
+		if (spell.spellInfo.spellMetaInfo) {
+			const note = document.createElement('div');
+			note.className = 'character-spells__note';
+			note.textContent = spell.spellInfo.spellMetaInfo;
+			meta.appendChild(note);
+		}
+
+		item.append(name, meta);
+		return item;
+	}
+}
+
+// ===== HELPER: PLACEHOLDER PROCESSOR =====
+class StoryHelperPlaceholder {
+	#tooltipManager;
+	#campaign;
+
+	constructor(tooltipManager, campaign) {
+		this.#tooltipManager = tooltipManager;
+		this.#campaign = campaign;
+	}
+
+	processAll(contentElement, session = null) {
+		this.#processImages(contentElement);
+		this.#processCharacterReferences(contentElement);
+		this.processEntityReferences(contentElement);
+
+		if (session) {
+			this.#processProgressionTags(contentElement, session);
+		}
+
+		this.#processCharacterHighlights(contentElement);
+	}
+
+	processTimelinePlaceholders(timelineContainer) {
+		const timelineItems = timelineContainer.querySelectorAll('.timeline-item');
+
+		timelineItems.forEach((item) => {
+			const contentElements = item.querySelectorAll(
+				'.timeline-content, .timeline-sub-description, .timeline-main-description'
+			);
+
+			contentElements.forEach((element) => {
+				this.#processImages(element);
+				this.#processCharacterReferences(element);
+				this.processEntityReferences(element);
+
+				if (item.classList.contains('timeline-main-item')) {
+					const itemId = item.getAttribute('data-id');
+					const timelineData = this.#campaign?.timeline;
+
+					if (timelineData?.length) {
+						const itemData = timelineData.find((data) => data.id === itemId);
+						if (itemData) {
+							this.#processProgressionTags(element, itemData);
+						}
+					}
+				}
+
+				this.#processCharacterHighlights(element);
+			});
+		});
+	}
+
+	processEntityReferences(contentElement) {
+		const text = contentElement.innerHTML;
+		const processedText = text.replace(
+			/\[ENTITY:([\w-]+):([^:\]]+)(?::([^\]]+))?\]/gi,
+			(match, type, name, givenName) => {
+				const cleanType = type.toLowerCase().trim();
+				const cleanName = name.trim();
+
+				if (!cleanType || !cleanName) return match;
+
+				const displayText = givenName ? givenName.trim() : cleanName;
+				return `<span class="entity-reference entity-${cleanType}" data-entity-type="${cleanType}" data-entity-name="${cleanName}">${displayText}</span>`;
+			}
+		);
+
+		contentElement.innerHTML = processedText;
+
+		const entitySpans = contentElement.querySelectorAll('.entity-reference');
+		entitySpans.forEach((span) => {
+			const entityType = span.getAttribute('data-entity-type');
+			const entityName = span.getAttribute('data-entity-name');
+
+			if (entityType && entityName) {
+				this.#tooltipManager.addEntityTooltipEvents(span, entityType, entityName);
+			}
+		});
+	}
+
 	#processImages(contentElement) {
-		// Find all image placeholders
-		// Format: [IMAGE:path/to/image.jpg:optional-caption:optional-width:optional-alignment:optional-inline]
 		const text = contentElement.innerHTML;
 		const processedText = text.replace(
 			/\[IMAGE:(.*?)(?::(.*?))?(?::(.*?))?(?::(.*?))?(?::(.*?))?\]/g,
@@ -1538,66 +1466,47 @@ class StoryManager {
 	#processCharacterReferences(contentElement) {
 		if (!this.#campaign.metadata?.characters?.length) return;
 
-		// Get character names for regex pattern
 		const characterNames = this.#campaign.metadata.characters
 			.map((char) => char.name.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&'))
 			.join('|');
 
-		// Skip if no characters
 		if (!characterNames) return;
 
-		// Create regex to find character names in text
 		const characterRegex = new RegExp(`\\[CHARACTER:(${characterNames})\\]`, 'g');
+		const textNodes = this.#getTextNodes(contentElement);
 
-		// Find all text nodes in the content
-		const textNodes = [];
-		const walker = document.createTreeWalker(contentElement, NodeFilter.SHOW_TEXT, null, false);
-
-		let node;
-		while ((node = walker.nextNode())) {
-			textNodes.push(node);
-		}
-
-		// Process each text node
 		textNodes.forEach((textNode) => {
 			const text = textNode.nodeValue;
-			if (characterRegex.test(text)) {
-				const fragment = document.createDocumentFragment();
-				let lastIndex = 0;
-				let match;
+			if (!characterRegex.test(text)) return;
 
-				// Reset regex
-				characterRegex.lastIndex = 0;
+			const fragment = document.createDocumentFragment();
+			let lastIndex = 0;
+			characterRegex.lastIndex = 0;
 
-				while ((match = characterRegex.exec(text)) !== null) {
-					// Add text before the match
-					if (match.index > lastIndex) {
-						fragment.appendChild(document.createTextNode(text.substring(lastIndex, match.index)));
-					}
-
-					// Create highlighted span for character
-					const span = document.createElement('span');
-					span.className = 'character-highlight';
-					span.setAttribute('data-character', match[1]);
-					span.textContent = match[1];
-					fragment.appendChild(span);
-
-					lastIndex = characterRegex.lastIndex;
+			let match;
+			while ((match = characterRegex.exec(text)) !== null) {
+				if (match.index > lastIndex) {
+					fragment.appendChild(document.createTextNode(text.substring(lastIndex, match.index)));
 				}
 
-				// Add remaining text
-				if (lastIndex < text.length) {
-					fragment.appendChild(document.createTextNode(text.substring(lastIndex)));
-				}
+				const span = document.createElement('span');
+				span.className = 'character-highlight';
+				span.setAttribute('data-character', match[1]);
+				span.textContent = match[1];
+				fragment.appendChild(span);
 
-				// Replace the text node with the fragment
-				textNode.parentNode.replaceChild(fragment, textNode);
+				lastIndex = characterRegex.lastIndex;
 			}
+
+			if (lastIndex < text.length) {
+				fragment.appendChild(document.createTextNode(text.substring(lastIndex)));
+			}
+
+			textNode.parentNode.replaceChild(fragment, textNode);
 		});
 	}
 
 	#processCharacterHighlights(contentElement) {
-		// Attaches tooltips to spans with 'character-highlight' class
 		if (!this.#campaign.metadata?.characters?.length) return;
 
 		const characterMap = new Map();
@@ -1605,58 +1514,21 @@ class StoryManager {
 			characterMap.set(char.name, char);
 		});
 
-		const spans = contentElement.querySelectorAll('span.character-highlight'); // Target the spans created by #processCharacterReferences
+		const spans = contentElement.querySelectorAll('span.character-highlight');
 		spans.forEach((span) => {
 			const characterName = span.getAttribute('data-character');
-			if (characterMap.has(characterName)) {
-				// Ensure text content matches (might be redundant if #processCharacterReferences works)
+			const character = characterMap.get(characterName);
+
+			if (character) {
 				span.textContent = characterName;
-				// Add tooltip events
-				this.#addCharacterTooltipEvents(span, characterMap.get(characterName));
-			} else {
-				// Optional: Remove attribute or class if character data is missing
-				// span.removeAttribute('data-character');
-				// span.classList.remove('character-highlight');
-			}
-		});
-	}
-
-	#processEntityReferences(contentElement) {
-		// Finds [ENTITY:type:name] or [ENTITY:type:name:givenName] and replaces with spans for tooltips
-		// This should run *before* tooltip attachment logic if separated
-		const text = contentElement.innerHTML;
-		const processedText = text.replace(
-			/\[ENTITY:([\w-]+):([^:\]]+)(?::([^\]]+))?\]/gi,
-			(match, type, name, givenName) => {
-				// More specific type regex
-				const cleanType = type.toLowerCase().trim();
-				const cleanName = name.trim();
-				// Basic validation
-				if (!cleanType || !cleanName) return match; // Return original if malformed
-
-				const displayText = givenName ? givenName.trim() : cleanName;
-				return `<span class="entity-reference entity-${cleanType}" data-entity-type="${cleanType}" data-entity-name="${cleanName}">${displayText}</span>`;
-			}
-		);
-		contentElement.innerHTML = processedText;
-
-		// Attach event listeners
-		const entitySpans = contentElement.querySelectorAll('.entity-reference');
-		entitySpans.forEach((span) => {
-			const entityType = span.getAttribute('data-entity-type');
-			const entityName = span.getAttribute('data-entity-name');
-			if (entityType && entityName) {
-				this.#addEntityTooltipEvents(span, entityType, entityName);
+				this.#tooltipManager.addCharacterTooltipEvents(span, character);
 			}
 		});
 	}
 
 	#processProgressionTags(contentElement, session) {
-		// Finds [PROGRESSION:type:value] - remains the same
 		const progressionRegex = /\[PROGRESSION:(levelup|loot):(.*?)\]/g;
-		const walker = document.createTreeWalker(contentElement, NodeFilter.SHOW_TEXT, null, false);
-		const textNodes = [];
-		while (walker.nextNode()) textNodes.push(walker.currentNode);
+		const textNodes = this.#getTextNodes(contentElement);
 
 		textNodes.forEach((node) => {
 			const text = node.nodeValue;
@@ -1664,136 +1536,196 @@ class StoryManager {
 
 			const fragment = document.createDocumentFragment();
 			let lastIndex = 0;
-			let match;
 			progressionRegex.lastIndex = 0;
 
+			let match;
 			while ((match = progressionRegex.exec(text)) !== null) {
 				if (match.index > lastIndex) {
 					fragment.appendChild(document.createTextNode(text.substring(lastIndex, match.index)));
 				}
+
 				const type = match[1];
 				const value = match[2];
 				let replacementNode = null;
+
 				if (type === 'levelup') {
-					replacementNode = this.#generateLevelUpElement(value);
+					replacementNode = this.#createLevelUpElement(value);
 				} else if (type === 'loot') {
-					replacementNode = this.#generateLootElement(value, session);
+					replacementNode = this.#createLootElement(value, session);
 				}
-				if (replacementNode) fragment.appendChild(replacementNode);
+
+				if (replacementNode) {
+					fragment.appendChild(replacementNode);
+				}
+
 				lastIndex = progressionRegex.lastIndex;
 			}
+
 			if (lastIndex < text.length) {
 				fragment.appendChild(document.createTextNode(text.substring(lastIndex)));
 			}
+
 			node.parentNode.replaceChild(fragment, node);
 		});
 	}
 
-	#generateLevelUpElement(level) {
-		/* ... remains the same ... */ //
-		const levelUpDiv = document.createElement('div');
-		levelUpDiv.className = 'progression-levelup';
-		levelUpDiv.innerHTML = `
-            <div class="levelup-icon">
+	#createLevelUpElement(level) {
+		const div = document.createElement('div');
+		div.className = 'progression-levelup';
+		div.innerHTML = `
+			<div class="levelup-icon">
 				<img src="images/assets/d20.png"/>
 			</div>
-            <div class="levelup-text">
-                <span>Level Up!</span>
-                <p>Congratulations! The party has reached level <strong>${level}</strong>!</p>
-            </div>
-        `;
-		return levelUpDiv;
+			<div class="levelup-text">
+				<span>Level Up!</span>
+				<p>Congratulations! The party has reached level <strong>${level}</strong>!</p>
+			</div>
+		`;
+		return div;
 	}
-	#generateLootElement(lootId, session) {
-		/* ... remains the same ... */ //
-		const lootContainer = document.createElement('div');
-		lootContainer.className = 'progression-loot';
+
+	#createLootElement(lootId, session) {
+		const container = document.createElement('div');
+		container.className = 'progression-loot';
 
 		const lootData = session?.progression?.loot?.find((l) => l.id === lootId);
-		if (!lootData || !lootData.data || lootData.data.length === 0) {
-			lootContainer.innerHTML = '<p><em>Loot information not found.</em></p>';
-			return lootContainer;
+		if (!lootData?.data?.length) {
+			container.innerHTML = '<p><em>Loot information not found.</em></p>';
+			return container;
 		}
 
 		const title = document.createElement('span');
-		title.textContent = `Loot found`;
+		title.textContent = 'Loot found';
 		title.className = 'progression-loot-title';
-		lootContainer.appendChild(title);
+		container.appendChild(title);
 
 		const list = document.createElement('ul');
 		list.className = 'loot-list';
+
 		lootData.data.forEach((item) => {
 			const listItem = document.createElement('li');
 			listItem.className = `loot-item rarity-${item.rarity || 'common'}`;
 
-			let ownerText = item.owner ? ` <span class="loot-owner">[ENTITY:character:${item.owner}]</span>` : '';
-			// Process item name for entities
+			const ownerText = item.owner ? ` <span class="loot-owner">[ENTITY:character:${item.owner}]</span>` : '';
+
 			const itemNameSpan = document.createElement('span');
 			itemNameSpan.className = 'loot-item-name';
-			itemNameSpan.innerHTML = `${item.itemName}${item.count > 1 ? ` (x${item.count})` : ''}`; // Assume item name might contain entity refs
+			itemNameSpan.innerHTML = `${item.itemName}${item.count > 1 ? ` (x${item.count})` : ''}`;
 
 			listItem.innerHTML = `
 				<div class="loot-item-metadata">
-					${itemNameSpan.outerHTML} 
+					${itemNameSpan.outerHTML}
 					${item.description ? `<span class="loot-item-description">${item.description}</span>` : ''}
 				</div>
 				${ownerText}
-            `;
-			this.#processEntityReferences(listItem);
-			// Process description for entities if it exists
+			`;
+
+			this.processEntityReferences(listItem);
+
 			if (item.description) {
 				const descDiv = listItem.querySelector('.loot-item-description');
-				if (descDiv) this.#processEntityReferences(descDiv);
+				if (descDiv) this.processEntityReferences(descDiv);
 			}
 
 			list.appendChild(listItem);
 		});
-		lootContainer.appendChild(list);
-		return lootContainer;
+
+		container.appendChild(list);
+		return container;
 	}
 
-	// --- Tooltip Methods ---
+	#getTextNodes(element) {
+		const textNodes = [];
+		const walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT, null, false);
+
+		let node;
+		while ((node = walker.nextNode())) {
+			textNodes.push(node);
+		}
+
+		return textNodes;
+	}
+}
+
+// ===== HELPER: TOOLTIP MANAGER =====
+class StoryHelperTooltip {
+	#tooltipContainer;
+	#customApiData;
+	#apiBaseUrl = 'https://www.dnd5eapi.co/api/2014/';
+	#supportedEntityTypes = [
+		'spell',
+		'monster',
+		'class',
+		'background',
+		'race',
+		'equipment',
+		'magic-item',
+		'feat',
+		'condition',
+		'character',
+		'npc',
+	];
+	#entityEndpoints = {
+		spell: 'spells',
+		monster: 'monsters',
+		class: 'classes',
+		background: 'backgrounds',
+		race: 'races',
+		equipment: 'equipment',
+		'magic-item': 'magic-item',
+		feat: 'feats',
+		condition: 'conditions',
+		character: 'character',
+		npc: 'npc',
+	};
+
+	constructor(customApiData = {}) {
+		this.#customApiData = customApiData || {};
+		this.#createTooltipContainer();
+	}
+
+	getCustomApiData() {
+		return this.#customApiData;
+	}
 
 	#createTooltipContainer() {
-		/* ... remains the same ... */
 		this.#tooltipContainer = document.getElementById('character-tooltip-container');
+
 		if (!this.#tooltipContainer) {
 			this.#tooltipContainer = document.createElement('div');
 			this.#tooltipContainer.id = 'character-tooltip-container';
-			this.#tooltipContainer.className = 'character-tooltip-container'; // Use a more generic name maybe? 'dynamic-tooltip-container'
-			this.#tooltipContainer.style.position = 'absolute'; // Ensure positioning works
-			this.#tooltipContainer.style.zIndex = '1000'; // Keep on top
-			this.#tooltipContainer.style.display = 'none';
+			this.#tooltipContainer.className = 'character-tooltip-container';
+			Object.assign(this.#tooltipContainer.style, {
+				position: 'absolute',
+				zIndex: '1000',
+				display: 'none',
+			});
 			document.body.appendChild(this.#tooltipContainer);
 		}
 	}
 
-	#addCharacterTooltipEvents(element, character) {
-		/* ... remains the same ... */ //
+	addCharacterTooltipEvents(element, character) {
 		element.addEventListener('mouseover', (e) => {
-			// Prevent triggering parent tooltips if nested
 			e.stopPropagation();
 			this.#tooltipContainer.innerHTML = `
-                <div class="character-tooltip">
-                    <div class="tooltip-header">
-                        <img src="${character.icon}" alt="${character.name}" />
-                        <h3>${character.name}</h3>
-
-                   </div>
-                    <div class="tooltip-content">
-                        <div><strong>Race:</strong> ${character.race}</div>
-                        <div><strong>Class:</strong> ${character.class}</div>
-
-              <div><strong>Level:</strong> ${character.level}</div>
-                        ${
-													character.shortDescription
-														? `<div class="tooltip-description tooltip-background">${character.shortDescription}</div>`
-														: ''
-												}
-                    </div>
-                </div>
-            `;
-			this.#positionTooltip(element); // Position and show
+				<div class="character-tooltip">
+					<div class="tooltip-header">
+						<img src="${character.icon}" alt="${character.name}" />
+						<h3>${character.name}</h3>
+					</div>
+					<div class="tooltip-content">
+						<div><strong>Race:</strong> ${character.race}</div>
+						<div><strong>Class:</strong> ${character.class}</div>
+						<div><strong>Level:</strong> ${character.level}</div>
+						${
+							character.shortDescription
+								? `<div class="tooltip-description tooltip-background">${character.shortDescription}</div>`
+								: ''
+						}
+					</div>
+				</div>
+			`;
+			this.#positionTooltip(element);
 		});
 
 		element.addEventListener('mouseout', () => {
@@ -1801,44 +1733,39 @@ class StoryManager {
 		});
 	}
 
-	#addEntityTooltipEvents(element, entityType, entityName) {
+	addEntityTooltipEvents(element, entityType, entityName) {
 		element.classList.add('entity-' + entityType);
 
 		element.addEventListener('mouseover', async (e) => {
-			// Show loading state
 			this.#tooltipContainer.innerHTML = `
 				<div class="entity-tooltip">
-				<div class="tooltip-header">
-					<h3>${entityName}</h3>
-				</div>
-				<div class="tooltip-content">
-					<div>Loading ${entityType} information...</div>
-				</div>
+					<div class="tooltip-header">
+						<h3>${entityName}</h3>
+					</div>
+					<div class="tooltip-content">
+						<div>Loading ${entityType} information...</div>
+					</div>
 				</div>
 			`;
 
-			// Position and show the tooltip
 			this.#tooltipContainer.style.display = 'block';
 			this.#positionTooltip(element);
 
-			// Fetch entity data
 			try {
 				const entityData = await this.#fetchEntityData(entityType, entityName);
 
-				// Update tooltip with fetched data
 				if (entityData) {
 					this.#tooltipContainer.innerHTML = this.#generateEntityTooltipContent(entityType, entityData);
-					// Reposition in case content size changed
 					this.#positionTooltip(element);
 				} else {
 					this.#tooltipContainer.innerHTML = `
 						<div class="entity-tooltip">
-						<div class="tooltip-header">
-							<h3>${entityName}</h3>
-						</div>
-						<div class="tooltip-content">
-							<div>No information found for this ${entityType}.</div>
-						</div>
+							<div class="tooltip-header">
+								<h3>${entityName}</h3>
+							</div>
+							<div class="tooltip-content">
+								<div>No information found for this ${entityType}.</div>
+							</div>
 						</div>
 					`;
 				}
@@ -1846,14 +1773,14 @@ class StoryManager {
 				this.#tooltipContainer.innerHTML = `
 					<div class="entity-tooltip">
 						<div class="tooltip-header">
-						<h3>${entityName}</h3>
+							<h3>${entityName}</h3>
 						</div>
 						<div class="tooltip-content">
-						<div>Error loading information: ${error.message}</div>
+							<div>Error loading information: ${error.message}</div>
 						</div>
 					</div>
-					`;
-				console.error(`Error fetching entity data:`, error);
+				`;
+				console.error('Error fetching entity data:', error);
 			}
 		});
 
@@ -1863,12 +1790,12 @@ class StoryManager {
 	}
 
 	#positionTooltip(element) {
-		/* ... remains the same ... */ //
-		// Make tooltip visible to calculate dimensions, but keep off-screen initially
-		this.#tooltipContainer.style.visibility = 'hidden';
-		this.#tooltipContainer.style.display = 'block';
-		this.#tooltipContainer.style.top = '-9999px';
-		this.#tooltipContainer.style.left = '-9999px';
+		Object.assign(this.#tooltipContainer.style, {
+			visibility: 'hidden',
+			display: 'block',
+			top: '-9999px',
+			left: '-9999px',
+		});
 
 		const elementRect = element.getBoundingClientRect();
 		const tooltipRect = this.#tooltipContainer.getBoundingClientRect();
@@ -1878,52 +1805,38 @@ class StoryManager {
 			scrollX: window.scrollX,
 			scrollY: window.scrollY,
 		};
-		// Calculate available space
+
 		const space = {
-			above: elementRect.top, // Distance from top of element to top of viewport
-			below: viewport.height - elementRect.bottom, // Distance from bottom of element to bottom of viewport
-			left: elementRect.left, // Distance from left of element to left of viewport
-			right: viewport.width - elementRect.right, // Distance from right of element to right of viewport
+			above: elementRect.top,
+			below: viewport.height - elementRect.bottom,
+			left: elementRect.left,
+			right: viewport.width - elementRect.right,
 		};
 
-		// Default position: below, aligned left
 		let position = 'below';
-		let horizontalAlign = 'left'; // 'left', 'right', 'center' (for element)
-		let verticalAlign = 'top'; // 'top', 'bottom', 'center' (for element)
+		let horizontalAlign = 'left';
+		let verticalAlign = 'top';
 
-		// Determine best vertical position
 		if (space.below >= tooltipRect.height) {
 			position = 'below';
 		} else if (space.above >= tooltipRect.height) {
 			position = 'above';
 		} else if (space.right >= tooltipRect.width) {
-			// Try side if below/above don't fit
 			position = 'right';
 		} else if (space.left >= tooltipRect.width) {
 			position = 'left';
-		} // else: stick with 'below' and let overflow logic handle it
+		}
 
-		// Determine horizontal alignment for above/below
 		if (position === 'below' || position === 'above') {
-			if (elementRect.left + tooltipRect.width > viewport.width - 10) {
-				// Check overflow right (10px buffer)
-				horizontalAlign = 'right'; // Align tooltip right edge with element right edge
-			} else {
-				horizontalAlign = 'left'; // Align tooltip left edge with element left edge
-			}
-		}
-		// Determine vertical alignment for left/right
-		if (position === 'left' || position === 'right') {
-			if (elementRect.top + tooltipRect.height > viewport.height - 10) {
-				verticalAlign = 'bottom'; // Align tooltip bottom with element bottom
-			} else {
-				verticalAlign = 'top'; // Align tooltip top with element top
-			}
+			horizontalAlign = elementRect.left + tooltipRect.width > viewport.width - 10 ? 'right' : 'left';
 		}
 
-		// Calculate position coordinates based on elementRect and viewport scroll offset
+		if (position === 'left' || position === 'right') {
+			verticalAlign = elementRect.top + tooltipRect.height > viewport.height - 10 ? 'bottom' : 'top';
+		}
+
+		const buffer = 8;
 		let coords = { top: 0, left: 0 };
-		const buffer = 8; // Small gap between element and tooltip
 
 		switch (position) {
 			case 'below':
@@ -1956,7 +1869,6 @@ class StoryManager {
 				break;
 		}
 
-		// Ensure tooltip stays within viewport bounds (add 10px margin)
 		coords.left = Math.max(
 			viewport.scrollX + 10,
 			Math.min(coords.left, viewport.scrollX + viewport.width - tooltipRect.width - 10)
@@ -1966,32 +1878,28 @@ class StoryManager {
 			Math.min(coords.top, viewport.scrollY + viewport.height - tooltipRect.height - 10)
 		);
 
-		// Apply final position and make visible
-		this.#tooltipContainer.style.top = `${coords.top}px`;
-		this.#tooltipContainer.style.left = `${coords.left}px`;
-		this.#tooltipContainer.style.visibility = 'visible'; // Make visible now that it's positioned
+		Object.assign(this.#tooltipContainer.style, {
+			top: `${coords.top}px`,
+			left: `${coords.left}px`,
+			visibility: 'visible',
+		});
 	}
 
 	async #fetchEntityData(entityType, entityName) {
-		// First check our custom data for locations, guilds, etc
-		if (this.#customApiData[entityType] && this.#customApiData[entityType][entityName]) {
+		if (this.#customApiData[entityType]?.[entityName]) {
 			return this.#customApiData[entityType][entityName];
 		}
 
-		// For standard DND 5e API entities
 		if (this.#supportedEntityTypes.includes(entityType)) {
-			// Format the name for API (lowercase, dashes instead of spaces)
 			const formattedName = entityName.toLowerCase().replace(/\s+/g, '-');
 
 			try {
-				// First, try direct access if we know the exact endpoint
 				const response = await fetch(`${this.#apiBaseUrl}${this.#entityEndpoints[entityType]}/${formattedName}`);
 
 				if (response.ok) {
 					return await response.json();
 				}
 
-				// If direct access fails, try to search
 				const searchResponse = await fetch(
 					`${this.#apiBaseUrl}${this.#entityEndpoints[entityType]}?name=${encodeURIComponent(entityName)}`
 				);
@@ -1999,8 +1907,7 @@ class StoryManager {
 				if (searchResponse.ok) {
 					const searchData = await searchResponse.json();
 
-					// If we have results, fetch the first one
-					if (searchData.results && searchData.results.length > 0) {
+					if (searchData.results?.length > 0) {
 						const detailResponse = await fetch(`${this.#apiBaseUrl}${searchData.results[0].url}`);
 						if (detailResponse.ok) {
 							return await detailResponse.json();
@@ -2008,7 +1915,6 @@ class StoryManager {
 					}
 				}
 
-				// If all attempts fail, return null
 				return null;
 			} catch (error) {
 				console.error(`Error fetching ${entityType} data for ${entityName}:`, error);
@@ -2016,7 +1922,6 @@ class StoryManager {
 			}
 		}
 
-		// Return null for unsupported entity types
 		return null;
 	}
 
@@ -2024,29 +1929,28 @@ class StoryManager {
 		let content = `
 			<div class="entity-tooltip entity-${entityType}-tooltip">
 				<div class="tooltip-header">
-				${entityType === 'character' ? `<img src="${entityData.icon}" alt="${entityData.name}" />` : ''}
-				<h3>${entityData.name || entityData.title || entityData.spellName || 'Unknown'}</h3>
+					${entityType === 'character' ? `<img src="${entityData.icon}" alt="${entityData.name}" />` : ''}
+					<h3>${entityData.name || entityData.title || entityData.spellName || 'Unknown'}</h3>
 				</div>
 				<div class="tooltip-content">
-			`;
+		`;
 
-		// Different formatting based on entity type
 		switch (entityType) {
 			case 'spell':
 				content += `
-				<div><strong>Level:</strong> ${entityData.level || 'Cantrip'}</div>
-				<div><strong>School:</strong> ${
-					entityData.spellClass
-						? entityData.spellClass.charAt(0).toUpperCase() + entityData.spellClass.slice(1)
-						: 'Unknown'
-				}</div>
-				<div><strong>Casting Time:</strong> ${entityData.castingTime || 'N/A'}</div>
-				<div><strong>Range:</strong> ${entityData.range || 'N/A'}</div>
-				<div><strong>Components:</strong> ${entityData.components || 'None'}</div>
-				<div><strong>Duration:</strong> ${entityData.duration || 'Instantaneous'}</div>
-				<div><strong>Classes:</strong> ${entityData.classes?.join(', ') || 'N/A'}</div>
-				<div><strong>Source:</strong> ${entityData.source || 'Unknown'}</div>
-				<div class="tooltip-description tooltip-background">${entityData.description || 'No description available.'}</div>
+					<div><strong>Level:</strong> ${entityData.level || 'Cantrip'}</div>
+					<div><strong>School:</strong> ${
+						entityData.spellClass
+							? entityData.spellClass.charAt(0).toUpperCase() + entityData.spellClass.slice(1)
+							: 'Unknown'
+					}</div>
+					<div><strong>Casting Time:</strong> ${entityData.castingTime || 'N/A'}</div>
+					<div><strong>Range:</strong> ${entityData.range || 'N/A'}</div>
+					<div><strong>Components:</strong> ${entityData.components || 'None'}</div>
+					<div><strong>Duration:</strong> ${entityData.duration || 'Instantaneous'}</div>
+					<div><strong>Classes:</strong> ${entityData.classes?.join(', ') || 'N/A'}</div>
+					<div><strong>Source:</strong> ${entityData.source || 'Unknown'}</div>
+					<div class="tooltip-description tooltip-background">${entityData.description || 'No description available.'}</div>
 				`;
 				break;
 
@@ -2059,45 +1963,34 @@ class StoryManager {
 					<div class="tooltip-description tooltip-background">${
 						entityData.desc || entityData.description || 'No description available.'
 					}</div>
-					`;
+				`;
 				break;
 
 			case 'class':
 				content += `
-					  <div><strong>Hit Die:</strong> d${entityData.hit_die || '?'}</div>
-					  <div><strong>Proficiencies:</strong> ${entityData.proficiencies?.map((p) => p.name).join(', ') || 'None'}</div>
-					  <div><strong>Saves:</strong> ${entityData.saving_throws?.map((s) => s.name).join(', ') || 'None'}</div>
-					  <div><strong>Spellcasting:</strong> ${entityData.spellcasting ? 'Yes' : 'No'}</div>
-					  <div><strong>Subclasses:</strong> ${entityData.subclasses?.map((p) => p.name).join(', ') || 'None'}</div>
-					`;
+					<div><strong>Hit Die:</strong> d${entityData.hit_die || '?'}</div>
+					<div><strong>Proficiencies:</strong> ${entityData.proficiencies?.map((p) => p.name).join(', ') || 'None'}</div>
+					<div><strong>Saves:</strong> ${entityData.saving_throws?.map((s) => s.name).join(', ') || 'None'}</div>
+					<div><strong>Spellcasting:</strong> ${entityData.spellcasting ? 'Yes' : 'No'}</div>
+					<div><strong>Subclasses:</strong> ${entityData.subclasses?.map((p) => p.name).join(', ') || 'None'}</div>
+				`;
 				break;
 
-			case 'subclass':
-				content += `
-					  <div><strong>Subclass Of:</strong> ${entityData.class?.name || 'Unknown'}</div>
-					  <div><strong>Features:</strong> ${entityData.subclass_flavor || 'No flavor text'}</div>
-					  <div class="tooltip-description tooltip-background">${
-							entityData.desc || entityData.description || 'No description available.'
-						}</div>
-					`;
-				break;
 			case 'location':
 			case 'guild':
 			case 'race':
 				content += `
-										${
-											entityData?.metadata
-												? Object.entries(entityData?.metadata)
-														.map(
-															([key, entry]) =>
-																`<div class="tooltip-metadata"><span>${key}</span><span>${entry}</span></div>`
-														)
-														.join('')
-												: ''
-										}
-				<div class="tooltip-description tooltip-background">${entityData.description || 'No description available.'}</div>
+					${
+						entityData?.metadata
+							? Object.entries(entityData.metadata)
+									.map(([key, entry]) => `<div class="tooltip-metadata"><span>${key}</span><span>${entry}</span></div>`)
+									.join('')
+							: ''
+					}
+					<div class="tooltip-description tooltip-background">${entityData.description || 'No description available.'}</div>
 				`;
 				break;
+
 			case 'character':
 				content += `
 					<div><strong>Race:</strong> ${entityData.race || 'Unknown'}</div>
@@ -2106,8 +1999,8 @@ class StoryManager {
 					${
 						entityData?.stats?.abilityScores
 							? '<div class="tooltip-scores-container tooltip-background">' +
-							  Object.entries(entityData?.stats?.abilityScores)
-									?.map(
+							  Object.entries(entityData.stats.abilityScores)
+									.map(
 										([key, entry]) =>
 											`<div class="tooltip-ability"><span class="tooltip-ability-name">${key}</span><span class="tooltip-ability-value">${entry}</span></div>`
 									)
@@ -2116,27 +2009,26 @@ class StoryManager {
 							: ''
 					}
 					<div class="tooltip-description tooltip-background">${entityData.shortDescription || 'No description available.'}</div>
-					`;
+				`;
 				break;
+
 			case 'npc':
 				content += `
-					<div><strong>Class: </strong>${entityData.class || 'Unknown'}</div>
-					<div><strong>Affinity: </strong>${entityData.affinity || 'Unknown'}</div>
-					<div><strong>Role: </strong>${entityData.role || 'Unknown'}</div>
+					<div><strong>Class:</strong> ${entityData.class || 'Unknown'}</div>
+					<div><strong>Affinity:</strong> ${entityData.affinity || 'Unknown'}</div>
+					<div><strong>Role:</strong> ${entityData.role || 'Unknown'}</div>
 				`;
+				break;
+
 			default:
 				content += `
-		  <div class="tooltip-description tooltip-background">${
-				entityData.desc || entityData.description || JSON.stringify(entityData)
-			}</div>
-		`;
+					<div class="tooltip-description tooltip-background">${
+						entityData.desc || entityData.description || JSON.stringify(entityData)
+					}</div>
+				`;
 		}
 
-		content += `
-		</div>
-	  </div>
-	`;
-
+		content += '</div></div>';
 		return content;
 	}
 }
