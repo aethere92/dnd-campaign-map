@@ -13,13 +13,13 @@
 </ul>
 <p><strong>A Chaotic Barrage</strong></p>
 <ul>
-<li>As the battle intensified, <strong>[ENTITY:character:Norr]&rsquo;s Wild Magic</strong> surged uncontrollably, triggering a <strong>Fireball</strong> centered on her position.</li>
+<li>As the battle intensified, <strong>[ENTITY:character:Norr]&rsquo;s Wild Magic</strong> surged uncontrollably, triggering a <strong>[ENTITY:spells:Fireball]</strong> centered on her position.</li>
 <li>The blast severely injured her and [ENTITY:character:Soshi] but incinerated six enemies, devastating the front line.</li>
 <li>The room filled with smoke, ozone, and burnt flesh &mdash; proof of [ENTITY:character:Norr]&rsquo;s raw but volatile strength.</li>
 <li>Enemy archers fired volleys into the chamber, destroying [ENTITY:character:Kaedin]&rsquo;s echo and pelting [ENTITY:character:Olek], though his armor absorbed most hits.</li>
 <li>The main force&mdash;a mix of orcs and disciplined soldiers&mdash;charged the breach, overwhelming [ENTITY:character:Olek] and [ENTITY:character:Kaedin]&rsquo;s defensive line.</li>
 <li>Both were knocked prone by a massive orc&rsquo;s charge.</li>
-<li>[ENTITY:character:Norr] retaliated with <strong>Lightning Bolt</strong>, electrocuting seven orcs in a line.</li>
+<li>[ENTITY:character:Norr] retaliated with <strong>[ENTITY:spells:Lightning Bolt]</strong>, electrocuting seven orcs in a line.</li>
 <li>The bolt also struck one of [ENTITY:character:Soshi]&rsquo;s <strong>magical cats</strong>, which absorbed the energy and gained a temporary shield.</li>
 <li>[ENTITY:character:Soshi] threw two metallic spheres that released <strong>additional spectral cats</strong>, joining the fight.</li>
 <li>From her invisible vantage point, <strong>[ENTITY:character:Bonnie]</strong> loosed an arrow into one of the <strong>dragonkin commanders</strong>, injuring it severely.</li>
@@ -33,7 +33,7 @@
 <li>With a powerful <strong>warhammer strike</strong>, [ENTITY:character:Olek] broke the creature&rsquo;s concentration, freeing the cat.</li>
 <li>The feline immediately leapt back into battle, slashing its former captor under [ENTITY:character:Olek]&rsquo;s command.</li>
 <li>[ENTITY:character:Soshi] directed her cats to harass the archers while launching <strong>acidic blasts</strong> that melted soldier armor.</li>
-<li><strong>[ENTITY:character:Bonnie]</strong>, still under Greater Invisibility, <strong>teleported</strong> behind the second dragonkin leader using her medallion&rsquo;s power, and then continued with her movement.</li>
+<li><strong>[ENTITY:character:Bonnie]</strong>, still under [ENTITY:spells:Greater Invisibility], <strong>teleported</strong> behind the second dragonkin leader using her medallion&rsquo;s power, and then continued with her movement.</li>
 <li>Her <strong>dual strikes</strong> were lethal: the first inflicted massive bleeding, and the second killed one of the shaman&rsquo;s outright, collapsing it onto the stone floor.</li>
 </ul>
 <p><strong>The Artifact&rsquo;s Last Gasp</strong></p>
@@ -65,7 +65,7 @@
 <p><strong>[ENTITY:character:Bonnie] &ndash; The Fall of the Feywild</strong></p>
 <ul>
 <li>Rode her rat familiar, <strong>[ENTITY:npc:Jacques]</strong>, amid a catastrophic Feywild war.</li>
-<li>Saw <strong>Titania</strong> and the <strong>Queen of Air and Darkness</strong> fighting side by side against a lone warrior wielding <strong>energy spears</strong>.</li>
+<li>Saw <strong>Titania</strong> and the <strong>Queen of Air and [ENTITY:spells:Darkness]</strong> fighting side by side against a lone warrior wielding <strong>energy spears</strong>.</li>
 <li>She asked who are they fighting and the queens replied &ldquo;kilgor and his army&rdquo;</li>
 <li>The Fey Courts of Spring and Autumn were annihilated; chromatic dragons decimated the skies.</li>
 <li>The last line of defense was some paladins unknown to her, later revealed at the 9 from Neverwinter.</li>
