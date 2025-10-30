@@ -31,7 +31,7 @@
 <li><strong>Taylas Pelts</strong>: Used to reinforce armor; rare and non-native material.</li>
 <li><strong>Mage Hand</strong>: Used by [ENTITY:character:Bonnie] to prank distracted soldiers.</li>
 <li><strong>Spectral Steed</strong>: Used to carry the party&rsquo;s honey barrel.</li>
-<li><strong>[ENTITY:guild:Arcane Brotherhood]</strong> (also in Sessions 1, 2, 3, 4, 5, 7, 8): Magical organization tied to [ENTITY:character:Soshi], [ENTITY:character:Norr], and Calistra.</li>
+<li><strong>[ENTITY:guild:Arcane Brotherhood]</strong> (also in Sessions 1, 2, 3, 4, 5, 7, 8): Magical organization tied to [ENTITY:character:Soshi], [ENTITY:character:Norr], and Kalistra.</li>
 <li><strong>Red Dragon</strong> (also in Sessions 7, 8): Magical residue and claw marks suggest its involvement in the fortress.</li>
 <li><strong>Abjuration Magic</strong>: Protective magic sensed in the soil around the fortress.</li>
 <li><strong>Renewal Magic</strong>: Felt by [ENTITY:character:Norr] as a sign of life returning to the land.</li>

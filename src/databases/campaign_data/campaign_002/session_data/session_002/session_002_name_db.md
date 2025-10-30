@@ -28,6 +28,6 @@
 <li><strong>Dead Man&rsquo;s Boots</strong>: Magical item last held by Nels Huto.</li>
 <li><strong>Zone of Truth</strong>: Spell used by [ENTITY:character:Olek] to interrogate a hobgoblin.</li>
 <li><strong>Chronomancers of Krynn</strong>: Rumored magical group mentioned by Sertieren.</li>
-<li><strong>Talos</strong>: [ENTITY:character:Kaedin]&rsquo;s missing friend.</li>
+<li><strong>Thalos</strong>: [ENTITY:character:Kaedin]&rsquo;s missing friend.</li>
 <li><strong>[ENTITY:guild:Arcane Brotherhood]</strong>: Magical organization linked to [ENTITY:character:Soshi] and [ENTITY:character:Norr]&rsquo;s past.</li>
 </ul>

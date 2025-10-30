@@ -42,8 +42,8 @@
 <li><strong>Storm Dust</strong>: Sold to Sertieren for gold; potent magical reagent.</li>
 <li><strong>Artus Plura Mushrooms</strong> (also in Session 4): Sold to Sertieren; used in alchemy.</li>
 <li><strong>Sertieren</strong> (also in Sessions 1, 3, 4): Wizard in Drellin&rsquo;s Ferry; identifies potions and buys rare materials.</li>
-<li><strong>Crazy Hogs</strong>: Adventuring party once led by Sertieren and Calistra.</li>
-<li><strong>[ENTITY:guild:Arcane Brotherhood]</strong> (also in Sessions 1, 2, 3, 4, 6, 7, 8): Magical organization tied to [ENTITY:character:Soshi], [ENTITY:character:Norr], and Calistra.</li>
+<li><strong>Crazy Hogs</strong>: Adventuring party once led by Sertieren and Kalistra.</li>
+<li><strong>[ENTITY:guild:Arcane Brotherhood]</strong> (also in Sessions 1, 2, 3, 4, 6, 7, 8): Magical organization tied to [ENTITY:character:Soshi], [ENTITY:character:Norr], and Kalistra.</li>
 <li><strong>Potion of Celerity</strong>: Grants extra movement.</li>
 <li><strong>Demonic Vitality Serum</strong>: Buffs mind and body but risks corruption.</li>
 <li><strong>Hops Potion</strong>: Grants poison immunity but causes explosive dysentery.</li>

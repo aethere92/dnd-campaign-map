@@ -33,5 +33,5 @@
 <li><strong>Dead Man&rsquo;s Boots</strong> (also in Session 1): Magical item tied to Nels Huto.</li>
 <li><strong>[ENTITY:guild:Arcane Brotherhood]</strong> (also in Sessions 1, 3, 4, 5, 6, 7, 8): Magical organization with ties to [ENTITY:character:Soshi] and [ENTITY:character:Norr].</li>
 <li><strong>Chronomancers of Krynn</strong> (also in Session 1): Mentioned by Sertieren as part of magical lore.</li>
-<li><p><strong>[ENTITY:npc:Jacques]</strong> (also in Sessions 3, 5, 7, 8): [ENTITY:character:Bonnie]&rsquo;s rat familiar; causes chaos in the tavern.</p></li>
+<li><strong>[ENTITY:npc:Jacques]</strong> (also in Sessions 3, 5, 7, 8): [ENTITY:character:Bonnie]&rsquo;s rat familiar; causes chaos in the tavern.</li>
 </ul>

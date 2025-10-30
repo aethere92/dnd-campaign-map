@@ -8,7 +8,7 @@
 </ul>
 <p><strong>Location:</strong> Road to Drellin&rsquo;s Ferry, Elsir Vale.<br /><strong>Day:</strong> 4 of travel. Afternoon.</p>
 <p><strong>Travel and Ambush</strong></p>
-<ol>
+<ul>
 <li>Party traveling toward Drellin&rsquo;s Ferry through subtropical forest.</li>
 <li>Encountered abandoned farmhouse in shallow dell; [ENTITY:character:Bonnie] identifies it as potential ambush site.</li>
 <li>Ambushed by a group of hobgoblins:</li>
@@ -30,18 +30,18 @@
 <li>Hobgoblin released and killed by [ENTITY:character:Olek] per promise.</li>
 </ul>
 <li>Party burns three dead travelers&rsquo; bodies to prevent misuse, then carefully extinguishes fire.</li>
-</ol>
+</ul>
 <p><strong>Encounter with Civilians</strong></p>
-<ol>
+<ul>
 <li>Farmer and two sons walk toward the farmhouse:</li>
 <ul>
 <li>[ENTITY:character:Olek] tries to warn them; they panic at his appearance.</li>
 <li>[ENTITY:character:Bonnie] telepathically frightens them (&ldquo;Boo&rdquo;), causing them to flee.</li>
 <li>[ENTITY:character:Bonnie] collects supplies left behind; [ENTITY:character:Olek] returns most items except spoiled wine.</li>
 </ul>
-</ol>
+</ul>
 <p><strong>Arrival at Drellin&rsquo;s Ferry</strong></p>
-<ol>
+<ul>
 <li>Town description: along river, ferryboats replace missing bridge, orchards, fields, five watchtowers.</li>
 <li>Met town guards led by <strong>Sergeant Hersk</strong>:</li>
 <ul>
@@ -52,11 +52,11 @@
 <ul>
 <li><strong>[ENTITY:character:Olek] + [ENTITY:character:Bonnie]</strong> &rarr; Tollhouse (contact Sorana, report ambush).</li>
 <li><strong>[ENTITY:character:Norr] + [ENTITY:character:Soshi]</strong> &rarr; Shrine of Pelor (speak with Brother Denny and druid Avartel).</li>
-<li><strong>[ENTITY:character:Kaedin]</strong> &rarr; Mansion of wizard Sertieren (seek information on Talos and magic).</li>
+<li><strong>[ENTITY:character:Kaedin]</strong> &rarr; Mansion of wizard Sertieren (seek information on Thalos and magic).</li>
 </ul>
-</ol>
+</ul>
 <p><strong>[ENTITY:character:Olek] &amp; [ENTITY:character:Bonnie] at Tollhouse</strong></p>
-<ol>
+<ul>
 <li>Encounter <strong>Sorana</strong>:</li>
 <ul>
 <li>[ENTITY:character:Bonnie] delivers artifact from Rilon Paln.</li>
@@ -69,9 +69,9 @@
 <li>Offer: stop raiders for reward.</li>
 </ul>
 <li>[ENTITY:character:Olek] mounts steed with [ENTITY:character:Bonnie] to reunite with party.</li>
-</ol>
+</ul>
 <p><strong>[ENTITY:character:Norr] &amp; [ENTITY:character:Soshi] at Shrine of Pelor</strong></p>
-<ol>
+<ul>
 <li>Purchase offerings for the shrine (greens and fruits for 5 silver each).</li>
 <li>Meet <strong>Brother Denny</strong> and <strong>Avartel</strong>:</li>
 <ul>
@@ -79,9 +79,9 @@
 <li>Brother Denny accepts offerings; tries to sell wares.</li>
 </ul>
 <li>Depart shrine for meeting point.</li>
-</ol>
+</ul>
 <p><strong>[ENTITY:character:Kaedin] at Sertieren Mansion</strong></p>
-<ol>
+<ul>
 <li>Encounters magical fountain (speaks) and halfling servant.</li>
 <li>Asks wizard <strong>Sertieren</strong> about Talos, disappearances, and magical phenomena:</li>
 <ul>
@@ -90,7 +90,7 @@
 <li>Comments on city defenses and local threats.</li>
 </ul>
 <li>[ENTITY:character:Kaedin] departs mansion; heads to meeting point.</li>
-</ol>
+</ul>
 <p><strong>Key NPCs Introduced</strong></p>
 <ul>
 <li><strong>Sergeant Hersk</strong> &ndash; Town guard, initial contact for newcomers.</li>

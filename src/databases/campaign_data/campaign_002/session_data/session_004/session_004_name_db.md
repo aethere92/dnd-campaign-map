@@ -45,5 +45,5 @@
 <li><strong>Rune Activation</strong>: Used to collapse skeletons in arena and open third corridor.</li>
 <li><strong>Chronomancers of Krynn</strong> (also in Session 1): Mentioned again in magical context.</li>
 <li><strong>[ENTITY:guild:Arcane Brotherhood]</strong> (also in Sessions 1, 2, 4, 5, 6, 7, 8): Magical organization tied to [ENTITY:character:Soshi] and [ENTITY:character:Norr]&rsquo;s past.</li>
-<li><strong>Talos</strong> (also in Session 1): [ENTITY:character:Kaedin]&rsquo;s missing friend.</li>
+<li><strong>Thalos</strong> (also in Session 1): [ENTITY:character:Kaedin]&rsquo;s missing friend.</li>
 </ul>

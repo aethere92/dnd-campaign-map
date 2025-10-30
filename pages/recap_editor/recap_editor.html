@@ -204,7 +204,13 @@
 					const formattedLines = lines.map((line) => {
 						if (!line.trim()) return ''; // Preserve empty lines as paragraph breaks
 
-						if (line.trim().startsWith('[IMAGE:')) {
+						// Skip processing for HTML header elements h2, h3, h4
+						const trimmed = line.trim();
+						if (/^<h(2|3|4)(\s|>)/i.test(trimmed)) {
+							return trimmed; // return as-is, no tagging or paragraph wrapping
+						}
+
+						if (trimmed.startsWith('[IMAGE:')) {
 							return this.convertImageTagToHtml(line);
 						}
 
@@ -413,29 +419,96 @@
 				}
 			}
 
-			// Initialize the formatter with sample entities
+			// Initialize the formatter with entities from campaign_002_api_data.js
 			const formatter = new RecapFormatter({
 				characters: ['Bonnie', 'Kaedin', 'Soshi', 'Norr', 'Olek'],
-				locations: ["Drellin's Ferry", 'Feywilds', 'Brindol', 'Green Apple Inn'],
-				classes: ['Paladin', 'Sorcerer', 'Rogue'],
+				locations: [
+					"Drellin's Ferry",
+					'Feywilds',
+					'Underdark',
+					'Brindol',
+					'Luskan',
+					'Witchwood',
+					'Green Apple Inn',
+					'Shrine of Pelor',
+					"Sertieren's Manor",
+					'Wrath Keep',
+					'Ramashen',
+					"Avarthel's Grove",
+					'Temple',
+					'Bridge',
+					'Lake',
+					'Stone Ring',
+					'Reptilian Path',
+					'Cavern of Horrors',
+					'Old Fort North of the Woods',
+					'Underwater Passage',
+					'Pirate Ship',
+					'Mountain Waterfall',
+					"Leviathan's Hall",
+					'Pelagos',
+					'Lustria',
+					'Penal Colony',
+					'Town Market',
+					'General Store',
+					"Armorer's Forge",
+					'Ruined Fortress',
+					"Mountains near Drellin's Ferry",
+				],
+				classes: ['Paladin', 'Sorcerer', 'Rogue', 'Fighter', 'Druid', 'Assassin', 'Trickster', 'Wizard'],
 				subclasses: ['Echo Knight'],
-				guilds: ['Arcane Brotherhood', 'Winter Rose', 'Thieves Guild'],
+				guilds: [
+					'Arcane Brotherhood',
+					'The Arcane Brotherhood',
+					'Winter Rose',
+					'The Winter Rose',
+					"Thieves' Guild",
+					'Thieves Guild',
+					'Harpers',
+					'The Harpers',
+					'House Corzina',
+					'Arcane Seekers',
+					'Krynn Dynasty',
+				],
 				items: [],
-				races: [],
+				races: ['Earth Genasi'],
 				npc: [
 					'Zella',
 					'Thalos',
 					'Clyde',
 					'Jacques',
-					'Vandal',
+					'Wyrmlord Koth',
 					'Soranna',
-					'Summoner',
+					'Sergeant Hersk',
+					'Brother Denny',
+					'Sertieren',
+					'Nels Huto',
+					'Rilon Paln',
+					'Anya',
 					'Lem',
 					'Kat',
 					'Yoghurt',
-					'Anya',
 					'Avarthel',
+					'Loic',
+					'Vandal',
+					'Summoner',
+					'June Takahashi',
 					'Jareth',
+					'Zaya',
+					'Jaret',
+					'Noro',
+					'Palo',
+					'Captain Bianca Turiados',
+					'Commander Turiados',
+					'Glass',
+					'Marise Curs',
+					'General Ilie',
+					'Bardin Cratcho',
+					'Scoundrel',
+					'Gică',
+					'Mișu',
+					'Tharma',
+					'Kalistra',
 				],
 			});
 			formatter.init('formatter-container');

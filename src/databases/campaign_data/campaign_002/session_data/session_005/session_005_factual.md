@@ -12,9 +12,9 @@
 <li>Suspicion of three harpy spies sent by Kilgor.</li>
 <li>Plans to deliver all creatures to Kilgor to win the &ldquo;Festival of Life.&rdquo;</li>
 <li>Notes about traveling to <strong>Luskan</strong> via pirates, leaving treasure behind at &ldquo;the old fort north of the woods.&rdquo;</li>
-<li>Signed by <strong>Calistra of the Brotherhood.</strong><strong><br /></strong></li>
+<li>Signed by <strong>Kalistra of the Brotherhood.</strong><strong><br /></strong></li>
 </ul>
-<li>[ENTITY:character:Norr] recognized Calistra as her former teacher&mdash;an alteration specialist known for &ldquo;mind spiking&rdquo; students. She left the Brotherhood 10 years prior.</li>
+<li>[ENTITY:character:Norr] recognized Kalistra as her former teacher&mdash;an alteration specialist known for &ldquo;mind spiking&rdquo; students. She left the Brotherhood 10 years prior.</li>
 <li>Attempting to read the obscured text revealed an <strong>illusion script ward</strong>, potentially harmful to bypass. [ENTITY:character:Norr] chose not to risk it.</li>
 </ul>
 <p><strong>Giant Mosquitoes and Glowing Crystals</strong></p>
@@ -28,7 +28,7 @@
 <ul>
 <li>The party traveled deeper, encountering massive sloth-bear-like creatures&mdash;<strong>Megatherium</strong>&mdash;roughly 8 feet tall.</li>
 <li>[ENTITY:character:Olek]&rsquo;s Divine Sense confirmed they were natural, not fiendish.</li>
-<li>[ENTITY:character:Norr] identified them (taking 3 psychic damage from a &ldquo;mind spike&rdquo; flashback to Calistra&rsquo;s lessons).</li>
+<li>[ENTITY:character:Norr] identified them (taking 3 psychic damage from a &ldquo;mind spike&rdquo; flashback to Kalistra&rsquo;s lessons).</li>
 <li>Megatherium traits: prehistoric, crossbred beasts resistant to fear/stun, primarily herbivorous but drawn to insect prey.</li>
 <li>Noted <strong>Broken Shackle Tribe</strong> markings&mdash;creatures likely tamed by orcs in the past.</li>
 <li>[ENTITY:character:Bonnie] successfully befriended two Megatherium, naming them <strong>Gică</strong> and <strong>Mișu.</strong><strong><br /></strong></li>

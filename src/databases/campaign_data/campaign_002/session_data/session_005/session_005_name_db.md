@@ -1,6 +1,6 @@
 <p><strong>🧑&zwj;🤝&zwj;🧑 Characters &amp; NPCs</strong></p>
 <ul>
-<li><strong>Calistra</strong> (also in Sessions 5, 7): Former teacher of [ENTITY:character:Norr] from the [ENTITY:guild:Arcane Brotherhood]; author of the ledger found in the cavern, involved in dark rituals.</li>
+<li><strong>Kalistra</strong> (also in Sessions 5, 7): Former teacher of [ENTITY:character:Norr] from the [ENTITY:guild:Arcane Brotherhood]; author of the ledger found in the cavern, involved in dark rituals.</li>
 <li><strong>Kilgor</strong> (also in Sessions 5, 7): Mysterious figure collecting combatants for the Festival of Life; suspected of sending harpy spies.</li>
 <li><strong>Loic</strong> (also in Session 3): Phoenix residing in [ENTITY:npc:Avarthel]&rsquo;s grove; heals [ENTITY:npc:Anya].</li>
 <li><strong>Gică</strong> (also in Session 5): Megatherium befriended by [ENTITY:character:Bonnie]; helps the party navigate the caves.</li>
@@ -14,8 +14,8 @@
 <p><strong>🏞️ Places</strong></p>
 <ul>
 <li><strong>Cavern of Horrors</strong>: Underground chamber filled with cages, skulls, and ritual remnants.</li>
-<li><strong>Old Fort North of the Woods</strong> (also in Session 5): Location mentioned in Calistra&rsquo;s ledger as a treasure site.</li>
-<li><strong>Luskan</strong> (also in Sessions 2, 5): City referenced in Calistra&rsquo;s plans to escape via pirates.</li>
+<li><strong>Old Fort North of the Woods</strong> (also in Session 5): Location mentioned in Kalistra&rsquo;s ledger as a treasure site.</li>
+<li><strong>Luskan</strong> (also in Sessions 2, 5): City referenced in Kalistra&rsquo;s plans to escape via pirates.</li>
 <li><strong>[ENTITY:npc:Avarthel]&rsquo;s Grove</strong> (also in Sessions 3, 5): Magical grove near the Feywild; healing site.</li>
 <li><strong>Temple</strong> (also in Session 3): Submerged structure connected to cave system.</li>
 <li><strong>Underwater Passage</strong>: Tunnel leading from the Megatherium chamber to a shipwreck.</li>
