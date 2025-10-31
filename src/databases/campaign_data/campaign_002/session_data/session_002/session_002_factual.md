@@ -1,418 +1,166 @@
-<div>
+
 <h3><strong>I. Session Overview</strong></h3>
 <ul>
-  <li style="font-weight: 400">
-    <strong>Session Number:</strong>
-    <span style="font-weight: 400">1</span>
-  </li>
-  <li style="font-weight: 400">
-    <strong>In-Game Date/Time:</strong>
-    <span style="font-weight: 400">Afternoon of Day 4 to Dusk of Day 4.</span>
-  </li>
-  <li style="font-weight: 400">
-    <strong>Location(s) Explored:</strong>
-    <span style="font-weight: 400">
-      Road to Drellin's Ferry (Ambush Site/Farmhouse), Drellin's Ferry (Tollhouse, Market, Shrine of Pelor, Sertieren's Manor).
-    </span>
-  </li>
-  <li style="font-weight: 400">
-    <strong>The Big Headline:</strong>
-    <span style="font-weight: 400">The party was ambushed by Hobgoblin raiders just outside</span>
-    <strong>Drellin's Ferry</strong>
-    <span style="font-weight: 400">
-      , revealing the local threat is organized and led by a 'Wyrmlord Koth' who is preparing for a 'Day of Ruin.' After reaching the city and
-      splitting up, the group made contact with local authorities and gathered information pointing to a necromancer, a ruined fortress, and powerful
-      magic all within the nearby Witchwood.
-    </span>
-  </li>
+<li>
+<p><strong>Session Number:</strong> 1</p>
+</li>
+<li>
+<p><strong>In-Game Date/Time:</strong> Day 4 of travel, from afternoon until dusk.</p>
+</li>
+<li>
+<p><strong>Location(s) Explored:</strong> The road to Drellin's Ferry, an abandoned farmhouse, the town of Drellin's Ferry.</p>
+</li>
+<li>
+<p><strong>The Big Headline:</strong> Ambushed by hobgoblins on the road, the party arrives in Drellin's Ferry and begins investigating local threats and personal quests.</p>
+</li>
 </ul>
+
 <h3><strong>II. Narrative Summary (The Bullet Points)</strong></h3>
+
 <ul>
-  <li style="font-weight: 400">
-    <strong>The Ambush:</strong>
-    <span style="font-weight: 400">The party, weary after four days of travel, was ambushed by a large group of</span>
-    <strong>Hobgoblin Raiders</strong>
-    <span style="font-weight: 400">outside Drellin's Ferry, near a derelict farmhouse.</span>
-  </li>
-  <li style="font-weight: 400">
-    <strong>Teamwork Triumph:</strong>
-    <span style="font-weight: 400">The group displayed</span>
-    <strong>flawless teamwork</strong>
-    <span style="font-weight: 400">, culminating in a powerful combination attack that instantly defeated the enemy captain (</span>
-    <strong>Norr's Lightning + Soshi's Fire + Kaedin's Echo + Olek's Club + Bonnie's Dagger</strong>
-    <span style="font-weight: 400">).</span>
-  </li>
-  <li style="font-weight: 400">
-    <strong>The Prisoner:</strong>
-    <span style="font-weight: 400">They spared a single hobgoblin to interrogate, finding three dead travelers in the nearby farmhouse.</span>
-  </li>
-  <li style="font-weight: 400">
-    <strong>The Interrogation:</strong>
-  </li>
-  <ul>
-    <li><strong>Olek</strong>
-    <span style="font-weight: 400">cast</span>
-    <em><span style="font-weight: 400">Zone of Truth.</span></em>
-    <strong>Bonnie's</strong>
-    <span style="font-weight: 400">
-      attempts to threaten the captive failed, but he eventually agreed to answer three questions in exchange for a swift death from the Paladin.
-    </span></li>
-    <li style="font-weight: 400">
-      <span style="font-weight: 400">The captive revealed the leader is</span>
-      <strong>Wyrmlord Koth, a mighty sorcerer</strong>
-      <span style="font-weight: 400">, gathering tribes for</span>
-      <strong>"the Day of Ruin."</strong>
-    </li>
-    <li style="font-weight: 400">
-      <span style="font-weight: 400">He gave no clear location. He recognized a strange symbol:</span>
-      <strong>a sun with a red hand</strong>
-      <span style="font-weight: 400">(from the dead travelers' belongings), but gave no information on it.</span>
-    </li>
-  </ul>
-  <li style="font-weight: 400">
-    <strong>The Promise:</strong>
-    <span style="font-weight: 400">Olek fulfilled his oath to the hobgoblin, prioritizing his word to his god (</span>
-    <strong>Helm</strong>
-    <span style="font-weight: 400">) over the group's desire for more information in town.</span>
-  </li>
-  <li style="font-weight: 400">
-    <strong>Aftermath:</strong>
-    <span style="font-weight: 400">
-      The party burned the dead (at Bonnie's request) and spent an hour carefully extinguishing the fire before proceeding covertly toward Drellin's
-      Ferry.
-    </span>
-  </li>
-  <li style="font-weight: 400">
-    <strong>Comedic Relief:</strong>
-    <strong>Olek</strong>
-    <span style="font-weight: 400">attempted to warn a farmer and his two sons, but his</span>
-    <strong>Aasimar appearance</strong>
-    <span style="font-weight: 400">(wings, glow) terrified them.</span>
-    <strong>Bonnie</strong>
-    <span style="font-weight: 400">amplified the fear with a telepathic "Boo," causing them to abandon their cart.</span>
-    <strong>Bonnie</strong>
-    <span style="font-weight: 400">covertly looted the good wine and supplies before</span>
-    <strong>Olek</strong>
-    <span style="font-weight: 400">, burdened by guilt, returned the rest to the cart.</span>
-  </li>
-  <li style="font-weight: 400">
-    <strong>Arrival:</strong>
-    <span style="font-weight: 400">They reached Drellin's Ferry and spoke with</span>
-    <strong>Sergeant Hersk</strong>
-    <span style="font-weight: 400">, who confirmed recent attacks and warned them about the</span>
-    <strong>Witchwood</strong>
-    <span style="font-weight: 400">.</span>
-  </li>
-</ul>
-<h4><strong>Party Split: Olek &amp; Bonnie (The Tollhouse)</strong></h4>
+<li>
+<p>While traveling to Drellin's Ferry, the party was ambushed by hobgoblins at a ruined farmhouse.</p>
+</li>
+<li>
+<p>They fought off the attackers with impressive teamwork, defeating a hobgoblin captain through a combined assault from Norr, Soshi, Kaedin, Olek, and Bonnie.</p>
+</li>
+<li>
+<p>One hobgoblin was captured and interrogated. Under a <em>Zone of Truth</em>, he revealed the name of his leader, "Wyrmlord Koth," and a plan called the "Day of Ruin" in exchange for a swift death, a promise Olek fulfilled.</p>
+</li>
+<li>
+<p>Among the belongings of three dead travelers found at the site, the party discovered a strange symbol: a sun with a red hand.</p>
+</li>
+<li>
+<p>Continuing towards town, Olek attempted to warn a farmer and his sons of the danger, but his aasimar appearance terrified them. Bonnie&rsquo;s telepathic "Boo" sent the family fleeing, abandoning their cart, from which she pilfered some wine.</p>
+</li>
+<li>
+<p>The party arrived at Drellin's Ferry, a town with five new watchtowers. They spoke with Sergeant Hersk, who confirmed other recent raider attacks.</p>
+</li>
+<li>
+<p>The party split up to pursue individual leads:</p>
 <ul>
-  <li style="font-weight: 400">
-    <strong>Distraction:</strong>
-    <span style="font-weight: 400">Olek and Bonnie were swarmed by children; Bonnie created</span>
-    <strong>illusory fairies</strong>
-    <span style="font-weight: 400">, and Olek gave them a ride on his</span>
-    <strong>Floating Disk</strong>
-    <span style="font-weight: 400">.</span>
-  </li>
-  <li style="font-weight: 400">
-    <strong>The Complaint:</strong>
-    <span style="font-weight: 400">A sad boy asked Olek to help his mother, who was being abused by her husband.</span>
-  </li>
-  <li style="font-weight: 400">
-    <strong>The Healing:</strong>
-    <span style="font-weight: 400">Olek healed the mother's bruise but could not get her to confess the abuse.</span>
-    <strong>Bonnie</strong>
-    <span style="font-weight: 400">was caught attempting to slip the boy a</span>
-    <strong>small dagger</strong>
-    <span style="font-weight: 400">for protection. They agreed to return the next day.</span>
-  </li>
-  <li style="font-weight: 400">
-    <strong>Soranna &amp; Norro:</strong>
-    <span style="font-weight: 400">They met</span>
-    <strong>Guard Captain Soranna</strong>
-    <span style="font-weight: 400">and Council Member</span>
-    <strong>Norro</strong>
-    <span style="font-weight: 400">at the Tollhouse.</span>
-  </li>
-  <ul>
-    <li style="font-weight: 400">
-      <strong>Secret Package:</strong>
-      <span style="font-weight: 400">Bonnie delivered a package to Soranna from</span>
-      <strong>Rilon Paln</strong>
-      <span style="font-weight: 400">(secret contact). The artifact inside opened, revealing a first quest objective: find the</span>
-      <strong>Dead Man's Boots</strong>
-      <span style="font-weight: 400">.</span>
-    </li>
-    <li style="font-weight: 400">
-      <strong>The Boots</strong>
-      <span style="font-weight: 400">were last seen with a necromancer named</span>
-      <strong>Nels Huto</strong>
-      <span style="font-weight: 400">, who went to a fortress deep in the Witchwood two weeks ago.</span>
-    </li>
-    <li style="font-weight: 400">
-      <strong>Raid Intel:</strong>
-      <span style="font-weight: 400">Olek and Bonnie shared their intel on the hobgoblins and</span>
-      <strong>Wyrmlord Koth</strong>
-      <span style="font-weight: 400">. Soranna and Norro confirmed Koth is only a</span>
-      <strong>Captain</strong>
-      <span style="font-weight: 400">and offered the party a deal: stop the raiders for a</span>
-      <strong>reward</strong>
-      <span style="font-weight: 400">.</span>
-    </li>
-  </ul>
+<li>
+<p>Olek and Bonnie encountered a young boy who asked for help for his abused mother. They met the mother, Olek healed her, and they promised to return the next day to confront the father.</p>
+</li>
+<li>
+<p>At the tollhouse, Bonnie secretly delivered a package to Captain Soranna, receiving a quest to find an artifact called the Dead Man's Boots. They also spoke with an elder, Norro, about the raider threat and were hired to help protect the town.</p>
+</li>
+<li>
+<p>Norr and Soshi visited the Shrine of Pelor. They met the eccentric Brother Denny and a helpful druid, Avarthel, who told them of a cursed fortress called Wrath Keep, guarded by skeletons, located near the lake on their map.</p>
+</li>
+<li>
+<p>Kaedin visited the wizard Sertieren to ask about his missing person, Thalos. Sertieren spoke of the Chronomancers of Krynn and a magical nexus deep within the Witchwood.</p>
+</li>
 </ul>
-<h4><strong>Party Split: Norr &amp; Soshi (The Shrine)</strong></h4>
-<ul>
-  <li style="font-weight: 400">
-    <strong>The Market:</strong>
-    <span style="font-weight: 400">Norr and Soshi were</span>
-    <strong>swindled</strong>
-    <span style="font-weight: 400">
-      by a clever old lady, paying 5sp for a handful of greens, the same price a young girl charged for a kilogram of fruit.
-    </span>
-  </li>
-  <li style="font-weight: 400">
-    <strong>The Shrine:</strong>
-    <span style="font-weight: 400">They met</span>
-    <strong>Brother Denny</strong>
-    <span style="font-weight: 400">(a priest interested in confessions/sales) and the druid</span>
-    <strong>Avarthel</strong>
-    <span style="font-weight: 400">.</span>
-  </li>
-  <ul>
-    <li style="font-weight: 400">
-      <strong>The Confession:</strong>
-      <span style="font-weight: 400">Brother Denny awkwardly attempted to solicit a confession from</span>
-      <strong>Norr</strong>
-      <span style="font-weight: 400">, which</span>
-      <strong>Soshi</strong>
-      <span style="font-weight: 400">interrupted by offering their produce.</span>
-    </li>
-    <li style="font-weight: 400">
-      <strong>Avarthel's Intel:</strong>
-      <span style="font-weight: 400">The druid spoke of a</span>
-      <strong>cursed lake and a fortress</strong>
-      <span style="font-weight: 400">deep in the Witchwood called</span>
-      <strong>Wrath Keep</strong>
-      <span style="font-weight: 400">, where</span>
-      <strong>skeletons</strong>
-      <span style="font-weight: 400">have been seen guarding the area.</span>
-    </li>
-  </ul>
+</li>
+<li>
+<p>As dusk fell, the separated party members began making their way to a pre-arranged meeting point.</p>
+</li>
 </ul>
-<h4><strong>Party Split: Kaedin (Sertieren's Manor)</strong></h4>
-<ul>
-  <li style="font-weight: 400">
-    <strong>The Wizard:</strong>
-    <span style="font-weight: 400">Kaedin visited the mysterious wizard</span>
-    <strong>Sertieren</strong>
-    <span style="font-weight: 400">in his crumbling manor.</span>
-  </li>
-  <li style="font-weight: 400">
-    <strong>The Talking Fountain:</strong>
-    <span style="font-weight: 400">Kaedin was greeted by a</span>
-    <strong>talking fountain</strong>
-    <span style="font-weight: 400">and offered a drink.</span>
-  </li>
-  <li style="font-weight: 400">
-    <strong>Wizard's Ramblings:</strong>
-    <span style="font-weight: 400">Sertieren spoke of</span>
-    <strong>odd vanishings</strong>
-    <span style="font-weight: 400">, rumors of the</span>
-    <strong>Chronomancers of Krynn</strong>
-    <span style="font-weight: 400">, and a</span>
-    <strong>magical nexus</strong>
-    <span style="font-weight: 400">deep in the Witchwood. He also complained about being ignored regarding the town's defenses.</span>
-  </li>
-</ul>
+
 <h3><strong>III. Quest &amp; Objective Tracker</strong></h3>
 <div class="quest-container">
-    <table class="quest-table">
-        <thead>
-            <tr>
-                <th>
-                    Quest
-                </th>
-                <th>
-                    Last Progressed Session
-                </th>
-                <th>
-                    Status
-                </th>
-            <tbody>
-        </thead>
-        </tr>
-        <tr>
-        <td>
-            <strong>Stop the Raiders</strong>
-            <span style="font-weight: 400">(Local Threat)</span>
-        </td>
-        <td>
-            <p><span style="font-weight: 400">1</span></p>
-        </td>
-        <td>
-            <span style="font-weight: 400">New: Major threat identified (Wyrmlord Koth). Base is likely in the Witchwood. Offered a</span>
-            <strong>Reward</strong>
-            <span style="font-weight: 400">by Norro/Soranna.</span>
-        </td>
-        </tr>
-        <tr>
-        <td>
-            <strong>Find Thalos</strong>
-            <span style="font-weight: 400">(Kaedin's Brother)</span>
-        </td>
-        <td>
-            <span style="font-weight: 400">1</span>
-        </td>
-        <td>
-            <span style="font-weight: 400">Active: Gathered rumors on vanishings, Chronomancers, and a magical nexus in the Witchwood.</span>
-        </td>
-        </tr>
-        <tr>
-        <td>
-            <strong>Dead Man's Boots</strong>
-        </td>
-        <td>
-            <span style="font-weight: 400">1</span>
-        </td>
-        <td>
-            <span style="font-weight: 400">New: Objective acquired from Soranna/Rilon Paln. Item is with</span>
-            <strong>Necromancer Nels Huto</strong>
-            <span style="font-weight: 400">at a fortress in the Witchwood.</span>
-        </td>
-        </tr>
-        <tr>
-        <td>
-           <span style="font-weight: 400">The Abused Mother</span>
-        </td>
-        <td>
-            <span style="font-weight: 400">1</span>
-        </td>
-        <td>
-            <span style="font-weight: 400">Active: Olek and Bonnie agreed to return tomorrow to confront the father.</span>
-        </td>
-        </tr>
-        <tr>
-        <td>
-            <span style="font-weight: 400">Mysterious Symbol</span>
-        </td>
-        <td>
-            <span style="font-weight: 400">1</span>
-        </td>
-        <td>
-            <span style="font-weight: 400">New: Hobgoblin recognized the symbol (Sun with Red Hand) but provided no information.</span>
-        </td>
-        </tr>
-        <tr>
-        <td>
-            <span style="font-weight: 400">Find the Treasure (Lake)</span>
-        </td>
-        <td>
-            <span style="font-weight: 400">1</span>
-        </td>
-        <td>
-            
-            <span style="font-weight: 400">Progressed: Lake is near the fortress</span>
-            <strong>Wrath Keep</strong>
-            <span style="font-weight: 400">in the Witchwood (Avarthel's Intel).</span>
-            
-        </td>
-        </tr>
-    </tbody>
-    </table>
+<table class="quest-table">
+<thead>
+<tr style="height: 13px;">
+<td style="height: 13px;"><strong>Quest Name</strong></td>
+<td style="height: 13px;"><strong>Session</strong></td>
+<td style="height: 13px;"><strong>Status</strong></td>
+</tr>
+</thead>
+<tbody>
+<tr style="height: 26px;">
+<td style="height: 26px;">The Raider Threat</td>
+<td style="height: 26px;">1</td>
+<td style="height: 26px;"><strong>New:</strong> Accepted a job from Soranna and Norro to stop the raiders plaguing Drellin's Ferry. Learned of a leader, Wyrmlord Koth, and a "Day of Ruin." Base is likely in the Witchwood.</td>
+</tr>
+<tr style="height: 26px;">
+<td style="height: 26px;">Dead Man's Boots</td>
+<td style="height: 26px;">1</td>
+<td style="height: 26px;"><strong>New:</strong> Bonnie delivered a package to Soranna. In return, she received the first part of a quest: find the Dead Man's Boots, last held by a necromancer named Nels Huto, who vanished near a fortress in the Witchwood.</td>
+</tr>
+<tr style="height: 26px;">
+<td style="height: 26px;">Find Thalos</td>
+<td style="height: 26px;">1</td>
+<td style="height: 26px;"><strong>Updated:</strong> Kaedin spoke with the wizard Sertieren. Learned of the Chronomancers of Krynn and a possible magical nexus in the Witchwood, but no concrete leads.</td>
+</tr>
+<tr style="height: 26px;">
+<td style="height: 26px;">The Lakeside Treasure</td>
+<td style="height: 26px;">1</td>
+<td style="height: 26px;"><strong>Updated:</strong> Norr and Soshi learned from the druid Avarthel that the lake on their map is near a blighted, cursed fortress named Wrath Keep, which is guarded by skeletons.</td>
+</tr>
+<tr style="height: 13.4375px;">
+<td style="height: 13.4375px;">A Mother's Pain</td>
+<td style="height: 13.4375px;">1</td>
+<td style="height: 13.4375px;"><strong>New:</strong> Met a young boy and his abused mother. Olek healed the mother's visible injuries. The party promised to return the next day to confront the father.</td>
+</tr>
+</tbody>
+</table>
 </div>
+
 <h3><strong>IV. Key People &amp; Factions</strong></h3>
+
 <p><strong>New NPCs Introduced</strong></p>
 <ul>
-  <li style="font-weight: 400">
-    <strong>Wyrmlord Koth:</strong>
-    <span style="font-weight: 400">Hobgoblin Captain/Sorcerer, leader of the local raiders, preparing for the "Day of Ruin."</span>
-  </li>
-  <li style="font-weight: 400">
-    <strong>Sergeant Hersk:</strong>
-    <span style="font-weight: 400">Wary guard at the entrance to Drellin's Ferry.</span>
-  </li>
-  <li style="font-weight: 400">
-    <strong>Captain Soranna:</strong>
-    <span style="font-weight: 400">Young, stony-faced Guard Captain; secretly a contact of Bonnie's faction.</span>
-  </li>
-  <li style="font-weight: 400">
-    <strong>Norro:</strong>
-    <span style="font-weight: 400">Bald, bushy-bearded Council Member offering a reward to stop the raiders.</span>
-  </li>
-  <li style="font-weight: 400">
-    <strong>Brother Denny:</strong>
-    <span style="font-weight: 400">Priest at the Shrine of Pelor, more interested in confessions and selling wares.</span>
-  </li>
-  <li style="font-weight: 400">
-    <strong>Avarthel:</strong>
-    <span style="font-weight: 400">Kind druid who shared intel on Wrath Keep.</span>
-  </li>
-  <li style="font-weight: 400">
-    <strong>Sertieren:</strong>
-    <span style="font-weight: 400">Rambling wizard in the manor, obsessed with Chronomancers and local defenses.</span>
-  </li>
-  <li style="font-weight: 400">
-    <strong>Nels Huto:</strong>
-    <span style="font-weight: 400">Necromancer last seen heading to the fortress with the</span>
-    <strong>Dead Man's Boots</strong>
-    <span style="font-weight: 400">.</span>
-  </li>
+<li>
+<p><strong>Sergeant Hersk:</strong> A town guard at the entrance to Drellin's Ferry.</p>
+</li>
+<li>
+<p><strong>Soranna:</strong> The stony-faced Captain of the Drellin's Ferry guard.</p>
+</li>
+<li>
+<p><strong>Norro:</strong> A bald, well-dressed town elder concerned with the raider attacks.</p>
+</li>
+<li>
+<p><strong>Brother Denny:</strong> An overly enthusiastic priest at the Shrine of Pelor with a keen interest in gold offerings.</p>
+</li>
+<li>
+<p><strong>Avarthel:</strong> A kind and knowledgeable druid residing at the Shrine of Pelor.</p>
+</li>
+<li>
+<p><strong>Sertieren:</strong> An old, eccentric, and rambling wizard living in a magic-infused mansion.</p>
+</li>
+<li>
+<p><strong>Wyrmlord Koth:</strong> A hobgoblin sorcerer and captain gathering tribes for the "Day of Ruin."</p>
+</li>
+<li>
+<p><strong>Nels Huto:</strong> A necromancer who was the last known owner of the Dead Man's Boots.</p>
+</li>
 </ul>
-<p><strong>Factions Engaged</strong></p>
+<p><strong>Factions Engaged or Updated</strong></p>
 <ul>
-  <li style="font-weight: 400">
-    <strong>Hobgoblin Raiders:</strong>
-    <span style="font-weight: 400">Confirmed to be organized under a leadership structure (Wyrmlord Koth as a Captain).</span>
-  </li>
-  <li style="font-weight: 400">
-    <strong>Bonnie's Faction (Rilon Paln's Contact):</strong>
-    <span style="font-weight: 400">Active in Drellin's Ferry, providing a secret mission.</span>
-  </li>
+<li>
+<p><strong>Hobgoblin Raiders:</strong> An organized military force gathering in the region. They are led by captains like Wyrmlord Koth and are planning a major event called the "Day of Ruin." Their base is likely located somewhere in the Witchwood.</p>
+</li>
 </ul>
+
 <h3><strong>V. Important Discoveries &amp; Loot</strong></h3>
+
 <p><strong>Plot Discoveries</strong></p>
 <ul>
-  <li style="font-weight: 400">
-    <strong>Local Threat Defined:</strong>
-    <span style="font-weight: 400">Raiders are led by</span>
-    <strong>Wyrmlord Koth</strong>
-    <span style="font-weight: 400">for a coming event, "The Day of Ruin."</span>
-  </li>
-  <li style="font-weight: 400">
-    <strong>Primary Location:</strong>
-    <span style="font-weight: 400">The</span>
-    <strong>Witchwood</strong>
-    <span style="font-weight: 400">
-      is the source of all current threats: Raider Base, Necromancer, Cursed Lake/Fortress (Wrath Keep), and Magical Nexus.
-    </span>
-  </li>
-  <li style="font-weight: 400">
-    <strong>New Objective Item:</strong>
-    <span style="font-weight: 400">The</span>
-    <strong>Dead Man's Boots</strong>
-    <span style="font-weight: 400">are needed for Bonnie's secret quest.</span>
-  </li>
-  <li style="font-weight: 400">
-    <strong>Intelligence Leak:</strong>
-    <span style="font-weight: 400">
-      The fact that the raiders were ambushing a specific point on the road suggests a degree of tactical awareness or intelligence gathering.
-    </span>
-  </li>
+<li>
+<p>Hobgoblin tribes are uniting under a leader for an event called the "Day of Ruin."</p>
+</li>
+<li>
+<p>The hobgoblin forces are led by captains, one of whom is a powerful sorcerer named Wyrmlord Koth.</p>
+</li>
+<li>
+<p>The dead travelers found at the ambush site carried a symbol of a sun with a red hand painted in its center, which the hobgoblin captive reacted to.</p>
+</li>
+<li>
+<p>The Witchwood is a place of great danger, reputedly containing a cursed fortress (Wrath Keep), a magical nexus, and the main raider base.</p>
+</li>
+<li>
+<p>Drellin's Ferry's defenses are weak, consisting mostly of conscripted farmers.</p>
+</li>
 </ul>
 <p><strong>Key Items/Loot Acquired</strong></p>
 <ul>
-  <li style="font-weight: 400">
-    <strong>Wine &amp; Supplies:</strong>
-    <span style="font-weight: 400">Secretly "commandeered" by Bonnie from the abandoned farmer's cart (wine kept).</span>
-  </li>
-  <li style="font-weight: 400">
-    <strong>Symbol of the Sun with Red Hand:</strong>
-    <span style="font-weight: 400">Found on the dead travelers; recognized by the hobgoblin.</span>
-  </li>
-  <li style="font-weight: 400">
-    <strong>Reward Deal:</strong>
-    <span style="font-weight: 400">A promise of payment/reward from Norro for combating the raiders.</span>
-  </li>
+<li>
+<p><strong>Poorly made wine:</strong> Looted by Bonnie from an abandoned cart.</p>
+</li>
+<li>
+<p><strong>Strange Symbol:</strong> An illustration or description of the sun symbol with a red hand, found on the bodies of dead travelers.</p>
+</li>
 </ul>
 </div>

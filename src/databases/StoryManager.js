@@ -67,7 +67,7 @@ class StoryHelperContent {
 		const temp = document.createElement('div');
 		temp.innerHTML = `<h3 id="short-summary">Session Recap: Quick-Reference Log</h3>${await this.#fetchAndParseMd(
 			session.factual_recap
-		)}${await this.#fetchAndParseMd(session.name_db)}`;
+		)}${session.name_db ? await this.#fetchAndParseMd(session.name_db) : ''}`;
 		this.#placeholderProcessor.processAll(temp, session);
 
 		recap.appendChild(temp);
