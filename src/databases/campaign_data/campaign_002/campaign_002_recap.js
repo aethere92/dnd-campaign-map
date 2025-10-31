@@ -77,7 +77,7 @@ const CAMPAIGN_002_RECAPS = [
 	{
 		id: 'session-005',
 		title: '04 - Echoes of the Arena',
-		date: 'Jul 8th',
+		date: 'Jun 15th',
 		content: 'session_data/session_005/session_005_content.md',
 		recap: 'session_data/session_005/session_005_recap.md',
 		factual_recap: 'session_data/session_005/session_005_factual.md',
@@ -101,7 +101,7 @@ const CAMPAIGN_002_RECAPS = [
 	{
 		id: 'session-007',
 		title: '06 - The Ruined Fortress',
-		date: 'Jul 8th',
+		date: 'Jul 26th',
 		content: 'session_data/session_007/session_007_content.md',
 		recap: 'session_data/session_007/session_007_recap.md',
 		factual_recap: 'session_data/session_007/session_007_factual.md',
@@ -113,7 +113,7 @@ const CAMPAIGN_002_RECAPS = [
 	{
 		id: 'session-008',
 		title: '07 - Assault on the Fortress',
-		date: 'Aug 4th',
+		date: 'Sep 20th',
 		content: 'session_data/session_008/session_008_content.md',
 		recap: 'session_data/session_008/session_008_recap.md',
 		factual_recap: 'session_data/session_008/session_008_factual.md',
