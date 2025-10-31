@@ -102,7 +102,7 @@ const CAMPAIGN_002_API_DATA = {
 		},
 		'Penal Colony': {
 			name: 'Penal Colony',
-			description: "Where Bianca's pirate crew were enslaved before being freed by General Ilie.",
+			description: "Where Bianca's pirate crew were enslaved before being freed by General Lee.",
 		},
 		'Blighted Fortress': {
 			name: 'Blighted Fortress',
@@ -424,10 +424,10 @@ const CAMPAIGN_002_API_DATA = {
 			affinity: "Leviathan's Hall",
 			class: 'Pirate',
 			role: 'Crewman',
-			description: 'Peg-legged pirate with a living mug; shares history of the crew and General Ilie with Bonnie.',
+			description: 'Peg-legged pirate with a living mug; shares history of the crew and General Lee with Bonnie.',
 		},
-		'General Ilie': {
-			name: 'General Ilie',
+		'General Lee': {
+			name: 'General Lee',
 			affinity: 'N/A',
 			class: 'Commander',
 			role: 'Liberator',

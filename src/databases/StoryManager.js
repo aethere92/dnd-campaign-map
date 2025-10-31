@@ -44,7 +44,7 @@ class StoryHelperContent {
 		const mainContent = await this.#createMainContent(session);
 
 		sessionContent.append(header);
-		if (session.factual_recap || session.name_db) sessionContent.append(recap);
+		if (session.factual_recap) sessionContent.append(recap);
 		sessionContent.appendChild(mainContent);
 
 		contentArea.appendChild(sessionContent);
@@ -65,9 +65,7 @@ class StoryHelperContent {
 		recap.className = 'session-small-recap';
 
 		const temp = document.createElement('div');
-		temp.innerHTML = `<h3 id="short-summary">Session Recap: Quick-Reference Log</h3>${await this.#fetchAndParseMd(
-			session.factual_recap
-		)}${session.name_db ? await this.#fetchAndParseMd(session.name_db) : ''}`;
+		temp.innerHTML = `${await this.#fetchAndParseMd(session.factual_recap)}`;
 		this.#placeholderProcessor.processAll(temp, session);
 
 		recap.appendChild(temp);

@@ -1653,41 +1653,32 @@ blockquote i {
 	font-family: var(--font-system);
 }
 
-.quest-table {
-	width: 100%;
-	border-collapse: collapse; /* Essential for clean table borders */
+.quest {
+	padding: 0.5rem;
+	border-bottom: 1px dashed #e0e0e0;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+
+.quest:last-child {
+	border-bottom: none; /* Remove border from the last quest */
+}
+
+.quest:hover {
+	background-color: rgba(255, 255, 241, 0.8); /* Slight hover effect */
+}
+
+.quest-name {
+	/* Mimics table header style */
+	color: var(--color-text-dark);
+	font-weight: 700;
 	font-size: 0.95rem;
 }
 
-.quest-table th {
-	/* Mimics .progression-loot-title style */
-	background-color: #f5f0e3; /* Slightly darker parchment for header */
-	color: var(--color-text-dark);
-	text-align: left;
-	padding: 0.75rem 1rem;
-	font-weight: 700;
-	text-transform: uppercase;
-	letter-spacing: 0.05em;
-	border-bottom: 2px solid var(--color-border); /* Strong separator */
-}
-
-/* Optional: Style for the very last TH/TD in the row */
-.quest-table th:last-child,
-.quest-table td:last-child {
-	text-align: center;
-}
-
-.quest-table td {
-	color: #333; /* Soft black for readability */
-	padding: 0.75rem 1rem;
-	/* Mimics the dashed border from .loot-item for row separation */
-	border-bottom: 1px dashed #e0e0e0;
-}
-
-.quest-table tbody tr:last-child td {
-	border-bottom: none; /* Remove border from the last row */
-}
-
-.quest-table tbody tr:hover {
-	background-color: rgba(255, 255, 241, 0.8); /* Slight hover effect */
+.quest-description {
+	color: #555; /* Soft black for readability */
+	font-size: 0.85rem;
+	display: flex;
+	flex-direction: column;
 }

@@ -74,9 +74,9 @@
 
 <p>"Even the least of us," Marise slurred.</p>
 
-<p>[ENTITY:character:Bonnie], ever the rogue, pressed for more. "You all seem very loyal. But who was this 'Ilie' the captain was sad about?"</p>
+<p>[ENTITY:character:Bonnie], ever the rogue, pressed for more. "You all seem very loyal. But who was this 'Lee' the captain was sad about?"</p>
 
-<p>Marise’s face darkened. "General Ilie. A former convict, like many of us. We were all slaves in the penal colony, mining ore. Ilie... he was the commander of the mercenaries who broke us out. He sent us to recover a ship, which Bianca... well, she took it."</p>
+<p>Marise’s face darkened. "General Lee. A former convict, like many of us. We were all slaves in the penal colony, mining ore. Lee... he was the commander of the mercenaries who broke us out. He sent us to recover a ship, which Bianca... well, she took it."</p>
 
 <p>[ENTITY:character:Bonnie] traded the pirate a small, tinkling bell from the Feylands for a pirate-themed bandana, mulling over this new information. Meanwhile, [ENTITY:character:Kaedin] approached the forge, where the Efreeti and a heavily augmented dwarf named Bardin Cratcho were tempering runes onto a batch of cutlasses.</p>
 
