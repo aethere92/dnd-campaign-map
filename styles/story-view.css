@@ -1706,36 +1706,34 @@ blockquote i {
 	cursor: pointer;
 	transition: all 0.2s ease;
 }
+
 /* =================================================================== */
-/* ===== QUEST PAGE STYLING (NEW) ===== */
+/* ===== QUEST LOG STYLING ===== */
 /* =================================================================== */
 
-/* Main container, mimics .session-content layout */
+/* Main container */
 .story-quest-container {
 	display: flex;
 	flex-direction: column;
-	align-items: center; /* Center the content blocks */
-	gap: var(--spacing-lg);
+	align-items: center;
+	gap: 0;
 	flex: 1;
 	min-inline-size: 0;
-	overflow-y: auto;
+	overflow: hidden;
 	animation: fadeIn 0.3s ease-out;
-	padding: var(--spacing-md);
 	inline-size: 100%;
+	block-size: 100%;
 }
 
-/* Page header, mimics .session-header */
+/* Page header */
 .quest-header {
-	inline-size: 100%;
-	max-inline-size: 56.25rem; /* Match other content */
-	padding-block-end: var(--spacing-sm);
+	inline-size: 72rem;
+	padding-block: var(--spacing-md);
 	padding-inline: var(--spacing-lg);
-	border-block-end: 0.125rem solid var(--color-border);
 	position: relative;
 	text-align: center;
 }
 
-/* Page title, mimics .session-header h2 */
 .quest-header h2 {
 	display: inline-block;
 	margin: 0;
@@ -1748,7 +1746,6 @@ blockquote i {
 	position: relative;
 }
 
-/* Decorative bullets, mimics .session-header h2::before/after */
 .quest-header h2::before,
 .quest-header h2::after {
 	content: '•';
@@ -1760,235 +1757,517 @@ blockquote i {
 	inset-block-start: -0.1875rem;
 }
 
-/* List container for quest groups */
-.quest-list {
+/* Two-panel layout */
+.quest-log-body {
 	display: flex;
-	flex-direction: column;
-	gap: var(--spacing-xl); /* More space between groups */
 	inline-size: 100%;
-	max-inline-size: 56.25rem; /* Match other content */
+	max-inline-size: 75rem;
+	flex: 1;
+	overflow: hidden;
+	gap: var(--spacing-md);
+	margin-bottom: var(--spacing-md);
+	/* background-color: var(--color-parchment); */
+	/* border: 0.0625rem solid var(--color-border); */
+	/* box-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.1); */
 }
 
+/* Left panel: Quest list */
+.quest-list-panel {
+	inline-size: 20rem;
+	flex-shrink: 0;
+	overflow-y: auto;
+	background: linear-gradient(to bottom, #3e3b34, #2c2a24);
+	/* border-inline-end: 0.125rem solid var(--color-border); */
+	padding: var(--spacing-sm);
+	box-shadow: inset -0.1875rem 0 0.4375rem rgba(0, 0, 0, 0.2);
+	border-radius: var(--spacing-xs);
+}
+
+/* Quest groups in left panel */
 .quest-group {
+	margin-block-end: var(--spacing-md);
+}
+
+.quest-group-header {
+	font-family: 'Noto Sans', var(--font-headers);
+	font-size: 0.75rem;
+	color: var(--color-border);
+	text-transform: uppercase;
+	letter-spacing: 0.0625rem;
+	padding: var(--spacing-xs) var(--spacing-sm);
+	margin-block-end: var(--spacing-xs);
+	border-block-end: 0.0625rem solid var(--color-secondary);
+	position: relative;
+	background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.1), transparent);
+}
+
+/* Individual quest item in list */
+.quest-list-item {
+	display: flex;
+	align-items: center;
+	gap: var(--spacing-sm);
+	padding: var(--spacing-sm);
+	margin-block-end: 0.125rem;
+	cursor: pointer;
+	border-radius: var(--radius-sm);
+	transition: all 0.2s ease;
+	background-color: rgba(255, 255, 255, 0.02);
+	border: 0.0625rem solid transparent;
+	position: relative;
+	overflow: hidden;
+}
+
+.quest-list-item::before {
+	content: '';
+	position: absolute;
+	inset: 0;
+	background-image: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.02));
+	z-index: 0;
+}
+
+.quest-list-item:hover {
+	background-color: rgba(255, 255, 255, 0.05);
+	border-color: rgba(192, 170, 118, 0.3);
+	transform: translateX(0.125rem);
+}
+
+.quest-list-item.selected {
+	background-color: rgba(123, 13, 13, 0.2);
+	border-color: var(--color-border);
+	box-shadow: 0 0.125rem 0.375rem rgba(0, 0, 0, 0.3);
+}
+
+.quest-list-item.selected::before {
+	content: '';
+	position: absolute;
+	inset-block: 0;
+	inset-inline-start: 0;
+	inline-size: 0.25rem;
+	background-color: var(--color-primary);
+}
+
+/* Quest level/priority indicator */
+.quest-level {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	inline-size: 1.75rem;
+	block-size: 1.75rem;
+	flex-shrink: 0;
+	border-radius: 50%;
+	font-size: 0.7rem;
+	font-weight: bold;
+	border: 0.125rem solid;
+	position: relative;
+	z-index: 1;
+	background: radial-gradient(circle, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.6));
+	box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.3);
+}
+
+.quest-priority-critical {
+	color: #ff4444;
+	border-color: #ff4444;
+	text-shadow: 0 0 0.3125rem #ff4444;
+	animation: pulse-critical 2s infinite;
+}
+
+.quest-priority-high {
+	color: #ff9944;
+	border-color: #ff9944;
+	text-shadow: 0 0 0.1875rem #ff9944;
+}
+
+.quest-priority-normal {
+	color: #ffd700;
+	border-color: #ffd700;
+	text-shadow: 0 0 0.1875rem #ffd700;
+}
+
+.quest-priority-low {
+	color: #888888;
+	border-color: #888888;
+}
+
+@keyframes pulse-critical {
+	0%,
+	100% {
+		box-shadow: 0 0 0.3125rem rgba(255, 68, 68, 0.4), 0 0.125rem 0.25rem rgba(0, 0, 0, 0.3);
+	}
+	50% {
+		box-shadow: 0 0 0.625rem rgba(255, 68, 68, 0.7), 0 0.125rem 0.25rem rgba(0, 0, 0, 0.3);
+	}
+}
+
+/* Quest title in list */
+.quest-item-title {
+	flex: 1;
+	font-size: 0.85rem;
+	color: var(--color-parchment);
+	font-family: var(--font-system);
+	line-height: 1.3;
+	position: relative;
+	z-index: 1;
+}
+
+.quest-status-completed .quest-item-title {
+	color: rgba(248, 244, 227, 0.5);
+	text-decoration: line-through;
+}
+
+.quest-status-failed .quest-item-title {
+	color: #ff6666;
+}
+
+/* Right panel: Quest details */
+.quest-detail-panel {
+	flex: 1;
+	overflow-y: auto;
+	background-color: #fffae9;
+	background-image: url(../images/assets/background_texture.png);
+	padding: var(--spacing-lg);
+	position: relative;
+	border-radius: var(--spacing-sm);
+}
+
+.quest-detail-panel::before {
+	content: '';
+	position: absolute;
+	inset: 0;
+	opacity: 0.05;
+	pointer-events: none;
+	z-index: 0;
+	background-size: 1.25rem 1.25rem;
+}
+
+.quest-detail-content {
 	display: flex;
 	flex-direction: column;
+	gap: var(--spacing-lg);
+	position: relative;
+	z-index: 1;
+}
+
+/* Quest detail header */
+.quest-detail-header {
+	border-block-end: 0.125rem solid var(--color-border);
+	padding-block-end: var(--spacing-md);
+	position: relative;
+}
+
+.quest-detail-title {
+	margin: 0 0 var(--spacing-sm) 0;
+	font-family: 'Noto Sans', var(--font-system);
+	font-size: 1.8rem;
+	color: var(--color-primary);
+	text-transform: uppercase;
+	letter-spacing: 0.0625rem;
+}
+
+.quest-detail-meta {
+	display: flex;
 	gap: var(--spacing-md);
+	font-size: 0.8rem;
+	text-transform: uppercase;
+	font-family: var(--font-system);
 }
 
-/* "Active Quests", "Completed Quests" titles */
-.quest-group-header {
-	/* Mimics .session-main-content h2 */
-	font-family: var(--font-headers);
-	font-size: 1.4rem;
-	color: #5c2c0a; /* Brown from .session-main-content h3 */
-	margin: 0 0 var(--spacing-md) 0;
+.quest-detail-priority,
+.quest-detail-status {
+	padding: var(--spacing-xs) var(--spacing-sm);
+	border-radius: var(--radius-sm);
+	font-weight: 600;
+	letter-spacing: 0.03125rem;
+	border: 0.0625rem solid;
+}
+
+.quest-detail-priority {
+	background-color: white;
+}
+
+.quest-detail-priority.critical {
+	color: #cc0000;
+	border-color: #cc0000;
+}
+
+.quest-detail-priority.high {
+	color: #ff6600;
+	border-color: #ff6600;
+}
+
+.quest-detail-priority.normal {
+	color: #b8860b;
+	border-color: #b8860b;
+}
+
+.quest-detail-priority.low {
+	color: #777777;
+	border-color: #777777;
+}
+
+.quest-detail-status {
+	background-color: white;
+}
+
+.quest-detail-status.active {
+	color: #2e7d32;
+	border-color: #4caf50;
+}
+
+.quest-detail-status.completed {
+	color: #1565c0;
+	border-color: #2196f3;
+}
+
+.quest-detail-status.failed {
+	color: #c62828;
+	border-color: #ff4444;
+}
+
+/* Quest sections */
+.quest-section {
+	display: flex;
+	flex-direction: column;
+	gap: var(--spacing-sm);
+}
+
+.quest-section-header {
+	font-family: 'Noto Sans', var(--font-headers);
+	font-size: 1.2rem;
+	color: var(--color-secondary);
+	text-transform: uppercase;
+	letter-spacing: 0.0625rem;
+	padding-block-end: var(--spacing-xs);
 	border-block-end: 0.0625rem solid #e0d5c3;
-	padding-block-end: 0.5rem;
+	margin-block-end: var(--spacing-sm);
 }
 
-/* Individual quest card, mimics .progression-loot */
-.quest-card {
+.quest-section-content {
+	color: var(--color-text);
+	font-size: 11pt;
+	line-height: 1.6;
+	font-family: 'Noto Sans', var(--font-system);
+}
+
+.quest-objective-text {
+	font-size: 11pt;
+	color: var(--color-text);
+	padding: var(--spacing-md);
+	background-color: #fffcf1;
+	background-image: url('https://transparenttextures.com/patterns/little-pluses.png');
+	border: 0.0625rem solid var(--color-border);
+	border-inline-start: 0.25rem solid var(--color-primary);
+	border-radius: var(--radius-sm);
+	box-shadow: 0 0.125rem 0.3125rem rgba(0, 0, 0, 0.1);
+}
+
+/* Session details */
+.quest-session-detail {
+	margin-block-end: var(--spacing-md);
+	padding: var(--spacing-md);
 	background-color: #fffcf1;
 	background-image: url('https://transparenttextures.com/patterns/little-pluses.png');
 	border: 0.0625rem solid var(--color-border);
 	border-radius: var(--radius-md);
 	box-shadow: 0 0.125rem 0.3125rem rgba(0, 0, 0, 0.1);
-	font-family: var(--font-system);
 	position: relative;
 	overflow: hidden;
-	display: flex;
-	flex-direction: column;
-	/* Add a colored left border based on status */
-	border-inline-start-width: 0.3125rem;
 }
 
-/* Colored left border for status */
-.quest-status-active {
-	border-inline-start-color: #4caf50; /* Green (from .entity-location) */
-}
-.quest-status-completed {
-	border-inline-start-color: #2196f3; /* Blue (from .entity-class) */
-}
-.quest-status-failed {
-	border-inline-start-color: var(--color-primary); /* Red */
-}
-/* Fallback for other/undefined statuses */
-.quest-card:not(.quest-status-active):not(.quest-status-completed):not(.quest-status-failed) {
-	border-inline-start-color: var(--color-secondary); /* Brown */
+.quest-session-detail::before {
+	content: '';
+	position: absolute;
+	inset: 0;
+	background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.2' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.02'/%3E%3C/svg%3E");
+	opacity: 0.7;
+	pointer-events: none;
+	z-index: 0;
 }
 
-/* Header of the quest card (title, priority, status) */
-.quest-card-header {
-	display: flex;
-	flex-wrap: wrap; /* Allow wrapping on small screens */
-	justify-content: space-between;
-	align-items: center;
-	gap: var(--spacing-sm);
-	padding: var(--spacing-sm) var(--spacing-md);
-	background-color: rgba(0, 0, 0, 0.02);
-	border-block-end: 0.0625rem dashed #e0d5c3; /* Mimics .loot-item */
-}
-
-.quest-title {
-	margin: 0;
-	font-family: 'Noto Sans', var(--font-system);
-	font-size: 11pt;
-	color: var(--color-secondary); /* Brown */
-}
-
-/* Container for priority/status pills */
-.quest-meta {
-	display: flex;
-	gap: var(--spacing-sm);
-	font-size: 0.8rem;
-	text-transform: uppercase;
-	flex-shrink: 0; /* Don't let them shrink */
-}
-
-/* "Pill" styling for priority and status */
-.quest-priority,
-.quest-status {
-	background-color: rgba(0, 0, 0, 0.05);
-	padding: var(--spacing-xs) var(--spacing-sm);
-	border-radius: 1rem; /* Rounded pill shape */
+.quest-session-detail-header {
 	font-weight: 600;
-}
-
-/* Color-code the status text */
-.quest-status-active .quest-status {
-	color: #388e3c; /* Darker green */
-	background-color: rgba(76, 175, 80, 0.1);
-}
-.quest-status-completed .quest-status {
-	color: #1976d2; /* Darker blue */
-	background-color: rgba(33, 150, 243, 0.1);
-}
-.quest-status-failed .quest-status {
-	color: var(--color-primary);
-	background-color: rgba(123, 13, 13, 0.1);
-}
-
-/* Body of the quest card (objective, button, history) */
-.quest-card-body {
-	padding: var(--spacing-md);
-	display: flex;
-	flex-direction: column;
-	gap: var(--spacing-md);
-}
-
-.quest-objective {
-	font-size: 10pt;
-	color: var(--color-text);
-	line-height: 1.5;
-}
-.quest-objective strong {
 	color: var(--color-secondary);
-	font-weight: 600;
+	margin-block-end: var(--spacing-sm);
+	font-size: 1rem;
+	padding-block-end: var(--spacing-xs);
+	border-block-end: 0.0625rem dashed #e0d5c3;
+	font-family: 'Noto Sans', var(--font-headers);
+	position: relative;
+	z-index: 1;
 }
 
-/* "Show Quest History" button */
-.quest-toggle-sessions {
-	/* Mimic .sidebar-back-button but less obtrusive */
-	align-self: flex-start; /* Don't stretch full width */
-	background-color: rgba(0, 0, 0, 0.05);
-	border: 0.0625rem solid var(--color-border);
-	border-radius: var(--radius-sm);
-	padding: var(--spacing-xs) var(--spacing-md);
-	font-family: var(--font-system);
-	font-size: 0.85rem;
-	font-weight: 500;
-	color: var(--color-secondary);
-	cursor: pointer;
-	transition: all 0.2s ease;
-}
-.quest-toggle-sessions:hover {
-	background-color: rgba(0, 0, 0, 0.1);
-	box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.05);
-}
-
-/* Container for session history cards */
-.quest-sessions {
-	display: flex; /* This is toggled from 'none' to 'flex' */
-	flex-direction: column;
-	gap: var(--spacing-sm);
-	padding-block-start: var(--spacing-md);
-	margin-block-start: var(--spacing-sm);
-	border-block-start: 0.0625rem solid #e0d5c3;
-}
-
-/* Nested card for a single session's history */
-.quest-session-card {
-	background-color: var(--color-parchment); /* Use parchment for contrast */
-	border-radius: var(--radius-sm);
-	border: 0.0625rem solid #e0d5c3;
-	overflow: hidden;
-}
-
-.quest-session-header {
-	font-weight: 600;
+.quest-session-description {
+	margin-block-end: var(--spacing-sm);
 	color: var(--color-text);
-	padding: var(--spacing-sm) var(--spacing-md);
-	background-color: rgba(0, 0, 0, 0.03);
-	border-block-end: 0.0625rem solid #e0d5c3;
-	font-family: var(--font-system);
-}
-
-/* Content of the nested session card */
-.quest-session-content {
-	padding: var(--spacing-sm) var(--spacing-md);
-	font-size: 0.9rem;
 	line-height: 1.6;
-	display: flex;
-	flex-direction: column;
-	gap: var(--spacing-sm);
+	font-size: 10pt;
+	font-family: 'Noto Sans', var(--font-system);
+	position: relative;
+	z-index: 1;
 }
 
-.quest-session-content p,
-.quest-session-content ul {
-	margin: 0;
-}
-
-.quest-session-content ul {
-	padding-inline-start: 1.25rem; /* Standard list indentation */
+.quest-session-details {
+	margin: var(--spacing-sm) 0;
+	padding-inline-start: 1.25rem;
+	color: var(--color-text);
+	font-size: 10pt;
+	font-family: 'Noto Sans', var(--font-system);
+	position: relative;
+	z-index: 1;
 }
 
 .quest-session-details li {
-	/* margin-block-end: var(--spacing-xs); */
+	margin-block-end: var(--spacing-xs);
+	line-height: 1.5;
 }
 
-/* Sub-headers like "Visions", "Recurring Elements" */
-.quest-session-content h5 {
-	margin: var(--spacing-sm) 0 var(--spacing-xs) 0;
-	font-family: var(--font-headers);
+/* Subsections within session details */
+.quest-session-detail h5 {
+	margin: var(--spacing-md) 0 var(--spacing-xs) 0;
+	font-family: 'Noto Sans', var(--font-headers);
 	color: var(--color-primary);
-	font-size: 1rem;
+	font-size: 0.95rem;
 	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 0.03125rem;
+	position: relative;
+	z-index: 1;
 }
 
-/* Special styling for "Visions" */
+.quest-visions-section,
+.quest-recurring-elements,
+.quest-list-section {
+	margin-block-start: var(--spacing-sm);
+	position: relative;
+	z-index: 1;
+}
+
 .quest-vision-card {
 	padding: var(--spacing-sm);
-	background-color: rgba(255, 255, 255, 0.5); /* Semi-transparent white */
-	border-inline-start: 0.1875rem solid var(--color-border);
+	margin-block-end: var(--spacing-sm);
+	background-color: rgba(248, 244, 227, 0.5);
+	border-inline-start: 0.1875rem solid var(--color-tertiary);
 	border-radius: var(--radius-sm);
+	box-shadow: 0 0.0625rem 0.1875rem rgba(0, 0, 0, 0.05);
 }
 
 .quest-vision-characters {
 	font-weight: 600;
+	color: var(--color-tertiary);
+	margin-block-end: var(--spacing-xs);
+	font-size: 10pt;
+	font-family: 'Noto Sans', var(--font-system);
 }
 
 .quest-vision-text {
 	font-style: italic;
 	color: var(--color-text);
 	margin: 0;
+	font-size: 10pt;
+	line-height: 1.5;
+	font-family: 'Noto Sans', var(--font-system);
 }
 
-/* Simple text for other details */
 .quest-recurring-elements div,
 .quest-threat-assessment {
-	font-size: 0.9rem;
+	margin-block-end: var(--spacing-xs);
+	color: var(--color-text);
+	font-size: 10pt;
+	line-height: 1.5;
+	font-family: 'Noto Sans', var(--font-system);
 }
+
 .quest-recurring-elements strong,
 .quest-threat-assessment strong {
 	color: var(--color-secondary);
+	font-weight: 600;
+}
+
+.quest-list-section ul {
+	margin: var(--spacing-xs) 0;
+	padding-inline-start: 1.25rem;
+	color: var(--color-text);
+	font-size: 10pt;
+	font-family: 'Noto Sans', var(--font-system);
+}
+
+.quest-list-section li {
+	margin-block-end: var(--spacing-xs);
+	line-height: 1.5;
+}
+
+/* Scrollbar styling */
+.quest-list-panel::-webkit-scrollbar,
+.quest-detail-panel::-webkit-scrollbar {
+	inline-size: 0.5rem;
+}
+
+.quest-list-panel::-webkit-scrollbar-track {
+	background: rgba(0, 0, 0, 0.2);
+}
+
+.quest-list-panel::-webkit-scrollbar-thumb {
+	background: rgba(192, 170, 118, 0.4);
+	border-radius: var(--radius-sm);
+}
+
+.quest-list-panel::-webkit-scrollbar-thumb:hover {
+	background: rgba(192, 170, 118, 0.6);
+}
+
+.quest-detail-panel::-webkit-scrollbar-track {
+	background: #f1f1f1;
+	border-radius: var(--radius-sm);
+}
+
+.quest-detail-panel::-webkit-scrollbar-thumb {
+	background: #c1c1c1;
+	border-radius: var(--radius-sm);
+}
+
+.quest-detail-panel::-webkit-scrollbar-thumb:hover {
+	background: #a1a1a1;
+}
+
+/* No content message */
+.story-quest-container .no-content {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	block-size: 12.5rem;
+	padding: var(--spacing-xl);
+	text-align: center;
+	color: var(--color-text);
+	font-style: italic;
+	background-color: rgba(255, 255, 255, 0.5);
+	border-radius: var(--radius-lg);
+	border: 0.0625rem dashed var(--color-border);
+	margin: var(--spacing-lg);
+}
+
+/* Responsive adjustments */
+@media (max-width: 70rem) {
+	.quest-log-body {
+		flex-direction: column;
+	}
+
+	.quest-list-panel {
+		inline-size: calc(100% - 17px);
+		block-size: 15rem;
+		border-inline-end: none;
+		border-block-end: 0.125rem solid var(--color-border);
+		border-radius: 0;
+	}
+
+	.quest-detail-panel {
+		flex: 1;
+	}
+
+	.quest-detail-title {
+		font-size: 1.4rem;
+	}
+
+	.quest-header {
+		inline-size: calc(100% - 2rem);
+	}
 }

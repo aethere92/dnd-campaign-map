@@ -305,7 +305,13 @@ class CampaignManager {
 		if (mapKey || (!sessionId && !characterName && !viewType && hasMap)) {
 			// Map was explicitly requested, or default to map if available
 			targetView = 'map';
-		} else if (sessionId || characterName || viewType === 'timeline' || (!hasMap && hasStory)) {
+		} else if (
+			sessionId ||
+			characterName ||
+			viewType === 'timeline' ||
+			viewType === 'quests' ||
+			(!hasMap && hasStory)
+		) {
 			// Story was explicitly requested, or default to story if no map available
 			targetView = 'story';
 		} else if (hasMap) {
@@ -405,6 +411,10 @@ class CampaignManager {
 			initialView = 'timeline';
 			initialSessionId = null; // Not showing a session
 			initialCharacterName = null; // Not showing a character
+		} else if (viewType === 'quests') {
+			initialView = 'quests';
+			initialSessionId = null; // Not showing a session
+			initialCharacterName = null; // Not showing a character
 		} else if (characterName) {
 			initialView = 'character';
 			initialSessionId = null; // Not showing a session
@@ -436,6 +446,10 @@ class CampaignManager {
 			params.set('view', 'timeline');
 			params.delete('session');
 			params.delete('character');
+		} else if (initialView === 'quests') {
+			params.set('view', 'quests');
+			params.delete('session');
+			params.delete('character');
 		} else if (initialView === 'character') {
 			params.set('character', initialCharacterName);
 			params.delete('session');
@@ -452,7 +466,7 @@ class CampaignManager {
 			campaignId: campaign.id,
 			sessionId: initialView === 'session' ? initialSessionId : null,
 			characterName: initialView === 'character' ? initialCharacterName : null,
-			viewType: initialView === 'timeline' ? 'timeline' : null, // Store the specific view type if needed
+			viewType: initialView === 'quests' ? 'quests' : initialView === 'timeline' ? 'timeline' : null,
 			view: 'story', // Generic view state for popstate handling
 		};
 
