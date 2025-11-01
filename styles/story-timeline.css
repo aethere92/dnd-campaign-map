@@ -63,6 +63,7 @@
 	font-weight: 500;
 	cursor: pointer;
 	transition: all 0.2s ease;
+	margin-bottom: 0.5rem;
 }
 
 .timeline-button:hover {

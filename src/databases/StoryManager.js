@@ -181,6 +181,12 @@ class StoryHelperContent {
 		timelineRenderer.render(contentArea);
 	}
 
+	renderQuests(contentArea) {
+		const campaign = this.#getCampaign();
+		const questRenderer = new StoryHelperQuest(campaign, this.#placeholderProcessor);
+		questRenderer.render(contentArea);
+	}
+
 	renderCharacter(contentArea, characterName) {
 		const campaign = this.#getCampaign();
 		const characterRenderer = new StoryHelperCharacter(campaign, this.#placeholderProcessor);
@@ -198,6 +204,7 @@ class StoryHelperSidebar {
 	#onCharacterClick;
 	#onSessionClick;
 	#onTimelineClick;
+	#onQuestsClick;
 
 	constructor(
 		getCampaign,
@@ -207,7 +214,8 @@ class StoryHelperSidebar {
 		onToggle,
 		onCharacterClick,
 		onSessionClick,
-		onTimelineClick
+		onTimelineClick,
+		onQuestsClick
 	) {
 		this.#getCampaign = getCampaign;
 		this.#getCurrentView = getCurrentView;
@@ -217,6 +225,7 @@ class StoryHelperSidebar {
 		this.#onCharacterClick = onCharacterClick;
 		this.#onSessionClick = onSessionClick;
 		this.#onTimelineClick = onTimelineClick;
+		this.#onQuestsClick = onQuestsClick;
 	}
 
 	createSidebar(isCollapsed) {
@@ -304,8 +313,31 @@ class StoryHelperSidebar {
 
 		button.addEventListener('click', () => this.#onTimelineClick());
 
-		section.append(title, button);
+		const quests = this.#createQuestsSection();
+
+		section.append(title, button, quests);
 		return section;
+	}
+
+	#createQuestsSection() {
+		const campaign = this.#getCampaign();
+		const quests = campaign?.quests;
+
+		if (!quests?.length) {
+			return document.createDocumentFragment();
+		}
+
+		const button = document.createElement('button');
+		button.className = 'quests-button';
+		button.textContent = 'View Quests';
+
+		if (this.#getCurrentView() === 'quests') {
+			button.classList.add('active');
+		}
+
+		button.addEventListener('click', () => this.#onQuestsClick());
+
+		return button;
 	}
 
 	#createSessionList() {
@@ -405,7 +437,8 @@ class StoryManager {
 			(collapsed) => this.#handleSidebarToggle(collapsed),
 			(characterName) => this.#handleCharacterClick(characterName),
 			(sessionId) => this.#handleSessionClick(sessionId),
-			() => this.#handleTimelineClick()
+			() => this.#handleTimelineClick(),
+			() => this.#handleQuestsClick()
 		);
 		this.#contentRenderer = new StoryHelperContent(
 			this.#placeholderProcessor,
@@ -578,6 +611,16 @@ class StoryManager {
 		this.render();
 	}
 
+	#handleQuestsClick() {
+		if (this.#currentView === 'quests') return;
+
+		this.#currentView = 'quests';
+		this.#selectedCharacterName = null;
+
+		this.#updateURL();
+		this.render();
+	}
+
 	#updateURL() {
 		const url = new URL(window.location.href);
 		const params = url.searchParams;
@@ -587,6 +630,10 @@ class StoryManager {
 
 		if (this.#currentView === 'timeline') {
 			params.set('view', 'timeline');
+			params.delete('session');
+			params.delete('character');
+		} else if (this.#currentView === 'quests') {
+			params.set('view', 'quests');
 			params.delete('session');
 			params.delete('character');
 		} else if (this.#currentView === 'character') {
@@ -618,6 +665,9 @@ class StoryManager {
 				break;
 			case 'character':
 				this.#contentRenderer.renderCharacter(contentArea, this.#selectedCharacterName);
+				break;
+			case 'quests':
+				this.#contentRenderer.renderQuests(contentArea);
 				break;
 			case 'session':
 			default:
@@ -2029,5 +2079,303 @@ class StoryHelperTooltip {
 
 		content += '</div></div>';
 		return content;
+	}
+}
+
+// ===== HELPER: QUEST RENDERER =====
+class StoryHelperQuest {
+	#campaign;
+	#placeholderProcessor;
+
+	constructor(campaign, placeholderProcessor) {
+		this.#campaign = campaign;
+		this.#placeholderProcessor = placeholderProcessor;
+	}
+
+	render(contentArea) {
+		const quests = this.#campaign?.quests;
+
+		if (!quests?.length) {
+			contentArea.innerHTML = `
+				<div class="story-quest-container">
+					<div class="quest-header"><h2>Campaign Quests</h2></div>
+					<div class="no-content">No quests available for this campaign.</div>
+					<div style="margin-top: 20px; padding: 10px; background: #f0f0f0; border-radius: 4px;">
+						<strong>Debug Info:</strong><br>
+						Campaign ID: ${this.#campaign?.id || 'N/A'}<br>
+						Quests property exists: ${this.#campaign?.quests !== undefined ? 'Yes' : 'No'}<br>
+						Quests type: ${typeof this.#campaign?.quests}<br>
+						Quests length: ${this.#campaign?.quests?.length || 0}<br>
+						Raw quests: ${JSON.stringify(this.#campaign?.quests, null, 2)}
+					</div>
+				</div>
+			`;
+			return;
+		}
+
+		const container = document.createElement('div');
+		container.className = 'story-quest-container';
+
+		const header = document.createElement('div');
+		header.className = 'quest-header';
+		header.innerHTML = '<h2>Campaign Quests</h2>';
+
+		const questList = document.createElement('div');
+		questList.className = 'quest-list';
+
+		// Group quests by status
+		const activeQuests = quests.filter((q) => q.status == 'Active');
+		const completedQuests = quests.filter((q) => q.status == 'Completed');
+		const failedQuests = quests.filter((q) => q.status == 'Failed');
+		const otherQuests = quests.filter((q) => !['Active', 'Completed', 'Failed'].includes(q.status));
+
+		if (activeQuests.length) {
+			this.#renderQuestGroup(questList, 'Active Quests', activeQuests);
+		}
+		if (completedQuests.length) {
+			this.#renderQuestGroup(questList, 'Completed Quests', completedQuests);
+		}
+		if (failedQuests.length) {
+			this.#renderQuestGroup(questList, 'Failed Quests', failedQuests);
+		}
+		if (otherQuests.length) {
+			this.#renderQuestGroup(questList, 'Other Quests', otherQuests);
+		}
+
+		container.append(header, questList);
+		contentArea.appendChild(container);
+	}
+
+	#renderQuestGroup(container, title, quests) {
+		const group = document.createElement('div');
+		group.className = 'quest-group';
+
+		const groupHeader = document.createElement('h3');
+		groupHeader.className = 'quest-group-header';
+		groupHeader.textContent = title;
+		group.appendChild(groupHeader);
+
+		// Sort quests by priority: Critical > High > Normal > Low
+		const priorityOrder = { critical: 0, high: 1, normal: 2, low: 3 };
+		const sortedQuests = [...quests].sort((a, b) => {
+			const aPriority = priorityOrder[a.priority?.toLowerCase()] ?? 999;
+			const bPriority = priorityOrder[b.priority?.toLowerCase()] ?? 999;
+			return aPriority - bPriority;
+		});
+
+		sortedQuests.forEach((quest) => {
+			const questCard = this.#createQuestCard(quest);
+			group.appendChild(questCard);
+		});
+
+		container.appendChild(group);
+	}
+
+	#createQuestCard(quest) {
+		const card = document.createElement('div');
+		card.className = `quest-card quest-status-${quest.status.toLowerCase()} quest-priority-${quest.priority.toLowerCase()}`;
+
+		const cardHeader = document.createElement('div');
+		cardHeader.className = 'quest-card-header';
+		cardHeader.innerHTML = `
+			<h4 class="quest-title">${quest.title}</h4>
+			<div class="quest-meta">
+				<span class="quest-priority">${quest.priority}</span>
+				<span class="quest-status">${quest.status}</span>
+			</div>
+		`;
+
+		this.#placeholderProcessor.processEntityReferences(cardHeader);
+
+		const cardBody = document.createElement('div');
+		cardBody.className = 'quest-card-body';
+
+		if (quest.current_objective) {
+			const objective = document.createElement('div');
+			objective.className = 'quest-objective';
+			objective.innerHTML = `<strong>Current Objective:</strong> ${quest.current_objective}`;
+			this.#placeholderProcessor.processEntityReferences(objective);
+			cardBody.appendChild(objective);
+		}
+
+		if (quest.sessions?.length) {
+			const toggleButton = document.createElement('button');
+			toggleButton.className = 'quest-toggle-sessions';
+			toggleButton.textContent = 'Show Quest History';
+			toggleButton.type = 'button';
+
+			const sessionsContainer = document.createElement('div');
+			sessionsContainer.className = 'quest-sessions';
+			sessionsContainer.style.display = 'none';
+
+			quest.sessions.forEach((session) => {
+				const sessionCard = this.#createSessionCard(session);
+				sessionsContainer.appendChild(sessionCard);
+			});
+
+			toggleButton.addEventListener('click', (e) => {
+				e.preventDefault();
+				e.stopPropagation();
+				const isVisible = sessionsContainer.style.display !== 'none';
+				sessionsContainer.style.display = isVisible ? 'none' : 'flex';
+				toggleButton.textContent = isVisible ? 'Show Quest History' : 'Hide Quest History';
+			});
+
+			cardBody.append(toggleButton, sessionsContainer);
+		} else {
+			console.log('No sessions for quest:', quest.title);
+		}
+
+		card.append(cardHeader, cardBody);
+		return card;
+	}
+
+	#createSessionCard(session) {
+		const card = document.createElement('div');
+		card.className = 'quest-session-card';
+
+		const sessionHeader = document.createElement('div');
+		sessionHeader.className = 'quest-session-header';
+		sessionHeader.textContent = `Session ${session.session || 'Unknown'}`;
+
+		const sessionContent = document.createElement('div');
+		sessionContent.className = 'quest-session-content';
+
+		if (session.description) {
+			const desc = document.createElement('p');
+			desc.className = 'quest-session-description';
+			desc.textContent = session.description;
+			sessionContent.appendChild(desc);
+		}
+
+		if (session.details?.length) {
+			const detailsList = document.createElement('ul');
+			detailsList.className = 'quest-session-details';
+			session.details.forEach((detail) => {
+				const li = document.createElement('li');
+				li.textContent = detail;
+				detailsList.appendChild(li);
+			});
+			sessionContent.appendChild(detailsList);
+		}
+
+		if (session.visions?.length) {
+			const visionsSection = this.#createVisionsSection(session.visions);
+			sessionContent.appendChild(visionsSection);
+		}
+
+		if (session.recurring_elements) {
+			const elementsSection = this.#createRecurringElementsSection(session.recurring_elements);
+			sessionContent.appendChild(elementsSection);
+		}
+
+		if (session.first_countermeasure?.length) {
+			sessionContent.appendChild(this.#createListSection('First Countermeasure', session.first_countermeasure));
+		}
+
+		if (session.allied_forces?.length) {
+			sessionContent.appendChild(this.#createListSection('Allied Forces', session.allied_forces));
+		}
+
+		if (session.threat_assessment) {
+			const threat = document.createElement('div');
+			threat.className = 'quest-threat-assessment';
+			threat.innerHTML = `<strong>Threat Assessment:</strong> ${session.threat_assessment}`;
+			this.#placeholderProcessor.processEntityReferences(threat);
+			sessionContent.appendChild(threat);
+		}
+
+		card.append(sessionHeader, sessionContent);
+		return card;
+	}
+
+	#createVisionsSection(visions) {
+		const section = document.createElement('div');
+		section.className = 'quest-visions-section';
+
+		const header = document.createElement('h5');
+		header.textContent = 'Visions';
+		section.appendChild(header);
+
+		visions.forEach((vision) => {
+			const visionCard = document.createElement('div');
+			visionCard.className = 'quest-vision-card';
+
+			const characters = document.createElement('div');
+			characters.className = 'quest-vision-characters';
+			characters.innerHTML = `<strong>Characters:</strong> ${vision.characters.join(', ')}`;
+
+			const visionText = document.createElement('p');
+			visionText.className = 'quest-vision-text';
+			visionText.textContent = vision.vision;
+
+			this.#placeholderProcessor.processEntityReferences(characters);
+			visionCard.append(characters, visionText);
+			section.appendChild(visionCard);
+		});
+
+		return section;
+	}
+
+	#createRecurringElementsSection(elements) {
+		const section = document.createElement('div');
+		section.className = 'quest-recurring-elements';
+
+		const header = document.createElement('h5');
+		header.textContent = 'Recurring Elements';
+		section.appendChild(header);
+
+		if (elements.unifying_banner) {
+			const banner = document.createElement('div');
+			banner.innerHTML = `<strong>Unifying Banner:</strong> ${elements.unifying_banner}`;
+
+			this.#placeholderProcessor.processEntityReferences(banner);
+			section.appendChild(banner);
+		}
+
+		if (elements.alliance?.length) {
+			const alliance = document.createElement('div');
+			alliance.innerHTML = `<strong>Alliance:</strong> ${elements.alliance.join(', ')}`;
+
+			this.#placeholderProcessor.processEntityReferences(alliance);
+			section.appendChild(alliance);
+		}
+
+		if (elements.pivotal_event) {
+			const event = document.createElement('div');
+			event.innerHTML = `<strong>Pivotal Event:</strong> ${elements.pivotal_event}`;
+
+			this.#placeholderProcessor.processEntityReferences(event);
+			section.appendChild(event);
+		}
+
+		if (elements.strategy) {
+			const strategy = document.createElement('div');
+			strategy.innerHTML = `<strong>Strategy:</strong> ${elements.strategy}`;
+
+			this.#placeholderProcessor.processEntityReferences(strategy);
+			section.appendChild(strategy);
+		}
+
+		return section;
+	}
+
+	#createListSection(title, items) {
+		const section = document.createElement('div');
+		section.className = 'quest-list-section';
+
+		const header = document.createElement('h5');
+		header.textContent = title;
+		section.appendChild(header);
+
+		const list = document.createElement('ul');
+		items.forEach((item) => {
+			const li = document.createElement('li');
+			li.textContent = item;
+			list.appendChild(li);
+		});
+		section.appendChild(list);
+
+		return section;
 	}
 }
