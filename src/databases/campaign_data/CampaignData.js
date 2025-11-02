@@ -39,5 +39,7 @@ const CAMPAIGN_DATA = [
 		timeline: CAMPAIGN_002_TIMELINE,
 		api_data: CAMPAIGN_002_API_DATA,
 		quests: CAMPAIGN_002_QUESTS,
+		npcs: CAMPAIGN_002_NPCS,
+		locations: CAMPAIGN_002_LOCATIONS,
 	},
 ];
