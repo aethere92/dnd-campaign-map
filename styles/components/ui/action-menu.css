@@ -1,0 +1,98 @@
+#actions {
+	position: absolute;
+	bottom: 0.5rem;
+	right: 0.5rem;
+	display: flex;
+	flex-direction: column;
+	z-index: 1000;
+	gap: 0.25rem;
+}
+
+.action-menu {
+	position: fixed;
+	bottom: 20px;
+	right: 20px;
+	z-index: 1000;
+}
+
+.menu-toggle {
+	background-color: white;
+	border: 2px solid rgba(0, 0, 0, 0.2);
+	border-radius: 4px;
+	padding: 0.5rem;
+	cursor: pointer;
+	font-family: system-ui;
+	display: flex;
+	align-items: center;
+	gap: 5px;
+
+	& svg {
+		transition: all 150ms ease-in;
+	}
+}
+
+.menu-toggle:hover {
+	background-color: #f0f0f0;
+}
+
+.menu-content {
+	position: absolute;
+	bottom: 100%;
+	right: 0;
+	background: white;
+	border: 2px solid rgba(0, 0, 0, 0.2);
+	border-radius: 4px;
+	padding: 0.5rem;
+	display: none;
+	min-width: 200px;
+	margin-bottom: 0.5rem;
+}
+
+.menu-content.active {
+	display: flex;
+	flex-direction: column;
+	gap: 0.25rem;
+}
+
+.menu-item {
+	display: block;
+	width: 100%;
+	padding: 0.5rem;
+	border: none;
+	background: none;
+	text-align: left;
+	cursor: pointer;
+	font-family: system-ui;
+	border-radius: 4px;
+}
+
+.menu-item:hover {
+	background-color: #f0f0f0;
+}
+
+.menu-item select {
+	width: 100%;
+	padding: 5px;
+	border: 1px solid rgba(0, 0, 0, 0.2);
+	border-radius: 4px;
+}
+
+#export-map {
+	display: flex;
+	align-items: center;
+
+	& span {
+		width: 100%;
+	}
+}
+
+/* Divider between menu items */
+.menu-divider {
+	height: 1px;
+	background-color: rgba(0, 0, 0, 0.1);
+}
+
+#actions:has(.menu-content.active) .menu-toggle svg {
+	transform: rotate(180deg);
+}
+

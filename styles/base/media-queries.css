@@ -1,0 +1,57 @@
+/* Mobile Optimizations */
+@media (max-width: 480px) {
+	.path-text-list-container {
+		display: none;
+	}
+	.path-text-toggle {
+		transform: rotate(-90deg);
+	}
+
+	#campaign-selection {
+		justify-content: flex-start;
+	}
+
+	.campaign-characters.campaign-characters {
+		flex-direction: row;
+		width: unset;
+		position: relative;
+		top: unset;
+		right: unset;
+		transform: unset;
+		border-top: 1px solid rgba(139, 107, 74, 0.3);
+		margin-top: 1rem;
+		padding-top: 1rem;
+	}
+
+	.character-card-name.character-card-name {
+		text-shadow: none;
+		color: black;
+		text-align: center;
+	}
+
+	.character-card-info.character-card-info {
+		text-shadow: none;
+		color: #555;
+		text-align: center;
+	}
+
+	.character-card-icon.character-card-icon {
+		margin: unset;
+	}
+
+	.path-voice-selector-container {
+		display: none;
+	}
+}
+
+/* Tablet Optimizations */
+@media (max-width: 1200px) {
+	/* .campaign-characters.campaign-characters {
+		flex-direction: column;
+		top: 0;
+		left: calc(100% + 1rem);
+		transform: translate(0, 0);
+		align-items: flex-start;
+	} */
+}
+

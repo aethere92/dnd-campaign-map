@@ -1,0 +1,115 @@
+@keyframes pulse {
+	0% {
+		transform: translate(-50%, -50%) scale(1);
+		opacity: 0.8;
+	}
+	50% {
+		transform: translate(-50%, -50%) scale(1.5);
+		opacity: 0.4;
+	}
+	100% {
+		transform: translate(-50%, -50%) scale(1);
+		opacity: 0.8;
+	}
+}
+
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+		transform: translateY(0.625rem);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+@keyframes spin {
+	from {
+		transform: rotate(0deg);
+	}
+	to {
+		transform: rotate(360deg);
+	}
+}
+
+@keyframes marker-glow {
+	0%,
+	100% {
+		filter: drop-shadow(0 0 3px #d3c190);
+	}
+	50% {
+		filter: drop-shadow(0 0 6px #d3c190);
+	}
+}
+
+@keyframes pulse-critical {
+	0%,
+	100% {
+		box-shadow: 0 0 0.3125rem rgba(255, 68, 68, 0.4), 0 0.125rem 0.25rem rgba(0, 0, 0, 0.3);
+	}
+	50% {
+		box-shadow: 0 0 0.625rem rgba(255, 68, 68, 0.7), 0 0.125rem 0.25rem rgba(0, 0, 0, 0.3);
+	}
+}
+
+@keyframes flicker-subtle {
+	0% {
+		opacity: 1;
+	}
+	50% {
+		opacity: 0.95;
+	}
+	100% {
+		opacity: 1;
+	}
+}
+
+@keyframes flicker-medium {
+	0% {
+		opacity: 1;
+	}
+	25% {
+		opacity: 0.85;
+	}
+	50% {
+		opacity: 0.95;
+	}
+	75% {
+		opacity: 0.9;
+	}
+	100% {
+		opacity: 1;
+	}
+}
+
+@keyframes flicker-strong {
+	0% {
+		opacity: 1;
+	}
+	25% {
+		opacity: 0.7;
+	}
+	50% {
+		opacity: 0.9;
+	}
+	75% {
+		opacity: 0.8;
+	}
+	100% {
+		opacity: 1;
+	}
+}
+
+@keyframes rain {
+	/* Animation for rain texture */
+}
+
+@keyframes snow {
+	/* Animation for snow texture */
+}
+
+@keyframes fog {
+	/* Animation for fog texture */
+}
+

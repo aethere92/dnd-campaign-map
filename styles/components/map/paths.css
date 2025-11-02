@@ -1,0 +1,197 @@
+.path-text-label span {
+	display: flex;
+	background: rgba(255 255 255 / 80%);
+	width: max-content;
+	max-width: 25ch;
+	font-size: 8pt;
+	font-family: system-ui;
+	padding: 0.25rem 0.5rem;
+	border-radius: 0.5rem;
+	margin-top: 1rem;
+	/* max-height: 50px;
+	overflow: auto; */
+}
+
+.path-text-dot {
+	background: #f15b50;
+	border-radius: 100%;
+	text-align: center;
+	line-height: 16px;
+	font-size: 8pt;
+	color: white;
+	height: 16px !important;
+	width: 16px !important;
+}
+
+.path-text-modal {
+	position: absolute;
+	left: 12px;
+	top: 90px;
+	background: white;
+	padding: 0.25rem;
+	border-radius: 0.25rem;
+	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+	max-width: 350px;
+	z-index: 1000;
+	display: flex;
+	cursor: default;
+	flex-direction: column;
+	gap: 0.25rem;
+}
+
+.path-text-list {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	max-height: 500px;
+	overflow: auto;
+	display: flex;
+	gap: 0.25rem;
+	flex-direction: column;
+}
+
+.path-item-row {
+	display: flex;
+	width: 100%;
+	align-items: center;
+}
+
+.path-item-column {
+	display: flex;
+	width: 100%;
+	flex-direction: column;
+	justify-content: center;
+	gap: 0.5rem;
+}
+
+.path-text-item {
+	padding: 0.25rem;
+	border-left: 3px solid #007bff;
+	background: #f8f9fa;
+	display: flex;
+	align-items: center;
+	flex-direction: column;
+	gap: 0.25rem;
+}
+
+.path-text {
+	padding-left: 0.5rem;
+}
+
+.path-event-icon {
+	margin-left: auto;
+	font-size: 12pt;
+	padding-left: 0.5rem;
+}
+
+.path-text-header {
+	display: flex;
+	gap: 0.25rem;
+	align-items: center;
+	padding: 0.25rem;
+}
+
+.path-text-toggle {
+	background: none;
+	border: none;
+	cursor: pointer;
+	margin: 0;
+	margin-left: auto;
+	padding: 0;
+}
+
+.path-item-loot-container {
+	display: flex;
+	flex-direction: column;
+	gap: 0.25rem;
+	flex-wrap: wrap;
+}
+
+.loot-item {
+	cursor: pointer;
+
+	&:hover {
+		text-decoration: underline;
+	}
+}
+
+.rarity-common {
+	color: #555;
+}
+
+.rarity-uncommon {
+	color: #28ad2e;
+}
+
+.rarity-rare {
+	color: #0070dd;
+}
+
+.path-item-loot-container-item {
+	display: flex;
+	gap: 0.25rem;
+	padding-left: 2rem;
+}
+
+.loot-item-icon {
+	height: 16px;
+	width: 16px;
+	border-radius: 0.125rem;
+}
+
+.icon-common {
+	background: #555;
+}
+
+.icon-uncommon {
+	background: #72a875;
+}
+
+.icon-rare {
+	background: #0070dd;
+}
+
+.path-item-level {
+	background: #e91e63;
+	padding: 0.125rem;
+	padding-left: 0.5rem;
+	border-radius: 0.25rem;
+	color: white;
+}
+
+.path-item-loot-title {
+	font-weight: 600;
+	background: #795548;
+	color: white;
+	padding: 0.125rem;
+	border-radius: 0.125rem;
+	padding-left: 0.25rem;
+	margin-left: 1.5rem;
+}
+
+.path-text-controls {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.25rem;
+	border-bottom: 1px solid #ddd;
+	border-top: 1px solid #ddd;
+	padding: 0.25rem 0;
+	background: #eee;
+}
+
+.path-text-control {
+	cursor: pointer;
+	background: none;
+	border: none;
+	padding: 0;
+
+	&:hover {
+		background: #eee;
+	}
+}
+
+.path-voice-selector-container {
+	/* Styles for voice selector */
+}
+

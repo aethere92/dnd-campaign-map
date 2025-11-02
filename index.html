@@ -9,35 +9,47 @@
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.css" />
 	<link rel="stylesheet" href="https://unpkg.com/@geoman-io/leaflet-geoman-free@2.17.0/dist/leaflet-geoman.css" />
 	<link rel="stylesheet" href="styles/styles.css" />
-	<link rel="stylesheet" href="styles/story-timeline.css" />
 	<link rel="icon" type="image/x-icon" href="images/pageicon.png" />
 	<!-- IMPORTS -->
 	<script defer src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.js"></script>
 	<script defer src="https://unpkg.com/@geoman-io/leaflet-geoman-free@2.17.0/dist/leaflet-geoman.js"></script>
 	<script defer src="https://cdn.jsdelivr.net/npm/leaflet-rotate@0.2.8/dist/leaflet-rotate.min.js"></script>
 	<!-- DATABASES -->
-	<script defer src="src/databases/SvgIconsDb.js"></script>
-		<!-- CAMPAIGN 001 -->
-	<script defer src="src/databases/campaign_data/DnDSpellDB.js"></script>
-	<script defer src="src/databases/campaign_data/campaign_001/campaign_01_map_info.js"></script>
-	<script defer src="src/databases/campaign_data/campaign_001/campaign_001_recap.js"></script>
-	<script defer src="src/databases/campaign_data/campaign_001/campaign_001_timeline.js"></script>
-	<script defer src="src/databases/campaign_data/campaign_001/campaign_001_character_metadata.js"></script>
-	<script defer src="src/databases/campaign_data/campaign_001/campaign_001_characters.js"></script>
-	<script defer src="src/databases/campaign_data/campaign_001/campaign_001_api_data.js"></script>
-		<!-- CAMPAIGN 002 -->
-	<script defer src="src/databases/campaign_data/campaign_002/campaign_002_recap.js"></script>
-	<script defer src="src/databases/campaign_data/campaign_002/background_info/campaign_002_backgrounds.js"></script>
-	<script defer src="src/databases/campaign_data/campaign_002/background_info/campaign_002_character_metadata.js"></script>
-	<script defer src="src/databases/campaign_data/campaign_002/background_info/campaign_002_characters.js"></script>
-	<script defer src="src/databases/campaign_data/campaign_002/background_info/campaign_002_api_data.js"></script>
-	<script defer src="src/databases/campaign_data/campaign_002/background_info/campaign_002_timeline.js"></script>
-	<script defer src="src/databases/campaign_data/campaign_002/background_info/campaign_002_quests.js"></script>
-	<script defer src="src/databases/campaign_data/campaign_002/background_info/campaign_002_locations.js"></script>
-	<script defer src="src/databases/campaign_data/campaign_002/background_info/campaign_002_npcs.js"></script>
-	<script defer src="src/databases/campaign_data/CampaignData.js"></script>
-	<script defer src="src/databases/CampaignManager.js"></script>
-	<script defer src="src/databases/StoryManager.js"></script>
+	<script defer src="src/databases/core/SvgIconsDb.js"></script>
+	<!-- CAMPAIGN 001 -->
+	<script defer src="src/databases/data/SpellDatabaseDND.js"></script>
+	<script defer src="src/databases/data/campaigns/campaign-001/recaps.js"></script>
+	<script defer src="src/databases/data/campaigns/campaign-001/api.js"></script>
+	<script defer src="src/databases/data/campaigns/campaign-001/metadata.js"></script>
+	<script defer src="src/databases/data/campaigns/campaign-001/characters.js"></script>
+	<script defer src="src/databases/data/campaigns/campaign-001/map.js"></script>
+	<script defer src="src/databases/data/campaigns/campaign-001/timeline.js"></script>
+	<!-- CAMPAIGN 002 -->
+	<script defer src="src/databases/data/campaigns/campaign-002/recaps.js"></script>
+	<script defer src="src/databases/data/campaigns/campaign-002/api.js"></script>
+	<script defer src="src/databases/data/campaigns/campaign-002/backgrounds.js"></script>
+	<script defer src="src/databases/data/campaigns/campaign-002/metadata.js"></script>
+	<script defer src="src/databases/data/campaigns/campaign-002/characters.js"></script>
+	<script defer src="src/databases/data/campaigns/campaign-002/locations.js"></script>
+	<script defer src="src/databases/data/campaigns/campaign-002/npcs.js"></script>
+	<script defer src="src/databases/data/campaigns/campaign-002/quests.js"></script>
+	<script defer src="src/databases/data/campaigns/campaign-002/timeline.js"></script>
+	<script defer src="src/databases/data/CampaignData.js"></script>
+	<script defer src="src/databases/core/CampaignManager.js"></script>
+
+	<!-- STORY MANAGER -->
+	<script defer src="src/databases/core/story-helpers/StoryBase.js"></script>
+	<script defer src="src/databases/core/story-helpers/StoryCharacter.js"></script>
+	<script defer src="src/databases/core/story-helpers/StoryContent.js"></script>
+	<script defer src="src/databases/core/story-helpers/StoryLocation.js"></script>
+	<script defer src="src/databases/core/story-helpers/StoryNavigation.js"></script>
+	<script defer src="src/databases/core/story-helpers/StoryNPC.js"></script>
+	<script defer src="src/databases/core/story-helpers/StoryPlaceholder.js"></script>
+	<script defer src="src/databases/core/story-helpers/StoryQuest.js"></script>
+	<script defer src="src/databases/core/story-helpers/StorySidebar.js"></script>
+	<script defer src="src/databases/core/story-helpers/StoryTimeline.js"></script>
+	<script defer src="src/databases/core/story-helpers/StoryTooltip.js"></script>
+	<script defer src="src/databases/core/StoryManager.js"></script>
 	<!-- UTILS -->
 	<script defer src="src/services/markers/StoryRecapModal.js"></script>
 	<script defer src="src/services/utils/UrlManager.js"></script>

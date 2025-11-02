@@ -1,0 +1,83 @@
+/* character cards */
+.campaign-characters {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-end;
+	flex-wrap: wrap;
+	justify-content: center;
+	width: 600px;
+	gap: 0.5rem;
+	position: absolute;
+	top: 50%;
+	right: calc(100% + 1rem);
+	transform: translate(0, -50%);
+
+	&.card-position-right {
+		right: 0;
+		left: calc(100% + 1rem);
+		align-items: flex-start;
+	}
+}
+
+.campaign-character-card {
+	width: max-content;
+	display: flex;
+	gap: 0.5rem;
+	/* background: #e5d6b4; */
+	/* border: 1px solid #8b6b4a; */
+	padding: 0.25rem;
+	border-radius: 0.25rem;
+	backdrop-filter: blur(2px);
+	padding-left: 0.5rem;
+}
+
+.character-card-icon.character-card-icon {
+	width: 30px;
+	height: 30px;
+	border-width: 2px;
+}
+
+.character-card-item {
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	text-shadow: 1px 1px 1px black;
+}
+
+.card-position-right .character-card-name {
+	text-align: left;
+}
+
+.character-card-name {
+	font-size: 11pt;
+	font-weight: 600;
+	text-align: right;
+	color: white;
+}
+
+.character-card-info {
+	font-size: 8pt;
+	width: max-content;
+	color: #ddd;
+}
+
+.icon-sorcerer.icon-sorcerer {
+	border-color: #17377c;
+}
+
+.icon-bard.icon-bard {
+	border-color: #79437a;
+}
+
+.icon-cleric.icon-cleric {
+	border-color: #5f7183;
+}
+
+.icon-ranger.icon-ranger {
+	border-color: #31553f;
+}
+
+.icon-barbarian.icon-barbarian {
+	border-color: #6d1b1b;
+}
+

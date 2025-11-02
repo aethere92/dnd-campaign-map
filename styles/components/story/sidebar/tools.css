@@ -1,0 +1,63 @@
+/* Campaign Tools */
+.story-campaign-tools-list {
+	display: flex;
+	/* flex-direction: column; */
+	flex-wrap: wrap;
+	gap: 0.25rem;
+}
+
+.campaign-tool-button {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 0.625rem 0.5rem;
+	border-radius: 0.375rem;
+	background-color: rgba(255, 255, 255, 0.03);
+	cursor: pointer;
+	transition: all 0.2s ease;
+	border: 0.0625rem solid transparent;
+	position: relative;
+	color: var(--color-parchment);
+	font-weight: 500;
+	font-family: 'Noto Sans', var(--font-system);
+}
+
+.campaign-tool-button:hover {
+	background-color: rgba(255, 255, 255, 0.08);
+	color: var(--color-parchment);
+	border-color: rgba(255, 255, 255, 0.1);
+	transform: translateX(0.125rem);
+}
+
+.campaign-tool-button.active {
+	background-color: rgba(123, 13, 13, 0.15);
+	border-color: rgba(123, 13, 13, 0.3);
+	color: var(--color-parchment);
+}
+
+.campaign-tool-button svg,
+.campaign-tool-button .icon {
+	inline-size: 1.25rem;
+	block-size: 1.25rem;
+	flex-shrink: 0;
+	opacity: 0.8;
+}
+
+.campaign-tool-button span {
+	transition: opacity 0.3s ease;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.campaign-tool-button .badge {
+	margin-inline-start: auto;
+	background-color: rgba(123, 13, 13, 0.4);
+	color: var(--color-parchment);
+	padding: 0.125rem 0.375rem;
+	border-radius: 0.75rem;
+	font-size: 0.6875rem;
+	font-weight: 600;
+	min-inline-size: 1.25rem;
+	text-align: center;
+}

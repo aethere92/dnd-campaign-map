@@ -1,0 +1,112 @@
+.leaflet-control-layers-row {
+	display: flex;
+	gap: 0.5rem;
+	align-items: center;
+
+	& .leaflet-control-layers-selector {
+		margin-left: auto;
+		padding-left: 1rem;
+	}
+}
+
+.leaflet-control-layers-overlays {
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+}
+
+.leaflet-control-layers-group {
+	display: flex;
+	flex-direction: column;
+	position: relative;
+}
+
+.leaflet-control-layers-group-layers .leaflet-control-layers-group {
+	padding-left: 10px;
+
+	&::after {
+		position: absolute;
+		content: '';
+		width: 10px;
+		height: 100%;
+		left: 0px;
+		/* top: -50%; */
+		border-left: 1px solid #ccc;
+		/* border-bottom: 1px solid #ccc; */
+		z-index: -1;
+	}
+}
+
+.leaflet-control-layers-overlays > .leaflet-control-layers-group > .leaflet-control-layers-group-header {
+	font-weight: 600;
+}
+
+.leaflet-control-layers-group-header {
+	display: flex;
+	gap: 0.25rem;
+	align-items: center;
+}
+
+.leaflet-control-layers-group-toggle {
+	margin-left: auto;
+	padding-left: 0.5rem;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.leaflet-control-layers-group-layers {
+	display: flex;
+	flex-direction: column;
+
+	& .leaflet-control-layers-group > .leaflet-control-layers-group-header:hover {
+		background: #eee;
+	}
+}
+.leaflet-control-layers-item {
+	position: relative;
+	padding-left: 10px;
+
+	&::after {
+		position: absolute;
+		content: '';
+		width: 10px;
+		height: 100%;
+		left: -6px;
+		top: -50%;
+		border-left: 1px solid #ccc;
+		border-bottom: 1px solid #ccc;
+		z-index: -1;
+	}
+}
+
+.leaflet-control-layers-group-layers[data-level='0'] > .leaflet-control-layers-item {
+	padding-left: 15px;
+
+	&::after {
+		left: 2px;
+	}
+}
+
+.leaflet-control-layers-group-selector,
+.leaflet-control-layers-selector {
+	height: 12px;
+	width: 12px;
+}
+
+.leaflet-control-layers-group[data-level='1']:has(.leaflet-control-layers-group-layers:not(.item-hidden))
+	.leaflet-control-layers-group-layers {
+	margin-bottom: 0.35rem;
+}
+
+.leaflet-control-layers-group-counter {
+	background: #eee;
+	padding: 0 0.35rem;
+	border-radius: 0.25rem;
+	font-size: 8pt;
+}
+
+.leaflet-control-layers-list {
+	padding: 0.5rem;
+}
+

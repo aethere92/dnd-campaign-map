@@ -1,0 +1,36 @@
+:root {
+	--bg-color-yellow: #cba04b;
+	--border-color-yellow: #986c3d;
+	--font-system: system-ui, sans-serif;
+	--font-title: 'IM Fell English SC', system-ui, sans-serif;
+	--font-description: 'Oldenburg', system-ui, sans-serif;
+
+	/* Color palette - DnD inspired colors */
+	--color-parchment: #f8f4e3;
+	--color-dark: #1a1510;
+	--color-primary: #7b0d0d;
+	--color-secondary: #643b11;
+	--color-tertiary: #35544d;
+	--color-text: #2c2319;
+	--color-border: #c0aa76;
+	--color-shadow: rgba(0, 0, 0, 0.25);
+	--color-highlight: #faedc1;
+
+	/* Typography */
+	--font-main: 'Alegreya', 'Bookman Old Style', Georgia, serif;
+	--font-headers: 'Modesto Condensed', 'Cinzel', serif;
+	--font-size-base: 16px;
+
+	/* Spacing */
+	--spacing-xs: 0.25rem;
+	--spacing-sm: 0.5rem;
+	--spacing-md: 1rem;
+	--spacing-lg: 1.5rem;
+	--spacing-xl: 2rem;
+
+	/* Border radius */
+	--radius-sm: 0.1875rem;
+	--radius-md: 0.3125rem;
+	--radius-lg: 0.5rem;
+}
+

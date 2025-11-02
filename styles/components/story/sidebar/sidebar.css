@@ -1,0 +1,147 @@
+/* Sidebar */
+.story-sidebar {
+	display: flex;
+	flex-direction: column;
+	background: linear-gradient(to bottom, #2a2823, #1c1a16);
+	border-inline-end: 0.0625rem solid rgba(255, 255, 255, 0.08);
+	overflow-y: auto;
+	overflow-x: hidden;
+	color: var(--color-parchment);
+	position: relative;
+	z-index: 2;
+	transition: inline-size 0.3s ease;
+	inline-size: 19rem;
+	box-shadow: 0.125rem 0 0.5rem rgba(0, 0, 0, 0.3);
+}
+
+.sidebar-collapsed .story-sidebar {
+	inline-size: 3.5rem;
+}
+
+.sidebar-collapsed .story-characters-section h2,
+.sidebar-collapsed .story-sessions-section h2,
+.sidebar-collapsed .story-sidebar-section-header h2,
+.sidebar-collapsed .character-info,
+.sidebar-collapsed .session-date,
+.sidebar-collapsed .campaign-tool-button span {
+	opacity: 0;
+	pointer-events: none;
+}
+
+/* Shared section styles */
+.story-characters-section,
+.story-sessions-section,
+.story-sidebar-section {
+	padding: 0.75rem;
+	border-block-end: 0.0625rem solid rgba(255, 255, 255, 0.06);
+	position: relative;
+	transition: all 0.3s ease;
+}
+
+.story-characters-section:hover,
+.story-sessions-section:hover,
+.story-sidebar-section:hover {
+	background-color: rgba(255, 255, 255, 0.02);
+}
+
+.story-characters-section h2,
+.story-sessions-section h2,
+.story-sidebar-section-header h2 {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	margin: 0 0 0.75rem 0;
+	font-family: var(--font-headers);
+	font-size: 0.75rem;
+	color: rgba(255, 255, 255, 0.6);
+	text-transform: uppercase;
+	letter-spacing: 0.0625rem;
+	font-weight: 600;
+	transition: all 0.3s ease;
+}
+
+.story-sidebar-section {
+	display: flex;
+	flex-direction: column;
+	gap: var(--spacing-sm);
+}
+
+.story-sidebar-section-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	cursor: pointer;
+	user-select: none;
+}
+
+.story-sidebar-section-header h2 {
+	margin: 0;
+	flex: 1;
+	font-family: 'Noto Sans', var(--font-system);
+}
+
+.sidebar-section-toggle {
+	background: none;
+	border: none;
+	color: rgba(255, 255, 255, 0.4);
+	cursor: pointer;
+	padding: 0.25rem;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	transition: all 0.2s ease;
+	border-radius: 0.25rem;
+}
+
+.sidebar-section-toggle:hover {
+	color: rgba(255, 255, 255, 0.7);
+	background-color: rgba(255, 255, 255, 0.05);
+}
+
+.toggle-icon {
+	inline-size: 1rem;
+	block-size: 1rem;
+	transition: transform 0.3s ease;
+}
+
+.story-sidebar-section.collapsed .toggle-icon {
+	transform: rotate(-90deg);
+}
+
+.story-sidebar-section.collapsed .story-campaign-tools-list,
+.story-sidebar-section.collapsed .story-character-list,
+.story-sidebar-section.collapsed .story-session-list {
+	display: none;
+}
+
+/* Scrollbar styling */
+.story-sidebar::-webkit-scrollbar {
+	inline-size: 0.375rem;
+}
+
+.story-sidebar::-webkit-scrollbar-track {
+	background: rgba(0, 0, 0, 0.2);
+}
+
+.story-sidebar::-webkit-scrollbar-thumb {
+	background: rgba(255, 255, 255, 0.1);
+	border-radius: 0.1875rem;
+}
+
+.story-sidebar::-webkit-scrollbar-thumb:hover {
+	background: rgba(255, 255, 255, 0.2);
+}
+
+/* Collapsed state optimizations */
+.sidebar-collapsed .story-character-card,
+.sidebar-collapsed .story-session-item,
+.sidebar-collapsed .campaign-tool-button {
+	justify-content: center;
+	padding-inline: 0.5rem;
+}
+
+.sidebar-collapsed .character-avatar,
+.sidebar-collapsed .campaign-tool-button svg,
+.sidebar-collapsed .campaign-tool-button .icon {
+	margin: 0 auto;
+}
