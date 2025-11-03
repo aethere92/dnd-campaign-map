@@ -74,9 +74,8 @@ class StoryHelperTooltip {
 		// Register factions
 		if (campaignData.factions) {
 			campaignData.factions.forEach((faction) => {
-				console.log(faction, faction.name, faction.id);
 				const key = faction.name.toLowerCase();
-				registry.quest[key] = faction;
+				registry.faction[key] = faction;
 				// Also register by id
 				if (faction.id) {
 					registry.faction[faction.id] = faction;
