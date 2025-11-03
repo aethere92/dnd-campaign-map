@@ -71,6 +71,12 @@ class StoryHelperFaction extends StoryHelperBase {
 			detail.appendChild(this.createSection('Leader', faction.leader));
 		}
 
+		// Location
+		if (faction.location) {
+			const fullLocation = faction.sublocation ? `${faction.location}: ${faction.sublocation}` : faction.location;
+			detail.appendChild(this.createSection('Location', fullLocation));
+		}
+
 		// Description
 		if (faction.description) {
 			detail.appendChild(this.createSection('Description', faction.description));
