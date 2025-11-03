@@ -659,7 +659,7 @@
 	gap: var(--spacing-lg);
 	flex: 1;
 	min-inline-size: 0;
-	overflow-y: auto;
+	overflow-y: hidden;
 	animation: fadeIn 0.3s ease-out;
 	padding: var(--spacing-md);
 }
