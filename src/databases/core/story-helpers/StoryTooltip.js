@@ -368,7 +368,7 @@ class StoryHelperTooltip {
 					<span class="faction-type">${data.type}</span>
 				</div>
 				<div class="tooltip-content">
-					${data.location ? `<div><strong>Location:</strong> ${data.location}</div>` : ''}
+					${data.location ? `<div><strong>Location:</strong> ${data.location}${data.sublocation ? `: ${data.sublocation}` :''}</div>` : ''}
 					${data.leader ? `<div><strong>Leader:</strong> ${data.leader}</div>` : ''}
 					<div class="tooltip-description">${data.description}</div>
 					${
