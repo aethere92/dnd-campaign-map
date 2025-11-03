@@ -302,7 +302,6 @@ class StoryManager {
 						factions: 'faction',
 					};
 					params.set(paramMap[view], encodeURIComponent(itemId));
-					console.log(itemId);
 				}
 
 				window.history.replaceState(null, '', `${url.pathname}?${params.toString()}`);

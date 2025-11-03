@@ -470,12 +470,12 @@ class CampaignManager {
 		// Preserve item-specific parameters if they match the current view
 		// Otherwise, clear them. StoryBase will handle restoring them if valid.
 		const itemParams = {
-			'quests': 'quest',
-			'locations': 'location',
-			'npcs': 'npc',
-			'factions': 'faction'
+			quests: 'quest',
+			locations: 'location',
+			npcs: 'npc',
+			factions: 'faction',
 		};
-		
+
 		// Only preserve the item parameter that matches the current view
 		Object.entries(itemParams).forEach(([view, param]) => {
 			if (initialView !== view) {
