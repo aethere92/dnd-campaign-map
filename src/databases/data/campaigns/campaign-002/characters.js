@@ -75,15 +75,15 @@ const CAMPAIGN_002_CHARACTERS = [
 	},
 	{
 		name: 'Entire party',
-		race: 'Pixie | Earth Genasi | Human | Aasimar | Elf',
-		class: 'Rogue | Echo Knight | Sorcerer | Paladin | Wizard',
+		race: 'Multiple',
+		class: 'Multiple',
 		icon: 'images/pageicon.png',
 		level: 8,
 		is_included: false,
-		shortDescription: `<p style="margin: 0; padding-block: 0"><strong>Olek</strong>, a Paladin of Helm, walks with the calm strength of one touched by the divine.<br>
-			<strong>Norr</strong>, a Sorcerer touched by dragon's blood and haunted by a stolen map. <br>
-			<strong>Soshi</strong> - a Feyborn wizard who traded whimsy for power. <br>
-			<strong>Kaedin</strong>, the Echo Knight genasi who seeks a friend lost to a trap and a mystery buried in time.<br>
-			<strong>Bonnie</strong> - a rogue pixie exiled from the Feywilds for loving too deeply and breaking too many rules.</p>`,
+		shortDescription: `<p style="margin: 0; padding-block: 0"><strong>Olek</strong>, an <strong>Aasimar Paladin of Helm</strong>, walks with the calm strength of one touched by the divine.<br>
+			<strong>Norr</strong>, a <strong>Human Sorcerer</strong> touched by dragon's blood and haunted by a stolen map. <br>
+			<strong>Soshi</strong> - a <strong>Feyborn Eladrin Wizard</strong> who traded whimsy for power. <br>
+			<strong>Kaedin</strong>, the <strong>Echo Knight Earth Genasi</strong> who seeks a friend lost to a trap and a mystery buried in time.<br>
+			<strong>Bonnie</strong> - a <strong>Rogue Pixie</strong> exiled from the Feywilds for loving too deeply and breaking too many rules.</p>`,
 	},
 ];
