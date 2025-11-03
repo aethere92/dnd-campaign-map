@@ -29,15 +29,9 @@
 @import url('components/map/labels.css');
 @import url('components/ui/modals.css');
 
-/* Story view components */
-@import url('components/story/container.css');
-@import url('components/story/sidebar/sidebar.css');
-@import url('components/story/sidebar/characters.css');
-@import url('components/story/sidebar/sessions.css');
-@import url('components/story/sidebar/tools.css');
-
 /* Views */
-@import url('views/story-view.css');
+/* @import url('components/story/story.css'); */
+@import url(views/story-view.css);
 @import url('views/story-timeline.css');
 @import url('views/story-character-page.css');
 @import url('views/story-recap.css');
