@@ -34,8 +34,6 @@ class StoryHelperNPC extends StoryHelperBase {
 			grouped[affinity][location].push(npc);
 		});
 
-		console.log(grouped);
-
 		// Sort NPCs within each faction group alphabetically
 		Object.values(grouped).forEach((locations) => {
 			Object.values(locations).forEach((npcList) => {
@@ -61,11 +59,7 @@ class StoryHelperNPC extends StoryHelperBase {
 		const affinityContent = document.createElement('div');
 		affinityContent.className = 'view-group-content';
 
-		const affinityHeader = this.createNestedGroupHeader(
-			affinity,
-			affinityContent,
-			'view-group-header-level-1'
-		);
+		const affinityHeader = this.createNestedGroupHeader(affinity, affinityContent, 'view-group-header-level-1');
 		affinityGroup.appendChild(affinityHeader);
 
 		// Iterate through locations
@@ -77,11 +71,7 @@ class StoryHelperNPC extends StoryHelperBase {
 			const locationContent = document.createElement('div');
 			locationContent.className = 'view-group-content';
 
-			const locationHeader = this.createNestedGroupHeader(
-				location,
-				locationContent,
-				'view-group-header-level-2'
-			);
+			const locationHeader = this.createNestedGroupHeader(location, locationContent, 'view-group-header-level-2');
 			locationGroup.appendChild(locationHeader);
 
 			// Add NPCs to location content
@@ -116,7 +106,7 @@ class StoryHelperNPC extends StoryHelperBase {
 		// Toggle function
 		const toggleGroup = () => {
 			const isCurrentlyExpanded = contentElement.style.display !== 'none';
-			
+
 			contentElement.style.display = isCurrentlyExpanded ? 'none' : 'block';
 			toggleButton.setAttribute('aria-expanded', !isCurrentlyExpanded);
 			toggleButton.querySelector('.toggle-icon').textContent = isCurrentlyExpanded ? '▶' : '▼';

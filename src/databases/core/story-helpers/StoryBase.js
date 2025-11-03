@@ -59,7 +59,32 @@ class StoryHelperBase {
 			params.delete(this.getUrlParam());
 		}
 
-		const newUrl = `${window.location.pathname}?${params.toString()}${window.location.hash}`;
+		// Build URL with parameters in correct order: campaign, view, then item
+		const orderedParams = new URLSearchParams();
+
+		// Add campaign first
+		if (params.has('campaign')) {
+			orderedParams.set('campaign', params.get('campaign'));
+		}
+
+		// Add view second
+		if (params.has('view')) {
+			orderedParams.set('view', params.get('view'));
+		}
+
+		// Add item-specific parameter third
+		if (itemId) {
+			orderedParams.set(this.getUrlParam(), encodeURIComponent(itemId));
+		}
+
+		// Add any other parameters
+		for (const [key, value] of params.entries()) {
+			if (key !== 'campaign' && key !== 'view' && !itemParams.includes(key)) {
+				orderedParams.set(key, value);
+			}
+		}
+
+		const newUrl = `${window.location.pathname}?${orderedParams.toString()}${window.location.hash}`;
 
 		// Include meaningful state for history
 		const state = {

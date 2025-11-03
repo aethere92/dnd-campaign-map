@@ -11,6 +11,7 @@ class StoryHelperSidebar {
 	#onLocationsClick;
 	#onNPCsClick;
 	#onFactionsClick;
+	#searchManager;
 
 	// Sidebar section toggle states
 	#sectionStates = {
@@ -31,7 +32,8 @@ class StoryHelperSidebar {
 		onQuestsClick,
 		onLocationsClick,
 		onNPCsClick,
-		onFactionsClick
+		onFactionsClick,
+		searchManager
 	) {
 		this.#getCampaign = getCampaign;
 		this.#getCurrentView = getCurrentView;
@@ -45,6 +47,7 @@ class StoryHelperSidebar {
 		this.#onLocationsClick = onLocationsClick;
 		this.#onNPCsClick = onNPCsClick;
 		this.#onFactionsClick = onFactionsClick;
+		this.#searchManager = searchManager;
 
 		// Load saved section states
 		this.#loadSectionStates();
@@ -58,6 +61,7 @@ class StoryHelperSidebar {
 
 		sidebar.append(
 			campaignName,
+			this.#createSearchButton(),
 			this.#createCharacterSection(),
 			this.#createCampaignToolsSection(),
 			this.#createSessionSection()
@@ -72,6 +76,19 @@ class StoryHelperSidebar {
 		header.className = 'story-campaign-name';
 		header.innerHTML = `<h3>${campaign.metadata?.name || 'Unnamed Campaign'}</h3>`;
 		return header;
+	}
+
+	#createSearchButton() {
+		const button = document.createElement('button');
+		button.className = 'search-trigger-button';
+		button.innerHTML = '🔍 Search';
+		button.title = 'Search (Ctrl+K)';
+
+		button.addEventListener('click', () => {
+			this.#searchManager.openSearch();
+		});
+
+		return button;
 	}
 
 	#createCharacterSection() {

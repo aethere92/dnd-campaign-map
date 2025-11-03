@@ -12,6 +12,7 @@ class StoryManager {
 	#tooltipManager;
 	#placeholderProcessor;
 	#navigationManager;
+	#searchManager;
 
 	constructor(elementId, options = {}) {
 		this.#rootElement = document.getElementById(elementId);
@@ -30,6 +31,10 @@ class StoryManager {
 		});
 		this.#placeholderProcessor = new StoryHelperPlaceholder(this.#tooltipManager, options.campaignData);
 		this.#navigationManager = new StoryHelperNavigation();
+		this.#searchManager = new StoryHelperSearch(
+			() => this.#campaign,
+			(navigation) => this.#handleSearchNavigation(navigation)
+		);
 		this.#sidebarManager = new StoryHelperSidebar(
 			() => this.#campaign,
 			() => this.#currentView,
@@ -42,7 +47,8 @@ class StoryManager {
 			() => this.#handleQuestsClick(),
 			() => this.#handleLocationsClick(),
 			() => this.#handleNPCsClick(),
-			() => this.#handleFactionsClick()
+			() => this.#handleFactionsClick(),
+			this.#searchManager
 		);
 		this.#contentRenderer = new StoryHelperContent(
 			this.#placeholderProcessor,
@@ -144,6 +150,7 @@ class StoryManager {
 			}
 		}
 
+		this.#searchManager?.invalidateIndex();
 		this.render();
 	}
 
@@ -260,6 +267,50 @@ class StoryManager {
 		this.render();
 	}
 
+	#handleSearchNavigation(navigation) {
+		const { view, sessionId, characterName, itemId } = navigation;
+
+		switch (view) {
+			case 'session':
+				this.#handleSessionClick(sessionId);
+				break;
+			case 'character':
+				this.#handleCharacterClick(characterName);
+				break;
+			case 'quests':
+			case 'locations':
+			case 'npcs':
+			case 'factions':
+				// Navigate to the view
+				this.#currentView = view;
+				this.#selectedCharacterName = null;
+
+				// Build clean URL with only the params we need
+				const url = new URL(window.location.href);
+				const params = new URLSearchParams(); // Start fresh!
+
+				// Set campaign and view
+				params.set('campaign', this.#campaign.id);
+				params.set('view', view);
+
+				// Set item parameter if provided
+				if (itemId) {
+					const paramMap = {
+						quests: 'quest',
+						locations: 'location',
+						npcs: 'npc',
+						factions: 'faction',
+					};
+					params.set(paramMap[view], encodeURIComponent(itemId));
+					console.log(itemId);
+				}
+
+				window.history.replaceState(null, '', `${url.pathname}?${params.toString()}`);
+				this.render();
+				break;
+		}
+	}
+
 	#updateURL() {
 		const url = new URL(window.location.href);
 		const params = url.searchParams;
@@ -278,7 +329,7 @@ class StoryManager {
 			quests: 'quest',
 			locations: 'location',
 			npcs: 'npc',
-			factions: 'faction'
+			factions: 'faction',
 		};
 
 		Object.entries(itemParams).forEach(([view, param]) => {
