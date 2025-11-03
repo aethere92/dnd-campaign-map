@@ -21,7 +21,7 @@
 
 <h3>Encounters with the Winter Rose Mercenaries</h3>
 
-<p>Returning to the inn, the party reunited with the [ENTITY:guild:Winter Rose] mercenaries, who had their own harrowing tale to share. Their recent expedition to the east had nearly ended in disaster when they were ambushed while pursuing a hidden stash. Giant raptors and Thylacoleos - fearsome panther-bear hybrids - had attacked them, devouring their horses. Ironically, this grisly sacrifice had provided the mercenaries with the distraction they needed to escape with their lives.</p>
+<p>Returning to the inn, the party reunited with the [ENTITY:faction:The Winter Rose:Winter Rose] mercenaries, who had their own harrowing tale to share. Their recent expedition to the east had nearly ended in disaster when they were ambushed while pursuing a hidden stash. Giant raptors and Thylacoleos - fearsome panther-bear hybrids - had attacked them, devouring their horses. Ironically, this grisly sacrifice had provided the mercenaries with the distraction they needed to escape with their lives.</p>
 <p>The mercenaries shared valuable tactical information: the raptors showed a marked fear of fire and strong light, and notably, there had been no hobgoblins among their attackers. However, the raptors bore distinctive markings that resembled shackles, suggesting they belonged to a different hobgoblin clan than those previously encountered.</p>
 <p>After parting ways with the mercenaries, the party sought out [ENTITY:npc:Tharma] once more. They discovered she was an avid reader of novels of ...questionable nature and interactions and even gifted one to the interested [ENTITY:character:Bonnie]. When asked about [ENTITY:npc:Lem], [ENTITY:npc:Tharma] revealed he was a member of the town guard.</p>
 <p>With this information gathered, the party retired to their rooms for a well-deserved rest, and through their experiences, they felt themselves grow stronger, reaching the 7th level of their abilities.</p>
@@ -31,9 +31,9 @@
 
 <p>The next morning brought the promised meeting with the two exiled thieves. Over breakfast, the party observed [ENTITY:npc:Yoghurt] approaching dressed in an elegant kimono with two katanas at his side, while [ENTITY:npc:Kat] appeared as one of the most unremarkable individuals imaginable - forgettable in every way except for the several large globes attached to his waist.</p>
 <p>Through conversation conducted partly in thieves' cant, with [ENTITY:character:Bonnie] taking the lead, they learned that the pair harbored ambitions of robbing the local wizard. More importantly, [ENTITY:npc:Soranna] had tasked them with researching the cave system, and their findings were illuminating:</p>
-<p>The caves extended beneath the city and were largely flooded. They connected to the temple near town but were protected by a barrier of light that prevented anyone affiliated with the city from passing through. This meant the party - and possibly the [ENTITY:guild:Winter Rose] mercenaries - could potentially bypass this magical obstacle. The wizard had described this barrier as a curse.</p>
+<p>The caves extended beneath the city and were largely flooded. They connected to the temple near town but were protected by a barrier of light that prevented anyone affiliated with the city from passing through. This meant the party - and possibly the [ENTITY:faction:The Winter Rose:Winter Rose] mercenaries - could potentially bypass this magical obstacle. The wizard had described this barrier as a curse.</p>
 <p>[ENTITY:character:Bonnie]'s keen observation revealed that [ENTITY:npc:Kat]'s mysterious globes were actually cats and even a large tiger. The tiefling was in desperate need of 2 gold pieces to settle debts owed to wealthy townspeople, though none of the party felt inclined to assist with this particular financial burden.</p>
-<p>Both thieves expressed considerable fear of the [ENTITY:guild:Winter Rose] mercenaries, referring to them only by their codenames: [ENTITY:npc:Vandal] and [ENTITY:npc:Summoner].</p>
+<p>Both thieves expressed considerable fear of the [ENTITY:faction:The Winter Rose:Winter Rose] mercenaries, referring to them only by their codenames: [ENTITY:npc:Vandal] and [ENTITY:npc:Summoner].</p>
 <p>After the thieves departed, [ENTITY:character:Bonnie] composed a letter for them, detailing information about the tunnel and suggesting they meet again later that day.</p>
 
 <h3>Seeking Expert Counsel</h3>
@@ -65,7 +65,7 @@
 
 <h3>Tavern Brawl</h3>
 
-<p>Returning to the [ENTITY:location:Green Apple Inn], the party walked directly into chaos. Bottles flew through the air and random punches were being thrown as 10-15 intoxicated townspeople engaged in a massive brawl. At the center of the conflict were [ENTITY:npc:Vandal] and [ENTITY:npc:Summoner], the [ENTITY:guild:Winter Rose] mercenaries.</p>
+<p>Returning to the [ENTITY:location:Green Apple Inn], the party walked directly into chaos. Bottles flew through the air and random punches were being thrown as 10-15 intoxicated townspeople engaged in a massive brawl. At the center of the conflict were [ENTITY:npc:Vandal] and [ENTITY:npc:Summoner], the [ENTITY:faction:The Winter Rose:Winter Rose] mercenaries.</p>
 <p>The party quickly intervened, carefully avoiding serious injury to the drunk participants while efficiently knocking them unconscious to end the fight. [ENTITY:npc:Tharma] expressed her gratitude for their assistance as they helped remove the unconscious troublemakers from her establishment.</p>
 <p>Once order was restored, they learned from [ENTITY:npc:Vandal] and [ENTITY:npc:Summoner] that the brawl had erupted when the drunken townspeople had attempted to inappropriately grab [ENTITY:npc:Vandal]'s chest.</p>
 

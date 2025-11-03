@@ -8,13 +8,13 @@
 
 <p>[ENTITY:character:Soshi]’s arcane knowledge prickled. The tattoos were not mere decoration; they were the ritualistic markings of Sahuagin shamans. A coiling kraken wrapped down his arm, its ink seeming to slither slowly on his skin. He wore a belt of braided sea snakes, a pair of throwing axes, and boots of manta ray hide. Around his neck hung a compass that appeared broken, its needle spinning wildly before stopping, pointing at [ENTITY:character:Soshi], and then spinning again.</p>
 
-<p>But it was the cutlass at his hip that made [ENTITY:character:Soshi]’s blood run cold. She recognized it instantly—a relic stolen from the Brotherhood’s treasury five years prior. It was the Breaker of Hulls, its blade curved like a shark’s tooth and glowing with faint blue runes. Runes, she knew, that flared to life when drawn against a traitor.</p>
+<p>But it was the cutlass at his hip that made [ENTITY:character:Soshi]’s blood run cold. She recognized it instantly—a relic stolen from the [ENTITY:faction:The Arcane Brotherhood:Brotherhood’s] treasury five years prior. It was the Breaker of Hulls, its blade curved like a shark’s tooth and glowing with faint blue runes. Runes, she knew, that flared to life when drawn against a traitor.</p>
 
 <p>The second figure, a woman, glided across the deck with the grace of a phantom. She wore a regal, high-collared garment of night-blue velvet, stitched with silver thread in patterns resembling constellations and maelstroms. Form-fitting black leather trousers were tucked into boots inlaid with sapphires that flashed like bioluminescent plankton. Her corset was a mosaic of polished abalone shell, and a half-cloak of shimmering mist floated behind her, never quite touching the ground. Her pale skin seemed almost luminescent, a clear sign of her Fey-touched blood. Her eyes were a piercing, crystalline blue, laced with veins of lightning that flickered with latent power.</p>
 
 <p>As she approached, [ENTITY:character:Soshi] felt the distinct thrum of magic being cast. Instinctively, she threw up a hand, weaving a counter-spell that shattered the woman's subtle probe. The woman’s eyes snapped to [ENTITY:character:Soshi], a flicker of surprise in their electric depths.</p>
 
-<p>[ENTITY:character:Soshi]’s gaze dropped to the woman’s hands, where rings adorned each finger. Her sharp mind identified the sigils: each ring represented a different school of magic. At the woman's hip hung another stolen treasure, a delicately carved blade that [ENTITY:character:Soshi] also recognized from the Brotherhood's museum: Winder, crafted from a shard of storm-forged glass, humming with latent thunder.</p>
+<p>[ENTITY:character:Soshi]’s gaze dropped to the woman’s hands, where rings adorned each finger. Her sharp mind identified the sigils: each ring represented a different school of magic. At the woman's hip hung another stolen treasure, a delicately carved blade that [ENTITY:character:Soshi] also recognized from the [ENTITY:faction:The Arcane Brotherhood:Brotherhood]'s museum: Winder, crafted from a shard of storm-forged glass, humming with latent thunder.</p>
 
 <p>The towering man’s voice rumbled like distant thunder. "Please, bring our... esteemed guests... to the bridge."</p>
 
@@ -108,7 +108,7 @@
 
 <p>"I am the ship’s Quartermaster and negotiator," Glass stated. "As such, I am here to assess your current belongings and take the fair due for rescuing you." He looked directly at [ENTITY:character:Soshi]. "I see a renowned sword-master," he said, nodding to [ENTITY:character:Kaedin]. "And by the way you resisted my probe, a member of the esteemed school in Lustria. A spell-breaker."</p>
 
-<p>Bianca’s lightning-veined eyes narrowed. "What's a member of the Brotherhood doing so far lost?" she asked [ENTITY:character:Soshi] directly.</p>
+<p>Bianca’s lightning-veined eyes narrowed. "What's a member of the [ENTITY:faction:The Arcane Brotherhood:Brotherhood] doing so far lost?" she asked [ENTITY:character:Soshi] directly.</p>
 
 <p>[ENTITY:character:Soshi] deflected. "It's... not your business to know."</p>
 
@@ -272,7 +272,7 @@
 
 <p>As they prepared to leave, [ENTITY:character:Soshi] asked one final question. "Sir... do you know of a mage named Kalistra?"</p>
 
-<p>Sertieren’s smile faded. "I do," he said, his voice heavy. "A long time ago, before she foolishly joined your Brotherhood, we were in an adventuring party together. We called ourselves the 'Crazy Hogs.' But we... had a falling out. She was always pragmatic. She wanted to use an earthquake spell to clear a goblin cave, but it would have collapsed a nearby settlement. I... stole her spellbook to stop her."</p>
+<p>Sertieren’s smile faded. "I do," he said, his voice heavy. "A long time ago, before she foolishly joined your [ENTITY:faction:The Arcane Brotherhood:Brotherhood], we were in an adventuring party together. We called ourselves the 'Crazy Hogs.' But we... had a falling out. She was always pragmatic. She wanted to use an earthquake spell to clear a goblin cave, but it would have collapsed a nearby settlement. I... stole her spellbook to stop her."</p>
 
 <p>He looked tired. "I'm leaving [ENTITY:location:Drellin's Ferry] soon. The things you've seen—the hydras, these potions, the tribes uniting—they are all portents. A storm is coming, and I do not intend to be here when it breaks."</p>
 
