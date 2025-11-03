@@ -2865,12 +2865,12 @@ blockquote i {
 	}
 
 	.tooltip-description {
-		max-height: 120px;
+		/* max-height: 120px; */
 		font-size: 8.5pt;
 	}
 
 	.tooltip-ability-scores {
-		grid-template-columns: repeat(7, 1fr);
+		grid-template-columns: repeat(6, 1fr);
 		gap: 0.3rem;
 	}
 }
@@ -2881,11 +2881,12 @@ blockquote i {
 	}
 
 	.tooltip-meta {
-		flex-direction: column;
+		/* flex-direction: column; */
+		flex-wrap: wrap;
 		gap: 0.3rem;
 	}
 
 	.tooltip-ability-scores {
-		grid-template-columns: repeat(2, 1fr);
+		grid-template-columns: repeat(6, 1fr);
 	}
 }
