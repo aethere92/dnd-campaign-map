@@ -40,5 +40,6 @@ const CAMPAIGN_DATA = [
 		quests: CAMPAIGN_002_QUESTS,
 		npcs: CAMPAIGN_002_NPCS,
 		locations: CAMPAIGN_002_LOCATIONS,
+		factions: CAMPAIGN_002_FACTIONS
 	},
 ];

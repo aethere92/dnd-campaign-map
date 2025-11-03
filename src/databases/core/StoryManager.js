@@ -26,6 +26,7 @@ class StoryManager {
 			npcs: options.campaignData?.npcs || [],
 			locations: options.campaignData?.locations || [],
 			quests: options.campaignData?.quests || [],
+			factions: options.campaignData?.factions || [],
 		});
 		this.#placeholderProcessor = new StoryHelperPlaceholder(this.#tooltipManager, options.campaignData);
 		this.#navigationManager = new StoryHelperNavigation();
@@ -40,7 +41,8 @@ class StoryManager {
 			() => this.#handleTimelineClick(),
 			() => this.#handleQuestsClick(),
 			() => this.#handleLocationsClick(),
-			() => this.#handleNPCsClick()
+			() => this.#handleNPCsClick(),
+			() => this.#handleFactionsClick()
 		);
 		this.#contentRenderer = new StoryHelperContent(
 			this.#placeholderProcessor,
@@ -115,6 +117,10 @@ class StoryManager {
 			this.#currentSessionId = sessionId || this.#getFirstSessionId();
 		} else if (viewType === 'npcs') {
 			this.#currentView = 'npcs';
+			this.#selectedCharacterName = null;
+			this.#currentSessionId = sessionId || this.#getFirstSessionId();
+		} else if (viewType === 'factions') {
+			this.#currentView = 'factions';
 			this.#selectedCharacterName = null;
 			this.#currentSessionId = sessionId || this.#getFirstSessionId();
 		} else if (characterName) {
@@ -244,6 +250,16 @@ class StoryManager {
 		this.render();
 	}
 
+	#handleFactionsClick() {
+		if (this.#currentView === 'factions') return;
+
+		this.#currentView = 'factions';
+		this.#selectedCharacterName = null;
+
+		this.#updateURL();
+		this.render();
+	}
+
 	#updateURL() {
 		const url = new URL(window.location.href);
 		const params = url.searchParams;
@@ -262,6 +278,7 @@ class StoryManager {
 			quests: 'quest',
 			locations: 'location',
 			npcs: 'npc',
+			factions: 'faction'
 		};
 
 		Object.entries(itemParams).forEach(([view, param]) => {
@@ -276,6 +293,7 @@ class StoryManager {
 			case 'timeline':
 			case 'quests':
 			case 'locations':
+			case 'factions':
 			case 'npcs':
 				params.set('view', this.#currentView);
 				break;
@@ -313,6 +331,9 @@ class StoryManager {
 				break;
 			case 'npcs':
 				this.#contentRenderer.renderNPCs(contentArea);
+				break;
+			case 'factions':
+				this.#contentRenderer.renderFactions(contentArea);
 				break;
 			case 'character':
 				this.#contentRenderer.renderCharacter(contentArea, this.#selectedCharacterName);
