@@ -71,6 +71,19 @@ class StoryHelperTooltip {
 			});
 		}
 
+		// Register factions
+		if (campaignData.factions) {
+			campaignData.factions.forEach((faction) => {
+				const key = faction.name.toLowerCase();
+				registry.quest[key] = faction;
+				// Also register by id
+				if (faction.id) {
+					registry.faction[faction.id] = faction;
+				}
+			});
+		}
+
+
 		return registry;
 	}
 
@@ -239,6 +252,7 @@ class StoryHelperTooltip {
 			npc: this.#generateNPCTooltip.bind(this),
 			location: this.#generateLocationTooltip.bind(this),
 			quest: this.#generateQuestTooltip.bind(this),
+			faction: this.#generateFactionTooltip.bind(this),
 			spell: this.#generateSpellTooltip.bind(this),
 			monster: this.#generateMonsterTooltip.bind(this),
 			class: this.#generateClassTooltip.bind(this),
@@ -337,6 +351,30 @@ class StoryHelperTooltip {
 						data.threats?.length
 							? `<div class="tooltip-threats"><strong>Threats:</strong><ul>${data.threats
 									.map((t) => `<li>${t}</li>`)
+									.join('')}</ul></div>`
+							: ''
+					}
+				</div>
+			</div>
+		`;
+	}
+
+	// Faction tooltip
+	#generateFactionTooltip(data) {
+		return `
+			<div class="entity-tooltip entity-faction-tooltip">
+				<div class="tooltip-header">
+					<h3>${data.name}</h3>
+					<span class="faction-type">${data.type}</span>
+				</div>
+				<div class="tooltip-content">
+					${data.location ? `<div><strong>Location:</strong> ${data.location}</div>` : ''}
+					${data.leader ? `<div><strong>Leader:</strong> ${data.leader}</div>` : ''}
+					<div class="tooltip-description">${data.description}</div>
+					${
+						data.npcs?.length
+							? `<div class="tooltip-features"><strong>NPCs:</strong><ul>${data.npcs
+									.map((f) => `<li>${f}</li>`)
 									.join('')}</ul></div>`
 							: ''
 					}

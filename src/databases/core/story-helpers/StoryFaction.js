@@ -84,6 +84,7 @@ class StoryHelperFaction extends StoryHelperBase {
 			detail.appendChild(this.createListSection('Notable NPCs', npcItems));
 		}
 
+		// Encounters
         if (faction.encounters?.length) {
 			detail.appendChild(this.createEncountersSection(faction.encounters));
 		}
