@@ -179,8 +179,8 @@ class StoryHelperTooltip {
 			}
 
 			// Debug: log what keys exist
-			console.log(`Looking for ${entityType}:${normalizedName}`);
-			console.log('Available keys:', Object.keys(this.#dataRegistry[entityType]));
+			// console.log(`Looking for ${entityType}:${normalizedName}`);
+			// console.log('Available keys:', Object.keys(this.#dataRegistry[entityType]));
 		}
 
 		// Fall back to D&D 5e API for standard entities
