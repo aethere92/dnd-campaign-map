@@ -16,6 +16,7 @@ class StoryHelperTooltip {
 			character: {},
 			npc: {},
 			location: {},
+			faction: {},
 			guild: {},
 			quest: {},
 			item: {},
