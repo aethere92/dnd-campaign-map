@@ -14,7 +14,7 @@
 	</li>
 	<li>
 		<strong>The Big Headline:</strong>
-        The party discovered Calistra's abandoned camp and monster collection efforts, befriended two Megatherium, fought acidic Arthropleura in a brutal battle, then escaped the collapsing cave system on a pirate ship through an underground waterfall before being captured by Captain Bianca Turiados's crew.
+        The party discovered Kalistra's abandoned camp and monster collection efforts, befriended two Megatherium, fought acidic Arthropleura in a brutal battle, then escaped the collapsing cave system on a pirate ship through an underground waterfall before being captured by Captain Bianca Turiados's crew.
 	</li>
 </ul>
 
@@ -33,9 +33,9 @@
 		<li>Suspicion of three harpy spies sent by Kilgor.</li>
 		<li>Plans to deliver all creatures to Kilgor to win the &ldquo;Festival of Life.&rdquo;</li>
 		<li>Notes about traveling to Luskan via pirates, leaving treasure behind at &ldquo;the old fort north of the woods.&rdquo;</li>
-		<li>Signed by Calistra of the Brotherhood.</li>
+		<li>Signed by Kalistra of the Brotherhood.</li>
 	</ul>
-	<li>Norr recognized Calistra as her former teacher&mdash;an alteration specialist known for &ldquo;mind spiking&rdquo; students. She left the Brotherhood 10 years prior.</li>
+	<li>Norr recognized Kalistra as her former teacher&mdash;an alteration specialist known for &ldquo;mind spiking&rdquo; students. She left the Brotherhood 10 years prior.</li>
 	<li>Attempting to read the obscured text revealed an illusion script ward, potentially harmful to bypass. Norr chose not to risk it.</li>
 </ul>
 <p><strong>Giant Mosquitoes and Glowing Crystals</strong></p>
@@ -49,7 +49,7 @@
 <ul>
 	<li>The party traveled deeper, encountering massive sloth-bear-like creatures&mdash;Megatherium&mdash;roughly 8 feet tall.</li>
 	<li>Olek&rsquo;s Divine Sense confirmed they were natural, not fiendish.</li>
-	<li>Norr identified them (taking 3 psychic damage from a &ldquo;mind spike&rdquo; flashback to Calistra&rsquo;s lessons).</li>
+	<li>Norr identified them (taking 3 psychic damage from a &ldquo;mind spike&rdquo; flashback to Kalistra&rsquo;s lessons).</li>
 	<li>Megatherium traits: prehistoric, crossbred beasts resistant to fear/stun, primarily herbivorous but drawn to insect prey.</li>
 	<li>Noted Broken Shackle Tribe markings&mdash;creatures likely tamed by orcs in the past.</li>
 	<li>Bonnie successfully befriended two Megatherium, naming them Gică and Mișu.<strong><br /></strong></li>
@@ -138,7 +138,7 @@
         <div class="quest-description">
             <span>
                 <strong>New</strong>
-                - Calistra (Norr's former teacher) collecting arena creatures for Kilgor; working with pirates to transport to Luskan
+                - Kalistra (Norr's former teacher) collecting arena creatures for Kilgor; working with pirates to transport to Luskan
             </span>
             <span>Last update: session 4</span>
         </div>
@@ -168,15 +168,15 @@
 <h3>IV. Key People &amp; Factions</h3>
 <p><strong>New NPCs Introduced:</strong></p>
 <ul>
-	<li><strong>Calistra</strong> - Norr's former teacher (Arcane Brotherhood member); left Brotherhood 10 years ago; collecting monsters for Kilgor</li>
+	<li><strong>Kalistra</strong> - Norr's former teacher (Arcane Brotherhood member); left Brotherhood 10 years ago; collecting monsters for Kilgor</li>
 	<li><strong>Kilgor</strong> - Figure collecting arena creatures for "Festival of Life"</li>
 	<li><strong>Captain Bianca Turiados</strong> - Pirate captain who captured the party</li>
 	<li><strong>Gică and Mișu</strong> - Two Megatherium befriended by Bonnie</li>
 </ul>
 <p><strong>Factions Engaged or Updated:</strong></p>
 <ul>
-	<li><strong>Calistra's Operation</strong> - Former Brotherhood member working independently with pirates</li>
-	<li><strong>The Brotherhood</strong> - Failed to send reinforcements to Calistra's operation</li>
+	<li><strong>Kalistra's Operation</strong> - Former Brotherhood member working independently with pirates</li>
+	<li><strong>The Brotherhood</strong> - Failed to send reinforcements to Kalistra's operation</li>
 	<li><strong>Broken Shackle Tribe</strong> - Orc tribe that tamed the Megatherium; answered Red Hand's call</li>
 	<li><strong>Te Snatchers</strong> - Goblin clan associated with the Arthropleura creatures</li>
 	<li><strong>Red Hand</strong> - Major faction</li>
@@ -185,14 +185,14 @@
 <h3>V. Important Discoveries &amp; Loot</h3>
 <p><strong>Plot Discoveries:</strong></p>
 <ul>
-	<li>Calistra conducting monster collection for Kilgor's "Festival of Life"</li>
+	<li>Kalistra conducting monster collection for Kilgor's "Festival of Life"</li>
 	<li>All creatures completed "arena trials" before collection</li>
 	<li>Three harpy spies sent by Kilgor suspected of infiltrating operation</li>
 	<li>Pirates transporting creatures to Luskan</li>
 	<li>Treasure cache at "old fort north of the woods"</li>
 	<li>Ritual site shows strong Conjuration magic (summoning/transportation)</li>
 	<li>Broken Shackle tribe left two weeks ago answering Red Hand's call</li>
-	<li>Calistra's ledger partially protected by illusion script ward</li>
+	<li>Kalistra's ledger partially protected by illusion script ward</li>
 </ul>
 <p><strong>Key Items/Loot Acquired:</strong></p>
 <ul>

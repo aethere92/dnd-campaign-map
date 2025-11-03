@@ -9,23 +9,26 @@ const CAMPAIGN_002_FACTIONS = [
         npcs: ['Kalistra', 'Soshi', 'Norr', 'Zella'],
         type: 'Enemy',
         encounters: [
-            { session: 0, description: 'Both Soshi and Norr were part of the brotherhood.'}
+            { session: 0, description: 'Both Soshi and Norr were part of the brotherhood.'},
+            { session: 4, description: 'Found half-burned ledger mentioning the brotherhood failing to send reinforcements, signed by Kalistra.'},
+            { session: 5, description: 'Commanders Turiados and Bianca were seen in the possession of a Breaker of Hulls cutlass and a storm-forged glass blade Winder, originally brotherhood relics.'},
+            { session: 7, description: 'Former teacher of Norr and Soshi, Kalistra, was found bound to the Null Brand artefact, still alive, but aged and corrupted.'}
         ]
     },
     {
         id: 'harpers',
         name: 'The Harpers',
         description: 'The Harpers are a semi-secret organization dedicated to promoting good, preserving history, and maintaining a balance between civilization and nature. They work against tyranny, aided by a network of spies and informants throughout the land.',
-        leader: null,
-        location: null,
+        leader: 'The High Harpers',
+        location: 'Unknown',
         sublocation: null,
         type: 'Neutral',
     },
     {
-        id: 'krynn-dynasty',
-        name: 'Krynn Dynasty',
+        id: 'Kryn-dynasty',
+        name: 'Kryn Dynasty',
         description: `The Calamity left northern Xhorhas a burnt and cracked wasteland surrounded by blackened marshland and jagged cliffs, and survival in the valley wasteland was difficult for centuries thereafter. The Kryn Dynasty, founded by drow who had turned from Lolth to a new faith in the Luxon, is the first nation to rise in the region after the end of that period, and though they still contend with not only the scarred landscape but also lingering abominations, they have been able to incorporate diverse humanoids and giants under their banner. The cities of the Dynasty are kept shaded or even in near-perpetual night by powerful dunamancers and other umbral magic, and the capital city of Rosohna sits under constant, sparsely broken cloud cover. Its settlements are connected by dirt roads. Associated with Chronomancers mentioned by Sertieren.`,
-        leader: null,
+        leader: 'Bright Queen Leylas Kryn',
         location: 'Wildermount',
         sublocation: 'Rosohna',
         type: 'Enemy',

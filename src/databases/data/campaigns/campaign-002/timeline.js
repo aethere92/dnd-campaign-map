@@ -75,7 +75,7 @@ const CAMPAIGN_002_TIMELINE = [
 				actors: '[ENTITY:character:Kaedin], [ENTITY:npc:Sertieren]',
 				sublocation: 'Sertieren Mansion',
 				url: { campaign: 'campaign-002', session: 'session-002', target: 'sertieren-meeting' },
-				description: `[ENTITY:character:Kaedin] goes to the mansion of the wizard Sertieren, encountering a speaking magical fountain. The wizard answers questions about Thalos, disappearances, and magical phenomena, mentioning rumors of the Chronomancers of Krynn being killed by dragons. He points out a powerful magical nexus in the Witchwood and comments on local defenses. [ENTITY:character:Kaedin] then departs for the meeting point.`,
+				description: `[ENTITY:character:Kaedin] goes to the mansion of the wizard Sertieren, encountering a speaking magical fountain. The wizard answers questions about Thalos, disappearances, and magical phenomena, mentioning rumors of the [ENTITY:faction:Kryn Dynasty:Chronomancers of Kryn] being killed by dragons. He points out a powerful magical nexus in the Witchwood and comments on local defenses. [ENTITY:character:Kaedin] then departs for the meeting point.`,
 			},
 		],
 	},

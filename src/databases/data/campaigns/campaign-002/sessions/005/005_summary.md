@@ -220,7 +220,7 @@
 	<li>All party gold cursed into worthless copper by touched pirate coin</li>
 	<li>Bianca seeks to reclaim throne from necromancer Sandro</li>
 	<li>Pirates displaced from Lustria, confused about current location</li>
-	<li>Sertieren was Calistra's former companion before she joined Brotherhood</li>
+	<li>Sertieren was Kalistra's former companion before she joined Brotherhood</li>
 	<li>Recent events (hydras, alchemy, tribal movements) are "portents of coming storm"</li>
 </ul>
 <p><strong>Key Items/Loot Acquired:</strong></p>

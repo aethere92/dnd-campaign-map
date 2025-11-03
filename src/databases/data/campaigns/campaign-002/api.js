@@ -140,8 +140,8 @@ const CAMPAIGN_002_API_DATA = {
 			description:
 				"Magical faction involved in the temple ritual chamber; linked to the map carried by the party. Their markings were found in Thieves' Cant at the ritual site.",
 		},
-		'Krynn Dynasty': {
-			name: 'Krynn Dynasty',
+		'Kryn Dynasty': {
+			name: 'Kryn Dynasty',
 			description: `The Calamity left northern Xhorhas a burnt and cracked wasteland surrounded by blackened marshland and jagged cliffs, and survival in the valley wasteland was difficult for centuries thereafter. The Kryn Dynasty, founded by drow who had turned from Lolth to a new faith in the Luxon, is the first nation to rise in the region after the end of that period, and though they still contend with not only the scarred landscape but also lingering abominations, they have been able to incorporate diverse humanoids and giants under their banner. The cities of the Dynasty are kept shaded or even in near-perpetual night by powerful dunamancers and other umbral magic, and the capital city of Rosohna sits under constant, sparsely broken cloud cover. Its settlements are connected by dirt roads. Associated with Chronomancers mentioned by Sertieren.`,
 			metadata: {
 				Base: 'Rosohna, Wildermount',
@@ -286,7 +286,7 @@ const CAMPAIGN_002_API_DATA = {
 			class: 'Wizard',
 			role: 'Local wizard',
 			description:
-				"Local wizard in Drellin's Ferry; shares rumors about Chronomancers of Krynn and magical threats. Former companion of Kalistra in the Crazy Hogs adventuring party. Provides containment spheres for magical creatures and identifies potions. Warned that recent events portend a coming storm and intends to leave Drellin's Ferry soon.",
+				"Local wizard in Drellin's Ferry; shares rumors about Chronomancers of Kryn and magical threats. Former companion of Kalistra in the Crazy Hogs adventuring party. Provides containment spheres for magical creatures and identifies potions. Warned that recent events portend a coming storm and intends to leave Drellin's Ferry soon.",
 		},
 		'Nels Huto': {
 			name: 'Nels Huto',

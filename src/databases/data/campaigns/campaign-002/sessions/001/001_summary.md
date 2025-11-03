@@ -101,7 +101,7 @@
 	<li>Encounters magical fountain (speaks) and halfling servant.</li>
 	<li>Asks wizard Sertieren about Talos, disappearances, and magical phenomena:</li>
 	<ul>
-		<li>Mentions Chronomancers of Krynn (rumors of deaths by dragons).</li>
+		<li>Mentions Chronomancers of Kryn (rumors of deaths by dragons).</li>
 		<li>Notes magical nexus in Witchwood; area dangerous.</li>
 		<li>Comments on city defenses and local threats.</li>
 	</ul>
@@ -198,7 +198,7 @@
 <ul>
 	<li>Wyrmlord Koth is gathering tribes for a "Day of Ruin" attack</li>
 	<li>Witchwood contains dangerous magical nexus and cursed fortress (Wrath Keep)</li>
-	<li>Chronomancers of Krynn rumored killed by dragons</li>
+	<li>Chronomancers of Kryn rumored killed by dragons</li>
 	<li>Necromancer Nels Huto heading into Witchwood with Dead Man's Boots</li>
 </ul>
 <p><strong>Key Items/Loot Acquired:</strong></p>

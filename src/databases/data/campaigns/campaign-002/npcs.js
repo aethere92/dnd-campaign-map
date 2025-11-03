@@ -179,7 +179,7 @@ const CAMPAIGN_002_NPCS = [
 			{ npcId: 'kalistra', type: 'Former Companion', description: 'Stole her spellbook to stop her rampage.' },
 		],
 		encounters: [
-			{ session: 1, description: 'Rambled about Chronomancers of Krynn and magical nexuses.' },
+			{ session: 1, description: 'Rambled about Chronomancers of Kryn and magical nexuses.' },
 			{ session: 3, description: 'Sold containment spheres to party.' },
 			{ session: 5, description: 'Bought Storm Dust and materials, warned of coming danger.' },
 		],

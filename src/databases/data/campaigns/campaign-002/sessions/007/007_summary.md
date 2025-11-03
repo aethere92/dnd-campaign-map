@@ -14,7 +14,7 @@
 	</li>
 	<li>
 		<strong>The Big Headline:</strong>
-        After a noisy infiltration, the party discovered evidence of a massive invasion force approaching Drellin's Ferry in 4 days, completed a dangerous blood ritual that killed Calistra and drained Norr's essence, then fought through spectral guardians and temple defenders to reach a vault containing the corrupted Null Brand artifact guarded by an aging Kalistra.
+        After a noisy infiltration, the party discovered evidence of a massive invasion force approaching Drellin's Ferry in 4 days, completed a dangerous blood ritual that killed Kalistra and drained Norr's essence, then fought through spectral guardians and temple defenders to reach a vault containing the corrupted Null Brand artifact guarded by an aging Kalistra.
 	</li>
 </ul>
 
