@@ -73,6 +73,7 @@ class StoryHelperFaction extends StoryHelperBase {
 
 		// Location
 		if (faction.location) {
+			console.log(faction);
 			const fullLocation = faction.sublocation ? `${faction.location}: ${faction.sublocation}` : faction.location;
 			detail.appendChild(this.createSection('Location', fullLocation));
 		}
