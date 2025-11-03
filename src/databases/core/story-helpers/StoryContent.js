@@ -126,6 +126,12 @@ class StoryHelperContent {
 		npcRenderer.render(contentArea);
 	}
 
+	renderFactions(contentArea) {
+		const campaign = this.#getCampaign();
+		const factionRenderer = new StoryHelperFactions(campaign, this.#placeholderProcessor);
+		factionRenderer.render(contentArea);
+	}
+
 	renderCharacter(contentArea, characterName) {
 		const campaign = this.#getCampaign();
 		const characterRenderer = new StoryHelperCharacter(campaign, this.#placeholderProcessor);

@@ -310,6 +310,9 @@ class CampaignManager {
 			characterName ||
 			viewType === 'timeline' ||
 			viewType === 'quests' ||
+			viewType === 'npcs' ||
+			viewType === 'locations' ||
+			viewType === 'factions' ||
 			(!hasMap && hasStory)
 		) {
 			// Story was explicitly requested, or default to story if no map available
@@ -335,6 +338,7 @@ class CampaignManager {
 			currentUrl.searchParams.delete('quest');
 			currentUrl.searchParams.delete('location');
 			currentUrl.searchParams.delete('npc');
+			currentUrl.searchParams.delete('faction');
 			// Update history without these params before loading map
 			window.history.replaceState(null, '', currentUrl.toString());
 
@@ -373,6 +377,7 @@ class CampaignManager {
 		params.delete('quest');
 		params.delete('location');
 		params.delete('npc');
+		params.delete('faction');
 
 		// Preserve any existing target parameter if present
 		const targetParam = params.get('t');
@@ -428,6 +433,10 @@ class CampaignManager {
 			initialView = 'locations';
 			initialSessionId = null; // Not showing a session
 			initialCharacterName = null; // Not showing a character
+		} else if (viewType === 'factions') {
+			initialView = 'factions';
+			initialSessionId = null; // Not showing a session
+			initialCharacterName = null; // Not showing a character
 		} else if (viewType === 'npcs') {
 			initialView = 'npcs';
 			initialSessionId = null; // Not showing a session
@@ -463,7 +472,8 @@ class CampaignManager {
 		const itemParams = {
 			'quests': 'quest',
 			'locations': 'location',
-			'npcs': 'npc'
+			'npcs': 'npc',
+			'factions': 'faction'
 		};
 		
 		// Only preserve the item parameter that matches the current view

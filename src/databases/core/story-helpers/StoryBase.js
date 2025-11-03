@@ -46,7 +46,7 @@ class StoryHelperBase {
 		const params = new URLSearchParams(window.location.search);
 
 		// Clear all other item-specific parameters to avoid conflicts
-		const itemParams = ['quest', 'location', 'npc'];
+		const itemParams = ['quest', 'location', 'npc', 'faction'];
 		itemParams.forEach((param) => {
 			if (param !== this.getUrlParam()) {
 				params.delete(param);
