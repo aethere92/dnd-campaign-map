@@ -72,17 +72,16 @@ class StoryHelperTooltip {
 		}
 
 		// Register factions
-		if (campaignData.factions) {
-			campaignData.factions.forEach((faction) => {
-				const key = faction.name.toLowerCase();
-				registry.quest[key] = faction;
-				// Also register by id
-				if (faction.id) {
-					registry.faction[faction.id] = faction;
-				}
-			});
-		}
-
+		// if (campaignData.factions) {
+		// 	campaignData.factions.forEach((faction) => {
+		// 		const key = faction.name.toLowerCase();
+		// 		registry.quest[key] = faction;
+		// 		// Also register by id
+		// 		if (faction.id) {
+		// 			registry.faction[faction.id] = faction;
+		// 		}
+		// 	});
+		// }
 
 		return registry;
 	}
