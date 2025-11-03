@@ -265,33 +265,4 @@ class StoryHelperNPC extends StoryHelperBase {
 
 		return this.createSection('Relationships', content);
 	}
-
-	createEncountersSection(encounters) {
-		const content = document.createElement('div');
-		content.className = 'view-encounters';
-
-		encounters.forEach((encounter) => {
-			const card = document.createElement('div');
-			card.className = 'view-card';
-
-			if (encounter.session) {
-				const sessionLabel = document.createElement('div');
-				sessionLabel.className = 'view-card-label';
-				sessionLabel.textContent = `Session ${encounter.session}`;
-				card.appendChild(sessionLabel);
-			}
-
-			if (encounter.description) {
-				const desc = document.createElement('p');
-				desc.className = 'view-card-text';
-				desc.textContent = encounter.description;
-				this.placeholderProcessor.processEntityReferences(desc);
-				card.appendChild(desc);
-			}
-
-			content.appendChild(card);
-		});
-
-		return this.createSection('Party Encounters', content);
-	}
 }
