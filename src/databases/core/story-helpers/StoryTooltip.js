@@ -359,7 +359,7 @@ class StoryHelperTooltip {
 		`;
 	}
 
-	// Faction tooltip
+	// Faction tooltipW
 	#generateFactionTooltip(data) {
 		return `
 			<div class="entity-tooltip entity-faction-tooltip">

@@ -246,7 +246,8 @@ class StoryHelperNPC extends StoryHelperBase {
 			relDiv.className = 'view-relationship-item';
 
 			const relatedNPC = this.campaign.npcs.find((n) => n.id === rel.npcId);
-			const npcName = relatedNPC ? relatedNPC.name : 'Unknown NPC';
+			const relatedCharacter = this.campaign.metadata.characters.find((n) => n.name.toLowerCase() === rel.npcId);
+			const npcName = relatedNPC ? relatedNPC.name : relatedCharacter ? relatedCharacter.name : 'Unknown NPC';
 
 			relDiv.innerHTML = `<strong>${npcName}</strong>: ${rel.type}${rel.description ? ` - ${rel.description}` : ''}`;
 			this.placeholderProcessor.processEntityReferences(relDiv);
