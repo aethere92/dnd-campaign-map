@@ -234,6 +234,10 @@ class StoryHelperNPC extends StoryHelperBase {
 			detail.appendChild(this.createEncountersSection(npc.encounters));
 		}
 
+		if (npc.link?.length) {
+			detail.appendChild(this.createLinksSection(npc.link));
+		}
+
 		return detail;
 	}
 

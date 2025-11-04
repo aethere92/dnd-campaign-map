@@ -343,6 +343,28 @@ class StoryHelperBase {
 		return this.createSection('Party Encounters', content);
 	}
 
+	// Utility: Create a links section
+	createLinksSection(links) {
+		const content = document.createElement('ul');
+		content.className = 'view-links';
+
+		links.forEach((link) => {
+			const card = document.createElement('li');
+			card.className = 'view-link';
+
+			const linkContent = document.createElement('a');
+			linkContent.className = 'view-link-anchor';
+			linkContent.textContent = link.title;
+			linkContent.href = link.link;
+			linkContent.target = '_blank';
+
+			card.append(linkContent);
+			content.append(card);
+		})
+
+		return this.createSection('Involved in', content);
+	}
+
 	// Utility: Format type names (e.g., "some-type" -> "Some Type")
 	formatName(name) {
 		return name
