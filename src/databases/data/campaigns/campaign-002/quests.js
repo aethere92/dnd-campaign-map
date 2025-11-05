@@ -475,7 +475,7 @@ const CAMPAIGN_002_QUESTS = [
 		title: 'Care for Thylacoleo Cubs',
 		status: 'Active',
 		priority: 'Normal',
-		current_objective: 'Seven cubs secured and traveling with party; magical properties lost after artifact explosion',
+		current_objective: 'Seven cubs secured and traveling with party.',
 		sessions: [
 			{
 				session: 5,

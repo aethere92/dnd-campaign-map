@@ -54,7 +54,7 @@ const CAMPAIGN_002_TIMELINE = [
 				type: 'traversal',
 				actors: '[ENTITY:character:Entire party:Party]',
 				url: { campaign: 'campaign-002', session: 'session-002', target: 'arrival' },
-				description: `The party arrives at [ENTITY:location:Drellin's Ferry], a town situated along the river, using ferryboats in place of a missing bridge. They note the presence of orchards, fields, and five watchtowers. They are met by town guards led by Sergeant Hersk, who briefs them on local dangers (Witchwood, goblins, orcs, undead rumors) before providing directions.`,
+				description: `The party arrives at [ENTITY:location:Drellin's Ferry], a town situated along the river, using ferryboats in place of a missing bridge. They note the presence of orchards, fields, and five watchtowers. They are met by town guards led by [ENTITY:npc:Sergeant Hersk], who briefs them on local dangers ([ENTITY:location:Witchwood], goblins, orcs, undead rumors) before providing directions.`,
 			},
 			{
 				type: 'investigation',
@@ -66,7 +66,7 @@ const CAMPAIGN_002_TIMELINE = [
 			{
 				type: 'investigation',
 				actors: '[ENTITY:character:Norr], [ENTITY:character:Soshi], [ENTITY:npc:Brother Denny], [ENTITY:npc:Avartel]',
-				sublocation: 'Shrine of Pelor',
+				sublocation: '[ENTITY:location:Shrine of Pelor]',
 				url: { campaign: 'campaign-002', session: 'session-002', target: 'shrine-meeting' },
 				description: `[ENTITY:character:Norr] and [ENTITY:character:Soshi] visit the Shrine of Pelor (purchasing offerings first) and speak with Brother Denny and the druid Avartel. [ENTITY:npc:Avartel] provides key information on the Witchwood, mentioning a cursed fortress called Wrath Keep haunted by skeletons. [ENTITY:npc:Brother Denny] accepts the offerings and attempts to sell them wares. They depart for the meeting point.`,
 			},
@@ -189,7 +189,7 @@ const CAMPAIGN_002_TIMELINE = [
 				type: 'investigation',
 				actors: '[ENTITY:character:Entire party:Party], [ENTITY:npc:Soranna]',
 				sublocation: 'Tollhouse Basement',
-				url: { campaign: 'campaign-002', session: 'session-003', target: 'soranna-briefing' },
+				url: { campaign: 'campaign-002', session: 'session-003', target: '[ENTITY:npc:Soranna]-briefing' },
 				description: `The party returns to [ENTITY:location:Drellin's Ferry] and meets with Captain [ENTITY:npc:Soranna] at the Tollhouse. Due to their filthy state and the need for discretion, they are led to the basement for a private briefing. They report sightings of mauled corpses, green-cloaked figures, a missing woodsman, and the hydra encounter. [ENTITY:npc:Soranna] marks the incidents on a map with red-flagged pins, rewards them with 10 gold pieces, and reveals a vast cave system beneath the city—a potential secret invasion route. She informs them two agents will meet them the following morning.`,
 			},
 			{
@@ -236,7 +236,7 @@ const CAMPAIGN_002_TIMELINE = [
 			{
 				type: 'narrative',
 				actors: '[ENTITY:character:Entire party:Party], [ENTITY:npc:Avarthel]',
-				url: { campaign: 'campaign-002', session: 'session-003', target: 'druid-counsel' },
+				url: { campaign: 'campaign-002', session: 'session-003', target: '[ENTITY:class:Druid]-counsel' },
 				description: `The party approaches [ENTITY:npc:Avarthel] while he is mid-wedding. He leads them to his grove near the Feywild, where the natural energy rejuvenates the party members, [ENTITY:character:Bonnie], and [ENTITY:npc:Jacques]. [ENTITY:npc:Avarthel] refuses to hatch the hydra eggs due to ecological danger but agrees to store them securely. He states only druids in Ramashen could return them to the Feywild. He also provides tactical advice: thylacoleos could be distracted with honey.`,
 			},
 			{
@@ -352,7 +352,7 @@ const CAMPAIGN_002_TIMELINE = [
 			campaign: 'campaign-002',
 			session: 'session-004',
 		},
-		description: `The party reunites with the mercenaries for a chaotic escape that leads to an unexpected confrontation with a pirate-paladin galleon.`,
+		description: `The party reunites with the mercenaries for a chaotic escape that leads to an unexpected confrontation with a pirate-[ENTITY:class:Paladin] galleon.`,
 		items: [
 			{
 				type: 'traversal',
@@ -365,8 +365,8 @@ const CAMPAIGN_002_TIMELINE = [
 				type: 'narrative',
 				actors: '[ENTITY:character:Olek], War Galleon Crew (Pirates and Paladins)',
 				sublocation: 'Open Sea',
-				url: { campaign: 'campaign-002', session: 'session-004', target: 'pirate-paladin-capture' },
-				description: `As the exhausted, half-armored party regroups at sea, a war galleon flying a pirate flag approaches. Boarding parties consist of both pirates and paladins. They are hailed as "new guests" by emissaries of Captain Bianca Turiados. The name alarms [ENTITY:character:Olek] as Commander Turiados is the paladin he has been seeking. The party is brought aboard as "guests" or captives, ending the session on a cliffhanger.`,
+				url: { campaign: 'campaign-002', session: 'session-004', target: 'pirate-[ENTITY:class:Paladin]-capture' },
+				description: `As the exhausted, half-armored party regroups at sea, a war galleon flying a pirate flag approaches. Boarding parties consist of both pirates and paladins. They are hailed as "new guests" by emissaries of Captain Bianca Turiados. The name alarms [ENTITY:character:Olek] as Commander Turiados is the [ENTITY:class:Paladin] he has been seeking. The party is brought aboard as "guests" or captives, ending the session on a cliffhanger.`,
 			},
 			{
 				type: 'narrative',
@@ -435,14 +435,14 @@ const CAMPAIGN_002_TIMELINE = [
 			campaign: 'campaign-002',
 			session: 'session-005',
 		},
-		description: `The party manages their new financial reality, secures their animal companions, and gains critical information about their enemies from the town wizard.`,
+		description: `The party manages their new financial reality, secures their animal companions, and gains critical information about their enemies from the town [ENTITY:class:Wizard].`,
 		items: [
 			{
 				type: 'traversal',
 				actors: '[ENTITY:character:Entire party:Party], [ENTITY:npc:Avarthel], [ENTITY:npc:Brother Denny]',
 				sublocation: 'Town',
 				url: { campaign: 'campaign-002', session: 'session-005', target: 'failed-aid' },
-				description: `The party finds [ENTITY:npc:Avarthel]'s druid grove empty (his snake guardian reports he is gone for months). [ENTITY:character:Norr] seeks help from Brother Denny at the shrine, who is unhelpful. A goat-herd provides milk for the cubs in exchange for gold.`,
+				description: `The party finds [ENTITY:npc:Avarthel]'s druid grove empty (his snake guardian reports he is gone for months). [ENTITY:character:Norr] seeks help from [ENTITY:npc:Brother Denny] at the shrine, who is unhelpful. A goat-herd provides milk for the cubs in exchange for gold.`,
 			},
 			{
 				type: 'investigation',
@@ -499,7 +499,7 @@ const CAMPAIGN_002_TIMELINE = [
 					'[ENTITY:character:Olek], [ENTITY:character:Kaedin], [ENTITY:character:Bonnie], [ENTITY:npc:Captain Sorana]',
 				sublocation: 'Barracks',
 				url: { campaign: 'campaign-002', session: 'session-006', target: 'new-contract' },
-				description: `While waiting for the armor, they report to Captain Sorana. [ENTITY:character:Olek] and [ENTITY:character:Kaedin] assist in drilling her recruits. [ENTITY:character:Bonnie] uses Mage Hand for pranks. They report their findings from the temple ruins and pirate encounter. [ENTITY:npc:Sorana] confirms reports of robbed ships. She awards them 20 gp for the temple mission and assigns a new task: investigate four missing barbarian riders last seen in the Witchwood, northwest of town.`,
+				description: `While waiting for the armor, they report to Captain Sorana. [ENTITY:character:Olek] and [ENTITY:character:Kaedin] assist in drilling her recruits. [ENTITY:character:Bonnie] uses Mage Hand for pranks. They report their findings from the temple ruins and pirate encounter. [ENTITY:npc:Sorana] confirms reports of robbed ships. She awards them 20 gp for the temple mission and assigns a new task: investigate four missing barbarian riders last seen in the [ENTITY:location:Witchwood], northwest of town.`,
 			},
 		],
 	},
@@ -512,7 +512,7 @@ const CAMPAIGN_002_TIMELINE = [
 			campaign: 'campaign-002',
 			session: 'session-006',
 		},
-		description: `The party sets out towards the Witchwood, quickly encountering evidence of a recent, brutal orc raid.`,
+		description: `The party sets out towards the [ENTITY:location:Witchwood], quickly encountering evidence of a recent, brutal orc raid.`,
 		items: [
 			{
 				type: 'traversal',
@@ -531,7 +531,7 @@ const CAMPAIGN_002_TIMELINE = [
 	{
 		id: 19,
 		title: `Trial by Fire at the Ruined Fortress`,
-		location: `[ENTITY:location:Ruined Fortress] (Witchwood)`,
+		location: `[ENTITY:location:Ruined Fortress] ([ENTITY:location:Witchwood])`,
 		session: '6 & 7',
 		url: {
 			campaign: 'campaign-002',
@@ -683,7 +683,7 @@ const CAMPAIGN_002_TIMELINE = [
                 - [ENTITY:character:Olek] & [ENTITY:character:Norr]: Witness a Blighted [ENTITY:class:Paladin] Stronghold infiltrated by Lamashtu's cults after the Battle for Bremen. The fortress falls to the Angevin fleet and their resurrected god, Kresimir. [ENTITY:character:Norr] notes her future self has lost her right arm.
                 - [ENTITY:character:Kaedin]: Sees his neighboring village burning, led by the Blue Bear sigil. Villagers are being taken for ritual sacrifice.
                 - [ENTITY:character:Bonnie]: Witnesses the Fall of the Feywild and the annihilation of the Spring and Autumn Courts. Titania and the Queen of Air and Darkness fight a warrior wielding energy spears, later revealed as Kilgor, under banners of the Red Hand and Black Orcs.
-                - [ENTITY:character:Soshi]: Is chained during the Siege of Neverwinter, where Red Wizards of Thay and Arcane Brotherhood mages lead the assault under Blue Bear banners, using prisoners' life force to destroy the city walls.`,
+                - [ENTITY:character:Soshi]: Is chained during the Siege of Neverwinter, where Red Wizards of Thay and [ENTITY:faction:Arcane Brotherhood] mages lead the assault under Blue Bear banners, using prisoners' life force to destroy the city walls.`,
 			},
 		],
 	},
@@ -708,7 +708,7 @@ const CAMPAIGN_002_TIMELINE = [
 			{
 				type: 'narrative',
 				actors: '[ENTITY:character:Bonnie], [ENTITY:npc:Yoghurt], [ENTITY:npc:Captain Soranna]',
-				url: { campaign: 'campaign-002', session: 'session-008', target: 'soranna-message' },
+				url: { campaign: 'campaign-002', session: 'session-008', target: '[ENTITY:npc:Soranna]-message' },
 				description: `Recognizing the immediate threat, [ENTITY:character:Bonnie] writes a detailed letter to [ENTITY:npc:Captain Soranna] in [ENTITY:location:Drellin's Ferry], warning her of the approaching army (ETA four days), the prophetic visions, and the untrustworthiness of the [ENTITY:guild:Arcane Brotherhood]. She pays [ENTITY:npc:Yoghurt] 3 gp and gives him strict instructions to deliver the message only to [ENTITY:npc:Soranna] and "Do not show it to Cat," before he disappears into the woods.`,
 			},
 		],

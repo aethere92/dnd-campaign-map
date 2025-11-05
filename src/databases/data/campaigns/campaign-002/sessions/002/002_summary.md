@@ -188,17 +188,17 @@
 <h3>III. Quest &amp; Objective Tracker</h3>
 <div class="quest-container">
     <div class="quest">
-        <div class="quest-name">Investigate Wyrmlord Koth and "Day of Ruin"</div>
+        <div class="quest-name">[ENTITY:quest:Stop The Invasion]</div>
         <div class="quest-description">
             <span>
                 <strong>Active</strong>
-                - Shared intel with Winter Rose mercenaries about hobgoblin attacks
+                - Shared intel with Winter Rose mercenaries about hobgoblin attacks. Discovered rigged bridge and body mound; fought hydra; multiple warg rider encounters.
             </span>
             <span>Last update: session 2</span>
         </div>
     </div>
     <div class="quest">
-        <div class="quest-name">Retrieve Dead Man's Boots from Nels Huto</div>
+        <div class="quest-name">[ENTITY:quest:Retrieve Dead Man's Boots from Nels Huto]</div>
         <div class="quest-description">
             <span>
                 <strong>Active</strong>
@@ -208,17 +208,7 @@
         </div>
     </div>
     <div class="quest">
-        <div class="quest-name">Stop the Raiders</div>
-        <div class="quest-description">
-            <span>
-                <strong>Progressed</strong>
-                - Discovered rigged bridge and body mound; fought hydra; multiple warg rider encounters
-            </span>
-            <span>Last update: session 2</span>
-        </div>
-    </div>
-    <div class="quest">
-        <div class="quest-name">Investigate Witchwood and Wrath Keep</div>
+        <div class="quest-name">[ENTITY:quest:Investigate Witchwood and Wrath Keep]</div>
         <div class="quest-description">
             <span>
                 <strong>Active</strong>
@@ -228,7 +218,7 @@
         </div>
     </div>
     <div class="quest">
-        <div class="quest-name">Winter Rose Spider Bounty</div>
+        <div class="quest-name">[ENTITY:quest:Winter Rose Spider Bounty]</div>
         <div class="quest-description">
             <span>
                 <strong>New</strong>

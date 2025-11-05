@@ -121,7 +121,7 @@
 <h3>III. Quest &amp; Objective Tracker</h3>
 <div class="quest-container">
     <div class="quest">
-        <div class="quest-name">Investigate Wyrmlord Koth and "Day of Ruin"</div>
+        <div class="quest-name">[ENTITY:quest:Stop The Invasion]</div>
         <div class="quest-description">
             <span>
                 <strong>Active</strong>
@@ -131,7 +131,7 @@
         </div>
     </div>
     <div class="quest">
-        <div class="quest-name">Retrieve Dead Man's Boots from Nels Huto</div>
+        <div class="quest-name">[ENTITY:quest:Retrieve Dead Man's Boots from Nels Huto]</div>
         <div class="quest-description">
             <span>
                 <strong>Active</strong>
@@ -141,17 +141,7 @@
         </div>
     </div>
     <div class="quest">
-        <div class="quest-name">Stop the Raiders</div>
-        <div class="quest-description">
-            <span>
-                <strong>Active</strong>
-                - No progress this session
-            </span>
-            <span>Last update: session 4</span>
-        </div>
-    </div>
-    <div class="quest">
-        <div class="quest-name">Retrieve Locket of Hair from Sandro</div>
+        <div class="quest-name">[ENTITY:quest:Retrieve Locket of Hair from Sandro]</div>
         <div class="quest-description">
             <span>
                 <strong>New</strong>
@@ -161,7 +151,7 @@
         </div>
     </div>
     <div class="quest">
-        <div class="quest-name">Investigate "The Brotherhood" Activities</div>
+        <div class="quest-name">[ENTITY:quest:Brotherhood and Kilgor Investigation]</div>
         <div class="quest-description">
             <span>
                 <strong>Progressed</strong>
@@ -171,17 +161,7 @@
         </div>
     </div>
     <div class="quest">
-        <div class="quest-name">Locate Kilgor's Festival</div>
-        <div class="quest-description">
-            <span>
-                <strong>Active</strong>
-                - No progress this session
-            </span>
-            <span>Last update: session 4</span>
-        </div>
-    </div>
-    <div class="quest">
-        <div class="quest-name">Care for Thylacoleo Cubs</div>
+        <div class="quest-name">[ENTITY:quest:Care for Thylacoleo Cubs]</div>
         <div class="quest-description">
             <span>
                 <strong>Active</strong>

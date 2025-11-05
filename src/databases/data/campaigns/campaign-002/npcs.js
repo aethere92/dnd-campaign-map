@@ -37,1320 +37,1318 @@
 
 const CAMPAIGN_002_NPCS = [
 	{
-		"id": "soranna",
-		"name": "Captain Soranna Anitah",
-		"affinity": "Ally",
-		"faction": "Town Guard",
-		"status": "Alive",
-		"race": "Unknown",
-		"class": "Unknown",
-		"role": "Guard Captain & Intelligence Coordinator",
-		"description": "Tall, strong-boned woman with simple good looks and an unsmiling manner. Holds a council seat.",
-		"personality": "Professional, strategic, pragmatic. Takes security threats seriously.",
-		"background": null,
-		"location": {
-			"primary": "Drellin's Ferry",
-			"specific": "Tollhouse/Barracks"
+		id: 'soranna',
+		name: 'Captain Soranna Anitah',
+		affinity: 'Ally',
+		faction: 'Town Guard',
+		status: 'Alive',
+		race: 'Unknown',
+		class: 'Unknown',
+		role: 'Guard Captain & Intelligence Coordinator',
+		description: 'Tall, strong-boned woman with simple good looks and an unsmiling manner. Holds a council seat.',
+		personality: 'Professional, strategic, pragmatic. Takes security threats seriously.',
+		background: null,
+		location: {
+			primary: "Drellin's Ferry",
+			specific: 'Tollhouse/Barracks',
 		},
-		"goals": [
+		goals: [
 			"Protect Drellin's Ferry from raiders",
-			"Gather intelligence on Red Hand threat",
-			"Coordinate defense preparations"
+			'Gather intelligence on Red Hand threat',
+			'Coordinate defense preparations',
 		],
-		"items": null,
-		"relationships": [
-			{ "npcId": "norro", "type": "Colleague", "description": "Works with on town security." },
-			{ "npcId": "kat", "type": "Operative", "description": "Intelligence gatherer." },
-			{ "npcId": "yoghurt", "type": "Operative", "description": "Intelligence gatherer." }
+		items: null,
+		relationships: [
+			{ npcId: 'norro', type: 'Colleague', description: 'Works with on town security.' },
+			{ npcId: 'kat', type: 'Operative', description: 'Intelligence gatherer.' },
+			{ npcId: 'yoghurt', type: 'Operative', description: 'Intelligence gatherer.' },
 		],
-		"encounters": [
-			{ "session": 1, "description": "Briefed party on raider activity and the Witchwood." },
-			{ "session": 2, "description": "Rewarded party for clearing bridge ambush." },
-			{ "session": 3, "description": "Met party in tollhouse basement to discuss attacks." }
+		encounters: [
+			{ session: 1, description: 'Briefed party on raider activity and the Witchwood.' },
+			{ session: 2, description: 'Rewarded party for clearing bridge ambush.' },
+			{ session: 3, description: 'Met party in tollhouse basement to discuss attacks.' },
 		],
-		"link": [
+		link: [
 			{
-				"title": "Stop the Invasion",
-				"link": "?campaign=campaign-002&view=quests&quest=Stop%2520the%2520Invasion"
+				title: 'Stop the Invasion',
+				link: '?campaign=campaign-002&view=quests&quest=Stop%2520the%2520Invasion',
 			},
 			{
-				"title": "Investigate Witchwood and Wrath Keep",
-				"link": "?campaign=campaign-002&view=quests&quest=Investigate%2520Witchwood%2520and%2520Wrath%2520Keep"
+				title: 'Investigate Witchwood and Wrath Keep',
+				link: '?campaign=campaign-002&view=quests&quest=Investigate%2520Witchwood%2520and%2520Wrath%2520Keep',
 			},
 			{
-				"title": "Retrieve Dead Man's Boots from Nels Huto",
-				"link": "?campaign=campaign-002&view=quests&quest=Retrieve%2520Dead%2520Man's%2520Boots%2520from%2520Nels%2520Huto"
+				title: "Retrieve Dead Man's Boots from Nels Huto",
+				link: "?campaign=campaign-002&view=quests&quest=Retrieve%2520Dead%2520Man's%2520Boots%2520from%2520Nels%2520Huto",
 			},
 			{
-				"title": "Investigate Cave System",
-				"link": "?campaign=campaign-002&view=quests&quest=Investigate%2520Cave%2520System"
-			}
-		]
-	},
-	{
-		"id": "norro",
-		"name": "Councilman Norro Wiston",
-		"affinity": "Neutral",
-		"faction": "Town Council",
-		"status": "Alive",
-		"race": "Unknown",
-		"class": "Unknown",
-		"role": "Town Councilor & Administrator",
-		"description": "Town councilman who coordinates security matters.",
-		"personality": null,
-		"background": null,
-		"location": {
-			"primary": "Drellin's Ferry",
-			"specific": null
-		},
-		"goals": null,
-		"items": null,
-		"relationships": [{ "npcId": "soranna", "type": "Colleague", "description": "Coordinates security issues." }],
-		"encounters": [
-			{
-				"session": 1,
-				"description": "Provided discount note for armorer, discussed town threats and Day of Ruin."
-			}
+				title: 'Investigate Cave System',
+				link: '?campaign=campaign-002&view=quests&quest=Investigate%2520Cave%2520System',
+			},
 		],
-		"link": [
-			{
-				"title": "Stop the Invasion",
-				"link": "?campaign=campaign-002&view=quests&quest=Stop%2520the%2520Invasion"
-			}
-		]
 	},
 	{
-		"id": "wyrmlord-koth",
-		"name": "Wyrmlord Koth",
-		"affinity": "Antagonist",
-		"faction": "Red Hand",
-		"status": "Alive",
-		"race": "Hobgoblin",
-		"class": "Warlord/Sorcerer",
-		"role": "Hobgoblin Captain",
-		"description": "Hobgoblin captain orchestrating tribal warfare. Initially believed to be supreme commander.",
-		"personality": "Orchestrates large-scale coordinated attacks.",
-		"background": "Gathering hobgoblin, orc, and other tribal forces. Serves higher power in Red Hand hierarchy.",
-		"location": {
-			"primary": "Unknown",
-			"specific": null
+		id: 'norro',
+		name: 'Councilman Norro Wiston',
+		affinity: 'Neutral',
+		faction: 'Town Council',
+		status: 'Alive',
+		race: 'Unknown',
+		class: 'Unknown',
+		role: 'Town Councilor & Administrator',
+		description: 'Town councilman who coordinates security matters.',
+		personality: null,
+		background: null,
+		location: {
+			primary: "Drellin's Ferry",
+			specific: null,
 		},
-		"goals": ["Unite tribes for Day of Ruin", "Coordinate raids on settlements", "Serve Red Hand leadership"],
-		"items": null,
-		"relationships": null,
-		"encounters": [{ "session": 2, "description": "Revealed through interrogation of captured hobgoblin." }],
-		"link": [
+		goals: null,
+		items: null,
+		relationships: [{ npcId: 'soranna', type: 'Colleague', description: 'Coordinates security issues.' }],
+		encounters: [
 			{
-				"title": "Stop the Invasion",
-				"link": "?campaign=campaign-002&view=quests&quest=Stop%2520the%2520Invasion"
+				session: 1,
+				description: 'Provided discount note for armorer, discussed town threats and Day of Ruin.',
+			},
+		],
+		link: [
+			{
+				title: 'Stop the Invasion',
+				link: '?campaign=campaign-002&view=quests&quest=Stop%2520the%2520Invasion',
+			},
+		],
+	},
+	{
+		id: 'wyrmlord-koth',
+		name: 'Wyrmlord Koth',
+		affinity: 'Antagonist',
+		faction: 'Red Hand',
+		status: 'Alive',
+		race: 'Hobgoblin',
+		class: 'Warlord/Sorcerer',
+		role: 'Hobgoblin Captain',
+		description: 'Hobgoblin captain orchestrating tribal warfare. Initially believed to be supreme commander.',
+		personality: 'Orchestrates large-scale coordinated attacks.',
+		background: 'Gathering hobgoblin, orc, and other tribal forces. Serves higher power in Red Hand hierarchy.',
+		location: {
+			primary: 'Unknown',
+			specific: null,
+		},
+		goals: ['Unite tribes for Day of Ruin', 'Coordinate raids on settlements', 'Serve Red Hand leadership'],
+		items: null,
+		relationships: null,
+		encounters: [{ session: 2, description: 'Revealed through interrogation of captured hobgoblin.' }],
+		link: [
+			{
+				title: 'Stop the Invasion',
+				link: '?campaign=campaign-002&view=quests&quest=Stop%2520the%2520Invasion',
 			},
 			{
-				"title": "The Blue Bear Alliance - Prevent the Apocalypse",
-				"link": "?campaign=campaign-002&view=quests&quest=The%2520Blue%2520Bear%2520Alliance%2520-%2520Prevent%2520the%2520Apocalypse"
-			}
-		]
-	},
-	{
-		"id": "sergeant-hersk",
-		"name": "Sergeant Hersk",
-		"affinity": "Neutral",
-		"faction": "Town Guard",
-		"status": "Alive",
-		"race": "Unknown",
-		"class": "Warrior",
-		"role": "Town Guard Sergeant",
-		"description": "Guard sergeant who briefs newcomers on local threats.",
-		"personality": null,
-		"background": null,
-		"location": {
-			"primary": "Drellin's Ferry",
-			"specific": "Barracks"
-		},
-		"goals": null,
-		"items": null,
-		"relationships": null,
-		"encounters": [{ "session": 1, "description": "Briefed party on raids and undead rumors in Witchwood." }],
-		"link": []
-	},
-	{
-		"id": "brother-denny",
-		"name": "Brother Denny",
-		"affinity": "Neutral",
-		"faction": "Church of Pelor",
-		"status": "Alive",
-		"race": "Human",
-		"class": "Cleric",
-		"role": "Priest of Pelor",
-		"description": "Priest at the Shrine of Pelor. Focused on commerce over compassion.",
-		"personality": "Unhelpful, mercantile.",
-		"background": null,
-		"location": {
-			"primary": "Drellin's Ferry",
-			"specific": "Shrine of Pelor"
-		},
-		"goals": null,
-		"items": null,
-		"relationships": null,
-		"encounters": [
-			{ "session": 1, "description": "Received offerings from Norr and Soshi, refused help with Thylacoleo cubs." }
+				title: 'The Blue Bear Alliance - Prevent the Apocalypse',
+				link: '?campaign=campaign-002&view=quests&quest=The%2520Blue%2520Bear%2520Alliance%2520-%2520Prevent%2520the%2520Apocalypse',
+			},
 		],
-		"link": [
+	},
+	{
+		id: 'sergeant-hersk',
+		name: 'Sergeant Hersk',
+		affinity: 'Neutral',
+		faction: 'Town Guard',
+		status: 'Alive',
+		race: 'Unknown',
+		class: 'Warrior',
+		role: 'Town Guard Sergeant',
+		description: 'Guard sergeant who briefs newcomers on local threats.',
+		personality: null,
+		background: null,
+		location: {
+			primary: "Drellin's Ferry",
+			specific: 'Barracks',
+		},
+		goals: null,
+		items: null,
+		relationships: null,
+		encounters: [{ session: 1, description: 'Briefed party on raids and undead rumors in Witchwood.' }],
+		link: [],
+	},
+	{
+		id: 'brother-denny',
+		name: 'Brother Denny',
+		affinity: 'Neutral',
+		faction: 'Church of Pelor',
+		status: 'Alive',
+		race: 'Human',
+		class: 'Cleric',
+		role: 'Priest of Pelor',
+		description: 'Priest at the Shrine of Pelor. Focused on commerce over compassion.',
+		personality: 'Unhelpful, mercantile.',
+		background: null,
+		location: {
+			primary: "Drellin's Ferry",
+			specific: 'Shrine of Pelor',
+		},
+		goals: null,
+		items: null,
+		relationships: null,
+		encounters: [
+			{ session: 1, description: 'Received offerings from Norr and Soshi, refused help with Thylacoleo cubs.' },
+		],
+		link: [
 			{
-				"title": "Care for Thylacoleo Cubs",
-				"link": "?campaign=campaign-002&view=quests&quest=Care%2520for%2520Thylacoleo%2520Cubs"
-			}
-		]
+				title: 'Care for Thylacoleo Cubs',
+				link: '?campaign=campaign-002&view=quests&quest=Care%2520for%2520Thylacoleo%2520Cubs',
+			},
+		],
 	},
 	{
-		"id": "sertieren",
-		"name": "Sertieren",
-		"affinity": "Ally",
-		"faction": "Independent",
-		"status": "Alive",
-		"race": "Unknown",
-		"class": "Wizard",
-		"role": "Retired Adventurer & Scholar",
-		"description": "Elderly, eccentric wizard living in a mansion. Former member of \"Crazy Hogs\" adventuring party.",
-		"personality": "Rambling, knowledgeable, pragmatic. Sees danger and plans to flee.",
-		"background": "Former adventurer with Kalistra before she joined Brotherhood. Fell out over her collateral damage.",
-		"location": {
-			"primary": "Drellin's Ferry",
-			"specific": "Sertieren's Manor"
+		id: 'sertieren',
+		name: 'Sertieren',
+		affinity: 'Ally',
+		faction: 'Independent',
+		status: 'Alive',
+		race: 'Unknown',
+		class: 'Wizard',
+		role: 'Retired Adventurer & Scholar',
+		description: 'Elderly, eccentric wizard living in a mansion. Former member of "Crazy Hogs" adventuring party.',
+		personality: 'Rambling, knowledgeable, pragmatic. Sees danger and plans to flee.',
+		background: 'Former adventurer with Kalistra before she joined Brotherhood. Fell out over her collateral damage.',
+		location: {
+			primary: "Drellin's Ferry",
+			specific: "Sertieren's Manor",
 		},
-		"goals": ["Leave Drellin's Ferry before the storm", "Study magical phenomena"],
-		"items": ["Various magical components", "Containment spheres"],
-		"relationships": [
-			{ "npcId": "kalistra", "type": "Former Companion", "description": "Stole her spellbook to stop her rampage." }
+		goals: ["Leave Drellin's Ferry before the storm", 'Study magical phenomena'],
+		items: ['Various magical components', 'Containment spheres'],
+		relationships: [
+			{ npcId: 'kalistra', type: 'Former Companion', description: 'Stole her spellbook to stop her rampage.' },
 		],
-		"encounters": [
-			{ "session": 1, "description": "Rambled about Chronomancers of Kryn and magical nexuses." },
-			{ "session": 3, "description": "Sold containment spheres to party." },
-			{ "session": 5, "description": "Bought Storm Dust and materials, warned of coming danger." }
+		encounters: [
+			{ session: 1, description: 'Rambled about Chronomancers of Kryn and magical nexuses.' },
+			{ session: 3, description: 'Sold containment spheres to party.' },
+			{ session: 5, description: 'Bought Storm Dust and materials, warned of coming danger.' },
 		],
-		"link": [
+		link: [
 			{
-				"title": "Brotherhood and Kilgor Investigation",
-				"link": "?campaign=campaign-002&view=quests&quest=Brotherhood%2520and%2520Kilgor%2520Investigation"
+				title: 'Brotherhood and Kilgor Investigation',
+				link: '?campaign=campaign-002&view=quests&quest=Brotherhood%2520and%2520Kilgor%2520Investigation',
 			},
 			{
-				"title": "Investigate Witchwood and Wrath Keep",
-				"link": "?campaign=campaign-002&view=quests&quest=Investigate%2520Witchwood%2520and%2520Wrath%2520Keep"
+				title: 'Investigate Witchwood and Wrath Keep',
+				link: '?campaign=campaign-002&view=quests&quest=Investigate%2520Witchwood%2520and%2520Wrath%2520Keep',
 			},
 			{
-				"title": "Care for Thylacoleo Cubs",
-				"link": "?campaign=campaign-002&view=quests&quest=Care%2520for%2520Thylacoleo%2520Cubs"
-			}
-		]
+				title: 'Care for Thylacoleo Cubs',
+				link: '?campaign=campaign-002&view=quests&quest=Care%2520for%2520Thylacoleo%2520Cubs',
+			},
+		],
 	},
 	{
-		"id": "tharma",
-		"name": "Tharma",
-		"affinity": "Ally",
-		"faction": "Independent",
-		"status": "Alive",
-		"race": "Dwarf",
-		"class": "Unknown",
-		"role": "Innkeeper",
-		"description": "Jovial dwarven proprietress of the (Green Apple Inn). Loves romance novels.",
-		"personality": "Friendly, practical, enjoys reading.",
-		"background": null,
-		"location": {
-			"primary": "Drellin's Ferry",
-			"specific": "Green Apple Inn"
+		id: 'tharma',
+		name: 'Tharma',
+		affinity: 'Ally',
+		faction: 'Independent',
+		status: 'Alive',
+		race: 'Dwarf',
+		class: 'Unknown',
+		role: 'Innkeeper',
+		description: 'Jovial dwarven proprietress of the (Green Apple Inn). Loves romance novels.',
+		personality: 'Friendly, practical, enjoys reading.',
+		background: null,
+		location: {
+			primary: "Drellin's Ferry",
+			specific: 'Green Apple Inn',
 		},
-		"goals": null,
-		"items": null,
-		"relationships": null,
-		"encounters": [
-			{ "session": 2, "description": "Provided breakfast before journey." },
-			{ "session": 3, "description": "Informed party about Anya's disappearance." },
-			{ "session": 6, "description": "Served experimental stew granting temporary HP." }
+		goals: null,
+		items: null,
+		relationships: null,
+		encounters: [
+			{ session: 2, description: 'Provided breakfast before journey.' },
+			{ session: 3, description: "Informed party about Anya's disappearance." },
+			{ session: 6, description: 'Served experimental stew granting temporary HP.' },
 		],
-		"link": [
+		link: [
 			{
-				"title": "Rescue Anya",
-				"link": "?campaign=campaign-002&view=quests&quest=Rescue%2520Anya"
-			}
-		]
+				title: 'Rescue Anya',
+				link: '?campaign=campaign-002&view=quests&quest=Rescue%2520Anya',
+			},
+		],
 	},
 	{
-		"id": "jun-takashi",
-		"name": "Jun Takashi",
-		"affinity": "Ally",
-		"faction": "Winter Rose",
-		"status": "Alive",
-		"race": "Human",
-		"class": "Spellcaster",
-		"role": "Winter Rose Mercenary",
-		"description": "Winter Rose spellcaster who shares intel. Can detect magic/abilities within 60 feet.",
-		"personality": null,
-		"background": null,
-		"location": {
-			"primary": "Traveling",
-			"specific": null
+		id: 'jun-takashi',
+		name: 'Jun Takashi',
+		affinity: 'Ally',
+		faction: 'Winter Rose',
+		status: 'Alive',
+		race: 'Human',
+		class: 'Spellcaster',
+		role: 'Winter Rose Mercenary',
+		description: 'Winter Rose spellcaster who shares intel. Can detect magic/abilities within 60 feet.',
+		personality: null,
+		background: null,
+		location: {
+			primary: 'Traveling',
+			specific: null,
 		},
-		"goals": null,
-		"items": ["Magical communication tattoo"],
-		"relationships": [
+		goals: null,
+		items: ['Magical communication tattoo'],
+		relationships: [
 			{
-				"npcId": "hans-mariner",
-				"type": "Commander",
-				"description": "Reports to Lion's Guard captain in Brindol."
-			}
+				npcId: 'hans-mariner',
+				type: 'Commander',
+				description: "Reports to Lion's Guard captain in Brindol.",
+			},
 		],
-		"encounters": [{ "session": 2, "description": "Warned about spider demon, gave Olek emergency contact tattoo." }],
-		"link": [
+		encounters: [{ session: 2, description: 'Warned about spider demon, gave Olek emergency contact tattoo.' }],
+		link: [
 			{
-				"title": "Stop the Invasion",
-				"link": "?campaign=campaign-002&view=quests&quest=Stop%2520the%2520Invasion"
-			}
-		]
+				title: 'Stop the Invasion',
+				link: '?campaign=campaign-002&view=quests&quest=Stop%2520the%2520Invasion',
+			},
+		],
 	},
 	{
-		"id": "kat",
-		"name": "Kat",
-		"affinity": "Neutral",
-		"faction": "Town Agents",
-		"status": "Alive",
-		"race": "Tiefling",
-		"class": "Rogue",
-		"role": "Intelligence Gatherer",
-		"description": "Unremarkable tiefling with unusual passion for cats. Has magical globes containing cats and tiger.",
-		"personality": "Forgettable appearance, cat enthusiast, somewhat incompetent.",
-		"background": "Former Thieves Guild member exiled for incompetence.",
-		"location": {
-			"primary": "Drellin's Ferry",
-			"specific": null
+		id: 'kat',
+		name: 'Kat',
+		affinity: 'Neutral',
+		faction: 'Town Agents',
+		status: 'Alive',
+		race: 'Tiefling',
+		class: 'Rogue',
+		role: 'Intelligence Gatherer',
+		description: 'Unremarkable tiefling with unusual passion for cats. Has magical globes containing cats and tiger.',
+		personality: 'Forgettable appearance, cat enthusiast, somewhat incompetent.',
+		background: 'Former Thieves Guild member exiled for incompetence.',
+		location: {
+			primary: "Drellin's Ferry",
+			specific: null,
 		},
-		"goals": ["Pay off 2 gold piece debt", "Avoid Winter Rose mercenaries"],
-		"items": ["Multiple cats in magical globes", "Large tiger"],
-		"relationships": [
-			{ "npcId": "yoghurt", "type": "Partner", "description": "Fellow exiled thief." },
-			{ "npcId": "soranna", "type": "Employer", "description": "Works gathering intelligence." }
+		goals: ['Pay off 2 gold piece debt', 'Avoid Winter Rose mercenaries'],
+		items: ['Multiple cats in magical globes', 'Large tiger'],
+		relationships: [
+			{ npcId: 'yoghurt', type: 'Partner', description: 'Fellow exiled thief.' },
+			{ npcId: 'soranna', type: 'Employer', description: 'Works gathering intelligence.' },
 		],
-		"encounters": [{ "session": 3, "description": "Met party to discuss cave system beneath city." }],
-		"link": [
+		encounters: [{ session: 3, description: 'Met party to discuss cave system beneath city.' }],
+		link: [
 			{
-				"title": "Investigate Cave System",
-				"link": "?campaign=campaign-002&view=quests&quest=Investigate%2520Cave%2520System"
-			}
-		]
+				title: 'Investigate Cave System',
+				link: '?campaign=campaign-002&view=quests&quest=Investigate%2520Cave%2520System',
+			},
+		],
 	},
 	{
-		"id": "yoghurt",
-		"name": "Yoghurt",
-		"affinity": "Ally",
-		"faction": "Town Agents",
-		"status": "Alive",
-		"race": "Half-Ogre",
-		"class": "Rogue/Assassin",
-		"role": "Intelligence Gatherer",
-		"description": "Lactose-intolerant half-ogre assassin in elegant kimono with two katanas.",
-		"personality": "Simple-minded but loyal when motivated.",
-		"background": "Former Thieves Guild member exiled for incompetence.",
-		"location": {
-			"primary": "Drellin's Ferry",
-			"specific": null
+		id: 'yoghurt',
+		name: 'Yoghurt',
+		affinity: 'Ally',
+		faction: 'Town Agents',
+		status: 'Alive',
+		race: 'Half-Ogre',
+		class: 'Rogue/Assassin',
+		role: 'Intelligence Gatherer',
+		description: 'Lactose-intolerant half-ogre assassin in elegant kimono with two katanas.',
+		personality: 'Simple-minded but loyal when motivated.',
+		background: 'Former Thieves Guild member exiled for incompetence.',
+		location: {
+			primary: "Drellin's Ferry",
+			specific: null,
 		},
-		"goals": null,
-		"items": ["Kimono", "Two katanas"],
-		"relationships": [
-			{ "npcId": "kat", "type": "Partner", "description": "Fellow exiled thief." },
-			{ "npcId": "soranna", "type": "Employer", "description": "Works gathering intelligence." }
+		goals: null,
+		items: ['Kimono', 'Two katanas'],
+		relationships: [
+			{ npcId: 'kat', type: 'Partner', description: 'Fellow exiled thief.' },
+			{ npcId: 'soranna', type: 'Employer', description: 'Works gathering intelligence.' },
 		],
-		"encounters": [
-			{ "session": 3, "description": "Met party to discuss cave system." },
-			{ "session": 8, "description": "Followed party to fortress, killed shadow-clad enemies, delivered letter." }
+		encounters: [
+			{ session: 3, description: 'Met party to discuss cave system.' },
+			{ session: 8, description: 'Followed party to fortress, killed shadow-clad enemies, delivered letter.' },
 		],
-		"link": [
+		link: [
 			{
-				"title": "Stop the Invasion",
-				"link": "?campaign=campaign-002&view=quests&quest=Stop%2520the%2520Invasion"
+				title: 'Stop the Invasion',
+				link: '?campaign=campaign-002&view=quests&quest=Stop%2520the%2520Invasion',
 			},
 			{
-				"title": "Investigate Cave System",
-				"link": "?campaign=campaign-002&view=quests&quest=Investigate%2520Cave%2520System"
-			}
-		]
+				title: 'Investigate Cave System',
+				link: '?campaign=campaign-002&view=quests&quest=Investigate%2520Cave%2520System',
+			},
+		],
 	},
 	{
-		"id": "avarthel",
-		"name": "Avarthel",
-		"affinity": "Ally",
-		"faction": "Druidic Circle",
-		"status": "Alive",
-		"race": "Unknown",
-		"class": "Druid (Circle of the Land)",
-		"role": "Grove Keeper & Healer",
-		"description": "Druid maintaining grove with proximity to Feywild. Left for mountains with followers.",
-		"personality": "Protective of ecosystems, refuses to hatch dangerous creatures.",
-		"background": "Maintains balance between Material Plane and Feywild. Left grove month before Session 3.",
-		"location": {
-			"primary": "Mountains",
-			"specific": null
+		id: 'avarthel',
+		name: 'Avarthel',
+		affinity: 'Ally',
+		faction: 'Druidic Circle',
+		status: 'Alive',
+		race: 'Unknown',
+		class: 'Druid (Circle of the Land)',
+		role: 'Grove Keeper & Healer',
+		description: 'Druid maintaining grove with proximity to Feywild. Left for mountains with followers.',
+		personality: 'Protective of ecosystems, refuses to hatch dangerous creatures.',
+		background: 'Maintains balance between Material Plane and Feywild. Left grove month before Session 3.',
+		location: {
+			primary: 'Mountains',
+			specific: null,
 		},
-		"goals": ["Protect ecological balance", "Maintain Feywild connection"],
-		"items": ["Hydra eggs (in secure storage)"],
-		"relationships": [
-			{ "npcId": "anya", "type": "Patient", "description": "Caring for her recovery." },
-			{ "npcId": "loic", "type": "Companion", "description": "Phoenix resides in his grove." }
+		goals: ['Protect ecological balance', 'Maintain Feywild connection'],
+		items: ['Hydra eggs (in secure storage)'],
+		relationships: [
+			{ npcId: 'anya', type: 'Patient', description: 'Caring for her recovery.' },
+			{ npcId: 'loic', type: 'Companion', description: 'Phoenix resides in his grove.' },
 		],
-		"encounters": [
-			{ "session": 1, "description": "Warned about Wrath Keep." },
-			{ "session": 3, "description": "Refused to hatch hydra eggs, treated Anya, provided Thylacoleo advice." }
+		encounters: [
+			{ session: 1, description: 'Warned about Wrath Keep.' },
+			{ session: 3, description: 'Refused to hatch hydra eggs, treated Anya, provided Thylacoleo advice.' },
 		],
-		"link": [
+		link: [
 			{
-				"title": "Investigate Witchwood and Wrath Keep",
-				"link": "?campaign=campaign-002&view=quests&quest=Investigate%2520Witchwood%2520and%2520Wrath%2520Keep"
+				title: 'Investigate Witchwood and Wrath Keep',
+				link: '?campaign=campaign-002&view=quests&quest=Investigate%2520Witchwood%2520and%2520Wrath%2520Keep',
 			},
 			{
-				"title": "Rescue Anya",
-				"link": "?campaign=campaign-002&view=quests&quest=Rescue%2520Anya"
+				title: 'Rescue Anya',
+				link: '?campaign=campaign-002&view=quests&quest=Rescue%2520Anya',
 			},
 			{
-				"title": "Hydra Egg Safekeeping",
-				"link": "?campaign=campaign-002&view=quests&quest=Hydra%2520Egg%2520Safekeeping"
+				title: 'Hydra Egg Safekeeping',
+				link: '?campaign=campaign-002&view=quests&quest=Hydra%2520Egg%2520Safekeeping',
 			},
 			{
-				"title": "Care for Thylacoleo Cubs",
-				"link": "?campaign=campaign-002&view=quests&quest=Care%2520for%2520Thylacoleo%2520Cubs"
-			}
-		]
+				title: 'Care for Thylacoleo Cubs',
+				link: '?campaign=campaign-002&view=quests&quest=Care%2520for%2520Thylacoleo%2520Cubs',
+			},
+		],
 	},
 	{
-		"id": "anya",
-		"name": "Anya",
-		"affinity": "Neutral",
-		"faction": null,
-		"status": "Alive",
-		"race": "Human",
-		"class": "None",
-		"role": "Former Barmaid",
-		"description": "17-year-old human, 1.8m tall, striking red hair and freckles.",
-		"personality": "Troubled, vulnerable.",
-		"background": "Had one-sided serious relationship with Lem. Became pregnant, attempted self-harm.",
-		"location": {
-			"primary": "Mountains",
-			"specific": "Avarthel's Care"
+		id: 'anya',
+		name: 'Anya',
+		affinity: 'Neutral',
+		faction: null,
+		status: 'Alive',
+		race: 'Human',
+		class: 'None',
+		role: 'Former Barmaid',
+		description: '17-year-old human, 1.8m tall, striking red hair and freckles.',
+		personality: 'Troubled, vulnerable.',
+		background: 'Had one-sided serious relationship with Lem. Became pregnant, attempted self-harm.',
+		location: {
+			primary: 'Mountains',
+			specific: "Avarthel's Care",
 		},
-		"goals": null,
-		"items": null,
-		"relationships": [
-			{ "npcId": "lem", "type": "Former Lover", "description": "One-sided serious relationship." },
-			{ "npcId": "avarthel", "type": "Caretaker", "description": "Under his care for recovery." },
-			{ "npcId": "loic", "type": "Healer", "description": "Healed by phoenix tears." }
+		goals: null,
+		items: null,
+		relationships: [
+			{ npcId: 'lem', type: 'Former Lover', description: 'One-sided serious relationship.' },
+			{ npcId: 'avarthel', type: 'Caretaker', description: 'Under his care for recovery.' },
+			{ npcId: 'loic', type: 'Healer', description: 'Healed by phoenix tears.' },
 		],
-		"encounters": [{ "session": 3, "description": "Rescued in distressed state, taken to Avarthel." }],
-		"link": [
+		encounters: [{ session: 3, description: 'Rescued in distressed state, taken to Avarthel.' }],
+		link: [
 			{
-				"title": "Rescue Anya",
-				"link": "?campaign=campaign-002&view=quests&quest=Rescue%2520Anya"
-			}
-		]
+				title: 'Rescue Anya',
+				link: '?campaign=campaign-002&view=quests&quest=Rescue%2520Anya',
+			},
+		],
 	},
 	{
-		"id": "lem",
-		"name": "Lem",
-		"affinity": "Neutral",
-		"faction": "Town Guard",
-		"status": "Alive",
-		"race": "Human",
-		"class": "Guard",
-		"role": "Town Guard",
-		"description": "Rotund 19-year-old guard, 1.5m tall.",
-		"personality": "Callous, immature, treats relationships casually.",
-		"background": "Had casual relationship with Anya, unaware of pregnancy. Attacked by worg riders.",
-		"location": {
-			"primary": "Drellin's Ferry",
-			"specific": "Barracks Infirmary"
+		id: 'lem',
+		name: 'Lem',
+		affinity: 'Neutral',
+		faction: 'Town Guard',
+		status: 'Alive',
+		race: 'Human',
+		class: 'Guard',
+		role: 'Town Guard',
+		description: 'Rotund 19-year-old guard, 1.5m tall.',
+		personality: 'Callous, immature, treats relationships casually.',
+		background: 'Had casual relationship with Anya, unaware of pregnancy. Attacked by worg riders.',
+		location: {
+			primary: "Drellin's Ferry",
+			specific: 'Barracks Infirmary',
 		},
-		"goals": null,
-		"items": null,
-		"relationships": [{ "npcId": "anya", "type": "Former Lover", "description": "Didn't take relationship seriously." }],
-		"encounters": [
-			{ "session": 3, "description": "Recovering in infirmary after worg attack, provided info about Anya." }
-		],
-		"link": [
+		goals: null,
+		items: null,
+		relationships: [{ npcId: 'anya', type: 'Former Lover', description: "Didn't take relationship seriously." }],
+		encounters: [{ session: 3, description: 'Recovering in infirmary after worg attack, provided info about Anya.' }],
+		link: [
 			{
-				"title": "Rescue Anya",
-				"link": "?campaign=campaign-002&view=quests&quest=Rescue%2520Anya"
-			}
-		]
+				title: 'Rescue Anya',
+				link: '?campaign=campaign-002&view=quests&quest=Rescue%2520Anya',
+			},
+		],
 	},
 	{
-		"id": "jareth",
-		"name": "Jareth of House Corzina",
-		"affinity": "Neutral",
-		"faction": "House Corzina",
-		"status": "Alive",
-		"race": "Drow",
-		"class": "Unknown",
-		"role": "Merchant & Agent",
-		"description": "Remarkably muscular drow who uses illusion magic to appear clothed while nearly nude.",
-		"personality": "Patient, follows orders from matron.",
-		"background": "Sent by Matron Zaya 20 years ago to await signal that has not yet come. From matriarchal society.",
-		"location": {
-			"primary": "Drellin's Ferry",
-			"specific": "Shopping District"
+		id: 'jareth',
+		name: 'Jareth of House Corzina',
+		affinity: 'Neutral',
+		faction: 'House Corzina',
+		status: 'Alive',
+		race: 'Drow',
+		class: 'Unknown',
+		role: 'Merchant & Agent',
+		description: 'Remarkably muscular drow who uses illusion magic to appear clothed while nearly nude.',
+		personality: 'Patient, follows orders from matron.',
+		background: 'Sent by Matron Zaya 20 years ago to await signal that has not yet come. From matriarchal society.',
+		location: {
+			primary: "Drellin's Ferry",
+			specific: 'Shopping District',
 		},
-		"goals": ["Await signal from Matron Zaya"],
-		"items": ["Healing potions", "Illusion magic"],
-		"relationships": [{ "npcId": "zaya", "type": "Superior", "description": "Awaiting her signal." }],
-		"encounters": [
-			{ "session": 3, "description": "Met party in shopping district, sold healing potions." },
-			{ "session": 6, "description": "Bought crystals from party, informed about fake pearls." }
+		goals: ['Await signal from Matron Zaya'],
+		items: ['Healing potions', 'Illusion magic'],
+		relationships: [{ npcId: 'zaya', type: 'Superior', description: 'Awaiting her signal.' }],
+		encounters: [
+			{ session: 3, description: 'Met party in shopping district, sold healing potions.' },
+			{ session: 6, description: 'Bought crystals from party, informed about fake pearls.' },
 		],
-		"link": []
+		link: [],
 	},
 	{
-		"id": "turiados",
-		"name": "Commander Turiados",
-		"affinity": "Neutral",
-		"faction": "Leviathan's Hall Crew",
-		"status": "Alive",
-		"race": "Unknown",
-		"class": "Ex-Paladin/Warrior",
-		"role": "Ship Co-Commander",
-		"description": "7-foot-tall warrior covered in Sahuagin shaman tattoos. Formerly Order of Inos.",
-		"personality": "Intimidating, pragmatic, bound by honor.",
-		"background": "Former penal colony convict freed by General Lee. Now serves Queen Bianca.",
-		"location": {
-			"primary": "The Leviathan's Hall",
-			"specific": null
+		id: 'turiados',
+		name: 'Commander Turiados',
+		affinity: 'Neutral',
+		faction: "Leviathan's Hall Crew",
+		status: 'Alive',
+		race: 'Unknown',
+		class: 'Ex-Paladin/Warrior',
+		role: 'Ship Co-Commander',
+		description: '7-foot-tall warrior covered in Sahuagin shaman tattoos. Formerly Order of Inos.',
+		personality: 'Intimidating, pragmatic, bound by honor.',
+		background: 'Former penal colony convict freed by General Lee. Now serves Queen Bianca.',
+		location: {
+			primary: "The Leviathan's Hall",
+			specific: null,
 		},
-		"goals": ["Kill Sandro for vengeance", "Serve Queen Bianca"],
-		"items": [
-			"Breaker of Hulls (Brotherhood cutlass)",
-			"Broken compass pointing to desires",
-			"Wyvern hide coat",
-			"Sea snake belt"
+		goals: ['Kill Sandro for vengeance', 'Serve Queen Bianca'],
+		items: [
+			'Breaker of Hulls (Brotherhood cutlass)',
+			'Broken compass pointing to desires',
+			'Wyvern hide coat',
+			'Sea snake belt',
 		],
-		"relationships": [
-			{ "npcId": "bianca", "type": "Co-Commander", "description": "Shares ship command." },
-			{ "npcId": "general-lee", "type": "Former Commander", "description": "Freed him from slavery." },
-			{ "npcId": "sandro", "type": "Enemy", "description": "Seeks vengeance." }
+		relationships: [
+			{ npcId: 'bianca', type: 'Co-Commander', description: 'Shares ship command.' },
+			{ npcId: 'general-lee', type: 'Former Commander', description: 'Freed him from slavery.' },
+			{ npcId: 'sandro', type: 'Enemy', description: 'Seeks vengeance.' },
 		],
-		"encounters": [{ "session": 5, "description": "Rescued party from sea, demanded 20% fee, offered Sandro deal." }],
-		"link": [
+		encounters: [{ session: 5, description: 'Rescued party from sea, demanded 20% fee, offered Sandro deal.' }],
+		link: [
 			{
-				"title": "Brotherhood and Kilgor Investigation",
-				"link": "?campaign=campaign-002&view=quests&quest=Brotherhood%2520and%2520Kilgor%2520Investigation"
+				title: 'Brotherhood and Kilgor Investigation',
+				link: '?campaign=campaign-002&view=quests&quest=Brotherhood%2520and%2520Kilgor%2520Investigation',
 			},
 			{
-				"title": "Retrieve Locket of Hair from Sandro",
-				"link": "?campaign=campaign-002&view=quests&quest=Retrieve%2520Locket%2520of%2520Hair%2520from%2520Sandro"
-			}
-		]
+				title: 'Retrieve Locket of Hair from Sandro',
+				link: '?campaign=campaign-002&view=quests&quest=Retrieve%2520Locket%2520of%2520Hair%2520from%2520Sandro',
+			},
+		],
 	},
 	{
-		"id": "bianca",
-		"name": "Captain Bianca Turiados",
-		"affinity": "Neutral",
-		"faction": "Leviathan's Hall Crew",
-		"status": "Alive",
-		"race": "Fey-touched",
-		"class": "Wizard (Multi-school)",
-		"role": "Ship Co-Commander & Exiled Queen",
-		"description": "Last descendant and true Queen of Pelagos. Fey-touched with lightning-veined eyes.",
-		"personality": "Regal, determined, protective of crew.",
-		"background": "Father killed by Sandro who usurped throne. Escaped with loyal followers bound by blood oath.",
-		"location": {
-			"primary": "The Leviathan's Hall",
-			"specific": null
+		id: 'bianca',
+		name: 'Captain Bianca Turiados',
+		affinity: 'Neutral',
+		faction: "Leviathan's Hall Crew",
+		status: 'Alive',
+		race: 'Fey-touched',
+		class: 'Wizard (Multi-school)',
+		role: 'Ship Co-Commander & Exiled Queen',
+		description: 'Last descendant and true Queen of Pelagos. Fey-touched with lightning-veined eyes.',
+		personality: 'Regal, determined, protective of crew.',
+		background: 'Father killed by Sandro who usurped throne. Escaped with loyal followers bound by blood oath.',
+		location: {
+			primary: "The Leviathan's Hall",
+			specific: null,
 		},
-		"goals": ["Reclaim Pelagos throne", "Find General Lee", "Kill Sandro"],
-		"items": ["Winder (Brotherhood storm-forged glass blade)", "Rings representing magic schools"],
-		"relationships": [
-			{ "npcId": "turiados", "type": "Co-Commander", "description": "Shares ship command." },
-			{ "npcId": "general-lee", "type": "Missing Ally", "description": "Wishes for his counsel." },
-			{ "npcId": "glass", "type": "Advisor", "description": "Freed ice elemental, now quartermaster." },
-			{ "npcId": "sandro", "type": "Enemy", "description": "Murdered her father, stole throne." }
+		goals: ['Reclaim Pelagos throne', 'Find General Lee', 'Kill Sandro'],
+		items: ['Winder (Brotherhood storm-forged glass blade)', 'Rings representing magic schools'],
+		relationships: [
+			{ npcId: 'turiados', type: 'Co-Commander', description: 'Shares ship command.' },
+			{ npcId: 'general-lee', type: 'Missing Ally', description: 'Wishes for his counsel.' },
+			{ npcId: 'glass', type: 'Advisor', description: 'Freed ice elemental, now quartermaster.' },
+			{ npcId: 'sandro', type: 'Enemy', description: 'Murdered her father, stole throne.' },
 		],
-		"encounters": [
-			{ "session": 5, "description": "Rescued party, probed Soshi's mind, attacked Bonnie for cursed coin." }
-		],
-		"link": [
+		encounters: [{ session: 5, description: "Rescued party, probed Soshi's mind, attacked Bonnie for cursed coin." }],
+		link: [
 			{
-				"title": "Brotherhood and Kilgor Investigation",
-				"link": "?campaign=campaign-002&view=quests&quest=Brotherhood%2520and%2520Kilgor%2520Investigation"
+				title: 'Brotherhood and Kilgor Investigation',
+				link: '?campaign=campaign-002&view=quests&quest=Brotherhood%2520and%2520Kilgor%2520Investigation',
 			},
 			{
-				"title": "Retrieve Locket of Hair from Sandro",
-				"link": "?campaign=campaign-002&view=quests&quest=Retrieve%2520Locket%2520of%2520Hair%2520from%2520Sandro"
-			}
-		]
-	},
-	{
-		"id": "glass",
-		"name": "Glass",
-		"affinity": "Neutral",
-		"faction": "Leviathan's Hall Crew",
-		"status": "Alive",
-		"race": "Ice Elemental",
-		"class": "Unknown",
-		"role": "Quartermaster",
-		"description": "Massive ice elemental who speaks agonizingly slowly except when conducting business.",
-		"personality": "Loyal, methodical, all-business when negotiating.",
-		"background": "Freed from shackles by Bianca, pledged blood loyalty.",
-		"location": {
-			"primary": "The Leviathan's Hall",
-			"specific": null
-		},
-		"goals": ["Serve Bianca"],
-		"items": null,
-		"relationships": [{ "npcId": "bianca", "type": "Freed by", "description": "Pledged loyalty after liberation." }],
-		"encounters": [{ "session": 5, "description": "Negotiated 20% rescue fee, explained cursed coin mechanics." }],
-		"link": []
-	},
-	{
-		"id": "vandal",
-		"name": "Vandal",
-		"affinity": "Neutral",
-		"faction": "Winter Rose",
-		"status": "Alive",
-		"race": "Unknown",
-		"class": "Caster",
-		"role": "Winter Rose Mercenary",
-		"description": "Capable Winter Rose mercenary and survivor.",
-		"personality": "Capable, survivor.",
-		"background": null,
-		"location": {
-			"primary": "Traveling",
-			"specific": null
-		},
-		"goals": null,
-		"items": null,
-		"relationships": [{ "npcId": "summoner", "type": "Colleague", "description": "Fellow Winter Rose mercenary." }],
-		"encounters": [
-			{ "session": 3, "description": "Shared info about raptors and Thylacoleos." },
-			{ "session": 4, "description": "Caused controlled collapses to free ship." },
-			{ "session": 5, "description": "Rescued with party, paid rescue fee." }
+				title: 'Retrieve Locket of Hair from Sandro',
+				link: '?campaign=campaign-002&view=quests&quest=Retrieve%2520Locket%2520of%2520Hair%2520from%2520Sandro',
+			},
 		],
-		"link": [
+	},
+	{
+		id: 'glass',
+		name: 'Glass',
+		affinity: 'Neutral',
+		faction: "Leviathan's Hall Crew",
+		status: 'Alive',
+		race: 'Ice Elemental',
+		class: 'Unknown',
+		role: 'Quartermaster',
+		description: 'Massive ice elemental who speaks agonizingly slowly except when conducting business.',
+		personality: 'Loyal, methodical, all-business when negotiating.',
+		background: 'Freed from shackles by Bianca, pledged blood loyalty.',
+		location: {
+			primary: "The Leviathan's Hall",
+			specific: null,
+		},
+		goals: ['Serve Bianca'],
+		items: null,
+		relationships: [{ npcId: 'bianca', type: 'Freed by', description: 'Pledged loyalty after liberation.' }],
+		encounters: [{ session: 5, description: 'Negotiated 20% rescue fee, explained cursed coin mechanics.' }],
+		link: [],
+	},
+	{
+		id: 'vandal',
+		name: 'Vandal',
+		affinity: 'Neutral',
+		faction: 'Winter Rose',
+		status: 'Alive',
+		race: 'Unknown',
+		class: 'Caster',
+		role: 'Winter Rose Mercenary',
+		description: 'Capable Winter Rose mercenary and survivor.',
+		personality: 'Capable, survivor.',
+		background: null,
+		location: {
+			primary: 'Traveling',
+			specific: null,
+		},
+		goals: null,
+		items: null,
+		relationships: [{ npcId: 'summoner', type: 'Colleague', description: 'Fellow Winter Rose mercenary.' }],
+		encounters: [
+			{ session: 3, description: 'Shared info about raptors and Thylacoleos.' },
+			{ session: 4, description: 'Caused controlled collapses to free ship.' },
+			{ session: 5, description: 'Rescued with party, paid rescue fee.' },
+		],
+		link: [
 			{
-				"title": "Investigate Cave System",
-				"link": "?campaign=campaign-002&view=quests&quest=Investigate%2520Cave%2520System"
+				title: 'Investigate Cave System',
+				link: '?campaign=campaign-002&view=quests&quest=Investigate%2520Cave%2520System',
 			},
 			{
-				"title": "Winter Rose Spider Bounty",
-				"link": "?campaign=campaign-002&view=quests&quest=Winter%2520Rose%2520Spider%2520Bounty"
-			}
-		]
+				title: 'Winter Rose Spider Bounty',
+				link: '?campaign=campaign-002&view=quests&quest=Winter%2520Rose%2520Spider%2520Bounty',
+			},
+		],
 	},
 	{
-		"id": "summoner",
-		"name": "Summoner",
-		"affinity": "Neutral",
-		"faction": "Winter Rose",
-		"status": "Alive",
-		"race": "Unknown",
-		"class": "Summoner",
-		"role": "Winter Rose Mercenary",
-		"description": "Winter Rose spellcaster who can summon magical dolphins.",
-		"personality": null,
-		"background": null,
-		"location": {
-			"primary": "Traveling",
-			"specific": null
+		id: 'summoner',
+		name: 'Summoner',
+		affinity: 'Neutral',
+		faction: 'Winter Rose',
+		status: 'Alive',
+		race: 'Unknown',
+		class: 'Summoner',
+		role: 'Winter Rose Mercenary',
+		description: 'Winter Rose spellcaster who can summon magical dolphins.',
+		personality: null,
+		background: null,
+		location: {
+			primary: 'Traveling',
+			specific: null,
 		},
-		"goals": null,
-		"items": null,
-		"relationships": [{ "npcId": "vandal", "type": "Colleague", "description": "Fellow Winter Rose mercenary." }],
-		"encounters": [
-			{ "session": 3, "description": "Shared info at tavern, involved in brawl." },
-			{ "session": 4, "description": "Took different tunnel path." },
-			{ "session": 5, "description": "Summoned dolphins to rescue drowning party members." }
+		goals: null,
+		items: null,
+		relationships: [{ npcId: 'vandal', type: 'Colleague', description: 'Fellow Winter Rose mercenary.' }],
+		encounters: [
+			{ session: 3, description: 'Shared info at tavern, involved in brawl.' },
+			{ session: 4, description: 'Took different tunnel path.' },
+			{ session: 5, description: 'Summoned dolphins to rescue drowning party members.' },
 		],
-		"link": [
+		link: [
 			{
-				"title": "Winter Rose Spider Bounty",
-				"link": "?campaign=campaign-002&view=quests&quest=Winter%2520Rose%2520Spider%2520Bounty"
-			}
-		]
+				title: 'Winter Rose Spider Bounty',
+				link: '?campaign=campaign-002&view=quests&quest=Winter%2520Rose%2520Spider%2520Bounty',
+			},
+		],
 	},
 	{
-		"id": "kalistra",
-		"name": "Kalistra",
-		"affinity": "Antagonist",
-		"faction": "Arcane Brotherhood (Former)",
-		"status": "Deceased",
-		"race": "Unknown",
-		"class": "Wizard (Transmutation)",
-		"role": "Former Brotherhood Teacher",
-		"description": "Harsh alteration magic instructor. Former Crazy Hogs adventurer.",
-		"personality": "Pragmatic to point of ruthlessness, willing to cause collateral damage.",
-		"background": "Left Brotherhood 10 years ago. Bound herself to Null Brand to contain corruption until death.",
-		"location": {
-			"primary": "Deceased",
-			"specific": "Underground Vault"
+		id: 'kalistra',
+		name: 'Kalistra',
+		affinity: 'Antagonist',
+		faction: 'Arcane Brotherhood (Former)',
+		status: 'Deceased',
+		race: 'Unknown',
+		class: 'Wizard (Transmutation)',
+		role: 'Former Brotherhood Teacher',
+		description: 'Harsh alteration magic instructor. Former Crazy Hogs adventurer.',
+		personality: 'Pragmatic to point of ruthlessness, willing to cause collateral damage.',
+		background: 'Left Brotherhood 10 years ago. Bound herself to Null Brand to contain corruption until death.',
+		location: {
+			primary: 'Deceased',
+			specific: 'Underground Vault',
 		},
-		"goals": ["Operate creature breeding program", "Research Null Brand", "Contain corruption"],
-		"items": ["Ledger (partially burned/obscured)", "Laboratory notes"],
-		"relationships": [
-			{ "npcId": "sertieren", "type": "Former Companion", "description": "Fell out over ethics." },
-			{ "npcId": "kilgor", "type": "Associate", "description": "Sent creatures for Festival of Life." }
+		goals: ['Operate creature breeding program', 'Research Null Brand', 'Contain corruption'],
+		items: ['Ledger (partially burned/obscured)', 'Laboratory notes'],
+		relationships: [
+			{ npcId: 'sertieren', type: 'Former Companion', description: 'Fell out over ethics.' },
+			{ npcId: 'kilgor', type: 'Associate', description: 'Sent creatures for Festival of Life.' },
 		],
-		"encounters": [
-			{ "session": 4, "description": "Her ledger found in underground complex." },
-			{ "session": 7, "description": "Found dead, fused to Null Brand artifact." }
+		encounters: [
+			{ session: 4, description: 'Her ledger found in underground complex.' },
+			{ session: 7, description: 'Found dead, fused to Null Brand artifact.' },
 		],
-		"link": [
+		link: [
 			{
-				"title": "Brotherhood and Kilgor Investigation",
-				"link": "?campaign=campaign-002&view=quests&quest=Brotherhood%2520and%2520Kilgor%2520Investigation"
+				title: 'Brotherhood and Kilgor Investigation',
+				link: '?campaign=campaign-002&view=quests&quest=Brotherhood%2520and%2520Kilgor%2520Investigation',
 			},
 			{
-				"title": "Investigate the Null Brand",
-				"link": "?campaign=campaign-002&view=quests&quest=Investigate%2520the%2520Null%2520Brand"
-			}
-		]
+				title: 'Investigate the Null Brand',
+				link: '?campaign=campaign-002&view=quests&quest=Investigate%2520the%2520Null%2520Brand',
+			},
+		],
 	},
 	{
-		"id": "kilgor",
-		"name": "Kilgor",
-		"affinity": "Antagonist",
-		"faction": "Unknown",
-		"status": "Alive",
-		"race": "Unknown",
-		"class": "Unknown",
-		"role": "Creature Collector",
-		"description": "Mysterious figure collecting combatants for Festival of Life.",
-		"personality": null,
-		"background": "Sent harpy spies to Kalistra's operation. Seen in vision defeating Fey Queens and withering Feywild.",
-		"location": {
-			"primary": "Unknown",
-			"specific": null
+		id: 'kilgor',
+		name: 'Kilgor',
+		affinity: 'Antagonist',
+		faction: 'Unknown',
+		status: 'Alive',
+		race: 'Unknown',
+		class: 'Unknown',
+		role: 'Creature Collector',
+		description: 'Mysterious figure collecting combatants for Festival of Life.',
+		personality: null,
+		background: "Sent harpy spies to Kalistra's operation. Seen in vision defeating Fey Queens and withering Feywild.",
+		location: {
+			primary: 'Unknown',
+			specific: null,
 		},
-		"goals": ["Collect creatures for Festival of Life", "Seize Fey crowns"],
-		"items": ["Energy spears (from vision)"],
-		"relationships": [
-			{ "npcId": "kalistra", "type": "Associate", "description": "Received creatures from her." },
-			{ "npcId": "titania", "type": "Enemy", "description": "Defeated and seized crown in vision." },
-			{ "npcId": "queen-air-darkness", "type": "Enemy", "description": "Defeated and seized crown in vision." }
+		goals: ['Collect creatures for Festival of Life', 'Seize Fey crowns'],
+		items: ['Energy spears (from vision)'],
+		relationships: [
+			{ npcId: 'kalistra', type: 'Associate', description: 'Received creatures from her.' },
+			{ npcId: 'titania', type: 'Enemy', description: 'Defeated and seized crown in vision.' },
+			{ npcId: 'queen-air-darkness', type: 'Enemy', description: 'Defeated and seized crown in vision.' },
 		],
-		"encounters": [
-			{ "session": 4, "description": "Mentioned in Kalistra's ledger." },
-			{ "session": 7, "description": "Seen in Bonnie's vision attacking Fey Queens." }
+		encounters: [
+			{ session: 4, description: "Mentioned in Kalistra's ledger." },
+			{ session: 7, description: "Seen in Bonnie's vision attacking Fey Queens." },
 		],
-		"link": [
+		link: [
 			{
-				"title": "The Blue Bear Alliance - Prevent the Apocalypse",
-				"link": "?campaign=campaign-002&view=quests&quest=The%2520Blue%2520Bear%2520Alliance%2520-%2520Prevent%2520the%2520Apocalypse"
+				title: 'The Blue Bear Alliance - Prevent the Apocalypse',
+				link: '?campaign=campaign-002&view=quests&quest=The%2520Blue%2520Bear%2520Alliance%2520-%2520Prevent%2520the%2520Apocalypse',
 			},
 			{
-				"title": "Brotherhood and Kilgor Investigation",
-				"link": "?campaign=campaign-002&view=quests&quest=Brotherhood%2520and%2520Kilgor%2520Investigation"
-			}
-		]
+				title: 'Brotherhood and Kilgor Investigation',
+				link: '?campaign=campaign-002&view=quests&quest=Brotherhood%2520and%2520Kilgor%2520Investigation',
+			},
+		],
 	},
 	{
-		"id": "sandro",
-		"name": "Sandro",
-		"affinity": "Antagonist",
-		"faction": "Pelagos (Usurper)",
-		"status": "Alive",
-		"race": "Unknown",
-		"class": "Necromancer",
-		"role": "Usurper King",
-		"description": "Powerful necromancer who murdered King of Pelagos and seized throne.",
-		"personality": "Evil, power-hungry.",
-		"background": "Came from Lustria during Pelagos civil war. Turned entire villages to zombies.",
-		"location": {
-			"primary": "Unknown",
-			"specific": null
+		id: 'sandro',
+		name: 'Sandro',
+		affinity: 'Antagonist',
+		faction: 'Pelagos (Usurper)',
+		status: 'Alive',
+		race: 'Unknown',
+		class: 'Necromancer',
+		role: 'Usurper King',
+		description: 'Powerful necromancer who murdered King of Pelagos and seized throne.',
+		personality: 'Evil, power-hungry.',
+		background: 'Came from Lustria during Pelagos civil war. Turned entire villages to zombies.',
+		location: {
+			primary: 'Unknown',
+			specific: null,
 		},
-		"goals": ["Maintain control of Pelagos", "Expand necromantic power"],
-		"items": null,
-		"relationships": [
-			{ "npcId": "bianca", "type": "Enemy", "description": "Killed her father, stole throne." },
-			{ "npcId": "turiados", "type": "Enemy", "description": "Target of his vengeance." }
+		goals: ['Maintain control of Pelagos', 'Expand necromantic power'],
+		items: null,
+		relationships: [
+			{ npcId: 'bianca', type: 'Enemy', description: 'Killed her father, stole throne.' },
+			{ npcId: 'turiados', type: 'Enemy', description: 'Target of his vengeance.' },
 		],
-		"encounters": null,
-		"link": [
+		encounters: null,
+		link: [
 			{
-				"title": "Retrieve Locket of Hair from Sandro",
-				"link": "?campaign=campaign-002&view=quests&quest=Retrieve%2520Locket%2520of%2520Hair%2520from%2520Sandro"
-			}
-		]
-	},
-	{
-		"id": "general-lee",
-		"name": "General Lee",
-		"affinity": "Neutral",
-		"faction": "The Leviathan's Hall",
-		"status": "Unknown",
-		"race": "Unknown",
-		"class": "Warrior/Commander",
-		"role": "Mercenary Commander",
-		"description": "Former convict who became mercenary commander and led penal colony breakout.",
-		"personality": "Capable leader, strategic thinker.",
-		"background": "Led successful prison break from mining colony and helped Bianca steal flagship.",
-		"location": {
-			"primary": "Unknown",
-			"specific": null
-		},
-		"goals": null,
-		"items": null,
-		"relationships": [
-			{ "npcId": "bianca", "type": "Ally", "description": "She misses his counsel." },
-			{ "npcId": "turiados", "type": "Former Commander", "description": "Led prison break." }
+				title: 'Retrieve Locket of Hair from Sandro',
+				link: '?campaign=campaign-002&view=quests&quest=Retrieve%2520Locket%2520of%2520Hair%2520from%2520Sandro',
+			},
 		],
-		"encounters": null,
-		"link": []
 	},
 	{
-		"id": "hans-mariner",
-		"name": "Captain Hans Mariner",
-		"affinity": "Neutral",
-		"faction": "Lion's Guard",
-		"status": "Alive",
-		"race": "Unknown",
-		"class": "Unknown",
-		"role": "Lion's Guard Captain",
-		"description": "Captain of the Lion's Guard in Brindol who offers creature bounties.",
-		"personality": null,
-		"background": null,
-		"location": {
-			"primary": "Brindol",
-			"specific": null
+		id: 'general-lee',
+		name: 'General Lee',
+		affinity: 'Neutral',
+		faction: "The Leviathan's Hall",
+		status: 'Unknown',
+		race: 'Unknown',
+		class: 'Warrior/Commander',
+		role: 'Mercenary Commander',
+		description: 'Former convict who became mercenary commander and led penal colony breakout.',
+		personality: 'Capable leader, strategic thinker.',
+		background: 'Led successful prison break from mining colony and helped Bianca steal flagship.',
+		location: {
+			primary: 'Unknown',
+			specific: null,
 		},
-		"goals": null,
-		"items": null,
-		"relationships": [{ "npcId": "jun-takashi", "type": "Subordinate", "description": "Commands Winter Rose operative." }],
-		"encounters": [{ "session": 2, "description": "Mentioned by Jun as offering spider demon reward." }],
-		"link": []
-	},
-	{
-		"id": "marise-curs",
-		"name": "Marise Curs",
-		"affinity": "Neutral",
-		"faction": "Leviathan's Hall Crew",
-		"status": "Alive",
-		"race": "Unknown",
-		"class": "Unknown",
-		"role": "Pirate Crewman",
-		"description": "Peg-legged pirate with unusual living tentacle mug.",
-		"personality": "Talkative when drunk, loyal to Bianca.",
-		"background": "Former penal colony slave freed by General Lee. Blood-bound to House Corina.",
-		"location": {
-			"primary": "The Leviathan's Hall",
-			"specific": null
-		},
-		"goals": null,
-		"items": ["Living tentacle mug"],
-		"relationships": [
-			{ "npcId": "general-lee", "type": "Liberator", "description": "Freed from penal colony." },
-			{ "npcId": "bianca", "type": "Commander", "description": "Blood-bound to serve." }
+		goals: null,
+		items: null,
+		relationships: [
+			{ npcId: 'bianca', type: 'Ally', description: 'She misses his counsel.' },
+			{ npcId: 'turiados', type: 'Former Commander', description: 'Led prison break.' },
 		],
-		"encounters": [{ "session": 5, "description": "Talked to Bonnie about ship's history and General Lee." }],
-		"link": []
+		encounters: null,
+		link: [],
 	},
 	{
-		"id": "bardin-cratcho",
-		"name": "Bardin Cratcho",
-		"affinity": "Neutral",
-		"faction": "Leviathan's Hall Crew",
-		"status": "Alive",
-		"race": "Dwarf",
-		"class": "Artificer/Runesmith",
-		"role": "Ship Forge-Master",
-		"description": "Heavily augmented dwarf who tempers runes onto weapons. Claims to have eaten molten slag.",
-		"personality": "Proud, expensive, skilled.",
-		"background": null,
-		"location": {
-			"primary": "The Leviathan's Hall",
-			"specific": "Forge"
+		id: 'hans-mariner',
+		name: 'Captain Hans Mariner',
+		affinity: 'Neutral',
+		faction: "Lion's Guard",
+		status: 'Alive',
+		race: 'Unknown',
+		class: 'Unknown',
+		role: "Lion's Guard Captain",
+		description: "Captain of the Lion's Guard in Brindol who offers creature bounties.",
+		personality: null,
+		background: null,
+		location: {
+			primary: 'Brindol',
+			specific: null,
 		},
-		"goals": null,
-		"items": null,
-		"relationships": null,
-		"encounters": [{ "session": 5, "description": "Offered to rune Kaedin's sword for 50 gold." }],
-		"link": []
+		goals: null,
+		items: null,
+		relationships: [{ npcId: 'jun-takashi', type: 'Subordinate', description: 'Commands Winter Rose operative.' }],
+		encounters: [{ session: 2, description: 'Mentioned by Jun as offering spider demon reward.' }],
+		link: [],
 	},
 	{
-		"id": "nels-huto",
-		"name": "Nels Huto",
-		"affinity": "Unknown",
-		"faction": "Unknown",
-		"status": "Unknown",
-		"race": "Unknown",
-		"class": "Necromancer",
-		"role": "Artifact Holder",
-		"description": "Last known possessor of Dead Man's Boots artifact. Heading into Witchwood.",
-		"personality": null,
-		"background": null,
-		"location": {
-			"primary": "Witchwood",
-			"specific": null
+		id: 'marise-curs',
+		name: 'Marise Curs',
+		affinity: 'Neutral',
+		faction: "Leviathan's Hall Crew",
+		status: 'Alive',
+		race: 'Unknown',
+		class: 'Unknown',
+		role: 'Pirate Crewman',
+		description: 'Peg-legged pirate with unusual living tentacle mug.',
+		personality: 'Talkative when drunk, loyal to Bianca.',
+		background: 'Former penal colony slave freed by General Lee. Blood-bound to House Corina.',
+		location: {
+			primary: "The Leviathan's Hall",
+			specific: null,
 		},
-		"goals": null,
-		"items": ["Dead Man's Boots (artifact)"],
-		"relationships": null,
-		"encounters": [{ "session": 1, "description": "Mentioned by Soranna as last holder of boots." }],
-		"link": [
+		goals: null,
+		items: ['Living tentacle mug'],
+		relationships: [
+			{ npcId: 'general-lee', type: 'Liberator', description: 'Freed from penal colony.' },
+			{ npcId: 'bianca', type: 'Commander', description: 'Blood-bound to serve.' },
+		],
+		encounters: [{ session: 5, description: "Talked to Bonnie about ship's history and General Lee." }],
+		link: [],
+	},
+	{
+		id: 'bardin-cratcho',
+		name: 'Bardin Cratcho',
+		affinity: 'Neutral',
+		faction: "Leviathan's Hall Crew",
+		status: 'Alive',
+		race: 'Dwarf',
+		class: 'Artificer/Runesmith',
+		role: 'Ship Forge-Master',
+		description: 'Heavily augmented dwarf who tempers runes onto weapons. Claims to have eaten molten slag.',
+		personality: 'Proud, expensive, skilled.',
+		background: null,
+		location: {
+			primary: "The Leviathan's Hall",
+			specific: 'Forge',
+		},
+		goals: null,
+		items: null,
+		relationships: null,
+		encounters: [{ session: 5, description: "Offered to rune Kaedin's sword for 50 gold." }],
+		link: [],
+	},
+	{
+		id: 'nels-huto',
+		name: 'Nels Huto',
+		affinity: 'Unknown',
+		faction: 'Unknown',
+		status: 'Unknown',
+		race: 'Unknown',
+		class: 'Necromancer',
+		role: 'Artifact Holder',
+		description: "Last known possessor of Dead Man's Boots artifact. Heading into Witchwood.",
+		personality: null,
+		background: null,
+		location: {
+			primary: 'Witchwood',
+			specific: null,
+		},
+		goals: null,
+		items: ["Dead Man's Boots (artifact)"],
+		relationships: null,
+		encounters: [{ session: 1, description: 'Mentioned by Soranna as last holder of boots.' }],
+		link: [
 			{
-				"title": "Retrieve Dead Man's Boots from Nels Huto",
-				"link": "?campaign=campaign-002&view=quests&quest=Retrieve%2520Dead%2520Man's%2520Boots%2520from%2520Nels%2520Huto"
-			}
-		]
-	},
-	{
-		"id": "dwarf-armorer",
-		"name": "Dwarf Armorer",
-		"affinity": "Neutral",
-		"faction": "Independent",
-		"status": "Alive",
-		"race": "Dwarf",
-		"class": "Blacksmith",
-		"role": "Master Armorer",
-		"description": "Tiny dwarf who works inside on scaffolding creating high-quality armor.",
-		"personality": "Skilled, respects Norro, professional.",
-		"background": null,
-		"location": {
-			"primary": "Drellin's Ferry",
-			"specific": "Armorer's Forge"
-		},
-		"goals": null,
-		"items": null,
-		"relationships": [{ "npcId": "norro", "type": "Respects", "description": "Honors his discount notes." }],
-		"encounters": [{ "session": 6, "description": "Sold and reinforced armor using Thylacoleo pelts." }],
-		"link": []
-	},
-	{
-		"id": "loic",
-		"name": "Loïc",
-		"affinity": "Neutral",
-		"faction": "Independent",
-		"status": "Alive",
-		"race": "Phoenix",
-		"class": "Magical Creature",
-		"role": "Guardian Spirit",
-		"description": "Phoenix with healing tears residing in druid grove.",
-		"personality": null,
-		"background": null,
-		"location": {
-			"primary": "Avarthel's Grove",
-			"specific": null
-		},
-		"goals": null,
-		"items": null,
-		"relationships": [
-			{ "npcId": "avarthel", "type": "Companion", "description": "Resides in his grove." },
-			{ "npcId": "anya", "type": "Healed", "description": "Shed healing tears on her." }
+				title: "Retrieve Dead Man's Boots from Nels Huto",
+				link: "?campaign=campaign-002&view=quests&quest=Retrieve%2520Dead%2520Man's%2520Boots%2520from%2520Nels%2520Huto",
+			},
 		],
-		"encounters": [{ "session": 3, "description": "Shed healing tears on Anya to stabilize her." }],
-		"link": [
+	},
+	{
+		id: 'dwarf-armorer',
+		name: 'Dwarf Armorer',
+		affinity: 'Neutral',
+		faction: 'Independent',
+		status: 'Alive',
+		race: 'Dwarf',
+		class: 'Blacksmith',
+		role: 'Master Armorer',
+		description: 'Tiny dwarf who works inside on scaffolding creating high-quality armor.',
+		personality: 'Skilled, respects Norro, professional.',
+		background: null,
+		location: {
+			primary: "Drellin's Ferry",
+			specific: "Armorer's Forge",
+		},
+		goals: null,
+		items: null,
+		relationships: [{ npcId: 'norro', type: 'Respects', description: 'Honors his discount notes.' }],
+		encounters: [{ session: 6, description: 'Sold and reinforced armor using Thylacoleo pelts.' }],
+		link: [],
+	},
+	{
+		id: 'loic',
+		name: 'Loïc',
+		affinity: 'Neutral',
+		faction: 'Independent',
+		status: 'Alive',
+		race: 'Phoenix',
+		class: 'Magical Creature',
+		role: 'Guardian Spirit',
+		description: 'Phoenix with healing tears residing in druid grove.',
+		personality: null,
+		background: null,
+		location: {
+			primary: "Avarthel's Grove",
+			specific: null,
+		},
+		goals: null,
+		items: null,
+		relationships: [
+			{ npcId: 'avarthel', type: 'Companion', description: 'Resides in his grove.' },
+			{ npcId: 'anya', type: 'Healed', description: 'Shed healing tears on her.' },
+		],
+		encounters: [{ session: 3, description: 'Shed healing tears on Anya to stabilize her.' }],
+		link: [
 			{
-				"title": "Rescue Anya",
-				"link": "?campaign=campaign-002&view=quests&quest=Rescue%2520Anya"
-			}
-		]
-	},
-	{
-		"id": "zella",
-		"name": "Zella",
-		"affinity": "Ally",
-		"faction": "Arcane Brotherhood",
-		"status": "Unknown",
-		"race": "Unknown",
-		"class": "Sorcerer",
-		"role": "Mentor",
-		"description": "Powerful sorcerer who rescued and mentored Norr.",
-		"personality": null,
-		"background": "Met Norr on rain-soaked night during bandit attack. Taught her everything before sending to Brotherhood.",
-		"location": {
-			"primary": "Unknown",
-			"specific": null
-		},
-		"goals": null,
-		"items": null,
-		"relationships": [{ "npcId": "norr", "type": "Student", "description": "Taught and sent to Brotherhood." }],
-		"encounters": null,
-		"link": []
-	},
-	{
-		"id": "thalos",
-		"name": "Thalos",
-		"affinity": "Ally",
-		"faction": "Unknown",
-		"status": "Unknown",
-		"race": "Earth Genasi",
-		"class": "Unknown",
-		"role": "Missing Friend",
-		"description": "Kaedin's childhood best friend from deeply religious Earth Genasi family. Lost to energy monolith.",
-		"personality": null,
-		"background": "Absorbed by ancient monolith after stepping on pressure plate. Only traditional garb remained.",
-		"location": {
-			"primary": "Unknown",
-			"specific": "Lost in Energy Monolith"
-		},
-		"goals": null,
-		"items": ["Traditional garb (worn by Kaedin)"],
-		"relationships": [
-			{ "npcId": "kaedin", "type": "Best Friend", "description": "Childhood best friend Kaedin searches for." }
+				title: 'Rescue Anya',
+				link: '?campaign=campaign-002&view=quests&quest=Rescue%2520Anya',
+			},
 		],
-		"encounters": null,
-		"link": []
 	},
 	{
-		"id": "clyde",
-		"name": "Clyde",
-		"affinity": "Ally",
-		"faction": "Feywild Quicklings",
-		"status": "Alive",
-		"race": "Quickling",
-		"class": "Unknown",
-		"role": "Friend",
-		"description": "Bonnie's best friend in Feywild. Saved from execution by Bonnie's sacrifice.",
-		"personality": null,
-		"background": "Captured with Bonnie, sentenced to death. Bonnie chose banishment to spare Clyde's life.",
-		"location": {
-			"primary": "Feywild",
-			"specific": null
+		id: 'zella',
+		name: 'Zella',
+		affinity: 'Ally',
+		faction: 'Arcane Brotherhood',
+		status: 'Unknown',
+		race: 'Unknown',
+		class: 'Sorcerer',
+		role: 'Mentor',
+		description: 'Powerful sorcerer who rescued and mentored Norr.',
+		personality: null,
+		background:
+			'Met Norr on rain-soaked night during bandit attack. Taught her everything before sending to Brotherhood.',
+		location: {
+			primary: 'Unknown',
+			specific: null,
 		},
-		"goals": null,
-		"items": null,
-		"relationships": [
-			{ "npcId": "bonnie", "type": "Best Friend", "description": "Saved by Bonnie's sacrifice." },
-			{ "npcId": "titania", "type": "Enemy", "description": "Sentenced to death by Summer Queen." }
+		goals: null,
+		items: null,
+		relationships: [{ npcId: 'norr', type: 'Student', description: 'Taught and sent to Brotherhood.' }],
+		encounters: null,
+		link: [],
+	},
+	{
+		id: 'thalos',
+		name: 'Thalos',
+		affinity: 'Ally',
+		faction: 'Unknown',
+		status: 'Unknown',
+		race: 'Earth Genasi',
+		class: 'Unknown',
+		role: 'Missing Friend',
+		description: "Kaedin's childhood best friend from deeply religious Earth Genasi family. Lost to energy monolith.",
+		personality: null,
+		background: 'Absorbed by ancient monolith after stepping on pressure plate. Only traditional garb remained.',
+		location: {
+			primary: 'Unknown',
+			specific: 'Lost in Energy Monolith',
+		},
+		goals: null,
+		items: ['Traditional garb (worn by Kaedin)'],
+		relationships: [
+			{ npcId: 'kaedin', type: 'Best Friend', description: 'Childhood best friend Kaedin searches for.' },
 		],
-		"encounters": null,
-		"link": []
+		encounters: null,
+		link: [],
 	},
 	{
-		"id": "jacques",
-		"name": "Jacques",
-		"affinity": "Ally",
-		"faction": null,
-		"status": "Alive",
-		"race": "Giant Rat",
-		"class": "Magical Creature",
-		"role": "Bonnie's Companion",
-		"description": "Antlered giant rat, Bonnie's closest family. Smaller in Material Plane than Feywild.",
-		"personality": null,
-		"background": null,
-		"location": {
-			"primary": "With Party",
-			"specific": null
+		id: 'clyde',
+		name: 'Clyde',
+		affinity: 'Ally',
+		faction: 'Feywild Quicklings',
+		status: 'Alive',
+		race: 'Quickling',
+		class: 'Unknown',
+		role: 'Friend',
+		description: "Bonnie's best friend in Feywild. Saved from execution by Bonnie's sacrifice.",
+		personality: null,
+		background: "Captured with Bonnie, sentenced to death. Bonnie chose banishment to spare Clyde's life.",
+		location: {
+			primary: 'Feywild',
+			specific: null,
 		},
-		"goals": null,
-		"items": null,
-		"relationships": [{ "npcId": "bonnie", "type": "Companion", "description": "Her closest family and constant companion." }],
-		"encounters": null,
-		"link": []
-	},
-	{
-		"id": "palo",
-		"name": "Palo",
-		"affinity": "Ally",
-		"faction": null,
-		"status": "Alive",
-		"race": "Magical Cat",
-		"class": "Magical Creature",
-		"role": "Olek's Companion",
-		"description": "Olek's magical feline companion known for causing havoc.",
-		"personality": null,
-		"background": "Freed by Olek after being trapped in magical sphere by dragonkin. Returns after Null Brand explosion.",
-		"location": {
-			"primary": "With Party",
-			"specific": null
-		},
-		"goals": null,
-		"items": null,
-		"relationships": [{ "npcId": "olek", "type": "Companion", "description": "Olek's loyal magical cat." }],
-		"encounters": [
-			{ "session": 3, "description": "Caused havoc in inn's kitchen." },
-			{ "session": 7, "description": "Returned after Null Brand explosion." }
+		goals: null,
+		items: null,
+		relationships: [
+			{ npcId: 'bonnie', type: 'Best Friend', description: "Saved by Bonnie's sacrifice." },
+			{ npcId: 'titania', type: 'Enemy', description: 'Sentenced to death by Summer Queen.' },
 		],
-		"link": [
+		encounters: null,
+		link: [],
+	},
+	{
+		id: 'jacques',
+		name: 'Jacques',
+		affinity: 'Ally',
+		faction: null,
+		status: 'Alive',
+		race: 'Giant Rat',
+		class: 'Magical Creature',
+		role: "Bonnie's Companion",
+		description: "Antlered giant rat, Bonnie's closest family. Smaller in Material Plane than Feywild.",
+		personality: null,
+		background: null,
+		location: {
+			primary: 'With Party',
+			specific: null,
+		},
+		goals: null,
+		items: null,
+		relationships: [{ npcId: 'bonnie', type: 'Companion', description: 'Her closest family and constant companion.' }],
+		encounters: null,
+		link: [],
+	},
+	{
+		id: 'palo',
+		name: 'Palo',
+		affinity: 'Ally',
+		faction: null,
+		status: 'Alive',
+		race: 'Magical Cat',
+		class: 'Magical Creature',
+		role: "Olek's Companion",
+		description: "Olek's magical feline companion known for causing havoc.",
+		personality: null,
+		background: 'Freed by Olek after being trapped in magical sphere by dragonkin. Returns after Null Brand explosion.',
+		location: {
+			primary: 'With Party',
+			specific: null,
+		},
+		goals: null,
+		items: null,
+		relationships: [{ npcId: 'olek', type: 'Companion', description: "Olek's loyal magical cat." }],
+		encounters: [
+			{ session: 3, description: "Caused havoc in inn's kitchen." },
+			{ session: 7, description: 'Returned after Null Brand explosion.' },
+		],
+		link: [
 			{
-				"title": "Care for Thylacoleo Cubs",
-				"link": "?campaign=campaign-002&view=quests&quest=Care%2520for%2520Thylacoleo%2520Cubs"
-			}
-		]
+				title: 'Care for Thylacoleo Cubs',
+				link: '?campaign=campaign-002&view=quests&quest=Care%2520for%2520Thylacoleo%2520Cubs',
+			},
+		],
 	},
 	{
-		"id": "rilon-paln",
-		"name": "Rilon Paln",
-		"affinity": "Unknown",
-		"faction": "Unknown",
-		"status": "Unknown",
-		"race": "Unknown",
-		"class": "Unknown",
-		"role": "Artifact Source",
-		"description": "Source of artifact delivered by Bonnie to Soranna.",
-		"personality": null,
-		"background": null,
-		"location": {
-			"primary": "Unknown",
-			"specific": null
+		id: 'rilon-paln',
+		name: 'Rilon Paln',
+		affinity: 'Unknown',
+		faction: 'Unknown',
+		status: 'Unknown',
+		race: 'Unknown',
+		class: 'Unknown',
+		role: 'Artifact Source',
+		description: 'Source of artifact delivered by Bonnie to Soranna.',
+		personality: null,
+		background: null,
+		location: {
+			primary: 'Unknown',
+			specific: null,
 		},
-		"goals": null,
-		"items": null,
-		"relationships": null,
-		"encounters": null,
-		"link": [
+		goals: null,
+		items: null,
+		relationships: null,
+		encounters: null,
+		link: [
 			{
-				"title": "Retrieve Dead Man's Boots from Nels Huto",
-				"link": "?campaign=campaign-002&view=quests&quest=Retrieve%2520Dead%2520Man's%2520Boots%2520from%2520Nels%2520Huto"
-			}
-		]
-	},
-	{
-		"id": "scoundrel",
-		"name": "Scoundrel",
-		"affinity": "Ally",
-		"faction": "Winter Rose",
-		"status": "Alive",
-		"race": "Unknown",
-		"class": "Mercenary",
-		"role": "Winter Rose Mercenary",
-		"description": "Mercenary companion of Vandal.",
-		"personality": null,
-		"background": null,
-		"location": {
-			"primary": "Traveling",
-			"specific": null
-		},
-		"goals": null,
-		"items": null,
-		"relationships": [{ "npcId": "vandal", "type": "Companion", "description": "Fellow Winter Rose mercenary." }],
-		"encounters": [{ "session": 5, "description": "Stranded with party on coast after pirate encounter." }],
-		"link": []
-	},
-	{
-		"id": "gica",
-		"name": "Gică",
-		"affinity": "Ally",
-		"faction": "Broken Shackle Tribe",
-		"status": "Alive",
-		"race": "Megatherium",
-		"class": "Magical Creature",
-		"role": "Befriended Beast",
-		"description": "8-foot prehistoric sloth-bear creature, primarily herbivorous, resistant to fear/stun. Bears tribal markings.",
-		"personality": null,
-		"background": null,
-		"location": {
-			"primary": "Underground Caves",
-			"specific": null
-		},
-		"goals": null,
-		"items": null,
-		"relationships": [
-			{ "npcId": "bonnie", "type": "Befriended by", "description": "Bonnie befriended and communicates with." },
-			{ "npcId": "misu", "type": "Companion", "description": "Fellow Megatherium." }
+				title: "Retrieve Dead Man's Boots from Nels Huto",
+				link: "?campaign=campaign-002&view=quests&quest=Retrieve%2520Dead%2520Man's%2520Boots%2520from%2520Nels%2520Huto",
+			},
 		],
-		"encounters": [{ "session": 6, "description": "Befriended by Bonnie, helped navigate caves." }],
-		"link": []
 	},
 	{
-		"id": "misu",
-		"name": "Mișu",
-		"affinity": "Ally",
-		"faction": "Broken Shackle Tribe",
-		"status": "Alive",
-		"race": "Megatherium",
-		"class": "Magical Creature",
-		"role": "Befriended Beast",
-		"description": "Second Megatherium befriended by Bonnie. Gained combat buff after killing Arthropleura.",
-		"personality": null,
-		"background": null,
-		"location": {
-			"primary": "Underground Caves",
-			"specific": null
+		id: 'scoundrel',
+		name: 'Scoundrel',
+		affinity: 'Ally',
+		faction: 'Winter Rose',
+		status: 'Alive',
+		race: 'Unknown',
+		class: 'Mercenary',
+		role: 'Winter Rose Mercenary',
+		description: 'Mercenary companion of Vandal.',
+		personality: null,
+		background: null,
+		location: {
+			primary: 'Traveling',
+			specific: null,
 		},
-		"goals": null,
-		"items": null,
-		"relationships": [
-			{ "npcId": "bonnie", "type": "Befriended by", "description": "Bonnie befriended and communicates with." },
-			{ "npcId": "gica", "type": "Companion", "description": "Fellow Megatherium." }
-		],
-		"encounters": [{ "session": 6, "description": "Befriended by Bonnie, gained combat buff after Arthropleura kill." }],
-		"link": []
+		goals: null,
+		items: null,
+		relationships: [{ npcId: 'vandal', type: 'Companion', description: 'Fellow Winter Rose mercenary.' }],
+		encounters: [{ session: 5, description: 'Stranded with party on coast after pirate encounter.' }],
+		link: [],
 	},
 	{
-		"id": "titania",
-		"name": "Titania",
-		"affinity": "Neutral",
-		"faction": "Feywild Summer Court",
-		"status": "Alive",
-		"race": "Fey",
-		"class": "Fey Queen",
-		"role": "Summer Court Ruler",
-		"description": "Queen of Summer Court who sentenced Clyde to execution.",
-		"personality": null,
-		"background": "Fought alongside Winter Queen against Kilgor in Bonnie's vision before losing crown.",
-		"location": {
-			"primary": "Feywild",
-			"specific": "Summer Court"
+		id: 'gica',
+		name: 'Gică',
+		affinity: 'Ally',
+		faction: 'Broken Shackle Tribe',
+		status: 'Alive',
+		race: 'Megatherium',
+		class: 'Magical Creature',
+		role: 'Befriended Beast',
+		description:
+			'8-foot prehistoric sloth-bear creature, primarily herbivorous, resistant to fear/stun. Bears tribal markings.',
+		personality: null,
+		background: null,
+		location: {
+			primary: 'Underground Caves',
+			specific: null,
 		},
-		"goals": null,
-		"items": null,
-		"relationships": [
-			{ "npcId": "queen-air-darkness", "type": "Ally", "description": "Allied against Kilgor in vision." },
-			{ "npcId": "kilgor", "type": "Enemy", "description": "Defeated by, crown seized in vision." },
-			{ "npcId": "clyde", "type": "Enemy", "description": "Sentenced to death." }
+		goals: null,
+		items: null,
+		relationships: [
+			{ npcId: 'bonnie', type: 'Befriended by', description: 'Bonnie befriended and communicates with.' },
+			{ npcId: 'misu', type: 'Companion', description: 'Fellow Megatherium.' },
 		],
-		"encounters": [{ "session": 7, "description": "Seen in Bonnie's vision fighting Kilgor." }],
-		"link": [
+		encounters: [{ session: 6, description: 'Befriended by Bonnie, helped navigate caves.' }],
+		link: [],
+	},
+	{
+		id: 'misu',
+		name: 'Mișu',
+		affinity: 'Ally',
+		faction: 'Broken Shackle Tribe',
+		status: 'Alive',
+		race: 'Megatherium',
+		class: 'Magical Creature',
+		role: 'Befriended Beast',
+		description: 'Second Megatherium befriended by Bonnie. Gained combat buff after killing Arthropleura.',
+		personality: null,
+		background: null,
+		location: {
+			primary: 'Underground Caves',
+			specific: null,
+		},
+		goals: null,
+		items: null,
+		relationships: [
+			{ npcId: 'bonnie', type: 'Befriended by', description: 'Bonnie befriended and communicates with.' },
+			{ npcId: 'gica', type: 'Companion', description: 'Fellow Megatherium.' },
+		],
+		encounters: [{ session: 6, description: 'Befriended by Bonnie, gained combat buff after Arthropleura kill.' }],
+		link: [],
+	},
+	{
+		id: 'titania',
+		name: 'Titania',
+		affinity: 'Neutral',
+		faction: 'Feywild Summer Court',
+		status: 'Alive',
+		race: 'Fey',
+		class: 'Fey Queen',
+		role: 'Summer Court Ruler',
+		description: 'Queen of Summer Court who sentenced Clyde to execution.',
+		personality: null,
+		background: "Fought alongside Winter Queen against Kilgor in Bonnie's vision before losing crown.",
+		location: {
+			primary: 'Feywild',
+			specific: 'Summer Court',
+		},
+		goals: null,
+		items: null,
+		relationships: [
+			{ npcId: 'queen-air-darkness', type: 'Ally', description: 'Allied against Kilgor in vision.' },
+			{ npcId: 'kilgor', type: 'Enemy', description: 'Defeated by, crown seized in vision.' },
+			{ npcId: 'clyde', type: 'Enemy', description: 'Sentenced to death.' },
+		],
+		encounters: [{ session: 7, description: "Seen in Bonnie's vision fighting Kilgor." }],
+		link: [
 			{
-				"title": "The Blue Bear Alliance - Prevent the Apocalypse",
-				"link": "?campaign=campaign-002&view=quests&quest=The%2520Blue%2520Bear%2520Alliance%2520-%2520Prevent%2520the%2520Apocalypse"
+				title: 'The Blue Bear Alliance - Prevent the Apocalypse',
+				link: '?campaign=campaign-002&view=quests&quest=The%2520Blue%2520Bear%2520Alliance%2520-%2520Prevent%2520the%2520Apocalypse',
 			},
 			{
-				"title": "Brotherhood and Kilgor Investigation",
-				"link": "?campaign=campaign-002&view=quests&quest=Brotherhood%2520and%2520Kilgor%2520Investigation"
-			}
-		]
+				title: 'Brotherhood and Kilgor Investigation',
+				link: '?campaign=campaign-002&view=quests&quest=Brotherhood%2520and%2520Kilgor%2520Investigation',
+			},
+		],
 	},
 	{
-		"id": "queen-air-darkness",
-		"name": "Queen of Air and Darkness",
-		"affinity": "Neutral",
-		"faction": "Feywild Winter Court",
-		"status": "Alive",
-		"race": "Fey",
-		"class": "Fey Queen",
-		"role": "Winter Court Ruler",
-		"description": "Winter Queen of Feywild.",
-		"personality": null,
-		"background": "Fought alongside Titania against Kilgor in Bonnie's vision before losing crown.",
-		"location": {
-			"primary": "Feywild",
-			"specific": "Winter Court"
+		id: 'queen-air-darkness',
+		name: 'Queen of Air and Darkness',
+		affinity: 'Neutral',
+		faction: 'Feywild Winter Court',
+		status: 'Alive',
+		race: 'Fey',
+		class: 'Fey Queen',
+		role: 'Winter Court Ruler',
+		description: 'Winter Queen of Feywild.',
+		personality: null,
+		background: "Fought alongside Titania against Kilgor in Bonnie's vision before losing crown.",
+		location: {
+			primary: 'Feywild',
+			specific: 'Winter Court',
 		},
-		"goals": null,
-		"items": null,
-		"relationships": [
-			{ "npcId": "titania", "type": "Ally", "description": "Allied against Kilgor in vision." },
-			{ "npcId": "kilgor", "type": "Enemy", "description": "Defeated by, crown seized in vision." }
+		goals: null,
+		items: null,
+		relationships: [
+			{ npcId: 'titania', type: 'Ally', description: 'Allied against Kilgor in vision.' },
+			{ npcId: 'kilgor', type: 'Enemy', description: 'Defeated by, crown seized in vision.' },
 		],
-		"encounters": [{ "session": 7, "description": "Seen in Bonnie's vision fighting Kilgor." }],
-		"link": [
+		encounters: [{ session: 7, description: "Seen in Bonnie's vision fighting Kilgor." }],
+		link: [
 			{
-				"title": "The Blue Bear Alliance - Prevent the Apocalypse",
-				"link": "?campaign=campaign-002&view=quests&quest=The%2520Blue%2520Bear%2520Alliance%2520-%2520Prevent%2520the%2520Apocalypse"
+				title: 'The Blue Bear Alliance - Prevent the Apocalypse',
+				link: '?campaign=campaign-002&view=quests&quest=The%2520Blue%2520Bear%2520Alliance%2520-%2520Prevent%2520the%2520Apocalypse',
 			},
 			{
-				"title": "Brotherhood and Kilgor Investigation",
-				"link": "?campaign=campaign-002&view=quests&quest=Brotherhood%2520and%2520Kilgor%2520Investigation"
-			}
-		]
+				title: 'Brotherhood and Kilgor Investigation',
+				link: '?campaign=campaign-002&view=quests&quest=Brotherhood%2520and%2520Kilgor%2520Investigation',
+			},
+		],
 	},
 	{
-		"id": "verenn-yorr",
-		"name": "Verenn Yorr",
-		"affinity": "Ally",
-		"faction": "Exiles",
-		"status": "Unknown",
-		"race": "Unknown",
-		"class": "Mage",
-		"role": "Mentor",
-		"description": "Wizened mage living among exiles who trained Kaedin in Echo Knight abilities.",
-		"personality": null,
-		"background": null,
-		"location": {
-			"primary": "Shadowy Tunnels",
-			"specific": "Exile Community"
+		id: 'verenn-yorr',
+		name: 'Verenn Yorr',
+		affinity: 'Ally',
+		faction: 'Exiles',
+		status: 'Unknown',
+		race: 'Unknown',
+		class: 'Mage',
+		role: 'Mentor',
+		description: 'Wizened mage living among exiles who trained Kaedin in Echo Knight abilities.',
+		personality: null,
+		background: null,
+		location: {
+			primary: 'Shadowy Tunnels',
+			specific: 'Exile Community',
 		},
-		"goals": null,
-		"items": null,
-		"relationships": [{ "npcId": "kaedin", "type": "Student", "description": "Trained in Echo Knight abilities." }],
-		"encounters": null,
-		"link": []
+		goals: null,
+		items: null,
+		relationships: [{ npcId: 'kaedin', type: 'Student', description: 'Trained in Echo Knight abilities.' }],
+		encounters: null,
+		link: [],
 	},
 	{
-		"id": "kresimir",
-		"name": "Kresimir",
-		"affinity": "Antagonist",
-		"faction": "Angevin",
-		"status": "Unknown",
-		"race": "God",
-		"class": "Deity",
-		"role": "Resurrected God",
-		"description": "Resurrected god leading Angevin fleet in Olek's vision, attacking paladin fortress.",
-		"personality": null,
-		"background": null,
-		"location": {
-			"primary": "Unknown",
-			"specific": null
+		id: 'kresimir',
+		name: 'Kresimir',
+		affinity: 'Antagonist',
+		faction: 'Angevin',
+		status: 'Unknown',
+		race: 'God',
+		class: 'Deity',
+		role: 'Resurrected God',
+		description: "Resurrected god leading Angevin fleet in Olek's vision, attacking paladin fortress.",
+		personality: null,
+		background: null,
+		location: {
+			primary: 'Unknown',
+			specific: null,
 		},
-		"goals": null,
-		"items": null,
-		"relationships": null,
-		"encounters": [{ "session": null, "description": "Seen in Olek's vision leading Angevin fleet." }],
-		"link": [
+		goals: null,
+		items: null,
+		relationships: null,
+		encounters: [{ session: null, description: "Seen in Olek's vision leading Angevin fleet." }],
+		link: [
 			{
-				"title": "The Blue Bear Alliance - Prevent the Apocalypse",
-				"link": "?campaign=campaign-002&view=quests&quest=The%2520Blue%2520Bear%2520Alliance%2520-%2520Prevent%2520the%2520Apocalypse"
-			}
-		]
+				title: 'The Blue Bear Alliance - Prevent the Apocalypse',
+				link: '?campaign=campaign-002&view=quests&quest=The%2520Blue%2520Bear%2520Alliance%2520-%2520Prevent%2520the%2520Apocalypse',
+			},
+		],
 	},
 	{
-		"id": "zaya",
-		"name": "Matron Zaya",
-		"affinity": "Neutral",
-		"faction": "House Corzina",
-		"status": "Alive",
-		"race": "Drow",
-		"class": "Unknown",
-		"role": "House Matron",
-		"description": "Matron of House Corzina who sent Jareth to Drellin's Ferry 20 years ago.",
-		"personality": null,
-		"background": null,
-		"location": {
-			"primary": "Underdark",
-			"specific": null
+		id: 'zaya',
+		name: 'Matron Zaya',
+		affinity: 'Neutral',
+		faction: 'House Corzina',
+		status: 'Alive',
+		race: 'Drow',
+		class: 'Unknown',
+		role: 'House Matron',
+		description: "Matron of House Corzina who sent Jareth to Drellin's Ferry 20 years ago.",
+		personality: null,
+		background: null,
+		location: {
+			primary: 'Underdark',
+			specific: null,
 		},
-		"goals": null,
-		"items": null,
-		"relationships": [{ "npcId": "jareth", "type": "Agent", "description": "Sent on 20-year mission." }],
-		"encounters": null,
-		"link": []
+		goals: null,
+		items: null,
+		relationships: [{ npcId: 'jareth', type: 'Agent', description: 'Sent on 20-year mission.' }],
+		encounters: null,
+		link: [],
 	},
 	{
-		"id": "groomsh-ka",
-		"name": "Groomsh of Ka",
-		"affinity": "Ally",
-		"faction": "Winter Rose",
-		"status": "Alive",
-		"race": "Unknown",
-		"class": "Unknown",
-		"role": "Winter Rose Mercenary",
-		"description": "Member of Winter Rose mercenary company.",
-		"personality": null,
-		"background": null,
-		"location": {
-			"primary": "Traveling",
-			"specific": null
+		id: 'groomsh-ka',
+		name: 'Groomsh of Ka',
+		affinity: 'Ally',
+		faction: 'Winter Rose',
+		status: 'Alive',
+		race: 'Unknown',
+		class: 'Unknown',
+		role: 'Winter Rose Mercenary',
+		description: 'Member of Winter Rose mercenary company.',
+		personality: null,
+		background: null,
+		location: {
+			primary: 'Traveling',
+			specific: null,
 		},
-		"goals": null,
-		"items": null,
-		"relationships": null,
-		"encounters": null,
-		"link": []
+		goals: null,
+		items: null,
+		relationships: null,
+		encounters: null,
+		link: [],
 	},
 	{
-		"id": "lord-jarmaath",
-		"name": "Lord Aaron Jarmaath",
-		"affinity": "Neutral",
-		"faction": "Brindol Nobility",
-		"status": "Alive",
-		"race": "Unknown",
-		"class": "Unknown",
-		"role": "Lord of Brindol",
-		"description": "Ruler of Brindol. His small keep and city walls are only fortifications this side of Dennovar.",
-		"personality": null,
-		"background": null,
-		"location": {
-			"primary": "Brindol",
-			"specific": "Keep"
+		id: 'lord-jarmaath',
+		name: 'Lord Aaron Jarmaath',
+		affinity: 'Neutral',
+		faction: 'Brindol Nobility',
+		status: 'Alive',
+		race: 'Unknown',
+		class: 'Unknown',
+		role: 'Lord of Brindol',
+		description: 'Ruler of Brindol. His small keep and city walls are only fortifications this side of Dennovar.',
+		personality: null,
+		background: null,
+		location: {
+			primary: 'Brindol',
+			specific: 'Keep',
 		},
-		"goals": null,
-		"items": null,
-		"relationships": null,
-		"encounters": null,
-		"link": []
-	}
-]
+		goals: null,
+		items: null,
+		relationships: null,
+		encounters: null,
+		link: [],
+	},
+];

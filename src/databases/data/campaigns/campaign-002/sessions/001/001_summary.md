@@ -110,7 +110,7 @@
 <h3>III. Quest &amp; Objective Tracker</h3>
 <div class="quest-container">
 	<div class="quest">
-		<div class="quest-name">Investigate Wyrmlord Koth and "Day of Ruin"</div>
+		<div class="quest-name">[ENTITY:quest:Stop The Invasion]</div>
 		<div class="quest-description">
 			<span>
 				<strong>Active</strong>
@@ -120,7 +120,7 @@
 		</div>
 	</div>
 	<div class="quest">
-		<div class="quest-name">Retrieve Dead Man's Boots from Nels Huto</div>
+		<div class="quest-name">[ENTITY:quest:Retrieve Dead Man's Boots from Nels Huto]</div>
 		<div class="quest-description">
 			<span>
 				<strong>Active</strong>
@@ -130,17 +130,7 @@
 		</div>
 	</div>
 	<div class="quest">
-		<div class="quest-name">Stop the Raiders</div>
-		<div class="quest-description">
-			<span>
-				<strong>Active</strong>
-				- Norro offered reward; raids ongoing; base likely in Witchwood
-			</span>
-			<span>Last update: session 1</span>
-		</div>
-	</div>
-	<div class="quest">
-		<div class="quest-name">Investigate Witchwood and Wrath Keep</div>
+		<div class="quest-name">[ENTITY:quest:Investigate Witchwood and Wrath Keep]</div>
 		<div class="quest-description">
 			<span>
 				<strong>Active</strong>
@@ -154,27 +144,27 @@
 <p><strong>New NPCs Introduced:</strong></p>
 <ul>
 	<li>
-		<strong>Sergeant Hersk</strong>
+		<strong>[ENTITY:npc:Sergeant Hersk]</strong>
 		- Town guard commander who briefed party on local dangers
 	</li>
 	<li>
-		<strong>Soranna</strong>
+		<strong>[ENTITY:npc:Soranna]</strong>
 		- Tollhouse contact who identified the Dead Man's Boots quest item
 	</li>
 	<li>
-		<strong>Norro</strong>
+		<strong>[ENTITY:npc:Norro]</strong>
 		- Bald elder/administrator who offered bounty for stopping raiders
 	</li>
 	<li>
-		<strong>Brother Denny</strong>
+		<strong>[ENTITY:npc:Brother Denny]</strong>
 		- Priest at Shrine of Pelor
 	</li>
 	<li>
-		<strong>Avartel</strong>
+		<strong>[ENTITY:npc:Avarthel]</strong>
 		- Druid with knowledge of Witchwood and Wrath Keep
 	</li>
 	<li>
-		<strong>Sertieren</strong>
+		<strong>[ENTITY:npc:Sertieren]</strong>
 		- Town wizard with information on magical phenomena and Chronomancers
 	</li>
 </ul>

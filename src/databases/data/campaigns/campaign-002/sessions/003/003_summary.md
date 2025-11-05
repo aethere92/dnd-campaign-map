@@ -145,17 +145,17 @@
 <h3>III. Quest &amp; Objective Tracker</h3>
 <div class="quest-container">
     <div class="quest">
-        <div class="quest-name">Investigate Wyrmlord Koth and "Day of Ruin"</div>
+        <div class="quest-name">[ENTITY:quest:Stop The Invasion]</div>
         <div class="quest-description">
             <span>
                 <strong>Active</strong>
-                - No direct progress this session
+                - No direct progress this session aside from reporting hydra/corpse findings to Soranna; received 10 gold reward
             </span>
             <span>Last update: session 2</span>
         </div>
     </div>
     <div class="quest">
-        <div class="quest-name">Retrieve Dead Man's Boots from Nels Huto</div>
+        <div class="quest-name">[ENTITY:quest:Retrieve Dead Man's Boots from Nels Huto]</div>
         <div class="quest-description">
             <span>
                 <strong>Active</strong>
@@ -165,17 +165,7 @@
         </div>
     </div>
     <div class="quest">
-        <div class="quest-name">Stop the Raiders</div>
-        <div class="quest-description">
-            <span>
-                <strong>Progressed</strong>
-                - Reported hydra/corpse findings to Soranna; received 10 gold reward
-            </span>
-            <span>Last update: session 3</span>
-        </div>
-    </div>
-    <div class="quest">
-        <div class="quest-name">Investigate Cave System</div>
+        <div class="quest-name">[ENTITY:quest:Investigate Cave System]</div>
         <div class="quest-description">
             <span>
                 <strong>Completed</strong>
@@ -185,7 +175,7 @@
         </div>
     </div>
     <div class="quest">
-        <div class="quest-name">Rescue Anya</div>
+        <div class="quest-name">[ENTITY:quest:Rescue Anya]</div>
         <div class="quest-description">
             <span>
                 <strong>Completed</strong>
@@ -195,7 +185,7 @@
         </div>
     </div>
     <div class="quest">
-        <div class="quest-name">Winter Rose Spider Bounty</div>
+        <div class="quest-name">[ENTITY:quest:Winter Rose Spider Bounty]</div>
         <div class="quest-description">
             <span>
                 <strong>Active</strong>
@@ -205,7 +195,7 @@
         </div>
     </div>
     <div class="quest">
-        <div class="quest-name">Hydra Egg Safekeeping</div>
+        <div class="quest-name">[ENTITY:quest:Hydra Egg Safekeeping]</div>
         <div class="quest-description">
             <span>
                 <strong>Completed</strong>

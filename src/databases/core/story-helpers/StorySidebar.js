@@ -157,31 +157,31 @@ class StoryHelperSidebar {
 		toolsList.className = 'story-campaign-tools-list';
 
 		// Timeline button
-		const timelineBtn = this.#createToolButton('Timeline', 'timeline');
+		const timelineBtn = this.#createToolButton('⏳ Timeline', 'timeline');
 		toolsList.appendChild(timelineBtn);
 
 		// Quests button
 		const campaign = this.#getCampaign();
 		if (campaign?.quests?.length) {
-			const questsBtn = this.#createToolButton('Quests', 'quests');
+			const questsBtn = this.#createToolButton('📜 Quests', 'quests');
 			toolsList.appendChild(questsBtn);
 		}
 
 		// Locations button
 		if (campaign?.locations?.length) {
-			const locationsBtn = this.#createToolButton('Locations', 'locations');
+			const locationsBtn = this.#createToolButton('📍 Locations', 'locations');
 			toolsList.appendChild(locationsBtn);
 		}
 
 		// NPCs button
 		if (campaign?.npcs?.length) {
-			const npcsBtn = this.#createToolButton('NPCs', 'npcs');
+			const npcsBtn = this.#createToolButton('🧌 NPCs', 'npcs');
 			toolsList.appendChild(npcsBtn);
 		}
 
 		// NPCs button
 		if (campaign?.factions?.length) {
-			const factionsBtn = this.#createToolButton('Factions', 'factions');
+			const factionsBtn = this.#createToolButton('🛡️ Factions', 'factions');
 			toolsList.appendChild(factionsBtn);
 		}
 

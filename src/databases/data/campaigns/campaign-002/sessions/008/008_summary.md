@@ -273,7 +273,7 @@
 </ul>
 <p><strong>Key Items/Loot Acquired:</strong></p>
 <ul>
-	<li>Feline companions survived explosion, now mundane cats</li>
+	<li>Feline companions survived explosion.</li>
 	<li>Null Brand fragments (artifact destroyed)</li>
 	<li>Two corpses of corrupted infiltrators (foreign-made gear, no identification)</li>
 </ul>
