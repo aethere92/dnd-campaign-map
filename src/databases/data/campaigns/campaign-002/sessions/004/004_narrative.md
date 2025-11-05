@@ -54,7 +54,7 @@
 
 <p>Before they could decide on their route forward, disaster struck. The party was ambushed by massive spiders—creatures known as Spitters—that had been hiding in the shadows above them. These weren't ordinary arachnids; they were Arthropleura fersanguinus, gigantic millipede-like creatures with highly acidic blood.</p>
 
-<p>As Norr began to recite knowledge about these creatures, she too suffered the mind spike—apparently another unfortunate legacy of Kalistra's teaching methods. The Arthropleura were aggressive hunters that preferred rotted meat. Their blood was so acidic it could dissolve most materials, including metal and leather armor. The acidic blood would splash back on anything that directly attacked them, making them extremely dangerous opponents. They also kept a reservoir of this blood ready to spit at prey.</p>
+<p>As [ENTITY:character:Norr] began to recite knowledge about these creatures, she too suffered the mind spike—apparently another unfortunate legacy of Kalistra's teaching methods. The Arthropleura were aggressive hunters that preferred rotted meat. Their blood was so acidic it could dissolve most materials, including metal and leather armor. The acidic blood would splash back on anything that directly attacked them, making them extremely dangerous opponents. They also kept a reservoir of this blood ready to spit at prey.</p>
 
 <p>The creatures were simple-minded and relatively easy to manipulate, but they were almost entirely part of the goblin Te Snatchers clan—another piece of the puzzle regarding the various factions operating in these caves.</p>
 
@@ -92,6 +92,6 @@
 
 <p>A voice called out across the water, greeting them as "new guests" and extending an invitation from "Captain Bianca Turiados." The name made several party members react—Commander Turiados was the paladin [ENTITY:character:Olek] had been seeking, though none had expected to find him serving alongside pirates.</p>
 
-<p>As the boats reached them and began helping survivors aboard, the party exchanged glances. They were soaked, exhausted, some barely clothed thanks to acid damage, and now apparently prisoners (or guests?) of a pirate-paladin alliance. Whatever was happening in this region was far more complex and dangerous than they had initially imagined.</p>
+<p>As the boats reached them and began helping survivors aboard, the party exchanged glances. They were soaked, exhausted, some barely clothed thanks to acid damage, and now apparently prisoners (or guests?) of a pirate-[ENTITY:class:Paladin] alliance. Whatever was happening in this region was far more complex and dangerous than they had initially imagined.</p>
 
 <p>The adventure was far from over. If anything, they were only now beginning to understand the true scope of the conspiracy involving the [ENTITY:faction:The Arcane Brotherhood:Brotherhood], the goblin clans, the mysterious Kilgor, and now this unusual naval force. But for the moment, as they were hauled from the sea and given blankets, they could at least catch their breath and prepare for whatever came next.</p>

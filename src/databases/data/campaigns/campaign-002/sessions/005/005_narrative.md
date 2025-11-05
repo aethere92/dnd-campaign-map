@@ -74,7 +74,7 @@
 
 <p>"Even the least of us," Marise slurred.</p>
 
-<p>[ENTITY:character:Bonnie], ever the rogue, pressed for more. "You all seem very loyal. But who was this 'Lee' the captain was sad about?"</p>
+<p>[ENTITY:character:Bonnie], ever the [ENTITY:class:Rogue], pressed for more. "You all seem very loyal. But who was this 'Lee' the captain was sad about?"</p>
 
 <p>Marise’s face darkened. "General Lee. A former convict, like many of us. We were all slaves in the penal colony, mining ore. Lee... he was the commander of the mercenaries who broke us out. He sent us to recover a ship, which Bianca... well, she took it."</p>
 
@@ -180,13 +180,13 @@
 
 <p>[ENTITY:character:Bonnie], reacting with supernatural speed, was the first to act. She blurred forward, her blade already alight with fey fire, and sank it deep into the first beast. She channeled her power into the strike, and the creature roared as magical flames seared its flesh.</p>
 
-<p>The second Thylacoleo, moving with terrifying speed, bounded toward [ENTITY:character:Kaedin]. It raked him with its claws, then clamped its powerful jaws onto his arm, its momentum carrying both of them backward. The third beast, the largest of the three, targeted [ENTITY:character:Soshi]. It leaped, catching her with its full weight, and with an incredible display of strength, scrambled back up the tree trunk, carrying the wizard in its vise-like grip.</p>
+<p>The second Thylacoleo, moving with terrifying speed, bounded toward [ENTITY:character:Kaedin]. It raked him with its claws, then clamped its powerful jaws onto his arm, its momentum carrying both of them backward. The third beast, the largest of the three, targeted [ENTITY:character:Soshi]. It leaped, catching her with its full weight, and with an incredible display of strength, scrambled back up the tree trunk, carrying the [ENTITY:class:Wizard] in its vise-like grip.</p>
 
 <p>"[ENTITY:character:Soshi]!" [ENTITY:character:Kaedin] yelled, as he, too, was hit again by the beast attacking him.</p>
 
 <p>High in the branches, [ENTITY:character:Soshi] found herself pinned and restrained. Below, [ENTITY:character:Kaedin] manifested his Echo, a ghostly double of himself, which immediately engaged the Thylacoleo attacking its creator. The Echo’s blade struck true, and the creature recoiled, a deep, bleeding gash opening on its flank.</p>
 
-<p>[ENTITY:character:Bonnie], seeing [ENTITY:character:Soshi] in peril, didn't hesitate. She dashed to the base of the tree, sprang into the air, and drove her short sword into the creature holding the wizard. The blade bit deep, a perfect sneak attack, and the beast shrieked, its grip faltering.</p>
+<p>[ENTITY:character:Bonnie], seeing [ENTITY:character:Soshi] in peril, didn't hesitate. She dashed to the base of the tree, sprang into the air, and drove her short sword into the creature holding the [ENTITY:class:Wizard]. The blade bit deep, a perfect sneak attack, and the beast shrieked, its grip faltering.</p>
 
 <p>[ENTITY:character:Soshi] seized the opportunity. Gathering her will, she muttered a single word and vanished in a puff of silvery mist. She reappeared on the forest floor thirty feet below, stumbling but free. As she landed, she cast Mirror Image, and three illusory copies of herself flickered into existence around her.</p>
 
@@ -220,7 +220,7 @@
 
 <p>The party’s resolve melted. "We can't just leave them," [ENTITY:character:Soshi] said, her voice soft.</p>
 
-<p>"We can take them to [ENTITY:npc:Avarthel]," [ENTITY:character:Kaedin] suggested. "The druid will know what to do."</p>
+<p>"We can take them to [ENTITY:npc:Avarthel]," [ENTITY:character:Kaedin] suggested. "The [ENTITY:class:Druid] will know what to do."</p>
 
 <p>They bundled the cubs, using [ENTITY:character:Bonnie]’s tattered leather to fashion a makeshift sling. They were weak with hunger, and they turned their noses up at the party's watered-down rations.</p>
 
@@ -234,7 +234,7 @@
 
 <p>They fed the hungry cubs, who drank greedily. As the tiny creatures settled, their bellies full, [ENTITY:character:Bonnie] had an idea.</p>
 
-<p>"I'll be right back," she said, and zipped off toward the wizard Sertieren’s mansion.</p>
+<p>"I'll be right back," she said, and zipped off toward the [ENTITY:class:Wizard] Sertieren’s mansion.</p>
 
 <p>She found the old mage on his porch. "Good afternoon, sir," she chirped. "We haven't met. I'm [ENTITY:character:Bonnie]."</p>
 
@@ -248,13 +248,13 @@
 
 <p>[ENTITY:character:Bonnie], however, was broke, her money still cursed copper. "I don't have any money," she admitted. "But my friends do. Can I take them on credit?"</p>
 
-<p>The wizard studied her. "I trust you," he said. "But... collateral." He placed a hand on her arm, and she felt a brief, magical sting. A glowing, arcane brand appeared on her wrist. "This will fade when the debt is paid. The spheres must be attuned to the creature with a name."</p>
+<p>The [ENTITY:class:Wizard] studied her. "I trust you," he said. "But... collateral." He placed a hand on her arm, and she felt a brief, magical sting. A glowing, arcane brand appeared on her wrist. "This will fade when the debt is paid. The spheres must be attuned to the creature with a name."</p>
 
 <h3>A Profitable Debrief</h3>
 
 <p>[ENTITY:character:Bonnie] returned to the party. After a lively debate, they named their new companions: [ENTITY:character:Bonnie] claimed Tom and Garfield; [ENTITY:character:Soshi] took Milly and Yoli; and [ENTITY:character:Kaedin] adopted Avatar and Bella. They spoke the names and the command words, and the seven cubs vanished into their respective spheres.</p>
 
-<p>The party marched back to Sertieren’s mansion. Two suits of animated armor barred the door, but they parted as the wizard emerged.</p>
+<p>The party marched back to Sertieren’s mansion. Two suits of animated armor barred the door, but they parted as the [ENTITY:class:Wizard] emerged.</p>
 
 <p>"Ah, my money," he smiled.</p>
 
@@ -266,9 +266,9 @@
 
 <p>The deal was struck. "While you're here," [ENTITY:character:Soshi] said, "could you identify these?" She produced the vials they had recovered from the caves.</p>
 
-<p>The wizard examined them closely. "This green one... this is demonic magic. It increases your vitality and mind, but leaves you vulnerable to... influence. This white one," he said, holding up the radiant vial, "is a simple, if potent, celerity potion. Thirty feet of extra movement for a minute." He then picked up the "Hops" potion. "This one grants immunity to poison for a day. The drawback, however... is severe, explosive dysentery. The creator noted it wasn't worth the cost to remove the side effect."</p>
+<p>The [ENTITY:class:Wizard] examined them closely. "This green one... this is demonic magic. It increases your vitality and mind, but leaves you vulnerable to... influence. This white one," he said, holding up the radiant vial, "is a simple, if potent, celerity potion. Thirty feet of extra movement for a minute." He then picked up the "Hops" potion. "This one grants immunity to poison for a day. The drawback, however... is severe, explosive dysentery. The creator noted it wasn't worth the cost to remove the side effect."</p>
 
-<p>Finally, they showed him the preserved Artus Plura mushrooms and the stinking, acid-filled head of the cave worm. The wizard’s face lit up with academic glee. "Marvelous! The glands are intact!" He eagerly bought the worm head and the mushrooms for another 10 gold.</p>
+<p>Finally, they showed him the preserved Artus Plura mushrooms and the stinking, acid-filled head of the cave worm. The [ENTITY:class:Wizard]’s face lit up with academic glee. "Marvelous! The glands are intact!" He eagerly bought the worm head and the mushrooms for another 10 gold.</p>
 
 <p>As they prepared to leave, [ENTITY:character:Soshi] asked one final question. "Sir... do you know of a mage named Kalistra?"</p>
 
@@ -276,4 +276,4 @@
 
 <p>He looked tired. "I'm leaving [ENTITY:location:Drellin's Ferry] soon. The things you've seen—the hydras, these potions, the tribes uniting—they are all portents. A storm is coming, and I do not intend to be here when it breaks."</p>
 
-<p>The party thanked the wizard and left his estate, their pockets significantly heavier and their minds buzzing with new information. They returned to the inn, weary but triumphant. Their plan was simple: barricade their doors, let the cubs out, and get some well-deserved rest.</p>
+<p>The party thanked the [ENTITY:class:Wizard] and left his estate, their pockets significantly heavier and their minds buzzing with new information. They returned to the inn, weary but triumphant. Their plan was simple: barricade their doors, let the cubs out, and get some well-deserved rest.</p>

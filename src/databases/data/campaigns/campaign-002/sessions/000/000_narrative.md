@@ -5,7 +5,7 @@
 <p>They have met before, here and there. Once or twice as allies, perhaps once or twice as obstacles to each other's paths. Yet none of that seems to matter now. Whatever reasons brought them together - whether shared cause or secret ambition - they move forward as one, at least for now.</p>
 <p>Now, one by one, let us see who they are.</p>
 
-<p><h3>Olek, the Aasimar Paladin of Helm</h3></p>
+<p><h3>[ENTITY:character:Olek], the Aasimar [ENTITY:class:Paladin] of Helm</h3></p>
 
 <p>He is devotion given form - an angelic soul clad in armor, kind and just, friendly and ever ready for conversation. [ENTITY:character:Olek] is honorable to his very core, though humble in his ways, never one to boast or seek glory.</p>
 <p>His story is unlike any other. As a child, he and his sibling were raised not by kin of their own kind, but by wolves, deep within the forest. How they came to be there, he cannot say. The memory is lost to time or fate. But the pack was family, and he knew love in fur and fang.</p>
@@ -15,7 +15,7 @@
 <p>He reached the town of [ENTITY:location:Brindol], where he offered help wherever it was needed. He stood beside other paladins of Helm, worked to defend the weak, and forged both likely and unlikely bonds. And now, he finds himself walking beside four others, toward the distant town of [ENTITY:location:Drellin's Ferry], with justice and goodness lighting his path.</p>
 <p>Whatever awaits them there, [ENTITY:character:Olek] walks forward with purpose - for the lost, for the helpless, for the ideals he now embodies.</p>
 
-<p><h3>Norr, the Sorcerer with Dragon's Blood</h3></p>
+<p><h3>[ENTITY:character:Norr], the [ENTITY:class:Sorcerer] with Dragon's Blood</h3></p>
 
 <p>[ENTITY:character:Norr], like so many other gifted children born into this world, did not have an easy start in life. Born into a poor family, with a father who enjoyed his drink a bit too much, and a mother unable to defend herself or her daughter, [ENTITY:character:Norr] learned early to keep quiet and keep to herself.</p>
 <p>She was beautiful, even as a child, and a strange, mysterious energy seemed to surround her. Drawing attention was never ideal - especially not in a household like hers. Her parents, frightened and unsure of what she was becoming, kept her gifts hidden from the world.</p>
@@ -29,7 +29,7 @@
 <p>And so, we find [ENTITY:character:Norr] now, her secrets held tight behind guarded eyes, the stolen map close to her heart. Beside her walks her dearest companion, and three strange allies whose paths are now twined with hers. Together they journey to [ENTITY:location:Drellin's Ferry].</p>
 <p>The future, like magic, is uncertain. But [ENTITY:character:Norr] walks forward - beautiful, dangerous, and full of lightning.</p>
 
-<p><h3>Soshi, the Eladrin Wizard from the Feywilds</h3></p>
+<p><h3>[ENTITY:character:Soshi], the Eladrin [ENTITY:class:Wizard] from the [ENTITY:location:Feywilds]</h3></p>
 
 <p>[ENTITY:character:Soshi] was not born in the world of mortals. As all fey creatures do, she was born in the [ENTITY:location:feywild:Feywilds] - magic giving her shape and form, infusing her with the changing seasons.</p>
 <p>By now, we know that fate plays a hand in the lives of all beings. Some say she wandered too close to a thin place in the weave, others whisper she was drawn through by the echoes of something calling her. Whatever the cause, [ENTITY:character:Soshi] crossed into the Material Plane as a child, stepping through unseen doors and emerging into the harsh, unforgiving port city of [ENTITY:location:Luskan].</p>
@@ -41,7 +41,7 @@
 <p>Driven by regrets, desires, and ambition, longing for home and the joyful life she left behind, [ENTITY:character:Soshi] finds herself traveling with four other companions: her friend from the [ENTITY:faction:The Arcane Brotherhood:Brotherhood], and three others as different as night is from day.</p>
 <p>And so, we find [ENTITY:character:Soshi], her spellbook in hand and memories of the [ENTITY:location:feywild:Feywilds] stirring in her chest, walking the winding road to [ENTITY:location:Drellin's Ferry].</p>
 
-<p><h3>Kaedin, the Earth Genasi Echo Knight of the Shifting Fates</h3></p>
+<p><h3>[ENTITY:character:Kaedin], the [ENTITY:race:Earth Genasi] [ENTITY:subclass:Echo Knight] of the Shifting Fates</h3></p>
 
 <p>[ENTITY:character:Kaedin] was an unusual child in a very usual family. Born out of humans, in a small mining village blessed by a Dao genie, he lived a simple life. Clever, full of energy, and with trouble always finding him, [ENTITY:character:Kaedin] enjoyed his days, finding excitement in what others would consider mundane.</p>
 <p>He became fast friends with [ENTITY:npc:Thalos], the son of a deeply religious [ENTITY:race:Earth Genasi] family. They couldn't have been more different - [ENTITY:character:Kaedin] scoffed at tradition, finding it impractical, while [ENTITY:npc:Thalos] honored it in every word, every piece of clothing, every step. But their souls were alike, and together they spent their days chasing adventure, uncovering secrets, and exploring hidden tunnels.</p>
@@ -58,7 +58,7 @@
 <p>In memory of [ENTITY:npc:Thalos], no matter what he wore, [ENTITY:character:Kaedin] always donned the traditional garb over. This way he would never forget. This way he would never stop looking.</p>
 <p>And now we find [ENTITY:character:Kaedin] on the road to [ENTITY:location:Drellin's Ferry], walking beside four unlikely companions. He keeps his past close and his mission closer - his eyes on the path ahead, and his soul reaching for the one left behind.</p>
 
-<p><h3>Bonnie, the Pixie Rogue full of mischief</h3></p>
+<p><h3>[ENTITY:character:Bonnie], the Pixie [ENTITY:class:Rogue] full of mischief</h3></p>
 
 <p>Here we are - our fifth hero. So far, we've heard tales of lost families, fractured selves, and friends long gone - of longings for magic, regrets for what once was, and hopes for what could be. [ENTITY:character:Bonnie], however, is not like that.</p>
 <p>[ENTITY:character:Bonnie] is a fairy pixie born from the pure magic of the [ENTITY:location:feywild:Feywilds]. She had no real family - other fairies born like her could be considered one, but she never saw it that way. She had no home beyond trees and groves, caves and lakes. [ENTITY:character:Bonnie] lived her long life doing whatever she pleased, always with her trusted companion, friend, and what she would call family: [ENTITY:npc:Jacques], the antlered giant rat.</p>
