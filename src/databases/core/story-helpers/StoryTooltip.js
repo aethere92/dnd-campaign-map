@@ -94,9 +94,11 @@ class StoryHelperTooltip {
 		const urlMap = {
 			character: (data) => `?campaign=${this.#campaignId}&character=${encodeURIComponent(data.name)}`,
 			npc: (data) => `?campaign=${this.#campaignId}&view=npcs&npc=${encodeURIComponent(data.id)}`,
-			location: (data) => `?campaign=${this.#campaignId}&view=locations&location=${encodeURIComponent(data.id || data.name)}`,
+			location: (data) =>
+				`?campaign=${this.#campaignId}&view=locations&location=${encodeURIComponent(data.id || data.name)}`,
 			quest: (data) => `?campaign=${this.#campaignId}&view=quests&quest=${encodeURIComponent(data.title)}`,
-			faction: (data) => `?campaign=${this.#campaignId}&view=factions&faction=${encodeURIComponent(data.id || data.name)}`,
+			faction: (data) =>
+				`?campaign=${this.#campaignId}&view=factions&faction=${encodeURIComponent(data.id || data.name)}`,
 		};
 
 		const urlGenerator = urlMap[entityType];
@@ -297,7 +299,7 @@ class StoryHelperTooltip {
 	// Character tooltip
 	#generateCharacterTooltip(data) {
 		const navLink = this.#createNavigationLink('character', data);
-		
+
 		return `
 			<div class="entity-tooltip entity-character-tooltip">
 				<div class="tooltip-header">
@@ -312,8 +314,8 @@ class StoryHelperTooltip {
 					</div>
 					${this.#generateAbilityScores(data.stats?.abilityScores)}
 					<div class="tooltip-description">${data.shortDescription || ''}</div>
-					${navLink}
 				</div>
+				<div class="tooltip-footer">${navLink}</div>
 			</div>
 		`;
 	}
@@ -321,7 +323,7 @@ class StoryHelperTooltip {
 	// NPC tooltip
 	#generateNPCTooltip(data) {
 		const navLink = this.#createNavigationLink('npc', data);
-		
+
 		const relationships =
 			data.relationships
 				?.map((rel) => {
@@ -354,8 +356,8 @@ class StoryHelperTooltip {
 							  }</div>`
 							: ''
 					}
-					${navLink}
 				</div>
+				<div class="tooltip-footer">${navLink}</div>
 			</div>
 		`;
 	}
@@ -363,7 +365,7 @@ class StoryHelperTooltip {
 	// Location tooltip
 	#generateLocationTooltip(data) {
 		const navLink = this.#createNavigationLink('location', data);
-		
+
 		return `
 			<div class="entity-tooltip entity-location-tooltip">
 				<div class="tooltip-header">
@@ -389,8 +391,8 @@ class StoryHelperTooltip {
 									.join('')}</ul></div>`
 							: ''
 					}
-					${navLink}
 				</div>
+				<div class="tooltip-footer">${navLink}</div>
 			</div>
 		`;
 	}
@@ -398,7 +400,7 @@ class StoryHelperTooltip {
 	// Faction tooltip
 	#generateFactionTooltip(data) {
 		const navLink = this.#createNavigationLink('faction', data);
-		
+
 		return `
 			<div class="entity-tooltip entity-faction-tooltip">
 				<div class="tooltip-header">
@@ -406,7 +408,13 @@ class StoryHelperTooltip {
 					<span class="faction-type">${data.type}</span>
 				</div>
 				<div class="tooltip-content">
-					${data.location ? `<div><strong>Location:</strong> ${data.location}${data.sublocation ? `: ${data.sublocation}` :''}</div>` : ''}
+					${
+						data.location
+							? `<div><strong>Location:</strong> ${data.location}${
+									data.sublocation ? `: ${data.sublocation}` : ''
+							  }</div>`
+							: ''
+					}
 					${data.leader ? `<div><strong>Leader:</strong> ${data.leader}</div>` : ''}
 					<div class="tooltip-description">${data.description}</div>
 					${
@@ -416,8 +424,8 @@ class StoryHelperTooltip {
 									.join('')}</ul></div>`
 							: ''
 					}
-					${navLink}
 				</div>
+				<div class="tooltip-footer">${navLink}</div>
 			</div>
 		`;
 	}
@@ -446,8 +454,8 @@ class StoryHelperTooltip {
 					`
 							: ''
 					}
-					${navLink}
 				</div>
+				<div class="tooltip-footer">${navLink}</div>
 			</div>
 		`;
 	}

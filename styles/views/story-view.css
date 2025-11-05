@@ -2323,18 +2323,18 @@ blockquote i {
 
 .view-links {
 	margin: var(--spacing-xs) 0;
-    padding-inline-start: 1.25rem;
-    color: var(--color-text);
-    font-size: 10pt;
-    font-family: 'Noto Sans', var(--font-system);
+	padding-inline-start: 1.25rem;
+	color: var(--color-text);
+	font-size: 10pt;
+	font-family: 'Noto Sans', var(--font-system);
 }
 
 .view-link-anchor {
 	text-decoration: none;
-    color: black;
-    display: flex;
-    gap: var(--spacing-xs);
-    align-items: center;
+	color: black;
+	display: flex;
+	gap: var(--spacing-xs);
+	align-items: center;
 
 	&::before {
 		content: '🔗';
@@ -3247,9 +3247,12 @@ blockquote i {
 }
 
 .tooltip-navigation {
-	margin-top: 12px;
-	padding-top: 12px;
-	border-top: 1px solid rgba(255, 255, 255, 0.1);
+	background: linear-gradient(to bottom, rgba(212, 180, 131, 0.3), rgba(212, 180, 131, 0.1));
+	border-bottom: 1px solid #e0d5c3;
+	padding: 0.125rem;
+	display: flex;
+	align-items: center;
+	gap: 0.75rem;
 }
 
 .tooltip-nav-link {
@@ -3263,6 +3266,8 @@ blockquote i {
 	text-decoration: none;
 	font-size: 0.9em;
 	transition: background 0.2s;
+	color: #5c2c0a;
+	font-weight: 600;
 }
 
 .tooltip-nav-link:hover {
