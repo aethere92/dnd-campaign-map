@@ -1,16 +1,16 @@
 class StoryHelperTooltip {
 	#tooltipContainer;
 	#dataRegistry;
+	#campaignId; // Store campaign ID for URL generation
 	#apiBaseUrl = 'https://www.dnd5eapi.co/api/2014/';
 
 	constructor(campaignData = {}) {
+		this.#campaignId = campaignData.campaignId; // Extract campaign ID
 		this.#dataRegistry = this.#buildDataRegistry(campaignData);
 		this.#createTooltipContainer();
 	}
 
 	// Build unified data registry from all campaign data
-	// In the StoryHelperTooltip class, update the #buildDataRegistry method:
-
 	#buildDataRegistry(campaignData) {
 		const registry = {
 			character: {},
@@ -85,6 +85,37 @@ class StoryHelperTooltip {
 		}
 
 		return registry;
+	}
+
+	// Generate navigation URL for an entity
+	#generateNavigationUrl(entityType, data) {
+		if (!this.#campaignId) return null;
+
+		const urlMap = {
+			character: (data) => `?campaign=${this.#campaignId}&character=${encodeURIComponent(data.name)}`,
+			npc: (data) => `?campaign=${this.#campaignId}&view=npcs&npc=${encodeURIComponent(data.id)}`,
+			location: (data) => `?campaign=${this.#campaignId}&view=locations&location=${encodeURIComponent(data.id || data.name)}`,
+			quest: (data) => `?campaign=${this.#campaignId}&view=quests&quest=${encodeURIComponent(data.title)}`,
+			faction: (data) => `?campaign=${this.#campaignId}&view=factions&faction=${encodeURIComponent(data.id || data.name)}`,
+		};
+
+		const urlGenerator = urlMap[entityType];
+		return urlGenerator ? urlGenerator(data) : null;
+	}
+
+	// Create a navigation link element if applicable
+	#createNavigationLink(entityType, data) {
+		const url = this.#generateNavigationUrl(entityType, data);
+		if (!url) return '';
+
+		return `
+			<div class="tooltip-navigation">
+				<a href="${url}" class="tooltip-nav-link" onclick="event.stopPropagation();">
+					<span class="tooltip-nav-icon">→</span>
+					View Full Details
+				</a>
+			</div>
+		`;
 	}
 
 	#createTooltipContainer() {
@@ -190,10 +221,6 @@ class StoryHelperTooltip {
 			if (data) {
 				return data;
 			}
-
-			// Debug: log what keys exist
-			// console.log(`Looking for ${entityType}:${normalizedName}`);
-			// console.log('Available keys:', Object.keys(this.#dataRegistry[entityType]));
 		}
 
 		// Fall back to D&D 5e API for standard entities
@@ -269,6 +296,8 @@ class StoryHelperTooltip {
 
 	// Character tooltip
 	#generateCharacterTooltip(data) {
+		const navLink = this.#createNavigationLink('character', data);
+		
 		return `
 			<div class="entity-tooltip entity-character-tooltip">
 				<div class="tooltip-header">
@@ -283,6 +312,7 @@ class StoryHelperTooltip {
 					</div>
 					${this.#generateAbilityScores(data.stats?.abilityScores)}
 					<div class="tooltip-description">${data.shortDescription || ''}</div>
+					${navLink}
 				</div>
 			</div>
 		`;
@@ -290,6 +320,8 @@ class StoryHelperTooltip {
 
 	// NPC tooltip
 	#generateNPCTooltip(data) {
+		const navLink = this.#createNavigationLink('npc', data);
+		
 		const relationships =
 			data.relationships
 				?.map((rel) => {
@@ -322,6 +354,7 @@ class StoryHelperTooltip {
 							  }</div>`
 							: ''
 					}
+					${navLink}
 				</div>
 			</div>
 		`;
@@ -329,6 +362,8 @@ class StoryHelperTooltip {
 
 	// Location tooltip
 	#generateLocationTooltip(data) {
+		const navLink = this.#createNavigationLink('location', data);
+		
 		return `
 			<div class="entity-tooltip entity-location-tooltip">
 				<div class="tooltip-header">
@@ -354,13 +389,16 @@ class StoryHelperTooltip {
 									.join('')}</ul></div>`
 							: ''
 					}
+					${navLink}
 				</div>
 			</div>
 		`;
 	}
 
-	// Faction tooltipW
+	// Faction tooltip
 	#generateFactionTooltip(data) {
+		const navLink = this.#createNavigationLink('faction', data);
+		
 		return `
 			<div class="entity-tooltip entity-faction-tooltip">
 				<div class="tooltip-header">
@@ -378,6 +416,7 @@ class StoryHelperTooltip {
 									.join('')}</ul></div>`
 							: ''
 					}
+					${navLink}
 				</div>
 			</div>
 		`;
@@ -385,6 +424,7 @@ class StoryHelperTooltip {
 
 	// Quest tooltip
 	#generateQuestTooltip(data) {
+		const navLink = this.#createNavigationLink('quest', data);
 		const latestSession = data.sessions?.[data.sessions.length - 1];
 
 		return `
@@ -406,12 +446,13 @@ class StoryHelperTooltip {
 					`
 							: ''
 					}
+					${navLink}
 				</div>
 			</div>
 		`;
 	}
 
-	// Spell tooltip
+	// Spell tooltip (no navigation - external API data)
 	#generateSpellTooltip(data) {
 		return `
 			<div class="entity-tooltip entity-spell-tooltip">
@@ -441,7 +482,7 @@ class StoryHelperTooltip {
 		`;
 	}
 
-	// Monster tooltip
+	// Monster tooltip (no navigation - external API data)
 	#generateMonsterTooltip(data) {
 		return `
 			<div class="entity-tooltip entity-monster-tooltip">
@@ -468,7 +509,7 @@ class StoryHelperTooltip {
 		`;
 	}
 
-	// Class tooltip
+	// Class tooltip (no navigation - external API data)
 	#generateClassTooltip(data) {
 		return `
 			<div class="entity-tooltip entity-class-tooltip">
@@ -496,7 +537,7 @@ class StoryHelperTooltip {
 		`;
 	}
 
-	// Race tooltip
+	// Race tooltip (no navigation - external API data)
 	#generateRaceTooltip(data) {
 		return `
 			<div class="entity-tooltip entity-race-tooltip">
@@ -615,18 +656,3 @@ class StoryHelperTooltip {
 		});
 	}
 }
-
-// // Usage example:
-// const tooltipSystem = new StoryHelperTooltip({
-// 	characters: CAMPAIGN_002_CHARACTERS,
-// 	npcs: CAMPAIGN_002_NPCS,
-// 	locations: CAMPAIGN_002_LOCATIONS,
-// 	quests: CAMPAIGN_002_QUESTS,
-// });
-
-// // Add tooltips to elements
-// document.querySelectorAll('[data-entity]').forEach((element) => {
-// 	const entityType = element.dataset.entity;
-// 	const entityName = element.dataset.name || element.textContent;
-// 	tooltipSystem.addTooltip(element, entityType, entityName);
-// });

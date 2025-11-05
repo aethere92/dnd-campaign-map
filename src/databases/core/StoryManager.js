@@ -22,7 +22,8 @@ class StoryManager {
 		}
 
 		// Initialize helpers
-		this.#tooltipManager = this.#tooltipManager = new StoryHelperTooltip({
+		this.#tooltipManager = new StoryHelperTooltip({
+			campaignId: options.campaignData?.id, // Add campaign ID
 			characters: options.campaignData?.metadata?.characters || [],
 			npcs: options.campaignData?.npcs || [],
 			locations: options.campaignData?.locations || [],

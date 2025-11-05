@@ -3245,3 +3245,30 @@ blockquote i {
 		padding-block-start: var(--spacing-xs);
 	}
 }
+
+.tooltip-navigation {
+	margin-top: 12px;
+	padding-top: 12px;
+	border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.tooltip-nav-link {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	padding: 6px 12px;
+	background: rgba(255, 255, 255, 0.1);
+	border-radius: 4px;
+	color: inherit;
+	text-decoration: none;
+	font-size: 0.9em;
+	transition: background 0.2s;
+}
+
+.tooltip-nav-link:hover {
+	background: rgba(255, 255, 255, 0.2);
+}
+
+.tooltip-nav-icon {
+	font-weight: bold;
+}
