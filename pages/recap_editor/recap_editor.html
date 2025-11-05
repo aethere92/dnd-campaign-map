@@ -1,59 +1,67 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>D&D Recap Entity Formatter</title>
-	</head>
-	<body>
-		<div id="formatter-container"></div>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>D&D Recap Entity Formatter</title>
+	<script defer src="../../src/databases/data/campaigns/campaign-002/characters.js"></script>
+	<script defer src="../../src/databases/data/campaigns/campaign-002/factions.js"></script>
+	<script defer src="../../src/databases/data/campaigns/campaign-002/locations.js"></script>
+	<script defer src="../../src/databases/data/campaigns/campaign-002/npcs.js"></script>
+	<script defer src="../../src/databases/data/campaigns/campaign-002/quests.js"></script>
+  </head>
+  <body>
+    <div id="formatter-container"></div>
 
-		<script>
-			class RecapFormatter {
-				constructor(options = {}) {
-					// Initialize entity categories
-					this.entities = {
-						character: options.characters || [],
-						location: options.locations || [],
-						class: options.classes || [],
-						subclass: options.subclasses || [],
-						guild: options.guilds || [],
-						item: options.items || [],
-						race: options.races || [],
-						npc: options.npc || [],
-					};
+    <script>
+      class RecapFormatter {
+        constructor(options = {}) {
+          // Initialize entity categories
+          this.entities = {
+            character: options.characters || [],
+            location: options.locations || [],
+            class: options.classes || [],
+            subclass: options.subclasses || [],
+            faction: options.factions || [],
+            item: options.items || [],
+            race: options.races || [],
+            npc: options.npcs || [],
+          };
 
-					// State for the output mode
-					this.outputAsHtml = true;
+          // State for the output mode
+          this.outputAsHtml = true;
 
-					// Element references
-					this.inputElement = null;
-					this.outputElement = null;
-					this.previewElement = null;
-					this.formatButton = null;
-					this.copyButton = null;
-					this.htmlToggle = null;
+          // Element references
+          this.inputElement = null;
+          this.outputElement = null;
+          this.previewElement = null;
+          this.formatButton = null;
+          this.copyButton = null;
+          this.htmlToggle = null;
 
-					// Initialize entity maps for quick lookup
-					this.entityMaps = {};
-					for (const [type, list] of Object.entries(this.entities)) {
-						this.entityMaps[type] = new Map();
-						if (list.length) {
-							list.forEach((entityName) => {
-								this.entityMaps[type].set(entityName.toLowerCase(), entityName);
-							});
-						}
-					}
-				}
+          // Initialize entity maps for quick lookup
+          this.entityMaps = {};
+          for (const [type, list] of Object.entries(this.entities)) {
+            this.entityMaps[type] = new Map();
+            if (list.length) {
+              list.forEach((entityName) => {
+                this.entityMaps[type].set(entityName.toLowerCase(), entityName);
+              });
+            }
+          }
+        }
 
-				init(containerId) {
-					const container = document.getElementById(containerId);
-					if (!container) {
-						console.error('RecapFormatter: Container element not found:', containerId);
-						return;
-					}
+        init(containerId) {
+          const container = document.getElementById(containerId);
+          if (!container) {
+            console.error(
+              "RecapFormatter: Container element not found:",
+              containerId
+            );
+            return;
+          }
 
-					container.innerHTML = `
+          container.innerHTML = `
                         <div class="formatter-container">
                             <div class="formatter-header">
                                 <h2>D&D Recap Entity Formatter</h2>
@@ -85,29 +93,35 @@
                         </div>
                     `;
 
-					// Get references to elements
-					this.inputElement = document.getElementById('recap-input');
-					this.outputElement = document.getElementById('recap-output');
-					this.previewElement = document.getElementById('recap-preview');
-					this.formatButton = document.getElementById('format-button');
-					this.copyButton = document.getElementById('copy-button');
-					this.htmlToggle = document.getElementById('html-toggle');
-					const addEntityButton = document.getElementById('add-entity-button');
-					const addImageButton = document.getElementById('add-image-button');
+          // Get references to elements
+          this.inputElement = document.getElementById("recap-input");
+          this.outputElement = document.getElementById("recap-output");
+          this.previewElement = document.getElementById("recap-preview");
+          this.formatButton = document.getElementById("format-button");
+          this.copyButton = document.getElementById("copy-button");
+          this.htmlToggle = document.getElementById("html-toggle");
+          const addEntityButton = document.getElementById("add-entity-button");
+          const addImageButton = document.getElementById("add-image-button");
 
-					// Add event listeners
-					this.formatButton.addEventListener('click', () => this.formatText());
-					this.copyButton.addEventListener('click', () => this.copyToClipboard());
-					this.htmlToggle.addEventListener('change', () => this.handleToggleChange());
-					addEntityButton.addEventListener('click', () => this.showEntityModal());
-					addImageButton.addEventListener('click', () => this.showImageModal());
+          // Add event listeners
+          this.formatButton.addEventListener("click", () => this.formatText());
+          this.copyButton.addEventListener("click", () =>
+            this.copyToClipboard()
+          );
+          this.htmlToggle.addEventListener("change", () =>
+            this.handleToggleChange()
+          );
+          addEntityButton.addEventListener("click", () =>
+            this.showEntityModal()
+          );
+          addImageButton.addEventListener("click", () => this.showImageModal());
 
-					this.addStyles();
-				}
+          this.addStyles();
+        }
 
-				addStyles() {
-					const styleElement = document.createElement('style');
-					styleElement.textContent = `
+        addStyles() {
+          const styleElement = document.createElement("style");
+          styleElement.textContent = `
                         .formatter-container { font-family: Arial, sans-serif; max-width: 1200px; margin: 0 auto; padding: 20px; }
                         .formatter-header { margin-bottom: 20px; }
                         .formatter-main { display: flex; gap: 20px; margin-bottom: 20px; }
@@ -142,7 +156,7 @@
                         .entity-reference { font-weight: bold; cursor: pointer; text-decoration: underline; }
                         .entity-character { color: #0066cc; } .entity-location { color: #008800; }
                         .entity-class { color: #990000; } .entity-subclass { color: #cc6600; }
-                        .entity-guild { color: #6600cc; } .entity-item { color: #cc0099; }
+                        .entity-faction { color: #6600cc; } .entity-item { color: #cc0099; }
                         .entity-race { color: #006666; } .entity-npc { color: #8B4513; }
                         /* Image styles */
                         .story-image-container { margin: 20px 0; }
@@ -153,150 +167,212 @@
                         .image-align-right { text-align: right; }
                         .story-image-container.image-align-left img, .story-image-container.image-align-right img { display: inline-block; }
                     `;
-					document.head.appendChild(styleElement);
-				}
+          document.head.appendChild(styleElement);
+        }
 
-				handleToggleChange() {
-					this.outputAsHtml = this.htmlToggle.checked;
-					const outputLabel = document.querySelector('.formatter-output-section h3');
-					const originalCopyText = this.copyButton.textContent;
+        handleToggleChange() {
+          this.outputAsHtml = this.htmlToggle.checked;
+          const outputLabel = document.querySelector(
+            ".formatter-output-section h3"
+          );
+          const originalCopyText = this.copyButton.textContent;
 
-					if (this.outputAsHtml) {
-						outputLabel.textContent = 'Formatted HTML';
-						if (!originalCopyText.includes('Copied')) this.copyButton.textContent = 'Copy HTML';
-					} else {
-						outputLabel.textContent = 'Formatted Text (Raw)';
-						if (!originalCopyText.includes('Copied')) this.copyButton.textContent = 'Copy Text';
-					}
-					if (this.inputElement.value.trim()) {
-						this.formatText();
-					}
-				}
+          if (this.outputAsHtml) {
+            outputLabel.textContent = "Formatted HTML";
+            if (!originalCopyText.includes("Copied"))
+              this.copyButton.textContent = "Copy HTML";
+          } else {
+            outputLabel.textContent = "Formatted Text (Raw)";
+            if (!originalCopyText.includes("Copied"))
+              this.copyButton.textContent = "Copy Text";
+          }
+          if (this.inputElement.value.trim()) {
+            this.formatText();
+          }
+        }
 
-				formatText() {
-					const inputText = this.inputElement.value;
-					if (!inputText.trim()) {
-						alert('Please enter some text to format.');
-						return;
-					}
+        formatText() {
+          const inputText = this.inputElement.value;
+          if (!inputText.trim()) {
+            alert("Please enter some text to format.");
+            return;
+          }
 
-					let formattedText;
-					if (this.outputAsHtml) {
-						formattedText = this.generateHtml(inputText);
-						this.updatePreview(formattedText);
-					} else {
-						formattedText = this.generateRawText(inputText);
-						const previewContent = formattedText.replace(/</g, '&lt;').replace(/>/g, '&gt;');
-						this.updatePreview(`<pre>${previewContent}</pre>`);
-					}
+          let formattedText;
+          if (this.outputAsHtml) {
+            formattedText = this.generateHtml(inputText);
+            this.updatePreview(formattedText);
+          } else {
+            formattedText = this.generateRawText(inputText);
+            const previewContent = formattedText
+              .replace(/</g, "&lt;")
+              .replace(/>/g, "&gt;");
+            this.updatePreview(`<pre>${previewContent}</pre>`);
+          }
 
-					this.outputElement.value = formattedText;
-				}
+          this.outputElement.value = formattedText;
+        }
 
-				generateRawText(text) {
-					return this.detectAndTagEntities(text);
-				}
+        generateRawText(text) {
+          const normalizedText = text.replace(/\r\n/g, "\n");
+          const lines = normalizedText.split("\n");
 
-				generateHtml(text) {
-					const normalizedText = text.replace(/\r\n/g, '\n');
-					const lines = normalizedText.split('\n');
+          const formattedLines = lines.map((line) => {
+            // Skip processing for HTML header elements h2, h3, h4
+            const trimmed = line.trim();
+            if (/^<h(2|3|4)(\s|>)/i.test(trimmed)) {
+              return trimmed; // return as-is, no tagging
+            }
 
-					const formattedLines = lines.map((line) => {
-						if (!line.trim()) return ''; // Preserve empty lines as paragraph breaks
+            return this.detectAndTagEntities(line);
+          });
 
-						// Skip processing for HTML header elements h2, h3, h4
-						const trimmed = line.trim();
-						if (/^<h(2|3|4)(\s|>)/i.test(trimmed)) {
-							return trimmed; // return as-is, no tagging or paragraph wrapping
-						}
+          return formattedLines.join("\n");
+        }
 
-						if (trimmed.startsWith('[IMAGE:')) {
-							return this.convertImageTagToHtml(line);
-						}
+        generateHtml(text) {
+          const normalizedText = text.replace(/\r\n/g, "\n");
+          const lines = normalizedText.split("\n");
 
-						const taggedLine = this.detectAndTagEntities(line);
-						const htmlLine = this.convertTagsToHtml(taggedLine);
-						return `<p>${htmlLine}</p>`;
-					});
+          const formattedLines = lines.map((line) => {
+            if (!line.trim()) return ""; // Preserve empty lines as paragraph breaks
 
-					// Join paragraphs, ensuring not to create excessive space from blank lines
-					return formattedLines.join('\n').replace(/(\n<p><\/p>)+/g, '\n');
-				}
+            // Skip processing for HTML header elements h2, h3, h4
+            const trimmed = line.trim();
+            if (/^<h(2|3|4)(\s|>)/i.test(trimmed)) {
+              return trimmed; // return as-is, no tagging or paragraph wrapping
+            }
 
-				detectAndTagEntities(text) {
-					let processed = text;
-					for (const [type, entityList] of Object.entries(this.entities)) {
-						if (!entityList.length) continue;
-						const sortedEntities = [...entityList].sort((a, b) => b.length - a.length);
+            if (trimmed.startsWith("[IMAGE:")) {
+              return this.convertImageTagToHtml(line);
+            }
 
-						for (const entityName of sortedEntities) {
-							const regex = new RegExp(`\\b${this.escapeRegExp(entityName)}\\b(?![^\\[]*\\])(?![^<]*>)`, 'g');
-							processed = processed.replace(regex, `[ENTITY:${type}:${entityName}]`);
-						}
-					}
-					return processed;
-				}
+            const taggedLine = this.detectAndTagEntities(line);
+            const htmlLine = this.convertTagsToHtml(taggedLine);
+            return `<p>${htmlLine}</p>`;
+          });
 
-				convertTagsToHtml(text) {
-					return text.replace(/\[ENTITY:(\w+):([^\]]+)\]/g, (match, type, name) => {
-						return this.createEntitySpan(type, name);
-					});
-				}
+          // Join paragraphs, ensuring not to create excessive space from blank lines
+          return formattedLines.join("\n").replace(/(\n<p><\/p>)+/g, "\n");
+        }
 
-				convertImageTagToHtml(tag) {
-					const parts = tag.slice(7, -1).split(':');
-					const src = parts[0] || '';
-					const caption = parts[1] || '';
-					const width = parts[2] || 'auto';
-					const alignment = parts[3] || 'center';
+        detectAndTagEntities(text) {
+          let processed = text;
 
-					if (!src) return '';
+          // First, protect already-tagged entities by temporarily replacing them
+          const protectedTags = [];
+          processed = processed.replace(
+            /\[ENTITY:(\w+):([^\]]+)\]/g,
+            (match) => {
+              const placeholder = `__PROTECTED_${protectedTags.length}__`;
+              protectedTags.push(match);
+              return placeholder;
+            }
+          );
 
-					let style = width !== 'auto' ? `style="max-width: ${width};"` : '';
-					const captionHtml = caption ? `<div class="image-caption">${caption}</div>` : '';
+          // Now detect and tag new entities
+          for (const [type, entityList] of Object.entries(this.entities)) {
+            if (!entityList.length) continue;
+            const sortedEntities = [...entityList].sort(
+              (a, b) => b.length - a.length
+            );
 
-					return `
+            for (const entityName of sortedEntities) {
+              // Match word boundaries, but exclude if already inside a placeholder
+              const regex = new RegExp(
+                `\\b${this.escapeRegExp(
+                  entityName
+                )}\\b(?!.*__PROTECTED_\\d+__)`,
+                "gi"
+              );
+              processed = processed.replace(
+                regex,
+                `[ENTITY:${type}:${entityName}]`
+              );
+            }
+          }
+
+          // Restore protected tags
+          protectedTags.forEach((tag, index) => {
+            const placeholder = `__PROTECTED_${index}__`;
+            processed = processed.replace(placeholder, tag);
+          });
+
+          return processed;
+        }
+
+        convertTagsToHtml(text) {
+          return text.replace(
+            /\[ENTITY:(\w+):([^\]]+)\]/g,
+            (match, type, name) => {
+              return this.createEntitySpan(type, name);
+            }
+          );
+        }
+
+        convertImageTagToHtml(tag) {
+          const parts = tag.slice(7, -1).split(":");
+          const src = parts[0] || "";
+          const caption = parts[1] || "";
+          const width = parts[2] || "auto";
+          const alignment = parts[3] || "center";
+
+          if (!src) return "";
+
+          let style = width !== "auto" ? `style="max-width: ${width};"` : "";
+          const captionHtml = caption
+            ? `<div class="image-caption">${caption}</div>`
+            : "";
+
+          return `
 <div class="story-image-container image-align-${alignment}">
-    <img src="${src}" alt="${caption || 'Story Image'}" ${style}>
+    <img src="${src}" alt="${caption || "Story Image"}" ${style}>
     ${captionHtml}
 </div>`;
-				}
+        }
 
-				createEntitySpan(type, name) {
-					const cleanName = name.replace(/\\'/g, "'");
-					return `<span class="entity-reference entity-${type}" data-entity-type="${type}" data-entity-name="${cleanName}">${cleanName}</span>`;
-				}
+        createEntitySpan(type, name) {
+          const cleanName = name.replace(/\\'/g, "'");
+          return `<span class="entity-reference entity-${type}" data-entity-type="${type}" data-entity-name="${cleanName}">${cleanName}</span>`;
+        }
 
-				escapeRegExp(string) {
-					return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-				}
+        escapeRegExp(string) {
+          return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+        }
 
-				updatePreview(html) {
-					this.previewElement.innerHTML = html;
-				}
+        updatePreview(html) {
+          this.previewElement.innerHTML = html;
+        }
 
-				copyToClipboard() {
-					this.outputElement.select();
-					document.execCommand('copy');
-					const originalText = this.copyButton.textContent;
-					this.copyButton.textContent = 'Copied!';
-					setTimeout(() => {
-						this.copyButton.textContent = this.outputAsHtml ? 'Copy HTML' : 'Copy Text';
-					}, 2000);
-				}
+        copyToClipboard() {
+          this.outputElement.select();
+          document.execCommand("copy");
+          const originalText = this.copyButton.textContent;
+          this.copyButton.textContent = "Copied!";
+          setTimeout(() => {
+            this.copyButton.textContent = this.outputAsHtml
+              ? "Copy HTML"
+              : "Copy Text";
+          }, 2000);
+        }
 
-				// --- MODAL AND ENTITY INSERTION METHODS (Unchanged) ---
+        // --- MODAL AND ENTITY INSERTION METHODS ---
 
-				showEntityModal() {
-					let modal = document.getElementById('entity-modal');
-					if (!modal) {
-						modal = document.createElement('div');
-						modal.id = 'entity-modal';
-						modal.className = 'modal';
-						const entityTypeOptions = Object.keys(this.entities)
-							.map((type) => `<option value="${type}">${type.charAt(0).toUpperCase() + type.slice(1)}</option>`)
-							.join('');
-						modal.innerHTML = `
+        showEntityModal() {
+          let modal = document.getElementById("entity-modal");
+          if (!modal) {
+            modal = document.createElement("div");
+            modal.id = "entity-modal";
+            modal.className = "modal";
+            const entityTypeOptions = Object.keys(this.entities)
+              .map(
+                (type) =>
+                  `<option value="${type}">${
+                    type.charAt(0).toUpperCase() + type.slice(1)
+                  }</option>`
+              )
+              .join("");
+            modal.innerHTML = `
                             <div class="modal-content">
                                 <div class="modal-header"><h3>Add Entity Reference</h3><span class="close-modal">&times;</span></div>
                                 <div class="modal-body">
@@ -306,69 +382,90 @@
                                 </div>
                                 <div class="modal-footer"><button id="insert-entity">Insert Entity</button></div>
                             </div>`;
-						document.body.appendChild(modal);
-						modal.querySelector('.close-modal').addEventListener('click', () => {
-							modal.style.display = 'none';
-						});
-						modal.querySelector('#insert-entity').addEventListener('click', () => {
-							this.insertEntity();
-							modal.style.display = 'none';
-						});
-						modal.querySelector('#entity-type').addEventListener('change', () => this.updateExistingEntitiesDropdown());
-						modal.querySelector('#existing-entities').addEventListener('change', (e) => {
-							if (e.target.value) document.getElementById('entity-name').value = e.target.value;
-						});
-					}
-					setTimeout(() => this.updateExistingEntitiesDropdown(), 0);
-					modal.style.display = 'block';
-				}
+            document.body.appendChild(modal);
+            modal
+              .querySelector(".close-modal")
+              .addEventListener("click", () => {
+                modal.style.display = "none";
+              });
+            modal
+              .querySelector("#insert-entity")
+              .addEventListener("click", () => {
+                this.insertEntity();
+                modal.style.display = "none";
+              });
+            modal
+              .querySelector("#entity-type")
+              .addEventListener("change", () =>
+                this.updateExistingEntitiesDropdown()
+              );
+            modal
+              .querySelector("#existing-entities")
+              .addEventListener("change", (e) => {
+                if (e.target.value)
+                  document.getElementById("entity-name").value = e.target.value;
+              });
+          }
+          setTimeout(() => this.updateExistingEntitiesDropdown(), 0);
+          modal.style.display = "block";
+        }
 
-				updateExistingEntitiesDropdown() {
-					const entityType = document.getElementById('entity-type').value;
-					const existingEntitiesSelect = document.getElementById('existing-entities');
-					existingEntitiesSelect.innerHTML = '<option value="">Select an entity</option>';
-					if (this.entities[entityType] && this.entities[entityType].length > 0) {
-						this.entities[entityType].forEach((entityName) => {
-							const option = document.createElement('option');
-							option.value = entityName;
-							option.textContent = entityName;
-							existingEntitiesSelect.appendChild(option);
-						});
-					}
-				}
+        updateExistingEntitiesDropdown() {
+          const entityType = document.getElementById("entity-type").value;
+          const existingEntitiesSelect =
+            document.getElementById("existing-entities");
+          existingEntitiesSelect.innerHTML =
+            '<option value="">Select an entity</option>';
+          if (
+            this.entities[entityType] &&
+            this.entities[entityType].length > 0
+          ) {
+            this.entities[entityType].forEach((entityName) => {
+              const option = document.createElement("option");
+              option.value = entityName;
+              option.textContent = entityName;
+              existingEntitiesSelect.appendChild(option);
+            });
+          }
+        }
 
-				insertEntity() {
-					const entityType = document.getElementById('entity-type').value;
-					const entityName = document.getElementById('entity-name').value.trim();
-					if (!entityType || !entityName) {
-						alert('Both entity type and name are required.');
-						return;
-					}
-					const entityTag = `[ENTITY:${entityType}:${entityName}]`;
-					const cursorPos = this.inputElement.selectionStart;
-					const textBefore = this.inputElement.value.substring(0, cursorPos);
-					const textAfter = this.inputElement.value.substring(cursorPos);
-					if (!this.entityMaps[entityType]?.has(entityName.toLowerCase())) {
-						if (!this.entities[entityType]) {
-							this.entities[entityType] = [];
-							this.entityMaps[entityType] = new Map();
-						}
-						this.entities[entityType].push(entityName);
-						this.entityMaps[entityType].set(entityName.toLowerCase(), entityName);
-					}
-					this.inputElement.value = textBefore + entityTag + textAfter;
-					this.inputElement.focus();
-					this.inputElement.selectionStart = cursorPos + entityTag.length;
-					this.inputElement.selectionEnd = cursorPos + entityTag.length;
-				}
+        insertEntity() {
+          const entityType = document.getElementById("entity-type").value;
+          const entityName = document
+            .getElementById("entity-name")
+            .value.trim();
+          if (!entityType || !entityName) {
+            alert("Both entity type and name are required.");
+            return;
+          }
+          const entityTag = `[ENTITY:${entityType}:${entityName}]`;
+          const cursorPos = this.inputElement.selectionStart;
+          const textBefore = this.inputElement.value.substring(0, cursorPos);
+          const textAfter = this.inputElement.value.substring(cursorPos);
+          if (!this.entityMaps[entityType]?.has(entityName.toLowerCase())) {
+            if (!this.entities[entityType]) {
+              this.entities[entityType] = [];
+              this.entityMaps[entityType] = new Map();
+            }
+            this.entities[entityType].push(entityName);
+            this.entityMaps[entityType].set(
+              entityName.toLowerCase(),
+              entityName
+            );
+          }
+          this.inputElement.value = textBefore + entityTag + textAfter;
+          this.inputElement.focus();
+          this.inputElement.selectionStart = cursorPos + entityTag.length;
+          this.inputElement.selectionEnd = cursorPos + entityTag.length;
+        }
 
-				showImageModal() {
-					let modal = document.getElementById('image-modal');
-					if (!modal) {
-						modal = document.createElement('div');
-						modal.id = 'image-modal';
-						modal.className = 'modal';
-						modal.innerHTML = `
+        showImageModal() {
+          let modal = document.getElementById("image-modal");
+          if (!modal) {
+            modal = document.createElement("div");
+            modal.id = "image-modal";
+            modal.className = "modal";
+            modal.innerHTML = `
                             <div class="modal-content">
                                 <div class="modal-header"><h3>Add Image</h3><span class="close-modal">&times;</span></div>
                                 <div class="modal-body">
@@ -379,139 +476,167 @@
                                 </div>
                                 <div class="modal-footer"><button id="insert-image">Insert Image</button></div>
                             </div>`;
-						document.body.appendChild(modal);
-						modal.querySelector('.close-modal').addEventListener('click', () => {
-							modal.style.display = 'none';
-						});
-						modal.querySelector('#insert-image').addEventListener('click', () => {
-							this.insertImage();
-							modal.style.display = 'none';
-						});
-					}
-					modal.style.display = 'block';
-				}
+            document.body.appendChild(modal);
+            modal
+              .querySelector(".close-modal")
+              .addEventListener("click", () => {
+                modal.style.display = "none";
+              });
+            modal
+              .querySelector("#insert-image")
+              .addEventListener("click", () => {
+                this.insertImage();
+                modal.style.display = "none";
+              });
+          }
+          modal.style.display = "block";
+        }
 
-				insertImage() {
-					const src = document.getElementById('image-src').value.trim();
-					if (!src) {
-						alert('Image source is required.');
-						return;
-					}
-					const caption = document.getElementById('image-caption').value.trim();
-					const width = document.getElementById('image-width').value.trim();
-					const alignment = document.getElementById('image-alignment').value;
-					let imageTag = `[IMAGE:${src}`;
-					if (caption) imageTag += `:${caption}`;
-					if (width) imageTag += `:${width}`;
-					if (alignment) imageTag += `:${alignment}`;
-					imageTag += ']';
+        insertImage() {
+          const src = document.getElementById("image-src").value.trim();
+          if (!src) {
+            alert("Image source is required.");
+            return;
+          }
+          const caption = document.getElementById("image-caption").value.trim();
+          const width = document.getElementById("image-width").value.trim();
+          const alignment = document.getElementById("image-alignment").value;
+          let imageTag = `[IMAGE:${src}`;
+          if (caption) imageTag += `:${caption}`;
+          if (width) imageTag += `:${width}`;
+          if (alignment) imageTag += `:${alignment}`;
+          imageTag += "]";
 
-					const cursorPos = this.inputElement.selectionStart;
-					const textBefore = this.inputElement.value.substring(0, cursorPos);
-					const textAfter = this.inputElement.value.substring(cursorPos);
-					const insertText =
-						(textBefore.endsWith('\n\n') || textBefore.length === 0 ? '' : '\n\n') +
-						imageTag +
-						(textAfter.startsWith('\n\n') ? '' : '\n\n');
-					this.inputElement.value = textBefore + insertText + textAfter;
-					this.inputElement.focus();
-					this.inputElement.selectionStart = this.inputElement.selectionEnd = cursorPos + insertText.length;
-				}
-			}
+          const cursorPos = this.inputElement.selectionStart;
+          const textBefore = this.inputElement.value.substring(0, cursorPos);
+          const textAfter = this.inputElement.value.substring(cursorPos);
+          const insertText =
+            (textBefore.endsWith("\n\n") || textBefore.length === 0
+              ? ""
+              : "\n\n") +
+            imageTag +
+            (textAfter.startsWith("\n\n") ? "" : "\n\n");
+          this.inputElement.value = textBefore + insertText + textAfter;
+          this.inputElement.focus();
+          this.inputElement.selectionStart = this.inputElement.selectionEnd =
+            cursorPos + insertText.length;
+        }
+      }
 
-			// Initialize the formatter with entities from campaign_002_api_data.js
-			const formatter = new RecapFormatter({
-				characters: ['Bonnie', 'Kaedin', 'Soshi', 'Norr', 'Olek'],
-				locations: [
-					"Drellin's Ferry",
-					'Feywilds',
-					'Underdark',
-					'Brindol',
-					'Luskan',
-					'Witchwood',
-					'Green Apple Inn',
-					'Shrine of Pelor',
-					"Sertieren's Manor",
-					'Wrath Keep',
-					'Ramashen',
-					"Avarthel's Grove",
-					'Temple',
-					'Bridge',
-					'Lake',
-					'Stone Ring',
-					'Reptilian Path',
-					'Cavern of Horrors',
-					'Old Fort North of the Woods',
-					'Underwater Passage',
-					'Pirate Ship',
-					'Mountain Waterfall',
-					"Leviathan's Hall",
-					'Pelagos',
-					'Lustria',
-					'Penal Colony',
-					'Town Market',
-					'General Store',
-					"Armorer's Forge",
-					'Ruined Fortress',
-					"Mountains near Drellin's Ferry",
-				],
-				classes: ['Paladin', 'Sorcerer', 'Rogue', 'Fighter', 'Druid', 'Assassin', 'Trickster', 'Wizard'],
-				subclasses: ['Echo Knight'],
-				guilds: [
-					'Arcane Brotherhood',
-					'The Arcane Brotherhood',
-					'Winter Rose',
-					'The Winter Rose',
-					"Thieves' Guild",
-					'Thieves Guild',
-					'Harpers',
-					'The Harpers',
-					'House Corzina',
-					'Arcane Seekers',
-					'Krynn Dynasty',
-				],
-				items: [],
-				races: ['Earth Genasi'],
-				npc: [
-					'Zella',
-					'Thalos',
-					'Clyde',
-					'Jacques',
-					'Wyrmlord Koth',
-					'Soranna',
-					'Sergeant Hersk',
-					'Brother Denny',
-					'Sertieren',
-					'Nels Huto',
-					'Rilon Paln',
-					'Anya',
-					'Lem',
-					'Kat',
-					'Yoghurt',
-					'Avarthel',
-					'Loic',
-					'Vandal',
-					'Summoner',
-					'June Takahashi',
-					'Jareth',
-					'Zaya',
-					'Jaret',
-					'Noro',
-					'Palo',
-					'Captain Bianca Turiados',
-					'Commander Turiados',
-					'Glass',
-					'Marise Curs',
-					'General Lee',
-					'Bardin Cratcho',
-					'Scoundrel',
-					'Gică',
-					'Mișu',
-					'Tharma',
-					'Kalistra',
-				],
-			});
-			formatter.init('formatter-container');
-		</script>
-	</body>
+      // Auto-load campaign data from global scope if available
+      function loadCampaignData() {
+        const campaignData = {
+          characters: [],
+          locations: [],
+          classes: [],
+          subclasses: [],
+          factions: [],
+          items: [],
+          races: [],
+          npcs: [],
+        };
+
+        // Try to load from CAMPAIGN_002_CHARACTERS
+        if (typeof CAMPAIGN_002_CHARACTERS !== "undefined") {
+          campaignData.characters = CAMPAIGN_002_CHARACTERS.filter(
+            (c) => c.is_included !== false
+          ).map((c) => c.name);
+          campaignData.classes = [
+            ...new Set(CAMPAIGN_002_CHARACTERS.map((c) => c.class)),
+          ];
+          campaignData.races = [
+            ...new Set(CAMPAIGN_002_CHARACTERS.map((c) => c.race)),
+          ];
+        }
+
+        // Try to load from CAMPAIGN_002_LOCATIONS
+        if (typeof CAMPAIGN_002_LOCATIONS !== "undefined") {
+          campaignData.locations = CAMPAIGN_002_LOCATIONS.map((l) => l.name);
+        }
+
+        // Try to load from CAMPAIGN_002_NPCS
+        if (typeof CAMPAIGN_002_NPCS !== "undefined") {
+          campaignData.npcs = CAMPAIGN_002_NPCS.map((n) => n.name);
+        }
+
+        // Try to load from CAMPAIGN_002_FACTIONS
+        if (typeof CAMPAIGN_002_FACTIONS !== "undefined") {
+          campaignData.factions = CAMPAIGN_002_FACTIONS.map((f) => f.name);
+        }
+
+        return campaignData;
+      }
+
+      // Initialize the formatter
+      const campaignData = loadCampaignData();
+      const formatter = new RecapFormatter({
+        characters:
+          campaignData.characters.length > 0
+            ? campaignData.characters
+            : ["Bonnie", "Kaedin", "Soshi", "Norr", "Olek"],
+        locations:
+          campaignData.locations.length > 0
+            ? campaignData.locations
+            : [
+                "Drellin's Ferry",
+                "Feywilds",
+                "Underdark",
+                "Brindol",
+                "Luskan",
+                "Witchwood",
+                "Green Apple Inn",
+                "Shrine of Pelor",
+                "Sertieren's Manor",
+                "Wrath Keep",
+              ],
+        classes:
+          campaignData.classes.length > 0
+            ? campaignData.classes
+            : [
+                "Paladin",
+                "Sorcerer",
+                "Rogue",
+                "Fighter",
+                "Druid",
+                "Assassin",
+                "Trickster",
+                "Wizard",
+              ],
+        subclasses:
+          campaignData.subclasses.length > 0
+            ? campaignData.subclasses
+            : ["Echo Knight"],
+        factions:
+          campaignData.factions.length > 0
+            ? campaignData.factions
+            : [
+                "Arcane Brotherhood",
+                "The Arcane Brotherhood",
+                "Winter Rose",
+                "The Winter Rose",
+                "Thieves' Guild",
+                "Thieves Guild",
+                "Harpers",
+                "The Harpers",
+              ],
+        items: campaignData.items,
+        races:
+          campaignData.races.length > 0 ? campaignData.races : ["Earth Genasi"],
+        npcs:
+          campaignData.npcs.length > 0
+            ? campaignData.npcs
+            : [
+                "Zella",
+                "Thalos",
+                "Clyde",
+                "Jacques",
+                "Wyrmlord Koth",
+                "Soranna",
+                "Sergeant Hersk",
+                "Brother Denny",
+              ],
+      });
+      formatter.init("formatter-container");
+    </script>
+  </body>
 </html>
