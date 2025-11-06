@@ -124,17 +124,17 @@
 <h3>III. Quest &amp; Objective Tracker</h3>
 <div class="quest-container">
     <div class="quest">
-        <div class="quest-name">Investigate Wyrmlord Koth and "Day of Ruin"</div>
+        <div class="quest-name">[ENTITY:quest:Stop the Invasion]</div>
         <div class="quest-description">
             <span>
                 <strong>Progressed</strong>
-                - Attacked fortress; shaman ordered retreat to "alert the Wormlord" before fleeing
+                - Attacked fortress; shaman ordered retreat to "alert the Wormlord" before fleeing; found burned caravan (10 civilians dead); tracked ~20 orcs on wargs to fortress; fortress assault successful; Sorana assigned task to find four missing riders last seen in Witchwood.
             </span>
             <span>Last update: session 6</span>
         </div>
     </div>
     <div class="quest">
-        <div class="quest-name">Retrieve Dead Man's Boots from Nels Huto</div>
+        <div class="quest-name">[ENTITY:quest:Retrieve Dead Man's Boots from Nels Huto]</div>
         <div class="quest-description">
             <span>
                 <strong>Active</strong>
@@ -144,27 +144,7 @@
         </div>
     </div>
     <div class="quest">
-        <div class="quest-name">Stop the Raiders</div>
-        <div class="quest-description">
-            <span>
-                <strong>Progressed</strong>
-                - Found burned caravan (10 civilians dead); tracked ~20 orcs on wargs to fortress; fortress assault successful
-            </span>
-            <span>Last update: session 6</span>
-        </div>
-    </div>
-    <div class="quest">
-        <div class="quest-name">Investigate Missing Barbarian Riders</div>
-        <div class="quest-description">
-            <span>
-                <strong>New</strong>
-                - Sorana assigned task to find four missing riders last seen in Witchwood
-            </span>
-            <span>Last update: session 6</span>
-        </div>
-    </div>
-    <div class="quest">
-        <div class="quest-name">Retrieve Locket of Hair from Sandro</div>
+        <div class="quest-name">[Entity:quest:Retrieve Locket of Hair from Sandro]</div>
         <div class="quest-description">
             <span>
                 <strong>Active</strong>
@@ -174,7 +154,7 @@
         </div>
     </div>
     <div class="quest">
-        <div class="quest-name">Care for Thylacoleo Cubs</div>
+        <div class="quest-name">[ENTITY:quest:Care for Thylacoleo Cubs]</div>
         <div class="quest-description">
             <span>
                 <strong>Progressed</strong>

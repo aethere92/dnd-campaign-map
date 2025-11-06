@@ -137,17 +137,17 @@
 <h3>III. Quest &amp; Objective Tracker</h3>
 <div class="quest-container">
     <div class="quest">
-        <div class="quest-name">Investigate Wyrmlord Koth and "Day of Ruin"</div>
+        <div class="quest-name">[ENTITY:quest:Stop the Invasion]</div>
         <div class="quest-description">
             <span>
                 <strong>Critical</strong>
-                - Army confirmed approaching; party prioritizing bridge destruction to delay invasion
+                - Army confirmed approaching; party prioritizing bridge destruction to delay invasion; Sent detailed warning letter with Yoghurt to Captain Soranna; immediate threat prioritized
             </span>
             <span>Last update: session 8</span>
         </div>
     </div>
     <div class="quest">
-        <div class="quest-name">Retrieve Dead Man's Boots from Nels Huto</div>
+        <div class="quest-name">[ENTITY:quest:Retrieve Dead Man's Boots from Nels Huto]</div>
         <div class="quest-description">
             <span>
                 <strong>Active</strong>
@@ -157,27 +157,7 @@
         </div>
     </div>
     <div class="quest">
-        <div class="quest-name">Stop the Raiders</div>
-        <div class="quest-description">
-            <span>
-                <strong>Critical</strong>
-                - Sent detailed warning letter with Yoghurt to Captain Soranna; immediate threat prioritized
-            </span>
-            <span>Last update: session 8</span>
-        </div>
-    </div>
-    <div class="quest">
-        <div class="quest-name">Investigate Missing Barbarian Riders</div>
-        <div class="quest-description">
-            <span>
-                <strong>Active</strong>
-                - No progress this session
-            </span>
-            <span>Last update: session 7</span>
-        </div>
-    </div>
-    <div class="quest">
-        <div class="quest-name">Retrieve Locket of Hair from Sandro</div>
+        <div class="quest-name">[ENTITY:quest:Retrieve Locket of Hair from Sandro]</div>
         <div class="quest-description">
             <span>
                 <strong>Active</strong>
@@ -187,41 +167,11 @@
         </div>
     </div>
     <div class="quest">
-        <div class="quest-name">Prevent Prophesied Future</div>
+        <div class="quest-name">[ENTITY:quest:The Blue Bear Alliance - Prevent the Apocalypse]]</div>
         <div class="quest-description">
             <span>
                 <strong>New</strong>
-                - Visions revealed catastrophic timeline featuring Battle for Bremen, fall of Feywild, siege of Neverwinter, and Paladin corruption
-            </span>
-            <span>Last update: session 8</span>
-        </div>
-    </div>
-    <div class="quest">
-        <div class="quest-name">Destroy the Bridge</div>
-        <div class="quest-description">
-            <span>
-                <strong>New</strong>
-                - Primary objective to delay enemy army by 2-3 days
-            </span>
-            <span>Last update: session 8</span>
-        </div>
-    </div>
-    <div class="quest">
-        <div class="quest-name">Investigate Blue Bear Sigil</div>
-        <div class="quest-description">
-            <span>
-                <strong>New</strong>
-                - Recurring enemy banner in all visions; unified command structure
-            </span>
-            <span>Last update: session 8</span>
-        </div>
-    </div>
-    <div class="quest">
-        <div class="quest-name">Warn Drellin's Ferry</div>
-        <div class="quest-description">
-            <span>
-                <strong>In Progress</strong>
-                - Letter sent with Yoghurt to Captain Soranna only
+                - Visions revealed catastrophic timeline featuring Battle for Bremen, fall of Feywild, siege of Neverwinter, and Paladin corruption; Recurring enemy banner in all visions; unified command structure
             </span>
             <span>Last update: session 8</span>
         </div>

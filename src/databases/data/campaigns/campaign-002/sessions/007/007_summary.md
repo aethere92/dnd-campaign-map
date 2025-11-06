@@ -172,17 +172,17 @@
 <h3>III. Quest &amp; Objective Tracker</h3>
 <div class="quest-container">
     <div class="quest">
-        <div class="quest-name">Investigate Wyrmlord Koth and "Day of Ruin"</div>
+        <div class="quest-name">[ENTITY:quest:Stop the Invasion]</div>
         <div class="quest-description">
             <span>
                 <strong>Critical</strong>
-                - Discovered army ~19× larger than previous forces approaching Drellin's Ferry; ETA 4 days; red dragon involved
+                - Discovered army ~19× larger than previous forces approaching Drellin's Ferry; ETA 4 days; red dragon involved; Bridge identified as strategic choke point; destroying it could delay invasion 2-3 days
             </span>
             <span>Last update: session 7</span>
         </div>
     </div>
     <div class="quest">
-        <div class="quest-name">Retrieve Dead Man's Boots from Nels Huto</div>
+        <div class="quest-name">[ENTITY:quest:Retrieve Dead Man's Boots from Nels Huto]</div>
         <div class="quest-description">
             <span>
                 <strong>Active</strong>
@@ -192,27 +192,7 @@
         </div>
     </div>
     <div class="quest">
-        <div class="quest-name">Stop the Raiders</div>
-        <div class="quest-description">
-            <span>
-                <strong>Critical</strong>
-                - Bridge identified as strategic choke point; destroying it could delay invasion 2-3 days
-            </span>
-            <span>Last update: session 7</span>
-        </div>
-    </div>
-    <div class="quest">
-        <div class="quest-name">Investigate Missing Barbarian Riders</div>
-        <div class="quest-description">
-            <span>
-                <strong>Active</strong>
-                - No progress this session
-            </span>
-            <span>Last update: session 7</span>
-        </div>
-    </div>
-    <div class="quest">
-        <div class="quest-name">Retrieve Locket of Hair from Sandro</div>
+        <div class="quest-name">[ENTITY:quest:Retrieve Locket of Hair from Sandro]</div>
         <div class="quest-description">
             <span>
                 <strong>Active</strong>
@@ -222,21 +202,11 @@
         </div>
     </div>
     <div class="quest">
-        <div class="quest-name">Investigate the Null Brand</div>
+        <div class="quest-name">[ENTITY:quest:Investigate the Null Brand]</div>
         <div class="quest-description">
             <span>
                 <strong>New</strong>
                 - Discovered artifact in vault; Kalistra using life force to contain its corruption
-            </span>
-            <span>Last update: session 7</span>
-        </div>
-    </div>
-    <div class="quest">
-        <div class="quest-name">Warn Drellin's Ferry</div>
-        <div class="quest-description">
-            <span>
-                <strong>Active</strong>
-                - Party debating whether to save or abandon the town
             </span>
             <span>Last update: session 7</span>
         </div>
