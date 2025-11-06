@@ -11,6 +11,7 @@ class StoryURLManager {
 		LOCATIONS: 'locations',
 		NPCS: 'npcs',
 		FACTIONS: 'factions',
+		ENCOUNTERS: 'encounters',
 	};
 
 	static PARAMS = {
@@ -26,6 +27,7 @@ class StoryURLManager {
 		LOCATION: 'location',
 		NPC: 'npc',
 		FACTION: 'faction',
+		ENCOUNTER: 'encounter',
 	};
 
 	static ITEM_PARAMS = [
@@ -33,6 +35,7 @@ class StoryURLManager {
 		StoryURLManager.PARAMS.LOCATION,
 		StoryURLManager.PARAMS.NPC,
 		StoryURLManager.PARAMS.FACTION,
+		StoryURLManager.PARAMS.ENCOUNTER,
 	];
 
 	constructor() {
@@ -87,6 +90,7 @@ class StoryURLManager {
 				[StoryURLManager.VIEW_TYPES.LOCATIONS]: StoryURLManager.PARAMS.LOCATION,
 				[StoryURLManager.VIEW_TYPES.NPCS]: StoryURLManager.PARAMS.NPC,
 				[StoryURLManager.VIEW_TYPES.FACTIONS]: StoryURLManager.PARAMS.FACTION,
+				[StoryURLManager.VIEW_TYPES.ENCOUNTERS]: StoryURLManager.PARAMS.ENCOUNTER,
 			};
 			config.itemType = paramMap[viewType];
 			config.itemId = itemId;
@@ -137,6 +141,7 @@ class StoryURLManager {
 			case StoryURLManager.VIEW_TYPES.LOCATIONS:
 			case StoryURLManager.VIEW_TYPES.NPCS:
 			case StoryURLManager.VIEW_TYPES.FACTIONS:
+			case StoryURLManager.VIEW_TYPES.ENCOUNTERS:
 				return {
 					...baseState,
 					campaignId: data.campaignId,
@@ -176,6 +181,7 @@ class StoryURLManager {
 			[StoryURLManager.VIEW_TYPES.LOCATIONS]: StoryURLManager.PARAMS.LOCATION,
 			[StoryURLManager.VIEW_TYPES.NPCS]: StoryURLManager.PARAMS.NPC,
 			[StoryURLManager.VIEW_TYPES.FACTIONS]: StoryURLManager.PARAMS.FACTION,
+			[StoryURLManager.VIEW_TYPES.ENCOUNTERS]: StoryURLManager.PARAMS.ENCOUNTER,
 		};
 		return paramMap[viewType];
 	}

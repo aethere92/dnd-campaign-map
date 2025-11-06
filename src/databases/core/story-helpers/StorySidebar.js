@@ -11,6 +11,7 @@ class StoryHelperSidebar {
 	#onLocationsClick;
 	#onNPCsClick;
 	#onFactionsClick;
+	#onEncountersClick;
 	#searchManager;
 
 	// Sidebar section toggle states
@@ -33,6 +34,7 @@ class StoryHelperSidebar {
 		onLocationsClick,
 		onNPCsClick,
 		onFactionsClick,
+		onEncountersClick,
 		searchManager
 	) {
 		this.#getCampaign = getCampaign;
@@ -47,6 +49,7 @@ class StoryHelperSidebar {
 		this.#onLocationsClick = onLocationsClick;
 		this.#onNPCsClick = onNPCsClick;
 		this.#onFactionsClick = onFactionsClick;
+		this.#onEncountersClick = onEncountersClick;
 		this.#searchManager = searchManager;
 
 		// Load saved section states
@@ -185,6 +188,12 @@ class StoryHelperSidebar {
 			toolsList.appendChild(factionsBtn);
 		}
 
+		// NPCs button
+		if (campaign?.encounters?.length) {
+			const encountersBtn = this.#createToolButton('🛡️ Encounters', 'encounters');
+			toolsList.appendChild(encountersBtn);
+		}
+
 		content.appendChild(toolsList);
 		section.append(header, content);
 		return section;
@@ -215,6 +224,9 @@ class StoryHelperSidebar {
 					break;
 				case 'factions':
 					this.#onFactionsClick();
+					break;
+				case 'encounters':
+					this.#onEncountersClick();
 					break;
 			}
 		});

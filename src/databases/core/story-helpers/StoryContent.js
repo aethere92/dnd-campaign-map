@@ -132,6 +132,12 @@ class StoryHelperContent {
 		factionRenderer.render(contentArea);
 	}
 
+	renderEncounters(contentArea) {
+		const campaign = this.#getCampaign();
+		const encounterRenderer = new StoryHelperEncounter(campaign, this.#placeholderProcessor);
+		encounterRenderer.render(contentArea);
+	}
+
 	renderCharacter(contentArea, characterName) {
 		const campaign = this.#getCampaign();
 		const characterRenderer = new StoryHelperCharacter(campaign, this.#placeholderProcessor);

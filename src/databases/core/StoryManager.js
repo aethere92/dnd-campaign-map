@@ -42,6 +42,7 @@ class StoryManager {
 			locations: options.campaignData?.locations || [],
 			quests: options.campaignData?.quests || [],
 			factions: options.campaignData?.factions || [],
+			encounters: options.campaignData?.encounters || [],
 		});
 
 		this.#placeholderProcessor = new StoryHelperPlaceholder(this.#tooltipManager, options.campaignData);
@@ -64,6 +65,7 @@ class StoryManager {
 			() => this.#handleViewChange(StoryURLManager.VIEW_TYPES.LOCATIONS),
 			() => this.#handleViewChange(StoryURLManager.VIEW_TYPES.NPCS),
 			() => this.#handleViewChange(StoryURLManager.VIEW_TYPES.FACTIONS),
+			() => this.#handleViewChange(StoryURLManager.VIEW_TYPES.ENCOUNTERS),
 			this.#searchManager
 		);
 
@@ -131,6 +133,7 @@ class StoryManager {
 			[StoryURLManager.VIEW_TYPES.LOCATIONS]: StoryURLManager.VIEW_TYPES.LOCATIONS,
 			[StoryURLManager.VIEW_TYPES.NPCS]: StoryURLManager.VIEW_TYPES.NPCS,
 			[StoryURLManager.VIEW_TYPES.FACTIONS]: StoryURLManager.VIEW_TYPES.FACTIONS,
+			[StoryURLManager.VIEW_TYPES.ENCOUNTERS]: StoryURLManager.VIEW_TYPES.ENCOUNTERS,
 		};
 
 		if (viewTypeMap[viewType]) {
@@ -245,6 +248,7 @@ class StoryManager {
 			case StoryURLManager.VIEW_TYPES.LOCATIONS:
 			case StoryURLManager.VIEW_TYPES.NPCS:
 			case StoryURLManager.VIEW_TYPES.FACTIONS:
+			case StoryURLManager.VIEW_TYPES.ENCOUNTERS:
 				this.#currentView = view;
 				this.#selectedCharacterName = null;
 
@@ -267,6 +271,7 @@ class StoryManager {
 			case StoryURLManager.VIEW_TYPES.LOCATIONS:
 			case StoryURLManager.VIEW_TYPES.FACTIONS:
 			case StoryURLManager.VIEW_TYPES.NPCS:
+			case StoryURLManager.VIEW_TYPES.ENCOUNTERS:
 				config.view = this.#currentView;
 				break;
 			case StoryURLManager.VIEW_TYPES.CHARACTER:
@@ -298,6 +303,7 @@ class StoryManager {
 			[StoryURLManager.VIEW_TYPES.LOCATIONS]: () => this.#contentRenderer.renderLocations(contentArea),
 			[StoryURLManager.VIEW_TYPES.NPCS]: () => this.#contentRenderer.renderNPCs(contentArea),
 			[StoryURLManager.VIEW_TYPES.FACTIONS]: () => this.#contentRenderer.renderFactions(contentArea),
+			[StoryURLManager.VIEW_TYPES.ENCOUNTERS]: () => this.#contentRenderer.renderEncounters(contentArea),
 			[StoryURLManager.VIEW_TYPES.CHARACTER]: () =>
 				this.#contentRenderer.renderCharacter(contentArea, this.#selectedCharacterName),
 			[StoryURLManager.VIEW_TYPES.SESSION]: () => this.#contentRenderer.renderSession(contentArea),
