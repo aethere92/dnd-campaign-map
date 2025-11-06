@@ -2,10 +2,10 @@ class StoryManager {
 	#rootElement;
 	#campaign;
 	#currentSessionId;
-	#currentView = URLManager.VIEW_TYPES.SESSION;
+	#currentView = StoryURLManager.VIEW_TYPES.SESSION;
 	#selectedCharacterName = null;
 	#isSidebarCollapsed = false;
-	#urlManager;
+	#storyUrlManager;
 
 	// Helper instances
 	#contentRenderer;
@@ -22,7 +22,7 @@ class StoryManager {
 			return;
 		}
 
-		this.#urlManager = new StoryURLManager();
+		this.#storyUrlManager = new StoryURLManager();
 		this.#initializeHelpers(options);
 		this.#loadSavedState();
 		
@@ -59,11 +59,11 @@ class StoryManager {
 			(collapsed) => this.#handleSidebarToggle(collapsed),
 			(characterName) => this.#handleCharacterClick(characterName),
 			(sessionId) => this.#handleSessionClick(sessionId),
-			() => this.#handleViewChange(URLManager.VIEW_TYPES.TIMELINE),
-			() => this.#handleViewChange(URLManager.VIEW_TYPES.QUESTS),
-			() => this.#handleViewChange(URLManager.VIEW_TYPES.LOCATIONS),
-			() => this.#handleViewChange(URLManager.VIEW_TYPES.NPCS),
-			() => this.#handleViewChange(URLManager.VIEW_TYPES.FACTIONS),
+			() => this.#handleViewChange(StoryURLManager.VIEW_TYPES.TIMELINE),
+			() => this.#handleViewChange(StoryURLManager.VIEW_TYPES.QUESTS),
+			() => this.#handleViewChange(StoryURLManager.VIEW_TYPES.LOCATIONS),
+			() => this.#handleViewChange(StoryURLManager.VIEW_TYPES.NPCS),
+			() => this.#handleViewChange(StoryURLManager.VIEW_TYPES.FACTIONS),
 			this.#searchManager
 		);
 		
@@ -126,11 +126,11 @@ class StoryManager {
 
 	#determineView(viewType, characterName, sessionId) {
 		const viewTypeMap = {
-			[URLManager.VIEW_TYPES.TIMELINE]: URLManager.VIEW_TYPES.TIMELINE,
-			[URLManager.VIEW_TYPES.QUESTS]: URLManager.VIEW_TYPES.QUESTS,
-			[URLManager.VIEW_TYPES.LOCATIONS]: URLManager.VIEW_TYPES.LOCATIONS,
-			[URLManager.VIEW_TYPES.NPCS]: URLManager.VIEW_TYPES.NPCS,
-			[URLManager.VIEW_TYPES.FACTIONS]: URLManager.VIEW_TYPES.FACTIONS
+			[StoryURLManager.VIEW_TYPES.TIMELINE]: StoryURLManager.VIEW_TYPES.TIMELINE,
+			[StoryURLManager.VIEW_TYPES.QUESTS]: StoryURLManager.VIEW_TYPES.QUESTS,
+			[StoryURLManager.VIEW_TYPES.LOCATIONS]: StoryURLManager.VIEW_TYPES.LOCATIONS,
+			[StoryURLManager.VIEW_TYPES.NPCS]: StoryURLManager.VIEW_TYPES.NPCS,
+			[StoryURLManager.VIEW_TYPES.FACTIONS]: StoryURLManager.VIEW_TYPES.FACTIONS
 		};
 
 		if (viewTypeMap[viewType]) {
@@ -138,11 +138,11 @@ class StoryManager {
 			this.#selectedCharacterName = null;
 			this.#currentSessionId = sessionId || this.#getFirstSessionId();
 		} else if (characterName) {
-			this.#currentView = URLManager.VIEW_TYPES.CHARACTER;
+			this.#currentView = StoryURLManager.VIEW_TYPES.CHARACTER;
 			this.#selectedCharacterName = characterName;
 			this.#currentSessionId = sessionId || this.#getFirstSessionId();
 		} else {
-			this.#currentView = URLManager.VIEW_TYPES.SESSION;
+			this.#currentView = StoryURLManager.VIEW_TYPES.SESSION;
 			this.#selectedCharacterName = null;
 			this.#currentSessionId = sessionId || this.#getFirstSessionId();
 
@@ -186,7 +186,7 @@ class StoryManager {
 		container.appendChild(mainContent);
 		this.#rootElement.appendChild(container);
 
-		if (this.#currentView === URLManager.VIEW_TYPES.SESSION) {
+		if (this.#currentView === StoryURLManager.VIEW_TYPES.SESSION) {
 			this.#generateTableOfContents(contentArea);
 			this.#navigationManager.scrollToHash();
 		}
@@ -200,12 +200,12 @@ class StoryManager {
 	}
 
 	#handleCharacterClick(characterName) {
-		if (this.#currentView === URLManager.VIEW_TYPES.CHARACTER && 
+		if (this.#currentView === StoryURLManager.VIEW_TYPES.CHARACTER && 
 		    this.#selectedCharacterName === characterName) {
-			this.#currentView = URLManager.VIEW_TYPES.SESSION;
+			this.#currentView = StoryURLManager.VIEW_TYPES.SESSION;
 			this.#selectedCharacterName = null;
 		} else {
-			this.#currentView = URLManager.VIEW_TYPES.CHARACTER;
+			this.#currentView = StoryURLManager.VIEW_TYPES.CHARACTER;
 			this.#selectedCharacterName = characterName;
 		}
 
@@ -214,7 +214,7 @@ class StoryManager {
 	}
 
 	#handleSessionClick(sessionId) {
-		this.#currentView = URLManager.VIEW_TYPES.SESSION;
+		this.#currentView = StoryURLManager.VIEW_TYPES.SESSION;
 		this.#selectedCharacterName = null;
 		this.#currentSessionId = sessionId;
 
@@ -236,21 +236,21 @@ class StoryManager {
 		const { view, sessionId, characterName, itemId } = navigation;
 
 		switch (view) {
-			case URLManager.VIEW_TYPES.SESSION:
+			case StoryURLManager.VIEW_TYPES.SESSION:
 				this.#handleSessionClick(sessionId);
 				break;
-			case URLManager.VIEW_TYPES.CHARACTER:
+			case StoryURLManager.VIEW_TYPES.CHARACTER:
 				this.#handleCharacterClick(characterName);
 				break;
-			case URLManager.VIEW_TYPES.QUESTS:
-			case URLManager.VIEW_TYPES.LOCATIONS:
-			case URLManager.VIEW_TYPES.NPCS:
-			case URLManager.VIEW_TYPES.FACTIONS:
+			case StoryURLManager.VIEW_TYPES.QUESTS:
+			case StoryURLManager.VIEW_TYPES.LOCATIONS:
+			case StoryURLManager.VIEW_TYPES.NPCS:
+			case StoryURLManager.VIEW_TYPES.FACTIONS:
 				this.#currentView = view;
 				this.#selectedCharacterName = null;
 
-				const url = this.#urlManager.buildStoryItemURL(this.#campaign.id, view, itemId);
-				this.#urlManager.updateHistory(url, null, true);
+				const url = this.#storyUrlManager.buildStoryItemURL(this.#campaign.id, view, itemId);
+				this.#storyUrlManager.updateHistory(url, null, true);
 				this.render();
 				break;
 		}
@@ -263,47 +263,47 @@ class StoryManager {
 
 		// Set view-specific parameters
 		switch (this.#currentView) {
-			case URLManager.VIEW_TYPES.TIMELINE:
-			case URLManager.VIEW_TYPES.QUESTS:
-			case URLManager.VIEW_TYPES.LOCATIONS:
-			case URLManager.VIEW_TYPES.FACTIONS:
-			case URLManager.VIEW_TYPES.NPCS:
+			case StoryURLManager.VIEW_TYPES.TIMELINE:
+			case StoryURLManager.VIEW_TYPES.QUESTS:
+			case StoryURLManager.VIEW_TYPES.LOCATIONS:
+			case StoryURLManager.VIEW_TYPES.FACTIONS:
+			case StoryURLManager.VIEW_TYPES.NPCS:
 				config.view = this.#currentView;
 				break;
-			case URLManager.VIEW_TYPES.CHARACTER:
+			case StoryURLManager.VIEW_TYPES.CHARACTER:
 				config.character = this.#selectedCharacterName;
 				break;
-			case URLManager.VIEW_TYPES.SESSION:
+			case StoryURLManager.VIEW_TYPES.SESSION:
 			default:
 				config.session = this.#currentSessionId;
 				break;
 		}
 
-		const url = this.#urlManager.buildURL(config);
-		const state = this.#urlManager.createState(this.#currentView, {
+		const url = this.#storyUrlManager.buildURL(config);
+		const state = this.#storyUrlManager.createState(this.#currentView, {
 			campaignId: this.#campaign.id,
-			sessionId: this.#currentView === URLManager.VIEW_TYPES.SESSION ? this.#currentSessionId : null,
-			characterName: this.#currentView === URLManager.VIEW_TYPES.CHARACTER ? this.#selectedCharacterName : null,
+			sessionId: this.#currentView === StoryURLManager.VIEW_TYPES.SESSION ? this.#currentSessionId : null,
+			characterName: this.#currentView === StoryURLManager.VIEW_TYPES.CHARACTER ? this.#selectedCharacterName : null,
 			viewType: this.#currentView
 		});
 
-		this.#urlManager.updateHistory(url, state, true);
+		this.#storyUrlManager.updateHistory(url, state, true);
 	}
 
 	async #loadContentArea(contentArea) {
 		contentArea.innerHTML = '';
 
 		const viewMap = {
-			[URLManager.VIEW_TYPES.TIMELINE]: () => this.#contentRenderer.renderTimeline(contentArea),
-			[URLManager.VIEW_TYPES.QUESTS]: () => this.#contentRenderer.renderQuests(contentArea),
-			[URLManager.VIEW_TYPES.LOCATIONS]: () => this.#contentRenderer.renderLocations(contentArea),
-			[URLManager.VIEW_TYPES.NPCS]: () => this.#contentRenderer.renderNPCs(contentArea),
-			[URLManager.VIEW_TYPES.FACTIONS]: () => this.#contentRenderer.renderFactions(contentArea),
-			[URLManager.VIEW_TYPES.CHARACTER]: () => this.#contentRenderer.renderCharacter(contentArea, this.#selectedCharacterName),
-			[URLManager.VIEW_TYPES.SESSION]: () => this.#contentRenderer.renderSession(contentArea)
+			[StoryURLManager.VIEW_TYPES.TIMELINE]: () => this.#contentRenderer.renderTimeline(contentArea),
+			[StoryURLManager.VIEW_TYPES.QUESTS]: () => this.#contentRenderer.renderQuests(contentArea),
+			[StoryURLManager.VIEW_TYPES.LOCATIONS]: () => this.#contentRenderer.renderLocations(contentArea),
+			[StoryURLManager.VIEW_TYPES.NPCS]: () => this.#contentRenderer.renderNPCs(contentArea),
+			[StoryURLManager.VIEW_TYPES.FACTIONS]: () => this.#contentRenderer.renderFactions(contentArea),
+			[StoryURLManager.VIEW_TYPES.CHARACTER]: () => this.#contentRenderer.renderCharacter(contentArea, this.#selectedCharacterName),
+			[StoryURLManager.VIEW_TYPES.SESSION]: () => this.#contentRenderer.renderSession(contentArea)
 		};
 
-		const renderMethod = viewMap[this.#currentView] || viewMap[URLManager.VIEW_TYPES.SESSION];
+		const renderMethod = viewMap[this.#currentView] || viewMap[StoryURLManager.VIEW_TYPES.SESSION];
 		await renderMethod();
 	}
 

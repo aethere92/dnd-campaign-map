@@ -5,12 +5,12 @@ class CampaignManager {
 	#storyInstance = null;
 	#rootElement;
 	#recapModal = null;
-	#urlManager;
+	#storyUrlManager;
 
 	constructor(rootElementId, isDebugMode = false) {
 		this.#rootElement = document.getElementById(rootElementId);
 		this.isDebugMode = isDebugMode;
-		this.#urlManager = new StoryURLManager();
+		this.#storyUrlManager = new StoryURLManager();
 		this.#initialize();
 	}
 
@@ -21,16 +21,16 @@ class CampaignManager {
 	}
 
 	#handleInitialNavigation() {
-		const params = this.#urlManager.getParams();
-		const state = params.get(URLManager.PARAMS.STATE);
-		const campaignId = params.get(URLManager.PARAMS.CAMPAIGN);
-		const mapKey = params.get(URLManager.PARAMS.MAP);
-		const sessionId = params.get(URLManager.PARAMS.SESSION);
-		const characterName = params.get(URLManager.PARAMS.CHARACTER);
-		const viewType = params.get(URLManager.PARAMS.VIEW);
+		const params = this.#storyUrlManager.getParams();
+		const state = params.get(StoryURLManager.PARAMS.STATE);
+		const campaignId = params.get(StoryURLManager.PARAMS.CAMPAIGN);
+		const mapKey = params.get(StoryURLManager.PARAMS.MAP);
+		const sessionId = params.get(StoryURLManager.PARAMS.SESSION);
+		const characterName = params.get(StoryURLManager.PARAMS.CHARACTER);
+		const viewType = params.get(StoryURLManager.PARAMS.VIEW);
 
 		// Campaign selection state takes precedence
-		if (state === URLManager.VIEW_TYPES.CAMPAIGN_SELECTION) {
+		if (state === StoryURLManager.VIEW_TYPES.CAMPAIGN_SELECTION) {
 			this.showCampaignSelection();
 			return;
 		}
@@ -56,7 +56,7 @@ class CampaignManager {
 		window.addEventListener('popstate', (event) => {
 			const state = event.state;
 			
-			if (state?.view === 'campaigns' || state?.state === URLManager.VIEW_TYPES.CAMPAIGN_SELECTION) {
+			if (state?.view === 'campaigns' || state?.state === StoryURLManager.VIEW_TYPES.CAMPAIGN_SELECTION) {
 				this.showCampaignSelection();
 			} else if (state?.campaignId) {
 				this.loadCampaign(
@@ -288,9 +288,9 @@ class CampaignManager {
 		const targetView = this.#determineTargetView(campaign, mapKey, sessionId, characterName, viewType);
 		this.#hideAllViews();
 
-		if (targetView === URLManager.VIEW_TYPES.MAP) {
+		if (targetView === StoryURLManager.VIEW_TYPES.MAP) {
 			this.#loadMapCampaign(campaign, mapKey);
-		} else if (targetView === URLManager.VIEW_TYPES.STORY) {
+		} else if (targetView === StoryURLManager.VIEW_TYPES.STORY) {
 			this.#loadStoryCampaign(campaign, sessionId, characterName, viewType);
 		} else {
 			console.error('No valid content type determined for campaign:', campaign.id);
@@ -307,24 +307,24 @@ class CampaignManager {
 
 		// Map explicitly requested or default
 		if (mapKey || (!sessionId && !characterName && !viewType && hasMap)) {
-			return URLManager.VIEW_TYPES.MAP;
+			return StoryURLManager.VIEW_TYPES.MAP;
 		}
 
 		// Story explicitly requested or fallback
 		const storyViewTypes = [
-			URLManager.VIEW_TYPES.TIMELINE,
-			URLManager.VIEW_TYPES.QUESTS,
-			URLManager.VIEW_TYPES.NPCS,
-			URLManager.VIEW_TYPES.LOCATIONS,
-			URLManager.VIEW_TYPES.FACTIONS
+			StoryURLManager.VIEW_TYPES.TIMELINE,
+			StoryURLManager.VIEW_TYPES.QUESTS,
+			StoryURLManager.VIEW_TYPES.NPCS,
+			StoryURLManager.VIEW_TYPES.LOCATIONS,
+			StoryURLManager.VIEW_TYPES.FACTIONS
 		];
 
 		if (sessionId || characterName || storyViewTypes.includes(viewType) || (!hasMap && hasStory)) {
-			return URLManager.VIEW_TYPES.STORY;
+			return StoryURLManager.VIEW_TYPES.STORY;
 		}
 
 		// Default preference: map > story
-		return hasMap ? URLManager.VIEW_TYPES.MAP : hasStory ? URLManager.VIEW_TYPES.STORY : null;
+		return hasMap ? StoryURLManager.VIEW_TYPES.MAP : hasStory ? StoryURLManager.VIEW_TYPES.STORY : null;
 	}
 
 	#hideAllViews() {
@@ -342,18 +342,18 @@ class CampaignManager {
 		}
 
 		// Build URL and state
-		const url = this.#urlManager.buildURL({
+		const url = this.#storyUrlManager.buildURL({
 			campaign: campaign.id,
 			map: defaultMap,
-			target: this.#urlManager.getParam(URLManager.PARAMS.TARGET)
+			target: this.#storyUrlManager.getParam(StoryURLManager.PARAMS.TARGET)
 		});
 
-		const state = this.#urlManager.createState(URLManager.VIEW_TYPES.MAP, {
+		const state = this.#storyUrlManager.createState(StoryURLManager.VIEW_TYPES.MAP, {
 			campaignId: campaign.id,
 			mapKey: defaultMap
 		});
 
-		this.#urlManager.updateHistory(url, state);
+		this.#storyUrlManager.updateHistory(url, state);
 
 		// Show and initialize map
 		document.getElementById('map').style.display = 'block';
@@ -384,10 +384,10 @@ class CampaignManager {
 		const urlConfig = { campaign: campaign.id };
 		const stateConfig = { campaignId: campaign.id };
 
-		if (storyConfig.view === URLManager.VIEW_TYPES.SESSION) {
+		if (storyConfig.view === StoryURLManager.VIEW_TYPES.SESSION) {
 			urlConfig.session = storyConfig.sessionId;
 			stateConfig.sessionId = storyConfig.sessionId;
-		} else if (storyConfig.view === URLManager.VIEW_TYPES.CHARACTER) {
+		} else if (storyConfig.view === StoryURLManager.VIEW_TYPES.CHARACTER) {
 			urlConfig.character = storyConfig.characterName;
 			stateConfig.characterName = storyConfig.characterName;
 		} else {
@@ -395,10 +395,10 @@ class CampaignManager {
 			stateConfig.viewType = storyConfig.view;
 		}
 
-		const url = this.#urlManager.buildURL(urlConfig);
-		const state = this.#urlManager.createState(URLManager.VIEW_TYPES.STORY, stateConfig);
+		const url = this.#storyUrlManager.buildURL(urlConfig);
+		const state = this.#storyUrlManager.createState(StoryURLManager.VIEW_TYPES.STORY, stateConfig);
 
-		this.#urlManager.updateHistory(url, state);
+		this.#storyUrlManager.updateHistory(url, state);
 
 		// Show and initialize story view
 		document.getElementById('story-view').style.display = 'block';
@@ -426,11 +426,11 @@ class CampaignManager {
 
 	#determineStoryConfig(campaign, sessionId, characterName, viewType) {
 		const viewTypes = {
-			[URLManager.VIEW_TYPES.TIMELINE]: URLManager.VIEW_TYPES.TIMELINE,
-			[URLManager.VIEW_TYPES.QUESTS]: URLManager.VIEW_TYPES.QUESTS,
-			[URLManager.VIEW_TYPES.LOCATIONS]: URLManager.VIEW_TYPES.LOCATIONS,
-			[URLManager.VIEW_TYPES.NPCS]: URLManager.VIEW_TYPES.NPCS,
-			[URLManager.VIEW_TYPES.FACTIONS]: URLManager.VIEW_TYPES.FACTIONS
+			[StoryURLManager.VIEW_TYPES.TIMELINE]: StoryURLManager.VIEW_TYPES.TIMELINE,
+			[StoryURLManager.VIEW_TYPES.QUESTS]: StoryURLManager.VIEW_TYPES.QUESTS,
+			[StoryURLManager.VIEW_TYPES.LOCATIONS]: StoryURLManager.VIEW_TYPES.LOCATIONS,
+			[StoryURLManager.VIEW_TYPES.NPCS]: StoryURLManager.VIEW_TYPES.NPCS,
+			[StoryURLManager.VIEW_TYPES.FACTIONS]: StoryURLManager.VIEW_TYPES.FACTIONS
 		};
 
 		// Special views
@@ -445,7 +445,7 @@ class CampaignManager {
 		// Character view
 		if (characterName) {
 			return {
-				view: URLManager.VIEW_TYPES.CHARACTER,
+				view: StoryURLManager.VIEW_TYPES.CHARACTER,
 				sessionId: null,
 				characterName: characterName
 			};
@@ -456,7 +456,7 @@ class CampaignManager {
 		if (!finalSessionId) return null;
 
 		return {
-			view: URLManager.VIEW_TYPES.SESSION,
+			view: StoryURLManager.VIEW_TYPES.SESSION,
 			sessionId: finalSessionId,
 			characterName: null
 		};
@@ -493,10 +493,10 @@ class CampaignManager {
 		this.#recapModal?.hide();
 
 		// Build URL and state
-		const url = this.#urlManager.buildCampaignSelectionURL();
-		const state = this.#urlManager.createState(URLManager.VIEW_TYPES.CAMPAIGN_SELECTION);
+		const url = this.#storyUrlManager.buildCampaignSelectionURL();
+		const state = this.#storyUrlManager.createState(StoryURLManager.VIEW_TYPES.CAMPAIGN_SELECTION);
 
-		this.#urlManager.updateHistory(url, state, false);
+		this.#storyUrlManager.updateHistory(url, state, false);
 
 		// Show campaign selection view
 		document.getElementById('campaign-selection').style.display = 'flex';

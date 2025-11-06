@@ -3,12 +3,12 @@ class StoryHelperBase {
 	#placeholderProcessor;
 	#selectedItemId = null;
 	#listPanel = null;
-	#urlManager;
+	#storyUrlManager;
 
 	constructor(campaign, placeholderProcessor) {
 		this.#campaign = campaign;
 		this.#placeholderProcessor = placeholderProcessor;
-		this.#urlManager = new StoryURLManager();
+		this.#storyUrlManager = new StoryURLManager();
 	}
 
 	// Abstract methods - must be implemented by subclasses
@@ -38,31 +38,31 @@ class StoryHelperBase {
 
 	// URL management methods
 	getTargetFromUrl() {
-		return this.#urlManager.getParam(this.getUrlParam());
+		return this.#storyUrlManager.getParam(this.getUrlParam());
 	}
 
 	updateUrl(itemId) {
-		const params = this.#urlManager.getParams();
+		const params = this.#storyUrlManager.getParams();
 		
 		// Clear other item params
-		this.#urlManager.clearItemParamsExcept(params, this.getUrlParam());
+		this.#storyUrlManager.clearItemParamsExcept(params, this.getUrlParam());
 
 		// Build new URL
-		const url = this.#urlManager.buildStoryItemURL(
-			params.get(URLManager.PARAMS.CAMPAIGN),
-			params.get(URLManager.PARAMS.VIEW),
+		const url = this.#storyUrlManager.buildStoryItemURL(
+			params.get(StoryURLManager.PARAMS.CAMPAIGN),
+			params.get(StoryURLManager.PARAMS.VIEW),
 			itemId
 		);
 
 		// Create state
-		const state = this.#urlManager.createState(URLManager.VIEW_TYPES.STORY, {
-			campaignId: params.get(URLManager.PARAMS.CAMPAIGN),
-			viewType: params.get(URLManager.PARAMS.VIEW),
+		const state = this.#storyUrlManager.createState(StoryURLManager.VIEW_TYPES.STORY, {
+			campaignId: params.get(StoryURLManager.PARAMS.CAMPAIGN),
+			viewType: params.get(StoryURLManager.PARAMS.VIEW),
 			itemId: itemId,
 			itemType: this.getUrlParam()
 		});
 
-		this.#urlManager.updateHistory(url, state, true);
+		this.#storyUrlManager.updateHistory(url, state, true);
 	}
 
 	findItemById(items, itemId) {
