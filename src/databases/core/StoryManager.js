@@ -2,9 +2,10 @@ class StoryManager {
 	#rootElement;
 	#campaign;
 	#currentSessionId;
-	#currentView = 'session';
+	#currentView = URLManager.VIEW_TYPES.SESSION;
 	#selectedCharacterName = null;
 	#isSidebarCollapsed = false;
+	#urlManager;
 
 	// Helper instances
 	#contentRenderer;
@@ -21,21 +22,35 @@ class StoryManager {
 			return;
 		}
 
-		// Initialize helpers
+		this.#urlManager = new StoryURLManager();
+		this.#initializeHelpers(options);
+		this.#loadSavedState();
+		
+		this.updateCampaign(
+			options.campaignData,
+			options.initialSessionId,
+			options.initialCharacterName,
+			options.initialViewType
+		);
+	}
+
+	#initializeHelpers(options) {
 		this.#tooltipManager = new StoryHelperTooltip({
-			campaignId: options.campaignData?.id, // Add campaign ID
+			campaignId: options.campaignData?.id,
 			characters: options.campaignData?.metadata?.characters || [],
 			npcs: options.campaignData?.npcs || [],
 			locations: options.campaignData?.locations || [],
 			quests: options.campaignData?.quests || [],
 			factions: options.campaignData?.factions || [],
 		});
+		
 		this.#placeholderProcessor = new StoryHelperPlaceholder(this.#tooltipManager, options.campaignData);
 		this.#navigationManager = new StoryHelperNavigation();
 		this.#searchManager = new StoryHelperSearch(
 			() => this.#campaign,
 			(navigation) => this.#handleSearchNavigation(navigation)
 		);
+		
 		this.#sidebarManager = new StoryHelperSidebar(
 			() => this.#campaign,
 			() => this.#currentView,
@@ -44,31 +59,26 @@ class StoryManager {
 			(collapsed) => this.#handleSidebarToggle(collapsed),
 			(characterName) => this.#handleCharacterClick(characterName),
 			(sessionId) => this.#handleSessionClick(sessionId),
-			() => this.#handleTimelineClick(),
-			() => this.#handleQuestsClick(),
-			() => this.#handleLocationsClick(),
-			() => this.#handleNPCsClick(),
-			() => this.#handleFactionsClick(),
+			() => this.#handleViewChange(URLManager.VIEW_TYPES.TIMELINE),
+			() => this.#handleViewChange(URLManager.VIEW_TYPES.QUESTS),
+			() => this.#handleViewChange(URLManager.VIEW_TYPES.LOCATIONS),
+			() => this.#handleViewChange(URLManager.VIEW_TYPES.NPCS),
+			() => this.#handleViewChange(URLManager.VIEW_TYPES.FACTIONS),
 			this.#searchManager
 		);
+		
 		this.#contentRenderer = new StoryHelperContent(
 			this.#placeholderProcessor,
 			() => this.#campaign,
 			() => this.#currentSessionId
 		);
+	}
 
-		// Load saved sidebar state
+	#loadSavedState() {
 		const savedState = localStorage.getItem('story-sidebar-collapsed');
 		if (savedState) {
 			this.#isSidebarCollapsed = savedState === 'true';
 		}
-
-		this.updateCampaign(
-			options.campaignData,
-			options.initialSessionId,
-			options.initialCharacterName,
-			options.initialViewType
-		);
 	}
 
 	getSidebarElement() {
@@ -107,52 +117,45 @@ class StoryManager {
 
 	updateCampaign(campaign, sessionId = null, characterName = null, viewType = null) {
 		if (!campaign) return;
+		
 		this.#campaign = campaign;
+		this.#determineView(viewType, characterName, sessionId);
+		this.#searchManager?.invalidateIndex();
+		this.render();
+	}
 
-		// Determine initial state based on viewType
-		if (viewType === 'timeline') {
-			this.#currentView = 'timeline';
-			this.#selectedCharacterName = null;
-			this.#currentSessionId = sessionId || this.#getFirstSessionId();
-		} else if (viewType === 'quests') {
-			this.#currentView = 'quests';
-			this.#selectedCharacterName = null;
-			this.#currentSessionId = sessionId || this.#getFirstSessionId();
-		} else if (viewType === 'locations') {
-			this.#currentView = 'locations';
-			this.#selectedCharacterName = null;
-			this.#currentSessionId = sessionId || this.#getFirstSessionId();
-		} else if (viewType === 'npcs') {
-			this.#currentView = 'npcs';
-			this.#selectedCharacterName = null;
-			this.#currentSessionId = sessionId || this.#getFirstSessionId();
-		} else if (viewType === 'factions') {
-			this.#currentView = 'factions';
+	#determineView(viewType, characterName, sessionId) {
+		const viewTypeMap = {
+			[URLManager.VIEW_TYPES.TIMELINE]: URLManager.VIEW_TYPES.TIMELINE,
+			[URLManager.VIEW_TYPES.QUESTS]: URLManager.VIEW_TYPES.QUESTS,
+			[URLManager.VIEW_TYPES.LOCATIONS]: URLManager.VIEW_TYPES.LOCATIONS,
+			[URLManager.VIEW_TYPES.NPCS]: URLManager.VIEW_TYPES.NPCS,
+			[URLManager.VIEW_TYPES.FACTIONS]: URLManager.VIEW_TYPES.FACTIONS
+		};
+
+		if (viewTypeMap[viewType]) {
+			this.#currentView = viewTypeMap[viewType];
 			this.#selectedCharacterName = null;
 			this.#currentSessionId = sessionId || this.#getFirstSessionId();
 		} else if (characterName) {
-			this.#currentView = 'character';
+			this.#currentView = URLManager.VIEW_TYPES.CHARACTER;
 			this.#selectedCharacterName = characterName;
 			this.#currentSessionId = sessionId || this.#getFirstSessionId();
 		} else {
-			this.#currentView = 'session';
+			this.#currentView = URLManager.VIEW_TYPES.SESSION;
 			this.#selectedCharacterName = null;
 			this.#currentSessionId = sessionId || this.#getFirstSessionId();
-		}
-
-		// Validate session view
-		if (this.#currentView === 'session' && !this.#currentSessionId) {
-			console.error('StoryManager: No valid session ID for session view');
-			this.#currentSessionId = this.#getFirstSessionId();
 
 			if (!this.#currentSessionId) {
-				this.#rootElement.innerHTML = '<p>Error: No sessions found for this campaign.</p>';
-				return;
+				console.error('StoryManager: No valid session ID for session view');
+				this.#currentSessionId = this.#getFirstSessionId();
+
+				if (!this.#currentSessionId) {
+					this.#rootElement.innerHTML = '<p>Error: No sessions found for this campaign.</p>';
+					return;
+				}
 			}
 		}
-
-		this.#searchManager?.invalidateIndex();
-		this.render();
 	}
 
 	#getFirstSessionId() {
@@ -183,7 +186,7 @@ class StoryManager {
 		container.appendChild(mainContent);
 		this.#rootElement.appendChild(container);
 
-		if (this.#currentView === 'session') {
+		if (this.#currentView === URLManager.VIEW_TYPES.SESSION) {
 			this.#generateTableOfContents(contentArea);
 			this.#navigationManager.scrollToHash();
 		}
@@ -197,11 +200,12 @@ class StoryManager {
 	}
 
 	#handleCharacterClick(characterName) {
-		if (this.#currentView === 'character' && this.#selectedCharacterName === characterName) {
-			this.#currentView = 'session';
+		if (this.#currentView === URLManager.VIEW_TYPES.CHARACTER && 
+		    this.#selectedCharacterName === characterName) {
+			this.#currentView = URLManager.VIEW_TYPES.SESSION;
 			this.#selectedCharacterName = null;
 		} else {
-			this.#currentView = 'character';
+			this.#currentView = URLManager.VIEW_TYPES.CHARACTER;
 			this.#selectedCharacterName = characterName;
 		}
 
@@ -210,7 +214,7 @@ class StoryManager {
 	}
 
 	#handleSessionClick(sessionId) {
-		this.#currentView = 'session';
+		this.#currentView = URLManager.VIEW_TYPES.SESSION;
 		this.#selectedCharacterName = null;
 		this.#currentSessionId = sessionId;
 
@@ -218,50 +222,10 @@ class StoryManager {
 		this.render();
 	}
 
-	#handleTimelineClick() {
-		if (this.#currentView === 'timeline') return;
+	#handleViewChange(viewType) {
+		if (this.#currentView === viewType) return;
 
-		this.#currentView = 'timeline';
-		this.#selectedCharacterName = null;
-
-		this.#updateURL();
-		this.render();
-	}
-
-	#handleQuestsClick() {
-		if (this.#currentView === 'quests') return;
-
-		this.#currentView = 'quests';
-		this.#selectedCharacterName = null;
-
-		this.#updateURL();
-		this.render();
-	}
-
-	#handleLocationsClick() {
-		if (this.#currentView === 'locations') return;
-
-		this.#currentView = 'locations';
-		this.#selectedCharacterName = null;
-
-		this.#updateURL();
-		this.render();
-	}
-
-	#handleNPCsClick() {
-		if (this.#currentView === 'npcs') return;
-
-		this.#currentView = 'npcs';
-		this.#selectedCharacterName = null;
-
-		this.#updateURL();
-		this.render();
-	}
-
-	#handleFactionsClick() {
-		if (this.#currentView === 'factions') return;
-
-		this.#currentView = 'factions';
+		this.#currentView = viewType;
 		this.#selectedCharacterName = null;
 
 		this.#updateURL();
@@ -272,128 +236,75 @@ class StoryManager {
 		const { view, sessionId, characterName, itemId } = navigation;
 
 		switch (view) {
-			case 'session':
+			case URLManager.VIEW_TYPES.SESSION:
 				this.#handleSessionClick(sessionId);
 				break;
-			case 'character':
+			case URLManager.VIEW_TYPES.CHARACTER:
 				this.#handleCharacterClick(characterName);
 				break;
-			case 'quests':
-			case 'locations':
-			case 'npcs':
-			case 'factions':
-				// Navigate to the view
+			case URLManager.VIEW_TYPES.QUESTS:
+			case URLManager.VIEW_TYPES.LOCATIONS:
+			case URLManager.VIEW_TYPES.NPCS:
+			case URLManager.VIEW_TYPES.FACTIONS:
 				this.#currentView = view;
 				this.#selectedCharacterName = null;
 
-				// Build clean URL with only the params we need
-				const url = new URL(window.location.href);
-				const params = new URLSearchParams(); // Start fresh!
-
-				// Set campaign and view
-				params.set('campaign', this.#campaign.id);
-				params.set('view', view);
-
-				// Set item parameter if provided
-				if (itemId) {
-					const paramMap = {
-						quests: 'quest',
-						locations: 'location',
-						npcs: 'npc',
-						factions: 'faction',
-					};
-					params.set(paramMap[view], encodeURIComponent(itemId));
-				}
-
-				window.history.replaceState(null, '', `${url.pathname}?${params.toString()}`);
+				const url = this.#urlManager.buildStoryItemURL(this.#campaign.id, view, itemId);
+				this.#urlManager.updateHistory(url, null, true);
 				this.render();
 				break;
 		}
 	}
 
 	#updateURL() {
-		const url = new URL(window.location.href);
-		const params = url.searchParams;
-
-		params.set('campaign', this.#campaign.id);
-		params.delete('map');
-
-		// Clear all view-specific params first
-		params.delete('session');
-		params.delete('character');
-		params.delete('view');
-
-		// Clear item-specific params that don't match the current view
-		// Preserve the one that matches (if any) - StoryBase will handle setting it if needed
-		const itemParams = {
-			quests: 'quest',
-			locations: 'location',
-			npcs: 'npc',
-			factions: 'faction',
+		const config = {
+			campaign: this.#campaign.id
 		};
 
-		Object.entries(itemParams).forEach(([view, param]) => {
-			if (this.#currentView !== view) {
-				params.delete(param);
-			}
-			// If it matches, leave it alone - StoryBase will manage it
-		});
-
-		// Set appropriate params based on current view
+		// Set view-specific parameters
 		switch (this.#currentView) {
-			case 'timeline':
-			case 'quests':
-			case 'locations':
-			case 'factions':
-			case 'npcs':
-				params.set('view', this.#currentView);
+			case URLManager.VIEW_TYPES.TIMELINE:
+			case URLManager.VIEW_TYPES.QUESTS:
+			case URLManager.VIEW_TYPES.LOCATIONS:
+			case URLManager.VIEW_TYPES.FACTIONS:
+			case URLManager.VIEW_TYPES.NPCS:
+				config.view = this.#currentView;
 				break;
-			case 'character':
-				params.set('character', this.#selectedCharacterName);
+			case URLManager.VIEW_TYPES.CHARACTER:
+				config.character = this.#selectedCharacterName;
 				break;
-			case 'session':
+			case URLManager.VIEW_TYPES.SESSION:
 			default:
-				params.set('session', this.#currentSessionId);
+				config.session = this.#currentSessionId;
 				break;
 		}
 
-		const state = {
+		const url = this.#urlManager.buildURL(config);
+		const state = this.#urlManager.createState(this.#currentView, {
 			campaignId: this.#campaign.id,
-			sessionId: this.#currentView === 'session' ? this.#currentSessionId : null,
-			characterName: this.#currentView === 'character' ? this.#selectedCharacterName : null,
-			view: this.#currentView,
-		};
+			sessionId: this.#currentView === URLManager.VIEW_TYPES.SESSION ? this.#currentSessionId : null,
+			characterName: this.#currentView === URLManager.VIEW_TYPES.CHARACTER ? this.#selectedCharacterName : null,
+			viewType: this.#currentView
+		});
 
-		window.history.replaceState(state, '', `${url.pathname}?${params.toString()}`);
+		this.#urlManager.updateHistory(url, state, true);
 	}
 
 	async #loadContentArea(contentArea) {
 		contentArea.innerHTML = '';
 
-		switch (this.#currentView) {
-			case 'timeline':
-				this.#contentRenderer.renderTimeline(contentArea);
-				break;
-			case 'quests':
-				this.#contentRenderer.renderQuests(contentArea);
-				break;
-			case 'locations':
-				this.#contentRenderer.renderLocations(contentArea);
-				break;
-			case 'npcs':
-				this.#contentRenderer.renderNPCs(contentArea);
-				break;
-			case 'factions':
-				this.#contentRenderer.renderFactions(contentArea);
-				break;
-			case 'character':
-				this.#contentRenderer.renderCharacter(contentArea, this.#selectedCharacterName);
-				break;
-			case 'session':
-			default:
-				await this.#contentRenderer.renderSession(contentArea);
-				break;
-		}
+		const viewMap = {
+			[URLManager.VIEW_TYPES.TIMELINE]: () => this.#contentRenderer.renderTimeline(contentArea),
+			[URLManager.VIEW_TYPES.QUESTS]: () => this.#contentRenderer.renderQuests(contentArea),
+			[URLManager.VIEW_TYPES.LOCATIONS]: () => this.#contentRenderer.renderLocations(contentArea),
+			[URLManager.VIEW_TYPES.NPCS]: () => this.#contentRenderer.renderNPCs(contentArea),
+			[URLManager.VIEW_TYPES.FACTIONS]: () => this.#contentRenderer.renderFactions(contentArea),
+			[URLManager.VIEW_TYPES.CHARACTER]: () => this.#contentRenderer.renderCharacter(contentArea, this.#selectedCharacterName),
+			[URLManager.VIEW_TYPES.SESSION]: () => this.#contentRenderer.renderSession(contentArea)
+		};
+
+		const renderMethod = viewMap[this.#currentView] || viewMap[URLManager.VIEW_TYPES.SESSION];
+		await renderMethod();
 	}
 
 	#generateTableOfContents(contentArea) {
