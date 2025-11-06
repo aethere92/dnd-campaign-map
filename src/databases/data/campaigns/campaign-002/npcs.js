@@ -1062,7 +1062,7 @@ const CAMPAIGN_002_NPCS = [
 		],
 		link: [
 			{
-				title: 'Care for Thylacoleo Cubs',
+				title: '[ENTITY:quest:Care for Thylacoleo Cubs]',
 				link: '?campaign=campaign-002&view=quests&quest=Care%2520for%2520Thylacoleo%2520Cubs',
 			},
 		],
