@@ -70,19 +70,19 @@ const CAMPAIGN_002_NPCS = [
 		],
 		link: [
 			{
-				title: 'Stop the Invasion',
+				title: '[ENTITY:quest:Stop the Invasion]',
 				link: '?campaign=campaign-002&view=quests&quest=Stop%2520the%2520Invasion',
 			},
 			{
-				title: 'Investigate Witchwood and Wrath Keep',
+				title: '[ENTITY:quest:Investigate Witchwood and Wrath Keep]',
 				link: '?campaign=campaign-002&view=quests&quest=Investigate%2520Witchwood%2520and%2520Wrath%2520Keep',
 			},
 			{
-				title: "Retrieve Dead Man's Boots from Nels Huto",
+				title: "[ENTITY:quest:Retrieve Dead Man's Boots from Nels Huto]",
 				link: "?campaign=campaign-002&view=quests&quest=Retrieve%2520Dead%2520Man's%2520Boots%2520from%2520Nels%2520Huto",
 			},
 			{
-				title: 'Investigate Cave System',
+				title: '[ENTITY:quest:Investigate Cave System]',
 				link: '?campaign=campaign-002&view=quests&quest=Investigate%2520Cave%2520System',
 			},
 		],
@@ -114,7 +114,7 @@ const CAMPAIGN_002_NPCS = [
 		],
 		link: [
 			{
-				title: 'Stop the Invasion',
+				title: '[ENTITY:quest:Stop the Invasion]',
 				link: '?campaign=campaign-002&view=quests&quest=Stop%2520the%2520Invasion',
 			},
 		],
@@ -141,11 +141,11 @@ const CAMPAIGN_002_NPCS = [
 		encounters: [{ session: 2, description: 'Revealed through interrogation of captured hobgoblin.' }],
 		link: [
 			{
-				title: 'Stop the Invasion',
+				title: '[ENTITY:quest:Stop the Invasion]',
 				link: '?campaign=campaign-002&view=quests&quest=Stop%2520the%2520Invasion',
 			},
 			{
-				title: 'The Blue Bear Alliance - Prevent the Apocalypse',
+				title: '[ENTITY:quest:The Blue Bear Alliance - Prevent the Apocalypse]',
 				link: '?campaign=campaign-002&view=quests&quest=The%2520Blue%2520Bear%2520Alliance%2520-%2520Prevent%2520the%2520Apocalypse',
 			},
 		],
@@ -196,7 +196,7 @@ const CAMPAIGN_002_NPCS = [
 		],
 		link: [
 			{
-				title: 'Care for Thylacoleo Cubs',
+				title: '[ENTITY:quest:Care for Thylacoleo Cubs]',
 				link: '?campaign=campaign-002&view=quests&quest=Care%2520for%2520Thylacoleo%2520Cubs',
 			},
 		],
@@ -229,15 +229,15 @@ const CAMPAIGN_002_NPCS = [
 		],
 		link: [
 			{
-				title: 'Brotherhood and Kilgor Investigation',
+				title: '[ENTITY:quest:Brotherhood and Kilgor Investigation]',
 				link: '?campaign=campaign-002&view=quests&quest=Brotherhood%2520and%2520Kilgor%2520Investigation',
 			},
 			{
-				title: 'Investigate Witchwood and Wrath Keep',
+				title: '[ENTITY:quest:Investigate Witchwood and Wrath Keep]',
 				link: '?campaign=campaign-002&view=quests&quest=Investigate%2520Witchwood%2520and%2520Wrath%2520Keep',
 			},
 			{
-				title: 'Care for Thylacoleo Cubs',
+				title: '[ENTITY:quest:Care for Thylacoleo Cubs]',
 				link: '?campaign=campaign-002&view=quests&quest=Care%2520for%2520Thylacoleo%2520Cubs',
 			},
 		],
@@ -268,7 +268,7 @@ const CAMPAIGN_002_NPCS = [
 		],
 		link: [
 			{
-				title: 'Rescue Anya',
+				title: '[ENTITY:quest:Rescue Anya]',
 				link: '?campaign=campaign-002&view=quests&quest=Rescue%2520Anya',
 			},
 		],
@@ -301,7 +301,7 @@ const CAMPAIGN_002_NPCS = [
 		encounters: [{ session: 2, description: 'Warned about spider demon, gave Olek emergency contact tattoo.' }],
 		link: [
 			{
-				title: 'Stop the Invasion',
+				title: '[ENTITY:quest:Stop the Invasion]',
 				link: '?campaign=campaign-002&view=quests&quest=Stop%2520the%2520Invasion',
 			},
 		],
@@ -331,7 +331,7 @@ const CAMPAIGN_002_NPCS = [
 		encounters: [{ session: 3, description: 'Met party to discuss cave system beneath city.' }],
 		link: [
 			{
-				title: 'Investigate Cave System',
+				title: '[ENTITY:quest:Investigate Cave System]',
 				link: '?campaign=campaign-002&view=quests&quest=Investigate%2520Cave%2520System',
 			},
 		],
@@ -364,11 +364,11 @@ const CAMPAIGN_002_NPCS = [
 		],
 		link: [
 			{
-				title: 'Stop the Invasion',
+				title: '[ENTITY:quest:Stop the Invasion]',
 				link: '?campaign=campaign-002&view=quests&quest=Stop%2520the%2520Invasion',
 			},
 			{
-				title: 'Investigate Cave System',
+				title: '[ENTITY:quest:Investigate Cave System]',
 				link: '?campaign=campaign-002&view=quests&quest=Investigate%2520Cave%2520System',
 			},
 		],
@@ -401,19 +401,19 @@ const CAMPAIGN_002_NPCS = [
 		],
 		link: [
 			{
-				title: 'Investigate Witchwood and Wrath Keep',
+				title: '[ENTITY:quest:Investigate Witchwood and Wrath Keep]',
 				link: '?campaign=campaign-002&view=quests&quest=Investigate%2520Witchwood%2520and%2520Wrath%2520Keep',
 			},
 			{
-				title: 'Rescue Anya',
+				title: '[ENTITY:quest:Rescue Anya]',
 				link: '?campaign=campaign-002&view=quests&quest=Rescue%2520Anya',
 			},
 			{
-				title: 'Hydra Egg Safekeeping',
+				title: '[ENTITY:quest:Hydra Egg Safekeeping]',
 				link: '?campaign=campaign-002&view=quests&quest=Hydra%2520Egg%2520Safekeeping',
 			},
 			{
-				title: 'Care for Thylacoleo Cubs',
+				title: '[ENTITY:quest:Care for Thylacoleo Cubs]',
 				link: '?campaign=campaign-002&view=quests&quest=Care%2520for%2520Thylacoleo%2520Cubs',
 			},
 		],
@@ -444,7 +444,7 @@ const CAMPAIGN_002_NPCS = [
 		encounters: [{ session: 3, description: 'Rescued in distressed state, taken to Avarthel.' }],
 		link: [
 			{
-				title: 'Rescue Anya',
+				title: '[ENTITY:quest:Rescue Anya]',
 				link: '?campaign=campaign-002&view=quests&quest=Rescue%2520Anya',
 			},
 		],
@@ -471,7 +471,7 @@ const CAMPAIGN_002_NPCS = [
 		encounters: [{ session: 3, description: 'Recovering in infirmary after worg attack, provided info about Anya.' }],
 		link: [
 			{
-				title: 'Rescue Anya',
+				title: '[ENTITY:quest:Rescue Anya]',
 				link: '?campaign=campaign-002&view=quests&quest=Rescue%2520Anya',
 			},
 		],
@@ -532,11 +532,11 @@ const CAMPAIGN_002_NPCS = [
 		encounters: [{ session: 5, description: 'Rescued party from sea, demanded 20% fee, offered Sandro deal.' }],
 		link: [
 			{
-				title: 'Brotherhood and Kilgor Investigation',
+				title: '[ENTITY:quest:Brotherhood and Kilgor Investigation]',
 				link: '?campaign=campaign-002&view=quests&quest=Brotherhood%2520and%2520Kilgor%2520Investigation',
 			},
 			{
-				title: 'Retrieve Locket of Hair from Sandro',
+				title: '[ENTITY:quest:Retrieve Locket of Hair from Sandro]',
 				link: '?campaign=campaign-002&view=quests&quest=Retrieve%2520Locket%2520of%2520Hair%2520from%2520Sandro',
 			},
 		],
@@ -568,11 +568,11 @@ const CAMPAIGN_002_NPCS = [
 		encounters: [{ session: 5, description: "Rescued party, probed Soshi's mind, attacked Bonnie for cursed coin." }],
 		link: [
 			{
-				title: 'Brotherhood and Kilgor Investigation',
+				title: '[ENTITY:quest:Brotherhood and Kilgor Investigation]',
 				link: '?campaign=campaign-002&view=quests&quest=Brotherhood%2520and%2520Kilgor%2520Investigation',
 			},
 			{
-				title: 'Retrieve Locket of Hair from Sandro',
+				title: '[ENTITY:quest:Retrieve Locket of Hair from Sandro]',
 				link: '?campaign=campaign-002&view=quests&quest=Retrieve%2520Locket%2520of%2520Hair%2520from%2520Sandro',
 			},
 		],
@@ -625,11 +625,11 @@ const CAMPAIGN_002_NPCS = [
 		],
 		link: [
 			{
-				title: 'Investigate Cave System',
+				title: '[ENTITY:quest:Investigate Cave System]',
 				link: '?campaign=campaign-002&view=quests&quest=Investigate%2520Cave%2520System',
 			},
 			{
-				title: 'Winter Rose Spider Bounty',
+				title: '[ENTITY:quest:Winter Rose Spider Bounty]',
 				link: '?campaign=campaign-002&view=quests&quest=Winter%2520Rose%2520Spider%2520Bounty',
 			},
 		],
@@ -660,7 +660,7 @@ const CAMPAIGN_002_NPCS = [
 		],
 		link: [
 			{
-				title: 'Winter Rose Spider Bounty',
+				title: '[ENTITY:quest:Winter Rose Spider Bounty]',
 				link: '?campaign=campaign-002&view=quests&quest=Winter%2520Rose%2520Spider%2520Bounty',
 			},
 		],
@@ -693,11 +693,11 @@ const CAMPAIGN_002_NPCS = [
 		],
 		link: [
 			{
-				title: 'Brotherhood and Kilgor Investigation',
+				title: '[ENTITY:quest:Brotherhood and Kilgor Investigation]',
 				link: '?campaign=campaign-002&view=quests&quest=Brotherhood%2520and%2520Kilgor%2520Investigation',
 			},
 			{
-				title: 'Investigate the Null Brand',
+				title: '[ENTITY:quest:Investigate the Null Brand]',
 				link: '?campaign=campaign-002&view=quests&quest=Investigate%2520the%2520Null%2520Brand',
 			},
 		],
@@ -731,11 +731,11 @@ const CAMPAIGN_002_NPCS = [
 		],
 		link: [
 			{
-				title: 'The Blue Bear Alliance - Prevent the Apocalypse',
+				title: '[ENTITY:quest:The Blue Bear Alliance - Prevent the Apocalypse]',
 				link: '?campaign=campaign-002&view=quests&quest=The%2520Blue%2520Bear%2520Alliance%2520-%2520Prevent%2520the%2520Apocalypse',
 			},
 			{
-				title: 'Brotherhood and Kilgor Investigation',
+				title: '[ENTITY:quest:Brotherhood and Kilgor Investigation]',
 				link: '?campaign=campaign-002&view=quests&quest=Brotherhood%2520and%2520Kilgor%2520Investigation',
 			},
 		],
@@ -765,7 +765,7 @@ const CAMPAIGN_002_NPCS = [
 		encounters: null,
 		link: [
 			{
-				title: 'Retrieve Locket of Hair from Sandro',
+				title: '[ENTITY:quest:Retrieve Locket of Hair from Sandro]',
 				link: '?campaign=campaign-002&view=quests&quest=Retrieve%2520Locket%2520of%2520Hair%2520from%2520Sandro',
 			},
 		],
@@ -886,7 +886,7 @@ const CAMPAIGN_002_NPCS = [
 		encounters: [{ session: 1, description: 'Mentioned by Soranna as last holder of boots.' }],
 		link: [
 			{
-				title: "Retrieve Dead Man's Boots from Nels Huto",
+				title: "[ENTITY:quest:Retrieve Dead Man's Boots from Nels Huto]",
 				link: "?campaign=campaign-002&view=quests&quest=Retrieve%2520Dead%2520Man's%2520Boots%2520from%2520Nels%2520Huto",
 			},
 		],
@@ -938,7 +938,7 @@ const CAMPAIGN_002_NPCS = [
 		encounters: [{ session: 3, description: 'Shed healing tears on Anya to stabilize her.' }],
 		link: [
 			{
-				title: 'Rescue Anya',
+				title: '[ENTITY:quest:Rescue Anya]',
 				link: '?campaign=campaign-002&view=quests&quest=Rescue%2520Anya',
 			},
 		],
@@ -1062,7 +1062,7 @@ const CAMPAIGN_002_NPCS = [
 		],
 		link: [
 			{
-				title: '[ENTITY:quest:Care for Thylacoleo Cubs]',
+				title: '[ENTITY:quest:[ENTITY:quest:Care for Thylacoleo Cubs]]',
 				link: '?campaign=campaign-002&view=quests&quest=Care%2520for%2520Thylacoleo%2520Cubs',
 			},
 		],
@@ -1089,7 +1089,7 @@ const CAMPAIGN_002_NPCS = [
 		encounters: null,
 		link: [
 			{
-				title: "Retrieve Dead Man's Boots from Nels Huto",
+				title: "[ENTITY:quest:Retrieve Dead Man's Boots from Nels Huto]",
 				link: "?campaign=campaign-002&view=quests&quest=Retrieve%2520Dead%2520Man's%2520Boots%2520from%2520Nels%2520Huto",
 			},
 		],
@@ -1193,11 +1193,11 @@ const CAMPAIGN_002_NPCS = [
 		encounters: [{ session: 7, description: "Seen in Bonnie's vision fighting Kilgor." }],
 		link: [
 			{
-				title: 'The Blue Bear Alliance - Prevent the Apocalypse',
+				title: '[ENTITY:quest:The Blue Bear Alliance - Prevent the Apocalypse]',
 				link: '?campaign=campaign-002&view=quests&quest=The%2520Blue%2520Bear%2520Alliance%2520-%2520Prevent%2520the%2520Apocalypse',
 			},
 			{
-				title: 'Brotherhood and Kilgor Investigation',
+				title: '[ENTITY:quest:Brotherhood and Kilgor Investigation]',
 				link: '?campaign=campaign-002&view=quests&quest=Brotherhood%2520and%2520Kilgor%2520Investigation',
 			},
 		],
@@ -1227,11 +1227,11 @@ const CAMPAIGN_002_NPCS = [
 		encounters: [{ session: 7, description: "Seen in Bonnie's vision fighting Kilgor." }],
 		link: [
 			{
-				title: 'The Blue Bear Alliance - Prevent the Apocalypse',
+				title: '[ENTITY:quest:The Blue Bear Alliance - Prevent the Apocalypse]',
 				link: '?campaign=campaign-002&view=quests&quest=The%2520Blue%2520Bear%2520Alliance%2520-%2520Prevent%2520the%2520Apocalypse',
 			},
 			{
-				title: 'Brotherhood and Kilgor Investigation',
+				title: '[ENTITY:quest:Brotherhood and Kilgor Investigation]',
 				link: '?campaign=campaign-002&view=quests&quest=Brotherhood%2520and%2520Kilgor%2520Investigation',
 			},
 		],
@@ -1280,7 +1280,7 @@ const CAMPAIGN_002_NPCS = [
 		encounters: [{ session: null, description: "Seen in Olek's vision leading Angevin fleet." }],
 		link: [
 			{
-				title: 'The Blue Bear Alliance - Prevent the Apocalypse',
+				title: '[ENTITY:quest:The Blue Bear Alliance - Prevent the Apocalypse]',
 				link: '?campaign=campaign-002&view=quests&quest=The%2520Blue%2520Bear%2520Alliance%2520-%2520Prevent%2520the%2520Apocalypse',
 			},
 		],

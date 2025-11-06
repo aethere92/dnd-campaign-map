@@ -2341,10 +2341,6 @@ blockquote i {
 	display: flex;
 	gap: var(--spacing-xs);
 	align-items: center;
-
-	&::before {
-		content: '🔗';
-	}
 }
 
 /* =================================================================== */
