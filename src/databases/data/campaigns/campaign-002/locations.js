@@ -1,8 +1,10 @@
 const CAMPAIGN_002_LOCATIONS = [
+	// ========== TOWNS ==========
 	{
 		id: 'drellins-ferry',
 		name: "Drellin's Ferry",
 		type: 'town',
+		parent: null,
 		region: 'Elsir Vale',
 		population: '1,150',
 		races: 'Mixed (humans, halfling, dwarf)',
@@ -15,25 +17,17 @@ const CAMPAIGN_002_LOCATIONS = [
 			'Orchards and fields',
 			'Tollhouse',
 			'Barracks',
-			'Shrine of Pelor',
-			"Sertieren's Mansion",
-			'Green Apple Inn',
-			'General Store',
-			"Armorer's Forge",
 			'Shopping District',
-			'Underground cave system (sealed by light barrier)',
 		],
 		npcs: [
 			'Captain Soranna',
 			'Councilman Norro',
 			'Sergeant Hersk',
 			'Brother Denny',
-			'Avartel (left for mountains)',
-			'Sertieren (planning to leave)',
+			'Sertieren',
 			'Tarma',
 			'Kat',
 			'Yoghurt',
-			'Anya (left with Avarthel)',
 			'Lem',
 			'Jareth',
 			'Jaret',
@@ -43,7 +37,6 @@ const CAMPAIGN_002_LOCATIONS = [
 			'Witchwood (northwest, several hours travel)',
 			'Brindol (accessible via trade routes)',
 			'Bridge (one day northeast - strategic target)',
-			'Ruined Fortress (in Witchwood)',
 		],
 		threats: [
 			'Coordinated raider attacks',
@@ -53,53 +46,11 @@ const CAMPAIGN_002_LOCATIONS = [
 		],
 	},
 	{
-		id: 'witchwood',
-		name: 'The Witchwood',
-		type: 'region',
-		region: 'Elsir Vale',
-		description:
-			"A dense, dangerous forest to the northwest of Drellin's Ferry. Parts of it are corrupted by blighted magic that creates illusions and distorts perception. Undead are rumored to wander its borders. Generally held to be haunted by the restless spirits of the ancient human druidic folk who once dwelt here, the Witchwood is a lush, wet woodland interspersed with swampy stretches in the vicinity of the larger rivers. The Witchwood is a warm forest with a mix of oaks, subtropical evergreens, and plenty of undergrowth. Any party cutting cross-country through the forest without following a trail stands an excellent chance of getting very lost. Location of missing barbarian scouts and enemy activity.",
-		features: [
-			'Dense oak forest',
-			'Blighted areas with illusion magic',
-			'Twisted, dead trees',
-			'Brooks and clearings',
-			'Ancient ruins',
-			'Swamplands',
-			'Subtropical evergreens',
-			'Thick undergrowth',
-		],
-		connections: [
-			"Drellin's Ferry (several hours southeast)",
-			'Wrath Keep (deep within)',
-			'Ruined Fortress (within forest)',
-			'Secret meeting pond (4 hours walk from town)',
-		],
-		threats: [
-			'Hobgoblin raiders',
-			'Worgs and worg riders',
-			'Undead',
-			'Thylacoleos',
-			'Raptors',
-			'Hydras',
-			'Blighted magic corruption',
-		],
-	},
-	{
-		id: 'wrath-keep',
-		name: 'Wrath Keep',
-		type: 'fortress',
-		region: 'The Witchwood',
-		description:
-			'A cursed fortress deep in the Witchwood, guarded by undead. The area is dangerous and avoided by locals.',
-		history: 'An ancient fortress that fell to a curse. Now inhabited by undead guardians.',
-		features: ['Cursed grounds', 'Undead guardians'],
-	},
-	{
 		id: 'green-apple-inn',
 		name: 'Green Apple Inn',
-		type: 'other_structure',
-		region: "Drellin's Ferry",
+		type: 'inn',
+		parent: 'drellins-ferry',
+		region: null,
 		description:
 			'A welcoming inn run by the dwarf Tarma. Serves as the primary lodging for adventurers and travelers. Known for hearty breakfasts and experimental cuisine.',
 		features: ['Common room', 'Multiple guest rooms', 'Kitchen', 'Bar area'],
@@ -108,8 +59,9 @@ const CAMPAIGN_002_LOCATIONS = [
 	{
 		id: 'sertierten-mansion',
 		name: "Sertieren's Mansion",
-		type: 'other_structure',
-		region: "Drellin's Ferry",
+		type: 'mansion',
+		parent: 'drellins-ferry',
+		region: null,
 		description:
 			"A wizard's mansion featuring a magical fountain and animated armor guards. Home to the eccentric wizard Sertieren. Features a magical speaking fountain and halfling servant.",
 		features: ['Magical fountain entrance', 'Animated armor guardians', 'Laboratory', 'Extensive library'],
@@ -118,54 +70,19 @@ const CAMPAIGN_002_LOCATIONS = [
 	{
 		id: 'shrine-of-pelor',
 		name: 'Shrine of Pelor',
-		type: 'other_structure',
-		region: "Drellin's Ferry",
+		type: 'shrine',
+		parent: 'drellins-ferry',
+		region: null,
 		description:
 			"A religious shrine dedicated to Pelor, maintained by Brother Denny and other clerics. Religious site in Drellin's Ferry where offerings are made and guidance is sought.",
 		npcs: ['Brother Denny', 'Avartel (formerly)'],
 	},
 	{
-		id: 'avarthel-grove',
-		name: "Avarthel's Grove",
-		type: 'other_structure',
-		region: "Near Drellin's Ferry",
-		description:
-			"A beautiful magical grove at the forest's edge with proximity to the Feywild. The grove has positive effects on visitors, particularly those with Fey heritage. Magical grove near the Feywild; healing site and refuge near Drellin's Ferry. Home to the phoenix Loïc and protected by a snake guardian.",
-		features: [
-			'Feywild connection',
-			'Healing properties',
-			'Giant snake guardian',
-			'Size-enhancing effects on Fey creatures',
-		],
-		npcs: ['Avarthel (left for mountains)', 'Loic (Phoenix)', 'Giant snake guardian'],
-		history: 'Created by Avarthel. Left abandoned when he departed for the mountains.',
-	},
-	{
-		id: 'dusk-way',
-		name: 'The Dusk Way',
-		type: 'region',
-		region: "Between Drellin's Ferry and Witchwood",
-		description:
-			'A treacherous path through swampland leading into the Witchwood. Critical trade route that raiders are attempting to close off.',
-		features: ['Swamplands', 'Wooden bridge (trapped)', 'Dense forest', 'Tall grass and broken fences'],
-		threats: ['Hobgoblin ambushes', 'Hydra', 'Bear traps', 'Worg riders'],
-	},
-	{
-		id: 'bridge-ambush',
-		name: 'Bridge Ambush Site',
-		type: 'other_structure',
-		region: 'The Dusk Way',
-		description:
-			'A wooden bridge over murky swamp water where hobgoblins set up an elaborate ambush with a five-headed hydra.',
-		history:
-			'Site of major battle where party defeated hydra and raiders. At least 10 travelers were killed and partially eaten here.',
-		features: ['Wooden bridge with trap mechanisms', 'Swamp beneath', 'Concealed bear traps (30+ dismantled by party)'],
-	},
-	{
 		id: 'underground-temple',
 		name: 'Underground Temple Complex',
 		type: 'dungeon',
-		region: "Beneath Drellin's Ferry",
+		parent: 'drellins-ferry',
+		region: null,
 		description:
 			'A vast underground complex with flooded caves, an arena, and laboratory chambers. Protected by a barrier of light that prevents city-affiliated people from passing.',
 		history:
@@ -200,63 +117,11 @@ const CAMPAIGN_002_LOCATIONS = [
 		],
 	},
 	{
-		id: 'ruined-fortress',
-		name: 'Ruined Fortress',
-		type: 'fortress',
-		region: 'The Witchwood',
-		description:
-			'An ancient fortress with a strange cleansed feeling despite being occupied by raiders. Features crumbling walls, a central keep, and various outbuildings.',
-		history:
-			'Recently occupied by Red Hand forces as a staging ground. Site of major battle where party fought hobgoblins, worg riders, manticore, minotaur, and mud elemental.',
-		features: [
-			'Main courtyard with boulders',
-			'Stables (burned during battle)',
-			'Ruined tower with caved-in roof',
-			'Main keep with single battlement',
-			'Barracks',
-			'Underground tunnels',
-			'Throne room',
-			'Torture chamber',
-			'Map room with tactical intelligence',
-		],
-		npcs: ['Skeleton patrol (defeated)', 'Hobgoblin forces (defeated)', 'Orc shaman (fled)', 'Minotaur (fled)'],
-		items: ['Map showing troop movements', 'Intelligence about 30-unit army', 'Bridge location marked'],
-		connections: ['Underground passages', 'Vault chamber (below)', 'Strategic bridge (one day northeast)'],
-	},
-	{
-		id: 'vault-chamber',
-		name: 'The Vault / Null Brand Chamber',
-		type: 'dungeon',
-		region: 'Beneath Ruined Fortress',
-		description:
-			'A vast blackstone chamber housing the Null Brand artifact. The ground is barren dirt, all vegetation reduced to ash. Heavy, oppressive atmosphere with metallic tang.',
-		history:
-			"Ancient vault designed to contain the Null Brand. Kalistra sacrificed herself here to contain the artifact's corruption. Site of major battle with Red Hand forces and dragon.",
-		features: [
-			'Blackstone walls (cracked and scorched)',
-			'Central pedestal',
-			'Arcane chain bindings',
-			'Ritual circle (blood magic)',
-			'Multiple corpses of previous ritualists',
-			'Skeletal remains with magical boots',
-		],
-		npcs: ['Kalistra (deceased, fused to artifact)', 'Red dragon (retreated)', '20 armored orcs (battle)'],
-		items: [
-			'Null Brand artifact (shattered)',
-			'Belt of Strength 18',
-			'Amulet of magical absorption',
-			'The Deama Sutrel book',
-			'Bone flute',
-			'Peculiar mushrooms',
-			'Magical boots',
-		],
-		threats: ['Corrupt magic fluctuations', 'Wild magic effects', 'Necrotic energy waves', 'Red Hand forces'],
-	},
-	{
 		id: 'ritual-chamber',
 		name: 'Blood Ritual Chamber',
 		type: 'dungeon',
-		region: 'Underground Complex',
+		parent: 'underground-temple',
+		region: null,
 		description:
 			'A circular stone chamber with painted runes and a large ritual circle stained with dried blood. The air occasionally shimmers with whispers.',
 		history:
@@ -282,7 +147,8 @@ const CAMPAIGN_002_LOCATIONS = [
 		id: 'megatherium-chamber',
 		name: 'Megatherium Chamber',
 		type: 'dungeon',
-		region: 'Underground Cave System',
+		parent: 'underground-temple',
+		region: null,
 		description:
 			'A large cavern housing two Megatherium (giant prehistoric sloth-bear-elephants). The creatures generate amber light from their bodies.',
 		features: [
@@ -296,9 +162,350 @@ const CAMPAIGN_002_LOCATIONS = [
 		history: 'Abandoned by Broken Shackle tribe members who answered "red hand" call two weeks prior.',
 	},
 	{
+		id: 'brindol',
+		name: 'Brindol',
+		type: 'city',
+		parent: null,
+		region: 'Elsir Vale',
+		population: '6,700',
+		races: 'Humans, half-elves, dwarves',
+		ruler: 'Lord Aaron Jarmaath',
+		description:
+			"A city with a dry dock and home to the Lion's Guard. Trade hub that has been raided by pirates. Brindol is a small city in the heart of Elsir Vale. One of the largest settlements in the Vale, Brindol is a prosperous farming community and caravan stopover located along the Dawn Way on the south bank of the Elsir River. Orchards of apple and pear trees follow the river's winding shores, while broad grain fields and farmlands surround the town for miles in all directions. Brindol is the home of Lord Aaron Jarmaath. His small keep and the city walls are the only fortifications of note this side of Dennovar (city 100 miles to east).",
+		npcs: ['Captain Hans Mariner', 'Lord Aaron Jarmaath'],
+		connections: [
+			"Drellin's Ferry (via trade routes)",
+			"Coast (raided by Leviathan's Hall)",
+			'Dennovar (100 miles east)',
+		],
+	},
+	{
+		id: 'luskan',
+		name: 'Luskan',
+		type: 'city',
+		parent: null,
+		region: 'Sword Coast North, northwest Faerûn',
+		size: 'Large town (1480 DR)',
+		races: 'Mostly humans; drow',
+		imports: 'Silver, scrimshaw, timber, dwarven weapons',
+		exports: 'Netherese artifacts, weapons',
+		government_type: 'Oligarchy',
+		ruler: 'Jarlaxle Baenre (1489 DR)',
+		description:
+			"Luskan, also known as the City of Sails, was a port city at the mouth of the River Mirar on the Sword Coast North. Luskan, despite the presence of the Ten Towns, was considered by many to be civilization's farthest reach. Although once a bustling city, in the days prior to the Spellplague, the city would suffer greatly at the hands of Arklem Greeth. The resulting disaster would allow the Spellplague to nearly annihilate the city, with it having only a fraction of its former populace.",
+		features: ['Host Tower of the Arcane', 'Port facilities', 'River Mirar mouth'],
+	},
+	{
+		id: 'neverwinter',
+		name: 'Neverwinter',
+		type: 'city',
+		parent: null,
+		region: 'The North',
+		description:
+			'One of the greatest cities in the North. High walls, well-defended. Major city targeted in visions by a unified enemy force including Red Wizards of Thay, Arcane Brotherhood mages, and chromatic dragons. The siege involves mass sacrifice rituals to destroy the city walls.',
+		history: "In Soshi's vision, under siege by combined forces using prisoners as ritual fuel to bring down walls.",
+		threats: [
+			'Red Wizards of Thay (in vision)',
+			'Arcane Brotherhood (in vision)',
+			'Blue Bear faction (in vision)',
+			'Chromatic dragons (in vision)',
+		],
+	},
+	{
+		id: 'bremen',
+		name: 'Bremen',
+		type: 'city',
+		parent: null,
+		region: "Near Olek's Home",
+		description:
+			'A strategic location that will be the site of a major battle that depletes paladin forces. Site of a key battle that weakened defenses and allowed cult infiltration into paladin orders, leading to widespread corruption.',
+		history:
+			'In vision, "Battle for Bremen" results in massive casualties for paladin orders, forcing them to take unvetted recruits who turn out to be Lamashtu cultists.',
+		threats: ['Angevin fleet (in vision)', 'Resurrected god Kresimir (in vision)', 'Red Hand forces (in vision)'],
+	},
+	{
+		id: 'pelagos',
+		name: 'Pelagos',
+		type: 'city',
+		parent: null,
+		region: 'Lustria Continent',
+		description:
+			"A kingdom on the Lustria continent, now ruled by the necromancer Sandro. Formerly ruled by House Corina. Bianca's homeland on the continent of Lustria; torn by civil war and usurped by the necromancer Sandro who murdered her father and seized the throne.",
+		history:
+			'Fell into civil war after lizardfolk mysteriously retreated. Sandro emerged, killed the king, and seized the throne.',
+		npcs: ['Sandro (current tyrant)', 'House Corina (exiled)'],
+	},
+	{
+		id: 'kaedins-village',
+		name: "Kaedin's Village",
+		type: 'village',
+		parent: null,
+		region: 'Unknown',
+		description: "Kaedin's home village, next to another village that was destroyed in his vision.",
+		threats: ['Blue Bear clan (in vision)', 'Red Hand (in vision)', 'Slaver raids (in vision)'],
+	},
+
+	// ========== REGIONS ==========
+	{
+		id: 'elsir-vale',
+		name: 'Elsir Vale',
+		type: 'region',
+		parent: null,
+		region: 'Material Plane',
+		description: "Region containing Drellin's Ferry and Brindol; connected by the Dawn Way road system.",
+		features: ['Dawn Way road system', 'Elsir River'],
+		connections: ["Drellin's Ferry", 'Brindol', 'Witchwood'],
+	},
+	{
+		id: 'witchwood',
+		name: 'The Witchwood',
+		type: 'region',
+		parent: null,
+		region: 'Elsir Vale',
+		description:
+			"A dense, dangerous forest to the northwest of Drellin's Ferry. Parts of it are corrupted by blighted magic that creates illusions and distorts perception. Undead are rumored to wander its borders. Generally held to be haunted by the restless spirits of the ancient human druidic folk who once dwelt here, the Witchwood is a lush, wet woodland interspersed with swampy stretches in the vicinity of the larger rivers. The Witchwood is a warm forest with a mix of oaks, subtropical evergreens, and plenty of undergrowth. Any party cutting cross-country through the forest without following a trail stands an excellent chance of getting very lost. Location of missing barbarian scouts and enemy activity.",
+		features: [
+			'Dense oak forest',
+			'Blighted areas with illusion magic',
+			'Twisted, dead trees',
+			'Brooks and clearings',
+			'Ancient ruins',
+			'Swamplands',
+			'Subtropical evergreens',
+			'Thick undergrowth',
+		],
+		connections: [
+			"Drellin's Ferry (several hours southeast)",
+			'Wrath Keep (deep within)',
+			'Ruined Fortress (within forest)',
+			'Secret meeting pond (4 hours walk from town)',
+		],
+		threats: [
+			'Hobgoblin raiders',
+			'Worgs and worg riders',
+			'Undead',
+			'Thylacoleos',
+			'Raptors',
+			'Hydras',
+			'Blighted magic corruption',
+		],
+	},
+	{
+		id: 'ruined-fortress',
+		name: 'Ruined Fortress',
+		type: 'fortress',
+		parent: 'witchwood',
+		region: null,
+		description:
+			'An ancient fortress with a strange cleansed feeling despite being occupied by raiders. Features crumbling walls, a central keep, and various outbuildings.',
+		history:
+			'Recently occupied by Red Hand forces as a staging ground. Site of major battle where party fought hobgoblins, worg riders, manticore, minotaur, and mud elemental.',
+		features: [
+			'Main courtyard with boulders',
+			'Stables (burned during battle)',
+			'Ruined tower with caved-in roof',
+			'Main keep with single battlement',
+			'Barracks',
+			'Underground tunnels',
+			'Throne room',
+			'Torture chamber',
+			'Map room with tactical intelligence',
+		],
+		npcs: ['Skeleton patrol (defeated)', 'Hobgoblin forces (defeated)', 'Orc shaman (fled)', 'Minotaur (fled)'],
+		items: ['Map showing troop movements', 'Intelligence about 30-unit army', 'Bridge location marked'],
+		connections: ['Underground passages', 'Vault chamber (below)', 'Strategic bridge (one day northeast)'],
+	},
+	{
+		id: 'vault-chamber',
+		name: 'The Vault / Null Brand Chamber',
+		type: 'dungeon',
+		parent: 'ruined-fortress',
+		region: null,
+		description:
+			'A vast blackstone chamber housing the Null Brand artifact. The ground is barren dirt, all vegetation reduced to ash. Heavy, oppressive atmosphere with metallic tang.',
+		history:
+			"Ancient vault designed to contain the Null Brand. Kalistra sacrificed herself here to contain the artifact's corruption. Site of major battle with Red Hand forces and dragon.",
+		features: [
+			'Blackstone walls (cracked and scorched)',
+			'Central pedestal',
+			'Arcane chain bindings',
+			'Ritual circle (blood magic)',
+			'Multiple corpses of previous ritualists',
+			'Skeletal remains with magical boots',
+		],
+		npcs: ['Kalistra (deceased, fused to artifact)', 'Red dragon (retreated)', '20 armored orcs (battle)'],
+		items: [
+			'Null Brand artifact (shattered)',
+			'Belt of Strength 18',
+			'Amulet of magical absorption',
+			'The Deama Sutrel book',
+			'Bone flute',
+			'Peculiar mushrooms',
+			'Magical boots',
+		],
+		threats: ['Corrupt magic fluctuations', 'Wild magic effects', 'Necrotic energy waves', 'Red Hand forces'],
+	},
+	{
+		id: 'wrath-keep',
+		name: 'Wrath Keep',
+		type: 'fortress',
+		parent: 'witchwood',
+		region: null,
+		description:
+			'A cursed fortress deep in the Witchwood, guarded by undead. The area is dangerous and avoided by locals.',
+		history: 'An ancient fortress that fell to a curse. Now inhabited by undead guardians.',
+		features: ['Cursed grounds', 'Undead guardians'],
+	},
+	{
+		id: 'dusk-way',
+		name: 'The Dusk Way',
+		type: 'region',
+		parent: null,
+		region: "Between Drellin's Ferry and Witchwood",
+		description:
+			'A treacherous path through swampland leading into the Witchwood. Critical trade route that raiders are attempting to close off.',
+		features: ['Swamplands', 'Wooden bridge (trapped)', 'Dense forest', 'Tall grass and broken fences'],
+		threats: ['Hobgoblin ambushes', 'Hydra', 'Bear traps', 'Worg riders'],
+	},
+	{
+		id: 'bridge-ambush',
+		name: 'Bridge Ambush Site',
+		type: 'landmark',
+		parent: 'dusk-way',
+		region: null,
+		description:
+			'A wooden bridge over murky swamp water where hobgoblins set up an elaborate ambush with a five-headed hydra.',
+		history:
+			'Site of major battle where party defeated hydra and raiders. At least 10 travelers were killed and partially eaten here.',
+		features: ['Wooden bridge with trap mechanisms', 'Swamp beneath', 'Concealed bear traps (30+ dismantled by party)'],
+	},
+	{
+		id: 'avarthel-grove',
+		name: "Avarthel's Grove",
+		type: 'grove',
+		parent: null,
+		region: "Near Drellin's Ferry",
+		description:
+			"A beautiful magical grove at the forest's edge with proximity to the Feywild. The grove has positive effects on visitors, particularly those with Fey heritage. Magical grove near the Feywild; healing site and refuge near Drellin's Ferry. Home to the phoenix Loïc and protected by a snake guardian.",
+		features: [
+			'Feywild connection',
+			'Healing properties',
+			'Giant snake guardian',
+			'Size-enhancing effects on Fey creatures',
+		],
+		npcs: ['Avarthel (left for mountains)', 'Loic (Phoenix)', 'Giant snake guardian'],
+		history: 'Created by Avarthel. Left abandoned when he departed for the mountains.',
+	},
+	{
+		id: 'lustria',
+		name: 'Lustria',
+		type: 'region',
+		parent: null,
+		region: 'Another Continent',
+		description:
+			'A distant continent with deep jungles and lizardfolk. Home to Pelagos and site of recent conflicts. Continent where Pelagos is located; origin of the Arcane Brotherhood.',
+		history:
+			'Experienced mysterious regrowth of deep jungles causing lizardfolk to retreat, followed by civil wars among human kingdoms.',
+		connections: ['Pelagos (kingdom)', 'Separated from current continent by ocean'],
+	},
+	{
+		id: 'nautica',
+		name: 'Nautica',
+		type: 'region',
+		parent: null,
+		region: 'Southern Seas',
+		description: 'A pirate archipelago far to the south across the Shining Sea.',
+		connections: ['Far south of current campaign area'],
+	},
+	{
+		id: 'feywild',
+		name: 'The Feywild',
+		type: 'plane',
+		parent: null,
+		region: 'Parallel Plane',
+		natives: 'Eladrin, elves, fey, fomorians, goblins',
+		planar_type: 'Dimensional plane',
+		description:
+			"The plane of the Fey, ruled by seasonal courts. Connected to the material plane in places like Avarthel's grove. Also called the Plane of Faerie, the Feywild is a realm of everlasting twilight, with glittering lights dancing in the air and stunning beauty that can captivate travelers. It exists as an echo of the Material Plane, overlapping with the ordinary world but containing magnificent features: towering mountains, breathtaking canyons, and vast seas. The Feywild is inhabited by sylvan creatures such as elves, dryads, satyrs, pixies, and other fey beings.",
+		history:
+			'In a possible future, witnessed under siege by chromatic dragons and Red Hand forces. Both Summer and Winter Queens fell.',
+		features: [
+			'Summer Court (Titania)',
+			'Winter Court (Queen of Air and Darkness)',
+			'Spring Court (annihilated in vision)',
+			'Autumn Court (annihilated in vision)',
+			'Pegasus knights',
+			'Hippogriff riders',
+		],
+		threats: [
+			'Chromatic dragons (in vision)',
+			'Red Hand forces (in vision)',
+			'Blue Bear faction (in vision)',
+			'Energy-spear warrior (in vision)',
+		],
+	},
+	{
+		id: 'underdark',
+		name: 'The Underdark',
+		type: 'plane',
+		parent: null,
+		region: 'Subterranean Realm',
+		description:
+			'The Underdark is a vast subterranean realm that exists beneath the surface world. It consists of a network of caves, tunnels, and caverns that stretch for thousands of miles. The Underdark is home to many strange and dangerous creatures, including drow (dark elves), mind flayers, beholders, and other aberrations.',
+		threats: ['Drow', 'Mind flayers', 'Beholders', 'Aberrations'],
+	},
+
+	// ========== STRUCTURES ==========
+	{
+		id: 'strategic-bridge',
+		name: 'Strategic Bridge',
+		type: 'bridge',
+		parent: null,
+		region: 'One day northeast of Ruined Fortress',
+		description:
+			"A critical bridge that the approaching Red Hand army must cross to reach Drellin's Ferry. Destroying it would delay the army by 2-3 days.",
+		history: 'Identified from captured tactical maps as key chokepoint in enemy advance.',
+		threats: ['Likely guarded by enemy forces', '30-unit army approaching'],
+	},
+	{
+		id: 'paladin-fortress',
+		name: 'Blighted Paladin Fortress',
+		type: 'fortress',
+		parent: null,
+		region: 'Unknown',
+		description:
+			"A fortress of a paladin order close to Olek's own, seen in vision corrupted by crystalline growths. Corrupted Paladin stronghold seen in Olek and Norr's vision, overrun by crystalline blight. The fortress commander revealed infiltration by Lamashu's cults after the Battle for Bremen.",
+		history:
+			'In vision, infiltrated by Lamashtu cultists after Battle for Bremen. Commander impaled and transformed by blight.',
+		features: ['Stone walls with crystalline corruption', 'Watchtower', 'Courtyard'],
+		threats: ["Lamashtu's cults (in vision)", 'Blighted corruption'],
+	},
+	{
+		id: 'penal-colony',
+		name: 'Penal Colony',
+		type: 'prison',
+		parent: null,
+		region: 'Unknown',
+		description:
+			"Where Bianca's pirate crew were enslaved before being freed by General Lee. Former mining penal colony that housed convicts.",
+		history: "Site of prison break led by General Lee that freed Bianca's crew and others.",
+		npcs: ['General Lee (former prisoner)', 'Commander Turiados (former prisoner)', 'Marise Curs (former prisoner)'],
+	},
+	{
+		id: 'ramashen',
+		name: 'Ramashen',
+		type: 'druidic_site',
+		parent: null,
+		region: 'Unknown',
+		description: 'Druidic location capable of returning creatures to the Feywild.',
+	},
+
+	// ========== SHIPS ==========
+	{
 		id: 'leviathan-hall',
 		name: "The Leviathan's Hall",
-		type: 'other_structure',
+		type: 'ship',
+		parent: null,
 		region: 'Coastal Waters',
 		description:
 			"A massive warship with black wood and green-tinged sails. Serves as mobile base for a pirate-paladin alliance. Massive black warship with green sails commanded by Captain Bianca Turiados and Commander Turiados. Crewed by a diverse mix including minotaurs, troglodytes, an Efreeti, and other species. The crew is magically bound to Bianca's family by blood oath.",
@@ -323,184 +530,5 @@ const CAMPAIGN_002_LOCATIONS = [
 		history:
 			'Stolen by Bianca with help from General Ilie. Crewed by freed penal colony prisoners bound by blood loyalty to House Corina.',
 		connections: ['Lost at sea (searching for Pelagos)', 'Raided three ships from Brindol'],
-	},
-	{
-		id: 'brindol',
-		name: 'Brindol',
-		type: 'city',
-		region: 'Elsir Vale',
-		population: '6,700',
-		races: 'Humans, half-elves, dwarves',
-		ruler: 'Lord Aaron Jarmaath',
-		description:
-			"A city with a dry dock and home to the Lion's Guard. Trade hub that has been raided by pirates. Brindol is a small city in the heart of Elsir Vale. One of the largest settlements in the Vale, Brindol is a prosperous farming community and caravan stopover located along the Dawn Way on the south bank of the Elsir River. Orchards of apple and pear trees follow the river's winding shores, while broad grain fields and farmlands surround the town for miles in all directions. Brindol is the home of Lord Aaron Jarmaath. His small keep and the city walls are the only fortifications of note this side of Dennovar (city 100 miles to east).",
-		npcs: ['Captain Hans Mariner', 'Lord Aaron Jarmaath'],
-		connections: [
-			"Drellin's Ferry (via trade routes)",
-			"Coast (raided by Leviathan's Hall)",
-			'Dennovar (100 miles east)',
-		],
-	},
-	{
-		id: 'pelagos',
-		name: 'Pelagos',
-		type: 'city',
-		region: 'Lustria Continent',
-		description:
-			"A kingdom on the Lustria continent, now ruled by the necromancer Sandro. Formerly ruled by House Corina. Bianca's homeland on the continent of Lustria; torn by civil war and usurped by the necromancer Sandro who murdered her father and seized the throne.",
-		history:
-			'Fell into civil war after lizardfolk mysteriously retreated. Sandro emerged, killed the king, and seized the throne.',
-		npcs: ['Sandro (current tyrant)', 'House Corina (exiled)'],
-	},
-	{
-		id: 'nautica',
-		name: 'Nautica',
-		type: 'region',
-		region: 'Southern Seas',
-		description: 'A pirate archipelago far to the south across the Shining Sea.',
-		connections: ['Far south of current campaign area'],
-	},
-	{
-		id: 'strategic-bridge',
-		name: 'Strategic Bridge',
-		type: 'other_structure',
-		region: 'One day northeast of Ruined Fortress',
-		description:
-			"A critical bridge that the approaching Red Hand army must cross to reach Drellin's Ferry. Destroying it would delay the army by 2-3 days.",
-		history: 'Identified from captured tactical maps as key chokepoint in enemy advance.',
-		threats: ['Likely guarded by enemy forces', '30-unit army approaching'],
-	},
-	{
-		id: 'lustria',
-		name: 'Lustria',
-		type: 'region',
-		region: 'Another Continent',
-		description:
-			'A distant continent with deep jungles and lizardfolk. Home to Pelagos and site of recent conflicts. Continent where Pelagos is located; origin of the Arcane Brotherhood.',
-		history:
-			'Experienced mysterious regrowth of deep jungles causing lizardfolk to retreat, followed by civil wars among human kingdoms.',
-		connections: ['Pelagos (kingdom)', 'Separated from current continent by ocean'],
-	},
-	{
-		id: 'feywild',
-		name: 'The Feywild',
-		type: 'region',
-		region: 'Parallel Plane',
-		natives: 'Eladrin, elves, fey, fomorians, goblins',
-		planar_type: 'Dimensional plane',
-		description:
-			"The plane of the Fey, ruled by seasonal courts. Connected to the material plane in places like Avarthel's grove. Also called the Plane of Faerie, the Feywild is a realm of everlasting twilight, with glittering lights dancing in the air and stunning beauty that can captivate travelers. It exists as an echo of the Material Plane, overlapping with the ordinary world but containing magnificent features: towering mountains, breathtaking canyons, and vast seas. The Feywild is inhabited by sylvan creatures such as elves, dryads, satyrs, pixies, and other fey beings.",
-		history:
-			'In a possible future, witnessed under siege by chromatic dragons and Red Hand forces. Both Summer and Winter Queens fell.',
-		features: [
-			'Summer Court (Titania)',
-			'Winter Court (Queen of Air and Darkness)',
-			'Spring Court (annihilated in vision)',
-			'Autumn Court (annihilated in vision)',
-			'Pegasus knights',
-			'Hippogriff riders',
-		],
-		threats: [
-			'Chromatic dragons (in vision)',
-			'Red Hand forces (in vision)',
-			'Blue Bear faction (in vision)',
-			'Energy-spear warrior (in vision)',
-		],
-	},
-	{
-		id: 'neverwinter',
-		name: 'Neverwinter',
-		type: 'city',
-		region: 'The North',
-		description:
-			'One of the greatest cities in the North. High walls, well-defended. Major city targeted in visions by a unified enemy force including Red Wizards of Thay, Arcane Brotherhood mages, and chromatic dragons. The siege involves mass sacrifice rituals to destroy the city walls.',
-		history: "In Soshi's vision, under siege by combined forces using prisoners as ritual fuel to bring down walls.",
-		threats: [
-			'Red Wizards of Thay (in vision)',
-			'Arcane Brotherhood (in vision)',
-			'Blue Bear faction (in vision)',
-			'Chromatic dragons (in vision)',
-		],
-	},
-	{
-		id: 'bremen',
-		name: 'Bremen',
-		type: 'city',
-		region: "Near Olek's Home",
-		description:
-			'A strategic location that will be the site of a major battle that depletes paladin forces. Site of a key battle that weakened defenses and allowed cult infiltration into paladin orders, leading to widespread corruption.',
-		history:
-			'In vision, "Battle for Bremen" results in massive casualties for paladin orders, forcing them to take unvetted recruits who turn out to be Lamashtu cultists.',
-		threats: ['Angevin fleet (in vision)', 'Resurrected god Kresimir (in vision)', 'Red Hand forces (in vision)'],
-	},
-	{
-		id: 'paladin-fortress',
-		name: 'Blighted Paladin Fortress',
-		type: 'fortress',
-		region: 'Unknown',
-		description:
-			"A fortress of a paladin order close to Olek's own, seen in vision corrupted by crystalline growths. Corrupted Paladin stronghold seen in Olek and Norr's vision, overrun by crystalline blight. The fortress commander revealed infiltration by Lamashu's cults after the Battle for Bremen.",
-		history:
-			'In vision, infiltrated by Lamashtu cultists after Battle for Bremen. Commander impaled and transformed by blight.',
-		features: ['Stone walls with crystalline corruption', 'Watchtower', 'Courtyard'],
-		threats: ["Lamashtu's cults (in vision)", 'Blighted corruption'],
-	},
-	{
-		id: 'kaedins-village',
-		name: "Kaedin's Village",
-		type: 'village',
-		region: 'Unknown',
-		description: "Kaedin's home village, next to another village that was destroyed in his vision.",
-		threats: ['Blue Bear clan (in vision)', 'Red Hand (in vision)', 'Slaver raids (in vision)'],
-	},
-	{
-		id: 'underdark',
-		name: 'The Underdark',
-		type: 'region',
-		region: 'Subterranean Realm',
-		description:
-			'The Underdark is a vast subterranean realm that exists beneath the surface world. It consists of a network of caves, tunnels, and caverns that stretch for thousands of miles. The Underdark is home to many strange and dangerous creatures, including drow (dark elves), mind flayers, beholders, and other aberrations.',
-		threats: ['Drow', 'Mind flayers', 'Beholders', 'Aberrations'],
-	},
-	{
-		id: 'elsir-vale',
-		name: 'Elsir Vale',
-		type: 'region',
-		region: 'Material Plane',
-		description: "Region containing Drellin's Ferry and Brindol; connected by the Dawn Way road system.",
-		features: ['Dawn Way road system', 'Elsir River'],
-		connections: ["Drellin's Ferry", 'Brindol', 'Witchwood'],
-	},
-	{
-		id: 'penal-colony',
-		name: 'Penal Colony',
-		type: 'other_structure',
-		region: 'Unknown',
-		description:
-			"Where Bianca's pirate crew were enslaved before being freed by General Lee. Former mining penal colony that housed convicts.",
-		history: "Site of prison break led by General Lee that freed Bianca's crew and others.",
-		npcs: ['General Lee (former prisoner)', 'Commander Turiados (former prisoner)', 'Marise Curs (former prisoner)'],
-	},
-	{
-		id: 'ramashen',
-		name: 'Ramashen',
-		type: 'other_structure',
-		region: 'Unknown',
-		description: 'Druidic location capable of returning creatures to the Feywild.',
-	},
-	{
-		id: 'luskan',
-		name: 'Luskan',
-		type: 'city',
-		region: 'Sword Coast North, northwest Faerûn',
-		size: 'Large town (1480 DR)',
-		races: 'Mostly humans; drow',
-		imports: 'Silver, scrimshaw, timber, dwarven weapons',
-		exports: 'Netherese artifacts, weapons',
-		government_type: 'Oligarchy',
-		ruler: 'Jarlaxle Baenre (1489 DR)',
-		description:
-			"Luskan, also known as the City of Sails, was a port city at the mouth of the River Mirar on the Sword Coast North. Luskan, despite the presence of the Ten Towns, was considered by many to be civilization's farthest reach. Although once a bustling city, in the days prior to the Spellplague, the city would suffer greatly at the hands of Arklem Greeth. The resulting disaster would allow the Spellplague to nearly annihilate the city, with it having only a fraction of its former populace.",
-		features: ['Host Tower of the Arcane', 'Port facilities', 'River Mirar mouth'],
 	},
 ];
