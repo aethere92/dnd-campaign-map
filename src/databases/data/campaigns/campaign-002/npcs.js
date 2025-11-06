@@ -49,7 +49,7 @@ const CAMPAIGN_002_NPCS = [
 		personality: 'Professional, strategic, pragmatic. Takes security threats seriously.',
 		background: null,
 		location: {
-			primary: "Drellin's Ferry",
+			primary: "[ENTITY:location:Drellin's Ferry]",
 			specific: 'Tollhouse/Barracks',
 		},
 		goals: [
@@ -100,7 +100,7 @@ const CAMPAIGN_002_NPCS = [
 		personality: null,
 		background: null,
 		location: {
-			primary: "Drellin's Ferry",
+			primary: "[ENTITY:location:Drellin's Ferry]",
 			specific: null,
 		},
 		goals: null,
@@ -163,7 +163,7 @@ const CAMPAIGN_002_NPCS = [
 		personality: null,
 		background: null,
 		location: {
-			primary: "Drellin's Ferry",
+			primary: "[ENTITY:location:Drellin's Ferry]",
 			specific: 'Barracks',
 		},
 		goals: null,
@@ -185,7 +185,7 @@ const CAMPAIGN_002_NPCS = [
 		personality: 'Unhelpful, mercantile.',
 		background: null,
 		location: {
-			primary: "Drellin's Ferry",
+			primary: "[ENTITY:location:Drellin's Ferry]",
 			specific: 'Shrine of Pelor',
 		},
 		goals: null,
@@ -214,7 +214,7 @@ const CAMPAIGN_002_NPCS = [
 		personality: 'Rambling, knowledgeable, pragmatic. Sees danger and plans to flee.',
 		background: 'Former adventurer with Kalistra before she joined Brotherhood. Fell out over her collateral damage.',
 		location: {
-			primary: "Drellin's Ferry",
+			primary: "[ENTITY:location:Drellin's Ferry]",
 			specific: "Sertieren's Manor",
 		},
 		goals: ["Leave Drellin's Ferry before the storm", 'Study magical phenomena'],
@@ -255,8 +255,8 @@ const CAMPAIGN_002_NPCS = [
 		personality: 'Friendly, practical, enjoys reading.',
 		background: null,
 		location: {
-			primary: "Drellin's Ferry",
-			specific: 'Green Apple Inn',
+			primary: "[ENTITY:location:Drellin's Ferry]",
+			specific: '[ENTITY:location:Green Apple Inn]',
 		},
 		goals: null,
 		items: null,
@@ -319,7 +319,7 @@ const CAMPAIGN_002_NPCS = [
 		personality: 'Forgettable appearance, cat enthusiast, somewhat incompetent.',
 		background: 'Former Thieves Guild member exiled for incompetence.',
 		location: {
-			primary: "Drellin's Ferry",
+			primary: "[ENTITY:location:Drellin's Ferry]",
 			specific: null,
 		},
 		goals: ['Pay off 2 gold piece debt', 'Avoid Winter Rose mercenaries'],
@@ -349,7 +349,7 @@ const CAMPAIGN_002_NPCS = [
 		personality: 'Simple-minded but loyal when motivated.',
 		background: 'Former Thieves Guild member exiled for incompetence.',
 		location: {
-			primary: "Drellin's Ferry",
+			primary: "[ENTITY:location:Drellin's Ferry]",
 			specific: null,
 		},
 		goals: null,
@@ -462,7 +462,7 @@ const CAMPAIGN_002_NPCS = [
 		personality: 'Callous, immature, treats relationships casually.',
 		background: 'Had casual relationship with Anya, unaware of pregnancy. Attacked by worg riders.',
 		location: {
-			primary: "Drellin's Ferry",
+			primary: "[ENTITY:location:Drellin's Ferry]",
 			specific: 'Barracks Infirmary',
 		},
 		goals: null,
@@ -489,7 +489,7 @@ const CAMPAIGN_002_NPCS = [
 		personality: 'Patient, follows orders from matron.',
 		background: 'Sent by Matron Zaya 20 years ago to await signal that has not yet come. From matriarchal society.',
 		location: {
-			primary: "Drellin's Ferry",
+			primary: "[ENTITY:location:Drellin's Ferry]",
 			specific: 'Shopping District',
 		},
 		goals: ['Await signal from Matron Zaya'],
@@ -514,7 +514,7 @@ const CAMPAIGN_002_NPCS = [
 		personality: 'Intimidating, pragmatic, bound by honor.',
 		background: 'Former penal colony convict freed by General Lee. Now serves Queen Bianca.',
 		location: {
-			primary: "The Leviathan's Hall",
+			primary: "[ENTITY:location:The Leviathan's Hall]",
 			specific: null,
 		},
 		goals: ['Kill Sandro for vengeance', 'Serve Queen Bianca'],
@@ -554,7 +554,7 @@ const CAMPAIGN_002_NPCS = [
 		personality: 'Regal, determined, protective of crew.',
 		background: 'Father killed by Sandro who usurped throne. Escaped with loyal followers bound by blood oath.',
 		location: {
-			primary: "The Leviathan's Hall",
+			primary: "[ENTITY:location:The Leviathan's Hall]",
 			specific: null,
 		},
 		goals: ['Reclaim Pelagos throne', 'Find General Lee', 'Kill Sandro'],
@@ -590,7 +590,7 @@ const CAMPAIGN_002_NPCS = [
 		personality: 'Loyal, methodical, all-business when negotiating.',
 		background: 'Freed from shackles by Bianca, pledged blood loyalty.',
 		location: {
-			primary: "The Leviathan's Hall",
+			primary: "[ENTITY:location:The Leviathan's Hall]",
 			specific: null,
 		},
 		goals: ['Serve Bianca'],
@@ -679,7 +679,7 @@ const CAMPAIGN_002_NPCS = [
 		background: 'Left Brotherhood 10 years ago. Bound herself to Null Brand to contain corruption until death.',
 		location: {
 			primary: 'Deceased',
-			specific: 'Underground Vault',
+			specific: '[ENTITY:location:The Vault / Null Brand Chamber]',
 		},
 		goals: ['Operate creature breeding program', 'Research Null Brand', 'Contain corruption'],
 		items: ['Ledger (partially burned/obscured)', 'Laboratory notes'],
@@ -808,7 +808,7 @@ const CAMPAIGN_002_NPCS = [
 		personality: null,
 		background: null,
 		location: {
-			primary: 'Brindol',
+			primary: '[ENTITY:location:Brindol]',
 			specific: null,
 		},
 		goals: null,
@@ -830,7 +830,7 @@ const CAMPAIGN_002_NPCS = [
 		personality: 'Talkative when drunk, loyal to Bianca.',
 		background: 'Former penal colony slave freed by General Lee. Blood-bound to House Corina.',
 		location: {
-			primary: "The Leviathan's Hall",
+			primary: "[ENTITY:location:The Leviathan's Hall]",
 			specific: null,
 		},
 		goals: null,
@@ -855,7 +855,7 @@ const CAMPAIGN_002_NPCS = [
 		personality: 'Proud, expensive, skilled.',
 		background: null,
 		location: {
-			primary: "The Leviathan's Hall",
+			primary: "[ENTITY:location:The Leviathan's Hall]",
 			specific: 'Forge',
 		},
 		goals: null,
@@ -877,7 +877,7 @@ const CAMPAIGN_002_NPCS = [
 		personality: null,
 		background: null,
 		location: {
-			primary: 'Witchwood',
+			primary: '[ENTITY:location: The Witchwood]',
 			specific: null,
 		},
 		goals: null,
@@ -904,7 +904,7 @@ const CAMPAIGN_002_NPCS = [
 		personality: 'Skilled, respects Norro, professional.',
 		background: null,
 		location: {
-			primary: "Drellin's Ferry",
+			primary: "[ENTITY:location:Drellin's Ferry]",
 			specific: "Armorer's Forge",
 		},
 		goals: null,
@@ -926,7 +926,7 @@ const CAMPAIGN_002_NPCS = [
 		personality: null,
 		background: null,
 		location: {
-			primary: "Avarthel's Grove",
+			primary: "[ENTITY:location:Avarthel's Grove]",
 			specific: null,
 		},
 		goals: null,
@@ -1003,7 +1003,7 @@ const CAMPAIGN_002_NPCS = [
 		personality: null,
 		background: "Captured with Bonnie, sentenced to death. Bonnie chose banishment to spare Clyde's life.",
 		location: {
-			primary: 'Feywild',
+			primary: '[ENTITY:location:The Feywild]',
 			specific: null,
 		},
 		goals: null,
@@ -1028,7 +1028,7 @@ const CAMPAIGN_002_NPCS = [
 		personality: null,
 		background: null,
 		location: {
-			primary: 'With Party',
+			primary: 'With [ENTITY:character:Party',
 			specific: null,
 		},
 		goals: null,
@@ -1050,7 +1050,7 @@ const CAMPAIGN_002_NPCS = [
 		personality: null,
 		background: 'Freed by Olek after being trapped in magical sphere by dragonkin. Returns after Null Brand explosion.',
 		location: {
-			primary: 'With Party',
+			primary: 'With [ENTITY:character:Entire Party:party]',
 			specific: null,
 		},
 		goals: null,
@@ -1130,7 +1130,7 @@ const CAMPAIGN_002_NPCS = [
 		personality: null,
 		background: null,
 		location: {
-			primary: 'Underground Caves',
+			primary: '[ENTITY:location:Underground Temple Complex]',
 			specific: null,
 		},
 		goals: null,
@@ -1155,7 +1155,7 @@ const CAMPAIGN_002_NPCS = [
 		personality: null,
 		background: null,
 		location: {
-			primary: 'Underground Caves',
+			primary: '[ENTITY:location:Underground Temple Complex]',
 			specific: null,
 		},
 		goals: null,
@@ -1180,7 +1180,7 @@ const CAMPAIGN_002_NPCS = [
 		personality: null,
 		background: "Fought alongside Winter Queen against Kilgor in Bonnie's vision before losing crown.",
 		location: {
-			primary: 'Feywild',
+			primary: '[ENTITY:location:The Feywild]',
 			specific: 'Summer Court',
 		},
 		goals: null,
@@ -1215,7 +1215,7 @@ const CAMPAIGN_002_NPCS = [
 		personality: null,
 		background: "Fought alongside Titania against Kilgor in Bonnie's vision before losing crown.",
 		location: {
-			primary: 'Feywild',
+			primary: '[ENTITY:location:The Feywild]',
 			specific: 'Winter Court',
 		},
 		goals: null,
@@ -1342,7 +1342,7 @@ const CAMPAIGN_002_NPCS = [
 		personality: null,
 		background: null,
 		location: {
-			primary: 'Brindol',
+			primary: '[ENTITY:location:Brindol]',
 			specific: 'Keep',
 		},
 		goals: null,
