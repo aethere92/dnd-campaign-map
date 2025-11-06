@@ -43,7 +43,7 @@ class StoryHelperBase {
 
 	updateUrl(itemId) {
 		const params = this.#storyUrlManager.getParams();
-		
+
 		// Clear other item params
 		this.#storyUrlManager.clearItemParamsExcept(params, this.getUrlParam());
 
@@ -59,14 +59,14 @@ class StoryHelperBase {
 			campaignId: params.get(StoryURLManager.PARAMS.CAMPAIGN),
 			viewType: params.get(StoryURLManager.PARAMS.VIEW),
 			itemId: itemId,
-			itemType: this.getUrlParam()
+			itemType: this.getUrlParam(),
 		});
 
 		this.#storyUrlManager.updateHistory(url, state, true);
 	}
 
 	findItemById(items, itemId) {
-		return items.find(item => this.getItemId(item) === itemId);
+		return items.find((item) => this.getItemId(item) === itemId);
 	}
 
 	// Main render method
@@ -142,7 +142,7 @@ class StoryHelperBase {
 		const groupHeader = StoryDOMBuilder.createToggleHeader(groupName, groupContent);
 		group.appendChild(groupHeader);
 
-		items.forEach(item => {
+		items.forEach((item) => {
 			const listItem = this.createListItem(item, detailPanel);
 			groupContent.appendChild(listItem);
 		});
@@ -182,7 +182,7 @@ class StoryHelperBase {
 
 		if (this.#listPanel) {
 			const allItems = this.#listPanel.querySelectorAll('.view-list-item');
-			allItems.forEach(listItem => {
+			allItems.forEach((listItem) => {
 				listItem.classList.toggle('selected', listItem.dataset.itemId === itemId);
 			});
 		}
@@ -209,7 +209,7 @@ class StoryHelperBase {
 		const content = document.createElement('div');
 		content.className = 'view-encounters';
 
-		encounters.forEach(encounter => {
+		encounters.forEach((encounter) => {
 			const card = document.createElement('div');
 			card.className = 'view-card';
 
@@ -238,7 +238,7 @@ class StoryHelperBase {
 		const content = document.createElement('ul');
 		content.className = 'view-links';
 
-		links.forEach(link => {
+		links.forEach((link) => {
 			const card = document.createElement('li');
 			card.className = 'view-link';
 
@@ -261,6 +261,22 @@ class StoryHelperBase {
 
 	createMetaTags(metaData) {
 		return StoryDOMBuilder.createMetaTags(metaData);
+	}
+
+	processEntityReference(entity) {
+		const processedText = entity.replace(
+			/\[ENTITY:([\w-]+):([^:\]]+)(?::([^\]]+))?\]/gi,
+			(match, type, name, givenName) => {
+				const cleanType = type.toLowerCase().trim();
+				const cleanName = name.trim();
+
+				if (!cleanType || !cleanName) return match;
+
+				const displayText = givenName ? givenName.trim() : cleanName;
+				return displayText;
+			}
+		);
+		return processedText;
 	}
 
 	// Getters

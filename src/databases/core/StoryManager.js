@@ -25,7 +25,7 @@ class StoryManager {
 		this.#storyUrlManager = new StoryURLManager();
 		this.#initializeHelpers(options);
 		this.#loadSavedState();
-		
+
 		this.updateCampaign(
 			options.campaignData,
 			options.initialSessionId,
@@ -43,14 +43,14 @@ class StoryManager {
 			quests: options.campaignData?.quests || [],
 			factions: options.campaignData?.factions || [],
 		});
-		
+
 		this.#placeholderProcessor = new StoryHelperPlaceholder(this.#tooltipManager, options.campaignData);
 		this.#navigationManager = new StoryHelperNavigation();
 		this.#searchManager = new StoryHelperSearch(
 			() => this.#campaign,
 			(navigation) => this.#handleSearchNavigation(navigation)
 		);
-		
+
 		this.#sidebarManager = new StoryHelperSidebar(
 			() => this.#campaign,
 			() => this.#currentView,
@@ -66,7 +66,7 @@ class StoryManager {
 			() => this.#handleViewChange(StoryURLManager.VIEW_TYPES.FACTIONS),
 			this.#searchManager
 		);
-		
+
 		this.#contentRenderer = new StoryHelperContent(
 			this.#placeholderProcessor,
 			() => this.#campaign,
@@ -117,7 +117,7 @@ class StoryManager {
 
 	updateCampaign(campaign, sessionId = null, characterName = null, viewType = null) {
 		if (!campaign) return;
-		
+
 		this.#campaign = campaign;
 		this.#determineView(viewType, characterName, sessionId);
 		this.#searchManager?.invalidateIndex();
@@ -130,7 +130,7 @@ class StoryManager {
 			[StoryURLManager.VIEW_TYPES.QUESTS]: StoryURLManager.VIEW_TYPES.QUESTS,
 			[StoryURLManager.VIEW_TYPES.LOCATIONS]: StoryURLManager.VIEW_TYPES.LOCATIONS,
 			[StoryURLManager.VIEW_TYPES.NPCS]: StoryURLManager.VIEW_TYPES.NPCS,
-			[StoryURLManager.VIEW_TYPES.FACTIONS]: StoryURLManager.VIEW_TYPES.FACTIONS
+			[StoryURLManager.VIEW_TYPES.FACTIONS]: StoryURLManager.VIEW_TYPES.FACTIONS,
 		};
 
 		if (viewTypeMap[viewType]) {
@@ -200,8 +200,7 @@ class StoryManager {
 	}
 
 	#handleCharacterClick(characterName) {
-		if (this.#currentView === StoryURLManager.VIEW_TYPES.CHARACTER && 
-		    this.#selectedCharacterName === characterName) {
+		if (this.#currentView === StoryURLManager.VIEW_TYPES.CHARACTER && this.#selectedCharacterName === characterName) {
 			this.#currentView = StoryURLManager.VIEW_TYPES.SESSION;
 			this.#selectedCharacterName = null;
 		} else {
@@ -258,7 +257,7 @@ class StoryManager {
 
 	#updateURL() {
 		const config = {
-			campaign: this.#campaign.id
+			campaign: this.#campaign.id,
 		};
 
 		// Set view-specific parameters
@@ -284,7 +283,7 @@ class StoryManager {
 			campaignId: this.#campaign.id,
 			sessionId: this.#currentView === StoryURLManager.VIEW_TYPES.SESSION ? this.#currentSessionId : null,
 			characterName: this.#currentView === StoryURLManager.VIEW_TYPES.CHARACTER ? this.#selectedCharacterName : null,
-			viewType: this.#currentView
+			viewType: this.#currentView,
 		});
 
 		this.#storyUrlManager.updateHistory(url, state, true);
@@ -299,8 +298,9 @@ class StoryManager {
 			[StoryURLManager.VIEW_TYPES.LOCATIONS]: () => this.#contentRenderer.renderLocations(contentArea),
 			[StoryURLManager.VIEW_TYPES.NPCS]: () => this.#contentRenderer.renderNPCs(contentArea),
 			[StoryURLManager.VIEW_TYPES.FACTIONS]: () => this.#contentRenderer.renderFactions(contentArea),
-			[StoryURLManager.VIEW_TYPES.CHARACTER]: () => this.#contentRenderer.renderCharacter(contentArea, this.#selectedCharacterName),
-			[StoryURLManager.VIEW_TYPES.SESSION]: () => this.#contentRenderer.renderSession(contentArea)
+			[StoryURLManager.VIEW_TYPES.CHARACTER]: () =>
+				this.#contentRenderer.renderCharacter(contentArea, this.#selectedCharacterName),
+			[StoryURLManager.VIEW_TYPES.SESSION]: () => this.#contentRenderer.renderSession(contentArea),
 		};
 
 		const renderMethod = viewMap[this.#currentView] || viewMap[StoryURLManager.VIEW_TYPES.SESSION];

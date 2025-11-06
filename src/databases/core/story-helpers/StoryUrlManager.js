@@ -10,7 +10,7 @@ class StoryURLManager {
 		QUESTS: 'quests',
 		LOCATIONS: 'locations',
 		NPCS: 'npcs',
-		FACTIONS: 'factions'
+		FACTIONS: 'factions',
 	};
 
 	static PARAMS = {
@@ -25,14 +25,14 @@ class StoryURLManager {
 		QUEST: 'quest',
 		LOCATION: 'location',
 		NPC: 'npc',
-		FACTION: 'faction'
+		FACTION: 'faction',
 	};
 
 	static ITEM_PARAMS = [
 		StoryURLManager.PARAMS.QUEST,
 		StoryURLManager.PARAMS.LOCATION,
 		StoryURLManager.PARAMS.NPC,
-		StoryURLManager.PARAMS.FACTION
+		StoryURLManager.PARAMS.FACTION,
 	];
 
 	constructor() {
@@ -51,7 +51,7 @@ class StoryURLManager {
 	// Build clean URL with ordered parameters
 	buildURL(config = {}) {
 		const { campaign, view, map, session, character, itemType, itemId, target, hash } = config;
-		
+
 		const params = new URLSearchParams();
 
 		// Add parameters in specific order
@@ -78,7 +78,7 @@ class StoryURLManager {
 	buildStoryItemURL(campaignId, viewType, itemId = null) {
 		const config = {
 			campaign: campaignId,
-			view: viewType
+			view: viewType,
 		};
 
 		if (itemId) {
@@ -86,7 +86,7 @@ class StoryURLManager {
 				[StoryURLManager.VIEW_TYPES.QUESTS]: StoryURLManager.PARAMS.QUEST,
 				[StoryURLManager.VIEW_TYPES.LOCATIONS]: StoryURLManager.PARAMS.LOCATION,
 				[StoryURLManager.VIEW_TYPES.NPCS]: StoryURLManager.PARAMS.NPC,
-				[StoryURLManager.VIEW_TYPES.FACTIONS]: StoryURLManager.PARAMS.FACTION
+				[StoryURLManager.VIEW_TYPES.FACTIONS]: StoryURLManager.PARAMS.FACTION,
 			};
 			config.itemType = paramMap[viewType];
 			config.itemId = itemId;
@@ -109,11 +109,11 @@ class StoryURLManager {
 	}
 
 	clearItemParams(params) {
-		StoryURLManager.ITEM_PARAMS.forEach(param => params.delete(param));
+		StoryURLManager.ITEM_PARAMS.forEach((param) => params.delete(param));
 	}
 
 	clearItemParamsExcept(params, keepParam) {
-		StoryURLManager.ITEM_PARAMS.forEach(param => {
+		StoryURLManager.ITEM_PARAMS.forEach((param) => {
 			if (param !== keepParam) params.delete(param);
 		});
 	}
@@ -125,10 +125,10 @@ class StoryURLManager {
 		switch (type) {
 			case StoryURLManager.VIEW_TYPES.CAMPAIGN_SELECTION:
 				return { ...baseState, state: StoryURLManager.VIEW_TYPES.CAMPAIGN_SELECTION, campaignId: null };
-			
+
 			case StoryURLManager.VIEW_TYPES.MAP:
 				return { ...baseState, campaignId: data.campaignId, mapKey: data.mapKey };
-			
+
 			case StoryURLManager.VIEW_TYPES.STORY:
 			case StoryURLManager.VIEW_TYPES.SESSION:
 			case StoryURLManager.VIEW_TYPES.CHARACTER:
@@ -144,9 +144,9 @@ class StoryURLManager {
 					characterName: data.characterName || null,
 					viewType: data.viewType || null,
 					itemId: data.itemId || null,
-					itemType: data.itemType || null
+					itemType: data.itemType || null,
 				};
-			
+
 			default:
 				return baseState;
 		}
@@ -159,9 +159,8 @@ class StoryURLManager {
 		} else {
 			// Check if we should replace instead of push (same view/campaign)
 			const currentState = window.history.state;
-			const shouldReplace = currentState?.campaignId === state.campaignId && 
-			                      currentState?.view === state.view;
-			
+			const shouldReplace = currentState?.campaignId === state.campaignId && currentState?.view === state.view;
+
 			if (shouldReplace) {
 				window.history.replaceState(state, '', url);
 			} else {
@@ -176,7 +175,7 @@ class StoryURLManager {
 			[StoryURLManager.VIEW_TYPES.QUESTS]: StoryURLManager.PARAMS.QUEST,
 			[StoryURLManager.VIEW_TYPES.LOCATIONS]: StoryURLManager.PARAMS.LOCATION,
 			[StoryURLManager.VIEW_TYPES.NPCS]: StoryURLManager.PARAMS.NPC,
-			[StoryURLManager.VIEW_TYPES.FACTIONS]: StoryURLManager.PARAMS.FACTION
+			[StoryURLManager.VIEW_TYPES.FACTIONS]: StoryURLManager.PARAMS.FACTION,
 		};
 		return paramMap[viewType];
 	}

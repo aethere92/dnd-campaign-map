@@ -44,7 +44,7 @@ const CAMPAIGN_002_NPCS = [
 		status: 'Alive',
 		race: 'Unknown',
 		class: 'Unknown',
-		role: 'Guard Captain & Intelligence Coordinator',
+		role: 'Guard Captain',
 		description: 'Tall, strong-boned woman with simple good looks and an unsmiling manner. Holds a council seat.',
 		personality: 'Professional, strategic, pragmatic. Takes security threats seriously.',
 		background: null,
@@ -89,7 +89,7 @@ const CAMPAIGN_002_NPCS = [
 	},
 	{
 		id: 'norro',
-		name: 'Councilman Norro Wiston',
+		name: 'Norro Wiston',
 		affinity: 'Neutral',
 		faction: 'Town Council',
 		status: 'Alive',
@@ -549,7 +549,7 @@ const CAMPAIGN_002_NPCS = [
 		status: 'Alive',
 		race: 'Fey-touched',
 		class: 'Wizard (Multi-school)',
-		role: 'Ship Co-Commander & Exiled Queen',
+		role: 'Ship Co-Commander',
 		description: 'Last descendant and true Queen of Pelagos. Fey-touched with lightning-veined eyes.',
 		personality: 'Regal, determined, protective of crew.',
 		background: 'Father killed by Sandro who usurped throne. Escaped with loyal followers bound by blood oath.',
@@ -1028,7 +1028,7 @@ const CAMPAIGN_002_NPCS = [
 		personality: null,
 		background: null,
 		location: {
-			primary: 'With [ENTITY:character:Party',
+			primary: 'With [ENTITY:character:Entire Party:party]',
 			specific: null,
 		},
 		goals: null,
@@ -1062,7 +1062,7 @@ const CAMPAIGN_002_NPCS = [
 		],
 		link: [
 			{
-				title: '[ENTITY:quest:[ENTITY:quest:Care for Thylacoleo Cubs]]',
+				title: '[ENTITY:quest:Care for Thylacoleo Cubs]',
 				link: '?campaign=campaign-002&view=quests&quest=Care%2520for%2520Thylacoleo%2520Cubs',
 			},
 		],

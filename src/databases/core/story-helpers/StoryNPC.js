@@ -20,7 +20,7 @@ class StoryHelperNPC extends StoryHelperBase {
 
 		npcs.forEach((npc) => {
 			const affinity = npc.affinity || 'Unknown';
-			const location = npc.location?.primary || 'Unknown Location';
+			const location = this.processEntityReference(npc.location?.primary || 'Unknown Location');
 			const faction = npc.faction || 'No Faction';
 
 			// Create nested structure: affinity > location > faction
@@ -148,7 +148,7 @@ class StoryHelperNPC extends StoryHelperBase {
 		role.className = 'view-item-subtitle';
 		role.textContent = npc.role || '';
 
-		container.append(name, role);
+		container.append(name); //, role);
 		return container;
 	}
 
