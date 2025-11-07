@@ -309,7 +309,7 @@ class StoryHelperEncounter extends StoryHelperBase {
 	}
 
 	/**
-	 * Create individual timeline entry (Dota-style combat log)
+	 * Create individual timeline entry (Dota-style two-lane combat log)
 	 */
 	#createTimelineEntry(entry) {
 		const entryEl = document.createElement('div');
@@ -328,62 +328,97 @@ class StoryHelperEncounter extends StoryHelperBase {
 		turn.className = 'timeline-turn';
 		turn.textContent = entry.turn;
 
-		// Main content line
+		// Action icon
+		const icon = document.createElement('div');
+		icon.className = 'timeline-icon';
+		icon.textContent = this.#getActionIcon(entry);
+
+		// Main content container (two lanes)
 		const content = document.createElement('div');
 		content.className = 'timeline-content-line';
 
-		// Build the combat log text
-		const logText = this.#buildLogText(entry);
-		content.innerHTML = logText;
+		// Build the two-lane combat log
+		const lanes = this.#buildTwoLaneLog(entry);
+		content.appendChild(lanes.leftLane);
+		content.appendChild(lanes.rightLane);
 
-		entryEl.append(turn, content);
+		entryEl.append(turn, icon, content);
 		return entryEl;
 	}
 
 	/**
-	 * Build Dota-style combat log text with color coding
+	 * Get icon emoji based on action type
 	 */
-	#buildLogText(entry) {
-		const actor = `<span class="log-actor actor-${this.#sanitizeClassName(entry.actor)}">${entry.actor}</span>`;
-		const actionType = `<span class="log-action-type">${entry.action_type}</span>`;
+	#getActionIcon(entry) {
+		const actionType = entry.action_type?.toLowerCase() || '';
+		const description = entry.action_description?.toLowerCase() || '';
+		const spell = entry.spell?.toLowerCase() || '';
 		
-		let logParts = [actor];
+		// Check for specific action patterns
+		if (actionType.includes('cast') || spell) return '🔮';
+		if (actionType.includes('attack') || description.includes('attack')) return '⚔️';
+		if (actionType.includes('damage')) return '💥';
+		if (actionType.includes('heal') || description.includes('heal')) return '💚';
+		if (actionType.includes('buff') || description.includes('gain')) return '✨';
+		if (actionType.includes('debuff') || description.includes('lose')) return '🔻';
+		if (actionType.includes('move')) return '🏃';
+		if (actionType.includes('death') || actionType.includes('died')) return '💀';
+		if (actionType.includes('summon') || description.includes('summon')) return '🌟';
+		
+		// Default
+		return '⚡';
+	}
 
-		// Build the main action description
+	/**
+	 * Build two-lane combat log (left: actor + action, right: target + result)
+	 */
+	#buildTwoLaneLog(entry) {
+		const leftLane = document.createElement('div');
+		leftLane.className = 'timeline-left-lane';
+		
+		const rightLane = document.createElement('div');
+		rightLane.className = 'timeline-right-lane';
+
+		// Left lane: Actor + Action + Spell
+		const actor = `<span class="log-actor actor-${this.#sanitizeClassName(entry.actor)}">${entry.actor}</span>`;
+		let leftContent = actor;
+
 		if (entry.action_description) {
-			logParts.push(entry.action_description);
+			leftContent += ` ${entry.action_description}`;
 		}
 
-		// Add spell if present
 		if (entry.spell) {
-			logParts.push(`<span class="log-spell">${entry.spell}</span>`);
+			leftContent += ` <span class="log-spell">${entry.spell}</span>`;
 		}
 
-		// Add targets if present
+		leftLane.innerHTML = leftContent;
+
+		// Right lane: Targets + Damage + Roll + Effect
+		let rightParts = [];
+
 		if (entry.targets) {
 			const targets = Array.isArray(entry.targets) ? entry.targets : [entry.targets];
 			const targetText = targets.map(t => 
 				`<span class="log-target">${t}</span>`
 			).join(', ');
-			logParts.push('on ' + targetText);
+			rightParts.push(targetText);
 		}
 
-		// Add damage if present
 		if (entry.damage) {
-			logParts.push(`<span class="log-damage">(${entry.damage})</span>`);
+			rightParts.push(`<span class="log-damage">(${entry.damage})</span>`);
 		}
 
-		// Add roll if present
 		if (entry.roll) {
-			logParts.push(`<span class="log-roll">[${entry.roll}]</span>`);
+			rightParts.push(`<span class="log-roll">[${entry.roll}]</span>`);
 		}
 
-		// Add effect if present
 		if (entry.effect) {
-			logParts.push(`<span class="log-effect">→ ${entry.effect}</span>`);
+			rightParts.push(`<span class="log-effect">${entry.effect}</span>`);
 		}
 
-		return logParts.join(' ');
+		rightLane.innerHTML = rightParts.join(' ');
+
+		return { leftLane, rightLane };
 	}
 
 	/**
