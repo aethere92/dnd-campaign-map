@@ -309,7 +309,7 @@ class StoryHelperEncounter extends StoryHelperBase {
 	}
 
 	/**
-	 * Create individual timeline entry
+	 * Create individual timeline entry (Dota-style combat log)
 	 */
 	#createTimelineEntry(entry) {
 		const entryEl = document.createElement('div');
@@ -323,59 +323,77 @@ class StoryHelperEncounter extends StoryHelperBase {
 			.replace(/[^a-z0-9]/gi, '');
 		entryEl.classList.add(`actor-${actorClass}`);
 
-		const entryHeader = document.createElement('div');
-		entryHeader.className = 'timeline-entry-header';
-
+		// Turn number (timestamp style)
 		const turn = document.createElement('div');
 		turn.className = 'timeline-turn';
-		turn.textContent = `Turn ${entry.turn}`;
+		turn.textContent = entry.turn;
 
-		const actor = document.createElement('div');
-		actor.className = 'timeline-actor';
-		actor.textContent = entry.actor;
+		// Main content line
+		const content = document.createElement('div');
+		content.className = 'timeline-content-line';
 
-		const actionType = document.createElement('div');
-		actionType.className = 'timeline-action-type';
-		actionType.textContent = entry.action_type;
-		actionType.classList.add(`action-type-${entry.action_type.toLowerCase().replace(/\s+/g, '-')}`);
+		// Build the combat log text
+		const logText = this.#buildLogText(entry);
+		content.innerHTML = logText;
 
-		entryHeader.append(turn, actor, actionType);
-
-		const body = document.createElement('div');
-		body.className = 'timeline-entry-body';
-
-		const desc = document.createElement('p');
-		desc.className = 'timeline-description';
-		desc.textContent = entry.action_description;
-		body.appendChild(desc);
-
-		const details = document.createElement('ul');
-		details.className = 'timeline-details';
-
-		// Add details dynamically from the JSON
-		if (entry.targets) {
-			const targets = Array.isArray(entry.targets) ? entry.targets.join(', ') : entry.targets;
-			details.innerHTML += `<li><strong>Targets:</strong> ${targets}</li>`;
-		}
-		if (entry.damage) {
-			details.innerHTML += `<li><strong>Damage:</strong> ${entry.damage}</li>`;
-		}
-		if (entry.spell) {
-			details.innerHTML += `<li><strong>Spell:</strong> ${entry.spell}</li>`;
-		}
-		if (entry.roll) {
-			details.innerHTML += `<li><strong>Roll:</strong> ${entry.roll}</li>`;
-		}
-		if (entry.effect) {
-			details.innerHTML += `<li><strong>Effect:</strong> ${entry.effect}</li>`;
-		}
-
-		// Only append details list if it has content
-		if (details.children.length > 0) {
-			body.appendChild(details);
-		}
-
-		entryEl.append(entryHeader, body);
+		entryEl.append(turn, content);
 		return entryEl;
+	}
+
+	/**
+	 * Build Dota-style combat log text with color coding
+	 */
+	#buildLogText(entry) {
+		const actor = `<span class="log-actor actor-${this.#sanitizeClassName(entry.actor)}">${entry.actor}</span>`;
+		const actionType = `<span class="log-action-type">${entry.action_type}</span>`;
+		
+		let logParts = [actor];
+
+		// Build the main action description
+		if (entry.action_description) {
+			logParts.push(entry.action_description);
+		}
+
+		// Add spell if present
+		if (entry.spell) {
+			logParts.push(`<span class="log-spell">${entry.spell}</span>`);
+		}
+
+		// Add targets if present
+		if (entry.targets) {
+			const targets = Array.isArray(entry.targets) ? entry.targets : [entry.targets];
+			const targetText = targets.map(t => 
+				`<span class="log-target">${t}</span>`
+			).join(', ');
+			logParts.push('on ' + targetText);
+		}
+
+		// Add damage if present
+		if (entry.damage) {
+			logParts.push(`<span class="log-damage">(${entry.damage})</span>`);
+		}
+
+		// Add roll if present
+		if (entry.roll) {
+			logParts.push(`<span class="log-roll">[${entry.roll}]</span>`);
+		}
+
+		// Add effect if present
+		if (entry.effect) {
+			logParts.push(`<span class="log-effect">→ ${entry.effect}</span>`);
+		}
+
+		return logParts.join(' ');
+	}
+
+	/**
+	 * Sanitize class name for CSS
+	 */
+	#sanitizeClassName(str) {
+		return str
+			.toLowerCase()
+			.replace(/[^a-z0-9]/gi, '-')
+			.replace(/-+/g, '-')
+			.replace(/^-|-$/g, '');
 	}
 }
