@@ -238,8 +238,7 @@ color: rgba(44, 35, 25, 0.5);
 	 */
 	createListItemContent(encounter) {
 		const container = document.createElement('div');
-		container.style.cssText = 'display: flex; flex-direction: column;
-gap: 0.25rem;';
+		container.style.cssText = 'display: flex; flex-direction: column; gap: 0.25rem;';
 
 		const name = document.createElement('span');
 		name.className = 'view-item-name';
