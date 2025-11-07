@@ -3304,7 +3304,7 @@ blockquote i {
 /* Individual timeline entry - two lane layout */
 .timeline-entry {
 	display: grid;
-	grid-template-columns: 4rem auto 1fr;
+	grid-template-columns: 2rem 1fr 4rem 1fr 2rem;
 	align-items: center;
 	gap: 0.75rem;
 	padding: 0.3rem 0.75rem;
@@ -3326,7 +3326,7 @@ blockquote i {
 	background-color: #333333;
 }
 
-/* Turn number (timestamp) */
+/* Turn number (timestamp) - center column */
 .timeline-turn {
 	font-size: 0.8rem;
 	color: #888;
@@ -3334,6 +3334,7 @@ blockquote i {
 	text-align: center;
 	font-family: monospace;
 	flex-shrink: 0;
+	grid-column: 3;
 }
 
 /* Action icon */
@@ -3347,32 +3348,40 @@ blockquote i {
 	font-size: 1.2rem;
 }
 
+/* Left side icon (party) */
+.timeline-icon.left-icon {
+	grid-column: 1;
+	justify-self: end;
+}
+
+/* Right side icon (enemies) */
+.timeline-icon.right-icon {
+	grid-column: 5;
+	justify-self: start;
+}
+
 /* Main content line */
 .timeline-content-line {
-	flex: 1;
 	line-height: 1.4;
 	color: #ddd;
 	display: flex;
-	flex-direction: column;
-	gap: 0.15rem;
-}
-
-/* Left lane - main action */
-.timeline-left-lane {
-	display: flex;
 	flex-wrap: wrap;
 	align-items: center;
 	gap: 0.3rem;
 }
 
-/* Right lane - target/result info */
-.timeline-right-lane {
-	display: flex;
-	flex-wrap: wrap;
-	align-items: center;
-	gap: 0.3rem;
-	font-size: 0.9em;
-	opacity: 0.9;
+/* Left lane - party actions */
+.timeline-content-line.left-lane {
+	grid-column: 2;
+	justify-self: end;
+	text-align: right;
+}
+
+/* Right lane - enemy actions */
+.timeline-content-line.right-lane {
+	grid-column: 4;
+	justify-self: start;
+	text-align: left;
 }
 
 /* Actor names - color coded */

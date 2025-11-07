@@ -308,7 +308,7 @@ class StoryHelperEncounter extends StoryHelperBase {
 		return section;
 	}
 
-	/**
+/**
 	 * Create individual timeline entry (Dota-style two-lane combat log)
 	 */
 	#createTimelineEntry(entry) {
@@ -323,27 +323,39 @@ class StoryHelperEncounter extends StoryHelperBase {
 			.replace(/[^a-z0-9]/gi, '');
 		entryEl.classList.add(`actor-${actorClass}`);
 
-		// Turn number (timestamp style)
+		// Determine if this is a party member or enemy
+		const isParty = this.#isPartyMember(entry.actor);
+
+		// Turn number (timestamp style) - always in center
 		const turn = document.createElement('div');
 		turn.className = 'timeline-turn';
 		turn.textContent = entry.turn;
 
 		// Action icon
 		const icon = document.createElement('div');
-		icon.className = 'timeline-icon';
+		icon.className = `timeline-icon ${isParty ? 'left-icon' : 'right-icon'}`;
 		icon.textContent = this.#getActionIcon(entry);
 
-		// Main content container (two lanes)
+		// Main content
 		const content = document.createElement('div');
-		content.className = 'timeline-content-line';
+		content.className = `timeline-content-line ${isParty ? 'left-lane' : 'right-lane'}`;
+		content.innerHTML = this.#buildLogText(entry);
 
-		// Build the two-lane combat log
-		const lanes = this.#buildTwoLaneLog(entry);
-		content.appendChild(lanes.leftLane);
-		content.appendChild(lanes.rightLane);
+		// Append elements
+		entryEl.appendChild(turn);
+		entryEl.appendChild(icon);
+		entryEl.appendChild(content);
 
-		entryEl.append(turn, icon, content);
 		return entryEl;
+	}
+
+	/**
+	 * Determine if an actor is a party member
+	 */
+	#isPartyMember(actor) {
+		const partyMembers = ['bonnie', 'soshi', 'norr', 'olek', 'kaedin'];
+		const actorLower = actor.toLowerCase();
+		return partyMembers.some(member => actorLower.includes(member));
 	}
 
 	/**
@@ -370,55 +382,48 @@ class StoryHelperEncounter extends StoryHelperBase {
 	}
 
 	/**
-	 * Build two-lane combat log (left: actor + action, right: target + result)
+	 * Build combat log text with color coding
 	 */
-	#buildTwoLaneLog(entry) {
-		const leftLane = document.createElement('div');
-		leftLane.className = 'timeline-left-lane';
-		
-		const rightLane = document.createElement('div');
-		rightLane.className = 'timeline-right-lane';
-
-		// Left lane: Actor + Action + Spell
+	#buildLogText(entry) {
 		const actor = `<span class="log-actor actor-${this.#sanitizeClassName(entry.actor)}">${entry.actor}</span>`;
-		let leftContent = actor;
+		
+		let logParts = [actor];
 
+		// Build the main action description
 		if (entry.action_description) {
-			leftContent += ` ${entry.action_description}`;
+			logParts.push(entry.action_description);
 		}
 
+		// Add spell if present
 		if (entry.spell) {
-			leftContent += ` <span class="log-spell">${entry.spell}</span>`;
+			logParts.push(`<span class="log-spell">${entry.spell}</span>`);
 		}
 
-		leftLane.innerHTML = leftContent;
-
-		// Right lane: Targets + Damage + Roll + Effect
-		let rightParts = [];
-
+		// Add targets if present
 		if (entry.targets) {
 			const targets = Array.isArray(entry.targets) ? entry.targets : [entry.targets];
 			const targetText = targets.map(t => 
 				`<span class="log-target">${t}</span>`
 			).join(', ');
-			rightParts.push(targetText);
+			logParts.push('on ' + targetText);
 		}
 
+		// Add damage if present
 		if (entry.damage) {
-			rightParts.push(`<span class="log-damage">(${entry.damage})</span>`);
+			logParts.push(`<span class="log-damage">(${entry.damage})</span>`);
 		}
 
+		// Add roll if present
 		if (entry.roll) {
-			rightParts.push(`<span class="log-roll">[${entry.roll}]</span>`);
+			logParts.push(`<span class="log-roll">[${entry.roll}]</span>`);
 		}
 
+		// Add effect if present
 		if (entry.effect) {
-			rightParts.push(`<span class="log-effect">${entry.effect}</span>`);
+			logParts.push(`<span class="log-effect">→ ${entry.effect}</span>`);
 		}
 
-		rightLane.innerHTML = rightParts.join(' ');
-
-		return { leftLane, rightLane };
+		return logParts.join(' ');
 	}
 
 	/**
