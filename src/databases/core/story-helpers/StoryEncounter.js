@@ -1,5 +1,6 @@
 class StoryHelperEncounter extends StoryHelperBase {
 	#encounterData;
+	#selectedActor = 'all'; // Track selected actor filter
 
 	constructor(campaign, placeholderProcessor) {
 		super(campaign, placeholderProcessor);
@@ -23,26 +24,222 @@ class StoryHelperEncounter extends StoryHelperBase {
 	}
 
 	groupItems(encounters) {
-		// Group by session if available, otherwise group all together
-		// This can be adapted if your encounter object gets a "session_id"
+		// Group by session if available
 		const grouped = {};
 
 		encounters.forEach((encounter) => {
-			const session = encounter.session || 'Encounter Log';
-			if (!grouped[session]) {
-				grouped[session] = [];
+			const session = encounter.session || 'Unknown Session';
+			const key = `Session ${session}`;
+			if (!grouped[key]) {
+				grouped[key] = [];
 			}
-			grouped[session].push(encounter);
+			grouped[key].push(encounter);
 		});
 
 		return grouped;
 	}
 
 	/**
+	 * Override render to add actor filter functionality
+	 */
+	render(contentArea) {
+		const items = this.getItems();
+
+		if (!items?.length) {
+			contentArea.innerHTML = `
+				<div class="story-view-container">
+					<div class="view-header"><h2>${this.getViewTitle()}</h2></div>
+					<div class="no-content">No ${this.getViewTitle().toLowerCase()} available for this campaign.</div>
+				</div>
+			`;
+			return;
+		}
+
+		const container = document.createElement('div');
+		container.className = 'story-view-container';
+
+		const header = document.createElement('div');
+		header.className = 'view-header';
+		header.innerHTML = `<h2>${this.getViewTitle()}</h2>`;
+
+		const body = document.createElement('div');
+		body.className = 'view-body';
+
+		const listPanel = document.createElement('div');
+		listPanel.className = 'view-list-panel';
+		this.listPanel = listPanel;
+
+		const detailPanel = document.createElement('div');
+		detailPanel.className = 'view-detail-panel';
+
+		// Add actor filter section at top of list panel
+		const filterSection = this.#createActorFilter(items);
+		listPanel.appendChild(filterSection);
+
+		const groupedItems = this.groupItems(items);
+		this.renderGroups(listPanel, groupedItems, detailPanel);
+
+		// Handle URL targeting
+		const targetId = this.getTargetFromUrl();
+		let initialItem = null;
+
+		if (targetId) {
+			initialItem = this.findItemById(items, decodeURIComponent(targetId));
+
+			if (initialItem) {
+				setTimeout(() => {
+					const targetElement = listPanel.querySelector(`[data-item-id="${this.getItemId(initialItem)}"]`);
+					targetElement?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+				}, 100);
+			}
+		}
+
+		this.selectItem(initialItem || items[0], detailPanel);
+
+		body.append(listPanel, detailPanel);
+		container.append(header, body);
+		contentArea.appendChild(container);
+	}
+
+	/**
+	 * Create actor filter dropdown
+	 */
+	#createActorFilter(encounters) {
+		const filterContainer = document.createElement('div');
+		filterContainer.className = 'encounter-filter-section';
+		filterContainer.style.cssText = `
+			padding: 0.75rem;
+			background: rgba(255, 255, 255, 0.05);
+			border-bottom: 1px solid rgba(192, 170, 118, 0.3);
+			margin-bottom: 0.75rem;
+		`;
+
+		const label = document.createElement('label');
+		label.textContent = 'Filter by Actor:';
+		label.style.cssText = `
+			display: block;
+			font-size: 0.75rem;
+			color: var(--color-border);
+			text-transform: uppercase;
+			letter-spacing: 0.0625rem;
+			margin-bottom: 0.5rem;
+			font-family: 'Noto Sans', var(--font-system);
+		`;
+
+		const select = document.createElement('select');
+		select.className = 'actor-filter-select';
+		select.style.cssText = `
+			width: 100%;
+			padding: 0.5rem;
+			background: rgba(255, 255, 255, 0.1);
+			border: 1px solid rgba(192, 170, 118, 0.3);
+			border-radius: 0.25rem;
+			color: var(--color-parchment);
+			font-family: 'Noto Sans', var(--font-system);
+			font-size: 0.85rem;
+			cursor: pointer;
+		`;
+
+		// Collect unique actors from all encounters
+		const actorSet = new Set();
+		encounters.forEach((encounter) => {
+			encounter.timeline?.forEach((entry) => {
+				if (entry.actor) {
+					actorSet.add(entry.actor);
+				}
+			});
+		});
+
+		const actors = Array.from(actorSet).sort();
+
+		// Add "All" option
+		const allOption = document.createElement('option');
+		allOption.value = 'all';
+		allOption.textContent = 'All Actors';
+		select.appendChild(allOption);
+
+		// Add individual actor options
+		actors.forEach((actor) => {
+			const option = document.createElement('option');
+			option.value = actor;
+			option.textContent = actor;
+			select.appendChild(option);
+		});
+
+		// Handle filter change
+		select.addEventListener('change', (e) => {
+			this.#selectedActor = e.target.value;
+			this.#applyActorFilter();
+		});
+
+		filterContainer.append(label, select);
+		return filterContainer;
+	}
+
+	/**
+	 * Apply actor filter to timeline entries
+	 */
+	#applyActorFilter() {
+		const timelineEntries = document.querySelectorAll('.timeline-entry');
+		
+		timelineEntries.forEach((entry) => {
+			const actor = entry.dataset.actor;
+			
+			if (this.#selectedActor === 'all' || actor === this.#selectedActor) {
+				entry.style.display = '';
+			} else {
+				entry.style.display = 'none';
+			}
+		});
+
+		// Show/hide "no results" message
+		const timelineLog = document.querySelector('.timeline-log');
+		if (timelineLog) {
+			const visibleEntries = timelineLog.querySelectorAll('.timeline-entry:not([style*="display: none"])');
+			
+			let noResultsMsg = timelineLog.querySelector('.timeline-no-results');
+			
+			if (visibleEntries.length === 0) {
+				if (!noResultsMsg) {
+					noResultsMsg = document.createElement('div');
+					noResultsMsg.className = 'timeline-no-results';
+					noResultsMsg.style.cssText = `
+						padding: 2rem;
+						text-align: center;
+						color: rgba(44, 35, 25, 0.5);
+						font-style: italic;
+					`;
+					noResultsMsg.textContent = `No actions found for ${this.#selectedActor}`;
+					timelineLog.appendChild(noResultsMsg);
+				}
+			} else {
+				noResultsMsg?.remove();
+			}
+		}
+	}
+
+	/**
+	 * Creates list item content with encounter summary
+	 */
+	createListItemContent(encounter) {
+		const container = document.createElement('div');
+		container.style.cssText = 'display: flex; flex-direction: column; gap: 0.25rem;';
+
+		const name = document.createElement('span');
+		name.className = 'view-item-name';
+		name.textContent = encounter.encounter_name;
+
+		const meta = document.createElement('span');
+		meta.className = 'view-item-subtitle';
+		const turnCount = encounter.timeline?.length || 0;
+		meta.textContent = `${turnCount} action${turnCount !== 1 ? 's' : ''}`;
+
+		container.append(name, meta);
+		return container;
+	}
+
+	/**
 	 * Creates the main detail view for a single encounter.
-	 * This has been modified to read from the 'timeline' array.
-	 * @param {object} encounter - The encounter object from the JSON
-	 * @returns {HTMLElement}
 	 */
 	createDetailContent(encounter) {
 		this.#encounterData = encounter;
@@ -50,17 +247,14 @@ class StoryHelperEncounter extends StoryHelperBase {
 		const detail = document.createElement('div');
 		detail.className = 'view-detail-content encounter-detail';
 
-		// Header (This part works with the new JSON)
+		// Header
 		const header = this.#createEncounterHeader(encounter);
 		detail.appendChild(header);
 
-		// Timeline Log (Replaces the old 'round_by_round' visualization)
+		// Timeline Log
 		if (encounter.timeline?.length) {
 			detail.appendChild(this.#createTimelineLog(encounter.timeline));
 		}
-
-		// Removed initiative_order, combat_summary, and post_combat sections
-		// as they are not present in the new JSON structure.
 
 		return detail;
 	}
@@ -73,14 +267,22 @@ class StoryHelperEncounter extends StoryHelperBase {
 		name.className = 'view-detail-name';
 		name.textContent = encounter.encounter_name;
 
-		header.appendChild(name);
+		const meta = document.createElement('div');
+		meta.className = 'view-detail-meta';
+		
+		if (encounter.session) {
+			const sessionTag = document.createElement('span');
+			sessionTag.className = 'view-meta-tag';
+			sessionTag.textContent = `Session ${encounter.session}`;
+			meta.appendChild(sessionTag);
+		}
+
+		header.append(name, meta);
 		return header;
 	}
 
 	/**
-	 * Creates a new vertical timeline log based on the 'timeline' array.
-	 * @param {Array<object>} timeline - The encounter.timeline array
-	 * @returns {HTMLElement}
+	 * Creates a vertical timeline log based on the 'timeline' array.
 	 */
 	#createTimelineLog(timeline) {
 		const section = document.createElement('div');
@@ -97,74 +299,83 @@ class StoryHelperEncounter extends StoryHelperBase {
 		log.className = 'timeline-log';
 
 		timeline.forEach((entry) => {
-			const entryEl = document.createElement('div');
-			entryEl.className = 'timeline-entry';
-
-			// Add a helper class for styling based on actor
-			const actorClass = entry.actor
-				.toLowerCase()
-				.split(' ')[0]
-				.replace(/[^a-z0-9]/gi, '');
-			entryEl.classList.add(`actor-${actorClass}`);
-
-			const entryHeader = document.createElement('div');
-			entryHeader.className = 'timeline-entry-header';
-
-			const turn = document.createElement('div');
-			turn.className = 'timeline-turn';
-			turn.textContent = `Turn ${entry.turn}`;
-
-			const actor = document.createElement('div');
-			actor.className = 'timeline-actor';
-			actor.textContent = entry.actor;
-
-			const actionType = document.createElement('div');
-			actionType.className = 'timeline-action-type';
-			actionType.textContent = entry.action_type;
-			actionType.classList.add(`action-type-${entry.action_type.toLowerCase().replace(/\s+/g, '-')}`);
-
-			entryHeader.append(turn, actor, actionType);
-
-			const body = document.createElement('div');
-			body.className = 'timeline-entry-body';
-
-			const desc = document.createElement('p');
-			desc.className = 'timeline-description';
-			desc.textContent = entry.action_description;
-			body.appendChild(desc);
-
-			const details = document.createElement('ul');
-			details.className = 'timeline-details';
-
-			// Add details dynamically from the JSON
-			if (entry.targets) {
-				const targets = Array.isArray(entry.targets) ? entry.targets.join(', ') : entry.targets;
-				details.innerHTML += `<li><strong>Targets:</strong> ${targets}</li>`;
-			}
-			if (entry.damage) {
-				details.innerHTML += `<li><strong>Damage:</strong> ${entry.damage}</li>`;
-			}
-			if (entry.spell) {
-				details.innerHTML += `<li><strong>Spell:</strong> ${entry.spell}</li>`;
-			}
-			if (entry.roll) {
-				details.innerHTML += `<li><strong>Roll:</strong> ${entry.roll}</li>`;
-			}
-			if (entry.effect) {
-				details.innerHTML += `<li><strong>Effect:</strong> ${entry.effect}</li>`;
-			}
-
-			// Only append details list if it has content
-			if (details.children.length > 0) {
-				body.appendChild(details);
-			}
-
-			entryEl.append(entryHeader, body);
+			const entryEl = this.#createTimelineEntry(entry);
 			log.appendChild(entryEl);
 		});
 
 		content.appendChild(log);
 		section.append(header, content);
 		return section;
+	}
+
+	/**
+	 * Create individual timeline entry
+	 */
+	#createTimelineEntry(entry) {
+		const entryEl = document.createElement('div');
+		entryEl.className = 'timeline-entry';
+		entryEl.dataset.actor = entry.actor; // Store actor for filtering
+
+		// Add a helper class for styling based on actor
+		const actorClass = entry.actor
+			.toLowerCase()
+			.split(' ')[0]
+			.replace(/[^a-z0-9]/gi, '');
+		entryEl.classList.add(`actor-${actorClass}`);
+
+		const entryHeader = document.createElement('div');
+		entryHeader.className = 'timeline-entry-header';
+
+		const turn = document.createElement('div');
+		turn.className = 'timeline-turn';
+		turn.textContent = `Turn ${entry.turn}`;
+
+		const actor = document.createElement('div');
+		actor.className = 'timeline-actor';
+		actor.textContent = entry.actor;
+
+		const actionType = document.createElement('div');
+		actionType.className = 'timeline-action-type';
+		actionType.textContent = entry.action_type;
+		actionType.classList.add(`action-type-${entry.action_type.toLowerCase().replace(/\s+/g, '-')}`);
+
+		entryHeader.append(turn, actor, actionType);
+
+		const body = document.createElement('div');
+		body.className = 'timeline-entry-body';
+
+		const desc = document.createElement('p');
+		desc.className = 'timeline-description';
+		desc.textContent = entry.action_description;
+		body.appendChild(desc);
+
+		const details = document.createElement('ul');
+		details.className = 'timeline-details';
+
+		// Add details dynamically from the JSON
+		if (entry.targets) {
+			const targets = Array.isArray(entry.targets) ? entry.targets.join(', ') : entry.targets;
+			details.innerHTML += `<li><strong>Targets:</strong> ${targets}</li>`;
+		}
+		if (entry.damage) {
+			details.innerHTML += `<li><strong>Damage:</strong> ${entry.damage}</li>`;
+		}
+		if (entry.spell) {
+			details.innerHTML += `<li><strong>Spell:</strong> ${entry.spell}</li>`;
+		}
+		if (entry.roll) {
+			details.innerHTML += `<li><strong>Roll:</strong> ${entry.roll}</li>`;
+		}
+		if (entry.effect) {
+			details.innerHTML += `<li><strong>Effect:</strong> ${entry.effect}</li>`;
+		}
+
+		// Only append details list if it has content
+		if (details.children.length > 0) {
+			body.appendChild(details);
+		}
+
+		entryEl.append(entryHeader, body);
+		return entryEl;
 	}
 }

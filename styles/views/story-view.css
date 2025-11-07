@@ -3279,3 +3279,311 @@ blockquote i {
 .tooltip-nav-icon {
 	font-weight: bold;
 }
+
+/* =================================================================== */
+/* ===== ENCOUNTER TIMELINE STYLES ===== */
+/* =================================================================== */
+
+.encounter-timeline-section {
+	margin-top: var(--spacing-lg);
+}
+
+.timeline-log {
+	display: flex;
+	flex-direction: column;
+	gap: var(--spacing-md);
+	padding: var(--spacing-md);
+	position: relative;
+}
+
+/* Timeline connector line */
+.timeline-log::before {
+	content: '';
+	position: absolute;
+	left: 2rem;
+	top: 0;
+	bottom: 0;
+	width: 2px;
+	background: linear-gradient(to bottom, 
+		transparent, 
+		var(--color-border) 10%, 
+		var(--color-border) 90%, 
+		transparent
+	);
+}
+
+/* Individual timeline entry */
+.timeline-entry {
+	display: flex;
+	flex-direction: column;
+	gap: var(--spacing-sm);
+	padding: var(--spacing-md);
+	background-color: rgba(255, 255, 255, 0.5);
+	border: 1px solid var(--color-border);
+	border-radius: var(--radius-md);
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+	position: relative;
+	margin-left: 3.5rem;
+	transition: all 0.2s ease;
+}
+
+.timeline-entry::before {
+	content: '';
+	position: absolute;
+	left: -1.75rem;
+	top: 1.5rem;
+	width: 1rem;
+	height: 1rem;
+	background-color: var(--color-border);
+	border: 3px solid var(--color-parchment);
+	border-radius: 50%;
+	box-shadow: 0 0 0 3px var(--color-border);
+	z-index: 1;
+}
+
+.timeline-entry:hover {
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+	transform: translateX(0.25rem);
+}
+
+/* Timeline entry header */
+.timeline-entry-header {
+	display: flex;
+	align-items: center;
+	gap: var(--spacing-md);
+	flex-wrap: wrap;
+	padding-bottom: var(--spacing-sm);
+	border-bottom: 1px solid var(--color-border);
+}
+
+.timeline-turn {
+	font-size: 0.75rem;
+	font-weight: 600;
+	color: var(--color-secondary);
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
+	padding: 0.25rem 0.5rem;
+	background-color: rgba(100, 59, 17, 0.1);
+	border-radius: var(--radius-sm);
+	font-family: 'Noto Sans', var(--font-system);
+}
+
+.timeline-actor {
+	font-size: 0.95rem;
+	font-weight: 700;
+	color: var(--color-primary);
+	font-family: 'Noto Sans', var(--font-system);
+	flex: 1;
+}
+
+.timeline-action-type {
+	font-size: 0.75rem;
+	font-weight: 600;
+	padding: 0.25rem 0.75rem;
+	border-radius: 12px;
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
+	font-family: 'Noto Sans', var(--font-system);
+	white-space: nowrap;
+}
+
+/* Action type colors */
+.action-type-action {
+	background-color: #e3f2fd;
+	color: #1565c0;
+	border: 1px solid #90caf9;
+}
+
+.action-type-bonus-action {
+	background-color: #fff3e0;
+	color: #e65100;
+	border: 1px solid #ffb74d;
+}
+
+.action-type-reaction {
+	background-color: #fce4ec;
+	color: #c2185b;
+	border: 1px solid #f48fb1;
+}
+
+.action-type-movement {
+	background-color: #e8f5e9;
+	color: #2e7d32;
+	border: 1px solid #81c784;
+}
+
+.action-type-spell,
+.action-type-attack {
+	background-color: #f3e5f5;
+	color: #6a1b9a;
+	border: 1px solid #ce93d8;
+}
+
+.action-type-special {
+	background-color: #fff8e1;
+	color: #f57f17;
+	border: 1px solid #ffd54f;
+}
+
+/* Timeline entry body */
+.timeline-entry-body {
+	display: flex;
+	flex-direction: column;
+	gap: var(--spacing-sm);
+}
+
+.timeline-description {
+	font-size: 0.95rem;
+	line-height: 1.6;
+	color: var(--color-text);
+	margin: 0;
+	font-family: 'Noto Sans', var(--font-system);
+}
+
+.timeline-details {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	display: flex;
+	flex-direction: column;
+	gap: 0.375rem;
+}
+
+.timeline-details li {
+	font-size: 0.85rem;
+	line-height: 1.4;
+	color: var(--color-text);
+	padding: 0.375rem 0.75rem;
+	background-color: rgba(248, 244, 227, 0.5);
+	border-left: 3px solid var(--color-border);
+	border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+	font-family: 'Noto Sans', var(--font-system);
+}
+
+.timeline-details li strong {
+	color: var(--color-secondary);
+	font-weight: 600;
+	margin-right: 0.375rem;
+}
+
+/* Actor-specific styling (optional color coding) */
+.timeline-entry.actor-bonnie::before {
+	background-color: #978036;
+	box-shadow: 0 0 0 3px #978036;
+}
+
+.timeline-entry.actor-soshi::before {
+	background-color: #2aa6c9;
+	box-shadow: 0 0 0 3px #2aa6c9;
+}
+
+.timeline-entry.actor-norr::before {
+	background-color: #c41e3a;
+	box-shadow: 0 0 0 3px #c41e3a;
+}
+
+.timeline-entry.actor-olek::before {
+	background-color: #f48cba;
+	box-shadow: 0 0 0 3px #f48cba;
+}
+
+.timeline-entry.actor-kaedin::before {
+	background-color: #507f62;
+	box-shadow: 0 0 0 3px #507f62;
+}
+
+/* Enemy/environment entries */
+.timeline-entry.actor-red::before,
+.timeline-entry.actor-enemies::before,
+.timeline-entry.actor-dragon::before {
+	background-color: #d32f2f;
+	box-shadow: 0 0 0 3px #d32f2f;
+}
+
+.timeline-entry.actor-environment::before,
+.timeline-entry.actor-artifact::before {
+	background-color: #7b1fa2;
+	box-shadow: 0 0 0 3px #7b1fa2;
+}
+
+/* No results message */
+.timeline-no-results {
+	padding: 2rem;
+	text-align: center;
+	color: rgba(44, 35, 25, 0.5);
+	font-style: italic;
+	font-family: 'Noto Sans', var(--font-system);
+	background-color: rgba(255, 255, 255, 0.3);
+	border-radius: var(--radius-md);
+	border: 1px dashed var(--color-border);
+}
+
+/* Filter section styling */
+.encounter-filter-section select:hover {
+	background: rgba(255, 255, 255, 0.15);
+	border-color: rgba(192, 170, 118, 0.5);
+}
+
+.encounter-filter-section select:focus {
+	outline: none;
+	border-color: var(--color-primary);
+	box-shadow: 0 0 0 3px rgba(123, 13, 13, 0.1);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+	.timeline-log::before {
+		left: 1rem;
+	}
+	
+	.timeline-entry {
+		margin-left: 2rem;
+	}
+	
+	.timeline-entry::before {
+		left: -1.25rem;
+		width: 0.75rem;
+		height: 0.75rem;
+	}
+	
+	.timeline-entry-header {
+		flex-direction: column;
+		align-items: flex-start;
+		gap: var(--spacing-xs);
+	}
+	
+	.timeline-actor {
+		order: -1;
+	}
+}
+
+/* Animation for filtered entries */
+@keyframes fadeOut {
+	from {
+		opacity: 1;
+		transform: translateX(0);
+	}
+	to {
+		opacity: 0;
+		transform: translateX(-10px);
+	}
+}
+
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+		transform: translateX(-10px);
+	}
+	to {
+		opacity: 1;
+		transform: translateX(0);
+	}
+}
+
+.timeline-entry[style*="display: none"] {
+	animation: fadeOut 0.2s ease-out;
+}
+
+.timeline-entry:not([style*="display: none"]) {
+	animation: fadeIn 0.3s ease-out;
+}

@@ -41,6 +41,6 @@ const CAMPAIGN_DATA = [
 		npcs: CAMPAIGN_002_NPCS,
 		locations: CAMPAIGN_002_LOCATIONS,
 		factions: CAMPAIGN_002_FACTIONS,
-		// encounters: CAMPAIGN_002_ENCOUNTERS,
+		encounters: CAMPAIGN_002_ENCOUNTERS,
 	},
 ];
