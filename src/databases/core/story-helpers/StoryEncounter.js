@@ -312,6 +312,9 @@ class StoryHelperEncounter extends StoryHelperBase {
 	 * Create individual timeline entry (Dota-style two-lane combat log)
 	 */
 	#createTimelineEntry(entry) {
+		const firstEmptyDiv = document.createElement('div');
+		const secondEmptyDiv = document.createElement('div');
+
 		const entryEl = document.createElement('div');
 		entryEl.className = 'timeline-entry';
 		entryEl.dataset.actor = entry.actor; // Store actor for filtering
@@ -342,9 +345,19 @@ class StoryHelperEncounter extends StoryHelperBase {
 		content.innerHTML = this.#buildLogText(entry);
 
 		// Append elements
-		entryEl.appendChild(turn);
-		entryEl.appendChild(icon);
-		entryEl.appendChild(content);
+		if (isParty) {
+			entryEl.appendChild(icon);
+			entryEl.appendChild(content);
+			entryEl.appendChild(turn);
+			entryEl.appendChild(firstEmptyDiv);
+			entryEl.appendChild(secondEmptyDiv);
+		} else {
+			entryEl.appendChild(firstEmptyDiv);
+			entryEl.appendChild(secondEmptyDiv);
+			entryEl.appendChild(turn);
+			entryEl.appendChild(icon);
+			entryEl.appendChild(content);
+		}
 
 		return entryEl;
 	}
