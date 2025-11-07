@@ -3281,7 +3281,7 @@ blockquote i {
 }
 
 /* =================================================================== */
-/* ===== ENCOUNTER TIMELINE STYLES ===== */
+/* ===== ENCOUNTER TIMELINE STYLES (DOTA-STYLE COMBAT LOG) ===== */
 /* =================================================================== */
 
 .encounter-timeline-section {
@@ -3291,234 +3291,189 @@ blockquote i {
 .timeline-log {
 	display: flex;
 	flex-direction: column;
-	gap: var(--spacing-md);
-	padding: var(--spacing-md);
-	position: relative;
+	gap: 0;
+	padding: 0;
+	background: #1a1a1a;
+	border-radius: var(--radius-md);
+	overflow: hidden;
+	font-family: 'Noto Sans', monospace, var(--font-system);
+	font-size: 0.9rem;
+	box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.5);
 }
 
-/* Timeline connector line */
-.timeline-log::before {
-	content: '';
-	position: absolute;
-	left: 2rem;
-	top: 0;
-	bottom: 0;
-	width: 2px;
-	background: linear-gradient(to bottom, 
-		transparent, 
-		var(--color-border) 10%, 
-		var(--color-border) 90%, 
-		transparent
-	);
-}
-
-/* Individual timeline entry */
+/* Individual timeline entry - compact single line */
 .timeline-entry {
 	display: flex;
-	flex-direction: column;
-	gap: var(--spacing-sm);
-	padding: var(--spacing-md);
-	background-color: rgba(255, 255, 255, 0.5);
-	border: 1px solid var(--color-border);
-	border-radius: var(--radius-md);
-	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-	position: relative;
-	margin-left: 3.5rem;
-	transition: all 0.2s ease;
-}
-
-.timeline-entry::before {
-	content: '';
-	position: absolute;
-	left: -1.75rem;
-	top: 1.5rem;
-	width: 1rem;
-	height: 1rem;
-	background-color: var(--color-border);
-	border: 3px solid var(--color-parchment);
-	border-radius: 50%;
-	box-shadow: 0 0 0 3px var(--color-border);
-	z-index: 1;
+	align-items: center;
+	gap: 0.75rem;
+	padding: 0.4rem 0.75rem;
+	background-color: #2a2a2a;
+	border-bottom: 1px solid #1a1a1a;
+	transition: background-color 0.15s ease;
+	min-height: 2rem;
 }
 
 .timeline-entry:hover {
-	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-	transform: translateX(0.25rem);
+	background-color: #333333;
 }
 
-/* Timeline entry header */
-.timeline-entry-header {
-	display: flex;
-	align-items: center;
-	gap: var(--spacing-md);
-	flex-wrap: wrap;
-	padding-bottom: var(--spacing-sm);
-	border-bottom: 1px solid var(--color-border);
+.timeline-entry:nth-child(even) {
+	background-color: #252525;
 }
 
+.timeline-entry:nth-child(even):hover {
+	background-color: #333333;
+}
+
+/* Turn number (timestamp) */
 .timeline-turn {
-	font-size: 0.75rem;
-	font-weight: 600;
-	color: var(--color-secondary);
-	text-transform: uppercase;
-	letter-spacing: 0.5px;
-	padding: 0.25rem 0.5rem;
-	background-color: rgba(100, 59, 17, 0.1);
-	border-radius: var(--radius-sm);
-	font-family: 'Noto Sans', var(--font-system);
+	font-size: 0.8rem;
+	color: #888;
+	font-weight: 500;
+	min-width: 2rem;
+	text-align: left;
+	font-family: monospace;
+	flex-shrink: 0;
 }
 
-.timeline-actor {
-	font-size: 0.95rem;
-	font-weight: 700;
-	color: var(--color-primary);
-	font-family: 'Noto Sans', var(--font-system);
+/* Main content line */
+.timeline-content-line {
 	flex: 1;
-}
-
-.timeline-action-type {
-	font-size: 0.75rem;
-	font-weight: 600;
-	padding: 0.25rem 0.75rem;
-	border-radius: 12px;
-	text-transform: uppercase;
-	letter-spacing: 0.5px;
-	font-family: 'Noto Sans', var(--font-system);
-	white-space: nowrap;
-}
-
-/* Action type colors */
-.action-type-action {
-	background-color: #e3f2fd;
-	color: #1565c0;
-	border: 1px solid #90caf9;
-}
-
-.action-type-bonus-action {
-	background-color: #fff3e0;
-	color: #e65100;
-	border: 1px solid #ffb74d;
-}
-
-.action-type-reaction {
-	background-color: #fce4ec;
-	color: #c2185b;
-	border: 1px solid #f48fb1;
-}
-
-.action-type-movement {
-	background-color: #e8f5e9;
-	color: #2e7d32;
-	border: 1px solid #81c784;
-}
-
-.action-type-spell,
-.action-type-attack {
-	background-color: #f3e5f5;
-	color: #6a1b9a;
-	border: 1px solid #ce93d8;
-}
-
-.action-type-special {
-	background-color: #fff8e1;
-	color: #f57f17;
-	border: 1px solid #ffd54f;
-}
-
-/* Timeline entry body */
-.timeline-entry-body {
-	display: flex;
-	flex-direction: column;
-	gap: var(--spacing-sm);
-}
-
-.timeline-description {
-	font-size: 0.95rem;
-	line-height: 1.6;
-	color: var(--color-text);
-	margin: 0;
-	font-family: 'Noto Sans', var(--font-system);
-}
-
-.timeline-details {
-	list-style: none;
-	padding: 0;
-	margin: 0;
-	display: flex;
-	flex-direction: column;
-	gap: 0.375rem;
-}
-
-.timeline-details li {
-	font-size: 0.85rem;
 	line-height: 1.4;
-	color: var(--color-text);
-	padding: 0.375rem 0.75rem;
-	background-color: rgba(248, 244, 227, 0.5);
-	border-left: 3px solid var(--color-border);
-	border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
-	font-family: 'Noto Sans', var(--font-system);
+	color: #ddd;
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 0.3rem;
 }
 
-.timeline-details li strong {
-	color: var(--color-secondary);
+/* Actor names - color coded */
+.log-actor {
+	font-weight: 700;
+	text-shadow: 0 0 2px rgba(0, 0, 0, 0.8);
+}
+
+/* Player character colors */
+.log-actor.actor-bonnie {
+	color: #f4d03f;
+}
+
+.log-actor.actor-soshi {
+	color: #5dade2;
+}
+
+.log-actor.actor-norr {
+	color: #e74c3c;
+}
+
+.log-actor.actor-olek {
+	color: #f48cba;
+}
+
+.log-actor.actor-kaedin {
+	color: #82e0aa;
+}
+
+/* Enemy/hostile colors */
+.log-actor.actor-red,
+.log-actor.actor-enemies,
+.log-actor.actor-dragon,
+.log-actor.actor-dragon-kin {
+	color: #ff4444;
+}
+
+/* NPC/ally colors */
+.log-actor.actor-arcane,
+.log-actor.actor-caster {
+	color: #bb8fce;
+}
+
+/* Environment/neutral */
+.log-actor.actor-environment,
+.log-actor.actor-artifact {
+	color: #aaa;
+}
+
+/* Spell names */
+.log-spell {
+	color: #bb8fce;
 	font-weight: 600;
-	margin-right: 0.375rem;
 }
 
-/* Actor-specific styling (optional color coding) */
-.timeline-entry.actor-bonnie::before {
-	background-color: #978036;
-	box-shadow: 0 0 0 3px #978036;
+/* Target names */
+.log-target {
+	color: #5dade2;
 }
 
-.timeline-entry.actor-soshi::before {
-	background-color: #2aa6c9;
-	box-shadow: 0 0 0 3px #2aa6c9;
+/* Damage numbers */
+.log-damage {
+	color: #ff6b6b;
+	font-weight: 700;
 }
 
-.timeline-entry.actor-norr::before {
-	background-color: #c41e3a;
-	box-shadow: 0 0 0 3px #c41e3a;
+/* Roll results */
+.log-roll {
+	color: #f39c12;
+	font-weight: 600;
+	font-family: monospace;
 }
 
-.timeline-entry.actor-olek::before {
-	background-color: #f48cba;
-	box-shadow: 0 0 0 3px #f48cba;
+/* Effects */
+.log-effect {
+	color: #9b59b6;
+	font-style: italic;
 }
 
-.timeline-entry.actor-kaedin::before {
-	background-color: #507f62;
-	box-shadow: 0 0 0 3px #507f62;
-}
-
-/* Enemy/environment entries */
-.timeline-entry.actor-red::before,
-.timeline-entry.actor-enemies::before,
-.timeline-entry.actor-dragon::before {
-	background-color: #d32f2f;
-	box-shadow: 0 0 0 3px #d32f2f;
-}
-
-.timeline-entry.actor-environment::before,
-.timeline-entry.actor-artifact::before {
-	background-color: #7b1fa2;
-	box-shadow: 0 0 0 3px #7b1fa2;
+/* Action type badge */
+.log-action-type {
+	font-size: 0.7rem;
+	padding: 0.1rem 0.4rem;
+	border-radius: 3px;
+	font-weight: 600;
+	text-transform: uppercase;
+	background-color: rgba(255, 255, 255, 0.1);
+	color: #aaa;
 }
 
 /* No results message */
 .timeline-no-results {
 	padding: 2rem;
 	text-align: center;
-	color: rgba(44, 35, 25, 0.5);
+	color: #888;
 	font-style: italic;
-	font-family: 'Noto Sans', var(--font-system);
-	background-color: rgba(255, 255, 255, 0.3);
-	border-radius: var(--radius-md);
-	border: 1px dashed var(--color-border);
+	background-color: #2a2a2a;
 }
 
 /* Filter section styling */
+.encounter-filter-section {
+	padding: 0.75rem;
+	background: rgba(0, 0, 0, 0.3);
+	border-bottom: 1px solid rgba(192, 170, 118, 0.3);
+	margin-bottom: 0;
+}
+
+.encounter-filter-section label {
+	display: block;
+	font-size: 0.75rem;
+	color: var(--color-border);
+	text-transform: uppercase;
+	letter-spacing: 0.0625rem;
+	margin-bottom: 0.5rem;
+	font-family: 'Noto Sans', var(--font-system);
+}
+
+.encounter-filter-section select {
+	width: 100%;
+	padding: 0.5rem;
+	background: rgba(255, 255, 255, 0.1);
+	border: 1px solid rgba(192, 170, 118, 0.3);
+	border-radius: 0.25rem;
+	color: var(--color-parchment);
+	font-family: 'Noto Sans', var(--font-system);
+	font-size: 0.85rem;
+	cursor: pointer;
+}
+
 .encounter-filter-section select:hover {
 	background: rgba(255, 255, 255, 0.15);
 	border-color: rgba(192, 170, 118, 0.5);
@@ -3532,28 +3487,19 @@ blockquote i {
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
-	.timeline-log::before {
-		left: 1rem;
-	}
-	
 	.timeline-entry {
-		margin-left: 2rem;
-	}
-	
-	.timeline-entry::before {
-		left: -1.25rem;
-		width: 0.75rem;
-		height: 0.75rem;
-	}
-	
-	.timeline-entry-header {
 		flex-direction: column;
 		align-items: flex-start;
-		gap: var(--spacing-xs);
+		gap: 0.25rem;
+		padding: 0.5rem;
 	}
 	
-	.timeline-actor {
-		order: -1;
+	.timeline-turn {
+		font-size: 0.75rem;
+	}
+	
+	.timeline-content-line {
+		font-size: 0.85rem;
 	}
 }
 
@@ -3561,27 +3507,30 @@ blockquote i {
 @keyframes fadeOut {
 	from {
 		opacity: 1;
-		transform: translateX(0);
+		max-height: 3rem;
 	}
 	to {
 		opacity: 0;
-		transform: translateX(-10px);
+		max-height: 0;
+		padding: 0;
+		margin: 0;
 	}
 }
 
 @keyframes fadeIn {
 	from {
 		opacity: 0;
-		transform: translateX(-10px);
+		max-height: 0;
 	}
 	to {
 		opacity: 1;
-		transform: translateX(0);
+		max-height: 3rem;
 	}
 }
 
 .timeline-entry[style*="display: none"] {
-	animation: fadeOut 0.2s ease-out;
+	animation: fadeOut 0.2s ease-out forwards;
+	overflow: hidden;
 }
 
 .timeline-entry:not([style*="display: none"]) {
