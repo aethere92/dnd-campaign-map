@@ -346,8 +346,8 @@ class StoryHelperEncounter extends StoryHelperBase {
 
 		// Append elements
 		if (isParty) {
-			entryEl.appendChild(icon);
 			entryEl.appendChild(content);
+			entryEl.appendChild(icon);
 			entryEl.appendChild(turn);
 			entryEl.appendChild(firstEmptyDiv);
 			entryEl.appendChild(secondEmptyDiv);
