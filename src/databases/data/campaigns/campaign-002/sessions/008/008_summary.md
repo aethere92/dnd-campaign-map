@@ -1,4 +1,4 @@
-<h3>I. Session Overview</h3>
+<h3 class="session-summary-heading">I. Session Overview</h3>
 <ul>
 	<li>
 		<strong>Session Number:</strong>
@@ -18,7 +18,7 @@
 	</li>
 </ul>
 
-<h3>II. Narrative Summary</h3>
+<h3 class="session-summary-heading">II. Narrative Summary</h3>
 <p><strong>The Onslaught Begins</strong></p>
 <ul>
 	<li>The session opened immediately after the explosion that breached the ritual chamber wall.</li>
@@ -134,7 +134,7 @@
 	<li>Yoghurt repeated the message, nodded solemnly, and disappeared into the woods to deliver it.</li>
 </ul>
 
-<h3>III. Quest &amp; Objective Tracker</h3>
+<h3 class="session-summary-heading">III. Quest &amp; Objective Tracker</h3>
 <div class="quest-container">
     <div class="quest">
         <div class="quest-name">[ENTITY:quest:Stop the Invasion]</div>
@@ -178,7 +178,7 @@
     </div>
 </div>
 
-<h3>IV. Key People &amp; Factions</h3>
+<h3 class="session-summary-heading">IV. Key People &amp; Factions</h3>
 <p><strong>New NPCs Introduced:</strong></p>
 <ul>
 	<li><strong>Kresimir</strong> - Resurrected god of the Angevin, mentioned in Olek's vision</li>
@@ -202,7 +202,7 @@
 	<li><strong>Fey Courts</strong> - Spring and Autumn Courts annihilated in vision</li>
 </ul>
 
-<h3>V. Important Discoveries &amp; Loot</h3>
+<h3 class="session-summary-heading">V. Important Discoveries &amp; Loot</h3>
 <p><strong>Plot Discoveries:</strong></p>
 <ul>
 	<li>Null Brand artifact destroyed in explosion, corruption lifted</li>

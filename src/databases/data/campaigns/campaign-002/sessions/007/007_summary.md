@@ -1,4 +1,4 @@
-<h3>I. Session Overview</h3>
+<h3 class="session-summary-heading">I. Session Overview</h3>
 <ul>
 	<li>
 		<strong>Session Number:</strong>
@@ -18,7 +18,7 @@
 	</li>
 </ul>
 
-<h3>II. Narrative Summary</h3>
+<h3 class="session-summary-heading">II. Narrative Summary</h3>
 <p><strong>Regrouping and Recovery</strong></p>
 <ul>
 	<li>The party regrouped after the previous battle in the fortress courtyard.</li>
@@ -169,7 +169,7 @@
 	<li>Session ended with the party trapped between Kalistra and the incoming dragon-led force.</li>
 </ul>
 
-<h3>III. Quest &amp; Objective Tracker</h3>
+<h3 class="session-summary-heading">III. Quest &amp; Objective Tracker</h3>
 <div class="quest-container">
     <div class="quest">
         <div class="quest-name">[ENTITY:quest:Stop the Invasion]</div>
@@ -213,7 +213,7 @@
     </div>
 </div>
 
-<h3>IV. Key People &amp; Factions</h3>
+<h3 class="session-summary-heading">IV. Key People &amp; Factions</h3>
 <p><strong>New NPCs Introduced:</strong></p>
 <ul>
 	<li><strong>Kalistra</strong> (alive, aged, corrupted) - Norr's former teacher; bound to Null Brand in vault; requests party's aid</li>
@@ -227,7 +227,7 @@
 	<li><strong>Spectral Guardians</strong> - Animated corpses defending ritual chamber</li>
 </ul>
 
-<h3>V. Important Discoveries &amp; Loot</h3>
+<h3 class="session-summary-heading">V. Important Discoveries &amp; Loot</h3>
 <p><strong>Plot Discoveries:</strong></p>
 <ul>
 	<li>Massive enemy force approaching Drellin's Ferry (19&times; previous size, ETA 4 days)</li>

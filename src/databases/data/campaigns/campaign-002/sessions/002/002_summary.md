@@ -1,4 +1,4 @@
-<h3>I. Session Overview</h3>
+<h3 class="session-summary-heading">I. Session Overview</h3>
 <ul>
 	<li>
 		<strong>Session Number:</strong>
@@ -17,7 +17,7 @@
         After encountering mercenary groups at the tavern and sharing intelligence with the Winter Rose, the party discovered a trapped bridge and defeated a hydra, recovering hydra eggs before retreating from repeated warg rider ambushes.
 	</li>
 </ul>
-<h3>II. Narrative Summary</h3>
+<h3 class="session-summary-heading">II. Narrative Summary</h3>
 <p>
 	<strong>
 		Arrival at the Tavern
@@ -185,7 +185,7 @@
 	</li>
 </ul>
 
-<h3>III. Quest &amp; Objective Tracker</h3>
+<h3 class="session-summary-heading">III. Quest &amp; Objective Tracker</h3>
 <div class="quest-container">
     <div class="quest">
         <div class="quest-name">[ENTITY:quest:Stop The Invasion]</div>
@@ -229,7 +229,7 @@
     </div>
 </div>
 
-<h3>IV. Key People &amp; Factions</h3>
+<h3 class="session-summary-heading">IV. Key People &amp; Factions</h3>
 <p><strong>New NPCs Introduced:</strong></p>
 <ul>
     <li><strong>Tharma</strong> - Dwarven innkeeper at Green Apple Inn</li>
@@ -245,7 +245,7 @@
     <li><strong>Arcane Brotherhood</strong> - Noted as recently uncooperative</li>
 </ul>
 
-<h3>V. Important Discoveries &amp; Loot</h3>
+<h3 class="session-summary-heading">V. Important Discoveries &amp; Loot</h3>
 <p><strong>Plot Discoveries:</strong></p>
 <ul>
 	<li>Bridge rigged with explosives</li>

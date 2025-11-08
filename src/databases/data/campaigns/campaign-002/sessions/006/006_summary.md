@@ -1,4 +1,4 @@
-<h3>I. Session Overview</h3>
+<h3 class="session-summary-heading">I. Session Overview</h3>
 <ul>
 	<li>
 		<strong>Session Number:</strong>
@@ -18,7 +18,7 @@
 	</li>
 </ul>
 
-<h3>II. Narrative Summary</h3>
+<h3 class="session-summary-heading">II. Narrative Summary</h3>
 <p><strong>An Uneasy Respite</strong></p>
 <ul>
 	<li>The party arrived at the town inn around 8 p.m., exhausted from the day&rsquo;s battle.</li>
@@ -121,7 +121,7 @@
 	<li>Combat ended with the fortress ablaze and the party victorious but exhausted.</li>
 </ul>
 
-<h3>III. Quest &amp; Objective Tracker</h3>
+<h3 class="session-summary-heading">III. Quest &amp; Objective Tracker</h3>
 <div class="quest-container">
     <div class="quest">
         <div class="quest-name">[ENTITY:quest:Stop the Invasion]</div>
@@ -165,7 +165,7 @@
     </div>
 </div>
 
-<h3>IV. Key People &amp; Factions</h3>
+<h3 class="session-summary-heading">IV. Key People &amp; Factions</h3>
 <p><strong>New NPCs Introduced:</strong></p>
 <ul>
 	<li><strong>Palo</strong> - Olek's cat who raided the inn kitchen</li>
@@ -180,7 +180,7 @@
 	<li><strong>Missing Barbarian Riders</strong> - Four riders disappeared in Witchwood area</li>
 </ul>
 
-<h3>V. Important Discoveries &amp; Loot</h3>
+<h3 class="session-summary-heading">V. Important Discoveries &amp; Loot</h3>
 <p><strong>Plot Discoveries:</strong></p>
 <ul>
 	<li>Forest near fortress unnaturally lifeless</li>

@@ -182,13 +182,13 @@ class StoryHelperSidebar {
 			toolsList.appendChild(npcsBtn);
 		}
 
-		// NPCs button
+		// Factions button
 		if (campaign?.factions?.length) {
 			const factionsBtn = this.#createToolButton('🛡️ Factions', 'factions');
 			toolsList.appendChild(factionsBtn);
 		}
 
-		// NPCs button
+		// Encounters button
 		if (campaign?.encounters?.length) {
 			const encountersBtn = this.#createToolButton('⚔️ Encounters', 'encounters');
 			toolsList.appendChild(encountersBtn);

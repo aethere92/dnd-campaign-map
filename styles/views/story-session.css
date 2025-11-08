@@ -18,7 +18,16 @@
 .session-header,
 .session-small-recap,
 .session-main-content {
-	max-inline-size: 56.25rem;
+	max-inline-size: 50rem;
+	inline-size: 100%;
+}
+
+.session-summary-heading {
+	font-size: 12pt;
+	color: #5c2c0a;
+	margin: 0 0 1rem;
+	border-block-end: 0.0625rem solid #e0d5c3;
+	padding-block-end: 0.5rem;
 }
 
 .session-header {
@@ -59,10 +68,10 @@
 	font-size: 11pt;
 	font-family: 'Noto Sans', var(--font-system);
 	background-image: url(../../images/assets/background_texture.png);
-	border: 0.0625rem solid #e0d5c3;
+	/* border: 0.0625rem solid #e0d5c3; */
 	border-radius: 0.375rem;
-	padding: 2rem;
-	box-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.05);
+	/* padding: 2rem; */
+	/* box-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.05); */
 }
 
 .session-small-recap .character-highlight {

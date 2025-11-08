@@ -1,4 +1,4 @@
-<h3>I. Session Overview</h3>
+<h3 class="session-summary-heading">I. Session Overview</h3>
 <ul>
 	<li>
 		<strong>Session Number:</strong>
@@ -18,7 +18,7 @@
 	</li>
 </ul>
 
-<h3>II. Narrative Summary</h3>
+<h3 class="session-summary-heading">II. Narrative Summary</h3>
 <p><strong>The Leviathan&rsquo;s Hall</strong></p>
 <ul>
 	<li>After escaping the collapsing caverns, the party (Bonnie, Kaedin, Soshi, Norr, and Olek) found themselves aboard a mysterious vessel pulled from the sea by grappling hooks.</li>
@@ -118,7 +118,7 @@
 	<li>The party rested at the inn, financially recovered, with their new cub companions secured.</li>
 </ul>
 
-<h3>III. Quest &amp; Objective Tracker</h3>
+<h3 class="session-summary-heading">III. Quest &amp; Objective Tracker</h3>
 <div class="quest-container">
     <div class="quest">
         <div class="quest-name">[ENTITY:quest:Stop The Invasion]</div>
@@ -172,7 +172,7 @@
     </div>
 </div>
 
-<h3>IV. Key People &amp; Factions</h3>
+<h3 class="session-summary-heading">IV. Key People &amp; Factions</h3>
 <p><strong>New NPCs Introduced:</strong></p>
 <ul>
 	<li><strong>Commander Bianca Corina</strong> - Fey-touched Queen-in-exile of Pelagos; wields storm-forged glass blade "Winder"</li>
@@ -192,7 +192,7 @@
 	<li><strong>Pelagos Kingdom</strong> - Bianca's homeland, currently ruled by necromancer Sandro</li>
 </ul>
 
-<h3>V. Important Discoveries &amp; Loot</h3>
+<h3 class="session-summary-heading">V. Important Discoveries &amp; Loot</h3>
 <p><strong>Plot Discoveries:</strong></p>
 <ul>
 	<li>Pirate crew magically blood-bound to Bianca's royal family</li>

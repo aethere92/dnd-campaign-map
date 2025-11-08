@@ -1,4 +1,4 @@
-<h3>I. Session Overview</h3>
+<h3 class="session-summary-heading">I. Session Overview</h3>
 <ul>
 	<li>
 		<strong>Session Number:</strong>
@@ -18,7 +18,7 @@
 	</li>
 </ul>
 
-<h3>II. Narrative Summary</h3>
+<h3 class="session-summary-heading">II. Narrative Summary</h3>
 <p><strong>The Cavern of Horrors</strong></p>
 <ul>
 	<li>The party emerged from the tunnels into a massive cavern filled with cages reinforced by dark magic, containing dozens of skulls (humanoid, reptilian, and unknown creatures).</li>
@@ -101,7 +101,7 @@
 	<li>The party, exhausted and half-armored, was brought aboard as &ldquo;guests&rdquo; (or captives), ending the session on a cliffhanger.</li>
 </ul>
 
-<h3>III. Quest &amp; Objective Tracker</h3>
+<h3 class="session-summary-heading">III. Quest &amp; Objective Tracker</h3>
 <div class="quest-container">
     <div class="quest">
         <div class="quest-name">[ENTITY:quest:Stop the Invasion]</div>
@@ -145,7 +145,7 @@
     </div>
 </div>
 
-<h3>IV. Key People &amp; Factions</h3>
+<h3 class="session-summary-heading">IV. Key People &amp; Factions</h3>
 <p><strong>New NPCs Introduced:</strong></p>
 <ul>
 	<li><strong>Kalistra</strong> - Norr's former teacher (Arcane Brotherhood member); left Brotherhood 10 years ago; collecting monsters for Kilgor</li>
@@ -162,7 +162,7 @@
 	<li><strong>Red Hand</strong> - Major faction</li>
 </ul>
 
-<h3>V. Important Discoveries &amp; Loot</h3>
+<h3 class="session-summary-heading">V. Important Discoveries &amp; Loot</h3>
 <p><strong>Plot Discoveries:</strong></p>
 <ul>
 	<li>Kalistra conducting monster collection for Kilgor's "Festival of Life"</li>

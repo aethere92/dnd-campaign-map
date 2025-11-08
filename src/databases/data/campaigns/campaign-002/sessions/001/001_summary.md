@@ -1,4 +1,4 @@
-<h3>I. Session Overview</h3>
+<h3 class="session-summary-heading">I. Session Overview</h3>
 <ul>
 	<li>
 		<strong>Session Number:</strong>
@@ -18,7 +18,7 @@
 		his "Day of Ruin" plan while beginning investigations into local threats.
 	</li>
 </ul>
-<h3>II. Narrative Summary</h3>
+<h3 class="session-summary-heading">II. Narrative Summary</h3>
 <p><strong>Travel and Ambush</strong></p>
 <ul>
 	<li>Party traveling toward Drellin&rsquo;s Ferry through subtropical forest.</li>
@@ -107,7 +107,7 @@
 	</ul>
 	<li>Kaedin departs mansion; heads to meeting point.</li>
 </ul>
-<h3>III. Quest &amp; Objective Tracker</h3>
+<h3 class="session-summary-heading">III. Quest &amp; Objective Tracker</h3>
 <div class="quest-container">
 	<div class="quest">
 		<div class="quest-name">[ENTITY:quest:Stop The Invasion]</div>
@@ -140,7 +140,7 @@
 		</div>
 	</div>
 </div>
-<h3>IV. Key People &amp; Factions</h3>
+<h3 class="session-summary-heading">IV. Key People &amp; Factions</h3>
 <p><strong>New NPCs Introduced:</strong></p>
 <ul>
 	<li>
@@ -183,7 +183,7 @@
 		- Mentioned as source of training for Norr and Soshi
 	</li>
 </ul>
-<h3>V. Important Discoveries &amp; Loot</h3>
+<h3 class="session-summary-heading">V. Important Discoveries &amp; Loot</h3>
 <p><strong>Plot Discoveries:</strong></p>
 <ul>
 	<li>Wyrmlord Koth is gathering tribes for a "Day of Ruin" attack</li>

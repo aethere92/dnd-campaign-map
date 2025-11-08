@@ -1,4 +1,4 @@
-<h3>I. Session Overview</h3>
+<h3 class="session-summary-heading">I. Session Overview</h3>
 <ul>
 	<li>
 		<strong>Session Number:</strong>
@@ -18,7 +18,7 @@
 	</li>
 </ul>
 
-<h3>II. Narrative Summary</h3>
+<h3 class="session-summary-heading">II. Narrative Summary</h3>
 <p><strong>Return to Drellin&rsquo;s Ferry and Soranna</strong></p>
 <ul>
 	<li>The party returned to Drellin&rsquo;s Ferry and met with Captain Soranna at the Tollhouse.</li>
@@ -142,7 +142,7 @@
 	<li>Party reached level 7 after these experiences.</li>
 </ul>
 
-<h3>III. Quest &amp; Objective Tracker</h3>
+<h3 class="session-summary-heading">III. Quest &amp; Objective Tracker</h3>
 <div class="quest-container">
     <div class="quest">
         <div class="quest-name">[ENTITY:quest:Stop The Invasion]</div>
@@ -206,7 +206,7 @@
     </div>
 </div>
 
-<h3>IV. Key People &amp; Factions</h3>
+<h3 class="session-summary-heading">IV. Key People &amp; Factions</h3>
 <p><strong>New NPCs Introduced:</strong></p>
 <ul>
 	<li><strong>Captain Soranna</strong> - Revealed cave system intelligence and contracted party for temple exploration</li>
@@ -225,7 +225,7 @@
 	<li><strong>Local Thieves</strong> - Kat and Yoghurt familiar with cave system but unable to pass magical barrier</li>
 </ul>
 
-<h3>V. Important Discoveries &amp; Loot</h3>
+<h3 class="session-summary-heading">V. Important Discoveries &amp; Loot</h3>
 <p><strong>Plot Discoveries:</strong></p>
 <ul>
 	<li>Vast cave system beneath Drellin's Ferry could be secret invasion route</li>

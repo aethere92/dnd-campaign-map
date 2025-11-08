@@ -33,7 +33,7 @@
 	.session-main-content,
 	.session-factual-content,
 	.session-factual-header {
-		max-inline-size: calc(100% - 3rem);
+		/* max-inline-size: calc(100% - 3rem); */
 	}
 }
 
