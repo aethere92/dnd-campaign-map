@@ -1,13 +1,13 @@
 const CAMPAIGN_002_BACKGROUNDS = {
 	BONNIE: {
 		background: `<p>So far, we've heard tales of lost families, fractured selves, and friends long gone - of longings for magic, regrets for what once was, and hopes for what could be. [ENTITY:character:Bonnie], however, is not like that.</p>
-		<p>[ENTITY:character:Bonnie] is a fairy pixie born from the pure magic of the [ENTITY:location:Feywilds]. She had no real family - other fairies born like her could be considered one, but she never saw it that way. She had no home beyond trees and groves, caves and lakes. [ENTITY:character:Bonnie] lived her long life doing whatever she pleased, always with her trusted companion, friend, and what she would call family: [ENTITY:npc:Jacques], the antlered giant rat.</p>
+		<p>[ENTITY:character:Bonnie] is a fairy pixie born from the pure magic of the [ENTITY:location:The Feywild]. She had no real family - other fairies born like her could be considered one, but she never saw it that way. She had no home beyond trees and groves, caves and lakes. [ENTITY:character:Bonnie] lived her long life doing whatever she pleased, always with her trusted companion, friend, and what she would call family: [ENTITY:npc:Jacques], the antlered giant rat.</p>
 		<p>Pixies are known to be a little mischievous, but rarely with a truly mean bone in them. [ENTITY:character:Bonnie], however, seems to have that particular trait in spades. She found joy in rule-breaking, in taking what wasn't hers. She enjoyed doing what she wanted, when she wanted, and nothing - absolutely nothing - could stand in her way.</p>
-		<p>But ah, what [ENTITY:character:Bonnie] did not anticipate was that fate had plans for her, too. One lovely morning, while dodging a swarm of angry Summer Court Sprites, she ran headfirst into someone who had no business being this deep in the [ENTITY:location:Feywilds] - a Quickling by the name of [ENTITY:npc:Clyde]. Now, [ENTITY:character:Bonnie] didn't care for rules, and instead of reporting the trespasser, she befriended him.</p>
+		<p>But ah, what [ENTITY:character:Bonnie] did not anticipate was that fate had plans for her, too. One lovely morning, while dodging a swarm of angry Summer Court Sprites, she ran headfirst into someone who had no business being this deep in the [ENTITY:location:The Feywild] - a Quickling by the name of [ENTITY:npc:Clyde]. Now, [ENTITY:character:Bonnie] didn't care for rules, and instead of reporting the trespasser, she befriended him.</p>
 		<p>In time, the two caused a storm of chaos together. They broke rules, borrowed (as they called it) treasures, stirred up trouble wherever they went. Their lives were fast and bright, a whirlwind of trouble and laughter - until the consequences finally caught up.</p>
 		<p>[ENTITY:npc:Clyde] was captured by the Sprites and dragged before Queen Titania herself. A spy, they claimed. Sent by the twisted Winter Queen. The sentence was swift: execution.</p>
 		<p>What [ENTITY:character:Bonnie] never expected in her long, chaotic life was to care for someone other than [ENTITY:npc:Jacques]. But she did. So, she stepped forward, confessed to everything in a desperate attempt to save her friend.</p>
-		<p>[ENTITY:npc:Clyde] was spared. [ENTITY:character:Bonnie] was not. Exiled to the mortal plane, cut off from the [ENTITY:location:Feywilds], with no way back. [ENTITY:npc:Clyde] was gone. Magic was... different now.</p>
+		<p>[ENTITY:npc:Clyde] was spared. [ENTITY:character:Bonnie] was not. Exiled to the mortal plane, cut off from the [ENTITY:location:The Feywild], with no way back. [ENTITY:npc:Clyde] was gone. Magic was... different now.</p>
 		<p>But [ENTITY:character:Bonnie] was scrappy. She carved out a life in [ENTITY:location:Brindol], adapted to the strange new shape of her magic, and stayed close to [ENTITY:npc:Jacques] - even if he was quite a bit smaller now than he once was. She spent her time with the Thieves' Guild, either waiting for something better to come along or searching for a way back home.</p>
 		<p>And maybe, just maybe, that something finally did.</p>
 		<p>On an errand to reach [ENTITY:location:Drellin\'s Ferry], [ENTITY:character:Bonnie] finds herself traveling with four odd companions, and while she brings trouble and pranks to their lives, she also watches their backs in her own special way.</p>`,
@@ -61,7 +61,7 @@ const CAMPAIGN_002_BACKGROUNDS = {
 			"Raised by wolves and bound by a divine pact, Olek is a humble paladin devoted to justice and compassion. Separated from his sibling during a brutal raid, he was saved by a celestial servant of Helm and charged with a sacred duty: protect the helpless and walk the path of righteousness without falter. Now, Olek travels toward Drellin's Ferry alongside four companions, a steady light in darkening times-guided by honor, heart, and the will of the Guardian.",
 	},
 	SOSHI: {
-		background: `<p>[ENTITY:character:Soshi] was not born in the world of mortals. As all fey creatures do, she was born in the [ENTITY:location:Feywilds] - magic giving her shape and form, infusing her with the changing seasons.</p>
+		background: `<p>[ENTITY:character:Soshi] was not born in the world of mortals. As all fey creatures do, she was born in the [ENTITY:location:The Feywild] - magic giving her shape and form, infusing her with the changing seasons.</p>
 
 		<p>By now, we know that fate plays a hand in the lives of all beings. Some say she wandered too close to a thin place in the weave, others whisper she was drawn through by the echoes of something calling her. Whatever the cause, [ENTITY:character:Soshi] crossed into the Material Plane as a child, stepping through unseen doors and emerging into the harsh, unforgiving port city of [ENTITY:location:Luskan].</p>
 
@@ -69,15 +69,15 @@ const CAMPAIGN_002_BACKGROUNDS = {
 
 		<p>Slowly, desire crawled through the cracks left by doubt and a wavering sense of self. Slowly, it made her forget what she was, where she came from, and what magic was supposed to be.</p>
 
-		<p>[ENTITY:character:Soshi] buried herself in books. Arcane formulas, incantations, the elegant structure of wizardry - she consumed it all with the desperation of someone who had everything to prove. In time, her dedication was noticed. The [ENTITY:guild:Arcane Brotherhood], ever in search of useful minds, extended a hand. Desperate to belong, desperate to be powerful, she took it.</p>
+		<p>[ENTITY:character:Soshi] buried herself in books. Arcane formulas, incantations, the elegant structure of wizardry - she consumed it all with the desperation of someone who had everything to prove. In time, her dedication was noticed. The [ENTITY:faction:The Arcane Brotherhood], ever in search of useful minds, extended a hand. Desperate to belong, desperate to be powerful, she took it.</p>
 
-		<p>But by now, we also know the [ENTITY:guild:Arcane Brotherhood:Brotherhood] isn't a place of fairytales. Its dark, twisted secrets came to light, terrifying [ENTITY:character:Soshi] - reminding her that some prices are too high to pay.</p>
+		<p>But by now, we also know the [ENTITY:faction:The Arcane Brotherhood:Brotherhood] isn't a place of fairytales. Its dark, twisted secrets came to light, terrifying [ENTITY:character:Soshi] - reminding her that some prices are too high to pay.</p>
 
 		<p>And so, together with the only friend she managed to make in this unforgiving world, she stole a map - a way for them to survive in the wide, dangerous world beyond.</p>
 
-		<p>Driven by regrets, desires, and ambition, longing for home and the joyful life she left behind, [ENTITY:character:Soshi] finds herself traveling with four other companions: her friend from the [ENTITY:guild:Arcane Brotherhood:Brotherhood], and three others as different as night is from day.</p>
+		<p>Driven by regrets, desires, and ambition, longing for home and the joyful life she left behind, [ENTITY:character:Soshi] finds herself traveling with four other companions: her friend from the [ENTITY:faction:The Arcane Brotherhood:Brotherhood], and three others as different as night is from day.</p>
 
-		<p>And so, we find [ENTITY:character:Soshi], her spellbook in hand and memories of the [ENTITY:location:Feywilds] stirring in her chest, walking the winding road to [ENTITY:location:Drellin\'s Ferry].</p>`,
+		<p>And so, we find [ENTITY:character:Soshi], her spellbook in hand and memories of the [ENTITY:location:The Feywild] stirring in her chest, walking the winding road to [ENTITY:location:Drellin\'s Ferry].</p>`,
 		shortDescription:
 			"Born of magic in the Feywilds, Soshi crossed into the harsh world of mortals as a child, lost and alone in the unforgiving streets of Luskan. Stripped of her fey joy, she buried herself in wizardry, desperate to belong. The Arcane Brotherhood gave her power-but at a terrible cost. Fleeing its darkness with her only friend and a stolen map, Soshi now travels toward Drellin's Ferry with a band of unlikely allies, her spellbook in hand and the echo of the Feywild still stirring in her soul.",
 	},
@@ -96,9 +96,9 @@ const CAMPAIGN_002_BACKGROUNDS = {
 
 		<p>It was a painful decision. To leave her family and everything she had known behind, or to remain and live forever as only half of herself. But the excitement - the longing to understand what she was - overwhelmed her doubt. She went with [ENTITY:npc:Zella].</p>
 
-		<p>They spent years together. [ENTITY:npc:Zella] taught her everything she knew, drilled every bit of magical knowledge into [ENTITY:character:Norr]'s mind. When there was nothing left to teach, she sent her student onward - to [ENTITY:location:Luskan], to find the [ENTITY:guild:Arcane Brotherhood]. A place of boundless learning, where the magically gifted could find their path. A place, perhaps, to belong.</p>
+		<p>They spent years together. [ENTITY:npc:Zella] taught her everything she knew, drilled every bit of magical knowledge into [ENTITY:character:Norr]'s mind. When there was nothing left to teach, she sent her student onward - to [ENTITY:location:Luskan], to find the [ENTITY:faction:The Arcane Brotherhood]. A place of boundless learning, where the magically gifted could find their path. A place, perhaps, to belong.</p>
 
-		<p>[ENTITY:character:Norr] joined the [ENTITY:guild:Arcane Brotherhood:Brotherhood] but soon discovered that great institutions often hide terrible secrets. Together with a friend she made within its walls, she uncovered one such secret - a map leading to a great treasure. And together, they fled. The road led them to [ENTITY:location:Brindol].</p>
+		<p>[ENTITY:character:Norr] joined the [ENTITY:faction:The Arcane Brotherhood:Brotherhood] but soon discovered that great institutions often hide terrible secrets. Together with a friend she made within its walls, she uncovered one such secret - a map leading to a great treasure. And together, they fled. The road led them to [ENTITY:location:Brindol].</p>
 
 		<p>And so, we find [ENTITY:character:Norr] now, her secrets held tight behind guarded eyes, the stolen map close to her heart. Beside her walks her dearest companion, and three strange allies whose paths are now twined with hers. Together they journey to [ENTITY:location:Drellin\'s Ferry].</p>
 
