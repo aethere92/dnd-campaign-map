@@ -237,240 +237,240 @@
 			font-size: 0.9rem;
 		}
 	}
+}
 
-	/* Tablet Breakpoint (max-width: 768px / 48rem) - General Layout, Tooltips, and Timeline refinements */
-	@media (max-width: 768px) {
-		/* Tooltip Adjustments */
-		.character-tooltip-container {
-			max-width: 280px;
-		}
+/* Tablet Breakpoint (max-width: 768px / 48rem) - General Layout, Tooltips, and Timeline refinements */
+@media (max-width: 768px) {
+	/* Tooltip Adjustments */
+	.character-tooltip-container {
+		max-width: 280px;
+	}
 
-		.entity-tooltip,
-		.character-tooltip {
-			font-size: 9pt;
-		}
+	.entity-tooltip,
+	.character-tooltip {
+		font-size: 9pt;
+	}
 
-		.tooltip-header {
-			padding: 0.5rem;
-		}
+	.tooltip-header {
+		padding: 0.5rem;
+	}
 
-		.tooltip-header h3 {
-			font-size: 10pt;
-		}
+	.tooltip-header h3 {
+		font-size: 10pt;
+	}
 
-		.tooltip-header img {
-			width: 32px;
-			height: 32px;
-		}
+	.tooltip-header img {
+		width: 32px;
+		height: 32px;
+	}
 
-		.tooltip-content {
-			padding: 0.5rem;
-		}
+	.tooltip-content {
+		padding: 0.5rem;
+	}
 
-		.tooltip-description {
-			font-size: 8.5pt;
-		}
+	.tooltip-description {
+		font-size: 8.5pt;
+	}
 
-		/* Timeline Refinements */
-		.timeline-header {
-			width: 100%;
-			margin-bottom: 0.25rem;
-			margin-top: 0.25rem;
-		}
+	/* Timeline Refinements */
+	.timeline-header {
+		width: 100%;
+		margin-bottom: 0.25rem;
+		margin-top: 0.25rem;
+	}
 
-		.story-timeline-container {
-			width: unset;
-			overflow: unset;
-			padding: 0 0.5rem; /* Added from original for consistency */
-		}
+	.story-timeline-container {
+		width: unset;
+		overflow: unset;
+		padding: 0 0.5rem; /* Added from original for consistency */
+	}
 
-		.timeline {
-			width: 90%;
-		}
+	.timeline {
+		width: 90%;
+	}
 
-		.timeline-item {
-			width: calc(100% - 1.5rem);
-			margin-left: 1.5rem;
-		}
+	.timeline-item {
+		width: calc(100% - 1.5rem);
+		margin-left: 1.5rem;
+	}
 
-		.timeline-main-item {
-			&.left,
-			&.right {
-				&::before {
-					width: 30px;
-					height: 30px;
-					left: -2.5rem;
-				}
+	.timeline-main-item {
+		&.left,
+		&.right {
+			&::before {
+				width: 30px;
+				height: 30px;
+				left: -2.5rem;
 			}
-		}
-
-		.timeline-subitem.new-session-indicator::after {
-			width: 100%;
-			left: 0;
-		}
-
-		/* Story Content Layout */
-		.story-main-content {
-			grid-template-columns: 1fr;
-			overflow: auto;
-		}
-
-		.story-content-area {
-			flex-direction: column;
-			block-size: auto;
-			max-block-size: none;
-			overflow: visible;
-		}
-
-		.story-sidebar {
-			border-inline-end: none;
-			border-block-end: 0.125rem solid var(--color-secondary);
-			overflow: visible;
-			inline-size: 100%;
-		}
-
-		.story-image-container.image-inline {
-			float: unset;
-			margin: 0.5rem 0;
-		}
-
-		/* Character and TOC Adjustments */
-		.character-info {
-			flex-direction: column;
-			justify-content: flex-start;
-			gap: 0;
-		}
-
-		.character-details {
-			text-align: center;
-		}
-
-		.character-profile {
-			flex-direction: column;
-			align-items: center;
-			gap: 1rem;
-			text-align: center;
-		}
-
-		.character-profile-image {
-			inline-size: 7.5rem;
-			block-size: 7.5rem;
-			object-fit: cover;
-		}
-
-		.story-character-list {
-			justify-content: center;
-		}
-
-		.session-toc {
-			inline-size: auto;
-		}
-
-		.toc {
-			max-block-size: none;
-		}
-
-		/* Session and Quest */
-		.session-content {
-			padding: var(--spacing-md);
-			overflow: visible;
-		}
-
-		.story-quest-container {
-			align-items: unset !important;
-		}
-
-		.quest-list {
-			inline-size: calc(100% - 3rem);
-		}
-
-		/* Image Floats */
-		.image-align-left,
-		.image-align-right {
-			float: none;
-			max-inline-size: 90%;
-			text-align: center;
-			display: block;
-		}
-
-		/* View Container */
-		.story-view-container {
-			align-items: unset !important;
 		}
 	}
 
-	/* Mobile Breakpoint (max-width: 480px) - Tooltip and Timeline final tweaks */
-	@media (max-width: 480px) {
-		/* Tooltip Final Tweaks */
-		.character-tooltip-container {
-			max-width: calc(100vw - 20px);
-		}
+	.timeline-subitem.new-session-indicator::after {
+		width: 100%;
+		left: 0;
+	}
 
-		.tooltip-meta {
-			flex-wrap: wrap;
-			gap: 0.3rem;
-		}
+	/* Story Content Layout */
+	.story-main-content {
+		grid-template-columns: 1fr;
+		overflow: auto;
+	}
 
-		.tooltip-ability-scores {
-			grid-template-columns: repeat(6, 1fr);
-		}
+	.story-content-area {
+		flex-direction: column;
+		block-size: auto;
+		max-block-size: none;
+		overflow: visible;
+	}
 
-		/* Timeline Final Tweaks */
-		.timeline {
-			width: 95%;
-		}
+	.story-sidebar {
+		border-inline-end: none;
+		border-block-end: 0.125rem solid var(--color-secondary);
+		overflow: visible;
+		inline-size: 100%;
+	}
 
-		.timeline-item {
-			width: calc(100% - 2rem);
-			margin-left: 1.2rem;
-		}
+	.story-image-container.image-inline {
+		float: unset;
+		margin: 0.5rem 0;
+	}
 
-		.timeline-subitem.left,
-		.timeline-subitem.right {
-			width: calc(100% - 4rem);
-			align-self: flex-start;
-		}
+	/* Character and TOC Adjustments */
+	.character-info {
+		flex-direction: column;
+		justify-content: flex-start;
+		gap: 0;
+	}
 
-		.timeline-main-item {
-			&.left,
-			&.right {
-				&::before {
-					width: 25px;
-					height: 25px;
-					left: -2rem;
-				}
+	.character-details {
+		text-align: center;
+	}
 
-				&::after {
-					width: 1.5rem;
-					left: -1.5rem;
-				}
+	.character-profile {
+		flex-direction: column;
+		align-items: center;
+		gap: 1rem;
+		text-align: center;
+	}
+
+	.character-profile-image {
+		inline-size: 7.5rem;
+		block-size: 7.5rem;
+		object-fit: cover;
+	}
+
+	.story-character-list {
+		justify-content: center;
+	}
+
+	.session-toc {
+		inline-size: auto;
+	}
+
+	.toc {
+		max-block-size: none;
+	}
+
+	/* Session and Quest */
+	.session-content {
+		padding: var(--spacing-md);
+		overflow: visible;
+	}
+
+	.story-quest-container {
+		align-items: unset !important;
+	}
+
+	.quest-list {
+		inline-size: calc(100% - 3rem);
+	}
+
+	/* Image Floats */
+	.image-align-left,
+	.image-align-right {
+		float: none;
+		max-inline-size: 90%;
+		text-align: center;
+		display: block;
+	}
+
+	/* View Container */
+	.story-view-container {
+		align-items: unset !important;
+	}
+}
+
+/* Mobile Breakpoint (max-width: 480px) - Tooltip and Timeline final tweaks */
+@media (max-width: 480px) {
+	/* Tooltip Final Tweaks */
+	.character-tooltip-container {
+		max-width: calc(100vw - 20px);
+	}
+
+	.tooltip-meta {
+		flex-wrap: wrap;
+		gap: 0.3rem;
+	}
+
+	.tooltip-ability-scores {
+		grid-template-columns: repeat(6, 1fr);
+	}
+
+	/* Timeline Final Tweaks */
+	.timeline {
+		width: 95%;
+	}
+
+	.timeline-item {
+		width: calc(100% - 2rem);
+		margin-left: 1.2rem;
+	}
+
+	.timeline-subitem.left,
+	.timeline-subitem.right {
+		width: calc(100% - 4rem);
+		align-self: flex-start;
+	}
+
+	.timeline-main-item {
+		&.left,
+		&.right {
+			&::before {
+				width: 25px;
+				height: 25px;
+				left: -2rem;
+			}
+
+			&::after {
+				width: 1.5rem;
+				left: -1.5rem;
 			}
 		}
+	}
 
-		.story-header {
-			padding: var(--spacing-sm);
-		}
+	.story-header {
+		padding: var(--spacing-sm);
+	}
 
-		.story-character-list {
-			grid-template-columns: 1fr;
-		}
+	.story-character-list {
+		grid-template-columns: 1fr;
+	}
 
-		.session-content {
-			padding: var(--spacing-sm);
-		}
+	.session-content {
+		padding: var(--spacing-sm);
+	}
 
-		.session-main-content {
-			padding: var(--spacing-md);
-		}
+	.session-main-content {
+		padding: var(--spacing-md);
+	}
 
-		.session-header h2::before,
-		.session-header h2::after {
-			display: none;
-		}
+	.session-header h2::before,
+	.session-header h2::after {
+		display: none;
+	}
 
-		.character-profile-image {
-			inline-size: 6.25rem;
-			block-size: 6.25rem;
-		}
+	.character-profile-image {
+		inline-size: 6.25rem;
+		block-size: 6.25rem;
 	}
 }
