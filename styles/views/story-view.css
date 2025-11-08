@@ -3564,6 +3564,10 @@ blockquote i {
 	.view-body:has(.encounter-timeline-section) {
 		max-inline-size: 100%;
 	}
+
+	.timeline-placeholder {
+		display: none;
+	}
 }
 
 /* Animation for filtered entries */

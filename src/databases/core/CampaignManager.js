@@ -29,6 +29,16 @@ class CampaignManager {
 		const characterName = params.get(StoryURLManager.PARAMS.CHARACTER);
 		const viewType = params.get(StoryURLManager.PARAMS.VIEW);
 
+		// MODIFIED: Find any item-specific parameter (e.g., location, quest, npc)
+		let itemId = null;
+		for (const param of StoryURLManager.ITEM_PARAMS) {
+			const id = params.get(param);
+			if (id) {
+				itemId = id;
+				break;
+			}
+		}
+
 		// Campaign selection state takes precedence
 		if (state === StoryURLManager.VIEW_TYPES.CAMPAIGN_SELECTION) {
 			this.showCampaignSelection();
@@ -37,7 +47,8 @@ class CampaignManager {
 
 		// Try to load specific campaign
 		if (campaignId && this.#isCampaignValid(campaignId)) {
-			this.loadCampaign(campaignId, mapKey, sessionId, characterName, viewType);
+			// MODIFIED: Pass the found itemId to loadCampaign
+			this.loadCampaign(campaignId, mapKey, sessionId, characterName, viewType, itemId);
 			return;
 		}
 
@@ -59,7 +70,15 @@ class CampaignManager {
 			if (state?.view === 'campaigns' || state?.state === StoryURLManager.VIEW_TYPES.CAMPAIGN_SELECTION) {
 				this.showCampaignSelection();
 			} else if (state?.campaignId) {
-				this.loadCampaign(state.campaignId, state.mapKey, state.sessionId, state.characterName, state.viewType);
+				// MODIFIED: Pass state.itemId from the popstate event
+				this.loadCampaign(
+					state.campaignId,
+					state.mapKey,
+					state.sessionId,
+					state.characterName,
+					state.viewType,
+					state.itemId // This property is set by StoryBase's updateUrl
+				);
 			}
 		});
 	}
@@ -273,7 +292,8 @@ class CampaignManager {
 	}
 
 	// Main campaign loading
-	loadCampaign(campaignId, mapKey = null, sessionId = null, characterName = null, viewType = null) {
+	// MODIFIED: Added itemId = null to the signature
+	loadCampaign(campaignId, mapKey = null, sessionId = null, characterName = null, viewType = null, itemId = null) {
 		const campaign = CAMPAIGN_DATA.find((c) => c.id === campaignId);
 		if (!campaign || !this.#isCampaignValid(campaignId)) return;
 
@@ -287,7 +307,8 @@ class CampaignManager {
 		if (targetView === StoryURLManager.VIEW_TYPES.MAP) {
 			this.#loadMapCampaign(campaign, mapKey);
 		} else if (targetView === StoryURLManager.VIEW_TYPES.STORY) {
-			this.#loadStoryCampaign(campaign, sessionId, characterName, viewType);
+			// MODIFIED: Pass itemId to #loadStoryCampaign
+			this.#loadStoryCampaign(campaign, sessionId, characterName, viewType, itemId);
 		} else {
 			console.error('No valid content type determined for campaign:', campaign.id);
 			this.showCampaignSelection();
@@ -368,7 +389,8 @@ class CampaignManager {
 		}
 	}
 
-	#loadStoryCampaign(campaign, sessionId = null, characterName = null, viewType = null) {
+	// MODIFIED: Added itemId = null to the signature
+	#loadStoryCampaign(campaign, sessionId = null, characterName = null, viewType = null, itemId = null) {
 		const storyConfig = this.#determineStoryConfig(campaign, sessionId, characterName, viewType);
 
 		if (!storyConfig) {
@@ -390,12 +412,26 @@ class CampaignManager {
 		} else {
 			urlConfig.view = storyConfig.view;
 			stateConfig.viewType = storyConfig.view;
+
+			// MODIFIED: If an itemId was passed (from initial load or popstate),
+			// add it to the URL and state configs.
+			if (itemId) {
+				const itemType = StoryURLManager.getItemParamName(storyConfig.view);
+				if (itemType) {
+					urlConfig.itemType = itemType; // e.g., 'location'
+					urlConfig.itemId = itemId; // e.g., 'kaedins-village'
+					stateConfig.itemType = itemType;
+					stateConfig.itemId = itemId;
+				}
+			}
 		}
 
 		const url = this.#storyUrlManager.buildURL(urlConfig);
 		const state = this.#storyUrlManager.createState(StoryURLManager.VIEW_TYPES.STORY, stateConfig);
 
-		this.#storyUrlManager.updateHistory(url, state);
+		// MODIFIED: Use replace=true so the back button doesn't just
+		// reload the same view without the item parameter.
+		this.#storyUrlManager.updateHistory(url, state, true);
 
 		// Show and initialize story view
 		document.getElementById('story-view').style.display = 'block';

@@ -66,7 +66,11 @@ class StoryHelperBase {
 	}
 
 	findItemById(items, itemId) {
-		return items.find((item) => this.getItemId(item) === itemId);
+		return items.find((item) => {
+			const id = this.getItemId(item);
+			// Handle both string and numeric comparisons
+			return id === itemId || String(id) === String(itemId);
+		});
 	}
 
 	// Main render method
@@ -75,11 +79,11 @@ class StoryHelperBase {
 
 		if (!items?.length) {
 			contentArea.innerHTML = `
-				<div class="story-view-container">
-					<div class="view-header"><h2>${this.getViewTitle()}</h2></div>
-					<div class="no-content">No ${this.getViewTitle().toLowerCase()} available for this campaign.</div>
-				</div>
-			`;
+            <div class="story-view-container">
+                <div class="view-header"><h2>${this.getViewTitle()}</h2></div>
+                <div class="no-content">No ${this.getViewTitle().toLowerCase()} available for this campaign.</div>
+            </div>
+        `;
 			return;
 		}
 
@@ -100,25 +104,32 @@ class StoryHelperBase {
 		const detailPanel = document.createElement('div');
 		detailPanel.className = 'view-detail-panel';
 
-		const groupedItems = this.groupItems(items);
-		this.renderGroups(listPanel, groupedItems, detailPanel);
-
-		// Handle URL targeting
+		// IMPORTANT: Determine the initial item BEFORE rendering groups
 		const targetId = this.getTargetFromUrl();
-		let initialItem = null;
+		let initialItem = items[0]; // default fallback
 
 		if (targetId) {
-			initialItem = this.findItemById(items, decodeURIComponent(targetId));
-
-			if (initialItem) {
-				setTimeout(() => {
-					const targetElement = listPanel.querySelector(`[data-item-id="${this.getItemId(initialItem)}"]`);
-					targetElement?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-				}, 100);
+			const decodedId = decodeURIComponent(targetId);
+			const foundItem = this.findItemById(items, decodedId);
+			if (foundItem) {
+				initialItem = foundItem;
 			}
 		}
 
-		this.selectItem(initialItem || items[0], detailPanel);
+		// Now render groups
+		const groupedItems = this.groupItems(items);
+		this.renderGroups(listPanel, groupedItems, detailPanel);
+
+		// Select the initial item (either from URL or first item)
+		this.selectItem(initialItem, detailPanel);
+
+		// Scroll to the item if it was from URL
+		if (targetId && initialItem !== items[0]) {
+			setTimeout(() => {
+				const targetElement = listPanel.querySelector(`[data-item-id="${this.getItemId(initialItem)}"]`);
+				targetElement?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+			}, 100);
+		}
 
 		body.append(listPanel, detailPanel);
 		container.append(header, body);

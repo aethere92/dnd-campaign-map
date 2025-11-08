@@ -1,6 +1,6 @@
 class StoryHelperLocation extends StoryHelperBase {
 	getUrlParam() {
-		return StoryURLManager.PARAMS.QUEST;
+		return 'location';
 	}
 
 	getItems() {

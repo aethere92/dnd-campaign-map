@@ -63,7 +63,7 @@ class StoryURLManager {
 		if (map) params.set(StoryURLManager.PARAMS.MAP, map);
 		if (session) params.set(StoryURLManager.PARAMS.SESSION, session);
 		if (character) params.set(StoryURLManager.PARAMS.CHARACTER, character);
-		if (itemType && itemId) params.set(itemType, encodeURIComponent(itemId));
+		if (itemType && itemId) params.set(itemType, itemId);
 		if (target) params.set(StoryURLManager.PARAMS.TARGET, target);
 
 		const hashStr = hash ? `#${hash}` : '';

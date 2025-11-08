@@ -634,7 +634,7 @@ const CAMPAIGN_002_ENCOUNTERS = [
 					{
 						actor: '[ENTITY:character:Norr]',
 						type: 'Spell',
-						name: '[ENTITY:spell:Firebolt]',
+						name: '[ENTITY:spell:Fire Bolt]',
 						roll: 18,
 						target: 'Hobgoblin Archer 2',
 						damage: 18,
