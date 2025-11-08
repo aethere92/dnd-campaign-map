@@ -38,61 +38,16 @@ class StoryHelperEncounter extends StoryHelperBase {
 
 	// ===== Overridden Methods =====
 
-	render(contentArea) {
-		const items = this.getItems();
-		if (!items?.length) {
-			contentArea.innerHTML = `
-				<div class="story-view-container">
-					<div class="view-header"><h2>${this.getViewTitle()}</h2></div>
-					<div class="no-content">No ${this.getViewTitle().toLowerCase()} available for this campaign.</div>
-				</div>
-			`;
-			return;
-		}
+	renderGroups(container, groupedItems, detailPanel) {
+		// Prepend actor filter to the list panel
+		const allEncounters = Object.values(groupedItems).flat();
+		const filterSection = this.#createActorFilter(allEncounters);
+		container.appendChild(filterSection);
 
-		const container = document.createElement('div');
-		container.className = 'story-view-container';
-
-		const header = document.createElement('div');
-		header.className = 'view-header';
-		header.innerHTML = `<h2>${this.getViewTitle()}</h2>`;
-
-		const body = document.createElement('div');
-		body.className = 'view-body';
-
-		const listPanel = document.createElement('div');
-		listPanel.className = 'view-list-panel';
-
-		const detailPanel = document.createElement('div');
-		detailPanel.className = 'view-detail-panel';
-
-		// Add actor filter at top of list panel
-		const filterSection = this.#createActorFilter(items);
-		listPanel.appendChild(filterSection);
-
-		const groupedItems = this.groupItems(items);
-		this.renderGroups(listPanel, groupedItems, detailPanel);
-
-		// Handle URL targeting
-		const targetId = this.getTargetFromUrl();
-		let initialItem = null;
-
-		if (targetId) {
-			const targetIdValue = /^\d+$/.test(targetId) ? parseInt(targetId, 10) : decodeURIComponent(targetId);
-			initialItem = this.findItemById(items, targetIdValue);
-			if (initialItem) {
-				setTimeout(() => {
-					const targetElement = listPanel.querySelector(`[data-item-id="${this.getItemId(initialItem)}"]`);
-					targetElement?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-				}, 100);
-			}
-		}
-
-		this.selectItem(initialItem || items[0], detailPanel);
-
-		body.append(listPanel, detailPanel);
-		container.append(header, body);
-		contentArea.appendChild(container);
+		// Render groups using base behavior
+		Object.entries(groupedItems).forEach(([groupName, items]) => {
+			this.renderGroup(container, groupName, items, detailPanel);
+		});
 	}
 
 	createListItemContent(encounter) {
@@ -102,15 +57,7 @@ class StoryHelperEncounter extends StoryHelperBase {
 		name.className = 'view-item-name';
 		name.textContent = encounter.name;
 
-		const meta = document.createElement('span');
-		meta.className = 'view-item-subtitle';
-		const roundCount = encounter.rounds?.length || 0;
-		const actionCount = encounter.rounds?.reduce((sum, round) => sum + (round.actions?.length || 0), 0) || 0;
-		meta.textContent = `${roundCount} round${roundCount !== 1 ? 's' : ''}, ${actionCount} action${
-			actionCount !== 1 ? 's' : ''
-		}`;
-
-		container.append(name, meta);
+		container.append(name);
 		return container;
 	}
 
@@ -126,35 +73,30 @@ class StoryHelperEncounter extends StoryHelperBase {
 		if (encounter.environment) {
 			const envSection = this.#createEnvironmentSection(encounter.environment, encounter.location);
 			detail.appendChild(envSection);
-			this.placeholderProcessor.processEntityReferences(envSection);
 		}
 
 		// Initiative Order
 		if (encounter.initiative?.length) {
 			const initSection = this.#createInitiativeSection(encounter.initiative);
 			detail.appendChild(initSection);
-			this.placeholderProcessor.processEntityReferences(initSection);
 		}
 
 		// Timeline Log
 		if (encounter.rounds?.length) {
 			const timelineSection = this.#createTimelineLog(encounter.rounds);
 			detail.appendChild(timelineSection);
-			this.placeholderProcessor.processEntityReferences(timelineSection);
 		}
 
 		// Outcome Section
 		if (encounter.outcome) {
 			const outcomeSection = this.#createOutcomeSection(encounter.outcome);
 			detail.appendChild(outcomeSection);
-			this.placeholderProcessor.processEntityReferences(outcomeSection);
 		}
 
 		// Post-Combat Section
 		if (encounter.postCombat) {
 			const postCombatSection = this.#createPostCombatSection(encounter.postCombat);
 			detail.appendChild(postCombatSection);
-			this.placeholderProcessor.processEntityReferences(postCombatSection);
 		}
 
 		// Reset filter state
@@ -301,15 +243,8 @@ class StoryHelperEncounter extends StoryHelperBase {
 	// ===== Environment Section =====
 
 	#createEnvironmentSection(environment, location) {
-		const section = document.createElement('div');
-		section.className = 'view-section encounter-environment-section';
-
-		const header = document.createElement('div');
-		header.className = 'view-section-header';
-		header.textContent = 'Environment';
-
 		const content = document.createElement('div');
-		content.className = 'view-section-content';
+		content.className = 'encounter-environment-content';
 
 		if (environment.name) {
 			const nameEl = document.createElement('div');
@@ -361,22 +296,14 @@ class StoryHelperEncounter extends StoryHelperBase {
 			content.appendChild(effectsContainer);
 		}
 
-		section.append(header, content);
-		return section;
+		return this.createSection('Environment', content, 'encounter-environment-section');
 	}
 
 	// ===== Initiative Section =====
 
 	#createInitiativeSection(initiative) {
-		const section = document.createElement('div');
-		section.className = 'view-section encounter-initiative-section';
-
-		const header = document.createElement('div');
-		header.className = 'view-section-header';
-		header.textContent = 'Initiative Order';
-
 		const content = document.createElement('div');
-		content.className = 'view-section-content';
+		content.className = 'encounter-initiative-content';
 
 		const initList = document.createElement('div');
 		initList.className = 'initiative-list';
@@ -390,7 +317,7 @@ class StoryHelperEncounter extends StoryHelperBase {
 
 			const rank = document.createElement('span');
 			rank.className = 'initiative-rank';
-			rank.textContent = `${index + 1}.`;
+			rank.textContent = `${index + 1}`;
 
 			const character = document.createElement('span');
 			character.className = 'initiative-character';
@@ -405,23 +332,12 @@ class StoryHelperEncounter extends StoryHelperBase {
 		});
 
 		content.appendChild(initList);
-		section.append(header, content);
-		return section;
+		return this.createSection('Initiative Order', content, 'encounter-initiative-section');
 	}
 
 	// ===== Timeline Creation =====
 
 	#createTimelineLog(rounds) {
-		const section = document.createElement('div');
-		section.className = 'view-section encounter-timeline-section';
-
-		const header = document.createElement('div');
-		header.className = 'view-section-header';
-		header.textContent = 'Combat Timeline';
-
-		const content = document.createElement('div');
-		content.className = 'view-section-content';
-
 		const log = document.createElement('div');
 		log.className = 'timeline-log';
 
@@ -437,9 +353,7 @@ class StoryHelperEncounter extends StoryHelperBase {
 			});
 		});
 
-		content.appendChild(log);
-		section.append(header, content);
-		return section;
+		return this.createSection('Combat Timeline', log, 'encounter-timeline-section');
 	}
 
 	#createTimelineEntry(action, roundNumber) {
@@ -481,81 +395,48 @@ class StoryHelperEncounter extends StoryHelperBase {
 	// ===== Outcome Section =====
 
 	#createOutcomeSection(outcome) {
-		const section = document.createElement('div');
-		section.className = 'view-section encounter-outcome-section';
-
-		const header = document.createElement('div');
-		header.className = 'view-section-header';
-		header.textContent = 'Outcome';
-
 		const content = document.createElement('div');
-		content.className = 'view-section-content';
+		content.className = 'encounter-outcome-content view-card';
 
-		if (outcome.status) {
-			const statusEl = document.createElement('div');
-			statusEl.className = `outcome-status status-${outcome.status.toLowerCase()}`;
-			statusEl.textContent = `Status: ${outcome.status}`;
-			content.appendChild(statusEl);
+		if (outcome.status || outcome.partyCondition) {
+			const elements = [
+				`Status: ${outcome?.status || 'Unknown'}`,
+				`Party condition: ${outcome?.partyCondition || 'Unknown'}`,
+			];
+			content.appendChild(this.createListSection('Fight summary', elements));
 		}
 
-		if (outcome.partyCondition) {
-			const conditionEl = document.createElement('div');
-			conditionEl.className = 'outcome-party-condition';
-			conditionEl.innerHTML = `<strong>Party Condition:</strong> ${outcome.partyCondition}`;
-			content.appendChild(conditionEl);
-		}
-
+		// List-based subsections using base helper
 		if (outcome.enemiesDefeated?.length) {
-			const defeatedEl = this.#createListSection('Enemies Defeated', outcome.enemiesDefeated);
-			content.appendChild(defeatedEl);
+			content.appendChild(this.createListSection('Enemies Defeated', outcome.enemiesDefeated));
 		}
-
 		if (outcome.enemiesFled?.length) {
-			const fledEl = this.#createListSection('Enemies Fled', outcome.enemiesFled);
-			content.appendChild(fledEl);
+			content.appendChild(this.createListSection('Enemies Fled', outcome.enemiesFled));
 		}
-
 		if (outcome.casualties?.length) {
-			const casualtiesEl = this.#createListSection('Casualties', outcome.casualties, 'outcome-casualties');
-			content.appendChild(casualtiesEl);
+			content.appendChild(this.createListSection('Casualties', outcome.casualties));
 		}
-
 		if (outcome.itemsObtained?.length) {
-			const itemsEl = this.#createListSection('Items Obtained', outcome.itemsObtained);
-			content.appendChild(itemsEl);
+			content.appendChild(this.createListSection('Items Obtained', outcome.itemsObtained));
 		}
-
 		if (outcome.complications?.length) {
-			const complicationsEl = this.#createListSection('Complications', outcome.complications);
-			content.appendChild(complicationsEl);
+			content.appendChild(this.createListSection('Complications', outcome.complications));
 		}
-
 		if (outcome.tacticalNotes?.length) {
-			const tacticalEl = this.#createListSection('Tactical Notes', outcome.tacticalNotes);
-			content.appendChild(tacticalEl);
+			content.appendChild(this.createListSection('Tactical Notes', outcome.tacticalNotes));
 		}
-
 		if (outcome.consequences?.length) {
-			const consequencesEl = this.#createListSection('Consequences', outcome.consequences);
-			content.appendChild(consequencesEl);
+			content.appendChild(this.createListSection('Consequences', outcome.consequences));
 		}
 
-		section.append(header, content);
-		return section;
+		return this.createSection('Outcome', content, 'encounter-outcome-section');
 	}
 
 	// ===== Post-Combat Section =====
 
 	#createPostCombatSection(postCombat) {
-		const section = document.createElement('div');
-		section.className = 'view-section encounter-postcombat-section';
-
-		const header = document.createElement('div');
-		header.className = 'view-section-header';
-		header.textContent = 'Post-Combat';
-
 		const content = document.createElement('div');
-		content.className = 'view-section-content';
+		content.className = 'encounter-postcombat-content';
 
 		if (postCombat.action) {
 			const actionEl = document.createElement('div');
@@ -586,14 +467,10 @@ class StoryHelperEncounter extends StoryHelperBase {
 			content.appendChild(healingEl);
 		}
 
+		// Investigation subsection
 		if (postCombat.investigation?.length) {
-			const invSection = document.createElement('div');
-			invSection.className = 'postcombat-investigation';
-
-			const invTitle = document.createElement('div');
-			invTitle.className = 'investigation-title';
-			invTitle.textContent = 'Investigation:';
-			invSection.appendChild(invTitle);
+			const invContent = document.createElement('div');
+			invContent.className = 'postcombat-investigation-content';
 
 			postCombat.investigation.forEach((inv) => {
 				const invItem = document.createElement('div');
@@ -611,53 +488,42 @@ class StoryHelperEncounter extends StoryHelperBase {
 					invItem.appendChild(findings);
 				}
 
-				invSection.appendChild(invItem);
+				invContent.appendChild(invItem);
 			});
 
-			content.appendChild(invSection);
+			content.appendChild(this.createSection('Investigation', invContent, 'postcombat-investigation'));
 		}
 
 		if (postCombat.itemsAcquired?.length) {
-			const itemsEl = this.#createListSection('Items Acquired', postCombat.itemsAcquired);
-			content.appendChild(itemsEl);
+			content.appendChild(this.createListSection('Items Acquired', postCombat.itemsAcquired));
 		}
 
 		if (postCombat.partyStatus) {
-			const statusSection = document.createElement('div');
-			statusSection.className = 'postcombat-party-status';
-
-			const statusTitle = document.createElement('div');
-			statusTitle.className = 'party-status-title';
-			statusTitle.textContent = 'Party Status:';
-			statusSection.appendChild(statusTitle);
+			const statusContent = document.createElement('div');
+			statusContent.className = 'postcombat-party-status-content';
 
 			if (postCombat.partyStatus.hp) {
 				const hpEl = document.createElement('div');
 				hpEl.innerHTML = `<strong>HP:</strong> ${postCombat.partyStatus.hp}`;
-				statusSection.appendChild(hpEl);
-			}
-
-			if (postCombat.partyStatus.conditions?.length) {
-				const conditionsEl = this.#createListSection(
-					'Conditions',
-					postCombat.partyStatus.conditions,
-					'party-conditions'
-				);
-				statusSection.appendChild(conditionsEl);
+				statusContent.appendChild(hpEl);
 			}
 
 			if (postCombat.partyStatus.resources) {
 				const resourcesEl = document.createElement('div');
 				resourcesEl.innerHTML = `<strong>Resources:</strong> ${postCombat.partyStatus.resources}`;
-				statusSection.appendChild(resourcesEl);
+				statusContent.appendChild(resourcesEl);
 			}
 
-			content.appendChild(statusSection);
+			// Attach as a sub-section
+			content.appendChild(this.createSection('Party Status', statusContent, 'postcombat-party-status'));
+
+			if (postCombat.partyStatus.conditions?.length) {
+				content.appendChild(this.createListSection('Conditions', postCombat.partyStatus.conditions));
+			}
 		}
 
 		if (postCombat.observations?.length) {
-			const obsEl = this.#createListSection('Observations', postCombat.observations);
-			content.appendChild(obsEl);
+			content.appendChild(this.createListSection('Observations', postCombat.observations));
 		}
 
 		if (postCombat.nextSteps) {
@@ -667,33 +533,10 @@ class StoryHelperEncounter extends StoryHelperBase {
 			content.appendChild(nextStepsEl);
 		}
 
-		section.append(header, content);
-		return section;
+		return this.createSection('Post-Combat', content, 'encounter-postcombat-section');
 	}
 
 	// ===== Helper Methods =====
-
-	#createListSection(title, items, className = '') {
-		const container = document.createElement('div');
-		container.className = `outcome-list-section ${className}`;
-
-		const titleEl = document.createElement('div');
-		titleEl.className = 'list-section-title';
-		titleEl.textContent = `${title}:`;
-		container.appendChild(titleEl);
-
-		const list = document.createElement('ul');
-		list.className = 'outcome-list';
-
-		items.forEach((item) => {
-			const li = document.createElement('li');
-			li.textContent = item;
-			list.appendChild(li);
-		});
-
-		container.appendChild(list);
-		return container;
-	}
 
 	#isPartyMember(actor) {
 		const partyMembers = ['bonnie', 'soshi', 'norr', 'olek', 'kaedin', 'cats', 'mishu', 'gica', 'megatherium'];
@@ -763,7 +606,7 @@ class StoryHelperEncounter extends StoryHelperBase {
 		const targets = this.#extractTargets(action);
 		if (targets.length) {
 			const targetText = targets.map((t) => `<span class="log-target">${t}</span>`).join(', ');
-			logParts.push('→ ' + targetText);
+			logParts.push('➜ ' + targetText);
 		}
 
 		// Damage

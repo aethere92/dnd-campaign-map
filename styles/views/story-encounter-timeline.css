@@ -1,0 +1,349 @@
+.timeline-log {
+	display: flex;
+	flex-direction: column;
+	gap: 0;
+	padding: 0;
+	background: #1a1a1a;
+	border-radius: var(--radius-md);
+	overflow: hidden;
+	font-family: 'Noto Sans', monospace, var(--font-system);
+	font-size: 0.9rem;
+	box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+/* Individual timeline entry - two lane layout */
+.timeline-entry {
+	display: grid;
+	grid-template-columns: 1fr 2rem 4rem 2rem 1fr;
+	align-items: center;
+	gap: 0.75rem;
+	padding: 0.3rem 0.75rem;
+	background-color: #2a2a2a;
+	border-bottom: 1px solid #1a1a1a;
+	transition: background-color 0.15s ease;
+	min-height: 2rem;
+}
+
+.timeline-entry:hover {
+	background-color: #333333;
+}
+
+.timeline-entry:nth-child(even) {
+	background-color: #252525;
+}
+
+.timeline-entry:nth-child(even):hover {
+	background-color: #333333;
+}
+
+.timeline-entry .entity-npc {
+	color: unset;
+
+	&::before {
+		filter: invert(1);
+	}
+}
+
+/* Turn number (timestamp) - center column */
+.timeline-turn {
+	font-size: 0.8rem;
+	color: #888;
+	font-weight: 500;
+	text-align: center;
+	flex-shrink: 0;
+}
+
+/* Action icon */
+.timeline-icon {
+	width: 2rem;
+	height: 2rem;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-shrink: 0;
+	font-size: 1.2rem;
+}
+
+/* Left side icon (party) */
+.timeline-icon.left-icon {
+	justify-self: end;
+}
+
+/* Right side icon (enemies) */
+.timeline-icon.right-icon {
+	justify-self: start;
+}
+
+/* Main content line */
+.timeline-content-line {
+	line-height: 1.4;
+	color: #ddd;
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 0.3rem;
+
+	&.left-lane {
+		justify-content: flex-end;
+	}
+}
+
+/* Actor names - color coded */
+.log-actor {
+	font-weight: 700;
+	text-shadow: 0 0 2px rgba(0, 0, 0, 0.8);
+}
+
+/* Player character colors */
+.log-actor.actor-bonnie {
+	color: #f4d03f;
+}
+
+.log-actor.actor-soshi {
+	color: #5dade2;
+}
+
+.log-actor.actor-norr {
+	color: #e74c3c;
+}
+
+.log-actor.actor-olek {
+	color: #f48cba;
+}
+
+.log-actor.actor-kaedin {
+	color: #82e0aa;
+}
+
+/* Enemy/hostile colors */
+.log-actor.actor-red,
+.log-actor.actor-enemies,
+.log-actor.actor-dragon,
+.log-actor.actor-dragon-kin {
+	color: #ff4444;
+}
+
+/* NPC/ally colors */
+.log-actor.actor-arcane,
+.log-actor.actor-caster {
+	color: #bb8fce;
+}
+
+/* Environment/neutral */
+.log-actor.actor-environment,
+.log-actor.actor-artifact {
+	color: #aaa;
+}
+
+/* Spell names */
+.log-spell {
+	color: #bb8fce;
+	font-weight: 600;
+}
+
+/* Target names */
+.log-target {
+	color: #5dade2;
+}
+
+/* Damage numbers */
+.log-damage {
+	color: #ff6b6b;
+	font-weight: 700;
+}
+
+/* Roll results */
+.log-roll {
+	color: #f39c12;
+}
+
+/* Effects */
+.log-effect {
+	color: #9b59b6;
+	font-style: italic;
+}
+
+/* Action type badge */
+.log-action-type {
+	font-size: 0.7rem;
+	padding: 0.1rem 0.4rem;
+	border-radius: 3px;
+	font-weight: 600;
+	text-transform: uppercase;
+	background-color: rgba(255, 255, 255, 0.1);
+	color: #aaa;
+}
+
+/* No results message */
+.timeline-no-results {
+	padding: 2rem;
+	text-align: center;
+	color: #888;
+	font-style: italic;
+	background-color: #2a2a2a;
+}
+
+/* Filter section styling */
+.encounter-filter-section {
+	padding: 0.75rem;
+	background: rgba(0, 0, 0, 0.3);
+	border-bottom: 1px solid rgba(192, 170, 118, 0.3);
+	margin-bottom: 0;
+}
+
+.encounter-filter-section label {
+	display: block;
+	font-size: 0.75rem;
+	color: var(--color-border);
+	text-transform: uppercase;
+	letter-spacing: 0.0625rem;
+	margin-bottom: 0.5rem;
+	font-family: 'Noto Sans', var(--font-system);
+}
+
+.encounter-filter-section select {
+	width: 100%;
+	padding: 0.5rem;
+	background: rgba(255, 255, 255, 0.1);
+	border: 1px solid rgba(192, 170, 118, 0.3);
+	border-radius: 0.25rem;
+	color: var(--color-parchment);
+	font-family: 'Noto Sans', var(--font-system);
+	font-size: 0.85rem;
+	cursor: pointer;
+
+	& option {
+		color: black;
+	}
+}
+
+.encounter-filter-section select:hover {
+	background: rgba(255, 255, 255, 0.15);
+	border-color: rgba(192, 170, 118, 0.5);
+}
+
+.encounter-filter-section select:focus {
+	outline: none;
+	border-color: var(--color-primary);
+	box-shadow: 0 0 0 3px rgba(123, 13, 13, 0.1);
+}
+
+.timeline-round-header {
+	text-align: center;
+	font-weight: 600;
+	padding: var(--spacing-xs);
+	color: var(--color-parchment);
+}
+
+.encounter-outcome-content {
+	display: flex;
+	flex-direction: column;
+	gap: var(--spacing-md);
+}
+
+/* =================================================================== */
+/* ===== INITIATIVE ORDER SECTION ===== */
+/* =================================================================== */
+
+.initiative-list {
+	display: grid;
+	grid-template-columns: repeat(4, 1fr);
+	gap: 0.25rem;
+}
+
+.initiative-item {
+	display: flex;
+	align-items: center;
+	gap: 0.75rem;
+	padding: 0.5rem 0.75rem;
+	background-color: rgba(248, 244, 227, 0.3);
+	border-radius: var(--radius-sm);
+	border: 1px solid #e0d5c3;
+	transition: all 0.2s ease;
+}
+
+.initiative-item:hover {
+	background-color: rgba(248, 244, 227, 0.6);
+	border-color: var(--color-border);
+	transform: translateX(2px);
+}
+
+/* Rank number */
+.initiative-rank {
+	width: 1.75rem;
+	height: 1.75rem;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: linear-gradient(135deg, rgba(192, 170, 118, 0.2), rgba(192, 170, 118, 0.1));
+	border: 1px solid var(--color-border);
+	border-radius: 4px;
+	font-weight: 700;
+	font-size: 0.85rem;
+	color: var(--color-secondary);
+	flex-shrink: 0;
+}
+
+/* Character name */
+.initiative-character {
+	flex: 1;
+	font-weight: 600;
+	color: var(--color-text);
+	font-family: 'Noto Sans', var(--font-system);
+	font-size: 0.9rem;
+}
+
+/* Initiative value */
+.initiative-value {
+	font-weight: 700;
+	font-size: 1rem;
+	color: var(--color-primary);
+	font-family: 'Noto Sans', var(--font-system);
+	flex-shrink: 0;
+	min-width: 1.5rem;
+	text-align: right;
+}
+
+/* Top initiative gets subtle highlight */
+.initiative-item:first-child {
+	background-color: rgba(243, 156, 18, 0.1);
+	border-color: rgba(243, 156, 18, 0.3);
+}
+
+.initiative-item:first-child .initiative-value {
+	color: #e67e22;
+}
+
+/* Animation for filtered entries */
+@keyframes encounterFadeOut {
+	from {
+		opacity: 1;
+		max-height: 3rem;
+	}
+	to {
+		opacity: 0;
+		max-height: 0;
+		padding: 0;
+		margin: 0;
+	}
+}
+
+@keyframes encounterFadeIn {
+	from {
+		opacity: 0;
+		max-height: 0;
+	}
+	to {
+		opacity: 1;
+		max-height: 3rem;
+	}
+}
+
+.timeline-entry[style*='display: none'] {
+	animation: encounterFadeOut 0.2s ease-out forwards;
+	overflow: hidden;
+}
+
+.timeline-entry:not([style*='display: none']) {
+	animation: encounterFadeIn 0.3s ease-out;
+}

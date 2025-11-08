@@ -1,0 +1,77 @@
+.story-image-container {
+	text-align: center;
+	position: relative;
+}
+
+.story-image-container.image-inline {
+	float: right;
+	margin-inline-start: 1rem;
+}
+
+.image-align-left {
+	float: left;
+	margin-inline-end: var(--spacing-lg);
+	margin-block-end: var(--spacing-md);
+	max-inline-size: 40%;
+}
+
+.image-align-right {
+	float: right;
+	margin-inline-start: var(--spacing-lg);
+	margin-block-end: var(--spacing-md);
+	max-inline-size: 40%;
+}
+
+.story-image-container img {
+	max-inline-size: 100%;
+	border-radius: var(--radius-md);
+	box-shadow: 0 0.1875rem 0.625rem var(--color-shadow);
+	border: 0.1875rem solid var(--color-border);
+	position: relative;
+}
+
+.story-image-container img::before {
+	content: '';
+	position: absolute;
+	inset: -0.3125rem;
+	border: 0.0625rem solid var(--color-dark);
+	border-radius: calc(var(--radius-md) + 0.125rem);
+	pointer-events: none;
+}
+
+.image-caption {
+	display: inline-block;
+	margin-block-start: var(--spacing-sm);
+	padding: 0.1875rem 0.625rem;
+	font-size: 0.9rem;
+	color: var(--color-text);
+	font-style: italic;
+	background-color: rgba(255, 255, 255, 0.6);
+	border-radius: var(--radius-sm);
+}
+
+blockquote {
+	position: relative;
+	block-size: max-content;
+	padding: 1rem;
+}
+
+blockquote::before {
+	content: '';
+	position: absolute;
+	inline-size: 100%;
+	block-size: 100%;
+	inset-block-start: calc(50% - 0.25rem);
+	inset-inline-start: calc(50% - 1rem);
+	transform: translate(-50%, -50%);
+	z-index: 0;
+	background-color: #fffae4;
+	background-image: url('https://transparenttextures.com/patterns/rice-paper.png');
+	filter: url(#wavy2);
+}
+
+blockquote i {
+	filter: unset;
+	z-index: 5;
+	position: relative;
+}

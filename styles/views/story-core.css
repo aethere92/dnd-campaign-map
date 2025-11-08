@@ -1,0 +1,162 @@
+.story-container {
+	display: flex;
+	flex-direction: column;
+	block-size: 100%;
+	inline-size: 100%;
+	overflow: hidden;
+	background-color: var(--color-parchment);
+	background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0h100v100H0z' fill='%23c0aa7610'/%3E%3Cpath d='M10 10h80v80H10z' fill='%23c0aa7608'/%3E%3C/svg%3E"),
+		url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 20l-5-5 5-5 5 5-5 5zm0 20l-5 5 5 5 5-5-5-5z' stroke='%23c0aa7615' fill='none' stroke-width='1'/%3E%3C/svg%3E");
+	color: var(--color-text);
+	font-family: var(--font-main);
+	position: relative;
+	container: storycontent / inline-size;
+}
+
+.story-container::before {
+	content: '';
+	position: absolute;
+	inset: 0;
+	background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.04' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.05'/%3E%3C/svg%3E");
+	opacity: 0.7;
+	pointer-events: none;
+	z-index: 0;
+}
+
+/* Header */
+.story-header {
+	display: none;
+	padding: var(--spacing-md) var(--spacing-lg);
+	background: linear-gradient(to bottom, #372a1d, #211810),
+		url("data:image/svg+xml,%3Csvg width='100' height='60' viewBox='0 0 100 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 30 L100 30' stroke='%23c0aa7650' stroke-width='1' stroke-dasharray='5,5'/%3E%3C/svg%3E");
+	position: relative;
+	box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.3);
+	z-index: 5;
+}
+
+.story-header::before {
+	content: '';
+	position: absolute;
+	inset-block-start: 0;
+	inset-inline: 0;
+	block-size: 0.1875rem;
+	background: linear-gradient(to right, transparent, #c5b088, #f5e8d0, #c5b088, transparent);
+}
+
+.story-header::after {
+	content: '';
+	position: absolute;
+	inset-block-end: 0;
+	inset-inline: 0;
+	block-size: 0.375rem;
+	background-image: url("data:image/svg+xml,%3Csvg width='30' height='6' viewBox='0 0 30 6' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0 L15 6 L30 0 Z' fill='%232c2117'/%3E%3C/svg%3E");
+	background-repeat: repeat-x;
+	background-size: 1.875rem 0.375rem;
+}
+
+.story-header h1 {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 1rem;
+	margin: 0;
+	font-size: 1.5rem;
+	font-family: var(--font-headers);
+	text-transform: uppercase;
+	letter-spacing: 0.125rem;
+	color: #f5e8d0;
+	text-align: center;
+	text-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.4);
+}
+
+.story-header h1::before,
+.story-header h1::after {
+	content: '';
+	display: inline-block;
+	inline-size: 2rem;
+	block-size: 2rem;
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath fill='%23c0aa76' d='M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm80 248c0 44.1-35.9 80-80 80s-80-35.9-80-80 35.9-80 80-80 80 35.9 80 80z'/%3E%3C/svg%3E");
+	background-repeat: no-repeat;
+	background-size: contain;
+}
+
+/* Campaign info */
+.story-campaign-name {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.story-campaign-name h3 {
+	font-family: var(--font-headers);
+	margin: 0.5rem;
+}
+
+.story-description {
+	margin-block-start: var(--spacing-sm);
+	font-size: 0.625rem;
+	line-height: 1.6;
+	text-align: center;
+	margin-inline: auto;
+	color: #d2c4a0;
+	font-style: italic;
+	position: relative;
+	padding-block-start: var(--spacing-sm);
+}
+
+.story-description::before {
+	content: '';
+	position: absolute;
+	inset-block-start: 0;
+	inset-inline-start: 50%;
+	transform: translateX(-50%);
+	inline-size: 60%;
+	block-size: 0.0625rem;
+	background: linear-gradient(to right, transparent, #c0aa76, transparent);
+}
+
+/* Main content area */
+.story-main-content {
+	display: grid;
+	grid-template-columns: 18.75rem 1fr;
+	flex: 1;
+	position: relative;
+	z-index: 1;
+	transition: grid-template-columns 0.3s ease;
+	overflow: hidden;
+}
+
+.story-main-content.sidebar-collapsed {
+	grid-template-columns: 2.5rem 1fr;
+}
+
+/* Content area */
+.story-content-area {
+	display: flex;
+	flex-direction: row;
+	gap: 1rem;
+	background-color: #fffae9;
+	background-image: url('https://transparenttextures.com/patterns/rice-paper-3.png');
+	position: relative;
+	block-size: 100vh;
+	scroll-behavior: smooth;
+	container-type: inline-size;
+}
+
+.story-content-area::before {
+	content: '';
+	position: absolute;
+	inset: 0;
+	opacity: 0.05;
+	pointer-events: none;
+	z-index: 0;
+	background-size: 1.25rem 1.25rem;
+}
+
+/* Animations and loading */
+.loading::before {
+	content: '⚅';
+	display: inline-block;
+	animation: spin 2s infinite linear;
+	margin-inline-end: 0.5rem;
+}

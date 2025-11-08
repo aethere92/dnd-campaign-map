@@ -235,7 +235,7 @@ class StoryHelperNPC extends StoryHelperBase {
 		}
 
 		if (npc.link?.length) {
-			detail.appendChild(this.createLinksSection(npc.link));
+			detail.appendChild(this.createListSection('Involved In', npc.link));
 		}
 
 		return detail;

@@ -1,0 +1,58 @@
+.quest-container {
+	/* Mimics .progression-levelup/loot for the container style */
+	background-color: #fffcf1;
+	background-image: url(https://transparenttextures.com/patterns/little-pluses.png);
+	border: 1px solid var(--color-border);
+	border-radius: var(--radius-md);
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+	overflow: hidden; /* Ensures borders/shadow look clean */
+	margin: 2rem auto;
+	max-width: 90%;
+	font-family: var(--font-system);
+}
+
+.quest {
+	padding: 0.5rem;
+	border-bottom: 1px dashed #e0e0e0;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+
+.quest:last-child {
+	border-bottom: none; /* Remove border from the last quest */
+}
+
+.quest:hover {
+	background-color: rgba(255, 255, 241, 0.8); /* Slight hover effect */
+}
+
+.quest-name {
+	/* Mimics table header style */
+	color: var(--color-text-dark);
+	font-weight: 700;
+	font-size: 0.95rem;
+}
+
+.quest-description {
+	color: #555; /* Soft black for readability */
+	font-size: 0.85rem;
+	display: flex;
+	flex-direction: column;
+}
+
+.quests-button {
+	display: block;
+	width: 100%;
+	padding: var(--spacing-sm);
+	background-color: rgba(255, 255, 255, 0.1);
+	border: 1px solid rgba(255, 255, 255, 0.2);
+	border-radius: var(--border-radius-sm);
+	color: var(--color-parchment);
+	text-align: center;
+	font-family: var(--font-system);
+	font-size: 0.9rem;
+	font-weight: 500;
+	cursor: pointer;
+	transition: all 0.2s ease;
+}

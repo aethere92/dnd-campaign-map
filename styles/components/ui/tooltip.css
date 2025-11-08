@@ -1,0 +1,279 @@
+.character-tooltip-container {
+	position: absolute;
+	z-index: 1000;
+	max-width: 320px;
+	font-family: 'Noto Sans', var(--font-system);
+	pointer-events: auto; /* Changed from none */
+}
+
+/* Base Tooltip Styling */
+.entity-tooltip,
+.character-tooltip {
+	background-image: url(../../../images/assets/background_texture.png);
+	background-color: rgba(255, 248, 235, 0.98);
+	border: 0.0625rem solid #e0d5c3;
+	border-radius: 6px;
+	box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+	overflow: hidden;
+	font-size: 10pt;
+	line-height: 1.4;
+}
+
+/* Tooltip Header */
+.tooltip-header {
+	background: linear-gradient(to bottom, rgba(212, 180, 131, 0.3), rgba(212, 180, 131, 0.1));
+	border-bottom: 1px solid #e0d5c3;
+	padding: 0.75rem;
+	display: flex;
+	align-items: center;
+	gap: 0.75rem;
+}
+
+.tooltip-header img {
+	width: 40px;
+	height: 40px;
+	border-radius: 4px;
+	border: 0.0625rem solid #e0d5c3;
+	object-fit: cover;
+}
+
+.tooltip-header h3 {
+	margin: 0;
+	font-family: 'Noto Sans', var(--font-system);
+	font-size: 11pt;
+	color: #5c2c0a;
+	flex: 1;
+}
+
+/* Badges */
+.affinity-badge,
+.spell-level,
+.monster-cr,
+.quest-status,
+.location-type {
+	display: inline-flex;
+	align-items: center;
+	padding: 0.15rem 0.5rem;
+	border-radius: 3px;
+	font-size: 8pt;
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
+	margin-left: auto;
+}
+
+.affinity-badge.ally,
+.quest-status.completed {
+	background: #d4edda;
+	color: #155724;
+	border: 1px solid #c3e6cb;
+}
+
+.affinity-badge.neutral {
+	background: #fff3cd;
+	color: #856404;
+	border: 1px solid #ffeeba;
+}
+
+.affinity-badge.antagonist {
+	background: #f8d7da;
+	color: #721c24;
+	border: 1px solid #f5c6cb;
+}
+
+.quest-status.active {
+	background: #cce5ff;
+	color: #004085;
+	border: 1px solid #b8daff;
+}
+
+.spell-level,
+.monster-cr {
+	background: rgba(92, 44, 10, 0.1);
+	color: #5c2c0a;
+	border: 1px solid #d4b483;
+}
+
+/* Tooltip Content */
+.tooltip-content {
+	padding: 0.75rem;
+	color: #3a3226;
+	display: flex;
+	flex-direction: column;
+	max-block-size: 300px;
+	overflow: auto;
+	gap: 0.5rem;
+}
+
+.tooltip-content strong {
+	color: #5c2c0a;
+	font-weight: 600;
+}
+
+/* Meta Information */
+.tooltip-meta {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.75rem;
+	padding: 0.5rem;
+	background: rgba(212, 180, 131, 0.2);
+	border-radius: 4px;
+	font-size: 9pt;
+}
+
+.tooltip-stats {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.5rem;
+	font-size: 9pt;
+	margin-bottom: 0.5rem;
+}
+
+/* Descriptions */
+.tooltip-description,
+.tooltip-container {
+	font-size: 9pt;
+	padding: 0.5rem;
+	background: rgba(212, 180, 131, 0.1);
+	border-radius: 4px;
+}
+
+.tooltip-container ul {
+	margin: 0;
+	padding-left: var(--spacing-md);
+}
+
+.tooltip-personality,
+.tooltip-objective,
+.tooltip-higher-level {
+	font-size: 9pt;
+	padding: 0.5rem;
+	background: rgba(212, 180, 131, 0.1);
+	border-radius: 4px;
+	margin-top: 0.5rem;
+}
+
+/* Ability Scores */
+.tooltip-ability-scores {
+	display: grid;
+	grid-template-columns: repeat(6, 1fr);
+	gap: 0.4rem;
+	margin: 0.5rem 0;
+}
+
+.ability-score {
+	background: rgba(255, 248, 235, 0.8);
+	border: 1px solid #e0d5c3;
+	border-radius: 4px;
+	padding: 0.3rem;
+	text-align: center;
+	font-size: 9pt;
+}
+
+.ability-name {
+	display: block;
+	font-weight: 600;
+	color: #5c2c0a;
+	font-size: 8pt;
+}
+
+.ability-value {
+	display: block;
+	font-weight: bold;
+	color: #3a3226;
+}
+
+/* Lists */
+.tooltip-features ul,
+.tooltip-threats ul,
+.tooltip-relationships ul {
+	margin: 0.5rem 0 0 0;
+	padding-left: 1.2rem;
+	font-size: 9pt;
+}
+
+.tooltip-features li,
+.tooltip-threats li,
+.tooltip-relationships li {
+	margin-bottom: 0.3rem;
+	color: #5a4a3a;
+}
+
+/* Latest Update */
+.tooltip-latest-update {
+	border-top: 1px solid #e0d5c3;
+	padding-top: 0.5rem;
+	margin-top: 0.5rem;
+	font-size: 9pt;
+}
+
+.tooltip-latest-update p {
+	margin: 0.3rem 0 0 0;
+	color: #5a4a3a;
+}
+
+/* Loading & Error States */
+.entity-tooltip.loading,
+.entity-tooltip.error {
+	min-width: 200px;
+}
+
+.entity-tooltip.loading .tooltip-content,
+.entity-tooltip.error .tooltip-content {
+	text-align: center;
+	padding: 1rem;
+	color: #7a5c44;
+	font-style: italic;
+}
+
+/* Scrollbar for long content */
+.tooltip-description::-webkit-scrollbar {
+	width: 6px;
+}
+
+.tooltip-description::-webkit-scrollbar-track {
+	background: rgba(224, 213, 195, 0.3);
+	border-radius: 3px;
+}
+
+.tooltip-description::-webkit-scrollbar-thumb {
+	background: #d4b483;
+	border-radius: 3px;
+}
+
+.tooltip-description::-webkit-scrollbar-thumb:hover {
+	background: #c4a473;
+}
+
+/* Tooltip navigation (links) */
+.tooltip-navigation {
+	background: linear-gradient(to bottom, rgba(212, 180, 131, 0.3), rgba(212, 180, 131, 0.1));
+	border-bottom: 1px solid #e0d5c3;
+	padding: 0.125rem;
+	display: flex;
+	align-items: center;
+	gap: 0.75rem;
+}
+
+.tooltip-nav-link {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	padding: 6px 12px;
+	background: rgba(255, 255, 255, 0.1);
+	border-radius: 4px;
+	color: inherit;
+	text-decoration: none;
+	font-size: 0.9em;
+	transition: background 0.2s;
+	color: #5c2c0a;
+	font-weight: 600;
+}
+
+.tooltip-nav-link:hover {
+	background: rgba(255, 255, 255, 0.2);
+}
+
+.tooltip-nav-icon {
+	font-weight: bold;
+}

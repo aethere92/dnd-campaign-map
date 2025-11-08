@@ -3,7 +3,7 @@ const CAMPAIGN_002_ENCOUNTERS = [
 		id: 'sess-002-enc-001-hydra-battle-swamp-bridge',
 		name: 'Hydra Battle at the Swamp Bridge',
 		session: 2,
-		location: 'Swamp Bridge in the [ENTITY:location:Witchwood]',
+		location: 'Swamp Bridge in the Witchwood',
 		environment: {
 			name: 'Swamp and Bridge',
 			terrain: 'Difficult terrain (swamp), bridge structure',
@@ -899,7 +899,6 @@ const CAMPAIGN_002_ENCOUNTERS = [
 				],
 			},
 		],
-
 		outcome: {
 			status: 'Victory',
 			partyCondition: 'Heavily depleted resources, multiple injuries',
@@ -935,58 +934,6 @@ const CAMPAIGN_002_ENCOUNTERS = [
 				'Evidence of organized raider groups (Iron Wolves mercenaries, Spell Breakers)',
 				'Broken shackle symbol indicates escaped slaves or prisoners involved',
 			],
-		},
-		postCombat: {
-			action: 'Investigation and cleanup',
-			healing: {
-				type: 'Mixed (Lay on Hands, Second Wind, potions considered)',
-				totalHealing: 'Approximately 36 HP recovered',
-				characters: [
-					'[ENTITY:character:Olek] (20 HP from Lay on Hands)',
-					'[ENTITY:character:Kaedin] (16 HP from Second Wind)',
-				],
-			},
-			investigation: [
-				{
-					character: '[ENTITY:character:Bonnie]',
-					roll: 30,
-					skill: 'Investigation',
-					findings: 'Found all loot, disarmed 30 bear traps, discovered 10 dead bodies, identified trap patterns',
-				},
-				{
-					character: '[ENTITY:character:Kaedin]',
-					roll: 15,
-					skill: 'Perception',
-					findings: 'Noticed bodies had identifying marks/scars that could help identify them',
-				},
-			],
-			itemsAcquired: [
-				'5 gold in gemstones',
-				'2 healing potions',
-				'1 green potion (unknown)',
-				'1 radiant potion',
-				'30 bear traps',
-				'Hydra teeth',
-				'Broken staff',
-				'Tattoo evidence (broken shackles)',
-			],
-			partyStatus: {
-				hp: '[ENTITY:character:Olek]: ~20/max, [ENTITY:character:Kaedin]: ~34/max, [ENTITY:character:Norr]: ~12/max, [ENTITY:character:Soshi]: healthy, [ENTITY:character:Bonnie]: healthy',
-				conditions: [
-					'[ENTITY:character:Olek]: No longer poisoned (removed with Lay on Hands)',
-					'Party exhausted from extended travel and combat',
-				],
-				resources:
-					'Spell slots heavily depleted - [ENTITY:character:Soshi]: 0/3 level 3 slots remaining, [ENTITY:character:Norr]: 2/3 level 1, 1/2 level 2, [ENTITY:character:Olek]: limited spell slots and Lay on Hands points used',
-			},
-			observations: [
-				'Bodies disposed of in water to avoid alerting more enemies',
-				'Party chose not to take hydra hide due to time constraints',
-				'Evidence suggests organized raider activity coordinating multiple groups',
-				'[ENTITY:faction:Winter Rose] mercenaries spotted at tavern earlier may be connected',
-				'Party being tracked - discovered later when Worgs found them by scent',
-			],
-			nextSteps: 'Return to town to report findings and rest',
 		},
 	},
 	{
@@ -1343,39 +1290,6 @@ const CAMPAIGN_002_ENCOUNTERS = [
 				'Evidence of organized raider network tracking them',
 			],
 		},
-		postCombat: {
-			action: 'Quick looting and continued travel',
-			healing: {
-				type: 'None - party pressed forward',
-				totalHealing: '0 HP',
-				characters: [],
-			},
-			investigation: [
-				{
-					character: '[ENTITY:character:Bonnie]',
-					roll: 0,
-					skill: 'Quick search',
-					findings: 'Identified broken shackle tattoos matching previous enemies, took as proof',
-				},
-			],
-			itemsAcquired: [
-				'Broken shackle tattoo evidence',
-				'Leather boots ([ENTITY:character:Norr] took from dead rider to replace her missing sandals)',
-			],
-			partyStatus: {
-				hp: '[ENTITY:character:Olek]: ~8/max (took 12 damage), Others relatively healthy from this fight',
-				conditions: ['Entire party exhausted from extended day', 'Fear effects ended after combat'],
-				resources:
-					'Critically low - [ENTITY:character:Soshi]: 0 level 3, limited level 2; [ENTITY:character:Norr]: 0 level 3, 1 level 2, some level 1; [ENTITY:character:Olek]: limited slots remaining',
-			},
-			observations: [
-				'Party disposed of bodies by moving them off the path',
-				'Continued toward town at half speed through forest',
-				'Estimated 4-5 more hours of travel remaining',
-				'Party discussed whether to rest but decided to push forward',
-			],
-			nextSteps: 'Continue traveling toward town, hoping to avoid further encounters',
-		},
 	},
 	{
 		id: 'sess-002-enc-003-worg-ambush-2',
@@ -1717,46 +1631,6 @@ const CAMPAIGN_002_ENCOUNTERS = [
 				'Evidence of continuous tracking by organized raider forces',
 				'Party arrived back at town around 7:00 PM, completely exhausted',
 			],
-		},
-		postCombat: {
-			action: 'Emergency cleanup and forced march to town',
-			healing: {
-				type: 'Minimal healing during combat only',
-				totalHealing: '~5 HP to [ENTITY:character:Olek] from Healing Word',
-				characters: ['[ENTITY:character:Olek] (brought from 0 to ~5 HP)'],
-			},
-			investigation: [
-				{
-					character: '[ENTITY:character:Kaedin]',
-					roll: 0,
-					skill: 'Harvesting',
-					findings: 'Took Worg head as trophy, collected broken shackle tattoo',
-				},
-			],
-			itemsAcquired: [
-				'Worg head',
-				'Broken shackle tattoo evidence',
-				'Leather boots ([ENTITY:character:Norr] now wearing oversized boots from dead rider)',
-			],
-			partyStatus: {
-				hp: '[ENTITY:character:Olek]: ~5/max (unconscious then revived), Others: Moderately wounded, [ENTITY:character:Norr]: 12/max',
-				conditions: [
-					'Entire party exhausted',
-					'Resources completely depleted',
-					'Multiple members wounded',
-					'[ENTITY:character:Norr] wearing ill-fitting boots that smell terrible',
-				],
-				resources:
-					'CRITICAL - [ENTITY:character:Soshi]: 0 level 3, 0 level 2 remaining; [ENTITY:character:Norr]: 0 level 3, 0 level 2, minimal level 1; [ENTITY:character:Olek]: all slots used, Channel Divinity used, Lay on Hands depleted',
-			},
-			observations: [
-				'Party extinguished forest fire with Create Water cantrip',
-				'Disposed of bodies off the path',
-				'Completed final 2-hour trek to town without further incident',
-				'Survival check (21) helped correct navigation error that had added an hour to travel time',
-				'Arrived at town around 7:00 PM after departing at 8:00 AM - approximately 11 hours of travel with multiple combat encounters',
-			],
-			nextSteps: "Return to inn (Tarma's establishment), report to town council, rest and recover",
 		},
 	},
 	{
@@ -2786,58 +2660,6 @@ const CAMPAIGN_002_ENCOUNTERS = [
 				'Discovered connection to teacher Calistra and her research',
 			],
 		},
-		postCombat: {
-			action: 'Investigation and creature interaction',
-			healing: {
-				type: 'Short Rest + Prayer of Healing',
-				totalHealing: '2d8+4 per character',
-				characters: ['[ENTITY:character:Olek]', '[ENTITY:character:Norr]', '[ENTITY:character:Bonnie]'],
-			},
-			investigation: [
-				{
-					character: '[ENTITY:character:Norr]',
-					roll: 16,
-					skill: 'Investigation',
-					findings: "Found 10 glowing mushrooms (Garicum Agaricom) - used for King's Blood Venom coating",
-				},
-				{
-					character: '[ENTITY:character:Norr]',
-					roll: 20,
-					skill: 'Arcana/Alchemy',
-					findings:
-						'Recalled mushroom properties: causes lightheadedness on touch, dangerous to ingest, used with snake venom to create paralysis coating (10 charges, DC 17 Con save)',
-				},
-				{
-					character: '[ENTITY:character:Bonnie]',
-					roll: 11,
-					skill: 'Investigation',
-					findings: 'Limited findings',
-				},
-			],
-			itemsAcquired: [
-				'10 glowing mushrooms (Garicum Agaricom)',
-				'Arthropleura venom in flask',
-				'Arthropleura head (stored in sack)',
-			],
-			partyStatus: {
-				hp: 'Recovered to near-full after short rest and healing',
-				conditions: [
-					'[ENTITY:character:Olek]: No longer poisoned or paralyzed',
-					'[ENTITY:character:Norr]: Uninjured but clothing damaged',
-					'[ENTITY:character:Bonnie]: Unharmed',
-				],
-				resources: 'Spell slots partially expended, Megatherium allies available',
-			},
-			observations: [
-				'Megatherium (Gica and Mishu) are friendly and protective',
-				"Creatures were previously held by goblins with 'Broken Shackle' tribe markings",
-				'Megatherium were freed approximately 2 weeks ago based on baby age',
-				"They were called by 'Red Hand' - connection to orc tribes",
-				'Creatures are territorial but friendly to those who feed them',
-			],
-			nextSteps:
-				'Party communicated with Megatherium via Speak with Animals ([ENTITY:character:Bonnie]), learned about their captors, said farewell, and prepared to continue through caves toward exit/waterfall',
-		},
 	},
 	{
 		id: 'sess-005-enc-001-thylacoleos-ambush-forest',
@@ -3225,27 +3047,6 @@ const CAMPAIGN_002_ENCOUNTERS = [
 				'Fall damage from tree combat',
 				'Bear trap used before combat (killed seagull)',
 			],
-		},
-
-		// POST-COMBAT
-		postCombat: {
-			action: 'Skinned Thylacoleos corpses',
-			checks: [
-				{ character: '[ENTITY:character:Soshi]', skill: 'Survival', roll: 22, result: 'Obtained 6 pelts, 3 intact' },
-				{ character: '[ENTITY:character:Kaedin]', skill: 'Survival', roll: 9 },
-			],
-			discovery: 'Found 7 Thylacoleos kittens in tree hollow',
-			itemsAcquired: [
-				'7 creature capture balls (purchased from [ENTITY:class:Wizard] for 7 gold total)',
-				'Named kittens: Tom, Garfield, Bella, Milly, Yoli, Avatar, and one unnamed',
-			],
-			merchants: [
-				'Sertieren ([ENTITY:class:Wizard]) - bought storm dust for 15 gold',
-				'Sertieren - sold pelts for 5 gold each',
-				'Sertieren - identified potions and elixirs',
-			],
-			healing: 'Party rested, fed kittens milk',
-			nextObjective: 'Return to Drellin Ferry, care for kittens',
 		},
 	},
 	{
@@ -4016,30 +3817,12 @@ const CAMPAIGN_002_ENCOUNTERS = [
 				'Enemy used poison weapons extensively',
 			],
 		},
-
-		postCombat: {
-			location: 'Fortress courtyard',
-			observations: [
-				'Skeleton still on tower (non-hostile, appears to be decoy)',
-				'Fortress previously blessed (party felt spring/renewal energy in ground)',
-				'Heard warnings about "Worm Lord" - powerful [ENTITY:class:Sorcerer]',
-				'Fortress has underground passages',
-				'Heavy doors closed, enemies fortified inside',
-			],
-			partyStatus: {
-				hp: 'Most party members moderate to low HP',
-				conditions: ['[ENTITY:character:Olek]: Poisoned', '[ENTITY:character:Norr]: Poisoned'],
-				resources: 'Multiple high-level spell slots used',
-			},
-			nextSteps: 'Party discussing whether to press forward or rest',
-		},
 	},
 	{
 		id: 'sess-007-enc-001-spectral-guardians-sealed-chamber',
 		session: 7,
 		name: 'Spectral Guardians - The Sealed Chamber',
 		location: 'Underground vault with ritual circle',
-		// INITIATIVE
 		initiative: [
 			{ character: '[ENTITY:character:Bonnie]', value: null },
 			{ character: '[ENTITY:character:Norr]', value: null },
@@ -4048,8 +3831,6 @@ const CAMPAIGN_002_ENCOUNTERS = [
 			{ character: '[ENTITY:character:Kaedin]', value: null },
 			{ character: 'Spectral Enemies', value: null, count: 6, notes: 'Ghosts in robes, 2 casters, 4 fighters' },
 		],
-
-		// ENVIRONMENT
 		environment: {
 			name: 'Ritual Circle Chamber',
 			effects: [
@@ -4057,7 +3838,7 @@ const CAMPAIGN_002_ENCOUNTERS = [
 					name: 'Arcane Circle',
 					description: 'Circle prevents external magic, amplifies internal casting',
 					radius: 30,
-					notes: '[ENTITY:spell:Dispel Magic] ineffective, requires Disintegrate',
+					notes: '[ENTITY:spell:Dispel Magic] ineffective, requires [ENTITY:spell:Disintegrate]',
 				},
 				{
 					name: 'Soul Drain Attacks',
@@ -4068,10 +3849,7 @@ const CAMPAIGN_002_ENCOUNTERS = [
 			],
 			terrain: 'Stone floor, ritual circle drawn in center, sealed door on far wall',
 		},
-
-		// ROUNDS
 		rounds: [
-			// ROUND 1
 			{
 				number: 1,
 				actions: [
@@ -4088,7 +3866,7 @@ const CAMPAIGN_002_ENCOUNTERS = [
 					{
 						actor: '[ENTITY:character:Bonnie]',
 						type: 'class_feature',
-						name: 'Hunters Mark',
+						name: "[ENTITY:spell:Hunter's Mark]",
 						level: 1,
 						target: 'Wounded ghost',
 						duration: '1 hour',
@@ -4536,8 +4314,6 @@ const CAMPAIGN_002_ENCOUNTERS = [
 				],
 			},
 		],
-
-		// OUTCOME
 		outcome: {
 			status: 'Victory - Pyrrhic',
 			partyCondition: 'All survived, multiple low HP, [ENTITY:character:Norr] permanently changed',
@@ -4558,29 +4334,11 @@ const CAMPAIGN_002_ENCOUNTERS = [
 				'Souls finally released from torment',
 			],
 		},
-
-		// POST-COMBAT
-		postCombat: {
-			healing: [
-				'Party used Create/Destroy Water to heal (3d8+3 per use)',
-				'Multiple healing spells exchanged',
-				'Party rested and recovered',
-			],
-			investigation: [
-				{
-					character: '[ENTITY:character:Bonnie]',
-					roll: 27,
-					findings: 'Found treasure, magical items, and book',
-				},
-			],
-			exploration: 'Proceeded through opened door into artifact chamber',
-		},
 	},
 	{
 		id: 'sess-008-enc-001-chamber-battle-ritual',
 		name: 'Chamber Battle Ritual',
 		session: 8,
-		// INITIATIVE
 		initiative: [
 			{ character: '[ENTITY:character:Bonnie]', value: 29, notes: 'Natural 20, used stealth' },
 			{ character: '[ENTITY:character:Soshi]', value: 22 },
@@ -5114,15 +4872,6 @@ const CAMPAIGN_002_ENCOUNTERS = [
 			partyCondition: 'All survived but low HP',
 			enemiesDefeated: ['Multiple red orcs killed', 'Arcane casters defeated/fled', 'Dragon-kin fled'],
 			casualties: ['Kalistra'],
-		},
-
-		// POST-COMBAT
-		postCombat: {
-			healing: 'Party used cure wounds and potions',
-			exploration: 'Found exit via [ENTITY:npc:Jacques] (familiar)',
-			encounter: 'Met Yogurt (ogre ninja) who captured 2 shadow assassins',
-			mission: 'Sent Yogurt to deliver warning letter to Sorana (city captain)',
-			nextObjective: 'Travel to bridge to destroy it before army arrives',
 		},
 	},
 ];

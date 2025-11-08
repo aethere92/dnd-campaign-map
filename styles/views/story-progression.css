@@ -1,0 +1,143 @@
+.progression-levelup,
+.progression-loot {
+	background-color: #fffcf1;
+	background-image: url('https://transparenttextures.com/patterns/little-pluses.png');
+	border: 0.0625rem solid var(--color-border);
+	border-radius: var(--radius-md);
+	padding: var(--spacing-xs);
+	box-shadow: 0 0.125rem 0.3125rem rgba(0, 0, 0, 0.1);
+	font-family: var(--font-system);
+	position: relative;
+	overflow: hidden;
+}
+
+.progression-levelup::before,
+.progression-loot::before {
+	content: '';
+	position: absolute;
+	inset: 0;
+	background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.2' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.02'/%3E%3C/svg%3E");
+	opacity: 0.7;
+	pointer-events: none;
+	z-index: 0;
+}
+
+/* Level Up Specific Styles */
+.progression-levelup {
+	display: flex;
+	align-items: center;
+	gap: var(--spacing-md);
+	border-inline-start: 0.3125rem solid #ffc107;
+	background: linear-gradient(135deg, #fffde7, #fff8e1);
+}
+
+.levelup-icon {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	block-size: 2rem;
+	filter: drop-shadow(0 0.125rem 0.1875rem rgba(0, 0, 0, 0.2));
+}
+
+.levelup-icon img {
+	block-size: 8rem;
+}
+
+.levelup-text span {
+	margin: 0;
+	font-family: var(--font-headers);
+	color: #e65100;
+	font-size: 1.2rem;
+	font-weight: 600;
+}
+
+.levelup-text p {
+	margin: 0;
+	padding: 0;
+	color: var(--color-text);
+	font-size: 11pt;
+	font-family: 'Noto Sans', var(--font-system);
+}
+
+/* Loot Specific Styles */
+.progression-loot {
+	display: flex;
+	flex-direction: column;
+	border-inline-start: 0.3125rem solid #5c2c0a;
+}
+
+.progression-loot-title {
+	font-size: 10pt;
+	color: #5c2c0a;
+	border-block-end: 0.0625rem solid #e0d5c3;
+	padding: 0.5rem;
+	font-weight: 600;
+}
+
+.loot-list {
+	list-style: none;
+	padding: 0 0 0 0.5rem;
+	margin: 0;
+}
+
+.loot-item {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding-block: var(--spacing-sm);
+	border-block-end: 0.0625rem dashed #e0e0e0;
+	font-size: 0.95rem;
+	font-family: 'Noto Sans', var(--font-system);
+}
+
+.loot-item:last-child {
+	border-block-end: none;
+}
+
+.loot-item-metadata {
+	display: flex;
+	flex-direction: column;
+}
+
+.loot-item-name {
+	font-weight: 600;
+	color: var(--color-secondary);
+	font-size: 10pt;
+}
+
+.loot-owner {
+	font-size: 10pt;
+	color: #757575;
+	padding-inline-end: var(--spacing-md);
+}
+
+.loot-item-description {
+	font-size: 9pt;
+	color: #616161;
+}
+
+/* Rarity Colors */
+.rarity-common .loot-item-name {
+	color: var(--color-text);
+}
+
+.rarity-uncommon .loot-item-name {
+	color: #4caf50;
+}
+
+.rarity-rare .loot-item-name {
+	color: #2196f3;
+}
+
+.rarity-very-rare .loot-item-name {
+	color: #9c27b0;
+}
+
+.rarity-legendary .loot-item-name {
+	color: #ff9800;
+}
+
+.rarity-artifact .loot-item-name {
+	color: #e53935;
+	font-weight: bold;
+}

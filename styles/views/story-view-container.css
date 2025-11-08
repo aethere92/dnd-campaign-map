@@ -1,0 +1,59 @@
+.story-view-container {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 0;
+	flex: 1;
+	min-inline-size: 0;
+	overflow: hidden;
+	animation: fadeIn 0.3s ease-out;
+	inline-size: 100%;
+	block-size: 100%;
+}
+
+/* Page header */
+.view-header {
+	inline-size: 72rem;
+	padding-block: var(--spacing-md);
+	padding-inline: var(--spacing-lg);
+	position: relative;
+	text-align: center;
+}
+
+.view-header h2 {
+	display: inline-block;
+	margin: 0;
+	font-size: 1.8rem;
+	color: var(--color-primary);
+	text-align: center;
+	font-family: var(--font-headers);
+	text-transform: uppercase;
+	letter-spacing: 0.0625rem;
+	position: relative;
+}
+
+.view-header h2::before,
+.view-header h2::after {
+	content: '•';
+	display: inline-block;
+	margin-inline: 0.5rem;
+	color: var(--color-border);
+	font-size: 1.2rem;
+	position: relative;
+	inset-block-start: -0.1875rem;
+}
+
+/* Two-panel layout */
+.view-body {
+	display: flex;
+	inline-size: 100%;
+	max-inline-size: 75rem;
+	flex: 1;
+	overflow: hidden;
+	gap: var(--spacing-md);
+	margin-bottom: var(--spacing-md);
+
+	&:has(.encounter-timeline-section) {
+		max-inline-size: calc(100% - 10rem);
+	}
+}
