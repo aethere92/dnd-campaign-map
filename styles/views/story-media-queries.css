@@ -125,6 +125,7 @@
 	.view-body {
 		flex-direction: column;
 		align-items: center;
+		overflow: auto;
 	}
 
 	.view-list-panel {

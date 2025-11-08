@@ -3,12 +3,13 @@
 	flex-direction: column;
 	gap: 0;
 	padding: 0;
-	background: #1a1a1a;
+	/* background: #1a1a1a; */
 	border-radius: var(--radius-md);
 	overflow: hidden;
 	font-family: 'Noto Sans', monospace, var(--font-system);
 	font-size: 0.9rem;
-	box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.5);
+	/* box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.5); */
+	/* border: 1px solid #ddd5c4; */
 }
 
 /* Individual timeline entry - two lane layout */
@@ -18,36 +19,38 @@
 	align-items: center;
 	gap: 0.75rem;
 	padding: 0.3rem 0.75rem;
-	background-color: #2a2a2a;
-	border-bottom: 1px solid #1a1a1a;
+	/* background-color: #2a2a2a; */
+	border-bottom: 1px dashed #ddd5c4;
 	transition: background-color 0.15s ease;
 	min-height: 2rem;
 }
 
 .timeline-entry:hover {
-	background-color: #333333;
+	background: #fbf3e7;
 }
 
 .timeline-entry:nth-child(even) {
-	background-color: #252525;
+	background: linear-gradient(
+		90deg,
+		rgba(243, 224, 173, 0) 0%,
+		rgba(250, 249, 243, 1) 10%,
+		rgba(250, 249, 243, 1) 90%,
+		rgba(253, 246, 216, 0) 100%
+	);
 }
 
 .timeline-entry:nth-child(even):hover {
-	background-color: #333333;
+	background: #fbf3e7;
 }
 
 .timeline-entry .entity-npc {
 	color: unset;
-
-	&::before {
-		filter: invert(1);
-	}
 }
 
 /* Turn number (timestamp) - center column */
 .timeline-turn {
 	font-size: 0.8rem;
-	color: #888;
+	color: #6e1e12;
 	font-weight: 500;
 	text-align: center;
 	flex-shrink: 0;
@@ -77,7 +80,7 @@
 /* Main content line */
 .timeline-content-line {
 	line-height: 1.4;
-	color: #ddd;
+	color: #2a231a;
 	display: flex;
 	flex-wrap: wrap;
 	align-items: center;
@@ -91,7 +94,7 @@
 /* Actor names - color coded */
 .log-actor {
 	font-weight: 700;
-	text-shadow: 0 0 2px rgba(0, 0, 0, 0.8);
+	/* text-shadow: 0 0 2px rgba(0, 0, 0, 0.8); */
 }
 
 /* Player character colors */
@@ -231,8 +234,10 @@
 .timeline-round-header {
 	text-align: center;
 	font-weight: 600;
-	padding: var(--spacing-xs);
-	color: var(--color-parchment);
+	padding: var(--spacing-sm);
+	/* color: var(--color-parchment); */
+	color: #5c3d17;
+	border-bottom: 1px solid #bbab7a;
 }
 
 .encounter-outcome-content {
