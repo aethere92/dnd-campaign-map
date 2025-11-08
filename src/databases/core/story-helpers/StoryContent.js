@@ -292,9 +292,97 @@ class StoryHelperContent {
 		encounterRenderer.render(contentArea);
 	}
 
+	// New: render the interactive map inside the story content area
+	renderMap(contentArea) {
+		const campaign = this.#getCampaign();
+		if (!campaign?.data) {
+			contentArea.innerHTML = '<div class="no-content">No map data available for this campaign.</div>';
+			return;
+		}
+
+		// Wrapper to host the map element for layout within the story
+		const container = document.createElement('div');
+		container.className = 'story-view-container';
+
+		const body = document.createElement('div');
+		body.className = 'view-body';
+
+		const detailPanel = document.createElement('div');
+		detailPanel.className = 'view-detail-panel';
+
+		const detailContent = document.createElement('div');
+		detailContent.className = 'view-detail-content';
+		detailContent.style.padding = '0';
+
+		// Move the existing #map element into this content area
+		let mapEl = document.getElementById('map');
+		if (!mapEl) {
+			mapEl = document.createElement('div');
+			mapEl.id = 'map';
+		}
+
+		// Ensure sizing fills available space
+		Object.assign(mapEl.style, {
+			width: '100%',
+			height: '100%',
+			display: 'block',
+		});
+
+		detailContent.appendChild(mapEl);
+		detailPanel.appendChild(detailContent);
+		body.append(detailPanel);
+		container.appendChild(body);
+		contentArea.appendChild(container);
+
+		// Hide the top-level actions while inside story view
+		const actions = document.getElementById('actions');
+		if (actions) actions.style.display = 'none';
+
+		// Initialize or update the CustomMap instance
+		const defaultMapKey = this.#getCampaignDefaultMap(campaign);
+		if (window.customMap && typeof window.customMap.updateCampaignData === 'function') {
+			window.customMap.updateCampaignData(campaign.data);
+			if (typeof window.customMap.loadMap === 'function' && defaultMapKey) {
+				window.customMap.loadMap(defaultMapKey, false);
+			}
+			// Ensure proper sizing after DOM move
+			const map = window.customMap.getCurrentMap?.();
+			try {
+				map && map.invalidateSize(true);
+			} catch (_) {}
+		} else {
+			// Create a new instance bound to the #map element
+			if (defaultMapKey) {
+				// eslint-disable-next-line no-undef
+				new CustomMap('map', {
+					initialMapKey: defaultMapKey,
+					campaignData: campaign.data,
+					isDebugMode: false,
+				});
+			}
+		}
+	}
+
 	renderCharacter(contentArea, characterName) {
 		const campaign = this.#getCampaign();
 		const characterRenderer = new StoryHelperCharacter(campaign, this.#placeholderProcessor);
 		characterRenderer.render(contentArea, characterName);
+	}
+
+	// Local helper to compute default map key from campaign data
+	#getCampaignDefaultMap(campaign) {
+		if (campaign.defaultMap) return campaign.defaultMap;
+		const data = campaign.data;
+		if (!data) return null;
+		const findFirstMap = (obj) => {
+			if (!obj || typeof obj !== 'object') return null;
+			for (const key in obj) {
+				if (obj[key]?.image) return key;
+				const result = findFirstMap(obj[key]);
+				if (result) return `${key}.${result}`;
+			}
+			return null;
+		};
+		return findFirstMap(data);
 	}
 }

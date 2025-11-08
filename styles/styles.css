@@ -46,9 +46,9 @@
 @import url('views/story-view-detail.css');
 @import url('views/story-encounter-timeline.css');
 @import url('components/ui/tooltip.css');
-@import url('views/story-media-queries.css');
 @import url('components/ui/search-modal.css');
 @import url('views/story-timeline.css');
 @import url('views/story-character-page.css');
 @import url('views/story-recap.css');
 @import url('views/campaign-selection.css');
+@import url('views/story-media-queries.css');

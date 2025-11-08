@@ -335,6 +335,7 @@ class CampaignManager {
 			StoryURLManager.VIEW_TYPES.LOCATIONS,
 			StoryURLManager.VIEW_TYPES.FACTIONS,
 			StoryURLManager.VIEW_TYPES.ENCOUNTERS,
+			StoryURLManager.VIEW_TYPES.MAP,
 		];
 
 		if (sessionId || characterName || storyViewTypes.includes(viewType) || (!hasMap && hasStory)) {
@@ -373,9 +374,22 @@ class CampaignManager {
 
 		this.#storyUrlManager.updateHistory(url, state);
 
+		// Ensure map element is under root (not nested inside story) before showing
+		const mapEl = document.getElementById('map');
+		const rootEl = document.getElementById('root');
+		if (mapEl && rootEl && mapEl.parentElement !== rootEl) {
+			try { rootEl.appendChild(mapEl); } catch (_) {}
+		}
+
 		// Show and initialize map
-		document.getElementById('map').style.display = 'block';
-		document.getElementById('actions').style.display = 'block';
+		if (mapEl) mapEl.style.display = 'block';
+		const actionsEl = document.getElementById('actions');
+		if (actionsEl) actionsEl.style.display = 'block';
+
+		// Reuse existing global instance if available to avoid re-initializing Leaflet on the same container
+		if (!this.#mapInstance && window.customMap) {
+			this.#mapInstance = window.customMap;
+		}
 
 		if (!this.#mapInstance) {
 			this.#mapInstance = new CustomMap('map', {
@@ -386,6 +400,8 @@ class CampaignManager {
 		} else {
 			this.#mapInstance.updateCampaignData(campaign.data);
 			this.#mapInstance.loadMap(defaultMap);
+			// Fix sizing after moving container
+			try { this.#mapInstance.getCurrentMap()?.invalidateSize(true); } catch (_) {}
 		}
 	}
 
@@ -529,9 +545,15 @@ class CampaignManager {
 
 		// Show campaign selection view
 		document.getElementById('campaign-selection').style.display = 'flex';
-		document.getElementById('map').style.display = 'none';
+		const mapEl = document.getElementById('map');
+		if (mapEl) mapEl.style.display = 'none';
 		document.getElementById('story-view').style.display = 'none';
 		document.getElementById('actions').style.display = 'none';
+		// Ensure the map element is attached to root to avoid being cleared with story DOM
+		const rootEl = document.getElementById('root');
+		if (mapEl && rootEl && mapEl.parentElement !== rootEl) {
+			try { rootEl.appendChild(mapEl); } catch (_) {}
+		}
 
 		// Update grid and clear selection
 		this.#updateCampaignGrid();

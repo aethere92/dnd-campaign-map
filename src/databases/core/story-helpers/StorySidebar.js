@@ -12,6 +12,7 @@ class StoryHelperSidebar {
 	#onNPCsClick;
 	#onFactionsClick;
 	#onEncountersClick;
+	#onMapClick;
 	#searchManager;
 
 	// Sidebar section toggle states
@@ -35,6 +36,7 @@ class StoryHelperSidebar {
 		onNPCsClick,
 		onFactionsClick,
 		onEncountersClick,
+		onMapClick,
 		searchManager
 	) {
 		this.#getCampaign = getCampaign;
@@ -50,6 +52,7 @@ class StoryHelperSidebar {
 		this.#onNPCsClick = onNPCsClick;
 		this.#onFactionsClick = onFactionsClick;
 		this.#onEncountersClick = onEncountersClick;
+		this.#onMapClick = onMapClick;
 		this.#searchManager = searchManager;
 
 		// Load saved section states
@@ -194,6 +197,12 @@ class StoryHelperSidebar {
 			toolsList.appendChild(encountersBtn);
 		}
 
+		// Map button (always show if campaign has map data)
+		if (campaign?.data) {
+			const mapBtn = this.#createToolButton('🗺️ Map', 'map');
+			toolsList.appendChild(mapBtn);
+		}
+
 		content.appendChild(toolsList);
 		section.append(header, content);
 		return section;
@@ -227,6 +236,9 @@ class StoryHelperSidebar {
 					break;
 				case 'encounters':
 					this.#onEncountersClick();
+					break;
+				case 'map':
+					this.#onMapClick();
 					break;
 			}
 		});

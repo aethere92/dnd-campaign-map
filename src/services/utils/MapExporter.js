@@ -98,8 +98,10 @@ class MapExporter {
 		canvas.height = canvasHeight;
 		const ctx = canvas.getContext('2d');
 
-		// Fill background
-		ctx.fillStyle = document.getElementById('map').style.background || CONFIG.MAP.DEFAULT_BACKGROUND;
+		// Fill background based on the current Leaflet container (works for any container id)
+		const container = typeof map.getContainer === 'function' ? map.getContainer() : map._container;
+		const bg = container?.style?.background || CONFIG.MAP.DEFAULT_BACKGROUND;
+		ctx.fillStyle = bg;
 		ctx.fillRect(0, 0, canvasWidth, canvasHeight);
 
 		const tileSize = CONFIG.TILE_SIZE;

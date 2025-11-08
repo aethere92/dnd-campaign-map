@@ -66,6 +66,7 @@ class StoryManager {
 			() => this.#handleViewChange(StoryURLManager.VIEW_TYPES.NPCS),
 			() => this.#handleViewChange(StoryURLManager.VIEW_TYPES.FACTIONS),
 			() => this.#handleViewChange(StoryURLManager.VIEW_TYPES.ENCOUNTERS),
+			() => this.#handleViewChange(StoryURLManager.VIEW_TYPES.MAP),
 			this.#searchManager
 		);
 
@@ -134,6 +135,7 @@ class StoryManager {
 			[StoryURLManager.VIEW_TYPES.NPCS]: StoryURLManager.VIEW_TYPES.NPCS,
 			[StoryURLManager.VIEW_TYPES.FACTIONS]: StoryURLManager.VIEW_TYPES.FACTIONS,
 			[StoryURLManager.VIEW_TYPES.ENCOUNTERS]: StoryURLManager.VIEW_TYPES.ENCOUNTERS,
+			[StoryURLManager.VIEW_TYPES.MAP]: StoryURLManager.VIEW_TYPES.MAP,
 		};
 
 		if (viewTypeMap[viewType]) {
@@ -168,6 +170,19 @@ class StoryManager {
 	async render() {
 		if (!this.#rootElement || !this.#campaign) return;
 
+		// If the map element currently lives inside the story view (from MAP sub-view),
+		// move it back under the page root before clearing to avoid destroying the Leaflet instance.
+		try {
+			const mapEl = document.getElementById('map');
+			const pageRoot = document.getElementById('root');
+			if (mapEl && this.#rootElement.contains(mapEl) && pageRoot) {
+				mapEl.style.display = 'none';
+				pageRoot.appendChild(mapEl);
+			}
+		} catch (e) {
+			console.warn('StoryManager: failed to relocate map element before render', e);
+		}
+
 		this.#rootElement.innerHTML = '';
 
 		const container = document.createElement('div');
@@ -183,11 +198,12 @@ class StoryManager {
 		const contentArea = document.createElement('div');
 		contentArea.className = 'story-content-area';
 
-		await this.#loadContentArea(contentArea);
-
+		// Mount the structure first so inner renders (like Leaflet map) have a live DOM container
 		mainContent.append(sidebar, contentArea);
 		container.appendChild(mainContent);
 		this.#rootElement.appendChild(container);
+
+		await this.#loadContentArea(contentArea);
 
 		if (this.#currentView === StoryURLManager.VIEW_TYPES.SESSION) {
 			this.#generateTableOfContents(contentArea);
@@ -272,6 +288,7 @@ class StoryManager {
 			case StoryURLManager.VIEW_TYPES.FACTIONS:
 			case StoryURLManager.VIEW_TYPES.NPCS:
 			case StoryURLManager.VIEW_TYPES.ENCOUNTERS:
+			case StoryURLManager.VIEW_TYPES.MAP:
 				config.view = this.#currentView;
 				break;
 			case StoryURLManager.VIEW_TYPES.CHARACTER:
@@ -284,7 +301,7 @@ class StoryManager {
 		}
 
 		const url = this.#storyUrlManager.buildURL(config);
-		const state = this.#storyUrlManager.createState(this.#currentView, {
+		const state = this.#storyUrlManager.createState(StoryURLManager.VIEW_TYPES.STORY, {
 			campaignId: this.#campaign.id,
 			sessionId: this.#currentView === StoryURLManager.VIEW_TYPES.SESSION ? this.#currentSessionId : null,
 			characterName: this.#currentView === StoryURLManager.VIEW_TYPES.CHARACTER ? this.#selectedCharacterName : null,
@@ -304,6 +321,7 @@ class StoryManager {
 			[StoryURLManager.VIEW_TYPES.NPCS]: () => this.#contentRenderer.renderNPCs(contentArea),
 			[StoryURLManager.VIEW_TYPES.FACTIONS]: () => this.#contentRenderer.renderFactions(contentArea),
 			[StoryURLManager.VIEW_TYPES.ENCOUNTERS]: () => this.#contentRenderer.renderEncounters(contentArea),
+			[StoryURLManager.VIEW_TYPES.MAP]: () => this.#contentRenderer.renderMap(contentArea),
 			[StoryURLManager.VIEW_TYPES.CHARACTER]: () =>
 				this.#contentRenderer.renderCharacter(contentArea, this.#selectedCharacterName),
 			[StoryURLManager.VIEW_TYPES.SESSION]: () => this.#contentRenderer.renderSession(contentArea),
