@@ -1,5 +1,5 @@
 class StoryHelperFaction extends StoryHelperBase {
-    getUrlParam() {
+	getUrlParam() {
 		return 'faction'; // URL: ?faction=arcane-brotherhood
 	}
 
@@ -40,7 +40,7 @@ class StoryHelperFaction extends StoryHelperBase {
 		return formatted;
 	}
 
-    createDetailContent(faction) {
+	createDetailContent(faction) {
 		const detail = document.createElement('div');
 		detail.className = 'view-detail-content';
 
@@ -91,7 +91,7 @@ class StoryHelperFaction extends StoryHelperBase {
 		}
 
 		// Encounters
-        if (faction.encounters?.length) {
+		if (faction.encounters?.length) {
 			detail.appendChild(this.createEncountersSection(faction.encounters));
 		}
 

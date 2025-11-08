@@ -5,7 +5,7 @@
 	background: linear-gradient(to bottom, #3e3b34, #2c2a24);
 	padding: var(--spacing-sm);
 	box-shadow: inset -0.1875rem 0 0.4375rem rgba(0, 0, 0, 0.2);
-	border-radius: var(--spacing-xs);
+	/* border-radius: var(--spacing-xs); */
 }
 
 /* Groups in left panel */

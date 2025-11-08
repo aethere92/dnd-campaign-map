@@ -47,13 +47,17 @@
 .view-body {
 	display: flex;
 	inline-size: 100%;
-	max-inline-size: 75rem;
 	flex: 1;
 	overflow: hidden;
-	gap: var(--spacing-md);
-	margin-bottom: var(--spacing-md);
+	gap: 0.125rem;
+	/* margin-bottom: var(--spacing-md); */
+	background: url(../../images/assets/background_texture.png);
+}
 
-	&:has(.encounter-timeline-section) {
-		max-inline-size: calc(100% - 10rem);
-	}
+.view-body .view-list-panel {
+	order: 2;
+}
+
+.view-body .view-detail-panel {
+	order: 1;
 }

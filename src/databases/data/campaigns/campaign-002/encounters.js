@@ -308,19 +308,19 @@ const CAMPAIGN_002_ENCOUNTERS = [
 					{
 						actor: '[ENTITY:character:Kaedin]',
 						type: 'Attack',
-						name: 'Greatsword (Reckless)',
+						name: 'Greatsword',
 						roll: 20,
 						target: 'Blue Hydra Head',
 						damage: 13,
 						bonusAction: false,
 						healing: null,
 						height: null,
-						notes: 'Reckless Attack for advantage, flanking position',
+						notes: 'Attack for advantage, flanking position',
 					},
 					{
 						actor: '[ENTITY:character:Kaedin]',
 						type: 'Attack',
-						name: 'Greatsword (Second, Reckless)',
+						name: 'Greatsword',
 						roll: 11,
 						target: 'Blue Hydra Head',
 						damage: 10,
@@ -556,7 +556,7 @@ const CAMPAIGN_002_ENCOUNTERS = [
 					{
 						actor: '[ENTITY:character:Kaedin]',
 						type: 'Attack',
-						name: 'Greatsword (Reckless)',
+						name: 'Greatsword',
 						roll: 17,
 						target: 'White Hydra Head',
 						damage: 14,
@@ -568,7 +568,7 @@ const CAMPAIGN_002_ENCOUNTERS = [
 					{
 						actor: '[ENTITY:character:Kaedin]',
 						type: 'Attack',
-						name: 'Greatsword (Second, Reckless)',
+						name: 'Greatsword',
 						roll: 18,
 						target: 'White Hydra Head',
 						damage: 22,
@@ -780,7 +780,7 @@ const CAMPAIGN_002_ENCOUNTERS = [
 					{
 						actor: '[ENTITY:character:Kaedin]',
 						type: 'Attack',
-						name: 'Greatsword (Reckless)',
+						name: 'Greatsword',
 						roll: 17,
 						target: 'Hydra Body',
 						damage: 28,
@@ -792,7 +792,7 @@ const CAMPAIGN_002_ENCOUNTERS = [
 					{
 						actor: '[ENTITY:character:Kaedin]',
 						type: 'Attack',
-						name: 'Greatsword (Second, Reckless)',
+						name: 'Greatsword',
 						roll: 28,
 						target: 'Hydra Body',
 						damage: 32,
@@ -1566,7 +1566,7 @@ const CAMPAIGN_002_ENCOUNTERS = [
 						bonusAction: false,
 						healing: null,
 						height: null,
-						notes: 'Reckless Attack for advantage to overcome disadvantage',
+						notes: 'Attack for advantage to overcome disadvantage',
 					},
 					{
 						actor: '[ENTITY:character:Kaedin]',
@@ -1620,7 +1620,7 @@ const CAMPAIGN_002_ENCOUNTERS = [
 			tacticalNotes: [
 				'Fear effect continued to hamper effectiveness',
 				'Disadvantage on attacks made combat significantly harder',
-				'Reckless Attack helped overcome disadvantage penalties',
+				"Kaedin's Attack helped overcome disadvantage penalties",
 				'Healing Word as bonus action allowed for mid-combat revival',
 				'Wild magic/bad rolls caused environmental hazard (fire)',
 				"Party's resource depletion made this encounter far more dangerous than it should have been",

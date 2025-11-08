@@ -132,7 +132,7 @@ class StoryHelperBase {
 		}
 
 		body.append(listPanel, detailPanel);
-		container.append(header, body);
+		container.append(body);
 		contentArea.appendChild(container);
 	}
 

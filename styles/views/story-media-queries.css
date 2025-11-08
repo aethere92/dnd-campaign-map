@@ -133,11 +133,19 @@
 		border-inline-end: none;
 		border-block-end: 0.125rem solid var(--color-border);
 		border-radius: 0;
+		order: 1 !important;
 	}
 
 	.view-detail-panel {
 		flex: 1;
-		inline-size: calc(100% - 5rem);
+		order: 2;
+		/* overflow: auto; */
+		inline-size: 100%;
+	}
+
+	.view-section {
+		&:has(.encounter-timeline-section) {
+			inline-size: calc(100% - 0.5rem);
 	}
 
 	.view-detail-name {
