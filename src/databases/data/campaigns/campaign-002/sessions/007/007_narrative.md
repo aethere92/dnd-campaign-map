@@ -86,6 +86,8 @@
 
 <h3>Blood Magic and Spectral Guardians</h3>
 
+<p>[ENTITY:encounter:sess-007-enc-001-spectral-guardians-sealed-chamber:VIEW FULL ENCOUNTER BREAKDOWN]</p>
+
 <p>The mechanics of opening the door became clear through their arcane knowledge. The ritual required someone to draw blood from the circle and channel it, while another person directed the magical energy toward the door to convince it to open. The ritual needed participants powerful enough to complete the working—in this case, their former teacher had required multiple sacrifices to generate sufficient power.</p>
 
 <p>After some debate and a game of rock-paper-scissors to determine roles, they decided who would draw the blood and who would channel the power. One would need to make a Constitution saving throw to resist the blood draw, while the other would need a Charisma check (essentially a Persuasion action) to convince the door to open.</p>

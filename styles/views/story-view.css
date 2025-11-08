@@ -1150,6 +1150,18 @@
 	inset-inline-start: 0;
 }
 
+.entity-encounter {
+	color: #c41e3a;
+	border-block-end-color: #c41e3a;
+	font-weight: 600;
+
+	&::before {
+		content: '⚔️';
+		filter: hue-rotate(90deg);
+		padding-inline-end: 0.125rem;
+	}
+}
+
 /* Character-specific styles */
 [data-entity-name='Olek'] {
 	color: #f48cba;
@@ -1733,6 +1745,10 @@ blockquote i {
 	overflow: hidden;
 	gap: var(--spacing-md);
 	margin-bottom: var(--spacing-md);
+
+	&:has(.encounter-timeline-section) {
+		max-inline-size: calc(100% - 10rem);
+	}
 }
 
 /* =================================================================== */
@@ -2737,10 +2753,6 @@ blockquote i {
 	font-size: 9pt;
 }
 
-.tooltip-meta span {
-	white-space: nowrap;
-}
-
 .tooltip-stats {
 	display: flex;
 	flex-wrap: wrap;
@@ -3284,10 +3296,6 @@ blockquote i {
 /* ===== ENCOUNTER TIMELINE STYLES (DOTA-STYLE COMBAT LOG) ===== */
 /* =================================================================== */
 
-.encounter-timeline-section {
-	margin-top: var(--spacing-lg);
-}
-
 .timeline-log {
 	display: flex;
 	flex-direction: column;
@@ -3326,15 +3334,21 @@ blockquote i {
 	background-color: #333333;
 }
 
+.timeline-entry .entity-npc {
+	color: unset;
+
+	&::before {
+		filter: invert(1);
+	}
+}
+
 /* Turn number (timestamp) - center column */
 .timeline-turn {
 	font-size: 0.8rem;
 	color: #888;
 	font-weight: 500;
 	text-align: center;
-	font-family: monospace;
 	flex-shrink: 0;
-	/* grid-column: 3; */
 }
 
 /* Action icon */
@@ -3350,13 +3364,11 @@ blockquote i {
 
 /* Left side icon (party) */
 .timeline-icon.left-icon {
-	/* grid-column: 1; */
 	justify-self: end;
 }
 
 /* Right side icon (enemies) */
 .timeline-icon.right-icon {
-	/* grid-column: 5; */
 	justify-self: start;
 }
 
@@ -3368,20 +3380,10 @@ blockquote i {
 	flex-wrap: wrap;
 	align-items: center;
 	gap: 0.3rem;
-}
 
-/* Left lane - party actions */
-.timeline-content-line.left-lane {
-	/* grid-column: 2; */
-	justify-self: end;
-	text-align: right;
-}
-
-/* Right lane - enemy actions */
-.timeline-content-line.right-lane {
-	/* grid-column: 4; */
-	justify-self: start;
-	text-align: left;
+	&.left-lane {
+		justify-content: flex-end;
+	}
 }
 
 /* Actor names - color coded */
@@ -3451,8 +3453,6 @@ blockquote i {
 /* Roll results */
 .log-roll {
 	color: #f39c12;
-	font-weight: 600;
-	font-family: monospace;
 }
 
 /* Effects */
@@ -3509,6 +3509,10 @@ blockquote i {
 	font-family: 'Noto Sans', var(--font-system);
 	font-size: 0.85rem;
 	cursor: pointer;
+
+	& option {
+		color: black;
+	}
 }
 
 .encounter-filter-section select:hover {
@@ -3522,26 +3526,43 @@ blockquote i {
 	box-shadow: 0 0 0 3px rgba(123, 13, 13, 0.1);
 }
 
+.timeline-round-header {
+	text-align: center;
+	font-weight: 600;
+	padding: var(--spacing-xs);
+	color: var(--color-parchment);
+}
+
 /* Responsive adjustments */
-@media (max-width: 768px) {
+@media (max-width: 70rem) {
 	.timeline-entry {
-		grid-template-columns: 3rem auto 1fr;
+		display: flex;
+		align-items: center;
+		justify-content: flex-start;
 		gap: 0.5rem;
 		padding: 0.5rem;
 	}
-	
+
 	.timeline-turn {
 		font-size: 0.75rem;
+		display: none;
 	}
-	
+
 	.timeline-icon {
 		width: 1.5rem;
 		height: 1.5rem;
 		font-size: 1rem;
+		order: 1;
+		margin-left: auto;
 	}
-	
+
 	.timeline-content-line {
 		font-size: 0.85rem;
+		justify-content: flex-start !important;
+	}
+
+	.view-body:has(.encounter-timeline-section) {
+		max-inline-size: 100%;
 	}
 }
 
@@ -3570,11 +3591,11 @@ blockquote i {
 	}
 }
 
-.timeline-entry[style*="display: none"] {
+.timeline-entry[style*='display: none'] {
 	animation: fadeOut 0.2s ease-out forwards;
 	overflow: hidden;
 }
 
-.timeline-entry:not([style*="display: none"]) {
+.timeline-entry:not([style*='display: none']) {
 	animation: fadeIn 0.3s ease-out;
 }

@@ -190,7 +190,7 @@ class StoryHelperSidebar {
 
 		// NPCs button
 		if (campaign?.encounters?.length) {
-			const encountersBtn = this.#createToolButton('🛡️ Encounters', 'encounters');
+			const encountersBtn = this.#createToolButton('⚔️ Encounters', 'encounters');
 			toolsList.appendChild(encountersBtn);
 		}
 

@@ -1,6 +1,6 @@
 class StoryHelperLocation extends StoryHelperBase {
 	getUrlParam() {
-		return 'location';
+		return StoryURLManager.PARAMS.QUEST;
 	}
 
 	getItems() {
@@ -17,37 +17,37 @@ class StoryHelperLocation extends StoryHelperBase {
 
 	groupItems(locations) {
 		// Separate top-level locations from nested ones
-		const topLevel = locations.filter(loc => !loc.parent);
-		const nested = locations.filter(loc => loc.parent);
-		
+		const topLevel = locations.filter((loc) => !loc.parent);
+		const nested = locations.filter((loc) => loc.parent);
+
 		// Create a map for quick parent lookup
 		const nestedByParent = {};
-		nested.forEach(loc => {
+		nested.forEach((loc) => {
 			if (!nestedByParent[loc.parent]) {
 				nestedByParent[loc.parent] = [];
 			}
 			nestedByParent[loc.parent].push(loc);
 		});
-		
+
 		// Group top-level locations by type
 		const grouped = {};
-		topLevel.forEach(location => {
+		topLevel.forEach((location) => {
 			const type = location.type || 'Other';
 			if (!grouped[type]) {
 				grouped[type] = [];
 			}
-			
+
 			// Store the location with its children
 			grouped[type].push({
 				...location,
-				children: nestedByParent[location.id] || []
+				children: nestedByParent[location.id] || [],
 			});
 		});
 
 		// Sort each group and children alphabetically
-		Object.values(grouped).forEach(group => {
+		Object.values(grouped).forEach((group) => {
 			group.sort((a, b) => a.name.localeCompare(b.name));
-			group.forEach(loc => {
+			group.forEach((loc) => {
 				if (loc.children?.length) {
 					loc.children.sort((a, b) => a.name.localeCompare(b.name));
 				}
@@ -80,7 +80,7 @@ class StoryHelperLocation extends StoryHelperBase {
 		const typeHeader = StoryDOMBuilder.createToggleHeader(typeName, typeContent);
 		typeGroup.appendChild(typeHeader);
 
-		locations.forEach(location => {
+		locations.forEach((location) => {
 			// Add the parent location
 			const locationItem = this.createListItem(location, detailPanel);
 			typeContent.appendChild(locationItem);
@@ -93,7 +93,7 @@ class StoryHelperLocation extends StoryHelperBase {
 				const childrenContent = document.createElement('div');
 				childrenContent.className = 'view-group-content';
 
-				location.children.forEach(child => {
+				location.children.forEach((child) => {
 					const childItem = this.createListItem(child, detailPanel);
 					childItem.classList.add('view-list-item-nested');
 					childrenContent.appendChild(childItem);
@@ -124,11 +124,11 @@ class StoryHelperLocation extends StoryHelperBase {
 		if (location.type) {
 			metaTags.push({ className: 'location-type', text: this.formatName(location.type) });
 		}
-		
+
 		// Show region from location or inherit from parent
 		let region = location.region;
 		if (!region && location.parent) {
-			const parentLoc = this.campaign.locations.find(l => l.id === location.parent);
+			const parentLoc = this.campaign.locations.find((l) => l.id === location.parent);
 			region = parentLoc?.region;
 		}
 		if (region) {
@@ -137,11 +137,11 @@ class StoryHelperLocation extends StoryHelperBase {
 
 		// Show parent location if nested
 		if (location.parent) {
-			const parentLoc = this.campaign.locations.find(l => l.id === location.parent);
+			const parentLoc = this.campaign.locations.find((l) => l.id === location.parent);
 			if (parentLoc) {
-				metaTags.push({ 
-					className: 'location-parent', 
-					text: `In ${parentLoc.name}` 
+				metaTags.push({
+					className: 'location-parent',
+					text: `In ${parentLoc.name}`,
 				});
 			}
 		}
@@ -153,9 +153,9 @@ class StoryHelperLocation extends StoryHelperBase {
 		detail.appendChild(header);
 
 		// Show children if this is a parent location
-		const children = this.campaign.locations.filter(l => l.parent === location.id);
+		const children = this.campaign.locations.filter((l) => l.parent === location.id);
 		if (children.length) {
-			const childNames = children.map(c => c.name);
+			const childNames = children.map((c) => c.name);
 			detail.appendChild(this.createListSection('Structures & Sublocations', childNames));
 		}
 
@@ -180,7 +180,7 @@ class StoryHelperLocation extends StoryHelperBase {
 
 		// NPCs
 		if (location.npcs?.length) {
-			const npcItems = location.npcs.map(npc =>
+			const npcItems = location.npcs.map((npc) =>
 				typeof npc === 'string' ? npc : `${npc.name}${npc.role ? ` - ${npc.role}` : ''}`
 			);
 			detail.appendChild(this.createListSection('Notable NPCs', npcItems));

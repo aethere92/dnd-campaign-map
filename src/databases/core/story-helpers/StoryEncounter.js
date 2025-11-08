@@ -1,11 +1,11 @@
 class StoryHelperEncounter extends StoryHelperBase {
-	#encounterData;
-	#selectedActor = 'all'; // Track selected actor filter
+	#selectedActor = 'all';
 
 	constructor(campaign, placeholderProcessor) {
 		super(campaign, placeholderProcessor);
-		this.#encounterData = null;
-}
+	}
+
+	// ===== Abstract Method Implementations =====
 
 	getUrlParam() {
 		return 'encounter';
@@ -20,15 +20,12 @@ class StoryHelperEncounter extends StoryHelperBase {
 	}
 
 	getItemId(encounter) {
-		// CHANGED: Use 'id' instead of 'encounter_id'
 		return encounter.id;
-}
+	}
 
 	groupItems(encounters) {
-		// This logic remains compatible, as encounters without a 'session'
-		// will be grouped under 'Unknown Session'.
 		const grouped = {};
-encounters.forEach((encounter) => {
+		encounters.forEach((encounter) => {
 			const session = encounter.session || 'Unknown Session';
 			const key = `Session ${session}`;
 			if (!grouped[key]) {
@@ -36,16 +33,14 @@ encounters.forEach((encounter) => {
 			}
 			grouped[key].push(encounter);
 		});
-
 		return grouped;
-}
+	}
 
-	/**
-	 * Override render to add actor filter functionality
-	 */
+	// ===== Overridden Methods =====
+
 	render(contentArea) {
 		const items = this.getItems();
-if (!items?.length) {
+		if (!items?.length) {
 			contentArea.innerHTML = `
 				<div class="story-view-container">
 					<div class="view-header"><h2>${this.getViewTitle()}</h2></div>
@@ -56,7 +51,7 @@ if (!items?.length) {
 		}
 
 		const container = document.createElement('div');
-container.className = 'story-view-container';
+		container.className = 'story-view-container';
 
 		const header = document.createElement('div');
 		header.className = 'view-header';
@@ -64,28 +59,28 @@ container.className = 'story-view-container';
 
 		const body = document.createElement('div');
 		body.className = 'view-body';
-const listPanel = document.createElement('div');
+
+		const listPanel = document.createElement('div');
 		listPanel.className = 'view-list-panel';
-		this.listPanel = listPanel;
 
 		const detailPanel = document.createElement('div');
 		detailPanel.className = 'view-detail-panel';
-// Add actor filter section at top of list panel
+
+		// Add actor filter at top of list panel
 		const filterSection = this.#createActorFilter(items);
 		listPanel.appendChild(filterSection);
 
 		const groupedItems = this.groupItems(items);
-this.renderGroups(listPanel, groupedItems, detailPanel);
+		this.renderGroups(listPanel, groupedItems, detailPanel);
 
 		// Handle URL targeting
 		const targetId = this.getTargetFromUrl();
 		let initialItem = null;
 
 		if (targetId) {
-			// CHANGED: Must parse targetId as a number if encounter.id is a number
 			const targetIdValue = /^\d+$/.test(targetId) ? parseInt(targetId, 10) : decodeURIComponent(targetId);
 			initialItem = this.findItemById(items, targetIdValue);
-if (initialItem) {
+			if (initialItem) {
 				setTimeout(() => {
 					const targetElement = listPanel.querySelector(`[data-item-id="${this.getItemId(initialItem)}"]`);
 					targetElement?.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -96,77 +91,121 @@ if (initialItem) {
 		this.selectItem(initialItem || items[0], detailPanel);
 
 		body.append(listPanel, detailPanel);
-container.append(header, body);
+		container.append(header, body);
 		contentArea.appendChild(container);
 	}
 
-	/**
-	 * Create actor filter dropdown
-	 */
+	createListItemContent(encounter) {
+		const container = document.createElement('div');
+
+		const name = document.createElement('span');
+		name.className = 'view-item-name';
+		name.textContent = encounter.name;
+
+		const meta = document.createElement('span');
+		meta.className = 'view-item-subtitle';
+		const roundCount = encounter.rounds?.length || 0;
+		const actionCount = encounter.rounds?.reduce((sum, round) => sum + (round.actions?.length || 0), 0) || 0;
+		meta.textContent = `${roundCount} round${roundCount !== 1 ? 's' : ''}, ${actionCount} action${
+			actionCount !== 1 ? 's' : ''
+		}`;
+
+		container.append(name, meta);
+		return container;
+	}
+
+	createDetailContent(encounter) {
+		const detail = document.createElement('div');
+		detail.className = 'view-detail-content encounter-detail';
+
+		// Header
+		const header = this.#createEncounterHeader(encounter);
+		detail.appendChild(header);
+
+		// Environment Section
+		if (encounter.environment) {
+			const envSection = this.#createEnvironmentSection(encounter.environment, encounter.location);
+			detail.appendChild(envSection);
+			this.placeholderProcessor.processEntityReferences(envSection);
+		}
+
+		// Initiative Order
+		if (encounter.initiative?.length) {
+			const initSection = this.#createInitiativeSection(encounter.initiative);
+			detail.appendChild(initSection);
+			this.placeholderProcessor.processEntityReferences(initSection);
+		}
+
+		// Timeline Log
+		if (encounter.rounds?.length) {
+			const timelineSection = this.#createTimelineLog(encounter.rounds);
+			detail.appendChild(timelineSection);
+			this.placeholderProcessor.processEntityReferences(timelineSection);
+		}
+
+		// Outcome Section
+		if (encounter.outcome) {
+			const outcomeSection = this.#createOutcomeSection(encounter.outcome);
+			detail.appendChild(outcomeSection);
+			this.placeholderProcessor.processEntityReferences(outcomeSection);
+		}
+
+		// Post-Combat Section
+		if (encounter.postCombat) {
+			const postCombatSection = this.#createPostCombatSection(encounter.postCombat);
+			detail.appendChild(postCombatSection);
+			this.placeholderProcessor.processEntityReferences(postCombatSection);
+		}
+
+		// Reset filter state
+		this.#resetFilter();
+
+		return detail;
+	}
+
+	// ===== Actor Filter Methods =====
+
 	#createActorFilter(encounters) {
 		const filterContainer = document.createElement('div');
 		filterContainer.className = 'encounter-filter-section';
-filterContainer.style.cssText = `
-			padding: 0.75rem;
-			background: rgba(255, 255, 255, 0.05);
-			border-bottom: 1px solid rgba(192, 170, 118, 0.3);
-			margin-bottom: 0.75rem;
-		`;
-const label = document.createElement('label');
+
+		const label = document.createElement('label');
 		label.textContent = 'Filter by Actor:';
-		label.style.cssText = `
-			display: block;
-			font-size: 0.75rem;
-			color: var(--color-border);
-			text-transform: uppercase;
-letter-spacing: 0.0625rem;
-			margin-bottom: 0.5rem;
-			font-family: 'Noto Sans', var(--font-system);
-		`;
 
 		const select = document.createElement('select');
 		select.className = 'actor-filter-select';
-		select.style.cssText = `
-			width: 100%;
-padding: 0.5rem;
-			background: rgba(255, 255, 255, 0.1);
-			border: 1px solid rgba(192, 170, 118, 0.3);
-			border-radius: 0.25rem;
-			color: var(--color-parchment);
-font-family: 'Noto Sans', var(--font-system);
-			font-size: 0.85rem;
-			cursor: pointer;
-		`;
 
-		// Collect unique actors from all encounters
+		// Collect unique actors
 		const actorSet = new Set();
-		// CHANGED: Iterate new data structure (rounds -> actions)
-encounters.forEach((encounter) => {
+		encounters.forEach((encounter) => {
 			encounter.rounds?.forEach((round) => {
 				round.actions?.forEach((action) => {
 					if (action.actor) {
-						actorSet.add(action.actor);
+						const cleanActor = this.#cleanEntityTags(action.actor);
+						actorSet.add(JSON.stringify({ raw: action.actor, clean: cleanActor }));
 					}
 				});
 			});
 		});
 
-		const actors = Array.from(actorSet).sort();
-
 		// Add "All" option
 		const allOption = document.createElement('option');
-allOption.value = 'all';
+		allOption.value = 'all';
 		allOption.textContent = 'All Actors';
 		select.appendChild(allOption);
 
-		// Add individual actor options
-		actors.forEach((actor) => {
+		// Add individual actor options (sorted by clean name)
+		const actors = Array.from(actorSet)
+			.map((str) => JSON.parse(str))
+			.sort((a, b) => a.clean.localeCompare(b.clean));
+
+		actors.forEach(({ raw, clean }) => {
 			const option = document.createElement('option');
-			option.value = actor;
-			option.textContent = actor;
+			option.value = raw;
+			option.textContent = clean;
 			select.appendChild(option);
 		});
-// Handle filter change
+
 		select.addEventListener('change', (e) => {
 			this.#selectedActor = e.target.value;
 			this.#applyActorFilter();
@@ -174,11 +213,8 @@ allOption.value = 'all';
 
 		filterContainer.append(label, select);
 		return filterContainer;
-}
+	}
 
-	/**
-	 * Apply actor filter to timeline entries
-	 */
 	#applyActorFilter() {
 		const timelineLog = document.querySelector('.timeline-log');
 		if (!timelineLog) return;
@@ -186,21 +222,17 @@ allOption.value = 'all';
 		const timelineEntries = timelineLog.querySelectorAll('.timeline-entry');
 		const roundHeaders = timelineLog.querySelectorAll('.timeline-round-header');
 
-		// Filter individual action entries
-timelineEntries.forEach((entry) => {
+		timelineEntries.forEach((entry) => {
 			const actor = entry.dataset.actor;
-			
-			if (this.#selectedActor === 'all' || actor === this.#selectedActor) {
-				entry.style.display = '';
-			} else {
-				entry.style.display = 'none';
-			}
+			const cleanActor = this.#cleanEntityTags(actor);
+			const selectedClean = this.#cleanEntityTags(this.#selectedActor);
+			entry.style.display = this.#selectedActor === 'all' || cleanActor === selectedClean ? '' : 'none';
 		});
 
-		// CHANGED: Show/hide round headers based on visible children
 		roundHeaders.forEach((header) => {
 			let nextElement = header.nextElementSibling;
 			let hasVisibleActions = false;
+
 			while (nextElement && !nextElement.classList.contains('timeline-round-header')) {
 				if (nextElement.classList.contains('timeline-entry') && nextElement.style.display !== 'none') {
 					hasVisibleActions = true;
@@ -208,82 +240,34 @@ timelineEntries.forEach((entry) => {
 				}
 				nextElement = nextElement.nextElementSibling;
 			}
+
 			header.style.display = hasVisibleActions ? '' : 'none';
 		});
 
-// Show/hide "no results" message
 		const visibleEntries = timelineLog.querySelectorAll('.timeline-entry:not([style*="display: none"])');
 		let noResultsMsg = timelineLog.querySelector('.timeline-no-results');
-			
-if (visibleEntries.length === 0) {
+
+		if (visibleEntries.length === 0) {
 			if (!noResultsMsg) {
 				noResultsMsg = document.createElement('div');
 				noResultsMsg.className = 'timeline-no-results';
-				noResultsMsg.style.cssText = `
-					padding: 2rem;
-					text-align: center;
-color: rgba(44, 35, 25, 0.5);
-					font-style: italic;
-				`;
 				timelineLog.appendChild(noResultsMsg);
 			}
-			noResultsMsg.textContent = `No actions found for ${this.#selectedActor}`;
+			noResultsMsg.textContent = `No actions found for ${this.#cleanEntityTags(this.#selectedActor)}`;
 		} else {
 			noResultsMsg?.remove();
-}
+		}
 	}
 
-	/**
-	 * Creates list item content with encounter summary
-	 */
-	createListItemContent(encounter) {
-		const container = document.createElement('div');
-		container.style.cssText = 'display: flex; flex-direction: column; gap: 0.25rem;';
-
-		const name = document.createElement('span');
-		name.className = 'view-item-name';
-		// CHANGED: Use 'name' instead of 'encounter_name'
-		name.textContent = encounter.name;
-
-		const meta = document.createElement('span');
-		meta.className = 'view-item-subtitle';
-		// CHANGED: Calculate action count from new structure
-const actionCount = encounter.rounds?.reduce((sum, round) => sum + (round.actions?.length || 0), 0) || 0;
-		meta.textContent = `${actionCount} action${actionCount !== 1 ? 's' : ''}`;
-
-		container.append(name, meta);
-		return container;
-}
-
-	/**
-	 * Creates the main detail view for a single encounter.
-	 */
-	createDetailContent(encounter) {
-		this.#encounterData = encounter;
-
-		const detail = document.createElement('div');
-detail.className = 'view-detail-content encounter-detail';
-
-		// Header
-		const header = this.#createEncounterHeader(encounter);
-		detail.appendChild(header);
-
-		// Timeline Log
-		// CHANGED: Check 'rounds' and pass 'rounds' to timeline log
-		if (encounter.rounds?.length) {
-			detail.appendChild(this.#createTimelineLog(encounter.rounds));
-		}
-		
-		// Reset filter when new detail is created
+	#resetFilter() {
 		this.#selectedActor = 'all';
-		// We also need to reset the dropdown UI itself
 		const filterSelect = document.querySelector('.actor-filter-select');
 		if (filterSelect) {
 			filterSelect.value = 'all';
 		}
+	}
 
-		return detail;
-}
+	// ===== Header Creation =====
 
 	#createEncounterHeader(encounter) {
 		const header = document.createElement('div');
@@ -291,27 +275,142 @@ detail.className = 'view-detail-content encounter-detail';
 
 		const name = document.createElement('h3');
 		name.className = 'view-detail-name';
-		// CHANGED: Use 'name' instead of 'encounter_name'
 		name.textContent = encounter.name;
-const meta = document.createElement('div');
+
+		const meta = document.createElement('div');
 		meta.className = 'view-detail-meta';
-		
-		// This logic is still valid, will just not render if session is missing
+
 		if (encounter.session) {
 			const sessionTag = document.createElement('span');
 			sessionTag.className = 'view-meta-tag';
 			sessionTag.textContent = `Session ${encounter.session}`;
-meta.appendChild(sessionTag);
+			meta.appendChild(sessionTag);
+		}
+
+		if (encounter.location) {
+			const locationTag = document.createElement('span');
+			locationTag.className = 'view-meta-tag';
+			locationTag.textContent = encounter.location;
+			meta.appendChild(locationTag);
 		}
 
 		header.append(name, meta);
 		return header;
 	}
 
-	/**
-	 * Creates a vertical timeline log based on the 'rounds' array.
-*/
-	// CHANGED: Function now accepts 'rounds' array instead of 'timeline'
+	// ===== Environment Section =====
+
+	#createEnvironmentSection(environment, location) {
+		const section = document.createElement('div');
+		section.className = 'view-section encounter-environment-section';
+
+		const header = document.createElement('div');
+		header.className = 'view-section-header';
+		header.textContent = 'Environment';
+
+		const content = document.createElement('div');
+		content.className = 'view-section-content';
+
+		if (environment.name) {
+			const nameEl = document.createElement('div');
+			nameEl.className = 'environment-name';
+			nameEl.textContent = environment.name;
+			content.appendChild(nameEl);
+		}
+
+		if (environment.terrain) {
+			const terrainEl = document.createElement('div');
+			terrainEl.className = 'environment-terrain';
+			terrainEl.innerHTML = `<strong>Terrain:</strong> ${environment.terrain}`;
+			content.appendChild(terrainEl);
+		}
+
+		if (environment.effects?.length) {
+			const effectsContainer = document.createElement('div');
+			effectsContainer.className = 'environment-effects';
+
+			const effectsTitle = document.createElement('div');
+			effectsTitle.className = 'environment-effects-title';
+			effectsTitle.textContent = 'Environmental Effects:';
+			effectsContainer.appendChild(effectsTitle);
+
+			environment.effects.forEach((effect) => {
+				const effectEl = document.createElement('div');
+				effectEl.className = 'environment-effect-item';
+
+				const effectName = document.createElement('strong');
+				effectName.textContent = effect.name;
+				effectEl.appendChild(effectName);
+
+				if (effect.description) {
+					const effectDesc = document.createElement('span');
+					effectDesc.textContent = `: ${effect.description}`;
+					effectEl.appendChild(effectDesc);
+				}
+
+				if (effect.radius) {
+					const radiusSpan = document.createElement('span');
+					radiusSpan.className = 'effect-radius';
+					radiusSpan.textContent = ` (${effect.radius}ft radius)`;
+					effectEl.appendChild(radiusSpan);
+				}
+
+				effectsContainer.appendChild(effectEl);
+			});
+
+			content.appendChild(effectsContainer);
+		}
+
+		section.append(header, content);
+		return section;
+	}
+
+	// ===== Initiative Section =====
+
+	#createInitiativeSection(initiative) {
+		const section = document.createElement('div');
+		section.className = 'view-section encounter-initiative-section';
+
+		const header = document.createElement('div');
+		header.className = 'view-section-header';
+		header.textContent = 'Initiative Order';
+
+		const content = document.createElement('div');
+		content.className = 'view-section-content';
+
+		const initList = document.createElement('div');
+		initList.className = 'initiative-list';
+
+		// Sort by initiative value (descending)
+		const sorted = [...initiative].sort((a, b) => b.value - a.value);
+
+		sorted.forEach((entry, index) => {
+			const initItem = document.createElement('div');
+			initItem.className = 'initiative-item';
+
+			const rank = document.createElement('span');
+			rank.className = 'initiative-rank';
+			rank.textContent = `${index + 1}.`;
+
+			const character = document.createElement('span');
+			character.className = 'initiative-character';
+			character.textContent = entry.character;
+
+			const value = document.createElement('span');
+			value.className = 'initiative-value';
+			value.textContent = entry.value;
+
+			initItem.append(rank, character, value);
+			initList.appendChild(initItem);
+		});
+
+		content.appendChild(initList);
+		section.append(header, content);
+		return section;
+	}
+
+	// ===== Timeline Creation =====
+
 	#createTimelineLog(rounds) {
 		const section = document.createElement('div');
 		section.className = 'view-section encounter-timeline-section';
@@ -319,182 +418,338 @@ meta.appendChild(sessionTag);
 		const header = document.createElement('div');
 		header.className = 'view-section-header';
 		header.textContent = 'Combat Timeline';
-const content = document.createElement('div');
+
+		const content = document.createElement('div');
 		content.className = 'view-section-content';
 
 		const log = document.createElement('div');
 		log.className = 'timeline-log';
 
-		// CHANGED: Loop through rounds, then actions
 		rounds.forEach((round) => {
-			// Add a round header
 			const roundHeader = document.createElement('div');
 			roundHeader.className = 'timeline-round-header';
 			roundHeader.textContent = `Round ${round.number}`;
 			log.appendChild(roundHeader);
-			
-			// Add actions for this round
+
 			round.actions?.forEach((action) => {
 				const entryEl = this.#createTimelineEntry(action, round.number);
 				log.appendChild(entryEl);
 			});
 		});
-content.appendChild(log);
+
+		content.appendChild(log);
 		section.append(header, content);
 		return section;
 	}
 
-/**
-	 * Create individual timeline entry (Dota-style two-lane combat log)
-	 */
-	// CHANGED: Function now accepts 'action' and 'roundNumber'
-#createTimelineEntry(action, roundNumber) {
-		const firstEmptyDiv = document.createElement('div');
-const secondEmptyDiv = document.createElement('div');
-
+	#createTimelineEntry(action, roundNumber) {
 		const entryEl = document.createElement('div');
 		entryEl.className = 'timeline-entry';
-		// CHANGED: Use 'action.actor'
-		entryEl.dataset.actor = action.actor;
-// Store actor for filtering
+		entryEl.dataset.actor = this.#cleanEntityTags(action.actor) || '';
 
-		// Add a helper class for styling based on actor
-		const actorClass = action.actor
-			.toLowerCase()
-			.split(' ')[0]
-			.replace(/[^a-z0-9]/gi, '');
+		const actorClass = this.#sanitizeClassName(this.#cleanEntityTags(action.actor));
 		entryEl.classList.add(`actor-${actorClass}`);
-// Determine if this is a party member or enemy
-		// CHANGED: Use 'action.actor'
+
 		const isParty = this.#isPartyMember(action.actor);
-// Turn number (timestamp style) - always in center
+
 		const turn = document.createElement('div');
 		turn.className = 'timeline-turn';
-		// CHANGED: Use 'roundNumber' instead of 'entry.turn'
 		turn.textContent = `R${roundNumber}`;
-// Action icon
+
 		const icon = document.createElement('div');
 		icon.className = `timeline-icon ${isParty ? 'left-icon' : 'right-icon'}`;
-		// CHANGED: Pass 'action' to icon generator
 		icon.textContent = this.#getActionIcon(action);
-// Main content
+
 		const content = document.createElement('div');
 		content.className = `timeline-content-line ${isParty ? 'left-lane' : 'right-lane'}`;
-		// CHANGED: Pass 'action' to text builder
 		content.innerHTML = this.#buildLogText(action);
-// Append elements
+
+		const placeholderFirst = document.createElement('div');
+		placeholderFirst.className = 'timeline-placeholder';
+		const placeholderSecond = document.createElement('div');
+		placeholderSecond.className = 'timeline-placeholder';
+
 		if (isParty) {
-			entryEl.appendChild(content);
-			entryEl.appendChild(icon);
-			entryEl.appendChild(turn);
-			entryEl.appendChild(firstEmptyDiv);
-			entryEl.appendChild(secondEmptyDiv);
+			entryEl.append(content, icon, turn, placeholderFirst, placeholderSecond);
 		} else {
-			entryEl.appendChild(firstEmptyDiv);
-			entryEl.appendChild(secondEmptyDiv);
-			entryEl.appendChild(turn);
-			entryEl.appendChild(icon);
-			entryEl.appendChild(content);
+			entryEl.append(placeholderFirst, placeholderSecond, turn, icon, content);
 		}
 
 		return entryEl;
-}
-
-	/**
-	 * Determine if an actor is a party member
-	 */
-	#isPartyMember(actor) {
-		// CHANGED: Added '...cats' to party list
-		const partyMembers = ['bonnie', 'soshi', 'norr', 'olek', 'kaedin', 'cats'];
-const actorLower = actor.toLowerCase();
-		return partyMembers.some(member => actorLower.includes(member));
 	}
 
-	/**
-	 * Get icon emoji based on action type
-	 */
-	// CHANGED: Function accepts 'action' and uses new properties
-#getActionIcon(action) {
+	// ===== Outcome Section =====
+
+	#createOutcomeSection(outcome) {
+		const section = document.createElement('div');
+		section.className = 'view-section encounter-outcome-section';
+
+		const header = document.createElement('div');
+		header.className = 'view-section-header';
+		header.textContent = 'Outcome';
+
+		const content = document.createElement('div');
+		content.className = 'view-section-content';
+
+		if (outcome.status) {
+			const statusEl = document.createElement('div');
+			statusEl.className = `outcome-status status-${outcome.status.toLowerCase()}`;
+			statusEl.textContent = `Status: ${outcome.status}`;
+			content.appendChild(statusEl);
+		}
+
+		if (outcome.partyCondition) {
+			const conditionEl = document.createElement('div');
+			conditionEl.className = 'outcome-party-condition';
+			conditionEl.innerHTML = `<strong>Party Condition:</strong> ${outcome.partyCondition}`;
+			content.appendChild(conditionEl);
+		}
+
+		if (outcome.enemiesDefeated?.length) {
+			const defeatedEl = this.#createListSection('Enemies Defeated', outcome.enemiesDefeated);
+			content.appendChild(defeatedEl);
+		}
+
+		if (outcome.enemiesFled?.length) {
+			const fledEl = this.#createListSection('Enemies Fled', outcome.enemiesFled);
+			content.appendChild(fledEl);
+		}
+
+		if (outcome.casualties?.length) {
+			const casualtiesEl = this.#createListSection('Casualties', outcome.casualties, 'outcome-casualties');
+			content.appendChild(casualtiesEl);
+		}
+
+		if (outcome.itemsObtained?.length) {
+			const itemsEl = this.#createListSection('Items Obtained', outcome.itemsObtained);
+			content.appendChild(itemsEl);
+		}
+
+		if (outcome.complications?.length) {
+			const complicationsEl = this.#createListSection('Complications', outcome.complications);
+			content.appendChild(complicationsEl);
+		}
+
+		if (outcome.tacticalNotes?.length) {
+			const tacticalEl = this.#createListSection('Tactical Notes', outcome.tacticalNotes);
+			content.appendChild(tacticalEl);
+		}
+
+		if (outcome.consequences?.length) {
+			const consequencesEl = this.#createListSection('Consequences', outcome.consequences);
+			content.appendChild(consequencesEl);
+		}
+
+		section.append(header, content);
+		return section;
+	}
+
+	// ===== Post-Combat Section =====
+
+	#createPostCombatSection(postCombat) {
+		const section = document.createElement('div');
+		section.className = 'view-section encounter-postcombat-section';
+
+		const header = document.createElement('div');
+		header.className = 'view-section-header';
+		header.textContent = 'Post-Combat';
+
+		const content = document.createElement('div');
+		content.className = 'view-section-content';
+
+		if (postCombat.action) {
+			const actionEl = document.createElement('div');
+			actionEl.className = 'postcombat-action';
+			actionEl.innerHTML = `<strong>Action:</strong> ${postCombat.action}`;
+			content.appendChild(actionEl);
+		}
+
+		if (postCombat.healing) {
+			const healingEl = document.createElement('div');
+			healingEl.className = 'postcombat-healing';
+			healingEl.innerHTML = `<strong>Healing:</strong> ${postCombat.healing.type}`;
+
+			if (postCombat.healing.totalHealing) {
+				const healAmount = document.createElement('div');
+				healAmount.className = 'healing-amount';
+				healAmount.textContent = `Amount: ${postCombat.healing.totalHealing}`;
+				healingEl.appendChild(healAmount);
+			}
+
+			if (postCombat.healing.characters?.length) {
+				const healChars = document.createElement('div');
+				healChars.className = 'healing-characters';
+				healChars.textContent = `Recipients: ${postCombat.healing.characters.join(', ')}`;
+				healingEl.appendChild(healChars);
+			}
+
+			content.appendChild(healingEl);
+		}
+
+		if (postCombat.investigation?.length) {
+			const invSection = document.createElement('div');
+			invSection.className = 'postcombat-investigation';
+
+			const invTitle = document.createElement('div');
+			invTitle.className = 'investigation-title';
+			invTitle.textContent = 'Investigation:';
+			invSection.appendChild(invTitle);
+
+			postCombat.investigation.forEach((inv) => {
+				const invItem = document.createElement('div');
+				invItem.className = 'investigation-item';
+
+				const invHeader = document.createElement('div');
+				invHeader.className = 'investigation-header';
+				invHeader.innerHTML = `<strong>${inv.character}</strong> - ${inv.skill} (${inv.roll})`;
+				invItem.appendChild(invHeader);
+
+				if (inv.findings) {
+					const findings = document.createElement('div');
+					findings.className = 'investigation-findings';
+					findings.textContent = inv.findings;
+					invItem.appendChild(findings);
+				}
+
+				invSection.appendChild(invItem);
+			});
+
+			content.appendChild(invSection);
+		}
+
+		if (postCombat.itemsAcquired?.length) {
+			const itemsEl = this.#createListSection('Items Acquired', postCombat.itemsAcquired);
+			content.appendChild(itemsEl);
+		}
+
+		if (postCombat.partyStatus) {
+			const statusSection = document.createElement('div');
+			statusSection.className = 'postcombat-party-status';
+
+			const statusTitle = document.createElement('div');
+			statusTitle.className = 'party-status-title';
+			statusTitle.textContent = 'Party Status:';
+			statusSection.appendChild(statusTitle);
+
+			if (postCombat.partyStatus.hp) {
+				const hpEl = document.createElement('div');
+				hpEl.innerHTML = `<strong>HP:</strong> ${postCombat.partyStatus.hp}`;
+				statusSection.appendChild(hpEl);
+			}
+
+			if (postCombat.partyStatus.conditions?.length) {
+				const conditionsEl = this.#createListSection(
+					'Conditions',
+					postCombat.partyStatus.conditions,
+					'party-conditions'
+				);
+				statusSection.appendChild(conditionsEl);
+			}
+
+			if (postCombat.partyStatus.resources) {
+				const resourcesEl = document.createElement('div');
+				resourcesEl.innerHTML = `<strong>Resources:</strong> ${postCombat.partyStatus.resources}`;
+				statusSection.appendChild(resourcesEl);
+			}
+
+			content.appendChild(statusSection);
+		}
+
+		if (postCombat.observations?.length) {
+			const obsEl = this.#createListSection('Observations', postCombat.observations);
+			content.appendChild(obsEl);
+		}
+
+		if (postCombat.nextSteps) {
+			const nextStepsEl = document.createElement('div');
+			nextStepsEl.className = 'postcombat-next-steps';
+			nextStepsEl.innerHTML = `<strong>Next Steps:</strong> ${postCombat.nextSteps}`;
+			content.appendChild(nextStepsEl);
+		}
+
+		section.append(header, content);
+		return section;
+	}
+
+	// ===== Helper Methods =====
+
+	#createListSection(title, items, className = '') {
+		const container = document.createElement('div');
+		container.className = `outcome-list-section ${className}`;
+
+		const titleEl = document.createElement('div');
+		titleEl.className = 'list-section-title';
+		titleEl.textContent = `${title}:`;
+		container.appendChild(titleEl);
+
+		const list = document.createElement('ul');
+		list.className = 'outcome-list';
+
+		items.forEach((item) => {
+			const li = document.createElement('li');
+			li.textContent = item;
+			list.appendChild(li);
+		});
+
+		container.appendChild(list);
+		return container;
+	}
+
+	#isPartyMember(actor) {
+		const partyMembers = ['bonnie', 'soshi', 'norr', 'olek', 'kaedin', 'cats', 'mishu', 'gica', 'megatherium'];
+		const actorLower = (actor || '').toLowerCase();
+		return partyMembers.some((member) => actorLower.includes(member));
+	}
+
+	#getActionIcon(action) {
 		const actionType = action.type?.toLowerCase() || '';
-const description = action.name?.toLowerCase() || '';
-const spell = (actionType === 'spell' || actionType === 'spell_attack') ? description : '';
-		
-// Check for specific action patterns
-		if (actionType.includes('spell') || spell) return '🔮';
+		const description = (action.name || '').toLowerCase();
+
+		// Death/Kill
+		if (action.result?.toLowerCase().includes('kill') || action.result?.toLowerCase().includes('died')) return '💀';
+
+		// Healing
+		if (actionType.includes('heal') || description.includes('heal') || action.healing) return '💚';
+
+		// Spells
+		if (actionType.includes('spell') || actionType === 'class_feature') return '🔮';
+
+		// Attacks
 		if (actionType.includes('attack')) return '⚔️';
-if (action.damage || actionType === 'lair_action') return '💥';
-		if (actionType.includes('heal') || description.includes('heal')) return '💚';
-		if (actionType.includes('buff') || description.includes('gain') || description.includes('mage armor') || description.includes('invisibility')) return '✨';
-if (actionType.includes('debuff') || description.includes('lose') || description.includes('corruption') || action.condition === 'confusion') return '🔻';
-		if (actionType.includes('move') || description.includes('move') || description.includes('teleport')) return '🏃';
-		if (actionType.includes('death') || description.includes('died')) return '💀';
-if (actionType.includes('summon') || description.includes('summon')) return '🌟';
-		
-		// Default
+
+		// Damage/Abilities
+		if (action.damage || actionType.includes('ability') || actionType.includes('passive')) return '💥';
+
+		// Buffs
+		if (actionType.includes('buff') || description.includes('gain') || description.includes('invisibility'))
+			return '✨';
+
+		// Debuffs/Conditions
+		if (actionType.includes('debuff') || action.condition || actionType.includes('saving throw')) return '🔻';
+
+		// Movement
+		if (actionType.includes('move') || description.includes('move') || actionType.includes('arrival')) return '🏃';
+
+		// Skills/Checks
+		if (actionType.includes('check') || actionType.includes('knowledge')) return '🎲';
+
+		// Reactions
+		if (actionType.includes('reaction')) return '⚡';
+
 		return '⚡';
 	}
 
-	/**
-	 * Build combat log text with color coding
-	 */
-	// CHANGED: Completely rewritten to parse the new 'action' object structure
-#buildLogText(action) {
+	#buildLogText(action) {
 		const actor = `<span class="log-actor actor-${this.#sanitizeClassName(action.actor)}">${action.actor}</span>`;
-let logParts = [actor];
+		let logParts = [actor];
 
-		// 1. Build main action text (verb + name)
-		let verb = '';
+		// Main action
+		const verb = this.#getActionVerb(action.type);
 		const actionType = action.type?.toLowerCase() || '';
 
-		switch (actionType) {
-			case 'spell':
-			case 'spell_attack':
-				verb = 'casts';
-				break;
-			case 'attack':
-				verb = 'attacks with';
-				break;
-			case 'movement':
-				verb = 'moves';
-				break;
-			case 'check':
-				verb = 'checks';
-				break;
-			case 'class_feature':
-			case 'special_ability':
-			case 'special_attack':
-				verb = 'uses';
-				break;
-			case 'lair_action':
-			case 'environment':
-				verb = 'triggers'; // Actor is 'Environment'
-				break;
-			case 'condition_effect':
-				verb = 'is affected by';
-				break;
-			case 'reaction':
-				verb = 'reacts with';
-				break;
-			case 'wild_magic':
-				verb = 'triggers Wild Magic';
-				break;
-			case 'bonus_action':
-				verb = 'uses Bonus Action';
-				break;
-			case 'summon':
-				verb = 'summons';
-				break;
-			default:
-				verb = action.type; // Use the type itself if unknown
-		}
-		
 		if (verb && action.name) {
-			if (actionType === 'wild_magic') {
-				logParts.push(verb); // "triggers Wild Magic"
-			} else if (actionType === 'condition_effect' && action.condition) {
-				logParts.push(`${verb} ${action.condition}`); // "is affected by Confusion"
-			} else if (actionType === 'movement' && action.name) {
-				logParts.push(`${verb} (${action.name})`); // "moves (Teleport)"
+			if (actionType === 'movement' && action.name) {
+				logParts.push(`${verb} (${action.name})`);
 			} else {
 				logParts.push(`${verb} <span class="log-spell">${action.name}</span>`);
 			}
@@ -504,81 +759,159 @@ let logParts = [actor];
 			logParts.push(verb);
 		}
 
-
-		// 2. Add targets
-if (action.targets) {
-			const targets = Array.isArray(action.targets) ? action.targets : [action.targets];
-const targetText = targets.map(t => 
-				`<span class="log-target">${t}</span>`
-			).join(', ');
-			logParts.push('on ' + targetText);
+		// Target(s)
+		const targets = this.#extractTargets(action);
+		if (targets.length) {
+			const targetText = targets.map((t) => `<span class="log-target">${t}</span>`).join(', ');
+			logParts.push('→ ' + targetText);
 		}
 
-		// 3. Add damage
-if (action.damage) {
-			let damageText = '';
-			if (typeof action.damage === 'object' && action.damage !== null) {
-				if (action.damage.total) {
-					damageText = `${action.damage.total} total`;
-				} else if (action.damage.primary) {
-					damageText = `${action.damage.primary}p, ${action.damage.secondary}s`;
-				} else if (action.damage.fail) {
-					damageText = `fail: ${action.damage.fail}, success: ${action.damage.success}`;
-				} else {
-					// Handle other damage objects, e.g., { olek: 7, others: 14 }
-					damageText = Object.entries(action.damage).map(([key, val]) => `${key}: ${val}`).join(', ');
-				}
-			} else if (action.damage) {
-				damageText = `${action.damage}`;
-			}
-			if (damageText) {
-				logParts.push(`<span class="log-damage">(${damageText} damage)</span>`);
+		// Damage
+		const damageText = this.#formatDamage(action);
+		if (damageText) {
+			logParts.push(`<span class="log-damage">${damageText}</span>`);
+		}
+
+		// Roll
+		if (action.roll && typeof action.roll !== 'object') {
+			logParts.push(`<span class="log-roll">[${action.roll}]</span>`);
+		} else if (action.roll && typeof action.roll === 'object') {
+			const rollStr = Object.entries(action.roll)
+				.filter(([key, val]) => val !== null && val !== undefined)
+				.map(([key, val]) => `${key}: ${val}`)
+				.join(', ');
+			if (rollStr) {
+				logParts.push(`<span class="log-roll">[${rollStr}]</span>`);
 			}
 		}
 
-		// 4. Add roll
-if (action.roll) {
-			let rollText = '';
-			if (typeof action.roll === 'object' && action.roll !== null) {
-				const rollParts = Object.entries(action.roll).map(([key, val]) => {
-					// Handle boolean flags like advantage/disadvantage
-					if (typeof val === 'boolean') {
-						return val ? key : '';
-					}
-					return `${key}: ${val}`;
-				}).filter(Boolean); // Remove empty strings
-				rollText = rollParts.join(', ');
-			} else {
-				rollText = `Roll: ${action.roll}`;
-			}
-			if(rollText) {
-				logParts.push(`<span class="log-roll">[${rollText}]</span>`);
-			}
-		}
-		
-		// 5. Add effect/result
-if (action.effect) {
-			logParts.push(`<span class="log-effect">→ ${action.effect}</span>`);
-		} else if (action.result) {
-			logParts.push(`<span class="log-effect">→ ${action.result}</span>`);
+		// Save DC
+		if (action.saveDC) {
+			logParts.push(`<span class="log-save">DC ${action.saveDC} ${action.saveType || 'save'}</span>`);
 		}
 
-		// 6. Add notes
+		// Result/Effect
+		if (action.result) {
+			const resultClass = this.#getResultClass(action.result);
+			logParts.push(`<span class="log-result ${resultClass}">${action.result}</span>`);
+		}
+
+		if (action.effect) {
+			logParts.push(`<span class="log-effect">${action.effect}</span>`);
+		}
+
+		if (action.additionalEffect) {
+			logParts.push(`<span class="log-effect">${action.additionalEffect}</span>`);
+		}
+
+		// Condition
+		if (action.condition) {
+			logParts.push(`<span class="log-condition">${action.condition}</span>`);
+		}
+
+		// Duration
+		if (action.duration) {
+			logParts.push(`<span class="log-duration">(${action.duration})</span>`);
+		}
+
+		// Notes
 		if (action.notes) {
-			logParts.push(`<span class="log-notes">(${action.notes})</span>`);
+			logParts.push(`<span class="log-notes">${action.notes}</span>`);
 		}
 
 		return logParts.join(' ');
-}
+	}
 
-	/**
-	 * Sanitize class name for CSS
-	 */
+	#extractTargets(action) {
+		const targets = [];
+
+		if (action.target) targets.push(action.target);
+		if (action.primaryTarget) targets.push(action.primaryTarget);
+		if (action.secondaryTarget) targets.push(`${action.secondaryTarget} (secondary)`);
+		if (action.targets) {
+			const targetArray = Array.isArray(action.targets) ? action.targets : [action.targets];
+			targets.push(...targetArray);
+		}
+
+		return targets;
+	}
+
+	#formatDamage(action) {
+		const parts = [];
+
+		if (action.damage) {
+			const dmgType = action.damageType ? ` ${action.damageType}` : '';
+			parts.push(`${action.damage}${dmgType} dmg`);
+		}
+
+		if (action.primaryDamage) {
+			parts.push(`${action.primaryDamage} primary`);
+		}
+
+		if (action.secondaryDamage) {
+			parts.push(`${action.secondaryDamage} secondary`);
+		}
+
+		if (action.healing) {
+			parts.push(`${action.healing} healing`);
+		}
+
+		return parts.length ? `(${parts.join(', ')})` : '';
+	}
+
+	#getActionVerb(actionType) {
+		const type = actionType?.toLowerCase() || '';
+		const verbMap = {
+			spell: 'casts',
+			spell_attack: 'casts',
+			'spell effect': 'triggers',
+			attack: 'attacks with',
+			movement: 'moves',
+			'skill check': 'checks',
+			check: 'checks',
+			class_feature: 'uses',
+			'class feature': 'uses',
+			ability: 'uses',
+			special_ability: 'uses',
+			special_attack: 'uses',
+			'passive ability': 'triggers',
+			lair_action: 'triggers',
+			environment: 'triggers',
+			condition_effect: 'suffers',
+			reaction: 'reacts with',
+			wild_magic: 'triggers Wild Magic',
+			bonus_action: 'uses',
+			'held action': 'readies',
+			summon: 'summons',
+			arrival: 'arrives',
+			'saving throw': 'rolls',
+			'knowledge recall': 'recalls',
+		};
+		return verbMap[type] || type;
+	}
+
+	#getResultClass(result) {
+		const resultLower = result.toLowerCase();
+		if (resultLower.includes('kill') || resultLower.includes('died')) return 'result-kill';
+		if (resultLower.includes('crit') || resultLower.includes('critical')) return 'result-crit';
+		if (resultLower.includes('hit')) return 'result-hit';
+		if (resultLower.includes('miss')) return 'result-miss';
+		if (resultLower.includes('success')) return 'result-success';
+		if (resultLower.includes('fail')) return 'result-fail';
+		return '';
+	}
+
 	#sanitizeClassName(str) {
+		if (!str) return '';
 		return str
 			.toLowerCase()
 			.replace(/[^a-z0-9]/gi, '-')
 			.replace(/-+/g, '-')
 			.replace(/^-|-$/g, '');
+	}
+
+	#cleanEntityTags(str) {
+		if (!str) return '';
+		return str.replace(/\[ENTITY:[^\]]+:([^\]]+)\]/gi, '$1');
 	}
 }

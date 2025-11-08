@@ -55,17 +55,11 @@ class CampaignManager {
 	#setupPopStateHandler() {
 		window.addEventListener('popstate', (event) => {
 			const state = event.state;
-			
+
 			if (state?.view === 'campaigns' || state?.state === StoryURLManager.VIEW_TYPES.CAMPAIGN_SELECTION) {
 				this.showCampaignSelection();
 			} else if (state?.campaignId) {
-				this.loadCampaign(
-					state.campaignId,
-					state.mapKey,
-					state.sessionId,
-					state.characterName,
-					state.viewType
-				);
+				this.loadCampaign(state.campaignId, state.mapKey, state.sessionId, state.characterName, state.viewType);
 			}
 		});
 	}
@@ -91,7 +85,7 @@ class CampaignManager {
 
 		const campaignGrid = document.createElement('div');
 		campaignGrid.className = 'campaign-grid-container';
-		
+
 		const campaignCards = document.createElement('div');
 		campaignCards.className = 'campaign-cards-grid';
 		campaignGrid.appendChild(campaignCards);
@@ -136,7 +130,7 @@ class CampaignManager {
 
 	#getCampaignDefaultMap(campaign) {
 		if (campaign.defaultMap) return campaign.defaultMap;
-		
+
 		const data = campaign.data;
 		if (!data) return null;
 
@@ -149,7 +143,7 @@ class CampaignManager {
 			}
 			return null;
 		};
-		
+
 		return findFirstMap(data);
 	}
 
@@ -188,9 +182,11 @@ class CampaignManager {
 			</div>
 			<div class="campaign-card-content">
 				<h2>${campaign.metadata?.name || 'Unnamed Campaign'}</h2>
-				${campaign?.metadata?.description 
-					? `<div class="campaign-short-description">${campaign.metadata.description}</div>` 
-					: ''}
+				${
+					campaign?.metadata?.description
+						? `<div class="campaign-short-description">${campaign.metadata.description}</div>`
+						: ''
+				}
 				${this.#createCharactersList(campaign)}
 			</div>
 			<div class="campaign-card-actions">
@@ -226,7 +222,7 @@ class CampaignManager {
 				<span class="campaign-characters-text">Party: </span>
 				<div class="campaign-characters-content">
 		`;
-		
+
 		campaign.metadata.characters.forEach((character) => {
 			html += `
 				<div class="campaign-selection-character-container" title="${character?.name}">
@@ -234,7 +230,7 @@ class CampaignManager {
 				</div>
 			`;
 		});
-		
+
 		html += `</div></div>`;
 		return html;
 	}
@@ -316,7 +312,8 @@ class CampaignManager {
 			StoryURLManager.VIEW_TYPES.QUESTS,
 			StoryURLManager.VIEW_TYPES.NPCS,
 			StoryURLManager.VIEW_TYPES.LOCATIONS,
-			StoryURLManager.VIEW_TYPES.FACTIONS
+			StoryURLManager.VIEW_TYPES.FACTIONS,
+			StoryURLManager.VIEW_TYPES.ENCOUNTERS,
 		];
 
 		if (sessionId || characterName || storyViewTypes.includes(viewType) || (!hasMap && hasStory)) {
@@ -345,12 +342,12 @@ class CampaignManager {
 		const url = this.#storyUrlManager.buildURL({
 			campaign: campaign.id,
 			map: defaultMap,
-			target: this.#storyUrlManager.getParam(StoryURLManager.PARAMS.TARGET)
+			target: this.#storyUrlManager.getParam(StoryURLManager.PARAMS.TARGET),
 		});
 
 		const state = this.#storyUrlManager.createState(StoryURLManager.VIEW_TYPES.MAP, {
 			campaignId: campaign.id,
-			mapKey: defaultMap
+			mapKey: defaultMap,
 		});
 
 		this.#storyUrlManager.updateHistory(url, state);
@@ -373,7 +370,7 @@ class CampaignManager {
 
 	#loadStoryCampaign(campaign, sessionId = null, characterName = null, viewType = null) {
 		const storyConfig = this.#determineStoryConfig(campaign, sessionId, characterName, viewType);
-		
+
 		if (!storyConfig) {
 			console.error('No valid session found for story campaign:', campaign.id);
 			this.showCampaignSelection();
@@ -414,12 +411,7 @@ class CampaignManager {
 			});
 			this.#storyInstance.setCampaignManager(this, () => this.showCampaignSelection());
 		} else {
-			this.#storyInstance.updateCampaign(
-				campaign, 
-				storyConfig.sessionId, 
-				storyConfig.characterName, 
-				storyConfig.view
-			);
+			this.#storyInstance.updateCampaign(campaign, storyConfig.sessionId, storyConfig.characterName, storyConfig.view);
 			this.#storyInstance.setCampaignManager(this, () => this.showCampaignSelection());
 		}
 	}
@@ -430,7 +422,8 @@ class CampaignManager {
 			[StoryURLManager.VIEW_TYPES.QUESTS]: StoryURLManager.VIEW_TYPES.QUESTS,
 			[StoryURLManager.VIEW_TYPES.LOCATIONS]: StoryURLManager.VIEW_TYPES.LOCATIONS,
 			[StoryURLManager.VIEW_TYPES.NPCS]: StoryURLManager.VIEW_TYPES.NPCS,
-			[StoryURLManager.VIEW_TYPES.FACTIONS]: StoryURLManager.VIEW_TYPES.FACTIONS
+			[StoryURLManager.VIEW_TYPES.FACTIONS]: StoryURLManager.VIEW_TYPES.FACTIONS,
+			[StoryURLManager.VIEW_TYPES.ENCOUNTERS]: StoryURLManager.VIEW_TYPES.ENCOUNTERS,
 		};
 
 		// Special views
@@ -438,7 +431,7 @@ class CampaignManager {
 			return {
 				view: viewTypes[viewType],
 				sessionId: null,
-				characterName: null
+				characterName: null,
 			};
 		}
 
@@ -447,7 +440,7 @@ class CampaignManager {
 			return {
 				view: StoryURLManager.VIEW_TYPES.CHARACTER,
 				sessionId: null,
-				characterName: characterName
+				characterName: characterName,
 			};
 		}
 
@@ -458,7 +451,7 @@ class CampaignManager {
 		return {
 			view: StoryURLManager.VIEW_TYPES.SESSION,
 			sessionId: finalSessionId,
-			characterName: null
+			characterName: null,
 		};
 	}
 
@@ -476,9 +469,9 @@ class CampaignManager {
 
 	toggleRecap() {
 		if (!this.#recapModal) return;
-		
+
 		const recapButton = document.getElementById('view-recap');
-		
+
 		if (!this.#recapModal.isVisible) {
 			this.#recapModal.show();
 			recapButton?.classList.add('active');

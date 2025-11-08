@@ -20,6 +20,7 @@ class StoryHelperTooltip {
 			guild: {},
 			quest: {},
 			item: {},
+			encounter: {},
 			// Standard D&D entities
 			spell: {},
 			monster: {},
@@ -84,6 +85,30 @@ class StoryHelperTooltip {
 			});
 		}
 
+		// Register encounters
+		if (campaignData.encounters) {
+			campaignData.encounters.forEach((enc) => {
+				const key = enc.name.toLowerCase();
+				registry.encounter[key] = enc;
+				// Also register by id
+				if (enc.id) {
+					registry.encounter[enc.id] = enc;
+				}
+			});
+		}
+
+		// Register spells
+		if (DND_SPELL_DB) {
+			DND_SPELL_DB.forEach((spell) => {
+				const key = spell.spellName.toLowerCase();
+				registry.spell[key] = spell;
+
+				if (spell.id) {
+					registry.spell[spell.id] = spell;
+				}
+			});
+		}
+
 		return registry;
 	}
 
@@ -99,6 +124,9 @@ class StoryHelperTooltip {
 			quest: (data) => `?campaign=${this.#campaignId}&view=quests&quest=${encodeURIComponent(data.title)}`,
 			faction: (data) =>
 				`?campaign=${this.#campaignId}&view=factions&faction=${encodeURIComponent(data.id || data.name)}`,
+			encounter: (
+				data // <-- ADDED
+			) => `?campaign=${this.#campaignId}&view=encounters&encounter=${encodeURIComponent(data.id || data.name)}`,
 		};
 
 		const urlGenerator = urlMap[entityType];
@@ -111,13 +139,13 @@ class StoryHelperTooltip {
 		if (!url) return '';
 
 		return `
-			<div class="tooltip-navigation">
-				<a href="${url}" class="tooltip-nav-link" onclick="event.stopPropagation();">
-					<span class="tooltip-nav-icon">→</span>
-					View Full Details
-				</a>
-			</div>
-		`;
+            <div class="tooltip-navigation">
+                <a href="${url}" class="tooltip-nav-link" onclick="event.stopPropagation();">
+                    <span class="tooltip-nav-icon">→</span>
+                    View Full Details
+                </a>
+            </div>
+        `;
 	}
 
 	#createTooltipContainer() {
@@ -169,15 +197,15 @@ class StoryHelperTooltip {
 	async #showTooltip(element, entityType, entityName) {
 		// Show loading state
 		this.#tooltipContainer.innerHTML = `
-			<div class="entity-tooltip loading">
-				<div class="tooltip-header">
-					<h3>${entityName}</h3>
-				</div>
-				<div class="tooltip-content">
-					<div>Loading...</div>
-				</div>
-			</div>
-		`;
+            <div class="entity-tooltip loading">
+                <div class="tooltip-header">
+                    <h3>${entityName}</h3>
+                </div>
+                <div class="tooltip-content">
+                    <div>Loading...</div>
+                </div>
+            </div>
+        `;
 		this.#tooltipContainer.style.display = 'block';
 		this.#positionTooltip(element);
 
@@ -189,27 +217,27 @@ class StoryHelperTooltip {
 				this.#positionTooltip(element);
 			} else {
 				this.#tooltipContainer.innerHTML = `
-					<div class="entity-tooltip error">
-						<div class="tooltip-header">
-							<h3>${entityName}</h3>
-						</div>
-						<div class="tooltip-content">
-							<div>No information found for this ${entityType}.</div>
-						</div>
-					</div>
-				`;
+                    <div class="entity-tooltip error">
+                        <div class="tooltip-header">
+                            <h3>${entityName}</h3>
+                        </div>
+                        <div class="tooltip-content">
+                            <div>No information found for this ${entityType}.</div>
+                        </div>
+                    </div>
+                `;
 			}
 		} catch (error) {
 			this.#tooltipContainer.innerHTML = `
-				<div class="entity-tooltip error">
-					<div class="tooltip-header">
-						<h3>${entityName}</h3>
-					</div>
-					<div class="tooltip-content">
-						<div>Error loading information: ${error.message}</div>
-					</div>
-				</div>
-			`;
+                <div class="entity-tooltip error">
+                    <div class="tooltip-header">
+                        <h3>${entityName}</h3>
+                    </div>
+                    <div class="tooltip-content">
+                        <div>Error loading information: ${error.message}</div>
+                    </div>
+                </div>
+            `;
 			console.error('Error fetching entity data:', error);
 		}
 	}
@@ -282,6 +310,7 @@ class StoryHelperTooltip {
 			location: this.#generateLocationTooltip.bind(this),
 			quest: this.#generateQuestTooltip.bind(this),
 			faction: this.#generateFactionTooltip.bind(this),
+			encounter: this.#generateEncounterTooltip.bind(this), // <-- ADDED
 			spell: this.#generateSpellTooltip.bind(this),
 			monster: this.#generateMonsterTooltip.bind(this),
 			class: this.#generateClassTooltip.bind(this),
@@ -301,23 +330,23 @@ class StoryHelperTooltip {
 		const navLink = this.#createNavigationLink('character', data);
 
 		return `
-			<div class="entity-tooltip entity-character-tooltip">
-				<div class="tooltip-header">
-					${data.icon ? `<img src="${data.icon}" alt="${data.name}" />` : ''}
-					<h3>${data.name}</h3>
-				</div>
-				<div class="tooltip-content">
-					<div class="tooltip-meta">
-						<span><strong>Race:</strong> ${data.race}</span>
-						<span><strong>Class:</strong> ${data.class}</span>
-						<span><strong>Level:</strong> ${data.level}</span>
-					</div>
-					${this.#generateAbilityScores(data.stats?.abilityScores)}
-					<div class="tooltip-description">${data.shortDescription || ''}</div>
-				</div>
-				<div class="tooltip-footer">${navLink}</div>
-			</div>
-		`;
+            <div class="entity-tooltip entity-character-tooltip">
+                <div class="tooltip-header">
+                    ${data.icon ? `<img src="${data.icon}" alt="${data.name}" />` : ''}
+                    <h3>${data.name}</h3>
+                </div>
+                <div class="tooltip-content">
+                    <div class="tooltip-meta">
+                        <span><strong>Race:</strong> ${data.race}</span>
+                        <span><strong>Class:</strong> ${data.class}</span>
+                        <span><strong>Level:</strong> ${data.level}</span>
+                    </div>
+                    ${this.#generateAbilityScores(data.stats?.abilityScores)}
+                    <div class="tooltip-description">${data.shortDescription || ''}</div>
+                </div>
+                <div class="tooltip-footer">${navLink}</div>
+            </div>
+        `;
 	}
 
 	// NPC tooltip
@@ -333,33 +362,45 @@ class StoryHelperTooltip {
 				.join('') || '';
 
 		return `
-			<div class="entity-tooltip entity-npc-tooltip">
-				<div class="tooltip-header">
-					<h3>${data.name}</h3>
-					<span class="affinity-badge ${data.affinity?.toLowerCase()}">${data.affinity}</span>
-				</div>
-				<div class="tooltip-content">
-					<div class="tooltip-meta">
-						<span><strong>Race:</strong> ${data.race}</span>
-						<span><strong>Class:</strong> ${data.class}</span>
-						<span><strong>Status:</strong> ${data.status}</span>
-					</div>
-					<div class="tooltip-container"><strong>Role:</strong> ${data.role}</div>
-					${data.faction ? `<div class="tooltip-container"><strong>Faction:</strong> ${data.faction}</div>` : ''}
-					<div class="tooltip-container">${data.description}</div>
-					${data.personality ? `<div class="tooltip-container"><strong>Personality:</strong> ${data.personality}</div>` : ''}
-					${relationships ? `<div class="tooltip-container"><strong>Relationships:</strong><ul>${relationships}</ul></div>` : ''}
-					${
-						data.location
-							? `<div class="tooltip-container"><strong>Location:</strong> ${data.location.primary}${
-									data.location.specific ? ` (${data.location.specific})` : ''
-							  }</div>`
-							: ''
-					}
-				</div>
-				<div class="tooltip-footer">${navLink}</div>
-			</div>
-		`;
+            <div class="entity-tooltip entity-npc-tooltip">
+                <div class="tooltip-header">
+                    <h3>${data.name}</h3>
+                    <span class="affinity-badge ${data.affinity?.toLowerCase()}">${data.affinity}</span>
+                </div>
+                <div class="tooltip-content">
+                    <div class="tooltip-meta">
+                        <span><strong>Race:</strong> ${data.race}</span>
+                        <span><strong>Class:</strong> ${data.class}</span>
+                        <span><strong>Status:</strong> ${data.status}</span>
+                    </div>
+                    <div class="tooltip-container"><strong>Role:</strong> ${data.role}</div>
+                    ${
+											data.faction
+												? `<div class="tooltip-container"><strong>Faction:</strong> ${data.faction}</div>`
+												: ''
+										}
+                    <div class="tooltip-container">${data.description}</div>
+                    ${
+											data.personality
+												? `<div class="tooltip-container"><strong>Personality:</strong> ${data.personality}</div>`
+												: ''
+										}
+                    ${
+											relationships
+												? `<div class="tooltip-container"><strong>Relationships:</strong><ul>${relationships}</ul></div>`
+												: ''
+										}
+                    ${
+											data.location
+												? `<div class="tooltip-container"><strong>Location:</strong> ${data.location.primary}${
+														data.location.specific ? ` (${data.location.specific})` : ''
+												  }</div>`
+												: ''
+										}
+                </div>
+                <div class="tooltip-footer">${navLink}</div>
+            </div>
+        `;
 	}
 
 	// Location tooltip
@@ -367,34 +408,34 @@ class StoryHelperTooltip {
 		const navLink = this.#createNavigationLink('location', data);
 
 		return `
-			<div class="entity-tooltip entity-location-tooltip">
-				<div class="tooltip-header">
-					<h3>${data.name}</h3>
-					<span class="location-type">${data.type}</span>
-				</div>
-				<div class="tooltip-content">
-					${data.region ? `<div><strong>Region:</strong> ${data.region}</div>` : ''}
-					${data.population ? `<div><strong>Population:</strong> ${data.population}</div>` : ''}
-					${data.ruler ? `<div><strong>Ruler:</strong> ${data.ruler}</div>` : ''}
-					<div class="tooltip-description">${data.description}</div>
-					${
-						data.features?.length
-							? `<div class="tooltip-features"><strong>Features:</strong><ul>${data.features
-									.map((f) => `<li>${f}</li>`)
-									.join('')}</ul></div>`
-							: ''
-					}
-					${
-						data.threats?.length
-							? `<div class="tooltip-threats"><strong>Threats:</strong><ul>${data.threats
-									.map((t) => `<li>${t}</li>`)
-									.join('')}</ul></div>`
-							: ''
-					}
-				</div>
-				<div class="tooltip-footer">${navLink}</div>
-			</div>
-		`;
+            <div class="entity-tooltip entity-location-tooltip">
+                <div class="tooltip-header">
+                    <h3>${data.name}</h3>
+                    <span class="location-type">${data.type}</span>
+                </div>
+                <div class="tooltip-content">
+                    ${data.region ? `<div><strong>Region:</strong> ${data.region}</div>` : ''}
+                    ${data.population ? `<div><strong>Population:</strong> ${data.population}</div>` : ''}
+                    ${data.ruler ? `<div><strong>Ruler:</strong> ${data.ruler}</div>` : ''}
+                    <div class="tooltip-description">${data.description}</div>
+                    ${
+											data.features?.length
+												? `<div class="tooltip-features"><strong>Features:</strong><ul>${data.features
+														.map((f) => `<li>${f}</li>`)
+														.join('')}</ul></div>`
+												: ''
+										}
+                    ${
+											data.threats?.length
+												? `<div class="tooltip-threats"><strong>Threats:</strong><ul>${data.threats
+														.map((t) => `<li>${t}</li>`)
+														.join('')}</ul></div>`
+												: ''
+										}
+                </div>
+                <div class="tooltip-footer">${navLink}</div>
+            </div>
+        `;
 	}
 
 	// Faction tooltip
@@ -402,32 +443,32 @@ class StoryHelperTooltip {
 		const navLink = this.#createNavigationLink('faction', data);
 
 		return `
-			<div class="entity-tooltip entity-faction-tooltip">
-				<div class="tooltip-header">
-					<h3>${data.name}</h3>
-					<span class="faction-type">${data.type}</span>
-				</div>
-				<div class="tooltip-content">
-					${
-						data.location
-							? `<div><strong>Location:</strong> ${data.location}${
-									data.sublocation ? `: ${data.sublocation}` : ''
-							  }</div>`
-							: ''
-					}
-					${data.leader ? `<div><strong>Leader:</strong> ${data.leader}</div>` : ''}
-					<div class="tooltip-description">${data.description}</div>
-					${
-						data.npcs?.length
-							? `<div class="tooltip-features"><strong>NPCs:</strong><ul>${data.npcs
-									.map((f) => `<li>${f}</li>`)
-									.join('')}</ul></div>`
-							: ''
-					}
-				</div>
-				<div class="tooltip-footer">${navLink}</div>
-			</div>
-		`;
+            <div class="entity-tooltip entity-faction-tooltip">
+                <div class="tooltip-header">
+                    <h3>${data.name}</h3>
+                    <span class="faction-type">${data.type}</span>
+                </div>
+                <div class="tooltip-content">
+                    ${
+											data.location
+												? `<div><strong>Location:</strong> ${data.location}${
+														data.sublocation ? `: ${data.sublocation}` : ''
+												  }</div>`
+												: ''
+										}
+                    ${data.leader ? `<div><strong>Leader:</strong> ${data.leader}</div>` : ''}
+                    <div class="tooltip-description">${data.description}</div>
+                    ${
+											data.npcs?.length
+												? `<div class="tooltip-features"><strong>NPCs:</strong><ul>${data.npcs
+														.map((f) => `<li>${f}</li>`)
+														.join('')}</ul></div>`
+												: ''
+										}
+                </div>
+                <div class="tooltip-footer">${navLink}</div>
+            </div>
+        `;
 	}
 
 	// Quest tooltip
@@ -436,150 +477,242 @@ class StoryHelperTooltip {
 		const latestSession = data.sessions?.[data.sessions.length - 1];
 
 		return `
-			<div class="entity-tooltip entity-quest-tooltip">
-				<div class="tooltip-header">
-					<h3>${data.title}</h3>
-					<span class="quest-status ${data.status?.toLowerCase()}">${data.status}</span>
-				</div>
-				<div class="tooltip-content">
-					<div><strong>Priority:</strong> ${data.priority}</div>
-					<div class="tooltip-objective"><strong>Current Objective:</strong> ${data.current_objective}</div>
-					${
-						latestSession
-							? `
-						<div class="tooltip-latest-update">
-							<strong>Latest Update (Session ${latestSession.session}):</strong>
-							<p>${latestSession.description}</p>
-						</div>
-					`
-							: ''
-					}
-				</div>
-				<div class="tooltip-footer">${navLink}</div>
-			</div>
-		`;
+            <div class="entity-tooltip entity-quest-tooltip">
+                <div class="tooltip-header">
+                    <h3>${data.title}</h3>
+                    <span class="quest-status ${data.status?.toLowerCase()}">${data.status}</span>
+                </div>
+                <div class="tooltip-content">
+                    <div><strong>Priority:</strong> ${data.priority}</div>
+                    <div class="tooltip-objective"><strong>Current Objective:</strong> ${data.current_objective}</div>
+                    ${
+											latestSession
+												? `
+                    <div class="tooltip-latest-update">
+                        <strong>Latest Update (Session ${latestSession.session}):</strong>
+                        <p>${latestSession.description}</p>
+                    </div>
+                    `
+												: ''
+										}
+                </div>
+                <div class="tooltip-footer">${navLink}</div>
+            </div>
+        `;
+	}
+
+	/**
+	 * Helper to generate an HTML list for the encounter's initiative order.
+	 * @param {Array} initiative - The data.initiative array.
+	 * @returns {string} HTML string for the list, or empty string.
+	 */
+	#generateInitiativeList(initiative) {
+		if (!initiative || initiative.length === 0) {
+			return '';
+		}
+
+		// Cleans up [ENTITY:type:Name] tags for display
+		const cleanName = (name) => name.replace(/\[ENTITY:.*?:(.*?)]/, '$1');
+
+		const listItems = initiative
+			.map((item) => {
+				const name = cleanName(item.character);
+				// Show value if it's not null, otherwise just show notes
+				const value = item.value ? `(Initiative: ${item.value})` : '';
+				const notes = item.notes ? `- ${item.notes}` : '';
+				return `<li><strong>${name}</strong> ${value} ${notes}</li>`;
+			})
+			.join('');
+
+		return `
+            <div class="tooltip-list">
+                <strong>Participants:</strong>
+                <ul>${listItems}</ul>
+            </div>
+        `;
+	}
+
+	// Encounter tooltip (MODIFIED for new data structure)
+	#generateEncounterTooltip(data) {
+		const navLink = this.#createNavigationLink('encounter', data);
+
+		// --- Location logic (unchanged from your previous version) ---
+		let locationName = data.location;
+		if (locationName && this.#dataRegistry.location[locationName]) {
+			locationName = this.#dataRegistry.location[locationName].name;
+		} else if (locationName && this.#dataRegistry.location[locationName.toLowerCase()]) {
+			locationName = this.#dataRegistry.location[locationName.toLowerCase()].name;
+		}
+		// --- End location logic ---
+
+		const outcome = data.outcome || {};
+		const status = outcome.status || data.status; // Use new outcome.status, fallback to old data.status
+
+		// --- Helper logic to render simple lists (inlined for brevity) ---
+		const renderList = (title, items) => {
+			if (!items || items.length === 0) return '';
+			// Cleans up [ENTITY:type:Name] tags for display in lists
+			const cleanItem = (item) => item.replace(/\[ENTITY:.*?:(.*?)]/, '$1');
+			const listItems = items.map((item) => `<li>${cleanItem(item)}</li>`).join('');
+			return `<div class="tooltip-list"><strong>${title}:</strong><ul>${listItems}</ul></div>`;
+		};
+		// --- End helper logic ---
+
+		// Generate content from new structure
+		const initiativeList = this.#generateInitiativeList(data.initiative);
+		const enemiesList = renderList('Enemies Defeated', outcome.enemiesDefeated);
+		const casualtiesList = renderList('Casualties', outcome.casualties);
+		const itemsList = renderList('Items Obtained', outcome.itemsObtained);
+		const complicationsList = renderList('Complications', outcome.complications);
+
+		return `
+            <div class="entity-tooltip entity-encounter-tooltip">
+                <div class="tooltip-header">
+                    <h3>${data.name}</h3>
+                    ${status ? `<span class="encounter-status ${status.toLowerCase()}">${status}</span>` : ''}
+                </div>
+                <div class="tooltip-content">
+                    ${locationName ? `<div><strong>Location:</strong> ${locationName}</div>` : ''}
+                    ${data.rounds ? `<div><strong>Duration:</strong> ${data.rounds.length} rounds</div>` : ''}
+                    ${
+											outcome.partyCondition
+												? `<div><strong>Party Condition:</strong> ${outcome.partyCondition}</div>`
+												: ''
+										}
+                    
+                    ${data.description ? `<div class="tooltip-description">${data.description}</div>` : ''}
+
+                    ${initiativeList}
+                    ${enemiesList}
+                    ${casualtiesList}
+                    ${itemsList}
+                    ${complicationsList}
+                </div>
+                <div class="tooltip-footer">${navLink}</div>
+            </div>
+        `;
 	}
 
 	// Spell tooltip (no navigation - external API data)
 	#generateSpellTooltip(data) {
 		return `
-			<div class="entity-tooltip entity-spell-tooltip">
-				<div class="tooltip-header">
-					<h3>${data.name}</h3>
-					<span class="spell-level">Level ${data.level || 'Cantrip'}</span>
-				</div>
-				<div class="tooltip-content">
-					<div class="tooltip-meta">
-						<span><strong>School:</strong> ${data.school?.name || 'Unknown'}</span>
-						<span><strong>Casting Time:</strong> ${data.casting_time}</span>
-						<span><strong>Range:</strong> ${data.range}</span>
-					</div>
-					<div><strong>Components:</strong> ${data.components?.join(', ')}</div>
-					<div><strong>Duration:</strong> ${data.duration}</div>
-					${data.classes?.length ? `<div><strong>Classes:</strong> ${data.classes.map((c) => c.name).join(', ')}</div>` : ''}
-					<div class="tooltip-description">${data.desc?.join(' ') || 'No description available.'}</div>
-					${
-						data.higher_level?.length
-							? `<div class="tooltip-higher-level"><strong>At Higher Levels:</strong> ${data.higher_level.join(
-									' '
-							  )}</div>`
-							: ''
-					}
-				</div>
-			</div>
-		`;
+            <div class="entity-tooltip entity-spell-tooltip">
+                <div class="tooltip-header">
+                    <h3>${data.spellName}</h3>
+                    <span class="spell-level">Level ${data.level == 0 ? 'Cantrip' : data?.level ?? 'Cantrip'}</span>
+                </div>
+                <div class="tooltip-content">
+                    <div class="tooltip-meta">
+                        <span><strong>School:</strong> ${data.spellClass || 'Unknown'}</span>
+                        <span><strong>Casting Time:</strong> ${data.castingTime}</span>
+                        <span><strong>Range:</strong> ${data.range}</span>
+                    </div>
+                    <div><strong>Components:</strong> ${data?.components}</div>
+                    <div><strong>Duration:</strong> ${data.duration}</div>
+                    ${data.classes?.length ? `<div><strong>Classes:</strong> ${data.classes.join(', ')}</div>` : ''}
+                    <div class="tooltip-description">${data?.description || 'No description available.'}</div>
+					<div><strong>Source:</strong> ${data?.source || 'No source available.'}</div>
+                </div>
+            </div>
+        `;
 	}
 
 	// Monster tooltip (no navigation - external API data)
 	#generateMonsterTooltip(data) {
 		return `
-			<div class="entity-tooltip entity-monster-tooltip">
-				<div class="tooltip-header">
-					<h3>${data.name}</h3>
-					<span class="monster-cr">CR ${data.challenge_rating}</span>
-				</div>
-				<div class="tooltip-content">
-					<div class="tooltip-meta">
-						<span><strong>Type:</strong> ${data.type}</span>
-						<span><strong>Size:</strong> ${data.size}</span>
-						<span><strong>Alignment:</strong> ${data.alignment}</span>
-					</div>
-					<div class="tooltip-stats">
-						<span><strong>AC:</strong> ${data.armor_class?.[0]?.value || data.armor_class}</span>
-						<span><strong>HP:</strong> ${data.hit_points} (${data.hit_points_roll})</span>
-						<span><strong>Speed:</strong> ${Object.entries(data.speed || {})
-							.map(([k, v]) => `${k} ${v}`)
-							.join(', ')}</span>
-					</div>
-					${this.#generateAbilityScores(data)}
-				</div>
-			</div>
-		`;
+            <div class="entity-tooltip entity-monster-tooltip">
+                <div class="tooltip-header">
+                    <h3>${data.name}</h3>
+                    <span class="monster-cr">CR ${data.challenge_rating}</span>
+                </div>
+                <div class="tooltip-content">
+                    <div class="tooltip-meta">
+                        <span><strong>Type:</strong> ${data.type}</span>
+                        <span><strong>Size:</strong> ${data.size}</span>
+                        <span><strong>Alignment:</strong> ${data.alignment}</span>
+                    </div>
+                    <div class="tooltip-stats">
+                        <span><strong>AC:</strong> ${data.armor_class?.[0]?.value || data.armor_class}</span>
+                        <span><strong>HP:</strong> ${data.hit_points} (${data.hit_points_roll})</span>
+                        <span><strong>Speed:</strong> ${Object.entries(data.speed || {})
+													.map(([k, v]) => `${k} ${v}`)
+													.join(', ')}</span>
+                    </div>
+                    ${this.#generateAbilityScores(data)}
+                </div>
+            </div>
+        `;
 	}
 
 	// Class tooltip (no navigation - external API data)
 	#generateClassTooltip(data) {
 		return `
-			<div class="entity-tooltip entity-class-tooltip">
-				<div class="tooltip-header">
-					<h3>${data.name}</h3>
-				</div>
-				<div class="tooltip-content">
-					<div><strong>Hit Die:</strong> d${data.hit_die}</div>
-					<div><strong>Primary Ability:</strong> ${data.saving_throws?.map((s) => s.name).join(', ')}</div>
-					${
-						data.proficiencies?.length
-							? `<div><strong>Proficiencies:</strong> ${data.proficiencies
-									.slice(0, 5)
-									.map((p) => p.name)
-									.join(', ')}${data.proficiencies.length > 5 ? '...' : ''}</div>`
-							: ''
-					}
-					${
-						data.spellcasting
-							? `<div><strong>Spellcasting Ability:</strong> ${data.spellcasting.spellcasting_ability?.name}</div>`
-							: ''
-					}
-				</div>
-			</div>
-		`;
+            <div class="entity-tooltip entity-class-tooltip">
+                <div class="tooltip-header">
+                    <h3>${data.name}</h3>
+                </div>
+                <div class="tooltip-content">
+                    <div><strong>Hit Die:</strong> d${data.hit_die}</div>
+                    <div><strong>Primary Ability:</strong> ${data.saving_throws?.map((s) => s.name).join(', ')}</div>
+                    ${
+											data.proficiencies?.length
+												? `<div><strong>Proficiencies:</strong> ${data.proficiencies
+														.slice(0, 5)
+														.map((p) => p.name)
+														.join(', ')}${data.proficiencies.length > 5 ? '...' : ''}</div>`
+												: ''
+										}
+                    ${
+											data.spellcasting
+												? `<div><strong>Spellcasting Ability:</strong> ${data.spellcasting.spellcasting_ability?.name}</div>`
+												: ''
+										}
+                </div>
+            </div>
+        `;
 	}
 
 	// Race tooltip (no navigation - external API data)
 	#generateRaceTooltip(data) {
 		return `
-			<div class="entity-tooltip entity-race-tooltip">
-				<div class="tooltip-header">
-					<h3>${data.name}</h3>
-				</div>
-				<div class="tooltip-content">
-					<div><strong>Size:</strong> ${data.size}</div>
-					<div><strong>Speed:</strong> ${data.speed} ft.</div>
-					${
-						data.ability_bonuses?.length
-							? `<div><strong>Ability Bonuses:</strong> ${data.ability_bonuses
-									.map((ab) => `${ab.ability_score.name} +${ab.bonus}`)
-									.join(', ')}</div>`
-							: ''
-					}
-					${data.traits?.length ? `<div><strong>Traits:</strong> ${data.traits.map((t) => t.name).join(', ')}</div>` : ''}
-				</div>
-			</div>
-		`;
+            <div class="entity-tooltip entity-race-tooltip">
+                <div class="tooltip-header">
+                    <h3>${data.name}</h3>
+                </div>
+                <div class="tooltip-content">
+                    <div><strong>Size:</strong> ${data.size}</div>
+                    <div><strong>Speed:</strong> ${data.speed} ft.</div>
+                    ${
+											data.ability_bonuses?.length
+												? `<div><strong>Ability Bonuses:</strong> ${data.ability_bonuses
+														.map((ab) => `${ab.ability_score.name} +${ab.bonus}`)
+														.join(', ')}</div>`
+												: ''
+										}
+                    ${
+											data.traits?.length
+												? `<div><strong>Traits:</strong> ${data.traits.map((t) => t.name).join(', ')}</div>`
+												: ''
+										}
+                </div>
+            </div>
+        `;
 	}
 
 	// Generic fallback
 	#generateGenericTooltip(data) {
 		return `
-			<div class="entity-tooltip">
-				<div class="tooltip-header">
-					<h3>${data.name || data.title || 'Unknown'}</h3>
-				</div>
-				<div class="tooltip-content">
-					<div class="tooltip-description">${data.description || data.desc || JSON.stringify(data, null, 2)}</div>
-				</div>
-			</div>
-		`;
+            <div class="entity-tooltip">
+                <div class="tooltip-header">
+                    <h3>${data.name || data.title || 'Unknown'}</h3>
+                </div>
+                <div class="tooltip-content">
+                    <div class="tooltip-description">${
+											data.description || data.desc || JSON.stringify(data, null, 2)
+										}</div>
+                </div>
+            </div>
+        `;
 	}
 
 	// Helper to generate ability scores display
@@ -632,6 +765,11 @@ class StoryHelperTooltip {
 				? 'right'
 				: 'left';
 
+		// Failsafe if all directions are bad (e.g., large tooltip on small screen)
+		if (position === 'left' && space.left < tooltipRect.width) {
+			position = 'below';
+		}
+
 		const buffer = 8;
 		let coords = { top: 0, left: 0 };
 
@@ -654,6 +792,7 @@ class StoryHelperTooltip {
 				break;
 		}
 
+		// Clamp to viewport
 		coords.left = Math.max(10, Math.min(coords.left, viewport.scrollX + viewport.width - tooltipRect.width - 10));
 		coords.top = Math.max(10, Math.min(coords.top, viewport.scrollY + viewport.height - tooltipRect.height - 10));
 
