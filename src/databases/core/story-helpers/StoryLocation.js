@@ -7,9 +7,11 @@ class StoryHelperLocation extends StoryHelperBase {
 		// Try Supabase first, fallback to campaign data
 		if (this.supabaseClient?.isReady()) {
 			try {
-				const locations = await this.supabaseClient.fetchLocations(this.campaign.id);
+				// Fetch locations with all related data in one query
+				const locations = await this.supabaseClient.fetchLocationsWithRelations(this.campaign.id);
 				if (locations && locations.length > 0) {
-					return locations;
+					// Transform the normalized data back to the format the UI expects
+					return this.transformLocationsFromSupabase(locations);
 				}
 			} catch (error) {
 				console.warn('Failed to fetch Locations from Supabase, using local data:', error);
@@ -18,6 +20,20 @@ class StoryHelperLocation extends StoryHelperBase {
 
 		// Fallback to local data
 		return this.campaign?.locations || [];
+	}
+
+	/**
+	 * Transform normalized Supabase data into the format expected by the UI
+	 */
+	transformLocationsFromSupabase(locations) {
+		return locations.map((location) => ({
+			...location,
+			// Transform arrays from junction tables
+			threats: location.threats?.map((t) => t.threat) || [],
+			features: location.features?.map((f) => f.feature) || [],
+			connections: location.connections?.map((c) => c.connected_location_id || c.connection_type) || [],
+			npcs: location.npcs?.map((n) => n.npc_id) || [],
+		}));
 	}
 
 	getViewTitle() {
