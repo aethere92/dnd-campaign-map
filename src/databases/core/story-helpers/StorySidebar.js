@@ -253,7 +253,10 @@ class StoryHelperSidebar {
 		// Try Supabase first, fallback to campaign data
 		if (this.#supabaseClient?.isReady()) {
 			try {
-				const sessions = await this.#supabaseClient.fetchCampaignSessions(campaign.id);
+				const sessions = await Promise.race([
+					this.#supabaseClient.fetchCampaignSessions(campaign.id),
+					new Promise((_, reject) => setTimeout(() => reject(new Error('Supabase timeout')), 1000)),
+				]);
 				if (sessions && sessions.length > 0) {
 					return sessions;
 				}

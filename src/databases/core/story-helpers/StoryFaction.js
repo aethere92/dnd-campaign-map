@@ -7,7 +7,10 @@ class StoryHelperFaction extends StoryHelperBase {
 		// Try Supabase first, fallback to campaign data
 		if (this.supabaseClient?.isReady()) {
 			try {
-				const factions = await this.supabaseClient.fetchFactions(this.campaign.id);
+				const factions = await Promise.race([
+					this.supabaseClient.fetchFactions(this.campaign.id),
+					new Promise((_, reject) => setTimeout(() => reject(new Error('Supabase timeout')), 1000)),
+				]);
 				if (factions && factions.length > 0) {
 					return factions;
 				}

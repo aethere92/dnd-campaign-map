@@ -16,7 +16,10 @@ class StoryHelperContent {
 		// Try Supabase first, fallback to campaign data
 		if (this.#supabaseClient?.isReady()) {
 			try {
-				const sessions = await this.#supabaseClient.fetchCampaignSessions(campaign.id);
+				const sessions = await Promise.race([
+					this.#supabaseClient.fetchCampaignSessions(campaign.id),
+					new Promise((_, reject) => setTimeout(() => reject(new Error('Supabase timeout')), 1000)),
+				]);
 				if (sessions && sessions.length > 0) {
 					return sessions;
 				}
@@ -125,8 +128,47 @@ class StoryHelperContent {
 	 * @param {string} sessionId
 	 * @returns {Promise<{narrative: string, summary: string}>}
 	 */
+	/**
+	 * Fetch session data from Supabase
+	 * @param {string} campaignId
+	 * @param {string} sessionId
+	 * @returns {Promise<{narrative: string, summary: string}>}
+	 */
 	async #fetchSessionFromSupabase(campaignId, sessionId) {
-		return await this.#supabaseClient.fetchSessionData(campaignId, sessionId);
+		// Try Supabase with timeout
+		if (this.#supabaseClient?.isReady()) {
+			try {
+				const sessionData = await Promise.race([
+					this.#supabaseClient.fetchSessionData(campaignId, sessionId),
+					new Promise((_, reject) => setTimeout(() => reject(new Error('Supabase timeout')), 1000)),
+				]);
+
+				if (sessionData) {
+					return sessionData;
+				}
+			} catch (error) {
+				console.warn('Failed to fetch session from Supabase, trying fallback:', error);
+			}
+		}
+
+		// Fallback to local markdown files
+		const campaign = this.#getCampaign();
+		const sessions = campaign?.recaps || [];
+		const session = sessions.find((s) => s.id === sessionId);
+
+		if (!session) {
+			throw new Error('Session not found in local data');
+		}
+
+		// Fetch narrative and summary from local files if they exist
+		const narrative = session.narrative ? await this.#fetchAndParseMd(session.narrative) : '';
+
+		const summary = session.summary ? await this.#fetchAndParseMd(session.summary) : '';
+
+		return {
+			narrative: narrative || '',
+			summary: summary || '',
+		};
 	}
 
 	async #createRecapSection(session, summaryHtml) {

@@ -8,7 +8,10 @@ class StoryHelperLocation extends StoryHelperBase {
 		if (this.supabaseClient?.isReady()) {
 			try {
 				// Fetch locations with all related data in one query
-				const locations = await this.supabaseClient.fetchLocationsWithRelations(this.campaign.id);
+				const locations = await Promise.race([
+					this.supabaseClient.fetchLocationsWithRelations(this.campaign.id),
+					new Promise((_, reject) => setTimeout(() => reject(new Error('Supabase timeout')), 1000)),
+				]);
 				if (locations && locations.length > 0) {
 					// Transform the normalized data back to the format the UI expects
 					return this.transformLocationsFromSupabase(locations);

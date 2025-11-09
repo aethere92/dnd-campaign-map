@@ -15,7 +15,10 @@ class StoryHelperEncounter extends StoryHelperBase {
 		// Try Supabase first, fallback to campaign data
 		if (this.supabaseClient?.isReady()) {
 			try {
-				const encounters = await this.supabaseClient.fetchEncounters(this.campaign.id);
+				const encounters = await Promise.race([
+					this.supabaseClient.fetchEncounters(this.campaign.id),
+					new Promise((_, reject) => setTimeout(() => reject(new Error('Supabase timeout')), 1000)),
+				]);
 				if (encounters && encounters.length > 0) {
 					return encounters;
 				}

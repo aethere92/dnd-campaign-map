@@ -7,7 +7,11 @@ class StoryHelperNPC extends StoryHelperBase {
 		// Try Supabase first, fallback to campaign data
 		if (this.supabaseClient?.isReady()) {
 			try {
-				const npcs = await this.supabaseClient.fetchNPCs(this.campaign.id);
+				const npcs = await Promise.race([
+					this.supabaseClient.fetchNPCs(this.campaign.id),
+					new Promise((_, reject) => setTimeout(() => reject(new Error('Supabase timeout')), 1000)),
+				]);
+
 				if (npcs && npcs.length > 0) {
 					return npcs;
 				}
@@ -245,8 +249,11 @@ class StoryHelperNPC extends StoryHelperBase {
 			const relatedCharacter = this.campaign.metadata?.characters?.find((n) => n.name.toLowerCase() === rel.npcId);
 			const npcName = relatedNPC ? relatedNPC.name : relatedCharacter ? relatedCharacter.name : 'Unknown NPC';
 
-			relDiv.innerHTML = `<strong>${npcName}</strong>: ${rel.type}${rel.description ? ` - ${rel.description}` : ''}`;
-			this.placeholderProcessor.processEntityReferences(relDiv);
+			relDiv.innerHTML = `<span class="entity-reference entity-npc" data-entity-type="npc" data-entity-name="${npcName}">${npcName}</span>: ${
+				rel.type
+			}${rel.description ? ` - ${rel.description}` : ''}`;
+			// relDiv.innerHTML = `<strong>${npcName}</strong>: ${rel.type}${rel.description ? ` - ${rel.description}` : ''}`;
+			// this.placeholderProcessor.processEntityReferences(relDiv);
 			content.appendChild(relDiv);
 		});
 
