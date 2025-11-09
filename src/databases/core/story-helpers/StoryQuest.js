@@ -5,8 +5,20 @@ class StoryHelperQuest extends StoryHelperBase {
 		return 'quest'; // URL: ?quest=The%20Lost%20Artifact
 	}
 
-	getItems() {
-		return this.campaign?.quests;
+	async getItems() {
+		// Try Supabase first, fallback to campaign data
+		if (this.supabaseClient?.isReady()) {
+			try {
+				const quests = await this.supabaseClient.fetchQuests(this.campaign.id);
+				if (quests && quests.length > 0) {
+					return quests;
+				}
+			} catch (error) {
+				console.warn('Failed to fetch Quests from Supabase, using local data:', error);
+			}
+		}
+		// Fallback to local data
+		return this.campaign?.quests || [];
 	}
 
 	getViewTitle() {

@@ -3,8 +3,21 @@ class StoryHelperFaction extends StoryHelperBase {
 		return 'faction'; // URL: ?faction=arcane-brotherhood
 	}
 
-	getItems() {
-		return this.campaign?.factions;
+	async getItems() {
+		// Try Supabase first, fallback to campaign data
+		if (this.supabaseClient?.isReady()) {
+			try {
+				const factions = await this.supabaseClient.fetchFactions(this.campaign.id);
+				if (factions && factions.length > 0) {
+					return factions;
+				}
+			} catch (error) {
+				console.warn('Failed to fetch factions from Supabase, using local data:', error);
+			}
+		}
+
+		// Fallback to local data
+		return this.campaign?.factions || [];
 	}
 
 	getViewTitle() {

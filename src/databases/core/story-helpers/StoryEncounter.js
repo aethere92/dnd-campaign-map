@@ -11,8 +11,21 @@ class StoryHelperEncounter extends StoryHelperBase {
 		return 'encounter';
 	}
 
-	getItems() {
-		return this.campaign?.encounters;
+	async getItems() {
+		// Try Supabase first, fallback to campaign data
+		if (this.supabaseClient?.isReady()) {
+			try {
+				const encounters = await this.supabaseClient.fetchEncounters(this.campaign.id);
+				if (encounters && encounters.length > 0) {
+					return encounters;
+				}
+			} catch (error) {
+				console.warn('Failed to fetch encounters from Supabase, using local data:', error);
+			}
+		}
+
+		// Fallback to local data
+		return this.campaign?.encounters || [];
 	}
 
 	getViewTitle() {

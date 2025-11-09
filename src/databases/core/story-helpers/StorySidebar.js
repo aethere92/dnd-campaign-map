@@ -14,6 +14,7 @@ class StoryHelperSidebar {
 	#onEncountersClick;
 	#onMapClick;
 	#searchManager;
+	#supabaseClient;
 
 	// Sidebar section toggle states
 	#sectionStates = {
@@ -54,12 +55,13 @@ class StoryHelperSidebar {
 		this.#onEncountersClick = onEncountersClick;
 		this.#onMapClick = onMapClick;
 		this.#searchManager = searchManager;
+		this.#supabaseClient = SupabaseClient.getInstance();
 
 		// Load saved section states
 		this.#loadSectionStates();
 	}
 
-	createSidebar(isCollapsed) {
+	async createSidebar(isCollapsed) {
 		const sidebar = document.createElement('div');
 		sidebar.className = 'story-sidebar';
 
@@ -70,7 +72,7 @@ class StoryHelperSidebar {
 			this.#createSearchButton(),
 			this.#createCharacterSection(),
 			this.#createCampaignToolsSection(),
-			this.#createSessionSection()
+			await this.#createSessionSection()
 		);
 
 		return sidebar;
@@ -246,9 +248,27 @@ class StoryHelperSidebar {
 		return button;
 	}
 
-	#createSessionSection() {
+	async getSessions() {
 		const campaign = this.#getCampaign();
-		const recaps = campaign.recaps;
+		// Try Supabase first, fallback to campaign data
+		if (this.#supabaseClient?.isReady()) {
+			try {
+				const sessions = await this.#supabaseClient.fetchCampaignSessions(campaign.id);
+				if (sessions && sessions.length > 0) {
+					return sessions;
+				}
+			} catch (error) {
+				console.warn('Failed to fetch sessions from Supabase, using local data:', error);
+			}
+		}
+
+		// Fallback to local data
+		return campaign?.recaps || [];
+	}
+
+	async #createSessionSection() {
+		const campaign = this.#getCampaign();
+		const recaps = await this.getSessions();
 
 		const section = document.createElement('div');
 		section.className = 'story-sidebar-section';

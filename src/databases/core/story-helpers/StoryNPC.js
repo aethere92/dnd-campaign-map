@@ -1,10 +1,22 @@
 class StoryHelperNPC extends StoryHelperBase {
 	getUrlParam() {
-		return 'npc'; // URL: ?npc=npc_001
+		return 'npc';
 	}
 
-	getItems() {
-		return this.campaign?.npcs;
+	async getItems() {
+		// Try Supabase first, fallback to campaign data
+		if (this.supabaseClient?.isReady()) {
+			try {
+				const npcs = await this.supabaseClient.fetchNPCs(this.campaign.id);
+				if (npcs && npcs.length > 0) {
+					return npcs;
+				}
+			} catch (error) {
+				console.warn('Failed to fetch NPCs from Supabase, using local data:', error);
+			}
+		}
+		// Fallback to local data
+		return this.campaign?.npcs || [];
 	}
 
 	getViewTitle() {
@@ -21,9 +33,7 @@ class StoryHelperNPC extends StoryHelperBase {
 		npcs.forEach((npc) => {
 			const affinity = npc.affinity || 'Unknown';
 			const location = this.processEntityReference(npc.location?.primary || 'Unknown Location');
-			const faction = npc.faction || 'No Faction';
 
-			// Create nested structure: affinity > location > faction
 			if (!grouped[affinity]) {
 				grouped[affinity] = {};
 			}
@@ -34,7 +44,6 @@ class StoryHelperNPC extends StoryHelperBase {
 			grouped[affinity][location].push(npc);
 		});
 
-		// Sort NPCs within each faction group alphabetically
 		Object.values(grouped).forEach((locations) => {
 			Object.values(locations).forEach((npcList) => {
 				npcList.sort((a, b) => a.name.localeCompare(b.name));
@@ -45,7 +54,6 @@ class StoryHelperNPC extends StoryHelperBase {
 	}
 
 	renderGroups(container, groupedNPCs, detailPanel) {
-		// Override to handle nested structure
 		Object.entries(groupedNPCs).forEach(([affinity, locations]) => {
 			this.renderNestedGroup(container, affinity, locations, detailPanel);
 		});
@@ -55,26 +63,22 @@ class StoryHelperNPC extends StoryHelperBase {
 		const affinityGroup = document.createElement('div');
 		affinityGroup.className = 'view-group view-group-level-1';
 
-		// Create content wrapper for level 1 toggle
 		const affinityContent = document.createElement('div');
 		affinityContent.className = 'view-group-content';
 
 		const affinityHeader = this.createNestedGroupHeader(affinity, affinityContent, 'view-group-header-level-1');
 		affinityGroup.appendChild(affinityHeader);
 
-		// Iterate through locations
 		Object.entries(locations).forEach(([location, npcList]) => {
 			const locationGroup = document.createElement('div');
 			locationGroup.className = 'view-group view-group-level-2';
 
-			// Create content wrapper for level 2 toggle
 			const locationContent = document.createElement('div');
 			locationContent.className = 'view-group-content';
 
 			const locationHeader = this.createNestedGroupHeader(location, locationContent, 'view-group-header-level-2');
 			locationGroup.appendChild(locationHeader);
 
-			// Add NPCs to location content
 			npcList.forEach((npc) => {
 				const npcItem = this.createListItem(npc, detailPanel);
 				locationContent.appendChild(npcItem);
@@ -88,7 +92,6 @@ class StoryHelperNPC extends StoryHelperBase {
 		container.appendChild(affinityGroup);
 	}
 
-	// Create a nested group header with toggle functionality
 	createNestedGroupHeader(groupName, contentElement, headerClass) {
 		const groupHeader = document.createElement('div');
 		groupHeader.className = `view-group-header ${headerClass}`;
@@ -103,16 +106,13 @@ class StoryHelperNPC extends StoryHelperBase {
 		toggleButton.setAttribute('aria-label', `Toggle ${groupName} group`);
 		toggleButton.innerHTML = '<span class="toggle-icon">▼</span>';
 
-		// Toggle function
 		const toggleGroup = () => {
 			const isCurrentlyExpanded = contentElement.style.display !== 'none';
-
 			contentElement.style.display = isCurrentlyExpanded ? 'none' : 'block';
 			toggleButton.setAttribute('aria-expanded', !isCurrentlyExpanded);
 			toggleButton.querySelector('.toggle-icon').textContent = isCurrentlyExpanded ? '▶' : '▼';
 		};
 
-		// Make both button and header clickable
 		toggleButton.addEventListener('click', (e) => {
 			e.stopPropagation();
 			toggleGroup();
@@ -129,11 +129,9 @@ class StoryHelperNPC extends StoryHelperBase {
 
 	createListItem(npc, detailPanel) {
 		const item = super.createListItem(npc, detailPanel);
-
 		if (npc.status) {
 			item.classList.add(`status-${npc.status.toLowerCase()}`);
 		}
-
 		return item;
 	}
 
@@ -144,11 +142,7 @@ class StoryHelperNPC extends StoryHelperBase {
 		name.className = 'view-item-name';
 		name.textContent = npc.name;
 
-		const role = document.createElement('span');
-		role.className = 'view-item-subtitle';
-		role.textContent = npc.role || '';
-
-		container.append(name); //, role);
+		container.append(name);
 		return container;
 	}
 
@@ -156,7 +150,6 @@ class StoryHelperNPC extends StoryHelperBase {
 		const detail = document.createElement('div');
 		detail.className = 'view-detail-content';
 
-		// Header
 		const header = document.createElement('div');
 		header.className = 'view-detail-header';
 
@@ -197,7 +190,6 @@ class StoryHelperNPC extends StoryHelperBase {
 		header.appendChild(headerText);
 		detail.appendChild(header);
 
-		// Sections
 		if (npc.description) {
 			detail.appendChild(this.createSection('Description', npc.description));
 		}
@@ -249,8 +241,8 @@ class StoryHelperNPC extends StoryHelperBase {
 			const relDiv = document.createElement('div');
 			relDiv.className = 'view-relationship-item';
 
-			const relatedNPC = this.campaign.npcs.find((n) => n.id === rel.npcId);
-			const relatedCharacter = this.campaign.metadata.characters.find((n) => n.name.toLowerCase() === rel.npcId);
+			const relatedNPC = this.campaign.npcs?.find((n) => n.id === rel.npcId);
+			const relatedCharacter = this.campaign.metadata?.characters?.find((n) => n.name.toLowerCase() === rel.npcId);
 			const npcName = relatedNPC ? relatedNPC.name : relatedCharacter ? relatedCharacter.name : 'Unknown NPC';
 
 			relDiv.innerHTML = `<strong>${npcName}</strong>: ${rel.type}${rel.description ? ` - ${rel.description}` : ''}`;

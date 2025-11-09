@@ -3,8 +3,21 @@ class StoryHelperLocation extends StoryHelperBase {
 		return 'location';
 	}
 
-	getItems() {
-		return this.campaign?.locations;
+	async getItems() {
+		// Try Supabase first, fallback to campaign data
+		if (this.supabaseClient?.isReady()) {
+			try {
+				const locations = await this.supabaseClient.fetchLocations(this.campaign.id);
+				if (locations && locations.length > 0) {
+					return locations;
+				}
+			} catch (error) {
+				console.warn('Failed to fetch Locations from Supabase, using local data:', error);
+			}
+		}
+
+		// Fallback to local data
+		return this.campaign?.locations || [];
 	}
 
 	getViewTitle() {

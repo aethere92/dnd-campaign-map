@@ -4,11 +4,15 @@ class StoryHelperBase {
 	#selectedItemId = null;
 	#listPanel = null;
 	#storyUrlManager;
+	#supabaseClient;
+	#items = null;
+	#isLoading = false;
 
 	constructor(campaign, placeholderProcessor) {
 		this.#campaign = campaign;
 		this.#placeholderProcessor = placeholderProcessor;
 		this.#storyUrlManager = new StoryURLManager();
+		this.#supabaseClient = SupabaseClient.getInstance();
 	}
 
 	// Abstract methods - must be implemented by subclasses
@@ -43,18 +47,14 @@ class StoryHelperBase {
 
 	updateUrl(itemId) {
 		const params = this.#storyUrlManager.getParams();
-
-		// Clear other item params
 		this.#storyUrlManager.clearItemParamsExcept(params, this.getUrlParam());
 
-		// Build new URL
 		const url = this.#storyUrlManager.buildStoryItemURL(
 			params.get(StoryURLManager.PARAMS.CAMPAIGN),
 			params.get(StoryURLManager.PARAMS.VIEW),
 			itemId
 		);
 
-		// Create state
 		const state = this.#storyUrlManager.createState(StoryURLManager.VIEW_TYPES.STORY, {
 			campaignId: params.get(StoryURLManager.PARAMS.CAMPAIGN),
 			viewType: params.get(StoryURLManager.PARAMS.VIEW),
@@ -68,75 +68,93 @@ class StoryHelperBase {
 	findItemById(items, itemId) {
 		return items.find((item) => {
 			const id = this.getItemId(item);
-			// Handle both string and numeric comparisons
 			return id === itemId || String(id) === String(itemId);
 		});
 	}
 
-	// Main render method
-	render(contentArea) {
-		const items = this.getItems();
+	// Main render method - now async
+	async render(contentArea) {
+		// Show loading state
+		contentArea.innerHTML = `
+			<div class="story-view-container">
+				<div class="view-header"><h2>${this.getViewTitle()}</h2></div>
+				<div class="loading-container">
+					<div class="loading-spinner"></div>
+					<p>Loading ${this.getViewTitle().toLowerCase()}...</p>
+				</div>
+			</div>
+		`;
 
-		if (!items?.length) {
-			contentArea.innerHTML = `
-            <div class="story-view-container">
-                <div class="view-header"><h2>${this.getViewTitle()}</h2></div>
-                <div class="no-content">No ${this.getViewTitle().toLowerCase()} available for this campaign.</div>
-            </div>
-        `;
-			return;
-		}
+		try {
+			const items = await this.getItems();
 
-		const container = document.createElement('div');
-		container.className = 'story-view-container';
-
-		const header = document.createElement('div');
-		header.className = 'view-header';
-		header.innerHTML = `<h2>${this.getViewTitle()}</h2>`;
-
-		const body = document.createElement('div');
-		body.className = 'view-body';
-
-		const listPanel = document.createElement('div');
-		listPanel.className = 'view-list-panel';
-		this.#listPanel = listPanel;
-
-		const detailPanel = document.createElement('div');
-		detailPanel.className = 'view-detail-panel';
-
-		// IMPORTANT: Determine the initial item BEFORE rendering groups
-		const targetId = this.getTargetFromUrl();
-		let initialItem = items[0]; // default fallback
-
-		if (targetId) {
-			const decodedId = decodeURIComponent(targetId);
-			const foundItem = this.findItemById(items, decodedId);
-			if (foundItem) {
-				initialItem = foundItem;
+			if (!items?.length) {
+				contentArea.innerHTML = `
+					<div class="story-view-container">
+						<div class="view-header"><h2>${this.getViewTitle()}</h2></div>
+						<div class="no-content">No ${this.getViewTitle().toLowerCase()} available for this campaign.</div>
+					</div>
+				`;
+				return;
 			}
+
+			const container = document.createElement('div');
+			container.className = 'story-view-container';
+
+			const header = document.createElement('div');
+			header.className = 'view-header';
+			header.innerHTML = `<h2>${this.getViewTitle()}</h2>`;
+
+			const body = document.createElement('div');
+			body.className = 'view-body';
+
+			const listPanel = document.createElement('div');
+			listPanel.className = 'view-list-panel';
+			this.#listPanel = listPanel;
+
+			const detailPanel = document.createElement('div');
+			detailPanel.className = 'view-detail-panel';
+
+			const targetId = this.getTargetFromUrl();
+			let initialItem = items[0];
+
+			if (targetId) {
+				const decodedId = decodeURIComponent(targetId);
+				const foundItem = this.findItemById(items, decodedId);
+				if (foundItem) {
+					initialItem = foundItem;
+				}
+			}
+
+			const groupedItems = this.groupItems(items);
+			this.renderGroups(listPanel, groupedItems, detailPanel);
+			this.selectItem(initialItem, detailPanel);
+
+			if (targetId && initialItem !== items[0]) {
+				setTimeout(() => {
+					const targetElement = listPanel.querySelector(`[data-item-id="${this.getItemId(initialItem)}"]`);
+					targetElement?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+				}, 100);
+			}
+
+			body.append(listPanel, detailPanel);
+			container.append(body);
+			contentArea.innerHTML = '';
+			contentArea.appendChild(container);
+		} catch (error) {
+			console.error('Error rendering view:', error);
+			contentArea.innerHTML = `
+				<div class="story-view-container">
+					<div class="view-header"><h2>${this.getViewTitle()}</h2></div>
+					<div class="error-message">
+						<p><strong>Error loading ${this.getViewTitle().toLowerCase()}</strong></p>
+						<p class="error-details">${error.message}</p>
+					</div>
+				</div>
+			`;
 		}
-
-		// Now render groups
-		const groupedItems = this.groupItems(items);
-		this.renderGroups(listPanel, groupedItems, detailPanel);
-
-		// Select the initial item (either from URL or first item)
-		this.selectItem(initialItem, detailPanel);
-
-		// Scroll to the item if it was from URL
-		if (targetId && initialItem !== items[0]) {
-			setTimeout(() => {
-				const targetElement = listPanel.querySelector(`[data-item-id="${this.getItemId(initialItem)}"]`);
-				targetElement?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-			}, 100);
-		}
-
-		body.append(listPanel, detailPanel);
-		container.append(body);
-		contentArea.appendChild(container);
 	}
 
-	// Render groups (can be overridden for nested structures)
 	renderGroups(container, groupedItems, detailPanel) {
 		Object.entries(groupedItems).forEach(([groupName, items]) => {
 			this.renderGroup(container, groupName, items, detailPanel);
@@ -203,7 +221,6 @@ class StoryHelperBase {
 		detailPanel.appendChild(detailContent);
 	}
 
-	// Utility methods using StoryDOMBuilder
 	createSection(title, content, contentClass = '') {
 		const section = StoryDOMBuilder.createSection(title, content, contentClass);
 		this.#placeholderProcessor.processEntityReferences(section.querySelector('.view-section-content'));
@@ -290,12 +307,15 @@ class StoryHelperBase {
 		return processedText;
 	}
 
-	// Getters
 	get campaign() {
 		return this.#campaign;
 	}
 
 	get placeholderProcessor() {
 		return this.#placeholderProcessor;
+	}
+
+	get supabaseClient() {
+		return this.#supabaseClient;
 	}
 }

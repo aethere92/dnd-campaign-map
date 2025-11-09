@@ -194,7 +194,7 @@ class StoryManager {
 			mainContent.classList.add('sidebar-collapsed');
 		}
 
-		const sidebar = this.#sidebarManager.createSidebar(this.#isSidebarCollapsed);
+		const sidebar = await this.#sidebarManager.createSidebar(this.#isSidebarCollapsed);
 		const contentArea = document.createElement('div');
 		contentArea.className = 'story-content-area';
 

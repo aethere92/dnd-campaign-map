@@ -1,129 +1,120 @@
 <!DOCTYPE html>
 <html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>D&D Campaign Manager</title>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.css" />
+		<link rel="stylesheet" href="https://unpkg.com/@geoman-io/leaflet-geoman-free@2.17.0/dist/leaflet-geoman.css" />
+		<link rel="stylesheet" href="styles/styles.css" />
+		<link rel="icon" type="image/x-icon" href="images/pageicon.png" />
+		<!-- IMPORTS -->
+		<script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+		<script defer src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.js"></script>
+		<script defer src="https://unpkg.com/@geoman-io/leaflet-geoman-free@2.17.0/dist/leaflet-geoman.js"></script>
+		<script defer src="https://cdn.jsdelivr.net/npm/leaflet-rotate@0.2.8/dist/leaflet-rotate.min.js"></script>
+		<!-- DATABASES -->
+		<script defer src="src/databases/core/SvgIconsDb.js"></script>
+		<!-- CAMPAIGN 001 -->
+		<script defer src="src/databases/data/SpellDatabaseDND.js"></script>
+		<script defer src="src/databases/data/campaigns/campaign-001/recaps.js"></script>
+		<script defer src="src/databases/data/campaigns/campaign-001/api.js"></script>
+		<script defer src="src/databases/data/campaigns/campaign-001/metadata.js"></script>
+		<script defer src="src/databases/data/campaigns/campaign-001/characters.js"></script>
+		<script defer src="src/databases/data/campaigns/campaign-001/map.js"></script>
+		<script defer src="src/databases/data/campaigns/campaign-001/timeline.js"></script>
+		<!-- CAMPAIGN 002 -->
+		<script defer src="src/databases/data/campaigns/campaign-002/recaps.js"></script>
+		<script defer src="src/databases/data/campaigns/campaign-002/api.js"></script>
+		<script defer src="src/databases/data/campaigns/campaign-002/backgrounds.js"></script>
+		<script defer src="src/databases/data/campaigns/campaign-002/metadata.js"></script>
+		<script defer src="src/databases/data/campaigns/campaign-002/characters.js"></script>
+		<script defer src="src/databases/data/campaigns/campaign-002/locations.js"></script>
+		<script defer src="src/databases/data/campaigns/campaign-002/npcs.js"></script>
+		<script defer src="src/databases/data/campaigns/campaign-002/factions.js"></script>
+		<script defer src="src/databases/data/campaigns/campaign-002/quests.js"></script>
+		<script defer src="src/databases/data/campaigns/campaign-002/encounters.js"></script>
+		<script defer src="src/databases/data/campaigns/campaign-002/timeline.js"></script>
+		<script defer src="src/databases/data/CampaignData.js"></script>
+		<script defer src="src/databases/core/CampaignManager.js"></script>
 
-<head>
-	<meta charset="UTF-8" />
-	<meta name="viewport"
-		content="width=device-width, initial-scale=1.0" />
-	<title>D&D Campaign Manager</title>
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.css" />
-	<link rel="stylesheet" href="https://unpkg.com/@geoman-io/leaflet-geoman-free@2.17.0/dist/leaflet-geoman.css" />
-	<link rel="stylesheet" href="styles/styles.css" />
-	<link rel="icon" type="image/x-icon" href="images/pageicon.png" />
-	<!-- IMPORTS -->
-	<script defer src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.js"></script>
-	<script defer src="https://unpkg.com/@geoman-io/leaflet-geoman-free@2.17.0/dist/leaflet-geoman.js"></script>
-	<script defer src="https://cdn.jsdelivr.net/npm/leaflet-rotate@0.2.8/dist/leaflet-rotate.min.js"></script>
-	<!-- DATABASES -->
-	<script defer src="src/databases/core/SvgIconsDb.js"></script>
-	<!-- CAMPAIGN 001 -->
-	<script defer src="src/databases/data/SpellDatabaseDND.js"></script>
-	<script defer src="src/databases/data/campaigns/campaign-001/recaps.js"></script>
-	<script defer src="src/databases/data/campaigns/campaign-001/api.js"></script>
-	<script defer src="src/databases/data/campaigns/campaign-001/metadata.js"></script>
-	<script defer src="src/databases/data/campaigns/campaign-001/characters.js"></script>
-	<script defer src="src/databases/data/campaigns/campaign-001/map.js"></script>
-	<script defer src="src/databases/data/campaigns/campaign-001/timeline.js"></script>
-	<!-- CAMPAIGN 002 -->
-	<script defer src="src/databases/data/campaigns/campaign-002/recaps.js"></script>
-	<script defer src="src/databases/data/campaigns/campaign-002/api.js"></script>
-	<script defer src="src/databases/data/campaigns/campaign-002/backgrounds.js"></script>
-	<script defer src="src/databases/data/campaigns/campaign-002/metadata.js"></script>
-	<script defer src="src/databases/data/campaigns/campaign-002/characters.js"></script>
-	<script defer src="src/databases/data/campaigns/campaign-002/locations.js"></script>
-	<script defer src="src/databases/data/campaigns/campaign-002/npcs.js"></script>
-	<script defer src="src/databases/data/campaigns/campaign-002/factions.js"></script>
-	<script defer src="src/databases/data/campaigns/campaign-002/quests.js"></script>
-	<script defer src="src/databases/data/campaigns/campaign-002/encounters.js"></script>
-	<script defer src="src/databases/data/campaigns/campaign-002/timeline.js"></script>
-	<script defer src="src/databases/data/CampaignData.js"></script>
-	<script defer src="src/databases/core/CampaignManager.js"></script>
+		<!-- STORY MANAGER -->
+		<script defer src="src/databases/core/story-helpers/StoryUrlManager.js"></script>
+		<script defer src="src/databases/core/story-helpers/StoryDOMBuilder.js"></script>
+		<script defer src="src/databases/core/story-helpers/StoryBase.js"></script>
+		<script defer src="src/databases/core/story-helpers/StoryPlaceholder.js"></script>
+		<script defer src="src/databases/core/story-helpers/StoryCharacter.js"></script>
+		<script defer src="src/databases/core/story-helpers/StoryContent.js"></script>
+		<script defer src="src/databases/core/story-helpers/StoryLocation.js"></script>
+		<script defer src="src/databases/core/story-helpers/StoryNavigation.js"></script>
+		<script defer src="src/databases/core/story-helpers/StoryNPC.js"></script>
+		<script defer src="src/databases/core/story-helpers/StoryQuest.js"></script>
+		<script defer src="src/databases/core/story-helpers/StorySearch.js"></script>
+		<script defer src="src/databases/core/story-helpers/StorySidebar.js"></script>
+		<script defer src="src/databases/core/story-helpers/StoryTimeline.js"></script>
+		<script defer src="src/databases/core/story-helpers/StoryTooltip.js"></script>
+		<script defer src="src/databases/core/story-helpers/StoryFaction.js"></script>
+		<script defer src="src/databases/core/story-helpers/StoryEncounter.js"></script>
+		<script defer src="src/databases/core/StoryManager.js"></script>
+		<!-- UTILS -->
+		<script defer src="src/services/utils/SupabaseClient.js"></script>
+		<script defer src="src/services/markers/StoryRecapModal.js"></script>
+		<script defer src="src/services/utils/UrlManager.js"></script>
+		<script defer src="src/services/utils/LoadingManager.js"></script>
+		<script defer src="src/services/utils/MapStateManager.js"></script>
+		<script defer src="src/services/utils/MapExporter.js"></script>
+		<script defer src="src/services/utils/NestedLayerControl.js"></script>
+		<!-- CORE SERVICES -->
+		<script defer src="src/services/markers/SidebarService.js"></script>
+		<script defer src="src/services/markers/AnnotationService.js"></script>
+		<!-- PATH MANAGER UTILS -->
+		<script defer src="src/services/markers/path_utils/MapFilterManager.js"></script>
+		<script defer src="src/services/markers/path_utils/PathAnimationControl.js"></script>
+		<script defer src="src/services/markers/path_utils/DebugMarkerManager.js"></script>
+		<script defer src="src/services/markers/path_utils/DebugPolyLineManager.js"></script>
+		<!-- CORE SERVICES CONT -->
+		<script defer src="src/services/markers/PathManager.js"></script>
+		<script defer src="src/services/map/DungeonMapServices.js"></script>
+		<!-- CORE SCRIPTS -->
+		<script defer src="src/core/Initialization.js"></script>
+		<script defer src="src/core/EventHandlers.js"></script>
+	</head>
 
-	<!-- STORY MANAGER -->
-	<script defer src="src/databases/core/story-helpers/StoryUrlManager.js"></script>
-	<script defer src="src/databases/core/story-helpers/StoryDOMBuilder.js"></script>
-	<script defer src="src/databases/core/story-helpers/StoryBase.js"></script>
-	<script defer src="src/databases/core/story-helpers/StoryPlaceholder.js"></script>
-	<script defer src="src/databases/core/story-helpers/StoryCharacter.js"></script>
-	<script defer src="src/databases/core/story-helpers/StoryContent.js"></script>
-	<script defer src="src/databases/core/story-helpers/StoryLocation.js"></script>
-	<script defer src="src/databases/core/story-helpers/StoryNavigation.js"></script>
-	<script defer src="src/databases/core/story-helpers/StoryNPC.js"></script>
-	<script defer src="src/databases/core/story-helpers/StoryQuest.js"></script>
-	<script defer src="src/databases/core/story-helpers/StorySearch.js"></script>
-	<script defer src="src/databases/core/story-helpers/StorySidebar.js"></script>
-	<script defer src="src/databases/core/story-helpers/StoryTimeline.js"></script>
-	<script defer src="src/databases/core/story-helpers/StoryTooltip.js"></script>
-	<script defer src="src/databases/core/story-helpers/StoryFaction.js"></script>
-	<script defer src="src/databases/core/story-helpers/StoryEncounter.js"></script>
-	<script defer src="src/databases/core/StoryManager.js"></script>
-	<!-- UTILS -->
-	<script defer src="src/services/markers/StoryRecapModal.js"></script>
-	<script defer src="src/services/utils/UrlManager.js"></script>
-	<script defer src="src/services/utils/LoadingManager.js"></script>
-	<script defer src="src/services/utils/MapStateManager.js"></script>
-	<script defer src="src/services/utils/MapExporter.js"></script>
-	<script defer src="src/services/utils/NestedLayerControl.js"></script>
-	<!-- CORE SERVICES -->
-	<script defer src="src/services/markers/SidebarService.js"></script>
-	<script defer src="src/services/markers/AnnotationService.js"></script>
-	<!-- PATH MANAGER UTILS -->
-	<script defer src="src/services/markers/path_utils/MapFilterManager.js"></script>
-	<script defer src="src/services/markers/path_utils/PathAnimationControl.js"></script>
-	<script defer src="src/services/markers/path_utils/DebugMarkerManager.js"></script>
-	<script defer src="src/services/markers/path_utils/DebugPolyLineManager.js"></script>
-	<!-- CORE SERVICES CONT -->
-	<script defer src="src/services/markers/PathManager.js"></script>
-	<script defer src="src/services/map/DungeonMapServices.js"></script>
-	<!-- CORE SCRIPTS -->
-	<script defer src="src/core/Initialization.js"></script>
-	<script defer src="src/core/EventHandlers.js"></script>
-</head>
-
-<body>
-	<div id="root">
-		<div id="map"></div>
-		<div id="actions"
-			class="action-menu">
-			<button class="menu-toggle">
-				<span>Actions</span>
-				<svg width="16"
-					height="16"
-					viewBox="0 0 24 24"
-					fill="none"
-					stroke="currentColor"
-					stroke-width="2">
-					<path d="M6 9l6 6 6-6" />
-				</svg>
-			</button>
-
-			<div class="menu-content">
-				<button class="menu-item"
-					id="campaign-select">
-					<span>Campaign selection</span>
+	<body>
+		<div id="root">
+			<div id="map"></div>
+			<div id="actions" class="action-menu">
+				<button class="menu-toggle">
+					<span>Actions</span>
+					<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+						<path d="M6 9l6 6 6-6" />
+					</svg>
 				</button>
-				<!-- <div class="menu-divider"></div> -->
-				<!-- <button class="menu-item"
+
+				<div class="menu-content">
+					<button class="menu-item" id="campaign-select">
+						<span>Campaign selection</span>
+					</button>
+					<!-- <div class="menu-divider"></div> -->
+					<!-- <button class="menu-item"
 					id="view-recap">
 					<span>View recap</span>
 				</button> -->
-				<div class="menu-divider"></div>
-				<button class="menu-item"
-					id="export-map">
-					<span>Export Map</span>
-					<select id="zoom-select"></select>
-				</button>
-				<div class="menu-divider"></div>
-				<button class="menu-item"
-					data-role="toggle-markers">Toggle names</button>
+					<div class="menu-divider"></div>
+					<button class="menu-item" id="export-map">
+						<span>Export Map</span>
+						<select id="zoom-select"></select>
+					</button>
+					<div class="menu-divider"></div>
+					<button class="menu-item" data-role="toggle-markers">Toggle names</button>
+				</div>
 			</div>
+			<svg style="display: none">
+				<filter id="wavy2">
+					<feTurbulence x="0" y="0" baseFrequency="0.02" numOctaves="5" seed="1" />
+					<feDisplacementMap in="SourceGraphic" scale="20" />
+				</filter>
+			</svg>
 		</div>
-		<svg style="display: none;">
-			<filter id="wavy2">
-			  <feTurbulence x="0" y="0" baseFrequency="0.02" numOctaves="5" seed="1" />
-			  <feDisplacementMap in="SourceGraphic" scale="20" />
-			</filter>
-		  </svg>
-</body>
-
+	</body>
 </html>
