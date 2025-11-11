@@ -394,6 +394,25 @@ class SupabaseClient {
 	}
 
 	/**
+	 * Fetch timeline for a campaign
+	 */
+	async fetchSpellByName(spellName) {
+		if (!this.isReady()) {
+			throw new Error('Supabase client is not initialized');
+		}
+
+		try {
+			const { data, error } = await this.#client.from('spells').select('*').eq('spell_name', spellName);
+
+			if (error) throw error;
+			return data || [];
+		} catch (error) {
+			console.error(`Error fetching timeline for ${campaignId}:`, error);
+			throw error;
+		}
+	}
+
+	/**
 	 * Fetch all campaign data at once (more efficient)
 	 */
 	async fetchAllCampaignData(campaignId) {

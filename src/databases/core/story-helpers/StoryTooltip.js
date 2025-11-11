@@ -1,11 +1,13 @@
 class StoryHelperTooltip {
 	#tooltipContainer;
 	#dataRegistry;
-	#campaignId; // Store campaign ID for URL generation
+	#campaignId;
+	#supabaseClient;
 	#apiBaseUrl = 'https://www.dnd5eapi.co/api/2014/';
 
-	constructor(campaignData = {}) {
-		this.#campaignId = campaignData.campaignId; // Extract campaign ID
+	constructor(campaignData = {}, supabaseClient = null) {
+		this.#campaignId = campaignData.campaignId;
+		this.#supabaseClient = supabaseClient;
 		this.#dataRegistry = this.#buildDataRegistry(campaignData);
 		this.#createTooltipContainer();
 	}
@@ -97,8 +99,8 @@ class StoryHelperTooltip {
 			});
 		}
 
-		// Register spells
-		if (DND_SPELL_DB) {
+		// Register spells (local DB)
+		if (typeof DND_SPELL_DB !== 'undefined' && DND_SPELL_DB) {
 			DND_SPELL_DB.forEach((spell) => {
 				const key = spell.spellName.toLowerCase();
 				registry.spell[key] = spell;
@@ -124,9 +126,8 @@ class StoryHelperTooltip {
 			quest: (data) => `?campaign=${this.#campaignId}&view=quests&quest=${encodeURIComponent(data.title)}`,
 			faction: (data) =>
 				`?campaign=${this.#campaignId}&view=factions&faction=${encodeURIComponent(data.id || data.name)}`,
-			encounter: (
-				data // <-- ADDED
-			) => `?campaign=${this.#campaignId}&view=encounters&encounter=${encodeURIComponent(data.id || data.name)}`,
+			encounter: (data) =>
+				`?campaign=${this.#campaignId}&view=encounters&encounter=${encodeURIComponent(data.id || data.name)}`,
 		};
 
 		const urlGenerator = urlMap[entityType];
@@ -245,7 +246,12 @@ class StoryHelperTooltip {
 	async #fetchEntityData(entityType, entityName) {
 		const normalizedName = entityName.toLowerCase().trim();
 
-		// Check local registry first
+		// Special handling for spells - try Supabase first
+		if (entityType === 'spell') {
+			return await this.#fetchSpellData(normalizedName);
+		}
+
+		// Check local registry first for other entity types
 		if (this.#dataRegistry[entityType]) {
 			const data = this.#dataRegistry[entityType][normalizedName];
 			if (data) {
@@ -254,11 +260,87 @@ class StoryHelperTooltip {
 		}
 
 		// Fall back to D&D 5e API for standard entities
-		if (['spell', 'monster', 'class', 'race', 'equipment', 'condition', 'feat'].includes(entityType)) {
+		if (['monster', 'class', 'race', 'equipment', 'condition', 'feat'].includes(entityType)) {
 			return await this.#fetchFromDndApi(entityType, entityName);
 		}
 
 		return null;
+	}
+
+	/**
+	 * Fetch spell data with Supabase priority and multiple fallbacks
+	 */
+	async #fetchSpellData(spellName) {
+		// Try Supabase first with timeout
+		if (this.#supabaseClient?.isReady()) {
+			try {
+				const supabaseData = await Promise.race([
+					this.#fetchSpellFromSupabase(spellName),
+					new Promise((_, reject) => setTimeout(() => reject(new Error('Supabase timeout')), 1000)),
+				]);
+
+				if (supabaseData) {
+					return this.#transformSpellFromSupabase(supabaseData);
+				}
+			} catch (error) {
+				console.warn('Failed to fetch spell from Supabase, trying fallbacks:', error);
+			}
+		}
+
+		// Fallback 1: Local registry (DND_SPELL_DB)
+		if (this.#dataRegistry.spell[spellName]) {
+			return this.#dataRegistry.spell[spellName];
+		}
+
+		// Fallback 2: D&D 5e API
+		try {
+			return await this.#fetchFromDndApi('spell', spellName);
+		} catch (error) {
+			console.warn('Failed to fetch spell from D&D API:', error);
+			return null;
+		}
+	}
+
+	/**
+	 * Fetch spell from Supabase
+	 */
+	async #fetchSpellFromSupabase(spellName) {
+		try {
+			const data = await this.#supabaseClient.fetchSpellByName(spellName);
+
+			// Return first result if array, or null if empty
+			if (Array.isArray(data) && data.length > 0) {
+				return data[0];
+			}
+
+			return data || null;
+		} catch (error) {
+			console.error('Supabase spell fetch error:', error);
+			throw error;
+		}
+	}
+
+	/**
+	 * Transform Supabase spell data to match expected format
+	 */
+	#transformSpellFromSupabase(supabaseSpell) {
+		if (!supabaseSpell) return null;
+
+		// Map Supabase column names to expected format
+		return {
+			spellName: supabaseSpell.spell_name || supabaseSpell.spellName,
+			level: supabaseSpell.level,
+			spellClass: supabaseSpell.school || supabaseSpell.spellClass,
+			castingTime: supabaseSpell.casting_time || supabaseSpell.castingTime,
+			range: supabaseSpell.range,
+			components: supabaseSpell.components,
+			duration: supabaseSpell.duration,
+			description: supabaseSpell.description || supabaseSpell.desc,
+			classes: supabaseSpell.classes || [],
+			source: supabaseSpell.source,
+			// Include any other fields from Supabase
+			...supabaseSpell,
+		};
 	}
 
 	async #fetchFromDndApi(entityType, entityName) {
@@ -310,7 +392,7 @@ class StoryHelperTooltip {
 			location: this.#generateLocationTooltip.bind(this),
 			quest: this.#generateQuestTooltip.bind(this),
 			faction: this.#generateFactionTooltip.bind(this),
-			encounter: this.#generateEncounterTooltip.bind(this), // <-- ADDED
+			encounter: this.#generateEncounterTooltip.bind(this),
 			spell: this.#generateSpellTooltip.bind(this),
 			monster: this.#generateMonsterTooltip.bind(this),
 			class: this.#generateClassTooltip.bind(this),
@@ -503,21 +585,17 @@ class StoryHelperTooltip {
 
 	/**
 	 * Helper to generate an HTML list for the encounter's initiative order.
-	 * @param {Array} initiative - The data.initiative array.
-	 * @returns {string} HTML string for the list, or empty string.
 	 */
 	#generateInitiativeList(initiative) {
 		if (!initiative || initiative.length === 0) {
 			return '';
 		}
 
-		// Cleans up [ENTITY:type:Name] tags for display
 		const cleanName = (name) => name.replace(/\[ENTITY:.*?:(.*?)]/, '$1');
 
 		const listItems = initiative
 			.map((item) => {
 				const name = cleanName(item.character);
-				// Show value if it's not null, otherwise just show notes
 				const value = item.value ? `(Initiative: ${item.value})` : '';
 				const notes = item.notes ? `- ${item.notes}` : '';
 				return `<li><strong>${name}</strong> ${value} ${notes}</li>`;
@@ -532,33 +610,27 @@ class StoryHelperTooltip {
         `;
 	}
 
-	// Encounter tooltip (MODIFIED for new data structure)
+	// Encounter tooltip
 	#generateEncounterTooltip(data) {
 		const navLink = this.#createNavigationLink('encounter', data);
 
-		// --- Location logic (unchanged from your previous version) ---
 		let locationName = data.location;
 		if (locationName && this.#dataRegistry.location[locationName]) {
 			locationName = this.#dataRegistry.location[locationName].name;
 		} else if (locationName && this.#dataRegistry.location[locationName.toLowerCase()]) {
 			locationName = this.#dataRegistry.location[locationName.toLowerCase()].name;
 		}
-		// --- End location logic ---
 
 		const outcome = data.outcome || {};
-		const status = outcome.status || data.status; // Use new outcome.status, fallback to old data.status
+		const status = outcome.status || data.status;
 
-		// --- Helper logic to render simple lists (inlined for brevity) ---
 		const renderList = (title, items) => {
 			if (!items || items.length === 0) return '';
-			// Cleans up [ENTITY:type:Name] tags for display in lists
 			const cleanItem = (item) => item.replace(/\[ENTITY:.*?:(.*?)]/, '$1');
 			const listItems = items.map((item) => `<li>${cleanItem(item)}</li>`).join('');
 			return `<div class="tooltip-list"><strong>${title}:</strong><ul>${listItems}</ul></div>`;
 		};
-		// --- End helper logic ---
 
-		// Generate content from new structure
 		const initiativeList = this.#generateInitiativeList(data.initiative);
 		const enemiesList = renderList('Enemies Defeated', outcome.enemiesDefeated);
 		const casualtiesList = renderList('Casualties', outcome.casualties);
@@ -593,7 +665,7 @@ class StoryHelperTooltip {
         `;
 	}
 
-	// Spell tooltip (no navigation - external API data)
+	// Spell tooltip
 	#generateSpellTooltip(data) {
 		return `
             <div class="entity-tooltip entity-spell-tooltip">
@@ -611,13 +683,13 @@ class StoryHelperTooltip {
                     <div><strong>Duration:</strong> ${data.duration}</div>
                     ${data.classes?.length ? `<div><strong>Classes:</strong> ${data.classes.join(', ')}</div>` : ''}
                     <div class="tooltip-description">${data?.description || 'No description available.'}</div>
-					<div><strong>Source:</strong> ${data?.source || 'No source available.'}</div>
+                    <div><strong>Source:</strong> ${data?.source || 'No source available.'}</div>
                 </div>
             </div>
         `;
 	}
 
-	// Monster tooltip (no navigation - external API data)
+	// Monster tooltip
 	#generateMonsterTooltip(data) {
 		return `
             <div class="entity-tooltip entity-monster-tooltip">
@@ -644,7 +716,7 @@ class StoryHelperTooltip {
         `;
 	}
 
-	// Class tooltip (no navigation - external API data)
+	// Class tooltip
 	#generateClassTooltip(data) {
 		return `
             <div class="entity-tooltip entity-class-tooltip">
@@ -672,7 +744,7 @@ class StoryHelperTooltip {
         `;
 	}
 
-	// Race tooltip (no navigation - external API data)
+	// Race tooltip
 	#generateRaceTooltip(data) {
 		return `
             <div class="entity-tooltip entity-race-tooltip">
@@ -765,7 +837,7 @@ class StoryHelperTooltip {
 				? 'right'
 				: 'left';
 
-		// Failsafe if all directions are bad (e.g., large tooltip on small screen)
+		// Failsafe if all directions are bad
 		if (position === 'left' && space.left < tooltipRect.width) {
 			position = 'below';
 		}
