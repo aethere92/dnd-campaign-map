@@ -263,7 +263,7 @@ class StoryHelperTooltip {
 
 		// Special handling for monsters - try Supabase first
 		if (entityType === 'monster') {
-			return await this.#fetchMonsterData(normalizedName);
+			return await this.#fetchMonsterData(entityName);
 		}
 
 		// Check local registry first for other entity types
@@ -369,7 +369,6 @@ class StoryHelperTooltip {
 					this.#supabaseClient.fetchMonsterByName(monsterName),
 					new Promise((_, reject) => setTimeout(() => reject(new Error('Supabase timeout')), 1000)),
 				]);
-				console.log(supabaseData);
 				if (supabaseData) {
 					return this.#transformMonsterFromSupabase(supabaseData);
 				}
