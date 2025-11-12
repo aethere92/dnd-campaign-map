@@ -365,6 +365,7 @@ class StoryHelperTooltip {
 		// Try Supabase first with timeout
 		if (this.#supabaseClient?.isReady()) {
 			try {
+				console.log('I reached here');
 				const supabaseData = await Promise.race([
 					this.#supabaseClient.fetchMonsterByName(monsterName),
 					new Promise((_, reject) => setTimeout(() => reject(new Error('Supabase timeout')), 1000)),
