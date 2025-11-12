@@ -54,7 +54,6 @@ class SupabaseClient {
 				.eq('campaign_id', campaignId)
 				.eq('id', sessionId)
 				.single();
-
 			if (error) throw error;
 			if (!data) throw new Error(`No session found for ${campaignId}/${sessionId}`);
 
@@ -79,7 +78,6 @@ class SupabaseClient {
 				.select('*')
 				.eq('campaign_id', campaignId)
 				.order('session_order', { ascending: true });
-
 			if (error) throw error;
 			return data || [];
 		} catch (error) {
@@ -149,7 +147,6 @@ class SupabaseClient {
 				.select('*')
 				.eq('campaign_id', campaignId)
 				.order('name', { ascending: true });
-
 			if (error) throw error;
 			return data || [];
 		} catch (error) {
@@ -379,10 +376,7 @@ class SupabaseClient {
 		}
 
 		try {
-			const { data, error } = await this.#client
-				.from('monsters')
-				.select('*')
-				.order('name', { ascending: true });
+			const { data, error } = await this.#client.from('monsters').select('*').order('name', { ascending: true });
 
 			if (error) throw error;
 			return data || [];
@@ -401,11 +395,7 @@ class SupabaseClient {
 		}
 
 		try {
-			const { data, error } = await this.#client
-				.from('monsters')
-				.select('*')
-				.ilike('name', monsterName)
-				.single();
+			const { data, error } = await this.#client.from('monsters').select('*').ilike('name', monsterName).single();
 
 			if (error) throw error;
 			return data;
