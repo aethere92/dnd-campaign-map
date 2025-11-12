@@ -255,6 +255,7 @@ class StoryHelperTooltip {
 
 	async #fetchEntityData(entityType, entityName) {
 		const normalizedName = entityName.toLowerCase().trim();
+		console.log(entityType);
 
 		// Special handling for spells - try Supabase first
 		if (entityType === 'spell') {
@@ -263,6 +264,7 @@ class StoryHelperTooltip {
 
 		// Special handling for monsters - try Supabase first
 		if (entityType === 'monster') {
+			console.log('reached here');
 			return await this.#fetchMonsterData(entityName);
 		}
 
@@ -363,6 +365,7 @@ class StoryHelperTooltip {
 	 */
 	async #fetchMonsterData(monsterName) {
 		// Try Supabase first with timeout
+		console.log(this.#supabaseClient?.isReady())
 		if (this.#supabaseClient?.isReady()) {
 			try {
 				console.log('I reached here');
