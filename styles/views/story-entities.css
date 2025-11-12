@@ -31,12 +31,12 @@
 }
 
 .entity-monster {
-	color: #f44336;
-	border-block-end-color: #f44336;
+	color: #a1715b;
+	border-block-end-color: #a1715b;
 
 	&::before {
-		content: '👺';
-		padding-inline-end: 0.125rem;
+		content: '🧌';
+		/* padding-inline-end: 0.125rem; */
 	}
 }
 
