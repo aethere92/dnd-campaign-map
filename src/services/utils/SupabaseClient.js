@@ -371,6 +371,51 @@ class SupabaseClient {
 	}
 
 	/**
+	 * Fetch all monsters from Supabase
+	 */
+	async fetchMonsters() {
+		if (!this.isReady()) {
+			throw new Error('Supabase client is not initialized');
+		}
+
+		try {
+			const { data, error } = await this.#client
+				.from('monsters')
+				.select('*')
+				.order('name', { ascending: true });
+
+			if (error) throw error;
+			return data || [];
+		} catch (error) {
+			console.error('Error fetching monsters:', error);
+			throw error;
+		}
+	}
+
+	/**
+	 * Fetch a single monster by name
+	 */
+	async fetchMonsterByName(monsterName) {
+		if (!this.isReady()) {
+			throw new Error('Supabase client is not initialized');
+		}
+
+		try {
+			const { data, error } = await this.#client
+				.from('monsters')
+				.select('*')
+				.ilike('name', monsterName)
+				.single();
+
+			if (error) throw error;
+			return data;
+		} catch (error) {
+			console.error(`Error fetching monster ${monsterName}:`, error);
+			throw error;
+		}
+	}
+
+	/**
 	 * Fetch timeline for a campaign
 	 */
 	async fetchTimeline(campaignId) {

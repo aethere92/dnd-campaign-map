@@ -111,6 +111,16 @@ class StoryHelperTooltip {
 			});
 		}
 
+		if (campaignData.monsters) {
+			campaignData.monsters.forEach((monster) => {
+				const key = monster.name.toLowerCase();
+				registry.monster[key] = monster;
+				if (monster.id) {
+					registry.monster[monster.id] = monster;
+				}
+			});
+	}
+
 		return registry;
 	}
 
@@ -251,6 +261,11 @@ class StoryHelperTooltip {
 			return await this.#fetchSpellData(normalizedName);
 		}
 
+		// Special handling for monsters - try Supabase first
+		if (entityType === 'monster') {
+			return await this.#fetchMonsterData(normalizedName);
+		}
+
 		// Check local registry first for other entity types
 		if (this.#dataRegistry[entityType]) {
 			const data = this.#dataRegistry[entityType][normalizedName];
@@ -341,6 +356,145 @@ class StoryHelperTooltip {
 			// Include any other fields from Supabase
 			...supabaseSpell,
 		};
+	}
+
+	/**
+	 * Fetch monster data with Supabase priority and API fallback
+	 */
+	async #fetchMonsterData(monsterName) {
+		// Try Supabase first with timeout
+		if (this.#supabaseClient?.isReady()) {
+			try {
+				const supabaseData = await Promise.race([
+					this.#supabaseClient.fetchMonsterByName(monsterName),
+					new Promise((_, reject) => setTimeout(() => reject(new Error('Supabase timeout')), 1000)),
+				]);
+
+				if (supabaseData) {
+					return this.#transformMonsterFromSupabase(supabaseData);
+				}
+			} catch (error) {
+				console.warn('Failed to fetch monster from Supabase, trying fallbacks:', error);
+			}
+		}
+
+		// Fallback 1: Local registry (if any local monster data exists)
+		if (this.#dataRegistry.monster[monsterName]) {
+			return this.#dataRegistry.monster[monsterName];
+		}
+
+		// Fallback 2: D&D 5e API
+		try {
+			return await this.#fetchFromDndApi('monster', monsterName);
+		} catch (error) {
+			console.warn('Failed to fetch monster from D&D API:', error);
+			return null;
+		}
+	}
+
+	/**
+	 * Transform Supabase monster data to match expected format
+	 */
+	#transformMonsterFromSupabase(supabaseMonster) {
+		if (!supabaseMonster) return null;
+
+		// Parse JSON fields
+		const abilityScores = typeof supabaseMonster.ability_scores === 'string' 
+			? JSON.parse(supabaseMonster.ability_scores) 
+			: supabaseMonster.ability_scores;
+		
+		const traits = typeof supabaseMonster.traits === 'string'
+			? JSON.parse(supabaseMonster.traits)
+			: supabaseMonster.traits || [];
+		
+		const actions = typeof supabaseMonster.actions === 'string'
+			? JSON.parse(supabaseMonster.actions)
+			: supabaseMonster.actions || [];
+		
+		const legendaryActions = typeof supabaseMonster.legendary_actions === 'string'
+			? JSON.parse(supabaseMonster.legendary_actions)
+			: supabaseMonster.legendary_actions || [];
+
+		// Transform to expected format
+		return {
+			name: supabaseMonster.name,
+			type: supabaseMonster.meta || '',
+			size: this.#extractSize(supabaseMonster.meta),
+			alignment: this.#extractAlignment(supabaseMonster.meta),
+			armor_class: supabaseMonster.armor_class,
+			hit_points: supabaseMonster.hit_points,
+			hit_points_roll: supabaseMonster.hit_points,
+			speed: this.#parseSpeed(supabaseMonster.speed),
+			// Ability scores
+			strength: this.#parseAbilityScore(abilityScores?.str),
+			dexterity: this.#parseAbilityScore(abilityScores?.dex),
+			constitution: this.#parseAbilityScore(abilityScores?.con),
+			intelligence: this.#parseAbilityScore(abilityScores?.int),
+			wisdom: this.#parseAbilityScore(abilityScores?.wis),
+			charisma: this.#parseAbilityScore(abilityScores?.cha),
+			// Formatted ability scores for display
+			str: abilityScores?.str || '10 (+0)',
+			dex: abilityScores?.dex || '10 (+0)',
+			con: abilityScores?.con || '10 (+0)',
+			int: abilityScores?.int || '10 (+0)',
+			wis: abilityScores?.wis || '10 (+0)',
+			cha: abilityScores?.cha || '10 (+0)',
+			// Other stats
+			saving_throws: supabaseMonster.saving_throws,
+			skills: supabaseMonster.skills,
+			damage_immunities: supabaseMonster.damage_immunities,
+			condition_immunities: supabaseMonster.condition_immunities,
+			senses: supabaseMonster.senses,
+			languages: supabaseMonster.languages,
+			challenge_rating: supabaseMonster.challenge,
+			traits: traits,
+			actions: actions,
+			legendary_actions: legendaryActions,
+			legendary_actions_description: supabaseMonster.legendary_actions_description,
+			// Include original data
+			...supabaseMonster,
+		};
+	}
+
+	// Helper methods for parsing monster data
+	#extractSize(meta) {
+		if (!meta) return 'Unknown';
+		const sizeMatch = meta.match(/(Tiny|Small|Medium|Large|Huge|Gargantuan)/i);
+		return sizeMatch ? sizeMatch[1] : 'Unknown';
+	}
+
+	#extractAlignment(meta) {
+		if (!meta) return 'Unaligned';
+		const alignmentMatch = meta.match(/\), (.+)$/);
+		return alignmentMatch ? alignmentMatch[1] : 'Unaligned';
+	}
+
+	#parseSpeed(speedStr) {
+		if (!speedStr) return {};
+		const speeds = {};
+		const parts = speedStr.split(',').map(s => s.trim());
+		
+		parts.forEach(part => {
+			if (part.includes('fly')) {
+				speeds.fly = part.replace('fly', '').trim();
+			} else if (part.includes('swim')) {
+				speeds.swim = part.replace('swim', '').trim();
+			} else if (part.includes('climb')) {
+				speeds.climb = part.replace('climb', '').trim();
+			} else if (part.includes('burrow')) {
+				speeds.burrow = part.replace('burrow', '').trim();
+			} else {
+				speeds.walk = part;
+			}
+		});
+		
+		return speeds;
+	}
+
+	#parseAbilityScore(scoreStr) {
+		if (!scoreStr) return 10;
+		const match = scoreStr.match(/^(\d+)/);
+		return match ? parseInt(match[1], 10) : 10;
 	}
 
 	async #fetchFromDndApi(entityType, entityName) {
@@ -691,29 +845,79 @@ class StoryHelperTooltip {
 
 	// Monster tooltip
 	#generateMonsterTooltip(data) {
+		// Parse traits and actions if they're strings
+		const traits = typeof data.traits === 'string' ? JSON.parse(data.traits) : data.traits || [];
+		const actions = typeof data.actions === 'string' ? JSON.parse(data.actions) : data.actions || [];
+		
+		// Format ability scores
+		const abilityScoresDisplay = this.#generateAbilityScoresFromMonster(data);
+		
+		// Format speed display
+		const speedDisplay = typeof data.speed === 'object' 
+			? Object.entries(data.speed).map(([k, v]) => `${k} ${v}`).join(', ')
+			: data.speed || 'Unknown';
+		
+		// Format traits
+		const traitsHtml = traits.length > 0
+			? `<div class="tooltip-section">
+					<strong>Special Traits:</strong>
+					<ul>${traits.map(t => `<li><strong>${t.name}:</strong> ${t.description}</li>`).join('')}</ul>
+				</div>`
+			: '';
+		
+		// Format actions (limit to first 3 for tooltip)
+		const actionsHtml = actions.length > 0
+			? `<div class="tooltip-section">
+					<strong>Actions:</strong>
+					<ul>${actions.slice(0, 3).map(a => `<li><strong>${a.name}:</strong> ${a.description}</li>`).join('')}</ul>
+					${actions.length > 3 ? '<li><em>...and more</em></li>' : ''}
+				</div>`
+			: '';
+
 		return `
-            <div class="entity-tooltip entity-monster-tooltip">
-                <div class="tooltip-header">
-                    <h3>${data.name}</h3>
-                    <span class="monster-cr">CR ${data.challenge_rating}</span>
-                </div>
-                <div class="tooltip-content">
-                    <div class="tooltip-meta">
-                        <span><strong>Type:</strong> ${data.type}</span>
-                        <span><strong>Size:</strong> ${data.size}</span>
-                        <span><strong>Alignment:</strong> ${data.alignment}</span>
-                    </div>
-                    <div class="tooltip-stats">
-                        <span><strong>AC:</strong> ${data.armor_class?.[0]?.value || data.armor_class}</span>
-                        <span><strong>HP:</strong> ${data.hit_points} (${data.hit_points_roll})</span>
-                        <span><strong>Speed:</strong> ${Object.entries(data.speed || {})
-													.map(([k, v]) => `${k} ${v}`)
-													.join(', ')}</span>
-                    </div>
-                    ${this.#generateAbilityScores(data)}
-                </div>
-            </div>
-        `;
+			<div class="entity-tooltip entity-monster-tooltip">
+				<div class="tooltip-header">
+					<h3>${data.name}</h3>
+					<span class="monster-cr">CR ${data.challenge_rating || data.challenge || '?'}</span>
+				</div>
+				<div class="tooltip-content">
+					<div class="tooltip-meta">
+						<span><strong>Type:</strong> ${data.type || data.meta || 'Unknown'}</span>
+						<span><strong>Size:</strong> ${data.size || 'Unknown'}</span>
+						<span><strong>Alignment:</strong> ${data.alignment || 'Unaligned'}</span>
+					</div>
+					<div class="tooltip-stats">
+						<span><strong>AC:</strong> ${data.armor_class || '10'}</span>
+						<span><strong>HP:</strong> ${data.hit_points || '?'}</span>
+						<span><strong>Speed:</strong> ${speedDisplay}</span>
+					</div>
+					${abilityScoresDisplay}
+					${data.skills ? `<div><strong>Skills:</strong> ${data.skills}</div>` : ''}
+					${data.senses ? `<div><strong>Senses:</strong> ${data.senses}</div>` : ''}
+					${data.languages ? `<div><strong>Languages:</strong> ${data.languages}</div>` : ''}
+					${traitsHtml}
+					${actionsHtml}
+				</div>
+			</div>
+		`;
+	}
+
+	// Helper to generate ability scores display for monsters
+	#generateAbilityScoresFromMonster(monster) {
+		const abilities = ['str', 'dex', 'con', 'int', 'wis', 'cha'];
+		const scoreElements = abilities
+			.map((ability) => {
+				const score = monster[ability] || monster[ability.toUpperCase()];
+				if (!score) return '';
+				return `<div class="ability-score">
+					<span class="ability-name">${ability.toUpperCase()}</span>
+					<span class="ability-value">${score}</span>
+				</div>`;
+			})
+			.filter(Boolean)
+			.join('');
+
+		return scoreElements ? `<div class="tooltip-ability-scores">${scoreElements}</div>` : '';
 	}
 
 	// Class tooltip
