@@ -33,9 +33,21 @@
 .entity-monster {
 	color: #a1715b;
 	border-block-end-color: #a1715b;
+	padding-inline-start: calc(0.9375rem + 0.125rem);
 
 	&::before {
-		content: '🧌';
+		/* content: '🧌'; */
+		content: '';
+		background-image: url('../../images/assets/monster_icon.png');
+		background-size: contain;
+		inline-size: 0.9375rem;
+		block-size: 0.9375rem;
+		display: inline-block;
+		border-radius: 100%;
+		position: absolute;
+		inset-block-start: 50%;
+		transform: translateY(-50%);
+		inset-inline-start: 0;
 		/* padding-inline-end: 0.125rem; */
 	}
 }
