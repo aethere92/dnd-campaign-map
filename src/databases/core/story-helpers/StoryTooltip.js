@@ -369,7 +369,7 @@ class StoryHelperTooltip {
 					this.#supabaseClient.fetchMonsterByName(monsterName),
 					new Promise((_, reject) => setTimeout(() => reject(new Error('Supabase timeout')), 1000)),
 				]);
-
+				console.log(supabaseData);
 				if (supabaseData) {
 					return this.#transformMonsterFromSupabase(supabaseData);
 				}
