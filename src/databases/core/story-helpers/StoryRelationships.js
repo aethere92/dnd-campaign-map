@@ -657,29 +657,40 @@ class StoryHelperRelationships {
 		const container = document.querySelector('.relationships-container');
 		if (!container) return;
 
+		// Check if already in custom fullscreen mode
+		if (container.classList.contains('custom-fullscreen')) {
+			// Exit custom fullscreen
+			container.classList.remove('custom-fullscreen');
+			document.body.style.overflow = '';
+			return;
+		}
+
+		// Try native fullscreen for desktop browsers
 		if (!document.fullscreenElement && !document.webkitFullscreenElement) {
-			// Try standard fullscreen first
 			if (container.requestFullscreen) {
-				container.requestFullscreen().catch((err) => {
-					console.error('Error attempting to enable fullscreen:', err);
+				container.requestFullscreen().catch(() => {
+					// Fallback to custom fullscreen if native fails
+					this.#enterCustomFullscreen(container);
 				});
-			}
-			// Fallback for iOS Safari
-			else if (container.webkitRequestFullscreen) {
+			} else if (container.webkitRequestFullscreen) {
 				container.webkitRequestFullscreen();
-			}
-			// Fallback for older iOS
-			else if (container.webkitEnterFullscreen) {
-				container.webkitEnterFullscreen();
+			} else {
+				// Use custom fullscreen for browsers that don't support it (iOS)
+				this.#enterCustomFullscreen(container);
 			}
 		} else {
-			// Exit fullscreen
+			// Exit native fullscreen
 			if (document.exitFullscreen) {
 				document.exitFullscreen();
 			} else if (document.webkitExitFullscreen) {
 				document.webkitExitFullscreen();
 			}
 		}
+	}
+
+	#enterCustomFullscreen(container) {
+		container.classList.add('custom-fullscreen');
+		document.body.style.overflow = 'hidden';
 	}
 
 	#applyLayout(layoutName = 'cose') {
