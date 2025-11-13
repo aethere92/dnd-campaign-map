@@ -126,19 +126,19 @@ class StoryHelperRelationships {
 		const npc = npcs.get(npcId);
 
 		if (!npc || !npc.entity_icon_type) {
-			return '../../images/assets/npc_icon_unknown_gender.png';
+			return 'images/assets/npc_icon_unknown_gender.png';
 		}
 
 		const type = npc.entity_icon_type.toLowerCase();
 
 		if (type === 'female' || type === 'f') {
-			return '../../images/assets/npc_icon_female.png';
+			return 'images/assets/npc_icon_female.png';
 		} else if (type === 'male' || type === 'm') {
-			return '../../images/assets/npc_icon.png';
+			return 'images/assets/npc_icon.png';
 		} else if (type === 'monster') {
-			return '../../images/assets/npc_icon_monster.png';
+			return 'images/assets/npc_icon_monster.png';
 		} else {
-			return '../../images/assets/npc_icon_unknown_gender.png';
+			return 'images/assets/npc_icon_unknown_gender.png';
 		}
 	}
 
@@ -244,7 +244,7 @@ class StoryHelperRelationships {
 			position: relative; 
 			overflow: hidden; 
 			background: #fffae9;
-			background-image: url(../../images/assets/background_texture.png);
+			background-image: url(images/assets/background_texture.png);
 			min-height: 500px;
 			width: calc(100% - 2rem);
 			margin-bottom: 1rem;
