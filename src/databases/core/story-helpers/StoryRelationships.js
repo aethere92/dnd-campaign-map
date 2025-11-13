@@ -125,21 +125,22 @@ class StoryHelperRelationships {
 	#getNodeIcon(npcId, npcs) {
 		const npc = npcs.get(npcId);
 
+		const ICON_MAPPING = {
+			female: 'images/assets/npc_icon_female.png',
+			male: 'images/assets/npc_icon.png',
+			monster: 'images/assets/npc_icon_monster.png',
+			gnome: 'images/assets/npc_icon_gnome.png',
+			feline: 'images/assets/npc_icon_feline.png',
+			avian: 'images/assets/npc_icon_avian.png',
+		};
+
 		if (!npc || !npc.entity_icon_type) {
 			return 'images/assets/npc_icon_unknown_gender.png';
 		}
 
 		const type = npc.entity_icon_type.toLowerCase();
 
-		if (type === 'female' || type === 'f') {
-			return 'images/assets/npc_icon_female.png';
-		} else if (type === 'male' || type === 'm') {
-			return 'images/assets/npc_icon.png';
-		} else if (type === 'monster') {
-			return 'images/assets/npc_icon_monster.png';
-		} else {
-			return 'images/assets/npc_icon_unknown_gender.png';
-		}
+		return ICON_MAPPING[type] || 'images/assets/npc_icon_unknown_gender.png';
 	}
 
 	#formatNPCName(npcId, npcs) {
@@ -232,7 +233,8 @@ class StoryHelperRelationships {
 	#renderGraph(contentArea, relationships, npcs) {
 		const container = document.createElement('div');
 		container.className = 'story-view-container relationships-container';
-		container.style.cssText = 'height: 100%; width: 100%; display: flex; flex-direction: column;';
+		container.style.cssText =
+			'height: 100%; width: 100%; display: flex; flex-direction: column; background: url(images/assets/background_texture.png)';
 
 		const header = document.createElement('div');
 		header.className = 'view-header';
@@ -270,6 +272,7 @@ class StoryHelperRelationships {
 			{ text: 'Reset', title: 'Reset View', action: () => this.#resetView() },
 			{ text: '+', title: 'Zoom In', action: () => this.#cy?.zoom(this.#cy.zoom() * 1.2) },
 			{ text: '−', title: 'Zoom Out', action: () => this.#cy?.zoom(this.#cy.zoom() * 0.8) },
+			{ text: '⛶', title: 'Toggle Fullscreen', action: () => this.#toggleFullscreen() },
 		];
 
 		controlButtons.forEach((btn) => {
@@ -647,6 +650,19 @@ class StoryHelperRelationships {
 			if (infoPanel) {
 				infoPanel.style.display = 'none';
 			}
+		}
+	}
+
+	#toggleFullscreen() {
+		const container = document.querySelector('.relationships-container');
+		if (!container) return;
+
+		if (!document.fullscreenElement) {
+			container.requestFullscreen().catch((err) => {
+				console.error('Error attempting to enable fullscreen:', err);
+			});
+		} else {
+			document.exitFullscreen();
 		}
 	}
 
