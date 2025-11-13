@@ -657,12 +657,28 @@ class StoryHelperRelationships {
 		const container = document.querySelector('.relationships-container');
 		if (!container) return;
 
-		if (!document.fullscreenElement) {
-			container.requestFullscreen().catch((err) => {
-				console.error('Error attempting to enable fullscreen:', err);
-			});
+		if (!document.fullscreenElement && !document.webkitFullscreenElement) {
+			// Try standard fullscreen first
+			if (container.requestFullscreen) {
+				container.requestFullscreen().catch((err) => {
+					console.error('Error attempting to enable fullscreen:', err);
+				});
+			}
+			// Fallback for iOS Safari
+			else if (container.webkitRequestFullscreen) {
+				container.webkitRequestFullscreen();
+			}
+			// Fallback for older iOS
+			else if (container.webkitEnterFullscreen) {
+				container.webkitEnterFullscreen();
+			}
 		} else {
-			document.exitFullscreen();
+			// Exit fullscreen
+			if (document.exitFullscreen) {
+				document.exitFullscreen();
+			} else if (document.webkitExitFullscreen) {
+				document.webkitExitFullscreen();
+			}
 		}
 	}
 
