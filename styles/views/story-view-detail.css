@@ -2,15 +2,15 @@
 	flex: 1;
 	background-color: #fffae9;
 	background-image: url(../../images/assets/background_texture.png);
-	/* padding: var(--spacing-lg); */
 	position: relative;
+	display: flex;
+	justify-content: center;
+	height: auto;
+	/* padding: var(--spacing-lg); */
 	/* border-radius: var(--spacing-sm); */
 	/* border: 0.0625rem solid #e0d5c3; */
 	/* overflow: auto; */
 	/* box-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.05); */
-	display: flex;
-	justify-content: center;
-	height: auto;
 }
 
 .view-detail-panel::before {

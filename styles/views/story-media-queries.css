@@ -396,7 +396,7 @@
 	}
 
 	/* View Container */
-	.story-view-container {
+	.story-view-container:not(:has(#cy-container)) {
 		align-items: unset !important;
 	}
 }

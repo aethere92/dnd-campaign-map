@@ -14,6 +14,7 @@ class StoryManager {
 	#placeholderProcessor;
 	#navigationManager;
 	#searchManager;
+	#relationshipsRenderer;
 
 	constructor(elementId, options = {}) {
 		this.#rootElement = document.getElementById(elementId);
@@ -67,8 +68,11 @@ class StoryManager {
 			() => this.#handleViewChange(StoryURLManager.VIEW_TYPES.FACTIONS),
 			() => this.#handleViewChange(StoryURLManager.VIEW_TYPES.ENCOUNTERS),
 			() => this.#handleViewChange(StoryURLManager.VIEW_TYPES.MAP),
+			() => this.#handleViewChange(StoryURLManager.VIEW_TYPES.RELATIONSHIPS),
 			this.#searchManager
 		);
+
+		this.#relationshipsRenderer = new StoryHelperRelationships(options.campaignData);
 
 		this.#contentRenderer = new StoryHelperContent(
 			this.#placeholderProcessor,
@@ -136,6 +140,7 @@ class StoryManager {
 			[StoryURLManager.VIEW_TYPES.FACTIONS]: StoryURLManager.VIEW_TYPES.FACTIONS,
 			[StoryURLManager.VIEW_TYPES.ENCOUNTERS]: StoryURLManager.VIEW_TYPES.ENCOUNTERS,
 			[StoryURLManager.VIEW_TYPES.MAP]: StoryURLManager.VIEW_TYPES.MAP,
+			[StoryURLManager.VIEW_TYPES.RELATIONSHIPS]: StoryURLManager.VIEW_TYPES.RELATIONSHIPS,
 		};
 
 		if (viewTypeMap[viewType]) {
@@ -325,6 +330,7 @@ class StoryManager {
 			[StoryURLManager.VIEW_TYPES.CHARACTER]: () =>
 				this.#contentRenderer.renderCharacter(contentArea, this.#selectedCharacterName),
 			[StoryURLManager.VIEW_TYPES.SESSION]: () => this.#contentRenderer.renderSession(contentArea),
+			[StoryURLManager.VIEW_TYPES.RELATIONSHIPS]: () => this.#relationshipsRenderer.render(contentArea),
 		};
 
 		const renderMethod = viewMap[this.#currentView] || viewMap[StoryURLManager.VIEW_TYPES.SESSION];

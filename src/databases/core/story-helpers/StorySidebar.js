@@ -13,6 +13,7 @@ class StoryHelperSidebar {
 	#onFactionsClick;
 	#onEncountersClick;
 	#onMapClick;
+	#onRelationshipsClick;
 	#searchManager;
 	#supabaseClient;
 
@@ -38,6 +39,7 @@ class StoryHelperSidebar {
 		onFactionsClick,
 		onEncountersClick,
 		onMapClick,
+		onRelationshipsClick,
 		searchManager
 	) {
 		this.#getCampaign = getCampaign;
@@ -55,6 +57,7 @@ class StoryHelperSidebar {
 		this.#onEncountersClick = onEncountersClick;
 		this.#onMapClick = onMapClick;
 		this.#searchManager = searchManager;
+		this.#onRelationshipsClick = onRelationshipsClick;
 		this.#supabaseClient = SupabaseClient.getInstance();
 
 		// Load saved section states
@@ -205,6 +208,9 @@ class StoryHelperSidebar {
 			toolsList.appendChild(mapBtn);
 		}
 
+		const relationshipsBtn = this.#createToolButton('🔗 Relationships', 'relationships');
+		toolsList.appendChild(relationshipsBtn);
+
 		content.appendChild(toolsList);
 		section.append(header, content);
 		return section;
@@ -241,6 +247,9 @@ class StoryHelperSidebar {
 					break;
 				case 'map':
 					this.#onMapClick();
+					break;
+				case 'relationships':
+					this.#onRelationshipsClick();
 					break;
 			}
 		});

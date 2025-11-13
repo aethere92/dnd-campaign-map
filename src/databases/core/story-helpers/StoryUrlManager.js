@@ -28,6 +28,7 @@ class StoryURLManager {
 		NPC: 'npc',
 		FACTION: 'faction',
 		ENCOUNTER: 'encounter',
+		RELATIONSHIPS: 'relationships',
 	};
 
 	static ITEM_PARAMS = [
