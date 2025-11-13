@@ -62,7 +62,6 @@ class StoryHelperRelationships {
 				.from('entities')
 				.select('id, relationships')
 				.eq('campaign_id', this.#campaign.id)
-				.eq('entity_type', 'npc')
 				.not('relationships', 'is', null);
 
 			if (error) throw error;
@@ -85,7 +84,6 @@ class StoryHelperRelationships {
 					});
 				}
 			});
-
 			return flatRelationships;
 		} catch (error) {
 			console.error('Error fetching relationships:', error);
@@ -103,8 +101,7 @@ class StoryHelperRelationships {
 				.getClient()
 				.from('entities')
 				.select('id, name, entity_icon_type')
-				.eq('campaign_id', this.#campaign.id)
-				.eq('entity_type', 'npc');
+				.eq('campaign_id', this.#campaign.id);
 
 			if (error) throw error;
 
