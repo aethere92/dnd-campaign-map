@@ -12,6 +12,7 @@ class StoryURLManager {
 		NPCS: 'npcs',
 		FACTIONS: 'factions',
 		ENCOUNTERS: 'encounters',
+		RELATIONSHIPS: 'relationships',
 	};
 
 	static PARAMS = {
@@ -143,6 +144,7 @@ class StoryURLManager {
 			case StoryURLManager.VIEW_TYPES.NPCS:
 			case StoryURLManager.VIEW_TYPES.FACTIONS:
 			case StoryURLManager.VIEW_TYPES.ENCOUNTERS:
+			case StoryURLManager.VIEW_TYPES.RELATIONSHIPS:
 				return {
 					...baseState,
 					campaignId: data.campaignId,

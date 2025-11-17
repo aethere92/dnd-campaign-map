@@ -336,6 +336,7 @@ class CampaignManager {
 			StoryURLManager.VIEW_TYPES.FACTIONS,
 			StoryURLManager.VIEW_TYPES.ENCOUNTERS,
 			StoryURLManager.VIEW_TYPES.MAP,
+			StoryURLManager.VIEW_TYPES.RELATIONSHIPS,
 		];
 
 		if (sessionId || characterName || storyViewTypes.includes(viewType) || (!hasMap && hasStory)) {
@@ -378,7 +379,9 @@ class CampaignManager {
 		const mapEl = document.getElementById('map');
 		const rootEl = document.getElementById('root');
 		if (mapEl && rootEl && mapEl.parentElement !== rootEl) {
-			try { rootEl.appendChild(mapEl); } catch (_) {}
+			try {
+				rootEl.appendChild(mapEl);
+			} catch (_) {}
 		}
 
 		// Show and initialize map
@@ -401,7 +404,9 @@ class CampaignManager {
 			this.#mapInstance.updateCampaignData(campaign.data);
 			this.#mapInstance.loadMap(defaultMap);
 			// Fix sizing after moving container
-			try { this.#mapInstance.getCurrentMap()?.invalidateSize(true); } catch (_) {}
+			try {
+				this.#mapInstance.getCurrentMap()?.invalidateSize(true);
+			} catch (_) {}
 		}
 	}
 
@@ -476,6 +481,7 @@ class CampaignManager {
 			[StoryURLManager.VIEW_TYPES.NPCS]: StoryURLManager.VIEW_TYPES.NPCS,
 			[StoryURLManager.VIEW_TYPES.FACTIONS]: StoryURLManager.VIEW_TYPES.FACTIONS,
 			[StoryURLManager.VIEW_TYPES.ENCOUNTERS]: StoryURLManager.VIEW_TYPES.ENCOUNTERS,
+			[StoryURLManager.VIEW_TYPES.RELATIONSHIPS]: StoryURLManager.VIEW_TYPES.RELATIONSHIPS,
 		};
 
 		// Special views
@@ -552,7 +558,9 @@ class CampaignManager {
 		// Ensure the map element is attached to root to avoid being cleared with story DOM
 		const rootEl = document.getElementById('root');
 		if (mapEl && rootEl && mapEl.parentElement !== rootEl) {
-			try { rootEl.appendChild(mapEl); } catch (_) {}
+			try {
+				rootEl.appendChild(mapEl);
+			} catch (_) {}
 		}
 
 		// Update grid and clear selection

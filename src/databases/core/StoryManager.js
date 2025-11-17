@@ -293,6 +293,7 @@ class StoryManager {
 			case StoryURLManager.VIEW_TYPES.FACTIONS:
 			case StoryURLManager.VIEW_TYPES.NPCS:
 			case StoryURLManager.VIEW_TYPES.ENCOUNTERS:
+			case StoryURLManager.VIEW_TYPES.RELATIONSHIPS:
 			case StoryURLManager.VIEW_TYPES.MAP:
 				config.view = this.#currentView;
 				break;

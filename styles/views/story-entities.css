@@ -97,7 +97,7 @@
 	/* padding-inline-end: 0.125rem; */
 
 	content: '';
-	background-image: url('../../images/assets/npc_icon.png');
+	background-image: url('../../images/assets/relationship_icons/npc_icon.png');
 	background-size: contain;
 	inline-size: 0.9375rem;
 	block-size: 0.9375rem;

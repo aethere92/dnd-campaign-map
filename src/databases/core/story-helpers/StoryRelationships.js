@@ -77,6 +77,7 @@ class StoryHelperRelationships {
 						flatRelationships.push({
 							source_entity_id: entity.id,
 							target_entity_id: rel.target_id,
+							target_entity_name: rel.target_name,
 							relationship_type: rel.type,
 							description: rel.description,
 							icon_type: rel.icon_type,
@@ -121,23 +122,27 @@ class StoryHelperRelationships {
 
 	#getNodeIcon(npcId, npcs) {
 		const npc = npcs.get(npcId);
-
-		const ICON_MAPPING = {
-			female: 'images/assets/npc_icon_female.png',
-			male: 'images/assets/npc_icon.png',
-			monster: 'images/assets/npc_icon_monster.png',
-			gnome: 'images/assets/npc_icon_gnome.png',
-			feline: 'images/assets/npc_icon_feline.png',
-			avian: 'images/assets/npc_icon_avian.png',
-		};
+		const basePath = 'images/assets/relationship_icons';
 
 		if (!npc || !npc.entity_icon_type) {
-			return 'images/assets/npc_icon_unknown_gender.png';
+			return `${basePath}/npc_icon_unknown_gender.png`;
 		}
 
 		const type = npc.entity_icon_type.toLowerCase();
+		const ICON_MAPPING = {
+			female: `${basePath}/npc_icon_female.png`,
+			male: `${basePath}/npc_icon.png`,
+			monster: `${basePath}/npc_icon_monster.png`,
+			gnome: `${basePath}/npc_icon_gnome.png`,
+			feline: `${basePath}/npc_icon_feline.png`,
+			avian: `${basePath}/npc_icon_avian.png`,
+		};
 
-		return ICON_MAPPING[type] || 'images/assets/npc_icon_unknown_gender.png';
+		if (!['female', 'male', 'monster', 'gnome', 'feline', 'avian', 'other'].includes(type)) {
+			return `${basePath}/npc_icon_${type}.png`;
+		}
+
+		return ICON_MAPPING[type] || `${basePath}/npc_icon_unknown_gender.png`;
 	}
 
 	#formatNPCName(npcId, npcs) {
@@ -202,7 +207,7 @@ class StoryHelperRelationships {
 				nodes.set(rel.target_entity_id, {
 					data: {
 						id: rel.target_entity_id,
-						label: this.#formatNPCName(rel.target_entity_id, npcs),
+						label: this.#formatNPCName(rel.target_entity_name ?? rel.target_entity_id, npcs),
 						icon: icon,
 					},
 				});
@@ -381,10 +386,11 @@ class StoryHelperRelationships {
 						height: 60,
 						'background-image': 'data(icon)',
 						'background-fit': 'cover',
-						'background-clip': 'none',
+						'background-clip': 'node',
 						'border-width': 3,
 						'border-color': '#8d6e63',
 						'border-opacity': 0.8,
+						shape: 'ellipse',
 						label: 'data(label)',
 						'text-valign': 'bottom',
 						'text-halign': 'center',
@@ -463,21 +469,22 @@ class StoryHelperRelationships {
 
 			layout: {
 				name: 'cose',
-				idealEdgeLength: 100,
-				nodeOverlap: 20,
+				idealEdgeLength: 50,
+				nodeOverlap: 60,
 				refresh: 20,
 				fit: true,
-				padding: 30,
+				padding: 80,
 				randomize: false,
-				componentSpacing: 100,
-				nodeRepulsion: 400000,
-				edgeElasticity: 100,
+				componentSpacing: 300,
+				nodeRepulsion: 1200000,
+				edgeElasticity: 80,
 				nestingFactor: 5,
-				gravity: 80,
-				numIter: 1000,
-				initialTemp: 200,
+				gravity: 1.5,
+				numIter: 1200,
+				initialTemp: 250,
 				coolingFactor: 0.95,
 				minTemp: 1.0,
+				nodeDimensionsIncludeLabels: true,
 			},
 
 			minZoom: 0.3,
@@ -696,19 +703,19 @@ class StoryHelperRelationships {
 		const layoutConfigs = {
 			cose: {
 				name: 'cose',
-				idealEdgeLength: 100,
-				nodeOverlap: 20,
+				idealEdgeLength: 350,
+				nodeOverlap: 60,
 				refresh: 20,
 				fit: true,
-				padding: 30,
+				padding: 80,
 				randomize: false,
-				componentSpacing: 100,
-				nodeRepulsion: 400000,
-				edgeElasticity: 100,
+				componentSpacing: 300,
+				nodeRepulsion: 1200000,
+				edgeElasticity: 80,
 				nestingFactor: 5,
-				gravity: 80,
-				numIter: 1000,
-				initialTemp: 200,
+				gravity: 20,
+				numIter: 1200,
+				initialTemp: 250,
 				coolingFactor: 0.95,
 				minTemp: 1.0,
 			},
