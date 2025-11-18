@@ -126,7 +126,7 @@ class StoryHelperRelationships {
 
 	#buildCytoscapeElements(relationships, npcs) {
 		const nodes = new Map();
-		const edges = [];
+		const edgeMap = new Map();
 
 		relationships.forEach((rel) => {
 			// Add source node
@@ -136,7 +136,6 @@ class StoryHelperRelationships {
 						id: rel.source_entity_id,
 						label: this.#formatNPCName(rel.source_entity_id, npcs),
 						icon: this.#getNodeIcon(rel.source_entity_id, npcs),
-						draggable: false
 					},
 				});
 			}
@@ -148,24 +147,46 @@ class StoryHelperRelationships {
 						id: rel.target_entity_id,
 						label: this.#formatNPCName(rel.target_entity_name ?? rel.target_entity_id, npcs),
 						icon: this.#getNodeIcon(rel.target_entity_id, npcs),
-						draggable: false
 					},
 				});
 			}
 
-			// Add edge
-			edges.push({
-				data: {
-					id: `${rel.source_entity_id}-${rel.target_entity_id}`,
+			// Create bidirectional edge key (sorted to match both directions)
+			const edgeKey = [rel.source_entity_id, rel.target_entity_id].sort().join('|');
+			const reverseKey = [rel.target_entity_id, rel.source_entity_id].sort().join('|');
+
+			// Check if edge already exists in either direction
+			if (!edgeMap.has(edgeKey)) {
+				edgeMap.set(edgeKey, {
 					source: rel.source_entity_id,
 					target: rel.target_entity_id,
-					type: rel.relationship_type || 'unknown',
-					description: rel.description || '',
-					color: this.#getRelationshipColor(rel.relationship_type),
-					draggable: false
-				},
-			});
+					types: [rel.relationship_type || 'unknown'],
+					descriptions: [rel.description || ''],
+					colors: [this.#getRelationshipColor(rel.relationship_type)],
+					bidirectional: false,
+				});
+			} else {
+				// Edge exists - mark as bidirectional and add additional info
+				const existing = edgeMap.get(edgeKey);
+				existing.bidirectional = true;
+				existing.types.push(rel.relationship_type || 'unknown');
+				existing.descriptions.push(rel.description || '');
+				existing.colors.push(this.#getRelationshipColor(rel.relationship_type));
+			}
 		});
+
+		// Convert edge map to array with proper arrow configuration
+		const edges = Array.from(edgeMap.values()).map((edge, index) => ({
+			data: {
+				id: `edge-${index}`,
+				source: edge.source,
+				target: edge.target,
+				type: edge.types.join(' / '),
+				description: edge.descriptions.filter(d => d).join(' | '),
+				color: edge.colors[0], // Use first color
+				bidirectional: edge.bidirectional,
+			},
+		}));
 
 		return { nodes: Array.from(nodes.values()), edges };
 	}
@@ -351,6 +372,8 @@ class StoryHelperRelationships {
 			minZoom: 0.3,
 			maxZoom: 3,
 			wheelSensitivity: 0.2,
+			autoungrabify: true, // Disable node dragging
+			autounselectify: false, // Keep selection enabled
 		});
 
 		this.#attachEventHandlers();
@@ -412,12 +435,20 @@ class StoryHelperRelationships {
 				},
 			},
 			{
+				selector: 'edge[bidirectional = true]',
+				style: {
+					'source-arrow-color': 'data(color)',
+					'source-arrow-shape': 'triangle',
+				},
+			},
+			{
 				selector: 'edge:selected',
 				style: {
 					width: 3,
 					opacity: 1,
 					'line-color': '#d4af37',
 					'target-arrow-color': '#d4af37',
+					'source-arrow-color': '#d4af37',
 				},
 			},
 			{
@@ -530,15 +561,18 @@ class StoryHelperRelationships {
 			edges.forEach((edge) => {
 				const data = edge.data();
 				const isSource = data.source === id;
+				const isBidirectional = data.bidirectional;
 				const otherId = isSource ? data.target : data.source;
 				const otherLabel = this.#cy.getElementById(otherId).data('label');
+				
+				const arrow = isBidirectional ? '↔' : (isSource ? '→' : '←');
 
 				html += `
 					<li style="margin: 8px 0; padding: 8px;
 						background: rgba(248, 244, 227, 0.5);
 						border-left: 3px solid ${data.color}; border-radius: 4px;">
 						<strong style="color: #5d4a3a;">
-							${isSource ? '→' : '←'} ${otherLabel}
+							${arrow} ${otherLabel}
 						</strong><br>
 						<span style="color: ${data.color}; font-weight: 600; font-size: 0.9em;">
 							${data.type}
@@ -559,6 +593,7 @@ class StoryHelperRelationships {
 		const data = edge.data();
 		const sourceLabel = this.#cy.getElementById(data.source).data('label');
 		const targetLabel = this.#cy.getElementById(data.target).data('label');
+		const arrow = data.bidirectional ? '↔' : '→';
 
 		this.#infoPanel.innerHTML = `
 			<h3 style="margin: 0 0 12px 0; font-size: 1.1rem; color: #5d4a3a;
@@ -567,7 +602,7 @@ class StoryHelperRelationships {
 			</h3>
 			<div style="margin-bottom: 10px;">
 				<strong style="color: #5d4a3a;">${sourceLabel}</strong>
-				<span style="margin: 0 8px;">→</span>
+				<span style="margin: 0 8px;">${arrow}</span>
 				<strong style="color: #5d4a3a;">${targetLabel}</strong>
 			</div>
 			<div style="padding: 10px; background: rgba(248, 244, 227, 0.5);
