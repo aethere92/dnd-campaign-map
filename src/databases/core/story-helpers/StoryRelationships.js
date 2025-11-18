@@ -4,6 +4,8 @@ class StoryHelperRelationships {
 	#cy = null;
 	#container = null;
 	#infoPanel = null;
+	#searchInput = null;
+	#currentLayout = 'tension';
 
 	// Constants
 	static ICON_BASE_PATH = 'images/assets/relationship_icons';
@@ -136,6 +138,7 @@ class StoryHelperRelationships {
 						id: rel.source_entity_id,
 						label: this.#formatNPCName(rel.source_entity_id, npcs),
 						icon: this.#getNodeIcon(rel.source_entity_id, npcs),
+						degree: 0,
 					},
 				});
 			}
@@ -147,15 +150,18 @@ class StoryHelperRelationships {
 						id: rel.target_entity_id,
 						label: this.#formatNPCName(rel.target_entity_name ?? rel.target_entity_id, npcs),
 						icon: this.#getNodeIcon(rel.target_entity_id, npcs),
+						degree: 0,
 					},
 				});
 			}
 
-			// Create bidirectional edge key (sorted to match both directions)
-			const edgeKey = [rel.source_entity_id, rel.target_entity_id].sort().join('|');
-			const reverseKey = [rel.target_entity_id, rel.source_entity_id].sort().join('|');
+			// Increment degree for both nodes
+			nodes.get(rel.source_entity_id).data.degree++;
+			nodes.get(rel.target_entity_id).data.degree++;
 
-			// Check if edge already exists in either direction
+			// Create bidirectional edge key
+			const edgeKey = [rel.source_entity_id, rel.target_entity_id].sort().join('|');
+
 			if (!edgeMap.has(edgeKey)) {
 				edgeMap.set(edgeKey, {
 					source: rel.source_entity_id,
@@ -166,7 +172,6 @@ class StoryHelperRelationships {
 					bidirectional: false,
 				});
 			} else {
-				// Edge exists - mark as bidirectional and add additional info
 				const existing = edgeMap.get(edgeKey);
 				existing.bidirectional = true;
 				existing.types.push(rel.relationship_type || 'unknown');
@@ -175,16 +180,17 @@ class StoryHelperRelationships {
 			}
 		});
 
-		// Convert edge map to array with proper arrow configuration
 		const edges = Array.from(edgeMap.values()).map((edge, index) => ({
 			data: {
 				id: `edge-${index}`,
 				source: edge.source,
 				target: edge.target,
 				type: edge.types.join(' / '),
-				description: edge.descriptions.filter(d => d).join(' | '),
-				color: edge.colors[0], // Use first color
+				description: edge.descriptions.filter((d) => d).join(' | '),
+				color: edge.colors[0],
 				bidirectional: edge.bidirectional,
+				// Determine if this is a hostile relationship
+				isHostile: edge.types.some((t) => t.toLowerCase().includes('enemy') || t.toLowerCase().includes('hostile')),
 			},
 		}));
 
@@ -236,8 +242,9 @@ class StoryHelperRelationships {
 
 		this.#infoPanel = this.#createInfoPanel();
 		const controls = this.#createControls();
+		const searchBar = this.#createSearchBar();
 
-		graphWrapper.append(this.#container, controls, this.#infoPanel);
+		graphWrapper.append(this.#container, controls, searchBar, this.#infoPanel);
 		container.append(this.#createHeader(), graphWrapper);
 		contentArea.innerHTML = '';
 		contentArea.appendChild(container);
@@ -275,11 +282,57 @@ class StoryHelperRelationships {
 		return wrapper;
 	}
 
+	#createSearchBar() {
+		const searchContainer = document.createElement('div');
+		searchContainer.style.cssText = `
+			position: absolute; top: 10px; right: 10px;
+			display: flex; gap: 8px; z-index: 10; align-items: center;
+		`;
+
+		this.#searchInput = document.createElement('input');
+		this.#searchInput.type = 'text';
+		this.#searchInput.placeholder = 'Search NPCs...';
+		this.#searchInput.style.cssText = `
+			padding: 8px 12px; background: #fffcf1; border: 1px solid #c0aa76;
+			border-radius: 4px; font-family: 'Noto Sans', sans-serif;
+			font-size: 0.9rem; color: #5d4a3a; width: 200px;
+			transition: all 0.2s;
+		`;
+
+		this.#searchInput.addEventListener('input', (e) => this.#handleSearch(e.target.value));
+		this.#searchInput.addEventListener('focus', () => {
+			this.#searchInput.style.borderColor = '#8d6e63';
+			this.#searchInput.style.boxShadow = '0 0 0 2px rgba(141, 110, 99, 0.1)';
+		});
+		this.#searchInput.addEventListener('blur', () => {
+			this.#searchInput.style.borderColor = '#c0aa76';
+			this.#searchInput.style.boxShadow = 'none';
+		});
+
+		const clearBtn = document.createElement('button');
+		clearBtn.textContent = '✕';
+		clearBtn.title = 'Clear Search';
+		clearBtn.className = 'button-secondary';
+		clearBtn.style.cssText = `
+			padding: 8px 12px; background: #fffcf1; border: 1px solid #c0aa76;
+			border-radius: 4px; cursor: pointer; font-family: 'Noto Sans', sans-serif;
+			font-size: 0.9rem; color: #5d4a3a; transition: all 0.2s;
+		`;
+		clearBtn.addEventListener('click', () => {
+			this.#searchInput.value = '';
+			this.#handleSearch('');
+		});
+
+		searchContainer.append(this.#searchInput, clearBtn);
+		return searchContainer;
+	}
+
 	#createControls() {
 		const controls = document.createElement('div');
 		controls.style.cssText = `
 			position: absolute; top: 10px; left: 10px;
 			display: flex; gap: 8px; z-index: 10; flex-wrap: wrap;
+			max-width: 50%;
 		`;
 
 		const buttons = [
@@ -328,6 +381,8 @@ class StoryHelperRelationships {
 
 		const layouts = [
 			{ value: 'cose', label: 'Force Directed' },
+			{ value: 'importance', label: 'By Importance' },
+			{ value: 'tension', label: 'Tension-Based' },
 			{ value: 'circle', label: 'Circle' },
 			{ value: 'concentric', label: 'Concentric' },
 			{ value: 'grid', label: 'Grid' },
@@ -338,10 +393,14 @@ class StoryHelperRelationships {
 			const option = document.createElement('option');
 			option.value = value;
 			option.textContent = label;
+			if (value === this.#currentLayout) option.selected = true;
 			select.appendChild(option);
 		});
 
-		select.addEventListener('change', (e) => this.#applyLayout(e.target.value));
+		select.addEventListener('change', (e) => {
+			this.#currentLayout = e.target.value;
+			this.#applyLayout(e.target.value);
+		});
 		return select;
 	}
 
@@ -360,6 +419,53 @@ class StoryHelperRelationships {
 		return panel;
 	}
 
+	// Search functionality
+	#handleSearch(query) {
+		if (!this.#cy) return;
+
+		this.#cy.elements().removeClass('search-match search-hidden');
+
+		if (!query.trim()) {
+			return;
+		}
+
+		const lowerQuery = query.toLowerCase();
+		const matchedNodes = this.#cy.nodes().filter((node) => {
+			const label = node.data('label').toLowerCase();
+			return label.includes(lowerQuery);
+		});
+
+		if (matchedNodes.length === 0) {
+			// No matches - show all dimmed
+			this.#cy.elements().addClass('search-hidden');
+			return;
+		}
+
+		// Highlight matched nodes and their connections
+		matchedNodes.addClass('search-match');
+		const connectedEdges = matchedNodes.connectedEdges();
+		const connectedNodes = connectedEdges.connectedNodes();
+
+		connectedEdges.addClass('search-match');
+		connectedNodes.addClass('search-match');
+
+		// Hide non-matching elements
+		this.#cy.elements().not('.search-match').addClass('search-hidden');
+
+		// Focus on matched nodes
+		if (matchedNodes.length === 1) {
+			this.#cy.animate({
+				fit: { eles: matchedNodes.neighborhood().add(matchedNodes), padding: 50 },
+				duration: 500,
+			});
+		} else {
+			this.#cy.animate({
+				fit: { eles: matchedNodes, padding: 50 },
+				duration: 500,
+			});
+		}
+	}
+
 	// Cytoscape initialization
 	#initializeCytoscape(relationships, npcs) {
 		const elements = this.#buildCytoscapeElements(relationships, npcs);
@@ -368,12 +474,12 @@ class StoryHelperRelationships {
 			container: this.#container,
 			elements: [...elements.nodes, ...elements.edges],
 			style: this.#getCytoscapeStyles(),
-			layout: this.#getLayoutConfig('cose'),
+			layout: this.#getLayoutConfig(this.#currentLayout),
 			minZoom: 0.3,
 			maxZoom: 3,
 			wheelSensitivity: 0.2,
-			autoungrabify: true, // Disable node dragging
-			autounselectify: false, // Keep selection enabled
+			autoungrabify: true,
+			autounselectify: false,
 		});
 
 		this.#attachEventHandlers();
@@ -459,6 +565,21 @@ class StoryHelperRelationships {
 				selector: '.dimmed',
 				style: { opacity: (node) => (node.isNode() ? 0.3 : 0.2) },
 			},
+			{
+				selector: '.search-match',
+				style: {
+					'border-color': '#d4af37',
+					'border-width': 5,
+					opacity: 1,
+				},
+			},
+			{
+				selector: '.search-hidden',
+				style: {
+					opacity: 0.1,
+					'text-opacity': 0.1,
+				},
+			},
 		];
 	}
 
@@ -481,6 +602,37 @@ class StoryHelperRelationships {
 				initialTemp: 250,
 				coolingFactor: 0.95,
 				minTemp: 1.0,
+			},
+			importance: {
+				name: 'concentric',
+				fit: true,
+				padding: 50,
+				avoidOverlap: true,
+				concentric: (node) => node.degree() * 10, // More connected = inner circles
+				levelWidth: (nodes) => 3,
+				minNodeSpacing: 80,
+			},
+			tension: {
+				name: 'cose',
+				idealEdgeLength: (edge) => {
+					// Hostile relationships = longer edges (push apart)
+					return edge.data('isHostile') ? 500 : 200;
+				},
+				nodeOverlap: 80,
+				refresh: 20,
+				fit: true,
+				padding: 80,
+				randomize: false,
+				nodeRepulsion: (node) => {
+					// More important nodes repel more
+					return 800000 + node.degree() * 200000;
+				},
+				edgeElasticity: (edge) => {
+					// Hostile relationships are less elastic (stay far)
+					return edge.data('isHostile') ? 32 : 100;
+				},
+				gravity: 40,
+				numIter: 1500,
 			},
 			circle: { name: 'circle', fit: true, padding: 30, avoidOverlap: true },
 			concentric: {
@@ -541,7 +693,7 @@ class StoryHelperRelationships {
 	}
 
 	#showNodeInfo(node) {
-		const { id, label } = node.data();
+		const { id, label, degree } = node.data();
 		const edges = node.connectedEdges();
 
 		let html = `
@@ -564,8 +716,8 @@ class StoryHelperRelationships {
 				const isBidirectional = data.bidirectional;
 				const otherId = isSource ? data.target : data.source;
 				const otherLabel = this.#cy.getElementById(otherId).data('label');
-				
-				const arrow = isBidirectional ? '↔' : (isSource ? '→' : '←');
+
+				const arrow = isBidirectional ? '↔' : isSource ? '→' : '←';
 
 				html += `
 					<li style="margin: 8px 0; padding: 8px;
@@ -637,6 +789,8 @@ class StoryHelperRelationships {
 		this.#cy.zoom(1);
 		this.#clearHighlights();
 		this.#infoPanel.style.display = 'none';
+		this.#searchInput.value = '';
+		this.#cy.elements().removeClass('search-match search-hidden');
 	}
 
 	#toggleFullscreen() {
