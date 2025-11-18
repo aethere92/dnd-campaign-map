@@ -136,6 +136,7 @@ class StoryHelperRelationships {
 						id: rel.source_entity_id,
 						label: this.#formatNPCName(rel.source_entity_id, npcs),
 						icon: this.#getNodeIcon(rel.source_entity_id, npcs),
+						draggable: false
 					},
 				});
 			}
@@ -147,6 +148,7 @@ class StoryHelperRelationships {
 						id: rel.target_entity_id,
 						label: this.#formatNPCName(rel.target_entity_name ?? rel.target_entity_id, npcs),
 						icon: this.#getNodeIcon(rel.target_entity_id, npcs),
+						draggable: false
 					},
 				});
 			}
@@ -160,6 +162,7 @@ class StoryHelperRelationships {
 					type: rel.relationship_type || 'unknown',
 					description: rel.description || '',
 					color: this.#getRelationshipColor(rel.relationship_type),
+					draggable: false
 				},
 			});
 		});
