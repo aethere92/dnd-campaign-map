@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Dungeon OS - Full Control</title>
+		<script src="https://cdn.tailwindcss.com"></script>
+		<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+		<style>
+			body {
+				background-color: #0f172a;
+				color: #e2e8f0;
+				font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue',
+					Arial, sans-serif;
+			}
+			.glass {
+				background: #1e293b;
+				border: 1px solid #334155;
+			}
+			.input-base {
+				background: #020617;
+				border: 1px solid #334155;
+				color: white;
+				border-radius: 0.375rem;
+				width: 100%;
+				padding: 0.5rem;
+				font-size: 0.875rem;
+			}
+			.input-base:focus {
+				outline: none;
+				border-color: #6366f1;
+				ring: 1px solid #6366f1;
+			}
+			label {
+				display: block;
+				font-size: 0.75rem;
+				color: #94a3b8;
+				margin-bottom: 0.25rem;
+				text-transform: uppercase;
+				letter-spacing: 0.05em;
+				font-weight: 600;
+			}
+
+			/* Grid Layout for Form */
+			.form-grid {
+				display: grid;
+				grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+				gap: 1rem;
+			}
+			.full-width {
+				grid-column: 1 / -1;
+			}
+
+			/* Tab Logic */
+			.tab-btn {
+				padding: 0.75rem 1rem;
+				cursor: pointer;
+				color: #94a3b8;
+				border-bottom: 2px solid transparent;
+				transition: all 0.2s;
+			}
+			.tab-btn:hover {
+				color: white;
+			}
+			.tab-btn.active {
+				color: #818cf8;
+				border-bottom-color: #818cf8;
+			}
+			.panel {
+				display: none;
+			}
+			.panel.active {
+				display: block;
+			}
+		</style>
+	</head>
+	<body class="h-screen flex flex-col overflow-hidden">
+		<div class="bg-gray-900 border-b border-gray-800 px-6 py-3 flex justify-between items-center shrink-0">
+			<div class="font-bold text-indigo-400 tracking-widest">
+				DUNGEON OS
+				<span class="text-xs text-gray-600 ml-2">v2.0 schema-aware</span>
+			</div>
+			<div id="status" class="text-xs font-mono text-gray-500">Initializing...</div>
+		</div>
+
+		<div class="bg-gray-900 border-b border-gray-800 px-6 flex gap-4 shrink-0">
+			<button onclick="setTab('setup')" class="tab-btn active" id="btn-setup">Setup (Campaigns)</button>
+			<button onclick="setTab('database')" class="tab-btn" id="btn-database">Database Entry</button>
+			<button onclick="setTab('play')" class="tab-btn" id="btn-play">Session Play</button>
+		</div>
+
+		<div class="flex-1 overflow-y-auto p-6 bg-slate-950">
+			<div id="panel-setup" class="panel active max-w-4xl mx-auto space-y-8">
+				<div class="glass p-6 rounded-lg">
+					<h2 class="text-xl text-white mb-4">Campaign Context</h2>
+					<div class="flex gap-4 mb-4 items-end">
+						<div class="flex-1">
+							<label>Active Campaign</label>
+							<select id="ctx-campaign" class="input-base" onchange="handleCampaignChange()">
+								<option value="">Loading...</option>
+							</select>
+						</div>
+						<div class="flex-1">
+							<label>Active Session</label>
+							<select id="ctx-session" class="input-base" onchange="handleSessionChange()">
+								<option value="">Select Campaign First</option>
+							</select>
+						</div>
+					</div>
+
+					<div class="border-t border-gray-700 pt-4 mt-4">
+						<h3 class="text-sm text-gray-400 mb-2">Create New Campaign</h3>
+						<form onsubmit="createNewCampaign(event)" class="flex gap-2">
+							<input id="new-camp-id" type="number" placeholder="ID (Int)" class="input-base w-24" required />
+							<input id="new-camp-name" type="text" placeholder="Campaign Name" class="input-base" required />
+							<button class="bg-indigo-600 hover:bg-indigo-500 text-white px-4 rounded text-sm font-bold">
+								Create
+							</button>
+						</form>
+					</div>
+				</div>
+
+				<div class="glass p-6 rounded-lg">
+					<h2 class="text-xl text-white mb-4">New Session</h2>
+					<form onsubmit="createNewSession(event)" class="grid grid-cols-3 gap-4">
+						<div>
+							<label>Session #</label>
+							<input id="new-sess-num" type="number" class="input-base" required />
+						</div>
+						<div>
+							<label>Date</label>
+							<input id="new-sess-date" type="date" class="input-base" required />
+						</div>
+						<div class="full-width">
+							<label>Title</label>
+							<input id="new-sess-title" type="text" class="input-base" required />
+						</div>
+						<div class="full-width">
+							<label>Summary</label>
+							<textarea id="new-sess-summary" class="input-base" rows="2"></textarea>
+						</div>
+						<button class="bg-emerald-600 hover:bg-emerald-500 text-white p-2 rounded font-bold col-span-3">
+							Create Session
+						</button>
+					</form>
+				</div>
+			</div>
+
+			<div id="panel-database" class="panel max-w-5xl mx-auto">
+				<div class="glass p-6 rounded-lg">
+					<div class="flex justify-between items-center mb-6 border-b border-gray-700 pb-4">
+						<h2 class="text-xl text-white">Entity Creator</h2>
+						<select id="db-table-select" class="input-base w-64 bg-gray-800" onchange="renderSchemaForm()">
+							<option value="characters">Characters</option>
+							<option value="locations">Locations</option>
+							<option value="npcs">NPCs</option>
+							<option value="factions">Factions</option>
+							<option value="quests">Quests</option>
+							<option value="encounters">Encounters</option>
+						</select>
+					</div>
+
+					<form id="schema-form" onsubmit="submitEntity(event)">
+						<div id="form-container" class="form-grid"></div>
+						<div class="mt-6 pt-4 border-t border-gray-700">
+							<button
+								type="submit"
+								class="bg-blue-600 hover:bg-blue-500 text-white w-full py-3 rounded font-bold text-lg shadow-lg">
+								Save Entity to Database
+							</button>
+						</div>
+					</form>
+				</div>
+			</div>
+
+			<div id="panel-play" class="panel max-w-4xl mx-auto">
+				<div class="glass p-6 rounded-lg mb-6">
+					<h2 class="text-xl text-yellow-500 mb-4 font-bold">Event Logger</h2>
+					<div class="text-sm text-gray-400 mb-4">
+						Logging for:
+						<span id="play-context" class="text-white font-mono">No Session Selected</span>
+					</div>
+
+					<form onsubmit="submitEvent(event)" class="space-y-4">
+						<div class="grid grid-cols-2 gap-4">
+							<div>
+								<label>Event Type</label>
+								<select id="evt-type" class="input-base" onchange="toggleEventContext()">
+									<option value="story_event">Story Event</option>
+									<option value="npc_introduced">NPC Introduced</option>
+									<option value="npc_encountered">NPC Encountered</option>
+									<option value="npc_died">NPC Died</option>
+									<option value="npc_relocated">NPC Relocated</option>
+									<option value="location_visited">Location Visited</option>
+									<option value="quest_started">Quest Started</option>
+									<option value="quest_completed">Quest Completed</option>
+									<option value="encounter_fought">Combat</option>
+									<option value="item_acquired">Item Acquired</option>
+								</select>
+							</div>
+							<div>
+								<label>Headline</label>
+								<input id="evt-title" type="text" class="input-base" required placeholder="e.g., The Dragon Awakens" />
+							</div>
+						</div>
+
+						<div>
+							<label>Narrative Description</label>
+							<textarea id="evt-desc" rows="3" class="input-base"></textarea>
+						</div>
+
+						<div class="grid grid-cols-3 gap-4 bg-gray-900 p-4 rounded border border-gray-700">
+							<div id="grp-npc" class="opacity-50">
+								<label>Related NPC</label>
+								<select id="ref-npc" class="input-base">
+									<option value="">None</option>
+								</select>
+							</div>
+							<div id="grp-loc" class="opacity-50">
+								<label>Related Location</label>
+								<select id="ref-loc" class="input-base">
+									<option value="">None</option>
+								</select>
+							</div>
+							<div id="grp-quest" class="opacity-50">
+								<label>Related Quest</label>
+								<select id="ref-quest" class="input-base">
+									<option value="">None</option>
+								</select>
+							</div>
+						</div>
+
+						<button class="bg-yellow-600 hover:bg-yellow-500 text-white w-full py-3 rounded font-bold">
+							LOG EVENT
+						</button>
+					</form>
+				</div>
+			</div>
+		</div>
+
+		<script>
+			// ==========================================================
+			// 1. CONFIGURATION & SCHEMA DEFINITION
+			// ==========================================================
+
+			const SUPABASE_URL = 'https://yffukfulnggfhlgoyowg.supabase.co';
+			const SUPABASE_KEY = 'sb_publishable_AX2-qMjR0Jigxgcc3UET1g_YYBTaBUz';
+
+			// This MAP tells the form builder exactly what fields exist in your SQL tables.
+			// 'type': text, textarea, number, select, json
+			const SCHEMA_MAP = {
+				npcs: [
+					{ key: 'name', label: 'Name', type: 'text', req: true },
+					{ key: 'race', label: 'Race', type: 'text' },
+					{ key: 'class', label: 'Class', type: 'text' },
+					{ key: 'gender', label: 'Gender', type: 'text' },
+					{ key: 'affinity', label: 'Affinity', type: 'select', opts: ['unknown', 'ally', 'neutral', 'enemy'] },
+					{ key: 'status', label: 'Status', type: 'select', opts: ['alive', 'dead', 'missing', 'unknown'] },
+					{ key: 'role', label: 'Role', type: 'text' },
+					{ key: 'portrait', label: 'Portrait URL', type: 'text' },
+					{ key: 'description', label: 'Description', type: 'textarea', full: true },
+					{ key: 'personality', label: 'Personality', type: 'textarea', full: true },
+					{ key: 'background', label: 'Background', type: 'textarea', full: true },
+				],
+				locations: [
+					{ key: 'name', label: 'Name', type: 'text', req: true },
+					{
+						key: 'type',
+						label: 'Type',
+						type: 'select',
+						opts: [
+							'city',
+							'town',
+							'village',
+							'dungeon',
+							'wilderness',
+							'plane',
+							'region',
+							'landmark',
+							'building',
+							'room',
+						],
+					},
+					{ key: 'region', label: 'Region', type: 'text' },
+					{ key: 'parent_location_id', label: 'Parent Loc ID (UUID)', type: 'text' },
+					{ key: 'population', label: 'Population', type: 'text' },
+					{ key: 'races', label: 'Demographics', type: 'text' },
+					{ key: 'ruler', label: 'Ruler', type: 'text' },
+					{ key: 'government_type', label: 'Gov Type', type: 'text' },
+					{ key: 'size', label: 'Size', type: 'text' },
+					{ key: 'exports', label: 'Exports', type: 'text' },
+					{ key: 'imports', label: 'Imports', type: 'text' },
+					{ key: 'natives', label: 'Natives', type: 'text' },
+					{ key: 'description', label: 'Description', type: 'textarea', full: true },
+					{ key: 'history', label: 'History', type: 'textarea', full: true },
+				],
+				quests: [
+					{ key: 'title', label: 'Quest Title', type: 'text', req: true },
+					{
+						key: 'status',
+						label: 'Status',
+						type: 'select',
+						opts: ['active', 'completed', 'failed', 'on-hold', 'abandoned'],
+					},
+					{ key: 'priority', label: 'Priority', type: 'select', opts: ['low', 'medium', 'high', 'urgent'] },
+					{ key: 'description', label: 'Description', type: 'textarea', full: true },
+				],
+				factions: [
+					{ key: 'name', label: 'Name', type: 'text', req: true },
+					{ key: 'type', label: 'Type', type: 'text' },
+					{ key: 'leader_npc_id', label: 'Leader NPC ID', type: 'text' },
+					{ key: 'description', label: 'Description', type: 'textarea', full: true },
+				],
+				characters: [
+					{ key: 'name', label: 'Name', type: 'text', req: true },
+					{ key: 'race', label: 'Race', type: 'text' },
+					{ key: 'class', label: 'Class', type: 'text' },
+					{ key: 'level', label: 'Level', type: 'number' },
+					{ key: 'background', label: 'Background', type: 'textarea', full: true },
+					{ key: 'short_description', label: 'Short Desc', type: 'textarea', full: true },
+					{ key: 'stats', label: 'Stats (JSON)', type: 'json', full: true },
+				],
+				encounters: [
+					{ key: 'name', label: 'Encounter Name', type: 'text', req: true },
+					{ key: 'location_id', label: 'Location ID', type: 'text' },
+					{ key: 'description', label: 'Description', type: 'textarea', full: true },
+					{ key: 'environment', label: 'Environment (JSON)', type: 'json' },
+					{ key: 'outcome', label: 'Outcome (JSON)', type: 'json' },
+				],
+			};
+
+			// ==========================================================
+			// 2. APP STATE & UTILS
+			// ==========================================================
+			const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+			let state = {
+				campaignId: null,
+				sessionId: null,
+			};
+
+			// Initialize
+			(async function init() {
+				if (!SUPABASE_URL.includes('http'))
+					return alert('Please edit the HTML file and add your Supabase keys at the top of the script tag.');
+
+				document.getElementById('status').innerText = 'Connected';
+				await loadCampaigns();
+				renderSchemaForm(); // Draw initial form
+			})();
+
+			function setTab(id) {
+				document.querySelectorAll('.panel').forEach((p) => p.classList.remove('active'));
+				document.querySelectorAll('.tab-btn').forEach((b) => b.classList.remove('active'));
+				document.getElementById('panel-' + id).classList.add('active');
+				document.getElementById('btn-' + id).classList.add('active');
+			}
+
+			// ==========================================================
+			// 3. SETUP TAB LOGIC
+			// ==========================================================
+			async function loadCampaigns() {
+				const { data } = await supabase
+					.from('campaigns')
+					.select('id, name, campaign_id')
+					.order('created_at', { ascending: false });
+				const sel = document.getElementById('ctx-campaign');
+				sel.innerHTML = '<option value="">Select Campaign...</option>';
+				data.forEach((c) => {
+					sel.innerHTML += `<option value="${c.id}">${c.name} (ID: ${c.campaign_id})</option>`;
+				});
+			}
+
+			async function handleCampaignChange() {
+				state.campaignId = document.getElementById('ctx-campaign').value;
+				const sel = document.getElementById('ctx-session');
+
+				if (!state.campaignId) {
+					sel.innerHTML = '<option value="">Select Campaign First</option>';
+					return;
+				}
+
+				// Load Sessions for this campaign
+				const { data } = await supabase
+					.from('sessions')
+					.select('id, title, session_number')
+					.eq('campaign_id', state.campaignId)
+					.order('session_number', { ascending: false });
+				sel.innerHTML = '<option value="">Select Session...</option>';
+				data.forEach((s) => {
+					sel.innerHTML += `<option value="${s.id}">#${s.session_number}: ${s.title}</option>`;
+				});
+
+				// Refresh reference lists for Play tab
+				loadReferenceLists();
+			}
+
+			function handleSessionChange() {
+				state.sessionId = document.getElementById('ctx-session').value;
+				const sessText = document.getElementById('ctx-session').selectedOptions[0].text;
+				document.getElementById('play-context').innerText = sessText;
+			}
+
+			async function createNewCampaign(e) {
+				e.preventDefault();
+				const { error } = await supabase.from('campaigns').insert({
+					campaign_id: document.getElementById('new-camp-id').value,
+					name: document.getElementById('new-camp-name').value,
+				});
+				if (error) alert(error.message);
+				else {
+					document.getElementById('new-camp-name').value = '';
+					loadCampaigns();
+				}
+			}
+
+			async function createNewSession(e) {
+				e.preventDefault();
+				if (!state.campaignId) return alert('Select Campaign First');
+
+				const { error } = await supabase.from('sessions').insert({
+					campaign_id: state.campaignId,
+					session_number: document.getElementById('new-sess-num').value,
+					title: document.getElementById('new-sess-title').value,
+					session_date: document.getElementById('new-sess-date').value,
+					summary: document.getElementById('new-sess-summary').value,
+				});
+				if (error) alert(error.message);
+				else {
+					alert('Session Created');
+					handleCampaignChange();
+				} // Reload sessions
+			}
+
+			// ==========================================================
+			// 4. DATABASE FORM BUILDER (The "Everything" Part)
+			// ==========================================================
+			function renderSchemaForm() {
+				const table = document.getElementById('db-table-select').value;
+				const fields = SCHEMA_MAP[table];
+				const container = document.getElementById('form-container');
+				container.innerHTML = '';
+
+				fields.forEach((f) => {
+					const wrapper = document.createElement('div');
+					if (f.full) wrapper.className = 'full-width';
+
+					let inputHtml = '';
+
+					if (f.type === 'select') {
+						const options = f.opts.map((o) => `<option value="${o}">${o}</option>`).join('');
+						inputHtml = `<select name="${f.key}" class="input-base">${options}</select>`;
+					} else if (f.type === 'textarea') {
+						inputHtml = `<textarea name="${f.key}" class="input-base" rows="4"></textarea>`;
+					} else if (f.type === 'json') {
+						inputHtml = `<textarea name="${f.key}" class="input-base font-mono text-xs" rows="4" placeholder='{"key": "value"}'></textarea>`;
+					} else {
+						inputHtml = `<input type="${f.type}" name="${f.key}" class="input-base" ${f.req ? 'required' : ''}>`;
+					}
+
+					wrapper.innerHTML = `<label>${f.label}</label>${inputHtml}`;
+					container.appendChild(wrapper);
+				});
+			}
+
+			async function submitEntity(e) {
+				e.preventDefault();
+				if (!state.campaignId) return alert('Select a Campaign in Setup first!');
+
+				const table = document.getElementById('db-table-select').value;
+				const formData = new FormData(e.target);
+				const payload = { campaign_id: state.campaignId };
+
+				for (let [key, value] of formData.entries()) {
+					if (value.trim() === '') continue; // Skip empty strings
+
+					// Handle JSON fields
+					const fieldConfig = SCHEMA_MAP[table].find((f) => f.key === key);
+					if (fieldConfig && fieldConfig.type === 'json') {
+						try {
+							payload[key] = JSON.parse(value);
+						} catch (err) {
+							return alert(`Invalid JSON in ${fieldConfig.label}`);
+						}
+					} else {
+						payload[key] = value;
+					}
+				}
+
+				const { error } = await supabase.from(table).insert(payload);
+				if (error) alert('Error: ' + error.message);
+				else {
+					alert(`Created in ${table}!`);
+					e.target.reset();
+					loadReferenceLists(); // Update dropdowns if we created an NPC/Loc/Quest
+				}
+			}
+
+			// ==========================================================
+			// 5. PLAY TAB LOGIC
+			// ==========================================================
+			async function loadReferenceLists() {
+				if (!state.campaignId) return;
+
+				const [npcs, locs, quests] = await Promise.all([
+					supabase.from('npcs').select('id, name').eq('campaign_id', state.campaignId),
+					supabase.from('locations').select('id, name').eq('campaign_id', state.campaignId),
+					supabase.from('quests').select('id, title').eq('campaign_id', state.campaignId),
+				]);
+
+				const fill = (id, list, key) => {
+					const el = document.getElementById(id);
+					el.innerHTML = '<option value="">None</option>';
+					if (list.data)
+						list.data.forEach((item) => {
+							el.innerHTML += `<option value="${item.id}">${item[key]}</option>`;
+						});
+				};
+
+				fill('ref-npc', npcs, 'name');
+				fill('ref-loc', locs, 'name');
+				fill('ref-quest', quests, 'title');
+			}
+
+			function toggleEventContext() {
+				const type = document.getElementById('evt-type').value;
+				const npcGrp = document.getElementById('grp-npc');
+				const locGrp = document.getElementById('grp-loc');
+				const questGrp = document.getElementById('grp-quest');
+
+				// Reset opacity
+				npcGrp.className = locGrp.className = questGrp.className = 'opacity-50';
+
+				// Highlight relevant
+				if (type.includes('npc')) npcGrp.className = 'opacity-100 border-l-2 border-yellow-500';
+				if (type.includes('location') || type === 'npc_relocated')
+					locGrp.className = 'opacity-100 border-l-2 border-green-500';
+				if (type.includes('quest')) questGrp.className = 'opacity-100 border-l-2 border-purple-500';
+			}
+
+			async function submitEvent(e) {
+				e.preventDefault();
+				if (!state.sessionId) return alert('Select a Session in Setup first!');
+
+				const payload = {
+					p_session_id: state.sessionId,
+					p_event_type: document.getElementById('evt-type').value,
+					p_title: document.getElementById('evt-title').value,
+					p_description: document.getElementById('evt-desc').value || null,
+					p_npc_id: document.getElementById('ref-npc').value || null,
+					p_location_id: document.getElementById('ref-loc').value || null,
+					p_quest_id: document.getElementById('ref-quest').value || null,
+				};
+
+				const { error } = await supabase.rpc('add_session_event', payload);
+				if (error) alert(error.message);
+				else {
+					alert('Event Logged!');
+					document.getElementById('evt-title').value = '';
+					document.getElementById('evt-desc').value = '';
+				}
+			}
+		</script>
+	</body>
+</html>
