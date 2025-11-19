@@ -825,5 +825,5 @@ class StoryHelperRelationships {
 		if (!this.#cy) return;
 		const config = this.#getLayoutConfig(layoutName);
 		this.#cy.layout(config).run();
-	}
+	};
 }
