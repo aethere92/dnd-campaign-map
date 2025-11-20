@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>D&D Campaign Manager 2.0</title>
+		<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+		<style>
+			:root {
+				--bg-dark: #1a1b26;
+				--bg-card: #24283b;
+				--bg-input: #16161e;
+				--accent: #7aa2f7;
+				--accent-hover: #5d85d8;
+				--text-main: #c0caf5;
+				--text-muted: #565f89;
+				--border: #414868;
+				--success: #9ece6a;
+				--danger: #f7768e;
+			}
+
+			* {
+				box-sizing: border-box;
+				margin: 0;
+				padding: 0;
+			}
+			body {
+				font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+				background: var(--bg-dark);
+				color: var(--text-main);
+				padding: 20px;
+				line-height: 1.6;
+			}
+
+			/* Layout */
+			.container {
+				max-width: 1400px;
+				margin: 0 auto;
+			}
+			.grid {
+				display: grid;
+				gap: 15px;
+			}
+			.grid-2 {
+				grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+			}
+			.grid-4 {
+				grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+			}
+
+			/* UI Components */
+			.card {
+				background: var(--bg-card);
+				border: 1px solid var(--border);
+				border-radius: 8px;
+				padding: 20px;
+				margin-bottom: 20px;
+			}
+			.btn {
+				background: var(--accent);
+				color: #1a1b26;
+				border: none;
+				padding: 10px 20px;
+				border-radius: 6px;
+				cursor: pointer;
+				font-weight: 600;
+				transition: 0.2s;
+			}
+			.btn:hover {
+				background: var(--accent-hover);
+			}
+			.btn-danger {
+				background: var(--danger);
+				color: white;
+			}
+			.btn-sm {
+				padding: 5px 10px;
+				font-size: 0.85em;
+			}
+
+			input,
+			select,
+			textarea {
+				width: 100%;
+				background: var(--bg-input);
+				border: 1px solid var(--border);
+				color: var(--text-main);
+				padding: 10px;
+				border-radius: 6px;
+				outline: none;
+			}
+			input:focus,
+			select:focus,
+			textarea:focus {
+				border-color: var(--accent);
+			}
+			label {
+				display: block;
+				margin-bottom: 5px;
+				font-size: 0.9em;
+				color: var(--text-muted);
+				font-weight: 600;
+			}
+
+			/* Navigation */
+			.tabs {
+				display: flex;
+				gap: 10px;
+				flex-wrap: wrap;
+				margin-bottom: 20px;
+			}
+			.tab {
+				padding: 10px 20px;
+				background: var(--bg-card);
+				border: 1px solid var(--border);
+				border-radius: 6px;
+				cursor: pointer;
+				opacity: 0.7;
+			}
+			.tab:hover {
+				opacity: 1;
+				border-color: var(--accent);
+			}
+			.tab.active {
+				background: var(--accent);
+				color: var(--bg-dark);
+				opacity: 1;
+				border-color: var(--accent);
+			}
+
+			/* Tables */
+			.table-container {
+				overflow-x: auto;
+			}
+			table {
+				width: 100%;
+				border-collapse: collapse;
+				margin-top: 10px;
+			}
+			th,
+			td {
+				padding: 12px;
+				text-align: left;
+				border-bottom: 1px solid var(--border);
+			}
+			th {
+				color: var(--text-muted);
+				font-size: 0.85em;
+				text-transform: uppercase;
+				letter-spacing: 1px;
+			}
+			tr:hover {
+				background: rgba(255, 255, 255, 0.02);
+			}
+
+			/* Utilities */
+			.hidden {
+				display: none !important;
+			}
+			.flex-between {
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+			}
+			.form-group {
+				margin-bottom: 15px;
+			}
+			.toast {
+				position: fixed;
+				bottom: 20px;
+				right: 20px;
+				padding: 15px 25px;
+				border-radius: 8px;
+				color: white;
+				font-weight: bold;
+				transform: translateY(100px);
+				transition: 0.3s;
+				z-index: 1000;
+			}
+			.toast.show {
+				transform: translateY(0);
+			}
+			.toast.success {
+				background: var(--success);
+			}
+			.toast.error {
+				background: var(--danger);
+			}
+
+			/* Custom Views */
+			.log-entry {
+				border-left: 3px solid var(--accent);
+				padding-left: 15px;
+				margin-bottom: 10px;
+				background: rgba(0, 0, 0, 0.2);
+				padding: 10px;
+				border-radius: 0 4px 4px 0;
+			}
+			.init-item {
+				display: flex;
+				align-items: center;
+				padding: 10px;
+				border-bottom: 1px solid var(--border);
+			}
+			.init-order {
+				font-size: 1.5em;
+				font-weight: bold;
+				margin-right: 15px;
+				color: var(--accent);
+				width: 30px;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="container">
+			<!-- Header / Config -->
+			<div class="card flex-between">
+				<div>
+					<h1>🐉 Campaign Manager</h1>
+					<div id="activeCampaignDisplay" style="color: var(--text-muted); font-size: 0.9em; margin-top: 5px">
+						No Campaign Selected
+					</div>
+				</div>
+				<button onclick="toggleConfig()" class="btn btn-sm">⚙️ Config</button>
+			</div>
+
+			<!-- Config Modal (Auth) -->
+			<div id="configSection" class="card hidden">
+				<h3>Database Connection</h3>
+				<div class="grid-2">
+					<div class="form-group">
+						<label>Supabase URL</label>
+						<input
+							type="text"
+							id="sbUrl"
+							placeholder="https://xxx.supabase.co"
+							value="https://yffukfulnggfhlgoyowg.supabase.co" />
+					</div>
+					<div class="form-group">
+						<label>Supabase Key</label>
+						<input
+							type="password"
+							id="sbKey"
+							placeholder="public-anon-key"
+							value="sb_publishable_AX2-qMjR0Jigxgcc3UET1g_YYBTaBUz" />
+					</div>
+				</div>
+				<button onclick="initApp()" class="btn">Connect & Load</button>
+			</div>
+
+			<!-- Main Interface -->
+			<div id="appContent" class="hidden">
+				<!-- Campaign Selector -->
+				<div class="form-group">
+					<label>Active Campaign</label>
+					<select id="campaignSelector" onchange="handleCampaignSwitch()"></select>
+				</div>
+
+				<!-- Navigation -->
+				<div class="tabs" id="navTabs"></div>
+
+				<!-- Dynamic Content -->
+				<div class="grid grid-2">
+					<!-- Form Column -->
+					<div class="card">
+						<div class="flex-between" style="margin-bottom: 15px">
+							<h3 id="formTitle">New Item</h3>
+							<button onclick="resetForm()" class="btn btn-sm" style="background: var(--border); color: white">
+								Clear
+							</button>
+						</div>
+						<form id="dynamicForm" onsubmit="handleFormSubmit(event)"></form>
+					</div>
+
+					<!-- List/Data Column -->
+					<div class="card">
+						<div class="flex-between">
+							<h3>Existing Items</h3>
+							<button onclick="refreshTable()" class="btn btn-sm">↻ Refresh</button>
+						</div>
+						<div class="table-container" id="dataTable"></div>
+						<!-- Custom Views Area (Combat Log etc) -->
+						<div id="customView" class="hidden" style="margin-top: 20px"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div id="toast" class="toast">Message</div>
+
+		<script>
+			// ==========================================
+			// 1. CONFIGURATION & SCHEMA DEFINITIONS
+			// ==========================================
+
+			// Field Types: text, number, textarea, select, json, date
+			// Dependency: 'visibleIf' checks another field's value
+
+			const SCHEMAS = {
+				campaigns: {
+					label: 'Campaigns',
+					fields: [
+						{ key: 'campaign_id', label: 'ID (Number)', type: 'number', required: true },
+						{ key: 'name', label: 'Campaign Name', type: 'text', required: true },
+						{ key: 'metadata', label: 'Metadata', type: 'json' },
+						{ key: 'styling', label: 'Styling', type: 'json' },
+					],
+					listFields: ['campaign_id', 'name'], // Columns to show in table
+				},
+				sessions: {
+					label: 'Sessions',
+					fields: [
+						{ key: 'session_number', label: 'Session #', type: 'number', required: true },
+						{ key: 'title', label: 'Title', type: 'text', required: true },
+						{ key: 'session_date', label: 'Date', type: 'date', required: true },
+						{ key: 'summary', label: 'Summary', type: 'textarea' },
+						{ key: 'narrative', label: 'Full Narrative', type: 'textarea' },
+					],
+					listFields: ['session_number', 'title', 'session_date'],
+				},
+				characters: {
+					label: 'Characters',
+					fields: [
+						{ key: 'name', label: 'Name', type: 'text', required: true },
+						{ key: 'race', label: 'Race', type: 'text' },
+						{ key: 'class', label: 'Class', type: 'text' },
+						{ key: 'level', label: 'Level', type: 'number', default: 1 },
+						{ key: 'is_active', label: 'Active?', type: 'select', options: ['true', 'false'] },
+						{ key: 'stats', label: 'Stats (JSON)', type: 'json', default: '{"STR":10, "DEX":10}' },
+					],
+					listFields: ['name', 'race', 'class', 'level'],
+				},
+				npcs: {
+					label: 'NPCs',
+					fields: [
+						{ key: 'name', label: 'Name', type: 'text', required: true },
+						{ key: 'role', label: 'Role', type: 'text' },
+						{ key: 'class', label: 'Class', type: 'text' },
+						{ key: 'status', label: 'Status', type: 'select', options: ['Alive', 'Dead', 'Missing', 'Unknown'] },
+						{ key: 'affinity', label: 'Affinity', type: 'select', options: ['Friendly', 'Neutral', 'Hostile'] },
+						{ key: 'location_id', label: 'Location', type: 'select', foreignKey: 'locations', displayField: 'name' },
+						{ key: 'faction_id', label: 'Faction', type: 'select', foreignKey: 'factions', displayField: 'name' },
+						{ key: 'description', label: 'Description', type: 'textarea' },
+					],
+					listFields: ['name', 'role', 'status', 'race', 'class', 'gender'],
+				},
+				locations: {
+					label: 'Locations',
+					fields: [
+						{ key: 'name', label: 'Name', type: 'text', required: true },
+						{
+							key: 'type',
+							label: 'Type',
+							type: 'select',
+							options: ['City', 'Town', 'Village', 'Dungeon', 'Wilderness', 'Building'],
+						},
+						{
+							key: 'parent_location_id',
+							label: 'Parent Location',
+							type: 'select',
+							foreignKey: 'locations',
+							displayField: 'name',
+						},
+						{ key: 'region', label: 'Region', type: 'text' },
+						{ key: 'description', label: 'Description', type: 'textarea' },
+					],
+					listFields: ['name', 'type', 'region'],
+				},
+				factions: {
+					label: 'Factions',
+					fields: [
+						{ key: 'name', label: 'Name', type: 'text', required: true },
+						{ key: 'type', label: 'Type', type: 'text' },
+						{ key: 'leader_npc_id', label: 'Leader', type: 'select', foreignKey: 'npcs', displayField: 'name' },
+						{ key: 'description', label: 'Description', type: 'textarea' },
+					],
+					listFields: ['name', 'type'],
+				},
+				quests: {
+					label: 'Quests',
+					fields: [
+						{ key: 'title', label: 'Title', type: 'text', required: true },
+						{ key: 'status', label: 'Status', type: 'select', options: ['Active', 'Completed', 'Failed'] },
+						{ key: 'priority', label: 'Priority', type: 'select', options: ['Low', 'Medium', 'High'] },
+						{ key: 'description', label: 'Description', type: 'textarea' },
+					],
+					listFields: ['title', 'status', 'priority'],
+				},
+				encounters: {
+					label: 'Encounters',
+					fields: [
+						{ key: 'name', label: 'Name', type: 'text', required: true },
+						{ key: 'session_id', label: 'Session', type: 'select', foreignKey: 'sessions', displayField: 'title' },
+						{ key: 'location_id', label: 'Location', type: 'select', foreignKey: 'locations', displayField: 'name' },
+						{ key: 'description', label: 'Description', type: 'textarea' },
+					],
+					listFields: ['name'],
+				},
+				// Complex schemas with dependencies
+				session_events: {
+					label: 'Events',
+					tableName: 'session_events',
+					fields: [
+						{
+							key: 'session_id',
+							label: 'Session',
+							type: 'select',
+							foreignKey: 'sessions',
+							displayField: 'title',
+							required: true,
+						},
+						{ key: 'event_order', label: 'Order', type: 'number', required: true },
+						{
+							key: 'event_type',
+							label: 'Type',
+							type: 'select',
+							required: true,
+							options: [
+								'npc_introduced',
+								'npc_died',
+								'location_visited',
+								'quest_started',
+								'encounter_fought',
+								'item_acquired',
+								'custom',
+							],
+						},
+						{ key: 'title', label: 'Event Title', type: 'text', required: true },
+
+						// Conditional Fields
+						{
+							key: 'npc_id',
+							label: 'NPC',
+							type: 'select',
+							foreignKey: 'npcs',
+							displayField: 'name',
+							visibleIf: { field: 'event_type', values: ['npc_introduced', 'npc_died'] },
+						},
+						{
+							key: 'location_id',
+							label: 'Location',
+							type: 'select',
+							foreignKey: 'locations',
+							displayField: 'name',
+							visibleIf: { field: 'event_type', values: ['location_visited'] },
+						},
+						{
+							key: 'quest_id',
+							label: 'Quest',
+							type: 'select',
+							foreignKey: 'quests',
+							displayField: 'title',
+							visibleIf: { field: 'event_type', values: ['quest_started'] },
+						},
+						{
+							key: 'encounter_id',
+							label: 'Encounter',
+							type: 'select',
+							foreignKey: 'encounters',
+							displayField: 'name',
+							visibleIf: { field: 'event_type', values: ['encounter_fought'] },
+						},
+
+						{ key: 'description', label: 'Details', type: 'textarea' },
+					],
+					listFields: ['event_order', 'title', 'event_type'],
+				},
+				initiative: {
+					label: 'Initiative',
+					tableName: 'encounter_initiative',
+					fields: [
+						{
+							key: 'encounter_id',
+							label: 'Encounter',
+							type: 'select',
+							foreignKey: 'encounters',
+							displayField: 'name',
+							required: true,
+						},
+						{ key: 'combatant_name', label: 'Name', type: 'text', required: true },
+						{ key: 'initiative_roll', label: 'Roll', type: 'number', required: true },
+						{ key: 'order_index', label: 'Order', type: 'number', required: true },
+						{ key: 'current_hp', label: 'HP', type: 'number' },
+						{ key: 'max_hp', label: 'Max HP', type: 'number' },
+						{ key: 'armor_class', label: 'AC', type: 'number' },
+						{ key: 'combatant_type', label: 'Type', type: 'select', options: ['player', 'enemy', 'npc'] },
+					],
+					listFields: ['order_index', 'combatant_name', 'initiative_roll', 'current_hp'],
+				},
+				combat_log: {
+					label: 'Combat Actions',
+					tableName: 'encounter_actions',
+					fields: [
+						{
+							key: 'encounter_id',
+							label: 'Encounter',
+							type: 'select',
+							foreignKey: 'encounters',
+							displayField: 'name',
+							required: true,
+						},
+						{ key: 'round_number', label: 'Round #', type: 'number', required: true },
+						{ key: 'actor_name', label: 'Actor', type: 'text', required: true },
+						{ key: 'action_description', label: 'Action', type: 'textarea', required: true },
+						{ key: 'damage_dealt', label: 'Damage', type: 'number' },
+						{ key: 'target_name', label: 'Target', type: 'text' },
+						{ key: 'result', label: 'Result (Hit/Miss)', type: 'text' },
+					],
+					listFields: ['round_number', 'actor_name', 'action_description'],
+				},
+			};
+
+			// ==========================================
+			// 2. STATE MANAGEMENT
+			// ==========================================
+			let state = {
+				supabase: null,
+				campaigns: [],
+				currentCampaignId: null,
+				activeTab: 'campaigns',
+				cache: {}, // { npcs: [], locations: [] ... }
+				editingId: null,
+			};
+
+			// ==========================================
+			// 3. CORE LOGIC & SUPABASE
+			// ==========================================
+
+			function initApp() {
+				const url = document.getElementById('sbUrl').value || localStorage.getItem('sb_url');
+				const key = document.getElementById('sbKey').value || localStorage.getItem('sb_key');
+
+				if (!url || !key) return showToast('Enter Supabase details', 'error');
+
+				try {
+					state.supabase = supabase.createClient(url, key);
+					localStorage.setItem('sb_url', url);
+					localStorage.setItem('sb_key', key);
+
+					document.getElementById('configSection').classList.add('hidden');
+					document.getElementById('appContent').classList.remove('hidden');
+
+					loadCampaigns();
+					renderTabs();
+				} catch (e) {
+					showToast('Connection failed', 'error');
+				}
+			}
+
+			async function loadCampaigns() {
+				const { data, error } = await state.supabase.from('campaigns').select('*');
+				if (error) return showToast(error.message, 'error');
+
+				state.campaigns = data || [];
+				const select = document.getElementById('campaignSelector');
+				select.innerHTML = '<option value="">Select Campaign...</option>';
+				state.campaigns.forEach((c) => {
+					select.innerHTML += `<option value="${c.id}">${c.name} (${c.campaign_id})</option>`;
+				});
+
+				// Restore previous selection
+				const savedId = localStorage.getItem('last_campaign_id');
+				if (savedId && state.campaigns.find((c) => c.id == savedId)) {
+					select.value = savedId;
+					handleCampaignSwitch();
+				}
+			}
+
+			async function handleCampaignSwitch() {
+				const id = document.getElementById('campaignSelector').value;
+				state.currentCampaignId = id;
+				localStorage.setItem('last_campaign_id', id);
+
+				const campaign = state.campaigns.find((c) => c.id == id);
+				document.getElementById('activeCampaignDisplay').innerText = campaign ? campaign.name : 'No Campaign Selected';
+
+				// Clear cache when switching campaigns to ensure fresh data
+				state.cache = {};
+
+				// Reload current tab
+				if (state.activeTab) switchTab(state.activeTab);
+			}
+
+			async function fetchData(tableName) {
+				// Always fetch fresh for current campaign (or all if campaigns table)
+				let query = state.supabase.from(tableName).select('*');
+				if (tableName !== 'campaigns' && state.currentCampaignId) {
+					query = query.eq('campaign_id', state.currentCampaignId);
+				}
+
+				const { data, error } = await query;
+				if (error) {
+					console.error(error);
+					return [];
+				}
+				state.cache[tableName] = data;
+				return data;
+			}
+
+			// ==========================================
+			// 4. DYNAMIC RENDERERS
+			// ==========================================
+
+			function renderTabs() {
+				const container = document.getElementById('navTabs');
+				container.innerHTML = Object.keys(SCHEMAS)
+					.map(
+						(key) =>
+							`<div class="tab ${key === state.activeTab ? 'active' : ''}" onclick="switchTab('${key}')">${
+								SCHEMAS[key].label
+							}</div>`
+					)
+					.join('');
+			}
+
+			async function switchTab(key) {
+				state.activeTab = key;
+				state.editingId = null;
+				renderTabs();
+
+				const schema = SCHEMAS[key];
+				const tableName = schema.tableName || key; // Use explicit table name or key
+
+				document.getElementById('formTitle').innerText = `New ${schema.label.slice(0, -1)}`; // "New NPC"
+
+				// 1. Render Form
+				await renderForm(key);
+
+				// 2. Load Data
+				const data = await fetchData(tableName);
+
+				// 3. Render Table
+				renderTable(key, data);
+
+				// 4. Special Views
+				renderCustomViews(key, data);
+			}
+
+			async function renderForm(schemaKey) {
+				const schema = SCHEMAS[schemaKey];
+				const form = document.getElementById('dynamicForm');
+				form.innerHTML = '';
+
+				// Load dependencies for Foreign Keys first
+				const foreignKeys = schema.fields.filter((f) => f.foreignKey);
+				for (let fk of foreignKeys) {
+					if (!state.cache[fk.foreignKey]) {
+						await fetchData(fk.foreignKey);
+					}
+				}
+
+				schema.fields.forEach((field) => {
+					const div = document.createElement('div');
+					div.className = 'form-group';
+					div.dataset.fieldKey = field.key; // For conditional logic
+
+					// Label
+					const label = document.createElement('label');
+					label.innerText = field.label + (field.required ? ' *' : '');
+					div.appendChild(label);
+
+					// Input Element
+					let input;
+					if (field.type === 'select') {
+						input = document.createElement('select');
+						input.name = field.key;
+						input.innerHTML = '<option value="">-- Select --</option>';
+
+						if (field.foreignKey) {
+							// Populate from FK data
+							const sourceData = state.cache[field.foreignKey] || [];
+							sourceData.forEach((item) => {
+								const opt = document.createElement('option');
+								opt.value = item.id;
+								opt.innerText = item[field.displayField] || item.name || item.id;
+								input.appendChild(opt);
+							});
+						} else if (field.options) {
+							// Static options
+							field.options.forEach((opt) => {
+								const optEl = document.createElement('option');
+								optEl.value = opt;
+								optEl.innerText = opt;
+								input.appendChild(optEl);
+							});
+						}
+					} else if (field.type === 'textarea' || field.type === 'json') {
+						input = document.createElement('textarea');
+						input.name = field.key;
+						input.rows = 3;
+						if (field.type === 'json') {
+							input.placeholder = '{}';
+							input.classList.add('font-mono');
+						}
+					} else {
+						input = document.createElement('input');
+						input.type = field.type;
+						input.name = field.key;
+					}
+
+					if (field.required) input.required = true;
+					if (field.default) input.value = field.default;
+
+					// Conditional Logic Hook
+					input.onchange = () => checkDependencies(schemaKey);
+
+					div.appendChild(input);
+					form.appendChild(div);
+				});
+
+				// Hidden ID field
+				const idInput = document.createElement('input');
+				idInput.type = 'hidden';
+				idInput.name = 'id';
+				form.appendChild(idInput);
+
+				// Submit Button
+				const btn = document.createElement('button');
+				btn.type = 'submit';
+				btn.className = 'btn';
+				btn.style.width = '100%';
+				btn.innerText = 'Save Item';
+				form.appendChild(btn);
+
+				checkDependencies(schemaKey); // Initial check
+			}
+
+			function checkDependencies(schemaKey) {
+				const schema = SCHEMAS[schemaKey];
+				const form = document.getElementById('dynamicForm');
+				const formData = new FormData(form);
+
+				schema.fields.forEach((field) => {
+					if (field.visibleIf) {
+						const dependency = field.visibleIf;
+						const currentValue = formData.get(dependency.field);
+						const fieldDiv = form.querySelector(`div[data-field-key="${field.key}"]`);
+
+						if (fieldDiv) {
+							const isVisible = dependency.values.includes(currentValue);
+							if (isVisible) fieldDiv.classList.remove('hidden');
+							else fieldDiv.classList.add('hidden');
+						}
+					}
+				});
+			}
+
+			function renderTable(schemaKey, data) {
+				const schema = SCHEMAS[schemaKey];
+				const container = document.getElementById('dataTable');
+
+				if (!data || data.length === 0) {
+					container.innerHTML =
+						'<div style="padding:20px; text-align:center; color:var(--text-muted)">No items found</div>';
+					return;
+				}
+
+				let html = `<table><thead><tr>`;
+				schema.listFields.forEach((f) => (html += `<th>${f.replace(/_/g, ' ')}</th>`));
+				html += `<th>Actions</th></tr></thead><tbody>`;
+
+				data.forEach((item) => {
+					html += `<tr>`;
+					schema.listFields.forEach((key) => {
+						let val = item[key];
+						// Truncate long text
+						if (typeof val === 'string' && val.length > 30) val = val.substring(0, 30) + '...';
+						html += `<td>${val || '-'}</td>`;
+					});
+					html += `<td>
+                    <button class="btn btn-sm" onclick='editItem("${schemaKey}", ${JSON.stringify(item).replace(
+						/'/g,
+						'&#39;'
+					)})'>Edit</button>
+                    <button class="btn btn-sm btn-danger" onclick="deleteItem('${schemaKey}', '${item.id}')">×</button>
+                </td></tr>`;
+				});
+
+				html += `</tbody></table>`;
+				container.innerHTML = html;
+			}
+
+			// ==========================================
+			// 5. INTERACTION & CRUD
+			// ==========================================
+
+			async function handleFormSubmit(e) {
+				e.preventDefault();
+				if (!state.currentCampaignId && state.activeTab !== 'campaigns') {
+					return showToast('Please select a campaign first', 'error');
+				}
+
+				const form = e.target;
+				const formData = new FormData(form);
+				const schema = SCHEMAS[state.activeTab];
+				const tableName = schema.tableName || state.activeTab;
+
+				const payload = {};
+
+				// Process fields
+				for (let [key, value] of formData.entries()) {
+					if (value === '') {
+						payload[key] = null;
+						continue;
+					}
+
+					// Find field definition to check type
+					const fieldDef = schema.fields.find((f) => f.key === key);
+					if (fieldDef && fieldDef.type === 'json') {
+						try {
+							payload[key] = JSON.parse(value);
+						} catch (err) {
+							return showToast(`Invalid JSON in ${fieldDef.label}`, 'error');
+						}
+					} else if (key === 'id') {
+						// handled separately
+					} else {
+						payload[key] = value;
+					}
+				}
+
+				// Add campaign ID automatically
+				if (tableName !== 'campaigns') {
+					payload.campaign_id = state.currentCampaignId;
+				}
+
+				const id = formData.get('id');
+				let error;
+
+				if (id) {
+					// Update
+					const res = await state.supabase.from(tableName).update(payload).eq('id', id);
+					error = res.error;
+				} else {
+					// Create
+					const res = await state.supabase.from(tableName).insert([payload]);
+					error = res.error;
+				}
+
+				if (error) {
+					showToast(error.message, 'error');
+				} else {
+					showToast('Saved successfully', 'success');
+					resetForm();
+					refreshTable();
+				}
+			}
+
+			function editItem(schemaKey, item) {
+				state.editingId = item.id;
+				const form = document.getElementById('dynamicForm');
+
+				document.getElementById('formTitle').innerText = `Edit ${SCHEMAS[schemaKey].label.slice(0, -1)}`;
+
+				// Populate fields
+				Object.keys(item).forEach((key) => {
+					const input = form.elements[key];
+					if (input) {
+						if (typeof item[key] === 'object' && item[key] !== null) {
+							input.value = JSON.stringify(item[key], null, 2);
+						} else {
+							input.value = item[key];
+						}
+						// Trigger change for conditional logic
+						if (input.onchange) input.onchange();
+					}
+				});
+
+				// Set hidden ID
+				form.elements['id'].value = item.id;
+
+				// Scroll to top
+				window.scrollTo({ top: 0, behavior: 'smooth' });
+			}
+
+			async function deleteItem(schemaKey, id) {
+				if (!confirm('Delete this item?')) return;
+
+				const schema = SCHEMAS[schemaKey];
+				const tableName = schema.tableName || schemaKey;
+
+				const { error } = await state.supabase.from(tableName).delete().eq('id', id);
+
+				if (error) showToast(error.message, 'error');
+				else {
+					showToast('Deleted', 'success');
+					refreshTable();
+				}
+			}
+
+			function resetForm() {
+				state.editingId = null;
+				document.getElementById('dynamicForm').reset();
+				document.getElementById('formTitle').innerText = `New ${SCHEMAS[state.activeTab].label.slice(0, -1)}`;
+				document.querySelector('input[name="id"]').value = '';
+				// Reset conditionals
+				checkDependencies(state.activeTab);
+			}
+
+			function refreshTable() {
+				switchTab(state.activeTab);
+			}
+
+			function showToast(msg, type) {
+				const el = document.getElementById('toast');
+				el.innerText = msg;
+				el.className = `toast show ${type}`;
+				setTimeout(() => el.classList.remove('show'), 3000);
+			}
+
+			function toggleConfig() {
+				document.getElementById('configSection').classList.toggle('hidden');
+			}
+
+			// ==========================================
+			// 6. CUSTOM VIEWS (Logs, Special Displays)
+			// ==========================================
+			function renderCustomViews(key, data) {
+				const container = document.getElementById('customView');
+				container.innerHTML = '';
+				container.classList.add('hidden');
+
+				if (key === 'combat_log') {
+					container.classList.remove('hidden');
+					// Sort by round
+					data.sort((a, b) => b.round_number - a.round_number || b.id - a.id);
+
+					let html = '<h4>Combat Feed</h4>';
+					data.forEach((log) => {
+						html += `
+                    <div class="log-entry">
+                        <div style="font-size:0.8em; color:var(--accent)">Round ${log.round_number} - ${
+							log.actor_name
+						}</div>
+                        <div>${log.action_description}</div>
+                        ${
+													log.damage_dealt
+														? `<div style="color:var(--danger); font-weight:bold">-${log.damage_dealt} HP</div>`
+														: ''
+												}
+                        ${log.result ? `<div style="font-size:0.8em; opacity:0.8">Result: ${log.result}</div>` : ''}
+                    </div>`;
+					});
+					container.innerHTML = html;
+				} else if (key === 'initiative') {
+					container.classList.remove('hidden');
+					data.sort((a, b) => a.order_index - b.order_index);
+
+					let html = '<h4>Turn Order</h4>';
+					data.forEach((init) => {
+						html += `
+                    <div class="init-item">
+                        <div class="init-order">${init.order_index}</div>
+                        <div style="flex-grow:1">
+                            <strong>${init.combatant_name}</strong>
+                            <div style="font-size:0.8em; opacity:0.7">Roll: ${init.initiative_roll} | AC: ${
+							init.armor_class || '?'
+						}</div>
+                        </div>
+                        <div style="font-weight:bold; color:${
+													init.current_hp < init.max_hp / 2 ? 'var(--danger)' : 'var(--success)'
+												}">
+                            ${init.current_hp || '?'}/${init.max_hp || '?'} HP
+                        </div>
+                    </div>`;
+					});
+					container.innerHTML = html;
+				}
+			}
+
+			// Auto-init if creds exist
+			window.onload = () => {
+				if (localStorage.getItem('sb_url')) initApp();
+				else toggleConfig();
+			};
+		</script>
+	</body>
+</html>

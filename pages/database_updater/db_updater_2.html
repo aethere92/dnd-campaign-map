@@ -306,6 +306,42 @@
 				font-size: 1.2em;
 				line-height: 1;
 			}
+
+			.data-table {
+				width: 100%;
+				margin-top: 20px;
+				border-collapse: collapse;
+			}
+
+			.data-table th,
+			.data-table td {
+				padding: 12px;
+				text-align: left;
+				border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+			}
+
+			.data-table th {
+				background: rgba(255, 255, 255, 0.05);
+				font-weight: 600;
+			}
+
+			.data-table tr:hover {
+				background: rgba(255, 255, 255, 0.03);
+			}
+
+			.action-btn {
+				padding: 6px 12px;
+				margin: 0 4px;
+				font-size: 0.85em;
+			}
+
+			.action-btn.edit {
+				background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
+			}
+
+			.action-btn.delete {
+				background: linear-gradient(135deg, #f44336 0%, #d32f2f 100%);
+			}
 		</style>
 	</head>
 	<body>
@@ -524,32 +560,67 @@
 			function createCampaignForm() {
 				const container = document.getElementById('formContainer');
 				container.innerHTML = `
-                <h2>Add New Campaign</h2>
-                <form onsubmit="handleSubmit(event, 'campaigns')" id="campaignForm">
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label for="campaign_id">Campaign ID *</label>
-                            <input type="number" id="campaign_id" name="campaign_id" required>
-                            <span class="help-text">Unique identifier for this campaign</span>
-                        </div>
-                        <div class="form-group">
-                            <label for="name">Campaign Name *</label>
-                            <input type="text" id="name" name="name" required>
-                        </div>
-                        <div class="form-group full-width">
-                            <label for="metadata">Metadata (JSON)</label>
-                            <textarea id="metadata" name="metadata" class="json-editor" placeholder='{"setting": "Forgotten Realms"}'></textarea>
-                            <span class="help-text">Optional JSON metadata</span>
-                        </div>
-                        <div class="form-group full-width">
-                            <label for="styling">Styling (JSON)</label>
-                            <textarea id="styling" name="styling" class="json-editor" placeholder='{"theme": "dark"}'></textarea>
-                            <span class="help-text">Optional JSON styling preferences</span>
-                        </div>
-                    </div>
-                    <button type="submit">Create Campaign</button>
-                </form>
-            `;
+        <h2 id="formTitle">Add New Campaign</h2>
+        <form onsubmit="handleSubmit(event, 'campaigns')" id="campaignForm">
+            <input type="hidden" id="editId" name="id" value="">
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="campaign_id">Campaign ID *</label>
+                    <input type="number" id="campaign_id" name="campaign_id" required>
+                    <span class="help-text">Unique identifier for this campaign</span>
+                </div>
+                <div class="form-group">
+                    <label for="name">Campaign Name *</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                <div class="form-group full-width">
+                    <label for="metadata">Metadata (JSON)</label>
+                    <textarea id="metadata" name="metadata" class="json-editor" placeholder='{"setting": "Forgotten Realms"}'></textarea>
+                    <span class="help-text">Optional JSON metadata</span>
+                </div>
+                <div class="form-group full-width">
+                    <label for="styling">Styling (JSON)</label>
+                    <textarea id="styling" name="styling" class="json-editor" placeholder='{"theme": "dark"}'></textarea>
+                    <span class="help-text">Optional JSON styling preferences</span>
+                </div>
+            </div>
+            <button type="submit" id="submitBtn">Create Campaign</button>
+            <button type="button" onclick="cancelEdit()" id="cancelBtn" style="display:none; background: #666;">Cancel</button>
+        </form>
+
+        <h3 style="margin-top: 40px;">Existing Campaigns</h3>
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Created</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                ${allData.campaigns
+									.map(
+										(c) => `
+                    <tr>
+                        <td>${c.campaign_id}</td>
+                        <td>${c.name}</td>
+                        <td>${new Date(c.created_at).toLocaleDateString()}</td>
+                        <td>
+                            <button class="action-btn edit" onclick='editRecord("campaigns", ${JSON.stringify(
+															c
+														)})'>Edit</button>
+                            <button class="action-btn delete" onclick='deleteRecord("campaigns", "${c.id}", "${
+											c.name
+										}")'>Delete</button>
+                        </td>
+                    </tr>
+                `
+									)
+									.join('')}
+            </tbody>
+        </table>
+    `;
 			}
 
 			function createSessionForm() {
@@ -1538,9 +1609,12 @@
 				const form = event.target;
 				const formData = new FormData(form);
 				const data = {};
+				const editId = document.getElementById('editId')?.value;
 
-				// Convert form data to object
+				// Convert form data to object (existing code remains same)
 				for (let [key, value] of formData.entries()) {
+					if (key === 'id') continue; // Skip the hidden ID field
+
 					if (value === '') {
 						data[key] = null;
 					} else if (
@@ -1550,7 +1624,8 @@
 						key === 'stats' ||
 						key === 'environment' ||
 						key === 'outcome' ||
-						key === 'event_data'
+						key === 'event_data' ||
+						key === 'conditions'
 					) {
 						try {
 							data[key] = value ? JSON.parse(value) : null;
@@ -1563,7 +1638,6 @@
 					} else if (key === 'level' || key === 'session_number' || key === 'event_order') {
 						data[key] = value ? parseInt(value) : null;
 					} else if (key === 'campaign_id' && !value.includes('-')) {
-						// This is an integer campaign_id, not a UUID
 						data[key] = parseInt(value);
 					} else {
 						data[key] = value;
@@ -1575,31 +1649,95 @@
 					if (data[key] === null && (key.includes('_id') || key === 'parent_location_id')) {
 						delete data[key];
 					}
-					// Remove empty string UUID fields
 					if (data[key] === '' && key.includes('_id')) {
 						delete data[key];
 					}
 				});
 
 				try {
-					const { data: result, error } = await supabase.from(tableName).insert([data]).select();
+					let result, error;
 
-					if (error) throw error;
+					if (editId) {
+						// Update existing record
+						({ data: result, error } = await supabase.from(tableName).update(data).eq('id', editId).select());
 
-					showMessage(`✅ Successfully created ${tableName.slice(0, -1)}!`, 'success!');
-					form.reset();
+						if (error) throw error;
+						showMessage(`✅ Successfully updated ${tableName.slice(0, -1)}!`, 'success');
+					} else {
+						// Insert new record
+						({ data: result, error } = await supabase.from(tableName).insert([data]).select());
 
-					// Reload data to update selectors
+						if (error) throw error;
+						showMessage(`✅ Successfully created ${tableName.slice(0, -1)}!`, 'success');
+					}
+
 					await loadAllData();
 
 					// If we just created a campaign, select it
-					if (tableName === 'campaigns' && result && result[0]) {
+					if (tableName === 'campaigns' && result && result[0] && !editId) {
 						document.getElementById('campaignSelect').value = result[0].id;
 						currentCampaign = result[0].id;
 					}
+
+					// Refresh the form view
+					const activeTab = document.querySelector('.tab.active').textContent.toLowerCase().trim();
+					switchTab(activeTab);
 				} catch (error) {
 					showMessage(`❌ Error: ${error.message}`, 'error');
 					console.error('Submission error:', error);
+				}
+			}
+
+			function editRecord(tableName, record) {
+				// Populate form with record data
+				const form = document.querySelector('form');
+				document.getElementById('formTitle').textContent = `Edit ${tableName.slice(0, -1)}`;
+				document.getElementById('editId').value = record.id;
+				document.getElementById('submitBtn').textContent = `Update ${tableName.slice(0, -1)}`;
+				document.getElementById('cancelBtn').style.display = 'inline-block';
+
+				// Fill in form fields
+				Object.keys(record).forEach((key) => {
+					const field = document.getElementById(key);
+					if (field) {
+						if (typeof record[key] === 'object' && record[key] !== null) {
+							field.value = JSON.stringify(record[key], null, 2);
+						} else if (typeof record[key] === 'boolean') {
+							field.value = record[key].toString();
+						} else if (record[key] !== null) {
+							field.value = record[key];
+						}
+					}
+				});
+
+				// Scroll to form
+				form.scrollIntoView({ behavior: 'smooth' });
+			}
+
+			function cancelEdit() {
+				const activeTab = document.querySelector('.tab.active').textContent.toLowerCase().trim();
+				switchTab(activeTab); // Reload the form
+			}
+
+			async function deleteRecord(tableName, id, name) {
+				if (!confirm(`Are you sure you want to delete "${name}"? This cannot be undone.`)) {
+					return;
+				}
+
+				try {
+					const { error } = await supabase.from(tableName).delete().eq('id', id);
+
+					if (error) throw error;
+
+					showMessage(`✅ Successfully deleted ${name}!`, 'success');
+					await loadAllData();
+
+					// Refresh current view
+					const activeTab = document.querySelector('.tab.active').textContent.toLowerCase().trim();
+					switchTab(activeTab);
+				} catch (error) {
+					showMessage(`❌ Error deleting: ${error.message}`, 'error');
+					console.error('Delete error:', error);
 				}
 			}
 
