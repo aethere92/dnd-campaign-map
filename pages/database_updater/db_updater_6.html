@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>D&D Campaign Manager 3.2</title>
+		<title>D&D Campaign Manager 3.3 - Advanced</title>
 		<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 		<link href="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/css/tom-select.css" rel="stylesheet" />
 		<script src="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/js/tom-select.complete.min.js"></script>
@@ -38,7 +38,7 @@
 
 			/* Layout */
 			.container {
-				max-width: 1600px;
+				max-width: 1800px;
 				margin: 0 auto;
 			}
 			.grid {
@@ -48,8 +48,14 @@
 			.grid-main {
 				grid-template-columns: 250px 1fr;
 			}
+			/* Changed to fit Cross Ref panel better */
 			.grid-content {
 				grid-template-columns: 350px 1fr;
+			}
+			.editor-column {
+				display: flex;
+				flex-direction: column;
+				gap: 20px;
 			}
 
 			@media (max-width: 1000px) {
@@ -101,6 +107,11 @@
 				background: transparent;
 				border: 1px solid var(--border);
 				color: var(--text-main);
+			}
+			.btn-active {
+				background: var(--accent);
+				color: var(--bg-dark);
+				border-color: var(--accent);
 			}
 			.btn-icon {
 				padding: 4px 10px;
@@ -226,12 +237,72 @@
 				font-weight: 600;
 				position: sticky;
 				top: 0;
+				cursor: pointer;
+				user-select: none;
+			}
+			th:hover {
+				color: var(--text-main);
+				background: rgba(255, 255, 255, 0.05);
 			}
 			tr:last-child td {
 				border-bottom: none;
 			}
 			tr:hover {
 				background: rgba(255, 255, 255, 0.02);
+			}
+
+			/* Filter Panel */
+			.filter-panel {
+				background: rgba(0, 0, 0, 0.2);
+				border-bottom: 1px solid var(--border);
+				padding: 15px;
+				display: grid;
+				grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+				gap: 10px;
+				margin-bottom: 10px;
+			}
+			.filter-item label {
+				font-size: 0.75em;
+				margin-bottom: 2px;
+			}
+			.filter-item input,
+			.filter-item select {
+				padding: 6px;
+				font-size: 0.9em;
+			}
+
+			/* Cross Reference Panel */
+			.ref-category {
+				margin-bottom: 15px;
+			}
+			.ref-header {
+				font-size: 0.8em;
+				color: var(--warning);
+				font-weight: bold;
+				text-transform: uppercase;
+				margin-bottom: 5px;
+				border-bottom: 1px solid var(--border);
+				padding-bottom: 2px;
+			}
+			.ref-tag {
+				display: block;
+				padding: 6px 10px;
+				background: rgba(255, 255, 255, 0.03);
+				border: 1px solid var(--border);
+				border-radius: 4px;
+				margin-bottom: 5px;
+				font-size: 0.85em;
+				cursor: pointer;
+				transition: 0.2s;
+			}
+			.ref-tag:hover {
+				border-color: var(--accent);
+				background: rgba(255, 255, 255, 0.05);
+			}
+			.ref-tag .ref-id {
+				color: var(--text-muted);
+				font-size: 0.8em;
+				margin-right: 5px;
 			}
 
 			/* Utilities */
@@ -330,7 +401,7 @@
 		<div class="container">
 			<div class="card flex-between" style="margin-bottom: 20px">
 				<div>
-					<h1 style="font-size: 1.5em">🐉 DM Console 3.2</h1>
+					<h1 style="font-size: 1.5em">🐉 DM Console 3.3</h1>
 					<div id="activeCampaignDisplay" style="color: var(--text-muted); font-size: 0.9em">No Campaign Selected</div>
 				</div>
 				<div style="display: flex; gap: 10px">
@@ -366,29 +437,42 @@
 				</div>
 
 				<div class="grid grid-content">
-					<div class="card">
-						<div
-							class="flex-between"
-							style="margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid var(--border)">
-							<h3 id="formTitle">Editor</h3>
-							<button onclick="resetForm()" class="btn btn-sm btn-outline">New Item</button>
+					<div class="editor-column">
+						<div class="card">
+							<div
+								class="flex-between"
+								style="margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid var(--border)">
+								<h3 id="formTitle">Editor</h3>
+								<button onclick="resetForm()" class="btn btn-sm btn-outline">New Item</button>
+							</div>
+							<form id="dynamicForm" onsubmit="handleFormSubmit(event)"></form>
 						</div>
-						<form id="dynamicForm" onsubmit="handleFormSubmit(event)"></form>
+
+						<div id="crossRefContainer" class="card hidden">
+							<div class="flex-between" style="margin-bottom: 10px">
+								<h3 style="font-size: 1em">🔗 Linked Items</h3>
+								<span id="refCount" style="font-size: 0.8em; color: var(--text-muted)">0 refs</span>
+							</div>
+							<div id="crossRefList" style="max-height: 300px; overflow-y: auto"></div>
+						</div>
 					</div>
 
 					<div class="card" style="overflow: hidden; display: flex; flex-direction: column; height: 85vh">
 						<div class="flex-between" style="margin-bottom: 15px">
-							<h3 id="tableTitle">Data</h3>
+							<div class="flex-gap" style="align-items: center">
+								<h3 id="tableTitle">Data</h3>
+								<span id="tableStatus" class="tag hidden"></span>
+							</div>
 							<div class="flex-gap">
-								<input
-									type="text"
-									id="tableSearch"
-									placeholder="Search table..."
-									style="width: 150px; padding: 4px 8px; font-size: 0.9em"
-									onkeyup="filterTable(this.value)" />
+								<button id="btnToggleFilters" onclick="toggleFilterPanel()" class="btn btn-sm btn-outline">
+									🔍 Filters
+								</button>
 								<button onclick="refreshTable()" class="btn btn-sm btn-outline">↻</button>
 							</div>
 						</div>
+
+						<div id="filterPanelContainer" class="filter-panel hidden"></div>
+
 						<div class="table-wrapper" id="dataTable" style="flex-grow: 1; overflow-y: auto"></div>
 					</div>
 				</div>
@@ -411,7 +495,6 @@
 			// ==========================================
 			// 1. CONFIG
 			// ==========================================
-			// List of tables that definitely DO NOT have a campaign_id column
 			const NO_CAMPAIGN_ID_TABLES = [
 				'campaigns',
 				'character_sessions',
@@ -428,6 +511,7 @@
 				'encounter_initiative',
 				'session_events',
 				'encounter_rounds',
+				'encounter_actions',
 			];
 
 			const SCHEMAS = {
@@ -1274,6 +1358,9 @@
 				editingItem: null,
 				tomSelectInstances: [],
 				pendingQuickAdd: null,
+				// Advanced Features
+				filters: {}, // Key-Value pairs for filtering
+				sort: { field: null, direction: 'asc' }, // { field: 'name', direction: 'asc' }
 			};
 
 			// ==========================================
@@ -1358,6 +1445,47 @@
 				return item ? item[displayField] : id;
 			}
 
+			// --- CROSS REFERENCE LOGIC ---
+			async function getCrossReferences(targetSchemaKey, targetId) {
+				if (!targetId) return [];
+
+				const results = [];
+
+				// Iterate over all schemas to see who points to targetSchemaKey
+				for (const [schemaKey, schema] of Object.entries(SCHEMAS)) {
+					const fkFields = schema.fields.filter((f) => f.foreignKey === targetSchemaKey);
+
+					if (fkFields.length > 0) {
+						const tableName = schema.tableName || schemaKey;
+
+						for (const field of fkFields) {
+							// Query DB for accuracy (cache might be partial)
+							let query = state.supabase.from(tableName).select(`id, ${schema.listFields.join(',')}`);
+
+							if (schema.compositeKeys) {
+								// Composite keys don't usually have a single ID, we fetch enough to identify
+								query = query.eq(field.key, targetId);
+							} else {
+								query = query.eq(field.key, targetId);
+							}
+
+							const { data, error } = await query;
+
+							if (data && data.length > 0) {
+								results.push({
+									schemaKey: schemaKey,
+									category: schema.category,
+									label: schema.label,
+									items: data,
+									fieldLabel: field.label,
+								});
+							}
+						}
+					}
+				}
+				return results;
+			}
+
 			// ==========================================
 			// 5. RENDERERS
 			// ==========================================
@@ -1383,9 +1511,17 @@
 
 			async function switchTab(key) {
 				state.activeTab = key;
+				state.filters = {}; // Reset filters
+				state.sort = { field: null, direction: 'asc' }; // Reset sort
+
 				renderNav();
 				resetForm();
-				document.getElementById('tableSearch').value = ''; // Reset search
+
+				// UI Resets
+				document.getElementById('filterPanelContainer').classList.add('hidden');
+				document.getElementById('btnToggleFilters').classList.remove('btn-active');
+				document.getElementById('tableStatus').classList.add('hidden');
+				document.getElementById('crossRefContainer').classList.add('hidden');
 
 				const schema = SCHEMAS[key];
 				const tableName = schema.tableName || key;
@@ -1399,7 +1535,8 @@
 
 				const data = await fetchData(tableName);
 				renderForm(key, 'dynamicForm');
-				renderTable(key, data);
+				renderFilterPanel(key); // Prep filters
+				renderTable(key); // Uses cached data + filter/sort
 			}
 
 			function renderForm(schemaKey, formId) {
@@ -1515,45 +1652,156 @@
 				}, 50);
 			}
 
-			function checkDependencies(schemaKey, formId) {
-				const schema = SCHEMAS[schemaKey];
-				const form = document.getElementById(formId);
-				const formData = new FormData(form);
-
-				schema.fields.forEach((field) => {
-					if (field.visibleIf) {
-						const dep = field.visibleIf;
-						const val = formData.get(dep.field);
-						const div = form.querySelector(`div[data-field-key="${field.key}"]`);
-						if (div) {
-							const visible = dep.values.includes(val);
-							div.classList.toggle('hidden', !visible);
-							const el = div.querySelector('input, select, textarea');
-							if (el) el.required = visible && field.required;
-						}
-					}
-				});
+			// --- FILTERING UI & LOGIC ---
+			function toggleFilterPanel() {
+				const panel = document.getElementById('filterPanelContainer');
+				const btn = document.getElementById('btnToggleFilters');
+				panel.classList.toggle('hidden');
+				btn.classList.toggle('btn-active');
 			}
 
-			function renderTable(schemaKey, data) {
+			function renderFilterPanel(schemaKey) {
+				const schema = SCHEMAS[schemaKey];
+				const container = document.getElementById('filterPanelContainer');
+				container.innerHTML = '';
+
+				// Filterable fields (exclude JSON, textareas for now for simplicity)
+				const filterableFields = schema.fields.filter((f) => ['text', 'number', 'select', 'date'].includes(f.type));
+
+				filterableFields.forEach((field) => {
+					const wrapper = document.createElement('div');
+					wrapper.className = 'filter-item';
+
+					const label = document.createElement('label');
+					label.innerText = field.label;
+					wrapper.appendChild(label);
+
+					if (field.type === 'select') {
+						const select = document.createElement('select');
+						select.innerHTML = '<option value="">All</option>';
+						if (field.options) {
+							field.options.forEach((o) => (select.innerHTML += `<option value="${o}">${o}</option>`));
+						} else if (field.foreignKey) {
+							const data = state.cache[field.foreignKey] || [];
+							data.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+							data.forEach(
+								(o) => (select.innerHTML += `<option value="${o.id}">${o[field.displayField] || o.name}</option>`)
+							);
+						}
+						select.onchange = (e) => applyFilter(field.key, e.target.value);
+						wrapper.appendChild(select);
+					} else {
+						const input = document.createElement('input');
+						input.type = field.type;
+						input.placeholder = 'Filter...';
+						input.onkeyup = (e) => applyFilter(field.key, e.target.value);
+						wrapper.appendChild(input);
+					}
+					container.appendChild(wrapper);
+				});
+
+				// Clear Button
+				const clearBtn = document.createElement('button');
+				clearBtn.className = 'btn btn-sm btn-danger';
+				clearBtn.style.marginTop = '18px';
+				clearBtn.innerHTML = '✕ Clear';
+				clearBtn.onclick = clearFilters;
+				container.appendChild(clearBtn);
+			}
+
+			function applyFilter(key, value) {
+				if (value === '') delete state.filters[key];
+				else state.filters[key] = value;
+				renderTable(state.activeTab);
+			}
+
+			function clearFilters() {
+				state.filters = {};
+				const inputs = document.querySelectorAll('#filterPanelContainer input, #filterPanelContainer select');
+				inputs.forEach((i) => (i.value = ''));
+				renderTable(state.activeTab);
+			}
+
+			function handleSort(fieldKey) {
+				if (state.sort.field === fieldKey) {
+					state.sort.direction = state.sort.direction === 'asc' ? 'desc' : 'asc';
+				} else {
+					state.sort.field = fieldKey;
+					state.sort.direction = 'asc';
+				}
+				renderTable(state.activeTab);
+			}
+
+			// --- TABLE RENDERING WITH FILTERS ---
+			function renderTable(schemaKey) {
 				const schema = SCHEMAS[schemaKey];
 				const container = document.getElementById('dataTable');
+				const rawData = state.cache[schemaKey] || [];
 
-				if (!data || data.length === 0) {
+				// 1. Filter Data
+				let processedData = rawData.filter((item) => {
+					for (const [key, val] of Object.entries(state.filters)) {
+						const itemVal = item[key];
+						if (itemVal === null || itemVal === undefined) return false;
+
+						// Partial match for strings, exact for others
+						if (
+							typeof itemVal === 'string' &&
+							!schema.fields.find((f) => f.key === key)?.foreignKey &&
+							!schema.fields.find((f) => f.key === key)?.options
+						) {
+							if (!itemVal.toLowerCase().includes(val.toLowerCase())) return false;
+						} else {
+							// Exact match for IDs, Numbers, Dates, Selects
+							if (itemVal.toString() != val) return false;
+						}
+					}
+					return true;
+				});
+
+				// 2. Sort Data
+				if (state.sort.field) {
+					processedData.sort((a, b) => {
+						let valA = a[state.sort.field];
+						let valB = b[state.sort.field];
+
+						// Resolve FK for sorting if needed
+						const fDef = schema.fields.find((f) => f.key === state.sort.field);
+						if (fDef && fDef.foreignKey) {
+							valA = resolveFK(fDef.foreignKey, valA, fDef.displayField);
+							valB = resolveFK(fDef.foreignKey, valB, fDef.displayField);
+						}
+
+						if (valA < valB) return state.sort.direction === 'asc' ? -1 : 1;
+						if (valA > valB) return state.sort.direction === 'asc' ? 1 : -1;
+						return 0;
+					});
+				}
+
+				// Update Status Text
+				const statusEl = document.getElementById('tableStatus');
+				if (Object.keys(state.filters).length > 0) {
+					statusEl.innerText = `${processedData.length} / ${rawData.length}`;
+					statusEl.classList.remove('hidden');
+				} else {
+					statusEl.classList.add('hidden');
+				}
+
+				if (!processedData || processedData.length === 0) {
 					container.innerHTML =
-						'<div style="padding:20px; text-align:center; color:var(--text-muted)">No data found.</div>';
+						'<div style="padding:20px; text-align:center; color:var(--text-muted)">No data matches filters.</div>';
 					return;
 				}
 
 				let html = '<table><thead><tr>';
 				schema.listFields.forEach((f) => {
 					const fDef = schema.fields.find((field) => field.key === f);
-					html += `<th>${fDef ? fDef.label : f}</th>`;
+					const sortIcon = state.sort.field === f ? (state.sort.direction === 'asc' ? ' ▲' : ' ▼') : '';
+					html += `<th onclick="handleSort('${f}')">${fDef ? fDef.label : f}${sortIcon}</th>`;
 				});
 				html += '<th>Actions</th></tr></thead><tbody>';
 
-				data.forEach((item) => {
-					// Create identifier for edit/delete
+				processedData.forEach((item) => {
 					let itemId;
 					if (schema.compositeKeys) {
 						itemId = schema.compositeKeys.map((k) => `${k}:${item[k]}`).join(',');
@@ -1575,25 +1823,104 @@
 						html += `<td>${val}</td>`;
 					});
 					html += `<td>
-              <button class="btn btn-sm btn-outline" onclick="editItem('${schemaKey}', '${itemId}')">Edit</button>
-              <button class="btn btn-sm btn-danger" onclick="deleteItem('${schemaKey}', '${itemId}')">Del</button>
-          </td></tr>`;
+                        <button class="btn btn-sm btn-outline" onclick="editItem('${schemaKey}', '${itemId}')">Edit</button>
+                        <button class="btn btn-sm btn-danger" onclick="deleteItem('${schemaKey}', '${itemId}')">Del</button>
+                    </td></tr>`;
 				});
 				html += '</tbody></table>';
 				container.innerHTML = html;
 			}
+
+			// --- CROSS REFERENCE PANEL ---
+			async function renderCrossReferences(schemaKey, itemId) {
+				const container = document.getElementById('crossRefList');
+				const wrapper = document.getElementById('crossRefContainer');
+				const countEl = document.getElementById('refCount');
+
+				container.innerHTML = '<div style="padding:10px; text-align:center;">Searching dependencies...</div>';
+				wrapper.classList.remove('hidden');
+
+				const refs = await getCrossReferences(schemaKey, itemId);
+
+				let total = 0;
+				refs.forEach((r) => (total += r.items.length));
+				countEl.innerText = `${total} refs`;
+
+				if (refs.length === 0) {
+					container.innerHTML =
+						'<div style="padding:10px; text-align:center; color:var(--success)">No dependencies found. Safe to delete.</div>';
+					return;
+				}
+
+				// Group by Category
+				const grouped = {};
+				refs.forEach((ref) => {
+					if (!grouped[ref.category]) grouped[ref.category] = [];
+					grouped[ref.category].push(ref);
+				});
+
+				let html = '';
+				Object.keys(grouped).forEach((cat) => {
+					html += `<div class="ref-category"><div class="ref-header">${cat}</div>`;
+					grouped[cat].forEach((g) => {
+						g.items.forEach((item) => {
+							const label = item.name || item.title || item.description || `ID: ${item.id}`;
+							const idStr = g.items[0].id ? item.id : 'comp'; // composite handle later
+							// Create link to jump
+							html += `<div class="ref-tag" onclick="jumpToRef('${g.schemaKey}', '${item.id || ''}')">
+                                <span class="ref-id">[${g.label}]</span> ${label}
+                            </div>`;
+						});
+					});
+					html += `</div>`;
+				});
+				container.innerHTML = html;
+			}
+
+			function jumpToRef(schemaKey, itemId) {
+				switchTab(schemaKey);
+				// Auto filter to find it
+				if (itemId) {
+					const idField = SCHEMAS[schemaKey].fields.find((f) => f.key === 'id'); // Usually id
+					if (idField) {
+						state.filters['id'] = itemId;
+						// Re-render panel to show filter
+						const input = document.querySelector(`#filterPanelContainer input[type="number"]`); // simplistic guess
+						// Better: just set state and render
+						document.getElementById('filterPanelContainer').classList.remove('hidden');
+						renderTable(schemaKey);
+
+						// Populate inputs visually
+						renderFilterPanel(schemaKey); // reset inputs
+						// This part is tricky to sync visual inputs with state efficiently without ID matching
+						// For now, just filtering the table is sufficient feedback.
+					}
+				}
+			}
+
+			function checkDependencies(schemaKey, formId) {
+				const schema = SCHEMAS[schemaKey];
+				const form = document.getElementById(formId);
+				const formData = new FormData(form);
+
+				schema.fields.forEach((field) => {
+					if (field.visibleIf) {
+						const dep = field.visibleIf;
+						const val = formData.get(dep.field);
+						const div = form.querySelector(`div[data-field-key="${field.key}"]`);
+						if (div) {
+							const visible = dep.values.includes(val);
+							div.classList.toggle('hidden', !visible);
+							const el = div.querySelector('input, select, textarea');
+							if (el) el.required = visible && field.required;
+						}
+					}
+				});
+			}
+
 			// ==========================================
 			// 6. HELPERS & UTILS
 			// ==========================================
-
-			function filterTable(query) {
-				const rows = document.querySelectorAll('#dataTable tbody tr');
-				query = query.toLowerCase();
-				rows.forEach((row) => {
-					const text = row.innerText.toLowerCase();
-					row.style.display = text.includes(query) ? '' : 'none';
-				});
-			}
 
 			function formatJsonField(formId, fieldName) {
 				const form = document.getElementById(formId);
@@ -1632,8 +1959,6 @@
 					}
 				}
 
-				// FIX: Force Campaign ID injection for valid tables
-				// We check if the table is NOT in the exclusion list
 				if (state.currentCampaignId && !NO_CAMPAIGN_ID_TABLES.includes(tableName)) {
 					payload.campaign_id = state.currentCampaignId;
 				}
@@ -1732,17 +2057,16 @@
 				} else {
 					showToast('Saved!', 'success');
 					resetForm();
+					document.getElementById('crossRefContainer').classList.add('hidden'); // Hide refs on save
 					refreshTable();
 				}
 			}
 
-			// FIX: Retrieve item from State Cache via ID
 			function editItem(schemaKey, itemIdentifier) {
 				const schema = SCHEMAS[schemaKey];
 				let item;
 
 				if (schema.compositeKeys) {
-					// For composite keys, itemIdentifier is "key1:val1,key2:val2"
 					const parts = itemIdentifier.split(',');
 					const criteria = {};
 					parts.forEach((part) => {
@@ -1780,6 +2104,11 @@
 				btn.innerText = 'Update Item';
 				btn.classList.remove('btn-primary');
 				btn.style.background = 'var(--warning)';
+
+				// Trigger Cross Reference Check
+				if (!schema.compositeKeys) {
+					renderCrossReferences(schemaKey, item.id);
+				}
 			}
 
 			async function deleteItem(schemaKey, itemIdentifier) {
@@ -1800,7 +2129,23 @@
 
 				if (!item) return showToast('Error: Item not found in cache', 'error');
 
-				if (!confirm('Are you sure?')) return;
+				// Check Dependencies for normal keys
+				if (!schema.compositeKeys) {
+					const refs = await getCrossReferences(schemaKey, item.id);
+					if (refs.length > 0) {
+						let msg = `Cannot delete this item. It is referenced by ${refs.reduce(
+							(acc, r) => acc + r.items.length,
+							0
+						)} other items:\n\n`;
+						refs.forEach((r) => {
+							msg += `- ${r.label}: ${r.items.length} items\n`;
+						});
+						alert(msg);
+						return;
+					}
+				}
+
+				if (!confirm('Are you sure you want to delete this?')) return;
 
 				const tableName = schema.tableName || schemaKey;
 
@@ -1817,6 +2162,8 @@
 				if (error) showToast(error.message, 'error');
 				else {
 					showToast('Deleted', 'success');
+					document.getElementById('crossRefContainer').classList.add('hidden');
+					resetForm();
 					refreshTable();
 				}
 			}
@@ -1834,10 +2181,12 @@
 					}
 				}
 				checkDependencies(state.activeTab, 'dynamicForm');
+				document.getElementById('crossRefContainer').classList.add('hidden');
+				document.getElementById('formTitle').innerText = `Editor`;
 			}
 
 			function refreshTable() {
-				switchTab(state.activeTab);
+				renderTable(state.activeTab);
 			}
 
 			function showToast(msg, type) {
