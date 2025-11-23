@@ -437,7 +437,7 @@
 						type="text"
 						id="sbUrl"
 						placeholder="https://xxx.supabase.co"
-						value="https://cqumntwoephyeutyckjh.supabase.co" />
+						value="https://yffukfulnggfhlgoyowg.supabase.co" />
 				</div>
 				<div class="form-group">
 					<label>Supabase Key</label>
@@ -445,7 +445,7 @@
 						type="password"
 						id="sbKey"
 						placeholder="public-anon-key"
-						value="sb_publishable_HJwIIL4vNdzJX9r1UJDllw_EXe0mua2" />
+						value="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlmZnVrZnVsbmdnZmhsZ295b3dnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjM1NTcyMDYsImV4cCI6MjA3OTEzMzIwNn0.BcB9Uea-vfnxwKA22YpQU0QlFCA0bfigsiDC_r2SNQ4" />
 				</div>
 				<button id="btnConnect" class="btn btn-primary" style="width: 100%">Connect & Load Schema</button>
 			</div>
@@ -646,12 +646,12 @@
 							});
 
 							// --- List View Logic ---
-							// Logic: Show PK + first 3 non-JSON, non-long-text fields
+							// Logic: Show PK + first 4 non-JSON, non-long-text fields
 							const pk = fields.find((f) => f.primaryKey)?.key || 'id';
 							listFields.push(pk);
 
 							fields.forEach((f) => {
-								if (listFields.length >= 4) return;
+								if (listFields.length >= 5) return;
 								if (f.key === pk) return;
 								if (f.type === 'json' || f.type === 'textarea') return;
 								listFields.push(f.key);
