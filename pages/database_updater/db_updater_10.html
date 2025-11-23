@@ -422,6 +422,59 @@
 				height: calc(100vh - 60px) !important;
 				flex-grow: 1;
 			}
+
+			@media (max-width: 1240px) {
+				.main-content {
+					overflow: auto;
+				}
+
+				.workspace {
+					height: max-content;
+					display: flex;
+					flex-direction: column;
+					overflow: auto;
+					height: max-content;
+				}
+
+				.panel {
+					overflow: auto;
+				}
+			}
+
+			@media (max-width: 768px) {
+				body {
+					overflow: auto;
+					height: unset;
+				}
+
+				.app-container {
+					display: flex;
+					flex-direction: column;
+					overflow: auto;
+					height: max-content;
+				}
+
+				.sidebar {
+					max-height: 300px;
+					overflow: auto;
+				}
+
+				.sidebar-header {
+					display: none;
+				}
+
+				.main-content {
+					overflow: auto;
+				}
+
+				.workspace {
+					height: max-content;
+					display: flex;
+					flex-direction: column;
+					overflow: auto;
+					height: max-content;
+				}
+			}
 		</style>
 	</head>
 	<body>
