@@ -3,399 +3,18 @@
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>D&D Campaign Manager 3.3 - Advanced</title>
+		<title>D&D Campaign Manager 3.3 - Advanced JSON</title>
 		<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 		<link href="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/css/tom-select.css" rel="stylesheet" />
+		<link rel="icon" type="image/x-icon" href="../../images/pageicon.png" />
 		<script src="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/js/tom-select.complete.min.js"></script>
-
-		<style>
-			:root {
-				--bg-dark: #1a1b26;
-				--bg-card: #24283b;
-				--bg-input: #16161e;
-				--accent: #7aa2f7;
-				--accent-hover: #5d85d8;
-				--text-main: #c0caf5;
-				--text-muted: #565f89;
-				--border: #414868;
-				--success: #9ece6a;
-				--danger: #f7768e;
-				--warning: #e0af68;
-			}
-
-			* {
-				box-sizing: border-box;
-				margin: 0;
-				padding: 0;
-			}
-			body {
-				font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-				background: var(--bg-dark);
-				color: var(--text-main);
-				padding: 20px;
-				line-height: 1.6;
-			}
-
-			/* Layout */
-			.container {
-				max-width: 1800px;
-				margin: 0 auto;
-			}
-			.grid {
-				display: grid;
-				gap: 20px;
-			}
-			.grid-main {
-				grid-template-columns: 250px 1fr;
-			}
-			/* Changed to fit Cross Ref panel better */
-			.grid-content {
-				grid-template-columns: 350px 1fr;
-			}
-			.editor-column {
-				display: flex;
-				flex-direction: column;
-				gap: 20px;
-			}
-
-			@media (max-width: 1000px) {
-				.grid-main {
-					grid-template-columns: 1fr;
-				}
-				.grid-content {
-					grid-template-columns: 1fr;
-				}
-			}
-
-			/* UI Components */
-			.card {
-				background: var(--bg-card);
-				border: 1px solid var(--border);
-				border-radius: 8px;
-				padding: 20px;
-			}
-			.btn {
-				background: var(--accent);
-				color: #1a1b26;
-				border: none;
-				padding: 8px 16px;
-				border-radius: 6px;
-				cursor: pointer;
-				font-weight: 600;
-				transition: 0.2s;
-				display: inline-flex;
-				align-items: center;
-				justify-content: center;
-				gap: 5px;
-			}
-			.btn:hover {
-				background: var(--accent-hover);
-			}
-			.btn-danger {
-				background: var(--danger);
-				color: white;
-			}
-			.btn-success {
-				background: var(--success);
-				color: #1a1b26;
-			}
-			.btn-sm {
-				padding: 4px 8px;
-				font-size: 0.85em;
-			}
-			.btn-outline {
-				background: transparent;
-				border: 1px solid var(--border);
-				color: var(--text-main);
-			}
-			.btn-active {
-				background: var(--accent);
-				color: var(--bg-dark);
-				border-color: var(--accent);
-			}
-			.btn-icon {
-				padding: 4px 10px;
-				font-size: 1.2em;
-				line-height: 1;
-			}
-
-			input,
-			select,
-			textarea {
-				width: 100%;
-				background: var(--bg-input);
-				border: 1px solid var(--border);
-				color: var(--text-main);
-				padding: 10px;
-				border-radius: 6px;
-				outline: none;
-				font-family: inherit;
-				resize: vertical;
-			}
-			input:focus,
-			select:focus,
-			textarea:focus {
-				border-color: var(--accent);
-			}
-
-			/* Tom Select Dark Mode Overrides */
-			.ts-control {
-				background-color: var(--bg-input) !important;
-				border-color: var(--border) !important;
-				color: var(--text-main) !important;
-				border-radius: 6px;
-				padding: 10px;
-			}
-			.ts-dropdown {
-				background-color: var(--bg-card) !important;
-				border-color: var(--border) !important;
-				color: var(--text-main) !important;
-			}
-			.ts-dropdown .option {
-				color: var(--text-main);
-			}
-			.ts-dropdown .active {
-				background-color: var(--accent) !important;
-				color: var(--bg-dark) !important;
-			}
-			.ts-control input {
-				color: var(--text-main) !important;
-			}
-			.ts-wrapper.single .ts-control:after {
-				border-color: var(--text-muted) transparent transparent transparent !important;
-			}
-
-			.ts-wrapper {
-				width: 100%;
-			}
-
-			label {
-				display: block;
-				margin-bottom: 5px;
-				font-size: 0.85em;
-				color: var(--text-muted);
-				font-weight: 600;
-				text-transform: uppercase;
-				letter-spacing: 0.5px;
-			}
-
-			/* Navigation */
-			.nav-section {
-				margin-bottom: 20px;
-			}
-			.nav-title {
-				font-size: 0.8em;
-				text-transform: uppercase;
-				color: var(--text-muted);
-				margin-bottom: 8px;
-				font-weight: bold;
-				letter-spacing: 1px;
-			}
-			.nav-item {
-				display: block;
-				width: 100%;
-				text-align: left;
-				padding: 8px 12px;
-				background: transparent;
-				border: none;
-				color: var(--text-main);
-				cursor: pointer;
-				border-radius: 4px;
-				transition: 0.2s;
-				margin-bottom: 2px;
-			}
-			.nav-item:hover {
-				background: rgba(255, 255, 255, 0.05);
-			}
-			.nav-item.active {
-				background: var(--accent);
-				color: var(--bg-dark);
-				font-weight: bold;
-			}
-
-			/* Tables */
-			.table-wrapper {
-				overflow-x: auto;
-				border-radius: 6px;
-				border: 1px solid var(--border);
-			}
-			table {
-				width: 100%;
-				border-collapse: collapse;
-				font-size: 0.9em;
-			}
-			th,
-			td {
-				padding: 10px 15px;
-				text-align: left;
-				border-bottom: 1px solid var(--border);
-				white-space: nowrap;
-			}
-			th {
-				background: rgba(0, 0, 0, 0.2);
-				color: var(--text-muted);
-				font-weight: 600;
-				position: sticky;
-				top: 0;
-				cursor: pointer;
-				user-select: none;
-			}
-			th:hover {
-				color: var(--text-main);
-				background: rgba(255, 255, 255, 0.05);
-			}
-			tr:last-child td {
-				border-bottom: none;
-			}
-			tr:hover {
-				background: rgba(255, 255, 255, 0.02);
-			}
-
-			/* Filter Panel */
-			.filter-panel {
-				background: rgba(0, 0, 0, 0.2);
-				border-bottom: 1px solid var(--border);
-				padding: 15px;
-				display: grid;
-				grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-				gap: 10px;
-				margin-bottom: 10px;
-			}
-			.filter-item label {
-				font-size: 0.75em;
-				margin-bottom: 2px;
-			}
-			.filter-item input,
-			.filter-item select {
-				padding: 6px;
-				font-size: 0.9em;
-			}
-
-			/* Cross Reference Panel */
-			.ref-category {
-				margin-bottom: 15px;
-			}
-			.ref-header {
-				font-size: 0.8em;
-				color: var(--warning);
-				font-weight: bold;
-				text-transform: uppercase;
-				margin-bottom: 5px;
-				border-bottom: 1px solid var(--border);
-				padding-bottom: 2px;
-			}
-			.ref-tag {
-				display: block;
-				padding: 6px 10px;
-				background: rgba(255, 255, 255, 0.03);
-				border: 1px solid var(--border);
-				border-radius: 4px;
-				margin-bottom: 5px;
-				font-size: 0.85em;
-				cursor: pointer;
-				transition: 0.2s;
-			}
-			.ref-tag:hover {
-				border-color: var(--accent);
-				background: rgba(255, 255, 255, 0.05);
-			}
-			.ref-tag .ref-id {
-				color: var(--text-muted);
-				font-size: 0.8em;
-				margin-right: 5px;
-			}
-
-			/* Utilities */
-			.hidden {
-				display: none !important;
-			}
-			.flex-between {
-				display: flex;
-				justify-content: space-between;
-				align-items: center;
-			}
-			.flex-gap {
-				display: flex;
-				gap: 10px;
-			}
-			.form-group {
-				margin-bottom: 15px;
-			}
-			.input-group {
-				display: flex;
-				gap: 8px;
-			}
-
-			/* JSON Toolbar */
-			.json-toolbar {
-				display: flex;
-				justify-content: flex-end;
-				margin-bottom: 5px;
-			}
-			.code-input {
-				font-family: 'Courier New', monospace;
-				font-size: 0.85em;
-			}
-
-			/* Modal */
-			.modal-overlay {
-				position: fixed;
-				top: 0;
-				left: 0;
-				right: 0;
-				bottom: 0;
-				background: rgba(0, 0, 0, 0.7);
-				display: flex;
-				align-items: center;
-				justify-content: center;
-				z-index: 2000;
-				backdrop-filter: blur(2px);
-			}
-			.modal-content {
-				background: var(--bg-card);
-				width: 500px;
-				max-width: 90%;
-				max-height: 90vh;
-				overflow-y: auto;
-				padding: 25px;
-				border-radius: 8px;
-				border: 1px solid var(--border);
-				box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
-			}
-
-			/* Toast */
-			.toast {
-				position: fixed;
-				bottom: 20px;
-				right: 20px;
-				padding: 15px 25px;
-				border-radius: 8px;
-				color: white;
-				font-weight: bold;
-				transform: translateY(100px);
-				transition: 0.3s;
-				z-index: 3000;
-				box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-			}
-			.toast.show {
-				transform: translateY(0);
-			}
-			.toast.success {
-				background: var(--success);
-				color: #1a1b26;
-			}
-			.toast.error {
-				background: var(--danger);
-			}
-			.tag {
-				display: inline-block;
-				padding: 2px 6px;
-				border-radius: 4px;
-				font-size: 0.8em;
-				background: var(--bg-input);
-				border: 1px solid var(--border);
-			}
-		</style>
+		<link rel="stylesheet" href="styles/styles.css" />
+		<link
+			href="https://cdnjs.cloudflare.com/ajax/libs/jsoneditor/9.10.0/jsoneditor.min.css"
+			rel="stylesheet"
+			type="text/css" />
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jsoneditor/9.10.0/jsoneditor.min.js"></script>
 	</head>
 	<body>
 		<div class="container">
@@ -418,7 +37,7 @@
 						type="text"
 						id="sbUrl"
 						placeholder="https://xxx.supabase.co"
-						value="https://yffukfulnggfhlgoyowg.supabase.co" />
+						value="https://cqumntwoephyeutyckjh.supabase.co" />
 				</div>
 				<div class="form-group">
 					<label>Supabase Key</label>
@@ -426,7 +45,7 @@
 						type="password"
 						id="sbKey"
 						placeholder="public-anon-key"
-						value="sb_publishable_AX2-qMjR0Jigxgcc3UET1g_YYBTaBUz" />
+						value="sb_publishable_HJwIIL4vNdzJX9r1UJDllw_EXe0mua2" />
 				</div>
 				<button onclick="initApp()" class="btn">Connect & Load</button>
 			</div>
@@ -512,6 +131,11 @@
 				'session_events',
 				'encounter_rounds',
 				'encounter_actions',
+				'monsters',
+				'npc_encounters', // ADD THIS
+				'faction_encounters', // ADD THIS
+				'faction_npcs', // ADD THIS
+				'location_npcs', // ADD THIS
 			];
 
 			const SCHEMAS = {
@@ -521,38 +145,47 @@
 					label: 'Campaigns',
 					fields: [
 						{
+							key: 'id',
+							label: 'Campaign ID',
+							type: 'text',
+							required: true,
+						},
+						{
 							key: 'campaign_id',
 							label: 'ID (Int)',
 							type: 'number',
-							required: true,
 						},
-						{ key: 'name', label: 'Name', type: 'text', required: true },
 						{ key: 'metadata', label: 'Metadata', type: 'json' },
 						{ key: 'styling', label: 'Styling', type: 'json' },
 					],
-					listFields: ['campaign_id', 'name'],
+					listFields: ['id', 'campaign_id', 'metadata'],
 				},
 				sessions: {
 					category: 'Campaign',
 					label: 'Sessions',
 					fields: [
-						{
-							key: 'session_number',
-							label: 'Session #',
-							type: 'number',
-							required: true,
-						},
 						{ key: 'title', label: 'Title', type: 'text', required: true },
-						{
-							key: 'session_date',
-							label: 'Date',
-							type: 'date',
-							required: true,
-						},
-						{ key: 'summary', label: 'Summary', type: 'textarea' },
+						{ key: 'date', label: 'Date', type: 'text', required: true },
 						{ key: 'narrative', label: 'Narrative', type: 'textarea' },
+						{ key: 'summary', label: 'Summary', type: 'textarea' },
+						{ key: 'session_order', label: 'Session Order', type: 'number' },
+						{ key: 'progression', label: 'Progression', type: 'json' },
 					],
-					listFields: ['session_number', 'title', 'session_date'],
+					listFields: ['session_order', 'title', 'date'],
+				},
+				timeline_events: {
+					category: 'Campaign',
+					label: 'Timeline Events',
+					fields: [
+						{ key: 'title', label: 'Title', type: 'text', required: true },
+						{ key: 'location', label: 'Location', type: 'text' },
+						{ key: 'session', label: 'Session', type: 'text' },
+						{ key: 'url', label: 'URL', type: 'json' },
+						{ key: 'description', label: 'Description', type: 'textarea' },
+						{ key: 'items', label: 'Items', type: 'json' },
+						{ key: 'event_order', label: 'Event Order', type: 'number' },
+					],
+					listFields: ['event_order', 'title', 'session'],
 				},
 
 				// --- WORLD ---
@@ -579,13 +212,7 @@
 								'ship',
 							],
 						},
-						{
-							key: 'parent_location_id',
-							label: 'Parent Location',
-							type: 'select',
-							foreignKey: 'locations',
-							displayField: 'name',
-						},
+						{ key: 'parent', label: 'Parent Location', type: 'text' },
 						{ key: 'region', label: 'Region', type: 'text' },
 						{ key: 'population', label: 'Population', type: 'text' },
 						{ key: 'races', label: 'Races', type: 'text' },
@@ -598,29 +225,32 @@
 						{ key: 'natives', label: 'Natives', type: 'text' },
 						{ key: 'description', label: 'Description', type: 'textarea' },
 						{ key: 'history', label: 'History', type: 'textarea' },
+						{ key: 'features', label: 'Features', type: 'json' },
+						{ key: 'npcs', label: 'NPCs', type: 'json' },
+						{ key: 'connections', label: 'Connections', type: 'json' },
+						{ key: 'threats', label: 'Threats', type: 'json' },
+						{ key: 'items', label: 'Items', type: 'json' },
 					],
 					listFields: ['name', 'type', 'region'],
 				},
 				location_connections: {
 					category: 'World',
 					label: 'Travel Routes',
-					tableName: 'location_connections',
 					fields: [
 						{
-							key: 'from_location_id',
-							label: 'From',
+							key: 'location_id',
+							label: 'From Location',
 							type: 'select',
 							foreignKey: 'locations',
 							displayField: 'name',
 							required: true,
 						},
 						{
-							key: 'to_location_id',
-							label: 'To',
+							key: 'connected_location_id',
+							label: 'To Location',
 							type: 'select',
 							foreignKey: 'locations',
 							displayField: 'name',
-							required: true,
 						},
 						{
 							key: 'connection_type',
@@ -629,9 +259,8 @@
 							placeholder: 'Road, Portal, Path...',
 						},
 						{ key: 'distance', label: 'Distance/Time', type: 'text' },
-						{ key: 'description', label: 'Notes', type: 'textarea' },
 					],
-					listFields: ['from_location_id', 'to_location_id', 'connection_type'],
+					listFields: ['location_id', 'connected_location_id', 'connection_type'],
 				},
 				location_features: {
 					category: 'World',
@@ -651,7 +280,6 @@
 							type: 'text',
 							required: true,
 						},
-						{ key: 'description', label: 'Description', type: 'textarea' },
 					],
 					listFields: ['location_id', 'feature'],
 				},
@@ -668,16 +296,40 @@
 							required: true,
 						},
 						{ key: 'threat', label: 'Threat', type: 'text', required: true },
+					],
+					listFields: ['location_id', 'threat'],
+				},
+				location_npcs: {
+					category: 'World',
+					label: 'Location NPCs',
+					compositeKeys: ['location_id', 'npc_id'],
+					fields: [
 						{
-							key: 'is_active',
-							label: 'Active?',
+							key: 'location_id',
+							label: 'Location',
+							type: 'select',
+							foreignKey: 'locations',
+							displayField: 'name',
+							required: true,
+						},
+						{
+							key: 'npc_id',
+							label: 'NPC',
+							type: 'select',
+							foreignKey: 'npcs',
+							displayField: 'name',
+							required: true,
+						},
+						{
+							key: 'is_primary',
+							label: 'Primary Location?',
 							type: 'select',
 							options: ['true', 'false'],
-							default: 'true',
+							default: 'false',
 						},
-						{ key: 'description', label: 'Details', type: 'textarea' },
+						{ key: 'notes', label: 'Notes', type: 'textarea' },
 					],
-					listFields: ['location_id', 'threat', 'is_active'],
+					listFields: ['location_id', 'npc_id', 'is_primary'],
 				},
 				factions: {
 					category: 'World',
@@ -685,16 +337,63 @@
 					fields: [
 						{ key: 'name', label: 'Name', type: 'text', required: true },
 						{ key: 'type', label: 'Type', type: 'text' },
+						{ key: 'description', label: 'Description', type: 'textarea' },
+						{ key: 'leader', label: 'Leader', type: 'text' },
+						{ key: 'location', label: 'Location', type: 'text' },
+						{ key: 'sublocation', label: 'Sublocation', type: 'text' },
+						{ key: 'npcs', label: 'NPCs', type: 'json' },
+						{ key: 'encounters', label: 'Encounters', type: 'json' },
+					],
+					listFields: ['name', 'type', 'leader'],
+				},
+				faction_npcs: {
+					category: 'World',
+					label: 'Faction NPCs',
+					compositeKeys: ['faction_id', 'npc_id'],
+					fields: [
 						{
-							key: 'leader_npc_id',
-							label: 'Leader',
+							key: 'faction_id',
+							label: 'Faction',
+							type: 'select',
+							foreignKey: 'factions',
+							displayField: 'name',
+							required: true,
+						},
+						{
+							key: 'npc_id',
+							label: 'NPC',
 							type: 'select',
 							foreignKey: 'npcs',
 							displayField: 'name',
+							required: true,
 						},
+						{ key: 'role', label: 'Role', type: 'text' },
+					],
+					listFields: ['faction_id', 'npc_id', 'role'],
+				},
+				faction_encounters: {
+					category: 'World',
+					label: 'Faction Encounters',
+					fields: [
+						{
+							key: 'faction_id',
+							label: 'Faction',
+							type: 'select',
+							foreignKey: 'factions',
+							displayField: 'name',
+							required: true,
+						},
+						{
+							key: 'encounter_id',
+							label: 'Encounter',
+							type: 'select',
+							foreignKey: 'encounters',
+							displayField: 'name',
+						},
+						{ key: 'session', label: 'Session', type: 'text' },
 						{ key: 'description', label: 'Description', type: 'textarea' },
 					],
-					listFields: ['name', 'type'],
+					listFields: ['faction_id', 'encounter_id', 'session'],
 				},
 
 				// --- PEOPLE ---
@@ -703,24 +402,17 @@
 					label: 'Entities',
 					fields: [
 						{
-							key: 'type',
+							key: 'entity_type',
 							label: 'Type',
 							type: 'select',
-							options: ['character', 'npc', 'location', 'faction', 'quest'],
-							default: 'true',
+							options: ['character', 'npc', 'location', 'faction'],
+							required: true,
 						},
-						{ key: 'name', label: 'Name', type: 'text', required: true },
-						{ key: 'description', label: 'Description', type: 'textarea' },
-						{
-							key: 'is_secret',
-							label: 'Secret?',
-							type: 'select',
-							options: ['true', 'false'],
-							default: 'false',
-						},
-						{ key: 'metadata', label: 'Metadata', type: 'json' },
+						{ key: 'name', label: 'Name', type: 'text' },
+						{ key: 'entity_icon_type', label: 'Icon Type', type: 'text' },
+						{ key: 'relationships', label: 'Relationships', type: 'json' },
 					],
-					listFields: ['name', 'type'],
+					listFields: ['name', 'entity_type'],
 				},
 				characters: {
 					category: 'People',
@@ -739,8 +431,8 @@
 							type: 'textarea',
 						},
 						{
-							key: 'is_active',
-							label: 'Active?',
+							key: 'is_included',
+							label: 'Included?',
 							type: 'select',
 							options: ['true', 'false'],
 							default: 'true',
@@ -748,32 +440,6 @@
 						{ key: 'stats', label: 'Stats JSON', type: 'json' },
 					],
 					listFields: ['name', 'race', 'class', 'level'],
-				},
-				character_sessions: {
-					category: 'People',
-					label: 'PC Attendance',
-					tableName: 'character_sessions',
-					compositeKeys: ['character_id', 'session_id'],
-					fields: [
-						{
-							key: 'character_id',
-							label: 'Character',
-							type: 'select',
-							foreignKey: 'characters',
-							displayField: 'name',
-							required: true,
-						},
-						{
-							key: 'session_id',
-							label: 'Session',
-							type: 'select',
-							foreignKey: 'sessions',
-							displayField: 'title',
-							required: true,
-						},
-						{ key: 'notes', label: 'Notes', type: 'textarea' },
-					],
-					listFields: ['character_id', 'session_id'],
 				},
 				npcs: {
 					category: 'People',
@@ -789,145 +455,26 @@
 							label: 'Status',
 							type: 'select',
 							options: ['alive', 'dead', 'missing', 'unknown'],
-							default: 'alive',
 						},
 						{
 							key: 'affinity',
 							label: 'Affinity',
 							type: 'select',
 							options: ['ally', 'neutral', 'enemy', 'unknown'],
-							default: 'unknown',
 						},
+						{ key: 'faction', label: 'Faction', type: 'text' },
 						{ key: 'personality', label: 'Personality', type: 'textarea' },
 						{ key: 'background', label: 'Background', type: 'textarea' },
 						{ key: 'description', label: 'Description', type: 'textarea' },
 						{ key: 'portrait', label: 'Portrait URL', type: 'text' },
+						{ key: 'location', label: 'Location', type: 'json' },
+						{ key: 'goals', label: 'Goals', type: 'json' },
+						{ key: 'items', label: 'Items', type: 'json' },
+						{ key: 'relationships', label: 'Relationships', type: 'json' },
+						{ key: 'encounters', label: 'Encounters', type: 'json' },
+						{ key: 'link', label: 'Link', type: 'json' },
 					],
 					listFields: ['name', 'role', 'affinity', 'status'],
-				},
-				npc_relationships: {
-					category: 'People',
-					label: 'NPC Relationships',
-					fields: [
-						{
-							key: 'npc_id',
-							label: 'NPC 1',
-							type: 'select',
-							foreignKey: 'npcs',
-							displayField: 'name',
-							required: true,
-						},
-						{
-							key: 'related_npc_id',
-							label: 'NPC 2',
-							type: 'select',
-							foreignKey: 'npcs',
-							displayField: 'name',
-							required: true,
-						},
-						{
-							key: 'relationship_type',
-							label: 'Type',
-							type: 'text',
-							required: true,
-						},
-						{ key: 'strength', label: 'Strength (-10 to 10)', type: 'number' },
-						{ key: 'description', label: 'Details', type: 'textarea' },
-						{
-							key: 'established_session_id',
-							label: 'Established In Session',
-							type: 'select',
-							foreignKey: 'sessions',
-							displayField: 'title',
-						},
-					],
-					listFields: ['npc_id', 'relationship_type', 'related_npc_id'],
-				},
-				npc_factions: {
-					category: 'People',
-					label: 'NPC Factions',
-					compositeKeys: ['npc_id', 'faction_id'],
-					fields: [
-						{
-							key: 'npc_id',
-							label: 'NPC',
-							type: 'select',
-							foreignKey: 'npcs',
-							displayField: 'name',
-							required: true,
-						},
-						{
-							key: 'faction_id',
-							label: 'Faction',
-							type: 'select',
-							foreignKey: 'factions',
-							displayField: 'name',
-							required: true,
-						},
-						{ key: 'role', label: 'Role', type: 'text' },
-						{ key: 'rank', label: 'Rank', type: 'text' },
-						{
-							key: 'joined_session_id',
-							label: 'Joined In Session',
-							type: 'select',
-							foreignKey: 'sessions',
-							displayField: 'title',
-						},
-						{
-							key: 'left_session_id',
-							label: 'Left In Session',
-							type: 'select',
-							foreignKey: 'sessions',
-							displayField: 'title',
-						},
-					],
-					listFields: ['npc_id', 'faction_id', 'role'],
-				},
-				npc_locations: {
-					category: 'People',
-					label: 'NPC Locations',
-					compositeKeys: ['npc_id', 'location_id'],
-					fields: [
-						{
-							key: 'npc_id',
-							label: 'NPC',
-							type: 'select',
-							foreignKey: 'npcs',
-							displayField: 'name',
-							required: true,
-						},
-						{
-							key: 'location_id',
-							label: 'Location',
-							type: 'select',
-							foreignKey: 'locations',
-							displayField: 'name',
-							required: true,
-						},
-						{
-							key: 'is_primary',
-							label: 'Primary Home?',
-							type: 'select',
-							options: ['true', 'false'],
-							default: 'false',
-						},
-						{
-							key: 'arrival_session_id',
-							label: 'Arrived In Session',
-							type: 'select',
-							foreignKey: 'sessions',
-							displayField: 'title',
-						},
-						{
-							key: 'departure_session_id',
-							label: 'Departed In Session',
-							type: 'select',
-							foreignKey: 'sessions',
-							displayField: 'title',
-						},
-						{ key: 'notes', label: 'Notes', type: 'textarea' },
-					],
-					listFields: ['npc_id', 'location_id', 'is_primary'],
 				},
 				npc_items: {
 					category: 'People',
@@ -943,22 +490,32 @@
 						},
 						{ key: 'item_name', label: 'Item', type: 'text', required: true },
 						{ key: 'description', label: 'Description', type: 'textarea' },
-						{
-							key: 'acquired_session_id',
-							label: 'Acquired In Session',
-							type: 'select',
-							foreignKey: 'sessions',
-							displayField: 'title',
-						},
-						{
-							key: 'lost_session_id',
-							label: 'Lost In Session',
-							type: 'select',
-							foreignKey: 'sessions',
-							displayField: 'title',
-						},
 					],
 					listFields: ['npc_id', 'item_name'],
+				},
+				npc_encounters: {
+					category: 'People',
+					label: 'NPC Encounters',
+					fields: [
+						{
+							key: 'npc_id',
+							label: 'NPC',
+							type: 'select',
+							foreignKey: 'npcs',
+							displayField: 'name',
+							required: true,
+						},
+						{
+							key: 'encounter_id',
+							label: 'Encounter',
+							type: 'select',
+							foreignKey: 'encounters',
+							displayField: 'name',
+						},
+						{ key: 'session', label: 'Session', type: 'text' },
+						{ key: 'description', label: 'Description', type: 'textarea' },
+					],
+					listFields: ['npc_id', 'encounter_id', 'session'],
 				},
 
 				// --- QUESTS ---
@@ -972,16 +529,15 @@
 							label: 'Status',
 							type: 'select',
 							options: ['active', 'completed', 'failed', 'on-hold', 'abandoned'],
-							default: 'active',
 						},
 						{
 							key: 'priority',
 							label: 'Priority',
 							type: 'select',
 							options: ['low', 'medium', 'high', 'urgent'],
-							default: 'medium',
 						},
-						{ key: 'description', label: 'Description', type: 'textarea' },
+						{ key: 'current_objective', label: 'Current Objective', type: 'text' },
+						{ key: 'sessions', label: 'Sessions', type: 'json' },
 					],
 					listFields: ['title', 'status', 'priority'],
 				},
@@ -997,35 +553,16 @@
 							displayField: 'title',
 							required: true,
 						},
+						{ key: 'session', label: 'Session', type: 'text' },
 						{
 							key: 'description',
 							label: 'Objective',
 							type: 'text',
 							required: true,
 						},
-						{
-							key: 'status',
-							label: 'Status',
-							type: 'select',
-							options: ['pending', 'in-progress', 'completed', 'failed'],
-							default: 'pending',
-						},
-						{
-							key: 'order_index',
-							label: 'Order',
-							type: 'number',
-							required: true,
-						},
 						{ key: 'details', label: 'Details JSON', type: 'json' },
-						{
-							key: 'completed_session_id',
-							label: 'Completed In Session',
-							type: 'select',
-							foreignKey: 'sessions',
-							displayField: 'title',
-						},
 					],
-					listFields: ['quest_id', 'order_index', 'description', 'status'],
+					listFields: ['quest_id', 'session', 'description'],
 				},
 				quest_locations: {
 					category: 'Quests',
@@ -1084,289 +621,59 @@
 					label: 'Encounters',
 					fields: [
 						{ key: 'name', label: 'Name', type: 'text', required: true },
-						{
-							key: 'session_id',
-							label: 'Session',
-							type: 'select',
-							foreignKey: 'sessions',
-							displayField: 'title',
-						},
-						{
-							key: 'location_id',
-							label: 'Location',
-							type: 'select',
-							foreignKey: 'locations',
-							displayField: 'name',
-						},
+						{ key: 'session', label: 'Session', type: 'text' },
+						{ key: 'location', label: 'Location', type: 'text' },
 						{ key: 'description', label: 'Description', type: 'textarea' },
-						{ key: 'notes', label: 'Notes', type: 'textarea' },
-						{ key: 'outcome', label: 'Outcome JSON', type: 'json' },
 						{ key: 'environment', label: 'Environment JSON', type: 'json' },
+						{ key: 'initiative', label: 'Initiative JSON', type: 'json' },
+						{ key: 'rounds', label: 'Rounds JSON', type: 'json' },
+						{ key: 'outcome', label: 'Outcome JSON', type: 'json' },
+						{ key: 'post_combat', label: 'Post Combat JSON', type: 'json' },
 					],
-					listFields: ['name', 'session_id', 'location_id'],
-				},
-				encounter_initiative: {
-					category: 'Combat',
-					label: 'Initiative',
-					fields: [
-						{
-							key: 'encounter_id',
-							label: 'Encounter',
-							type: 'select',
-							foreignKey: 'encounters',
-							displayField: 'name',
-							required: true,
-						},
-						{
-							key: 'combatant_name',
-							label: 'Name',
-							type: 'text',
-							required: true,
-						},
-						{
-							key: 'combatant_type',
-							label: 'Type',
-							type: 'select',
-							options: ['player', 'npc', 'enemy', 'ally'],
-						},
-						{
-							key: 'initiative_roll',
-							label: 'Initiative Roll',
-							type: 'number',
-							required: true,
-						},
-						{
-							key: 'order_index',
-							label: 'Order',
-							type: 'number',
-							required: true,
-						},
-						{ key: 'max_hp', label: 'Max HP', type: 'number' },
-						{ key: 'current_hp', label: 'Current HP', type: 'number' },
-						{ key: 'armor_class', label: 'AC', type: 'number' },
-						{ key: 'conditions', label: 'Conditions JSON', type: 'json' },
-						{ key: 'notes', label: 'Notes', type: 'textarea' },
-					],
-					listFields: ['encounter_id', 'order_index', 'combatant_name', 'current_hp'],
-				},
-				encounter_rounds: {
-					category: 'Combat',
-					label: 'Rounds',
-					fields: [
-						{
-							key: 'encounter_id',
-							label: 'Encounter',
-							type: 'select',
-							foreignKey: 'encounters',
-							displayField: 'name',
-							required: true,
-						},
-						{
-							key: 'round_number',
-							label: 'Round #',
-							type: 'number',
-							required: true,
-						},
-						{ key: 'round_notes', label: 'Notes', type: 'textarea' },
-					],
-					listFields: ['encounter_id', 'round_number', 'round_notes'],
-				},
-				encounter_actions: {
-					category: 'Combat',
-					label: 'Actions',
-					fields: [
-						{
-							key: 'encounter_id',
-							label: 'Encounter',
-							type: 'select',
-							foreignKey: 'encounters',
-							displayField: 'name',
-							required: true,
-						},
-						{
-							key: 'round_number',
-							label: 'Round #',
-							type: 'number',
-							required: true,
-						},
-						{
-							key: 'action_order',
-							label: 'Order',
-							type: 'number',
-							required: true,
-						},
-						{ key: 'actor_name', label: 'Actor', type: 'text', required: true },
-						{ key: 'action_type', label: 'Action Type', type: 'text' },
-						{ key: 'target_name', label: 'Target', type: 'text' },
-						{
-							key: 'action_description',
-							label: 'Action',
-							type: 'textarea',
-							required: true,
-						},
-						{ key: 'attack_roll', label: 'Attack Roll', type: 'number' },
-						{ key: 'damage_roll', label: 'Damage Roll', type: 'text' },
-						{ key: 'damage_dealt', label: 'Damage', type: 'number' },
-						{ key: 'result', label: 'Result', type: 'text' },
-						{ key: 'notes', label: 'Notes', type: 'textarea' },
-					],
-					listFields: ['encounter_id', 'round_number', 'actor_name', 'action_description'],
-				},
-				encounter_consequences: {
-					category: 'Combat',
-					label: 'Consequences',
-					fields: [
-						{
-							key: 'encounter_id',
-							label: 'Encounter',
-							type: 'select',
-							foreignKey: 'encounters',
-							displayField: 'name',
-							required: true,
-						},
-						{
-							key: 'consequence_type',
-							label: 'Type',
-							type: 'select',
-							options: ['enemy_defeated', 'item_obtained', 'complication', 'injury', 'consequence', 'discovery'],
-							required: true,
-						},
-						{
-							key: 'description',
-							label: 'Description',
-							type: 'textarea',
-							required: true,
-						},
-						{ key: 'details', label: 'Details JSON', type: 'json' },
-					],
-					listFields: ['encounter_id', 'consequence_type', 'description'],
+					listFields: ['name', 'session', 'location'],
 				},
 
-				// --- EVENTS ---
-				session_events: {
-					category: 'Events',
-					label: 'Timeline Events',
+				// --- REFERENCE ---
+				monsters: {
+					category: 'Reference',
+					label: 'Monsters',
 					fields: [
-						{
-							key: 'session_id',
-							label: 'Session',
-							type: 'select',
-							foreignKey: 'sessions',
-							displayField: 'title',
-							required: true,
-						},
-						{
-							key: 'event_order',
-							label: 'Order',
-							type: 'number',
-							required: true,
-						},
-						{
-							key: 'event_type',
-							label: 'Type',
-							type: 'select',
-							required: true,
-							options: [
-								'npc_introduced',
-								'npc_encountered',
-								'npc_died',
-								'npc_relocated',
-								'npc_joined_faction',
-								'npc_left_faction',
-								'npc_relationship_changed',
-								'location_discovered',
-								'location_visited',
-								'location_changed',
-								'quest_started',
-								'quest_updated',
-								'quest_completed',
-								'quest_failed',
-								'objective_completed',
-								'encounter_fought',
-								'item_acquired',
-								'item_lost',
-								'faction_discovered',
-								'character_leveled',
-								'story_event',
-								'custom',
-							],
-						},
-						{ key: 'title', label: 'Title', type: 'text', required: true },
-
-						// Conditional Fields
-						{
-							key: 'npc_id',
-							label: 'NPC',
-							type: 'select',
-							foreignKey: 'npcs',
-							displayField: 'name',
-							visibleIf: {
-								field: 'event_type',
-								values: [
-									'npc_introduced',
-									'npc_died',
-									'npc_encountered',
-									'npc_relocated',
-									'npc_joined_faction',
-									'npc_left_faction',
-									'npc_relationship_changed',
-								],
-							},
-						},
-						{
-							key: 'location_id',
-							label: 'Location',
-							type: 'select',
-							foreignKey: 'locations',
-							displayField: 'name',
-							visibleIf: {
-								field: 'event_type',
-								values: ['location_discovered', 'location_visited', 'location_changed'],
-							},
-						},
-						{
-							key: 'quest_id',
-							label: 'Quest',
-							type: 'select',
-							foreignKey: 'quests',
-							displayField: 'title',
-							visibleIf: {
-								field: 'event_type',
-								values: ['quest_started', 'quest_updated', 'quest_completed', 'quest_failed'],
-							},
-						},
-						{
-							key: 'encounter_id',
-							label: 'Encounter',
-							type: 'select',
-							foreignKey: 'encounters',
-							displayField: 'name',
-							visibleIf: { field: 'event_type', values: ['encounter_fought'] },
-						},
-						{
-							key: 'faction_id',
-							label: 'Faction',
-							type: 'select',
-							foreignKey: 'factions',
-							displayField: 'name',
-							visibleIf: {
-								field: 'event_type',
-								values: ['faction_discovered', 'npc_joined_faction', 'npc_left_faction'],
-							},
-						},
-						{
-							key: 'character_id',
-							label: 'Character',
-							type: 'select',
-							foreignKey: 'characters',
-							displayField: 'name',
-							visibleIf: { field: 'event_type', values: ['character_leveled'] },
-						},
-
-						{ key: 'description', label: 'Details', type: 'textarea' },
-						{ key: 'event_data', label: 'Event Data JSON', type: 'json' },
+						{ key: 'name', label: 'Name', type: 'text', required: true },
+						{ key: 'meta', label: 'Meta', type: 'text' },
+						{ key: 'armor_class', label: 'Armor Class', type: 'text' },
+						{ key: 'hit_points', label: 'Hit Points', type: 'text' },
+						{ key: 'speed', label: 'Speed', type: 'text' },
+						{ key: 'ability_scores', label: 'Ability Scores', type: 'json' },
+						{ key: 'saving_throws', label: 'Saving Throws', type: 'text' },
+						{ key: 'skills', label: 'Skills', type: 'text' },
+						{ key: 'damage_immunities', label: 'Damage Immunities', type: 'text' },
+						{ key: 'condition_immunities', label: 'Condition Immunities', type: 'text' },
+						{ key: 'senses', label: 'Senses', type: 'text' },
+						{ key: 'languages', label: 'Languages', type: 'text' },
+						{ key: 'challenge', label: 'Challenge', type: 'text' },
+						{ key: 'traits', label: 'Traits', type: 'json' },
+						{ key: 'actions', label: 'Actions', type: 'json' },
+						{ key: 'legendary_actions_description', label: 'Legendary Actions Description', type: 'text' },
+						{ key: 'legendary_actions', label: 'Legendary Actions', type: 'text' },
 					],
-					listFields: ['session_id', 'event_order', 'event_type', 'title'],
+					listFields: ['name', 'challenge', 'meta'],
+				},
+				spells: {
+					category: 'Reference',
+					label: 'Spells',
+					fields: [
+						{ key: 'spell_name', label: 'Spell Name', type: 'text', required: true },
+						{ key: 'spell_level', label: 'Level', type: 'text' },
+						{ key: 'spell_class', label: 'Class', type: 'text' },
+						{ key: 'casting_time', label: 'Casting Time', type: 'text' },
+						{ key: 'range', label: 'Range', type: 'text' },
+						{ key: 'components', label: 'Components', type: 'text' },
+						{ key: 'duration', label: 'Duration', type: 'text' },
+						{ key: 'description', label: 'Description', type: 'textarea' },
+						{ key: 'classes', label: 'Classes', type: 'json' },
+						{ key: 'source', label: 'Source', type: 'text' },
+					],
+					listFields: ['spell_name', 'spell_level', 'spell_class'],
 				},
 			};
 
@@ -1381,10 +688,10 @@
 				cache: {},
 				editingItem: null,
 				tomSelectInstances: [],
+				jsonEditorInstances: {}, // Store JSONEditor instances keyed by field name
 				pendingQuickAdd: null,
-				// Advanced Features
-				filters: {}, // Key-Value pairs for filtering
-				sort: { field: null, direction: 'asc' }, // { field: 'name', direction: 'asc' }
+				filters: {},
+				sort: { field: null, direction: 'asc' },
 			};
 
 			// ==========================================
@@ -1422,7 +729,9 @@
 				const select = document.getElementById('campaignSelector');
 				select.innerHTML = '<option value="">Select Campaign...</option>';
 				state.campaigns.forEach((c) => {
-					select.innerHTML += `<option value="${c.id}">${c.name}</option>`;
+					// CHANGE THIS LINE:
+					select.innerHTML += `<option value="${c.id}">${c.metadata?.name || c.id}</option>`;
+					// Was using c.campaign_id and c.name, but should use c.id and c.metadata.name
 				});
 				const savedId = localStorage.getItem('last_campaign_id');
 				if (savedId && state.campaigns.find((c) => c.id == savedId)) {
@@ -1436,7 +745,10 @@
 				state.currentCampaignId = id;
 				localStorage.setItem('last_campaign_id', id);
 				const campaign = state.campaigns.find((c) => c.id == id);
-				document.getElementById('activeCampaignDisplay').innerText = campaign ? campaign.name : 'No Campaign Selected';
+				// CHANGE THIS LINE:
+				document.getElementById('activeCampaignDisplay').innerText = campaign
+					? campaign.metadata?.name || campaign.id
+					: 'No Campaign Selected';
 				state.cache = {};
 				if (state.activeTab) switchTab(state.activeTab);
 			}
@@ -1447,7 +759,6 @@
 			async function fetchData(tableName) {
 				let query = state.supabase.from(tableName).select('*');
 
-				// Basic filtering for non-junction tables
 				if (state.currentCampaignId && !NO_CAMPAIGN_ID_TABLES.includes(tableName)) {
 					query = query.eq('campaign_id', state.currentCampaignId);
 				}
@@ -1469,32 +780,26 @@
 				return item ? item[displayField] : id;
 			}
 
-			// --- CROSS REFERENCE LOGIC ---
 			async function getCrossReferences(targetSchemaKey, targetId) {
 				if (!targetId) return [];
-
 				const results = [];
-
-				// Iterate over all schemas to see who points to targetSchemaKey
 				for (const [schemaKey, schema] of Object.entries(SCHEMAS)) {
 					const fkFields = schema.fields.filter((f) => f.foreignKey === targetSchemaKey);
-
 					if (fkFields.length > 0) {
 						const tableName = schema.tableName || schemaKey;
-
 						for (const field of fkFields) {
-							// Query DB for accuracy (cache might be partial)
-							let query = state.supabase.from(tableName).select(`id, ${schema.listFields.join(',')}`);
+							let selectFields = schema.compositeKeys
+								? schema.listFields.join(',')
+								: `id, ${schema.listFields.join(',')}`;
+
+							let query = state.supabase.from(tableName).select(selectFields);
 
 							if (schema.compositeKeys) {
-								// Composite keys don't usually have a single ID, we fetch enough to identify
 								query = query.eq(field.key, targetId);
 							} else {
 								query = query.eq(field.key, targetId);
 							}
-
 							const { data, error } = await query;
-
 							if (data && data.length > 0) {
 								results.push({
 									schemaKey: schemaKey,
@@ -1535,13 +840,12 @@
 
 			async function switchTab(key) {
 				state.activeTab = key;
-				state.filters = {}; // Reset filters
-				state.sort = { field: null, direction: 'asc' }; // Reset sort
+				state.filters = {};
+				state.sort = { field: null, direction: 'asc' };
 
 				renderNav();
 				resetForm();
 
-				// UI Resets
 				document.getElementById('filterPanelContainer').classList.add('hidden');
 				document.getElementById('btnToggleFilters').classList.remove('btn-active');
 				document.getElementById('tableStatus').classList.add('hidden');
@@ -1553,14 +857,13 @@
 				document.getElementById('formTitle').innerText = `Editor: ${schema.label}`;
 				document.getElementById('tableTitle').innerText = `Data: ${schema.label}`;
 
-				// Fetch Dependencies
 				const fks = schema.fields.filter((f) => f.foreignKey);
 				for (let fk of fks) await fetchData(fk.foreignKey);
 
 				const data = await fetchData(tableName);
 				renderForm(key, 'dynamicForm');
-				renderFilterPanel(key); // Prep filters
-				renderTable(key); // Uses cached data + filter/sort
+				renderFilterPanel(key);
+				renderTable(key);
 			}
 
 			function renderForm(schemaKey, formId) {
@@ -1568,89 +871,74 @@
 				const form = document.getElementById(formId);
 				form.innerHTML = '';
 
+				// Clean up instances
 				if (formId === 'dynamicForm') {
 					state.tomSelectInstances.forEach((inst) => inst.destroy());
 					state.tomSelectInstances = [];
+					Object.keys(state.jsonEditorInstances).forEach((key) => {
+						if (key.startsWith('dynamicForm_')) delete state.jsonEditorInstances[key];
+					});
+				} else {
+					Object.keys(state.jsonEditorInstances).forEach((key) => {
+						if (key.startsWith('quickAddForm_')) delete state.jsonEditorInstances[key];
+					});
 				}
 
-				schema.fields.forEach((field) => {
-					const div = document.createElement('div');
-					div.className = 'form-group';
-					div.dataset.fieldKey = field.key;
+				// Group fields by type
+				const textFields = schema.fields.filter((f) => f.type === 'text' || f.type === 'number');
+				const selectFields = schema.fields.filter((f) => f.type === 'select');
+				const textareaFields = schema.fields.filter((f) => f.type === 'textarea');
+				const jsonFields = schema.fields.filter((f) => f.type === 'json');
 
-					const label = document.createElement('label');
-					label.innerText = field.label + (field.required ? ' *' : '');
-					div.appendChild(label);
+				// Render text fields in flex wrap
+				if (textFields.length > 0) {
+					const textContainer = document.createElement('div');
+					textContainer.style.display = 'flex';
+					textContainer.style.flexWrap = 'wrap';
+					textContainer.style.gap = '10px';
+					// textContainer.style.marginBottom = '20px';
+					textFields.forEach((field) => {
+						const div = createFieldElement(field, formId, schemaKey);
+						// div.style.flex = '1 1 calc(50% - 5px)';
+						// div.style.minWidth = '200px';
+						textContainer.appendChild(div);
+					});
+					form.appendChild(textContainer);
+				}
 
-					let inputContainer = document.createElement('div');
+				// Render select fields in grid
+				if (selectFields.length > 0) {
+					const selectContainer = document.createElement('div');
+					selectContainer.style.display = 'grid';
+					selectContainer.style.gridTemplateColumns = 'repeat(2, 1fr)';
+					selectContainer.style.gap = '10px';
+					selectContainer.style.marginBottom = '20px';
+					selectFields.forEach((field) => {
+						const div = createFieldElement(field, formId, schemaKey);
+						selectContainer.appendChild(div);
+					});
+					form.appendChild(selectContainer);
+				}
 
-					if (field.type === 'json') {
-						const toolbar = document.createElement('div');
-						toolbar.className = 'json-toolbar';
-						toolbar.innerHTML = `<button type="button" class="btn btn-sm btn-outline" onclick="formatJsonField('${formId}', '${field.key}')">✨ Format JSON</button>`;
-						div.appendChild(toolbar);
-					}
-
-					if (field.type === 'select') {
-						inputContainer.className = 'input-group';
-						const select = document.createElement('select');
-						select.name = field.key;
-						select.id = `${formId}_${field.key}`;
-						select.innerHTML = '<option value="">-- Select --</option>';
-
-						if (field.foreignKey) {
-							const data = state.cache[field.foreignKey] || [];
-							data.sort((a, b) => (a[field.displayField] || '').localeCompare(b[field.displayField] || ''));
-							data.forEach((item) => {
-								const opt = document.createElement('option');
-								opt.value = item.id;
-								opt.innerText = item[field.displayField] || item.name || item.id;
-								select.appendChild(opt);
-							});
-							inputContainer.appendChild(select);
-
-							const btn = document.createElement('button');
-							btn.type = 'button';
-							btn.className = 'btn btn-success btn-icon';
-							btn.innerText = '+';
-							btn.title = 'Quick Add New Item';
-							btn.onclick = () => openQuickAdd(field.foreignKey, select.id);
-							inputContainer.appendChild(btn);
-						} else if (field.options) {
-							field.options.forEach((opt) => {
-								const optEl = document.createElement('option');
-								optEl.value = opt;
-								optEl.innerText = opt;
-								select.appendChild(optEl);
-							});
-							inputContainer.appendChild(select);
-						}
-						div.appendChild(inputContainer);
-					} else if (field.type === 'textarea' || field.type === 'json') {
-						const input = document.createElement('textarea');
-						input.name = field.key;
-						input.rows = field.type === 'json' ? 5 : 3;
-						if (field.type === 'json') {
-							input.placeholder = '{"key": "value"}';
-							input.className = 'code-input';
-						}
-						div.appendChild(input);
-					} else {
-						const input = document.createElement('input');
-						input.type = field.type;
-						input.name = field.key;
-						div.appendChild(input);
-					}
-
-					const inputEl = div.querySelector('input, select, textarea');
-					if (inputEl) {
-						inputEl.onchange = () => checkDependencies(schemaKey, formId);
-						if (field.required) inputEl.required = true;
-						if (field.default) inputEl.value = field.default;
-					}
-
+				// Render textarea fields individually
+				textareaFields.forEach((field) => {
+					const div = createFieldElement(field, formId, schemaKey);
 					form.appendChild(div);
 				});
+
+				// Render JSON fields in grid
+				if (jsonFields.length > 0) {
+					const jsonContainer = document.createElement('div');
+					jsonContainer.style.display = 'grid';
+					jsonContainer.style.gridTemplateColumns = 'repeat(2, 1fr)';
+					jsonContainer.style.gap = '10px';
+					jsonContainer.style.marginBottom = '20px';
+					jsonFields.forEach((field) => {
+						const div = createFieldElement(field, formId, schemaKey);
+						jsonContainer.appendChild(div);
+					});
+					form.appendChild(jsonContainer);
+				}
 
 				const btn = document.createElement('button');
 				btn.type = 'submit';
@@ -1676,6 +964,134 @@
 				}, 50);
 			}
 
+			// Extract field creation into separate function
+			function createFieldElement(field, formId, schemaKey) {
+				const div = document.createElement('div');
+				div.className = 'form-group';
+				div.dataset.fieldKey = field.key;
+
+				const label = document.createElement('label');
+				label.innerText = field.label + (field.required ? ' *' : '');
+				div.appendChild(label);
+
+				if (field.type === 'json') {
+					const wrapper = document.createElement('div');
+
+					const headerRow = document.createElement('div');
+					headerRow.className = 'flex-between';
+					headerRow.style.marginBottom = '5px';
+
+					// Keep the label in the header row (not duplicate)
+					const headerLabel = document.createElement('span');
+					headerLabel.innerText = field.label + (field.required ? ' *' : '');
+					headerLabel.style.fontSize = '0.85em';
+					headerLabel.style.color = 'var(--text-muted)';
+					headerLabel.style.fontWeight = '600';
+					headerLabel.style.textTransform = 'uppercase';
+					headerLabel.style.letterSpacing = '0.5px';
+					headerRow.appendChild(headerLabel);
+
+					const uniqueId = `${formId}_${field.key}`;
+
+					const maxBtn = document.createElement('button');
+					maxBtn.type = 'button';
+					maxBtn.className = 'btn btn-sm btn-outline';
+					maxBtn.innerHTML = '⛶ Maximize';
+					maxBtn.onclick = () => {
+						wrapper.classList.toggle('json-wrapper-fullscreen');
+						const isFull = wrapper.classList.contains('json-wrapper-fullscreen');
+						maxBtn.innerHTML = isFull ? '✕ Close' : '⛶ Maximize';
+						maxBtn.classList.toggle('btn-active', isFull);
+						if (isFull) {
+							maxBtn.classList.remove('btn-outline');
+							maxBtn.classList.add('btn-danger');
+						} else {
+							maxBtn.classList.add('btn-outline');
+							maxBtn.classList.remove('btn-danger');
+						}
+					};
+					headerRow.appendChild(maxBtn);
+					wrapper.appendChild(headerRow);
+
+					const jsonContainer = document.createElement('div');
+					jsonContainer.id = uniqueId;
+					jsonContainer.style.height = '300px';
+					wrapper.appendChild(jsonContainer);
+
+					// Add wrapper to div instead of individual elements
+					div.appendChild(wrapper);
+
+					setTimeout(() => {
+						const container = document.getElementById(uniqueId);
+						if (container) {
+							const editor = new JSONEditor(container, {
+								mode: 'tree',
+								modes: ['code', 'tree'],
+								onError: function (err) {
+									showToast(err.toString(), 'error');
+								},
+							});
+							editor.set({});
+							state.jsonEditorInstances[uniqueId] = editor;
+						}
+					}, 50);
+				} else if (field.type === 'select') {
+					let inputContainer = document.createElement('div');
+					inputContainer.className = 'input-group';
+					const select = document.createElement('select');
+					select.name = field.key;
+					select.id = `${formId}_${field.key}`;
+					select.innerHTML = '<option value="">-- Select --</option>';
+
+					if (field.foreignKey) {
+						const data = state.cache[field.foreignKey] || [];
+						data.sort((a, b) => (a[field.displayField] || '').localeCompare(b[field.displayField] || ''));
+						data.forEach((item) => {
+							const opt = document.createElement('option');
+							opt.value = item.id;
+							opt.innerText = item[field.displayField] || item.name || item.id;
+							select.appendChild(opt);
+						});
+						inputContainer.appendChild(select);
+
+						const btn = document.createElement('button');
+						btn.type = 'button';
+						btn.className = 'btn btn-success btn-icon';
+						btn.innerText = '+';
+						btn.title = 'Quick Add New Item';
+						btn.onclick = () => openQuickAdd(field.foreignKey, select.id);
+						inputContainer.appendChild(btn);
+					} else if (field.options) {
+						field.options.forEach((opt) => {
+							const optEl = document.createElement('option');
+							optEl.value = opt;
+							optEl.innerText = opt;
+							select.appendChild(optEl);
+						});
+						inputContainer.appendChild(select);
+					}
+					div.appendChild(inputContainer);
+				} else if (field.type === 'textarea') {
+					const input = document.createElement('textarea');
+					input.name = field.key;
+					input.rows = 3;
+					div.appendChild(input);
+				} else {
+					const input = document.createElement('input');
+					input.type = field.type;
+					input.name = field.key;
+					div.appendChild(input);
+				}
+
+				const inputEl = div.querySelector('input, select, textarea');
+				if (inputEl) {
+					inputEl.onchange = () => checkDependencies(schemaKey, formId);
+					if (field.required) inputEl.required = true;
+					if (field.default) inputEl.value = field.default;
+				}
+
+				return div;
+			}
 			// --- FILTERING UI & LOGIC ---
 			function toggleFilterPanel() {
 				const panel = document.getElementById('filterPanelContainer');
@@ -1689,7 +1105,6 @@
 				const container = document.getElementById('filterPanelContainer');
 				container.innerHTML = '';
 
-				// Filterable fields (exclude JSON, textareas for now for simplicity)
 				const filterableFields = schema.fields.filter((f) => ['text', 'number', 'select', 'date'].includes(f.type));
 
 				filterableFields.forEach((field) => {
@@ -1724,7 +1139,6 @@
 					container.appendChild(wrapper);
 				});
 
-				// Clear Button
 				const clearBtn = document.createElement('button');
 				clearBtn.className = 'btn btn-sm btn-danger';
 				clearBtn.style.marginTop = '18px';
@@ -1756,19 +1170,16 @@
 				renderTable(state.activeTab);
 			}
 
-			// --- TABLE RENDERING WITH FILTERS ---
+			// --- TABLE RENDERING ---
 			function renderTable(schemaKey) {
 				const schema = SCHEMAS[schemaKey];
 				const container = document.getElementById('dataTable');
 				const rawData = state.cache[schemaKey] || [];
 
-				// 1. Filter Data
 				let processedData = rawData.filter((item) => {
 					for (const [key, val] of Object.entries(state.filters)) {
 						const itemVal = item[key];
 						if (itemVal === null || itemVal === undefined) return false;
-
-						// Partial match for strings, exact for others
 						if (
 							typeof itemVal === 'string' &&
 							!schema.fields.find((f) => f.key === key)?.foreignKey &&
@@ -1776,33 +1187,27 @@
 						) {
 							if (!itemVal.toLowerCase().includes(val.toLowerCase())) return false;
 						} else {
-							// Exact match for IDs, Numbers, Dates, Selects
 							if (itemVal.toString() != val) return false;
 						}
 					}
 					return true;
 				});
 
-				// 2. Sort Data
 				if (state.sort.field) {
 					processedData.sort((a, b) => {
 						let valA = a[state.sort.field];
 						let valB = b[state.sort.field];
-
-						// Resolve FK for sorting if needed
 						const fDef = schema.fields.find((f) => f.key === state.sort.field);
 						if (fDef && fDef.foreignKey) {
 							valA = resolveFK(fDef.foreignKey, valA, fDef.displayField);
 							valB = resolveFK(fDef.foreignKey, valB, fDef.displayField);
 						}
-
 						if (valA < valB) return state.sort.direction === 'asc' ? -1 : 1;
 						if (valA > valB) return state.sort.direction === 'asc' ? 1 : -1;
 						return 0;
 					});
 				}
 
-				// Update Status Text
 				const statusEl = document.getElementById('tableStatus');
 				if (Object.keys(state.filters).length > 0) {
 					statusEl.innerText = `${processedData.length} / ${rawData.length}`;
@@ -1876,7 +1281,6 @@
 					return;
 				}
 
-				// Group by Category
 				const grouped = {};
 				refs.forEach((ref) => {
 					if (!grouped[ref.category]) grouped[ref.category] = [];
@@ -1889,8 +1293,6 @@
 					grouped[cat].forEach((g) => {
 						g.items.forEach((item) => {
 							const label = item.name || item.title || item.description || `ID: ${item.id}`;
-							const idStr = g.items[0].id ? item.id : 'comp'; // composite handle later
-							// Create link to jump
 							html += `<div class="ref-tag" onclick="jumpToRef('${g.schemaKey}', '${item.id || ''}')">
                                 <span class="ref-id">[${g.label}]</span> ${label}
                             </div>`;
@@ -1903,22 +1305,11 @@
 
 			function jumpToRef(schemaKey, itemId) {
 				switchTab(schemaKey);
-				// Auto filter to find it
 				if (itemId) {
-					const idField = SCHEMAS[schemaKey].fields.find((f) => f.key === 'id'); // Usually id
-					if (idField) {
-						state.filters['id'] = itemId;
-						// Re-render panel to show filter
-						const input = document.querySelector(`#filterPanelContainer input[type="number"]`); // simplistic guess
-						// Better: just set state and render
-						document.getElementById('filterPanelContainer').classList.remove('hidden');
-						renderTable(schemaKey);
-
-						// Populate inputs visually
-						renderFilterPanel(schemaKey); // reset inputs
-						// This part is tricky to sync visual inputs with state efficiently without ID matching
-						// For now, just filtering the table is sufficient feedback.
-					}
+					state.filters['id'] = itemId;
+					document.getElementById('filterPanelContainer').classList.remove('hidden');
+					renderTable(schemaKey);
+					renderFilterPanel(schemaKey);
 				}
 			}
 
@@ -1946,46 +1337,56 @@
 			// 6. HELPERS & UTILS
 			// ==========================================
 
-			function formatJsonField(formId, fieldName) {
-				const form = document.getElementById(formId);
-				const el = form.querySelector(`textarea[name="${fieldName}"]`);
-				try {
-					if (!el.value) return;
-					const obj = JSON.parse(el.value);
-					el.value = JSON.stringify(obj, null, 4);
-					showToast('JSON Formatted', 'success');
-				} catch (e) {
-					showToast('Invalid JSON Syntax', 'error');
-				}
-			}
-
+			// REPLACE your existing extractFormData function with this:
 			function extractFormData(form, schemaKey) {
 				const schema = SCHEMAS[schemaKey];
 				const formData = new FormData(form);
 				const payload = {};
 				const tableName = schema.tableName || schemaKey;
+				const formId = form.id;
 
 				for (let [key, value] of formData.entries()) {
 					if (value === '') {
 						payload[key] = null;
 					} else {
-						const fDef = schema.fields.find((f) => f.key === key);
-						if (fDef && fDef.type === 'json') {
-							try {
-								payload[key] = JSON.parse(value);
-							} catch (e) {
-								showToast(`Invalid JSON in ${fDef.label}`, 'error');
-								return null;
-							}
-						} else {
-							payload[key] = value;
-						}
+						payload[key] = value;
 					}
 				}
+
+				// Special handling for JSON Editors which don't use standard input names
+				schema.fields.forEach((field) => {
+					if (field.type === 'json') {
+						const uniqueId = `${formId}_${field.key}`;
+						if (state.jsonEditorInstances[uniqueId]) {
+							try {
+								const jsonData = state.jsonEditorInstances[uniqueId].get();
+								// ✅ FIX: Pass JavaScript object directly - Supabase handles JSONB serialization
+								payload[field.key] = jsonData;
+							} catch (e) {
+								console.error('JSON Get Error for field:', field.key, e);
+								payload[field.key] = null;
+							}
+						}
+					}
+				});
 
 				if (state.currentCampaignId && !NO_CAMPAIGN_ID_TABLES.includes(tableName)) {
 					payload.campaign_id = state.currentCampaignId;
 				}
+
+				// Convert empty objects/arrays to null for cleaner data
+				Object.keys(payload).forEach((key) => {
+					const field = schema.fields.find((f) => f.key === key);
+					if (field && field.type === 'json') {
+						if (payload[key] !== null && typeof payload[key] === 'object') {
+							if (Array.isArray(payload[key]) && payload[key].length === 0) {
+								payload[key] = null;
+							} else if (!Array.isArray(payload[key]) && Object.keys(payload[key]).length === 0) {
+								payload[key] = null;
+							}
+						}
+					}
+				});
 
 				return payload;
 			}
@@ -2057,9 +1458,10 @@
 				const schemaKey = state.activeTab;
 				const tableName = SCHEMAS[schemaKey].tableName || schemaKey;
 				const payload = extractFormData(e.target, schemaKey);
+
 				if (!payload) return;
 
-				let error;
+				let error, data;
 				if (state.editingItem) {
 					let query = state.supabase.from(tableName).update(payload);
 					if (SCHEMAS[schemaKey].compositeKeys) {
@@ -2069,23 +1471,45 @@
 					} else {
 						query = query.eq('id', state.editingItem.id);
 					}
-					const res = await query;
+					const res = await query.select();
 					error = res.error;
+					data = res.data;
+
+					// ✅ UPDATE CACHE
+					if (!error && data && data[0]) {
+						const index = state.cache[schemaKey].findIndex((item) => {
+							if (SCHEMAS[schemaKey].compositeKeys) {
+								return SCHEMAS[schemaKey].compositeKeys.every((k) => item[k] === state.editingItem[k]);
+							}
+							return item.id === state.editingItem.id;
+						});
+						if (index !== -1) {
+							state.cache[schemaKey][index] = data[0];
+						}
+					}
 				} else {
-					const res = await state.supabase.from(tableName).insert([payload]);
+					const res = await state.supabase.from(tableName).insert([payload]).select();
 					error = res.error;
+					data = res.data;
+
+					// ✅ ADD TO CACHE
+					if (!error && data && data[0]) {
+						if (!state.cache[schemaKey]) state.cache[schemaKey] = [];
+						state.cache[schemaKey].push(data[0]);
+					}
 				}
 
 				if (error) {
-					showToast(error.message, 'error');
+					showToast(error.message || 'Database error', 'error');
+					console.error('Database error details:', error);
 				} else {
 					showToast('Saved!', 'success');
 					resetForm();
-					document.getElementById('crossRefContainer').classList.add('hidden'); // Hide refs on save
-					refreshTable();
+					document.getElementById('crossRefContainer').classList.add('hidden');
+					renderTable(schemaKey); // ✅ Re-render with updated cache
 				}
 			}
-
+			// REPLACE editItem function
 			function editItem(schemaKey, itemIdentifier) {
 				const schema = SCHEMAS[schemaKey];
 				let item;
@@ -2106,18 +1530,21 @@
 
 				state.editingItem = item;
 				const form = document.getElementById('dynamicForm');
+				const formId = 'dynamicForm';
 
 				Object.keys(item).forEach((key) => {
 					const input = form.elements[key];
-					if (input) {
-						if (typeof item[key] === 'object' && item[key] !== null) {
-							input.value = JSON.stringify(item[key], null, 4);
+					// Check for JSON Editor field
+					const jsonUniqueId = `${formId}_${key}`;
+					if (state.jsonEditorInstances[jsonUniqueId]) {
+						// ✅ FIX: Handle null values properly
+						state.jsonEditorInstances[jsonUniqueId].set(item[key] || {});
+					} else if (input) {
+						if (input.tagName === 'SELECT' && input.tomselect) {
+							input.tomselect.setValue(item[key]);
 						} else {
-							if (input.tagName === 'SELECT' && input.tomselect) {
-								input.tomselect.setValue(item[key]);
-							} else {
-								input.value = item[key];
-							}
+							// ✅ FIX: Handle null values
+							input.value = item[key] !== null ? item[key] : '';
 						}
 					}
 				});
@@ -2129,12 +1556,14 @@
 				btn.classList.remove('btn-primary');
 				btn.style.background = 'var(--warning)';
 
-				// Trigger Cross Reference Check
 				if (!schema.compositeKeys) {
 					renderCrossReferences(schemaKey, item.id);
 				}
-			}
 
+				// ✅ SCROLL TO TOP OF FORM for better UX
+				form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+			}
+			// REPLACE deleteItem
 			async function deleteItem(schemaKey, itemIdentifier) {
 				const schema = SCHEMAS[schemaKey];
 				let item;
@@ -2153,14 +1582,10 @@
 
 				if (!item) return showToast('Error: Item not found in cache', 'error');
 
-				// Check Dependencies for normal keys
 				if (!schema.compositeKeys) {
 					const refs = await getCrossReferences(schemaKey, item.id);
 					if (refs.length > 0) {
-						let msg = `Cannot delete this item. It is referenced by ${refs.reduce(
-							(acc, r) => acc + r.items.length,
-							0
-						)} other items:\n\n`;
+						let msg = `Cannot delete. Referenced by ${refs.reduce((acc, r) => acc + r.items.length, 0)} items:\n\n`;
 						refs.forEach((r) => {
 							msg += `- ${r.label}: ${r.items.length} items\n`;
 						});
@@ -2183,21 +1608,41 @@
 				}
 
 				const { error } = await query;
-				if (error) showToast(error.message, 'error');
-				else {
+				if (error) {
+					showToast(error.message, 'error');
+				} else {
 					showToast('Deleted', 'success');
+
+					// ✅ REMOVE FROM CACHE
+					const index = state.cache[schemaKey].findIndex((cachedItem) => {
+						if (schema.compositeKeys) {
+							return schema.compositeKeys.every((k) => cachedItem[k] === item[k]);
+						}
+						return cachedItem.id === item.id;
+					});
+					if (index !== -1) {
+						state.cache[schemaKey].splice(index, 1);
+					}
+
 					document.getElementById('crossRefContainer').classList.add('hidden');
 					resetForm();
-					refreshTable();
+					renderTable(schemaKey); // ✅ Re-render with updated cache
 				}
 			}
-
 			function resetForm() {
 				state.editingItem = null;
 				const form = document.getElementById('dynamicForm');
+				const formId = 'dynamicForm';
 				if (form) {
 					form.reset();
 					state.tomSelectInstances.forEach((ts) => ts.clear());
+					// Reset JSON Editors
+					Object.keys(state.jsonEditorInstances).forEach((key) => {
+						if (key.startsWith(formId)) {
+							state.jsonEditorInstances[key].set({});
+						}
+					});
+
 					const btn = form.querySelector('button[type="submit"]');
 					if (btn) {
 						btn.innerText = 'Create Item';
@@ -2210,7 +1655,9 @@
 			}
 
 			function refreshTable() {
-				renderTable(state.activeTab);
+				// ✅ Clear cache and re-fetch to get fresh data
+				state.cache[state.activeTab] = null;
+				switchTab(state.activeTab);
 			}
 
 			function showToast(msg, type) {

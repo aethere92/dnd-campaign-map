@@ -1,0 +1,1891 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>DM Console 4.0 - Supabase Edition</title>
+
+		<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+		<link href="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/css/tom-select.css" rel="stylesheet" />
+		<script src="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/js/tom-select.complete.min.js"></script>
+		<link
+			href="https://cdnjs.cloudflare.com/ajax/libs/jsoneditor/9.10.0/jsoneditor.min.css"
+			rel="stylesheet"
+			type="text/css" />
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jsoneditor/9.10.0/jsoneditor.min.js"></script>
+
+		<style>
+			/* --- SUPABASE INSPIRED THEME --- */
+			:root {
+				--colors-brand: #3ecf8e;
+				--colors-brand-hover: #34b27b;
+				--colors-bg: #1c1c1c;
+				--colors-surface-100: #232323;
+				--colors-surface-200: #2e2e2e;
+				--colors-border: #3e3e3e;
+				--colors-text-main: #ededed;
+				--colors-text-muted: #858585;
+				--colors-danger: #ef4444;
+				--colors-warning: #eab308;
+
+				--font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+				--radius: 6px;
+				--shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+			}
+
+			/* Reset & Base */
+			* {
+				box-sizing: border-box;
+				margin: 0;
+				padding: 0;
+			}
+			body {
+				font-family: var(--font-family);
+				background-color: var(--colors-bg);
+				color: var(--colors-text-main);
+				height: 100vh;
+				overflow: hidden;
+				font-size: 14px;
+			}
+
+			/* --- LAYOUT --- */
+			.app-container {
+				display: grid;
+				grid-template-columns: 260px 1fr;
+				height: 100vh;
+			}
+
+			/* Sidebar */
+			.sidebar {
+				background: var(--colors-surface-100);
+				border-right: 1px solid var(--colors-border);
+				display: flex;
+				flex-direction: column;
+				padding: 15px;
+			}
+			.sidebar-header {
+				margin-bottom: 20px;
+				padding-bottom: 15px;
+				border-bottom: 1px solid var(--colors-border);
+			}
+			.sidebar-content {
+				flex: 1;
+				overflow-y: auto;
+			}
+			.brand {
+				font-size: 1.1rem;
+				font-weight: 700;
+				color: var(--colors-text-main);
+				display: flex;
+				align-items: center;
+				gap: 8px;
+			}
+			.brand span {
+				color: var(--colors-brand);
+			}
+
+			/* Nav Items */
+			.nav-group {
+				margin-bottom: 15px;
+			}
+			.nav-label {
+				font-size: 0.75rem;
+				text-transform: uppercase;
+				letter-spacing: 0.05em;
+				color: var(--colors-text-muted);
+				margin-bottom: 8px;
+				font-weight: 600;
+			}
+			.nav-item {
+				display: block;
+				width: 100%;
+				text-align: left;
+				padding: 8px 10px;
+				background: transparent;
+				border: none;
+				border-radius: var(--radius);
+				color: var(--colors-text-muted);
+				cursor: pointer;
+				transition: 0.2s;
+				font-size: 0.9rem;
+				margin-bottom: 2px;
+			}
+			.nav-item:hover {
+				background: var(--colors-surface-200);
+				color: var(--colors-text-main);
+			}
+			.nav-item.active {
+				background: rgba(62, 207, 142, 0.1);
+				color: var(--colors-brand);
+				font-weight: 500;
+			}
+
+			/* Main Area */
+			.main-content {
+				display: flex;
+				flex-direction: column;
+				overflow: hidden;
+				background: var(--colors-bg);
+			}
+
+			/* Top Bar */
+			.top-bar {
+				height: 60px;
+				border-bottom: 1px solid var(--colors-border);
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				padding: 0 20px;
+				background: var(--colors-surface-100);
+			}
+
+			/* Two Column Editor Layout */
+			.workspace {
+				display: grid;
+				grid-template-columns: 600px 1fr;
+				height: calc(100vh - 60px);
+				overflow: hidden;
+			}
+
+			.panel {
+				display: flex;
+				flex-direction: column;
+				overflow: hidden;
+				border-right: 1px solid var(--colors-border);
+				background: var(--colors-bg);
+			}
+			.panel-header {
+				padding: 15px;
+				border-bottom: 1px solid var(--colors-border);
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				background: var(--colors-surface-100);
+				min-height: 55px;
+			}
+			.panel-title {
+				font-weight: 600;
+				color: var(--colors-text-main);
+			}
+			.panel-body {
+				flex: 1;
+				overflow-y: auto;
+				padding: 20px;
+			}
+
+			/* --- UI COMPONENTS --- */
+			/* Buttons */
+			.btn {
+				background: var(--colors-surface-200);
+				color: var(--colors-text-main);
+				border: 1px solid var(--colors-border);
+				padding: 6px 12px;
+				border-radius: var(--radius);
+				cursor: pointer;
+				font-size: 0.85rem;
+				transition: 0.2s;
+				display: inline-flex;
+				align-items: center;
+				gap: 6px;
+			}
+			.btn:hover {
+				border-color: var(--colors-text-muted);
+			}
+			.btn-primary {
+				background: var(--colors-brand);
+				color: #000;
+				border: none;
+				font-weight: 600;
+			}
+			.btn-primary:hover {
+				background: var(--colors-brand-hover);
+				border: none;
+			}
+			.btn-danger {
+				color: var(--colors-danger);
+				border-color: var(--colors-danger);
+				background: transparent;
+			}
+			.btn-danger:hover {
+				background: rgba(239, 68, 68, 0.1);
+			}
+			.btn-ghost {
+				border: none;
+				background: transparent;
+			}
+			.btn-sm {
+				padding: 4px 8px;
+				font-size: 0.8rem;
+			}
+
+			/* Inputs */
+			input,
+			select,
+			textarea {
+				width: 100%;
+				background: var(--colors-surface-100);
+				border: 1px solid var(--colors-border);
+				color: var(--colors-text-main);
+				padding: 8px 10px;
+				border-radius: var(--radius);
+				outline: none;
+				font-family: inherit;
+				transition: border-color 0.2s;
+			}
+			input:focus,
+			select:focus,
+			textarea:focus {
+				border-color: var(--colors-brand);
+			}
+			.form-group {
+				margin-bottom: 15px;
+			}
+			.form-group label {
+				display: block;
+				font-size: 0.75rem;
+				color: var(--colors-text-muted);
+				margin-bottom: 5px;
+				font-weight: 600;
+				text-transform: uppercase;
+			}
+
+			/* Tables */
+			.table-container {
+				flex: 1;
+				overflow: auto;
+			}
+			table {
+				width: 100%;
+				border-collapse: collapse;
+				font-size: 0.9rem;
+			}
+			th {
+				text-align: left;
+				padding: 10px 15px;
+				background: var(--colors-surface-100);
+				color: var(--colors-text-muted);
+				font-weight: 500;
+				position: sticky;
+				top: 0;
+				z-index: 10;
+				border-bottom: 1px solid var(--colors-border);
+				user-select: none;
+				cursor: pointer;
+			}
+			td {
+				padding: 10px 15px;
+				border-bottom: 1px solid var(--colors-border);
+				color: var(--colors-text-main);
+			}
+			tr:hover td {
+				background: var(--colors-surface-200);
+			}
+			.tag {
+				display: inline-block;
+				padding: 2px 6px;
+				border-radius: 4px;
+				font-size: 0.75rem;
+				background: var(--colors-surface-200);
+				border: 1px solid var(--colors-border);
+			}
+
+			/* Filter Bar */
+			.filter-bar {
+				padding: 10px 15px;
+				background: var(--colors-surface-100);
+				border-bottom: 1px solid var(--colors-border);
+				display: flex;
+				gap: 10px;
+				flex-wrap: wrap;
+			}
+			.filter-item {
+				flex: 1;
+				min-width: 150px;
+				max-width: 200px;
+			}
+
+			/* JSON Editor Overrides */
+			div.jsoneditor {
+				border-color: var(--colors-border);
+				background: var(--colors-surface-100);
+			}
+			div.jsoneditor-menu {
+				background: var(--colors-surface-200);
+				border-bottom: 1px solid var(--colors-border);
+			}
+			div.jsoneditor-tree,
+			textarea.jsoneditor-text {
+				background: var(--colors-surface-100);
+				color: var(--colors-text-main);
+			}
+			div.jsoneditor-field,
+			div.jsoneditor-value {
+				color: var(--colors-text-main) !important;
+			}
+			div.jsoneditor-contextmenu .jsoneditor-menu-item .jsoneditor-icon {
+				filter: invert(1);
+			}
+
+			/* Tom Select Overrides */
+			.ts-control {
+				background-color: var(--colors-surface-100) !important;
+				border-color: var(--colors-border) !important;
+				color: var(--colors-text-main) !important;
+			}
+			.ts-dropdown {
+				background-color: var(--colors-surface-100) !important;
+				border-color: var(--colors-border) !important;
+			}
+			.ts-dropdown .option {
+				color: var(--colors-text-main);
+			}
+			.ts-dropdown .active {
+				background-color: var(--colors-brand) !important;
+				color: #000 !important;
+			}
+			.ts-wrapper {
+				width: 100%;
+			}
+
+			/* Utilities */
+			.hidden {
+				display: none !important;
+			}
+			.flex-between {
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+			}
+			.text-sm {
+				font-size: 0.8rem;
+			}
+			.text-muted {
+				color: var(--colors-text-muted);
+			}
+
+			/* Modal & Toast */
+			.modal-overlay {
+				position: fixed;
+				inset: 0;
+				background: rgba(0, 0, 0, 0.7);
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				z-index: 2000;
+				backdrop-filter: blur(2px);
+			}
+			.modal-card {
+				background: var(--colors-surface-100);
+				width: 500px;
+				padding: 25px;
+				border-radius: var(--radius);
+				border: 1px solid var(--colors-border);
+				box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+			}
+			.toast {
+				position: fixed;
+				bottom: 20px;
+				right: 20px;
+				padding: 12px 20px;
+				border-radius: var(--radius);
+				background: var(--colors-surface-200);
+				border: 1px solid var(--colors-brand);
+				color: var(--colors-text-main);
+				transform: translateY(100px);
+				transition: 0.3s;
+				z-index: 3000;
+				font-weight: 500;
+				box-shadow: var(--shadow);
+			}
+			.toast.show {
+				transform: translateY(0);
+			}
+			.toast.error {
+				border-color: var(--colors-danger);
+			}
+
+			textarea {
+				resize: vertical;
+			}
+
+			/* Add this to your <style> section */
+			.json-fullscreen {
+				position: fixed !important;
+				inset: 0;
+				width: 100vw !important;
+				height: 100vh !important;
+				z-index: 5000;
+				background: var(--colors-bg);
+				padding: 20px;
+				display: flex;
+				flex-direction: column;
+			}
+
+			/* Ensure editor grows to fill screen */
+			.json-fullscreen .json-editor-container {
+				height: calc(100vh - 60px) !important;
+				flex-grow: 1;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="authModal" class="modal-overlay">
+			<div class="modal-card">
+				<h2 style="margin-bottom: 15px; color: var(--colors-brand)">Database Connection</h2>
+				<div class="form-group">
+					<label>Supabase URL</label>
+					<input
+						type="text"
+						id="sbUrl"
+						placeholder="https://xxx.supabase.co"
+						value="https://cqumntwoephyeutyckjh.supabase.co" />
+				</div>
+				<div class="form-group">
+					<label>Supabase Key</label>
+					<input
+						type="password"
+						id="sbKey"
+						placeholder="public-anon-key"
+						value="sb_publishable_HJwIIL4vNdzJX9r1UJDllw_EXe0mua2" />
+				</div>
+				<button id="btnConnect" class="btn btn-primary" style="width: 100%">Connect</button>
+			</div>
+		</div>
+
+		<div id="app" class="app-container hidden">
+			<div class="sidebar">
+				<div class="sidebar-header">
+					<div class="brand">
+						<span>⚡</span>
+						DM Console
+					</div>
+					<div class="text-sm text-muted" style="margin-top: 5px" id="activeCampaignDisplay">No Campaign</div>
+				</div>
+				<div id="navContainer" class="sidebar-content"></div>
+				<div style="padding-top: 15px; border-top: 1px solid var(--colors-border)">
+					<button id="btnLogout" class="btn btn-sm btn-ghost text-muted">Log Out</button>
+				</div>
+			</div>
+
+			<div class="main-content">
+				<div class="top-bar">
+					<h3 id="pageTitle">Dashboard</h3>
+					<div style="display: flex; gap: 10px">
+						<select id="campaignSelector" style="width: 200px"></select>
+						<button id="btnRefresh" class="btn btn-sm btn-ghost" title="Refresh Data">↻</button>
+					</div>
+				</div>
+
+				<div class="workspace">
+					<div class="panel">
+						<div class="panel-header">
+							<span class="panel-title">Editor</span>
+							<div class="flex-between" gap="10">
+								<button id="btnNewItem" class="btn btn-sm btn-primary">+ New</button>
+							</div>
+						</div>
+						<div class="panel-body">
+							<form id="dynamicForm"></form>
+
+							<div
+								id="crossRefSection"
+								class="hidden"
+								style="margin-top: 20px; border-top: 1px solid var(--colors-border); padding-top: 15px">
+								<h4 class="text-muted" style="font-size: 0.75rem; text-transform: uppercase; margin-bottom: 10px">
+									References
+								</h4>
+								<div id="crossRefList"></div>
+							</div>
+						</div>
+					</div>
+
+					<div class="panel" style="border-right: none">
+						<div class="panel-header">
+							<span class="panel-title">Data</span>
+							<div>
+								<button id="btnToggleFilters" class="btn btn-sm">Filters</button>
+							</div>
+						</div>
+
+						<div id="filterContainer" class="filter-bar hidden"></div>
+
+						<div id="tableContainer" class="table-container"></div>
+
+						<div
+							class="panel-header"
+							style="
+								border-top: 1px solid var(--colors-border);
+								min-height: 40px;
+								font-size: 0.8rem;
+								color: var(--colors-text-muted);
+							">
+							<span id="statusCount">0 records</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div id="quickAddModal" class="modal-overlay hidden">
+			<div class="modal-card" style="width: 800px; max-width: 90%">
+				<div class="flex-between" style="margin-bottom: 15px">
+					<h3 id="quickAddTitle">Quick Add</h3>
+					<button id="btnCloseQuickAdd" class="btn btn-ghost">✕</button>
+				</div>
+				<form id="quickAddForm"></form>
+			</div>
+		</div>
+
+		<div id="toast" class="toast"></div>
+
+		<script>
+			/* =========================================
+       0. SCHEMA DEFINITION
+       ========================================= */
+
+			const SCHEMAS = {
+				// --- CAMPAIGN ---
+				campaigns: {
+					category: 'Campaign',
+					label: 'Campaigns',
+					fields: [
+						{
+							key: 'id',
+							label: 'Campaign ID',
+							type: 'text',
+							required: true,
+						},
+						{
+							key: 'campaign_id',
+							label: 'ID (Int)',
+							type: 'number',
+						},
+						{ key: 'metadata', label: 'Metadata', type: 'json' },
+						{ key: 'styling', label: 'Styling', type: 'json' },
+					],
+					listFields: ['id', 'campaign_id', 'metadata'],
+				},
+				sessions: {
+					category: 'Campaign',
+					label: 'Sessions',
+					fields: [
+						{ key: 'title', label: 'Title', type: 'text', required: true },
+						{ key: 'date', label: 'Date', type: 'text', required: true },
+						{ key: 'narrative', label: 'Narrative', type: 'textarea' },
+						{ key: 'summary', label: 'Summary', type: 'textarea' },
+						{ key: 'session_order', label: 'Session Order', type: 'number' },
+						{ key: 'progression', label: 'Progression', type: 'json' },
+					],
+					listFields: ['session_order', 'title', 'date'],
+				},
+				timeline_events: {
+					category: 'Campaign',
+					label: 'Timeline Events',
+					fields: [
+						{ key: 'title', label: 'Title', type: 'text', required: true },
+						{ key: 'location', label: 'Location', type: 'text' },
+						{ key: 'session', label: 'Session', type: 'text' },
+						{ key: 'url', label: 'URL', type: 'json' },
+						{ key: 'description', label: 'Description', type: 'textarea' },
+						{ key: 'items', label: 'Items', type: 'json' },
+						{ key: 'event_order', label: 'Event Order', type: 'number' },
+					],
+					listFields: ['event_order', 'title', 'session'],
+				},
+
+				// --- WORLD ---
+				locations: {
+					category: 'World',
+					label: 'Locations',
+					fields: [
+						{ key: 'name', label: 'Name', type: 'text', required: true },
+						{
+							key: 'type',
+							label: 'Type',
+							type: 'select',
+							options: [
+								'city',
+								'town',
+								'village',
+								'dungeon',
+								'wilderness',
+								'plane',
+								'region',
+								'landmark',
+								'building',
+								'room',
+								'ship',
+							],
+						},
+						{ key: 'parent', label: 'Parent Location', type: 'text' },
+						{ key: 'region', label: 'Region', type: 'text' },
+						{ key: 'population', label: 'Population', type: 'text' },
+						{ key: 'races', label: 'Races', type: 'text' },
+						{ key: 'ruler', label: 'Ruler', type: 'text' },
+						{ key: 'government_type', label: 'Government Type', type: 'text' },
+						{ key: 'planar_type', label: 'Planar Type', type: 'text' },
+						{ key: 'size', label: 'Size', type: 'text' },
+						{ key: 'exports', label: 'Exports', type: 'text' },
+						{ key: 'imports', label: 'Imports', type: 'text' },
+						{ key: 'natives', label: 'Natives', type: 'text' },
+						{ key: 'description', label: 'Description', type: 'textarea' },
+						{ key: 'history', label: 'History', type: 'textarea' },
+						{ key: 'features', label: 'Features', type: 'json' },
+						{ key: 'npcs', label: 'NPCs', type: 'json' },
+						{ key: 'connections', label: 'Connections', type: 'json' },
+						{ key: 'threats', label: 'Threats', type: 'json' },
+						{ key: 'items', label: 'Items', type: 'json' },
+					],
+					listFields: ['name', 'type', 'region'],
+				},
+				location_connections: {
+					category: 'World',
+					label: 'Travel Routes',
+					fields: [
+						{
+							key: 'location_id',
+							label: 'From Location',
+							type: 'select',
+							foreignKey: 'locations',
+							displayField: 'name',
+							required: true,
+						},
+						{
+							key: 'connected_location_id',
+							label: 'To Location',
+							type: 'select',
+							foreignKey: 'locations',
+							displayField: 'name',
+						},
+						{
+							key: 'connection_type',
+							label: 'Type',
+							type: 'text',
+							placeholder: 'Road, Portal, Path...',
+						},
+						{ key: 'distance', label: 'Distance/Time', type: 'text' },
+					],
+					listFields: ['location_id', 'connected_location_id', 'connection_type'],
+				},
+				location_features: {
+					category: 'World',
+					label: 'Location Features',
+					fields: [
+						{
+							key: 'location_id',
+							label: 'Location',
+							type: 'select',
+							foreignKey: 'locations',
+							displayField: 'name',
+							required: true,
+						},
+						{
+							key: 'feature',
+							label: 'Feature Name',
+							type: 'text',
+							required: true,
+						},
+					],
+					listFields: ['location_id', 'feature'],
+				},
+				location_threats: {
+					category: 'World',
+					label: 'Location Threats',
+					fields: [
+						{
+							key: 'location_id',
+							label: 'Location',
+							type: 'select',
+							foreignKey: 'locations',
+							displayField: 'name',
+							required: true,
+						},
+						{ key: 'threat', label: 'Threat', type: 'text', required: true },
+					],
+					listFields: ['location_id', 'threat'],
+				},
+				location_npcs: {
+					category: 'World',
+					label: 'Location NPCs',
+					compositeKeys: ['location_id', 'npc_id'],
+					fields: [
+						{
+							key: 'location_id',
+							label: 'Location',
+							type: 'select',
+							foreignKey: 'locations',
+							displayField: 'name',
+							required: true,
+						},
+						{
+							key: 'npc_id',
+							label: 'NPC',
+							type: 'select',
+							foreignKey: 'npcs',
+							displayField: 'name',
+							required: true,
+						},
+						{
+							key: 'is_primary',
+							label: 'Primary Location?',
+							type: 'select',
+							options: ['true', 'false'],
+							default: 'false',
+						},
+						{ key: 'notes', label: 'Notes', type: 'textarea' },
+					],
+					listFields: ['location_id', 'npc_id', 'is_primary'],
+				},
+				factions: {
+					category: 'World',
+					label: 'Factions',
+					fields: [
+						{ key: 'name', label: 'Name', type: 'text', required: true },
+						{ key: 'type', label: 'Type', type: 'text' },
+						{ key: 'description', label: 'Description', type: 'textarea' },
+						{ key: 'leader', label: 'Leader', type: 'text' },
+						{ key: 'location', label: 'Location', type: 'text' },
+						{ key: 'sublocation', label: 'Sublocation', type: 'text' },
+						{ key: 'npcs', label: 'NPCs', type: 'json' },
+						{ key: 'encounters', label: 'Encounters', type: 'json' },
+					],
+					listFields: ['name', 'type', 'leader'],
+				},
+				faction_npcs: {
+					category: 'World',
+					label: 'Faction NPCs',
+					compositeKeys: ['faction_id', 'npc_id'],
+					fields: [
+						{
+							key: 'faction_id',
+							label: 'Faction',
+							type: 'select',
+							foreignKey: 'factions',
+							displayField: 'name',
+							required: true,
+						},
+						{
+							key: 'npc_id',
+							label: 'NPC',
+							type: 'select',
+							foreignKey: 'npcs',
+							displayField: 'name',
+							required: true,
+						},
+						{ key: 'role', label: 'Role', type: 'text' },
+					],
+					listFields: ['faction_id', 'npc_id', 'role'],
+				},
+				faction_encounters: {
+					category: 'World',
+					label: 'Faction Encounters',
+					fields: [
+						{
+							key: 'faction_id',
+							label: 'Faction',
+							type: 'select',
+							foreignKey: 'factions',
+							displayField: 'name',
+							required: true,
+						},
+						{
+							key: 'encounter_id',
+							label: 'Encounter',
+							type: 'select',
+							foreignKey: 'encounters',
+							displayField: 'name',
+						},
+						{ key: 'session', label: 'Session', type: 'text' },
+						{ key: 'description', label: 'Description', type: 'textarea' },
+					],
+					listFields: ['faction_id', 'encounter_id', 'session'],
+				},
+
+				// --- PEOPLE ---
+				entities: {
+					category: 'People',
+					label: 'Entities',
+					fields: [
+						{
+							key: 'entity_type',
+							label: 'Type',
+							type: 'select',
+							options: ['character', 'npc', 'location', 'faction'],
+							required: true,
+						},
+						{ key: 'name', label: 'Name', type: 'text' },
+						{ key: 'entity_icon_type', label: 'Icon Type', type: 'text' },
+						{ key: 'relationships', label: 'Relationships', type: 'json' },
+					],
+					listFields: ['name', 'entity_type'],
+				},
+				characters: {
+					category: 'People',
+					label: 'PCs',
+					fields: [
+						{ key: 'name', label: 'Name', type: 'text', required: true },
+						{ key: 'race', label: 'Race', type: 'text' },
+						{ key: 'class', label: 'Class', type: 'text' },
+						{ key: 'level', label: 'Level', type: 'number', default: 1 },
+						{ key: 'icon', label: 'Icon', type: 'text' },
+						{ key: 'image_bg', label: 'Image Background', type: 'text' },
+						{ key: 'background', label: 'Background', type: 'textarea' },
+						{
+							key: 'short_description',
+							label: 'Short Description',
+							type: 'textarea',
+						},
+						{
+							key: 'is_included',
+							label: 'Included?',
+							type: 'select',
+							options: ['true', 'false'],
+							default: 'true',
+						},
+						{ key: 'stats', label: 'Stats JSON', type: 'json' },
+					],
+					listFields: ['name', 'race', 'class', 'level'],
+				},
+				npcs: {
+					category: 'People',
+					label: 'NPCs',
+					fields: [
+						{ key: 'name', label: 'Name', type: 'text', required: true },
+						{ key: 'role', label: 'Role', type: 'text' },
+						{ key: 'race', label: 'Race', type: 'text' },
+						{ key: 'class', label: 'Class', type: 'text' },
+						{ key: 'gender', label: 'Gender', type: 'text' },
+						{
+							key: 'status',
+							label: 'Status',
+							type: 'select',
+							options: ['alive', 'dead', 'missing', 'unknown'],
+						},
+						{
+							key: 'affinity',
+							label: 'Affinity',
+							type: 'select',
+							options: ['ally', 'neutral', 'enemy', 'unknown'],
+						},
+						{ key: 'faction', label: 'Faction', type: 'text' },
+						{ key: 'personality', label: 'Personality', type: 'textarea' },
+						{ key: 'background', label: 'Background', type: 'textarea' },
+						{ key: 'description', label: 'Description', type: 'textarea' },
+						{ key: 'portrait', label: 'Portrait URL', type: 'text' },
+						{ key: 'location', label: 'Location', type: 'json' },
+						{ key: 'goals', label: 'Goals', type: 'json' },
+						{ key: 'items', label: 'Items', type: 'json' },
+						{ key: 'relationships', label: 'Relationships', type: 'json' },
+						{ key: 'encounters', label: 'Encounters', type: 'json' },
+						{ key: 'link', label: 'Link', type: 'json' },
+					],
+					listFields: ['name', 'role', 'affinity', 'status'],
+				},
+				npc_items: {
+					category: 'People',
+					label: 'NPC Inventory',
+					fields: [
+						{
+							key: 'npc_id',
+							label: 'NPC',
+							type: 'select',
+							foreignKey: 'npcs',
+							displayField: 'name',
+							required: true,
+						},
+						{ key: 'item_name', label: 'Item', type: 'text', required: true },
+						{ key: 'description', label: 'Description', type: 'textarea' },
+					],
+					listFields: ['npc_id', 'item_name'],
+				},
+				npc_encounters: {
+					category: 'People',
+					label: 'NPC Encounters',
+					fields: [
+						{
+							key: 'npc_id',
+							label: 'NPC',
+							type: 'select',
+							foreignKey: 'npcs',
+							displayField: 'name',
+							required: true,
+						},
+						{
+							key: 'encounter_id',
+							label: 'Encounter',
+							type: 'select',
+							foreignKey: 'encounters',
+							displayField: 'name',
+						},
+						{ key: 'session', label: 'Session', type: 'text' },
+						{ key: 'description', label: 'Description', type: 'textarea' },
+					],
+					listFields: ['npc_id', 'encounter_id', 'session'],
+				},
+
+				// --- QUESTS ---
+				quests: {
+					category: 'Quests',
+					label: 'Quests',
+					fields: [
+						{ key: 'title', label: 'Title', type: 'text', required: true },
+						{
+							key: 'status',
+							label: 'Status',
+							type: 'select',
+							options: ['active', 'completed', 'failed', 'on-hold', 'abandoned'],
+						},
+						{
+							key: 'priority',
+							label: 'Priority',
+							type: 'select',
+							options: ['low', 'medium', 'high', 'urgent'],
+						},
+						{ key: 'current_objective', label: 'Current Objective', type: 'text' },
+						{ key: 'sessions', label: 'Sessions', type: 'json' },
+					],
+					listFields: ['title', 'status', 'priority'],
+				},
+				quest_objectives: {
+					category: 'Quests',
+					label: 'Quest Objectives',
+					fields: [
+						{
+							key: 'quest_id',
+							label: 'Quest',
+							type: 'select',
+							foreignKey: 'quests',
+							displayField: 'title',
+							required: true,
+						},
+						{ key: 'session', label: 'Session', type: 'text' },
+						{
+							key: 'description',
+							label: 'Objective',
+							type: 'text',
+							required: true,
+						},
+						{ key: 'details', label: 'Details JSON', type: 'json' },
+					],
+					listFields: ['quest_id', 'session', 'description'],
+				},
+				quest_locations: {
+					category: 'Quests',
+					label: 'Quest Locations',
+					compositeKeys: ['quest_id', 'location_id'],
+					fields: [
+						{
+							key: 'quest_id',
+							label: 'Quest',
+							type: 'select',
+							foreignKey: 'quests',
+							displayField: 'title',
+							required: true,
+						},
+						{
+							key: 'location_id',
+							label: 'Location',
+							type: 'select',
+							foreignKey: 'locations',
+							displayField: 'name',
+							required: true,
+						},
+						{ key: 'relevance', label: 'Relevance', type: 'text' },
+					],
+					listFields: ['quest_id', 'location_id', 'relevance'],
+				},
+				quest_npcs: {
+					category: 'Quests',
+					label: 'Quest NPCs',
+					compositeKeys: ['quest_id', 'npc_id'],
+					fields: [
+						{
+							key: 'quest_id',
+							label: 'Quest',
+							type: 'select',
+							foreignKey: 'quests',
+							displayField: 'title',
+							required: true,
+						},
+						{
+							key: 'npc_id',
+							label: 'NPC',
+							type: 'select',
+							foreignKey: 'npcs',
+							displayField: 'name',
+							required: true,
+						},
+						{ key: 'involvement', label: 'Involvement', type: 'text' },
+					],
+					listFields: ['quest_id', 'npc_id', 'involvement'],
+				},
+
+				// --- COMBAT ---
+				encounters: {
+					category: 'Combat',
+					label: 'Encounters',
+					fields: [
+						{ key: 'name', label: 'Name', type: 'text', required: true },
+						{ key: 'session', label: 'Session', type: 'text' },
+						{ key: 'location', label: 'Location', type: 'text' },
+						{ key: 'description', label: 'Description', type: 'textarea' },
+						{ key: 'environment', label: 'Environment JSON', type: 'json' },
+						{ key: 'initiative', label: 'Initiative JSON', type: 'json' },
+						{ key: 'rounds', label: 'Rounds JSON', type: 'json' },
+						{ key: 'outcome', label: 'Outcome JSON', type: 'json' },
+						{ key: 'post_combat', label: 'Post Combat JSON', type: 'json' },
+					],
+					listFields: ['name', 'session', 'location'],
+				},
+
+				// --- REFERENCE ---
+				monsters: {
+					category: 'Reference',
+					label: 'Monsters',
+					fields: [
+						{ key: 'name', label: 'Name', type: 'text', required: true },
+						{ key: 'meta', label: 'Meta', type: 'text' },
+						{ key: 'armor_class', label: 'Armor Class', type: 'text' },
+						{ key: 'hit_points', label: 'Hit Points', type: 'text' },
+						{ key: 'speed', label: 'Speed', type: 'text' },
+						{ key: 'ability_scores', label: 'Ability Scores', type: 'json' },
+						{ key: 'saving_throws', label: 'Saving Throws', type: 'text' },
+						{ key: 'skills', label: 'Skills', type: 'text' },
+						{ key: 'damage_immunities', label: 'Damage Immunities', type: 'text' },
+						{ key: 'condition_immunities', label: 'Condition Immunities', type: 'text' },
+						{ key: 'senses', label: 'Senses', type: 'text' },
+						{ key: 'languages', label: 'Languages', type: 'text' },
+						{ key: 'challenge', label: 'Challenge', type: 'text' },
+						{ key: 'traits', label: 'Traits', type: 'json' },
+						{ key: 'actions', label: 'Actions', type: 'json' },
+						{ key: 'legendary_actions_description', label: 'Legendary Actions Description', type: 'text' },
+						{ key: 'legendary_actions', label: 'Legendary Actions', type: 'text' },
+					],
+					listFields: ['name', 'challenge', 'meta'],
+				},
+				spells: {
+					category: 'Reference',
+					label: 'Spells',
+					fields: [
+						{ key: 'spell_name', label: 'Spell Name', type: 'text', required: true },
+						{ key: 'spell_level', label: 'Level', type: 'text' },
+						{ key: 'spell_class', label: 'Class', type: 'text' },
+						{ key: 'casting_time', label: 'Casting Time', type: 'text' },
+						{ key: 'range', label: 'Range', type: 'text' },
+						{ key: 'components', label: 'Components', type: 'text' },
+						{ key: 'duration', label: 'Duration', type: 'text' },
+						{ key: 'description', label: 'Description', type: 'textarea' },
+						{ key: 'classes', label: 'Classes', type: 'json' },
+						{ key: 'source', label: 'Source', type: 'text' },
+					],
+					listFields: ['spell_name', 'spell_level', 'spell_class'],
+				},
+			};
+
+			/* =========================================
+       1. UTILITIES & DOM HELPER
+       ========================================= */
+			const DOM = {
+				create: (tag, classes = [], children = []) => {
+					const el = document.createElement(tag);
+
+					// 1. Handle Classes (Ensure it's an array)
+					if (classes) {
+						const classList = Array.isArray(classes) ? classes : [classes];
+						classList.forEach((c) => {
+							if (c && typeof c === 'string') el.classList.add(c);
+						});
+					}
+
+					// 2. Handle Children (Ensure it's an array)
+					// This fixes the "children.forEach is not a function" error
+					const childList = Array.isArray(children) ? children : [children];
+
+					childList.forEach((child) => {
+						if (child === null || child === undefined) return;
+
+						if (typeof child === 'string' || typeof child === 'number') {
+							// Create text node to allow mixed content (text + elements)
+							el.appendChild(document.createTextNode(String(child)));
+						} else if (child instanceof Node) {
+							el.appendChild(child);
+						}
+					});
+
+					return el;
+				},
+				clear: (el) => {
+					if (el) el.innerHTML = '';
+				},
+				get: (id) => document.getElementById(id),
+				show: (el) => el?.classList.remove('hidden'),
+				hide: (el) => el?.classList.add('hidden'),
+				toggle: (el) => el?.classList.toggle('hidden'),
+			};
+
+			class Toast {
+				static show(msg, type = 'success') {
+					const el = DOM.get('toast');
+					if (!el) return;
+					el.innerText = msg;
+					el.className = `toast show ${type === 'error' ? 'error' : ''}`;
+					setTimeout(() => el.classList.remove('show'), 3000);
+				}
+			}
+
+			/* =========================================
+       2. DATA MANAGER (Supabase Service)
+       ========================================= */
+			class DataManager {
+				constructor() {
+					this.supabase = null;
+					this.cache = {}; // Keys are TABLE NAMES, not Schema Keys
+					this.campaignId = localStorage.getItem('last_campaign_id');
+
+					this.GLOBAL_TABLES = [
+						'campaigns',
+						'monsters',
+						'spells',
+						'items',
+						// Add your global tables here
+					];
+				}
+
+				init(url, key) {
+					try {
+						if (!url || !key) return false;
+						this.supabase = supabase.createClient(url, key);
+						localStorage.setItem('sb_url', url);
+						localStorage.setItem('sb_key', key);
+						return true;
+					} catch (e) {
+						console.error('Supabase Init Error:', e);
+						return false;
+					}
+				}
+
+				async getCampaigns() {
+					if (!this.supabase) return [];
+					const { data, error } = await this.supabase.from('campaigns').select('*');
+					if (error) throw error;
+					return data || [];
+				}
+
+				setCampaign(id) {
+					this.campaignId = id;
+					localStorage.setItem('last_campaign_id', id);
+					this.cache = {};
+				}
+
+				async fetch(tableName) {
+					// CRITICAL FIX: Guard against empty table names
+					if (!tableName || typeof tableName !== 'string') {
+						console.error('DataManager.fetch called with invalid table name:', tableName);
+						return [];
+					}
+
+					if (this.cache[tableName]) return this.cache[tableName];
+
+					let query = this.supabase.from(tableName).select('*');
+
+					if (this.campaignId && !this.GLOBAL_TABLES.includes(tableName)) {
+						// Attempt to filter only if the table likely has the column
+						// (Supabase will throw error if column missing, but we assume schema adherence)
+						query = query.eq('campaign_id', this.campaignId);
+					}
+
+					const { data, error } = await query;
+					if (error) {
+						console.error(`Error fetching ${tableName}:`, error.message);
+						// Return empty array on error to prevent UI crashes
+						return [];
+					}
+
+					this.cache[tableName] = data;
+					return data;
+				}
+
+				async save(schemaKey, payload, isUpdate, identifiers = {}) {
+					const schema = SCHEMAS[schemaKey];
+					const tableName = schema.tableName || schemaKey; // Resolve table name
+
+					if (!isUpdate && this.campaignId && !this.GLOBAL_TABLES.includes(tableName)) {
+						payload.campaign_id = this.campaignId;
+					}
+
+					let query;
+					if (isUpdate) {
+						query = this.supabase.from(tableName).update(payload);
+						if (schema.compositeKeys) {
+							schema.compositeKeys.forEach((k) => (query = query.eq(k, identifiers[k])));
+						} else {
+							query = query.eq('id', identifiers.id);
+						}
+					} else {
+						query = this.supabase.from(tableName).insert([payload]);
+					}
+
+					const { data, error } = await query.select();
+					if (error) throw error;
+
+					const savedItem = data[0];
+
+					// Update Cache
+					if (!this.cache[tableName]) this.cache[tableName] = [];
+
+					if (isUpdate) {
+						const idx = this.cache[tableName].findIndex((i) => {
+							if (schema.compositeKeys) return schema.compositeKeys.every((k) => i[k] == identifiers[k]);
+							return i.id == identifiers.id;
+						});
+						if (idx > -1) this.cache[tableName][idx] = savedItem;
+					} else {
+						this.cache[tableName].push(savedItem);
+					}
+
+					return savedItem;
+				}
+
+				async delete(schemaKey, item) {
+					const schema = SCHEMAS[schemaKey];
+					const tableName = schema.tableName || schemaKey;
+					let query = this.supabase.from(tableName).delete();
+
+					if (schema.compositeKeys) {
+						schema.compositeKeys.forEach((k) => (query = query.eq(k, item[k])));
+					} else {
+						query = query.eq('id', item.id);
+					}
+
+					const { error } = await query;
+					if (error) throw error;
+
+					const idx = this.cache[tableName]?.findIndex((i) => {
+						if (schema.compositeKeys) return schema.compositeKeys.every((k) => i[k] == item[k]);
+						return i.id == item.id;
+					});
+					if (idx > -1) this.cache[tableName].splice(idx, 1);
+				}
+
+				async checkReferences(targetSchemaKey, targetId) {
+					if (!targetId) return [];
+					const refs = [];
+
+					for (const [sKey, schema] of Object.entries(SCHEMAS)) {
+						// Find fields in OTHER schemas that point to THIS schema
+						const fkFields = schema.fields.filter((f) => f.foreignKey === targetSchemaKey);
+						if (fkFields.length === 0) continue;
+
+						const tableName = schema.tableName || sKey;
+						for (const field of fkFields) {
+							const { data } = await this.supabase.from(tableName).select('id').eq(field.key, targetId).limit(5); // Limit for performance
+
+							if (data && data.length > 0) {
+								refs.push({ schema: sKey, label: schema.label, items: data });
+							}
+						}
+					}
+					return refs;
+				}
+			}
+
+			/* =========================================
+       3. FORM BUILDER
+       ========================================= */
+			/* =========================================
+   3. FORM BUILDER (Updated with JSON Maximize)
+   ========================================= */
+			class FormBuilder {
+				constructor(dataManager, onQuickAddRequest) {
+					this.dm = dataManager;
+					this.editors = {};
+					this.selects = [];
+					this.onQuickAdd = onQuickAddRequest;
+				}
+
+				destroy() {
+					Object.values(this.editors).forEach((e) => e.destroy());
+					this.selects.forEach((s) => s.destroy());
+					this.editors = {};
+					this.selects = [];
+				}
+
+				async render(schemaKey, containerId, item = null) {
+					this.destroy();
+					const schema = SCHEMAS[schemaKey];
+					if (!schema) return;
+
+					const form = DOM.get(containerId);
+					DOM.clear(form);
+
+					for (const field of schema.fields) {
+						const wrapper = DOM.create('div', 'form-group');
+						wrapper.dataset.key = field.key;
+
+						const val = item ? item[field.key] : field.default || null;
+						const inputId = `${containerId}_${field.key}`;
+						const labelText = field.label + (field.required ? ' *' : '');
+
+						// --- JSON FIELD (With Header & Maximize) ---
+						if (field.type === 'json') {
+							// 1. Create Header Row
+							const header = DOM.create('div', 'flex-between');
+							header.style.marginBottom = '5px';
+
+							// Label
+							const label = DOM.create('label', [], labelText);
+							label.style.marginBottom = '0'; // Override default margin
+							header.appendChild(label);
+
+							// Maximize Button
+							const btnMax = DOM.create('button', ['btn', 'btn-sm', 'btn-ghost'], '⛶ Maximize');
+							btnMax.type = 'button';
+							btnMax.style.fontSize = '0.75rem';
+
+							btnMax.onclick = () => {
+								const isFull = wrapper.classList.toggle('json-fullscreen');
+								btnMax.innerText = isFull ? '✕ Close' : '⛶ Maximize';
+								btnMax.classList.toggle('btn-danger', isFull);
+								btnMax.classList.toggle('btn-ghost', !isFull);
+							};
+							header.appendChild(btnMax);
+							wrapper.appendChild(header);
+
+							// 2. Editor Container
+							const editorContainer = DOM.create('div', 'json-editor-container');
+							editorContainer.style.height = '250px'; // Default height
+							wrapper.appendChild(editorContainer);
+
+							// 3. Init Editor
+							const editor = new JSONEditor(editorContainer, {
+								mode: 'tree',
+								modes: ['code', 'tree'],
+								mainMenuBar: true,
+							});
+							editor.set(val || {});
+							this.editors[field.key] = editor;
+
+							// --- SELECT FIELD ---
+						} else if (field.type === 'select') {
+							wrapper.appendChild(DOM.create('label', [], labelText));
+
+							const row = DOM.create('div', [], []);
+							row.style.display = 'flex';
+							row.style.gap = '8px';
+
+							const select = DOM.create('select', [], []);
+							select.id = inputId;
+							select.name = field.key;
+							select.innerHTML = '<option value="">Select...</option>';
+
+							// Options logic
+							if (field.options) {
+								field.options.forEach((opt) => {
+									const op = DOM.create('option', [], opt);
+									op.value = opt;
+									if (val === opt) op.selected = true;
+									select.appendChild(op);
+								});
+							} else if (field.foreignKey) {
+								const fkSchema = SCHEMAS[field.foreignKey];
+								const fkTable = fkSchema ? fkSchema.tableName || field.foreignKey : field.foreignKey;
+								const data = await this.dm.fetch(fkTable);
+
+								const displayField = field.displayField || 'name';
+								data.sort((a, b) => {
+									const tA = a[displayField] || a.name || '';
+									const tB = b[displayField] || b.name || '';
+									return tA.toString().localeCompare(tB.toString());
+								});
+
+								data.forEach((d) => {
+									const label = d[displayField] || d.name || d.id;
+									const op = DOM.create('option', [], label);
+									op.value = d.id;
+									if (val == d.id) op.selected = true;
+									select.appendChild(op);
+								});
+							}
+							row.appendChild(select);
+
+							if (field.foreignKey) {
+								const btn = DOM.create('button', ['btn', 'btn-sm'], '+');
+								btn.type = 'button';
+								btn.onclick = () => this.onQuickAdd(field.foreignKey, select.id);
+								row.appendChild(btn);
+							}
+
+							wrapper.appendChild(row);
+
+							setTimeout(() => {
+								if (document.body.contains(select)) {
+									this.selects.push(new TomSelect(select, { create: false, maxOptions: 100 }));
+								}
+							}, 50);
+
+							// --- STANDARD INPUTS ---
+						} else {
+							wrapper.appendChild(DOM.create('label', [], labelText));
+
+							if (field.type === 'textarea') {
+								const input = DOM.create('textarea');
+								input.name = field.key;
+								input.rows = 4;
+								input.value = val || '';
+								wrapper.appendChild(input);
+							} else {
+								const input = DOM.create('input');
+								input.type = field.type;
+								input.name = field.key;
+								input.value = val !== null ? val : '';
+								wrapper.appendChild(input);
+							}
+						}
+
+						// Required Attribute check
+						if (field.required && field.type !== 'json') {
+							const input = wrapper.querySelector('input, select, textarea');
+							if (input) input.required = true;
+						}
+
+						form.appendChild(wrapper);
+					}
+
+					const btn = DOM.create('button', ['btn', 'btn-primary'], item ? 'Update Item' : 'Create Item');
+					btn.style.width = '100%';
+					btn.style.marginTop = '10px';
+					btn.type = 'submit';
+					form.appendChild(btn);
+				}
+
+				extractData(formId) {
+					const form = DOM.get(formId);
+					const formData = new FormData(form);
+					const payload = {};
+
+					for (const [k, v] of formData.entries()) {
+						payload[k] = v === '' ? null : v;
+					}
+
+					Object.entries(this.editors).forEach(([key, editor]) => {
+						try {
+							payload[key] = editor.get();
+						} catch (e) {
+							console.error('Invalid JSON in field', key);
+							payload[key] = null;
+						}
+					});
+
+					return payload;
+				}
+			}
+			/* =========================================
+       4. TABLE VIEWER
+       ========================================= */
+			class TableViewer {
+				constructor(dataManager, onEdit, onDelete) {
+					this.dm = dataManager;
+					this.onEdit = onEdit;
+					this.onDelete = onDelete;
+					this.filters = {};
+					this.sort = { field: null, dir: 'asc' };
+				}
+
+				renderFilterBar(schemaKey) {
+					const container = DOM.get('filterContainer');
+					DOM.clear(container);
+					const schema = SCHEMAS[schemaKey];
+					if (!schema) return;
+
+					const validFields = schema.fields.filter((f) => ['text', 'select', 'number'].includes(f.type));
+
+					validFields.forEach((f) => {
+						const wrapper = DOM.create('div', 'filter-item');
+						const input = DOM.create('input');
+						input.placeholder = f.label;
+						input.className = 'text-sm';
+						input.onkeyup = (e) => {
+							this.filters[f.key] = e.target.value.toLowerCase();
+							// Debounce could be added here
+							this.refreshTable(schemaKey);
+						};
+						wrapper.appendChild(input);
+						container.appendChild(wrapper);
+					});
+				}
+
+				async renderTable(schemaKey, items) {
+					if (!schemaKey) return; // Guard against null key
+					const container = DOM.get('tableContainer');
+					DOM.clear(container);
+
+					const schema = SCHEMAS[schemaKey];
+					if (!schema) return console.error('Schema not found for key:', schemaKey);
+
+					const tableName = schema.tableName || schemaKey; // Resolve table name
+
+					if (!items) {
+						items = await this.dm.fetch(tableName);
+					}
+
+					// Filter
+					let data = items.filter((item) => {
+						return Object.entries(this.filters).every(([k, v]) => {
+							if (!v) return true;
+							const val = String(item[k] || '').toLowerCase();
+							return val.includes(v);
+						});
+					});
+
+					// Sort
+					if (this.sort.field) {
+						data.sort((a, b) => {
+							const va = a[this.sort.field];
+							const vb = b[this.sort.field];
+							if (va < vb) return this.sort.dir === 'asc' ? -1 : 1;
+							if (va > vb) return this.sort.dir === 'asc' ? 1 : -1;
+							return 0;
+						});
+					}
+
+					DOM.get('statusCount').innerText = `${data.length} records found`;
+
+					const table = DOM.create('table');
+					const thead = DOM.create('thead');
+					const trHead = DOM.create('tr');
+
+					schema.listFields.forEach((f) => {
+						const fDef = schema.fields.find((x) => x.key === f);
+						const label = fDef ? fDef.label : f;
+						const th = DOM.create('th', [], label);
+						// Add sort indicator
+						if (this.sort.field === f) {
+							th.innerText += this.sort.dir === 'asc' ? ' ▲' : ' ▼';
+						}
+						th.onclick = () => {
+							if (this.sort.field === f) this.sort.dir = this.sort.dir === 'asc' ? 'desc' : 'asc';
+							else {
+								this.sort.field = f;
+								this.sort.dir = 'asc';
+							}
+							this.renderTable(schemaKey, items);
+						};
+						trHead.appendChild(th);
+					});
+					trHead.appendChild(DOM.create('th', [], 'Actions'));
+					thead.appendChild(trHead);
+					table.appendChild(thead);
+
+					const tbody = DOM.create('tbody');
+
+					data.forEach((row) => {
+						const tr = DOM.create('tr');
+						schema.listFields.forEach((key) => {
+							let val = row[key];
+
+							const fDef = schema.fields.find((x) => x.key === key);
+							if (fDef && fDef.foreignKey) {
+								// Attempt simple lookup if FK data is cached
+								const fkSchema = SCHEMAS[fDef.foreignKey];
+								const fkTable = fkSchema ? fkSchema.tableName || fDef.foreignKey : fDef.foreignKey;
+								const cachedFK = this.dm.cache[fkTable];
+
+								if (cachedFK) {
+									const match = cachedFK.find((x) => x.id === val);
+									if (match) val = match[fDef.displayField] || match.name || val;
+								}
+								val = DOM.create('span', 'tag', String(val || '-'));
+								const td = DOM.create('td');
+								td.appendChild(val);
+								tr.appendChild(td);
+							} else {
+								if (typeof val === 'string' && val.length > 50) val = val.substring(0, 50) + '...';
+								if (val === null || val === undefined) val = '-';
+								tr.appendChild(DOM.create('td', [], String(val)));
+							}
+						});
+
+						const tdActions = DOM.create('td');
+						const btnEdit = DOM.create('button', ['btn', 'btn-sm'], 'Edit');
+						btnEdit.onclick = () => this.onEdit(row);
+
+						const btnDel = DOM.create('button', ['btn', 'btn-sm', 'btn-danger'], 'Del');
+						btnDel.onclick = () => this.onDelete(row);
+
+						tdActions.appendChild(btnEdit);
+						tdActions.appendChild(DOM.create('span', [], ' '));
+						tdActions.appendChild(btnDel);
+						tr.appendChild(tdActions);
+						tbody.appendChild(tr);
+					});
+
+					table.appendChild(tbody);
+					container.appendChild(table);
+				}
+
+				refreshTable(schemaKey) {
+					const schema = SCHEMAS[schemaKey];
+					if (schema) {
+						const tableName = schema.tableName || schemaKey;
+						this.renderTable(schemaKey, this.dm.cache[tableName]);
+					}
+				}
+			}
+
+			/* =========================================
+       5. MAIN APP
+       ========================================= */
+			class App {
+				constructor() {
+					this.dm = new DataManager();
+					this.fb = new FormBuilder(this.dm, this.handleQuickAdd.bind(this));
+					this.tv = new TableViewer(this.dm, this.handleEdit.bind(this), this.handleDelete.bind(this));
+
+					this.activeSchema = null;
+					this.editingItem = null;
+
+					this.bindEvents();
+					this.checkAuth();
+				}
+
+				bindEvents() {
+					DOM.get('btnConnect').addEventListener('click', () => this.login());
+					DOM.get('btnLogout').addEventListener('click', () => {
+						localStorage.clear();
+						location.reload();
+					});
+
+					DOM.get('campaignSelector').addEventListener('change', (e) => {
+						this.dm.setCampaign(e.target.value);
+						this.refreshAll();
+					});
+
+					DOM.get('btnRefresh').addEventListener('click', () => this.refreshAll());
+					DOM.get('btnToggleFilters').addEventListener('click', () => DOM.toggle(DOM.get('filterContainer')));
+					DOM.get('btnNewItem').addEventListener('click', () => this.resetForm());
+
+					DOM.get('dynamicForm').addEventListener('submit', async (e) => {
+						e.preventDefault();
+						if (!this.activeSchema) return;
+						await this.saveItem('dynamicForm', this.activeSchema, this.editingItem, (updated) => {
+							Toast.show('Item saved');
+							this.editingItem = null;
+							this.resetForm();
+						});
+					});
+
+					DOM.get('quickAddForm').addEventListener('submit', async (e) => {
+						e.preventDefault();
+						const schemaKey = DOM.get('quickAddForm').dataset.schema;
+						await this.saveItem('quickAddForm', schemaKey, null, (newItem) => {
+							Toast.show(`Created ${newItem.name || 'Item'}`);
+							DOM.hide(DOM.get('quickAddModal'));
+
+							const triggerId = DOM.get('quickAddForm').dataset.trigger;
+							const select = document.getElementById(triggerId);
+							if (select && select.tomselect) {
+								const schema = SCHEMAS[schemaKey];
+								const label = newItem[schema.fields.find((f) => f.displayField)?.displayField || 'name'] || newItem.id;
+								select.tomselect.addOption({ value: newItem.id, text: label });
+								select.tomselect.addItem(newItem.id);
+							}
+						});
+					});
+
+					DOM.get('btnCloseQuickAdd').onclick = () => DOM.hide(DOM.get('quickAddModal'));
+				}
+
+				checkAuth() {
+					const url = localStorage.getItem('sb_url');
+					const key = localStorage.getItem('sb_key');
+					if (url && key) {
+						if (this.dm.init(url, key)) {
+							DOM.hide(DOM.get('authModal'));
+							DOM.show(DOM.get('app'));
+							this.initApp();
+						}
+					}
+				}
+
+				async login() {
+					const url = DOM.get('sbUrl').value;
+					const key = DOM.get('sbKey').value;
+					if (this.dm.init(url, key)) {
+						DOM.hide(DOM.get('authModal'));
+						DOM.show(DOM.get('app'));
+						this.initApp();
+					} else {
+						Toast.show('Connection Failed', 'error');
+					}
+				}
+
+				async initApp() {
+					try {
+						const campaigns = await this.dm.getCampaigns();
+						const sel = DOM.get('campaignSelector');
+						sel.innerHTML = '<option value="">Select Campaign...</option>';
+						campaigns.forEach((c) => {
+							const opt = DOM.create('option', [], c.metadata?.name || c.id);
+							opt.value = c.id;
+							if (c.id == this.dm.campaignId) opt.selected = true;
+							sel.appendChild(opt);
+						});
+
+						this.renderNav();
+
+						if (typeof SCHEMAS === 'undefined') return;
+						const keys = Object.keys(SCHEMAS);
+						if (keys.length > 0) {
+							this.switchTab(keys[0]);
+						}
+					} catch (e) {
+						Toast.show('Init Error: ' + e.message, 'error');
+					}
+				}
+
+				renderNav() {
+					const container = DOM.get('navContainer');
+					DOM.clear(container);
+					if (typeof SCHEMAS === 'undefined') return;
+
+					const categories = {};
+					Object.entries(SCHEMAS).forEach(([key, val]) => {
+						if (!categories[val.category]) categories[val.category] = [];
+						categories[val.category].push({ key, label: val.label });
+					});
+
+					Object.keys(categories).forEach((cat) => {
+						const group = DOM.create('div', 'nav-group');
+						group.appendChild(DOM.create('div', 'nav-label', cat));
+						categories[cat].forEach((item) => {
+							const btn = DOM.create('button', 'nav-item', item.label);
+							btn.onclick = () => this.switchTab(item.key);
+							btn.dataset.key = item.key;
+							group.appendChild(btn);
+						});
+						container.appendChild(group);
+					});
+				}
+
+				async switchTab(key) {
+					if (!SCHEMAS[key]) return;
+					this.activeSchema = key;
+					this.editingItem = null;
+
+					document.querySelectorAll('.nav-item').forEach((el) => el.classList.remove('active'));
+					document.querySelector(`.nav-item[data-key="${key}"]`)?.classList.add('active');
+
+					DOM.get('pageTitle').innerText = SCHEMAS[key].label;
+					DOM.hide(DOM.get('crossRefSection'));
+
+					await this.fb.render(key, 'dynamicForm');
+					this.tv.filters = {};
+					this.tv.renderFilterBar(key);
+
+					// Clear table initially while loading
+					DOM.clear(DOM.get('tableContainer'));
+					DOM.get('statusCount').innerText = 'Loading...';
+
+					await this.tv.renderTable(key);
+				}
+
+				async refreshAll() {
+					if (!this.activeSchema) return;
+					this.dm.cache = {};
+					await this.tv.renderTable(this.activeSchema);
+				}
+
+				async saveItem(formId, schemaKey, originalItem, onSuccess) {
+					const payload = this.fb.extractData(formId);
+					const schema = SCHEMAS[schemaKey];
+					const missing = schema.fields.filter((f) => f.required && !payload[f.key]);
+					if (missing.length > 0) {
+						return Toast.show(`Missing: ${missing.map((f) => f.label).join(', ')}`, 'error');
+					}
+
+					try {
+						const identifiers = originalItem ? { id: originalItem.id, ...originalItem } : {};
+						const res = await this.dm.save(schemaKey, payload, !!originalItem, identifiers);
+						onSuccess(res);
+
+						// Use resolve table name to refresh view
+						const tableName = schema.tableName || schemaKey;
+						// Force refresh data from updated cache
+						this.tv.renderTable(schemaKey, this.dm.cache[tableName]);
+					} catch (e) {
+						Toast.show(e.message, 'error');
+					}
+				}
+
+				async handleEdit(item) {
+					this.editingItem = item;
+					await this.fb.render(this.activeSchema, 'dynamicForm', item);
+					DOM.get('dynamicForm').scrollIntoView({ behavior: 'smooth' });
+
+					if (!SCHEMAS[this.activeSchema].compositeKeys) {
+						const list = DOM.get('crossRefList');
+						const section = DOM.get('crossRefSection');
+						DOM.clear(list);
+
+						const refs = await this.dm.checkReferences(this.activeSchema, item.id);
+						if (refs.length) {
+							DOM.show(section);
+							refs.forEach((r) => {
+								list.appendChild(DOM.create('div', 'text-sm', `${r.label}: ${r.items.length} items`));
+							});
+						} else {
+							DOM.hide(section);
+						}
+					}
+				}
+
+				async handleDelete(item) {
+					if (!confirm('Are you sure?')) return;
+					try {
+						if (!SCHEMAS[this.activeSchema].compositeKeys) {
+							const refs = await this.dm.checkReferences(this.activeSchema, item.id);
+							if (refs.length > 0) {
+								return alert(`Cannot delete. Referenced by:\n${refs.map((r) => r.label).join(', ')}`);
+							}
+						}
+
+						await this.dm.delete(this.activeSchema, item);
+						Toast.show('Deleted successfully');
+						this.tv.refreshTable(this.activeSchema);
+						if (this.editingItem && this.editingItem.id === item.id) {
+							this.resetForm();
+						}
+					} catch (e) {
+						Toast.show(e.message, 'error');
+					}
+				}
+
+				resetForm() {
+					this.editingItem = null;
+					DOM.get('dynamicForm').reset();
+					this.fb.render(this.activeSchema, 'dynamicForm');
+					DOM.hide(DOM.get('crossRefSection'));
+				}
+
+				handleQuickAdd(foreignSchema, triggerId) {
+					const modal = DOM.get('quickAddModal');
+					const form = DOM.get('quickAddForm');
+					form.dataset.schema = foreignSchema;
+					form.dataset.trigger = triggerId;
+
+					DOM.get('quickAddTitle').innerText = `New ${SCHEMAS[foreignSchema].label}`;
+					this.fb.render(foreignSchema, 'quickAddForm');
+					DOM.show(modal);
+				}
+			}
+
+			window.onload = () => {
+				if (typeof SCHEMAS === 'undefined') {
+					alert('Error: SCHEMAS is not defined. Please ensure the configuration is pasted above the script.');
+					return;
+				}
+				new App();
+			};
+		</script>
+	</body>
+</html>

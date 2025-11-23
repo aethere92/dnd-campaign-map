@@ -1,0 +1,1438 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>DM Console - Auto-Schema Edition</title>
+
+		<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+		<link href="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/css/tom-select.css" rel="stylesheet" />
+		<script src="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/js/tom-select.complete.min.js"></script>
+		<link
+			href="https://cdnjs.cloudflare.com/ajax/libs/jsoneditor/9.10.0/jsoneditor.min.css"
+			rel="stylesheet"
+			type="text/css" />
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jsoneditor/9.10.0/jsoneditor.min.js"></script>
+
+		<style>
+			/* --- SUPABASE INSPIRED THEME --- */
+			:root {
+				--colors-brand: #3ecf8e;
+				--colors-brand-hover: #34b27b;
+				--colors-bg: #1c1c1c;
+				--colors-surface-100: #232323;
+				--colors-surface-200: #2e2e2e;
+				--colors-border: #3e3e3e;
+				--colors-text-main: #ededed;
+				--colors-text-muted: #858585;
+				--colors-danger: #ef4444;
+				--colors-warning: #eab308;
+
+				--font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+				--radius: 6px;
+				--shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+			}
+
+			/* Reset & Base */
+			* {
+				box-sizing: border-box;
+				margin: 0;
+				padding: 0;
+			}
+			body {
+				font-family: var(--font-family);
+				background-color: var(--colors-bg);
+				color: var(--colors-text-main);
+				height: 100vh;
+				overflow: hidden;
+				font-size: 14px;
+			}
+
+			/* --- LAYOUT --- */
+			.app-container {
+				display: grid;
+				grid-template-columns: 260px 1fr;
+				height: 100vh;
+			}
+
+			/* Sidebar */
+			.sidebar {
+				background: var(--colors-surface-100);
+				border-right: 1px solid var(--colors-border);
+				display: flex;
+				flex-direction: column;
+				padding: 15px;
+			}
+			.sidebar-header {
+				margin-bottom: 20px;
+				padding-bottom: 15px;
+				border-bottom: 1px solid var(--colors-border);
+			}
+			.sidebar-content {
+				flex: 1;
+				overflow-y: auto;
+			}
+			.brand {
+				font-size: 1.1rem;
+				font-weight: 700;
+				color: var(--colors-text-main);
+				display: flex;
+				align-items: center;
+				gap: 8px;
+			}
+			.brand span {
+				color: var(--colors-brand);
+			}
+
+			/* Nav Items */
+			.nav-group {
+				margin-bottom: 15px;
+			}
+			.nav-label {
+				font-size: 0.75rem;
+				text-transform: uppercase;
+				letter-spacing: 0.05em;
+				color: var(--colors-text-muted);
+				margin-bottom: 8px;
+				font-weight: 600;
+			}
+			.nav-item {
+				display: block;
+				width: 100%;
+				text-align: left;
+				padding: 8px 10px;
+				background: transparent;
+				border: none;
+				border-radius: var(--radius);
+				color: var(--colors-text-muted);
+				cursor: pointer;
+				transition: 0.2s;
+				font-size: 0.9rem;
+				margin-bottom: 2px;
+			}
+			.nav-item:hover {
+				background: var(--colors-surface-200);
+				color: var(--colors-text-main);
+			}
+			.nav-item.active {
+				background: rgba(62, 207, 142, 0.1);
+				color: var(--colors-brand);
+				font-weight: 500;
+			}
+
+			/* Main Area */
+			.main-content {
+				display: flex;
+				flex-direction: column;
+				overflow: hidden;
+				background: var(--colors-bg);
+			}
+
+			/* Top Bar */
+			.top-bar {
+				height: 60px;
+				border-bottom: 1px solid var(--colors-border);
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				padding: 0 20px;
+				background: var(--colors-surface-100);
+			}
+
+			/* Two Column Editor Layout */
+			.workspace {
+				display: grid;
+				grid-template-columns: 600px 1fr;
+				height: calc(100vh - 60px);
+				overflow: hidden;
+			}
+
+			.panel {
+				display: flex;
+				flex-direction: column;
+				overflow: hidden;
+				border-right: 1px solid var(--colors-border);
+				background: var(--colors-bg);
+			}
+			.panel-header {
+				padding: 15px;
+				border-bottom: 1px solid var(--colors-border);
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				background: var(--colors-surface-100);
+				min-height: 55px;
+			}
+			.panel-title {
+				font-weight: 600;
+				color: var(--colors-text-main);
+			}
+			.panel-body {
+				flex: 1;
+				overflow-y: auto;
+				padding: 20px;
+			}
+
+			/* --- UI COMPONENTS --- */
+			.btn {
+				background: var(--colors-surface-200);
+				color: var(--colors-text-main);
+				border: 1px solid var(--colors-border);
+				padding: 6px 12px;
+				border-radius: var(--radius);
+				cursor: pointer;
+				font-size: 0.85rem;
+				transition: 0.2s;
+				display: inline-flex;
+				align-items: center;
+				gap: 6px;
+			}
+			.btn:hover {
+				border-color: var(--colors-text-muted);
+			}
+			.btn-primary {
+				background: var(--colors-brand);
+				color: #000;
+				border: none;
+				font-weight: 600;
+			}
+			.btn-primary:hover {
+				background: var(--colors-brand-hover);
+				border: none;
+			}
+			.btn-danger {
+				color: var(--colors-danger);
+				border-color: var(--colors-danger);
+				background: transparent;
+			}
+			.btn-danger:hover {
+				background: rgba(239, 68, 68, 0.1);
+			}
+			.btn-ghost {
+				border: none;
+				background: transparent;
+			}
+			.btn-sm {
+				padding: 4px 8px;
+				font-size: 0.8rem;
+			}
+
+			/* Inputs */
+			input,
+			select,
+			textarea {
+				width: 100%;
+				background: var(--colors-surface-100);
+				border: 1px solid var(--colors-border);
+				color: var(--colors-text-main);
+				padding: 8px 10px;
+				border-radius: var(--radius);
+				outline: none;
+				font-family: inherit;
+				transition: border-color 0.2s;
+			}
+			input:focus,
+			select:focus,
+			textarea:focus {
+				border-color: var(--colors-brand);
+			}
+			.form-group {
+				margin-bottom: 15px;
+			}
+			.form-group label {
+				display: block;
+				font-size: 0.75rem;
+				color: var(--colors-text-muted);
+				margin-bottom: 5px;
+				font-weight: 600;
+				text-transform: uppercase;
+			}
+
+			/* Tables */
+			.table-container {
+				flex: 1;
+				overflow: auto;
+			}
+			table {
+				width: 100%;
+				border-collapse: collapse;
+				font-size: 0.9rem;
+			}
+			th {
+				text-align: left;
+				padding: 10px 15px;
+				background: var(--colors-surface-100);
+				color: var(--colors-text-muted);
+				font-weight: 500;
+				position: sticky;
+				top: 0;
+				z-index: 10;
+				border-bottom: 1px solid var(--colors-border);
+				user-select: none;
+				cursor: pointer;
+			}
+			td {
+				padding: 10px 15px;
+				border-bottom: 1px solid var(--colors-border);
+				color: var(--colors-text-main);
+			}
+			tr:hover td {
+				background: var(--colors-surface-200);
+			}
+			.tag {
+				display: inline-block;
+				padding: 2px 6px;
+				border-radius: 4px;
+				font-size: 0.75rem;
+				background: var(--colors-surface-200);
+				border: 1px solid var(--colors-border);
+			}
+
+			/* Filter Bar */
+			.filter-bar {
+				padding: 10px 15px;
+				background: var(--colors-surface-100);
+				border-bottom: 1px solid var(--colors-border);
+				display: flex;
+				gap: 10px;
+				flex-wrap: wrap;
+			}
+			.filter-item {
+				flex: 1;
+				min-width: 150px;
+				max-width: 200px;
+			}
+
+			/* JSON Editor Overrides */
+			div.jsoneditor {
+				border-color: var(--colors-border);
+				background: var(--colors-surface-100);
+			}
+			div.jsoneditor-menu {
+				background: var(--colors-surface-200);
+				border-bottom: 1px solid var(--colors-border);
+			}
+			div.jsoneditor-tree,
+			textarea.jsoneditor-text {
+				background: var(--colors-surface-100);
+				color: var(--colors-text-main);
+			}
+			div.jsoneditor-field,
+			div.jsoneditor-value {
+				color: var(--colors-text-main) !important;
+			}
+			div.jsoneditor-contextmenu .jsoneditor-menu-item .jsoneditor-icon {
+				filter: invert(1);
+			}
+
+			/* Tom Select Overrides */
+			.ts-control {
+				background-color: var(--colors-surface-100) !important;
+				border-color: var(--colors-border) !important;
+				color: var(--colors-text-main) !important;
+			}
+			.ts-dropdown {
+				background-color: var(--colors-surface-100) !important;
+				border-color: var(--colors-border) !important;
+			}
+			.ts-dropdown .option {
+				color: var(--colors-text-main);
+			}
+			.ts-dropdown .active {
+				background-color: var(--colors-brand) !important;
+				color: #000 !important;
+			}
+			.ts-wrapper {
+				width: 100%;
+			}
+
+			/* Utilities */
+			.hidden {
+				display: none !important;
+			}
+			.flex-between {
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+			}
+			.text-sm {
+				font-size: 0.8rem;
+			}
+			.text-muted {
+				color: var(--colors-text-muted);
+			}
+
+			/* Modal & Toast */
+			.modal-overlay {
+				position: fixed;
+				inset: 0;
+				background: rgba(0, 0, 0, 0.7);
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				z-index: 2000;
+				backdrop-filter: blur(2px);
+			}
+			.modal-card {
+				background: var(--colors-surface-100);
+				width: 500px;
+				padding: 25px;
+				border-radius: var(--radius);
+				border: 1px solid var(--colors-border);
+				box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+			}
+			.toast {
+				position: fixed;
+				bottom: 20px;
+				right: 20px;
+				padding: 12px 20px;
+				border-radius: var(--radius);
+				background: var(--colors-surface-200);
+				border: 1px solid var(--colors-brand);
+				color: var(--colors-text-main);
+				transform: translateY(100px);
+				transition: 0.3s;
+				z-index: 3000;
+				font-weight: 500;
+				box-shadow: var(--shadow);
+			}
+			.toast.show {
+				transform: translateY(0);
+			}
+			.toast.error {
+				border-color: var(--colors-danger);
+			}
+
+			textarea {
+				resize: vertical;
+			}
+
+			.json-fullscreen {
+				position: fixed !important;
+				inset: 0;
+				width: 100vw !important;
+				height: 100vh !important;
+				z-index: 5000;
+				background: var(--colors-bg);
+				padding: 20px;
+				display: flex;
+				flex-direction: column;
+			}
+			.json-fullscreen .json-editor-container {
+				height: calc(100vh - 60px) !important;
+				flex-grow: 1;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="authModal" class="modal-overlay">
+			<div class="modal-card">
+				<h2 style="margin-bottom: 15px; color: var(--colors-brand)">Database Connection</h2>
+				<p class="text-muted text-sm" style="margin-bottom: 15px">
+					This app requires a Supabase project. It will auto-detect your schema.
+				</p>
+				<div class="form-group">
+					<label>Supabase URL</label>
+					<input
+						type="text"
+						id="sbUrl"
+						placeholder="https://xxx.supabase.co"
+						value="https://cqumntwoephyeutyckjh.supabase.co" />
+				</div>
+				<div class="form-group">
+					<label>Supabase Key</label>
+					<input
+						type="password"
+						id="sbKey"
+						placeholder="public-anon-key"
+						value="sb_publishable_HJwIIL4vNdzJX9r1UJDllw_EXe0mua2" />
+				</div>
+				<button id="btnConnect" class="btn btn-primary" style="width: 100%">Connect & Load Schema</button>
+			</div>
+		</div>
+
+		<div id="app" class="app-container hidden">
+			<div class="sidebar">
+				<div class="sidebar-header">
+					<div class="brand">
+						<span>⚡</span>
+						DB Console
+					</div>
+					<div class="text-sm text-muted" style="margin-top: 5px" id="schemaStatusDisplay">Loading...</div>
+				</div>
+				<div id="navContainer" class="sidebar-content"></div>
+				<div style="padding-top: 15px; border-top: 1px solid var(--colors-border)">
+					<button id="btnLogout" class="btn btn-sm btn-ghost text-muted">Log Out</button>
+				</div>
+			</div>
+
+			<div class="main-content">
+				<div class="top-bar">
+					<h3 id="pageTitle">Dashboard</h3>
+					<div style="display: flex; gap: 10px">
+						<button id="btnRefresh" class="btn btn-sm btn-ghost" title="Refresh Data">↻ Refresh</button>
+					</div>
+				</div>
+
+				<div class="workspace">
+					<div class="panel">
+						<div class="panel-header">
+							<span class="panel-title">Editor</span>
+							<div class="flex-between" gap="10">
+								<button id="btnNewItem" class="btn btn-sm btn-primary">+ New</button>
+							</div>
+						</div>
+						<div class="panel-body">
+							<form id="dynamicForm"></form>
+
+							<div
+								id="crossRefSection"
+								class="hidden"
+								style="margin-top: 20px; border-top: 1px solid var(--colors-border); padding-top: 15px">
+								<h4 class="text-muted" style="font-size: 0.75rem; text-transform: uppercase; margin-bottom: 10px">
+									References
+								</h4>
+								<div id="crossRefList"></div>
+							</div>
+						</div>
+					</div>
+
+					<div class="panel" style="border-right: none">
+						<div class="panel-header">
+							<span class="panel-title">Data</span>
+							<div>
+								<button id="btnToggleFilters" class="btn btn-sm">Filters</button>
+							</div>
+						</div>
+
+						<div id="filterContainer" class="filter-bar hidden"></div>
+
+						<div id="tableContainer" class="table-container"></div>
+
+						<div
+							class="panel-header"
+							style="
+								border-top: 1px solid var(--colors-border);
+								min-height: 40px;
+								font-size: 0.8rem;
+								color: var(--colors-text-muted);
+							">
+							<span id="statusCount">0 records</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div id="quickAddModal" class="modal-overlay hidden">
+			<div class="modal-card" style="width: 800px; max-width: 90%">
+				<div class="flex-between" style="margin-bottom: 15px">
+					<h3 id="quickAddTitle">Quick Add</h3>
+					<button id="btnCloseQuickAdd" class="btn btn-ghost">✕</button>
+				</div>
+				<form id="quickAddForm"></form>
+			</div>
+		</div>
+
+		<div id="toast" class="toast"></div>
+
+		<script>
+			/* =========================================
+       0. DYNAMIC SCHEMA GENERATION (Introspection)
+       ========================================= */
+
+			let SCHEMAS = {}; // Populated at runtime
+
+			class SchemaIntrospector {
+				static async fetchAndParse(url, key) {
+					try {
+						// FIX: Pass 'apikey' and 'Authorization' in headers
+						const response = await fetch(`${url}/rest/v1/`, {
+							headers: {
+								apikey: key,
+								Authorization: `Bearer ${key}`,
+								Accept: 'application/openapi+json',
+							},
+						});
+
+						if (!response.ok)
+							throw new Error(`Failed to fetch DB Schema. Status: ${response.status} - ${response.statusText}`);
+
+						const doc = await response.json();
+						const schemas = {};
+						const defs = doc.definitions || doc.components?.schemas; // Swagger 2.0 vs OpenAPI 3.0
+
+						if (!defs) throw new Error('Invalid Schema format received: No definitions found.');
+
+						// 2. Parse Definitions
+						Object.keys(defs).forEach((tableName) => {
+							const def = defs[tableName];
+							const fields = [];
+							const listFields = [];
+
+							// Skip typical system definitions if exposed (rare in PostgREST default)
+							if (tableName.startsWith('_')) return;
+
+							Object.keys(def.properties).forEach((colName) => {
+								const prop = def.properties[colName];
+								const field = {
+									key: colName,
+									label: colName, // Capitalize?
+									required: (def.required || []).includes(colName),
+									default: prop.default,
+								};
+
+								// --- Type Detection ---
+
+								// 1. Foreign Keys (PostgREST puts this in description)
+								// Format: "Note: This is a Foreign Key to `table.column`."
+								if (prop.description && prop.description.includes('Foreign Key to')) {
+									const match = prop.description.match(/Foreign Key to `(\w+)\.(\w+)`/);
+									if (match) {
+										field.type = 'select';
+										field.foreignKey = match[1]; // Table name
+										field.displayField = 'name'; // Assume 'name' exists, fallback to ID later
+										field.isFk = true;
+									}
+								}
+
+								// 2. Primary Keys - Handle UUIDs
+								if (prop.description && prop.description.includes('Primary Key')) {
+									field.primaryKey = true;
+									// Only mark as readonly if it's a serial/auto-increment integer
+									// UUIDs and other types should be editable
+									if (prop.type === 'integer' && prop.format !== 'uuid') {
+										field.readOnly = true;
+									}
+									// UUIDs with default gen_random_uuid() should be hidden on create
+									if (prop.format === 'uuid' && prop.default) {
+										field.readOnly = true;
+									}
+								}
+
+								// 3. Data Types
+								if (!field.type) {
+									if (prop.format && prop.format.includes('json')) {
+										field.type = 'json';
+									} else if (prop.format === 'uuid') {
+										// UUID fields that aren't PKs or FKs should be text inputs
+										field.type = 'text';
+										field.isUuid = true;
+									} else if (prop.type === 'boolean') {
+										field.type = 'select';
+										field.options = ['true', 'false'];
+									} else if (prop.type === 'integer' || prop.type === 'number') {
+										field.type = 'number';
+									} else if (prop.type === 'string') {
+										// Heuristic for Textarea
+										const lower = colName.toLowerCase();
+										if (
+											lower.includes('description') ||
+											lower.includes('content') ||
+											lower.includes('history') ||
+											lower.includes('notes') ||
+											lower.includes('overview')
+										) {
+											field.type = 'textarea';
+										} else {
+											field.type = 'text';
+										}
+									} else {
+										field.type = 'text';
+									}
+								}
+
+								fields.push(field);
+							});
+
+							// --- List View Logic ---
+							// Logic: Show PK + first 3 non-JSON, non-long-text fields
+							const pk = fields.find((f) => f.primaryKey)?.key || 'id';
+							listFields.push(pk);
+
+							fields.forEach((f) => {
+								if (listFields.length >= 4) return;
+								if (f.key === pk) return;
+								if (f.type === 'json' || f.type === 'textarea') return;
+								listFields.push(f.key);
+							});
+
+							schemas[tableName] = {
+								category: 'Database Tables',
+								label: tableName,
+								fields: fields,
+								listFields: listFields,
+								tableName: tableName,
+							};
+						});
+
+						return schemas;
+					} catch (e) {
+						console.error('Schema Introspection Error:', e);
+						throw e;
+					}
+				}
+			}
+			/* =========================================
+       1. UTILITIES & DOM HELPER
+       ========================================= */
+			const DOM = {
+				create: (tag, classes = [], children = []) => {
+					const el = document.createElement(tag);
+					if (classes) {
+						const classList = Array.isArray(classes) ? classes : [classes];
+						classList.forEach((c) => {
+							if (c && typeof c === 'string') el.classList.add(c);
+						});
+					}
+					const childList = Array.isArray(children) ? children : [children];
+					childList.forEach((child) => {
+						if (child === null || child === undefined) return;
+						if (typeof child === 'string' || typeof child === 'number') {
+							el.appendChild(document.createTextNode(String(child)));
+						} else if (child instanceof Node) {
+							el.appendChild(child);
+						}
+					});
+					return el;
+				},
+				clear: (el) => {
+					if (el) el.innerHTML = '';
+				},
+				get: (id) => document.getElementById(id),
+				show: (el) => el?.classList.remove('hidden'),
+				hide: (el) => el?.classList.add('hidden'),
+				toggle: (el) => el?.classList.toggle('hidden'),
+			};
+
+			class Toast {
+				static show(msg, type = 'success') {
+					const el = DOM.get('toast');
+					if (!el) return;
+					el.innerText = msg;
+					el.className = `toast show ${type === 'error' ? 'error' : ''}`;
+					setTimeout(() => el.classList.remove('show'), 3000);
+				}
+			}
+
+			/* =========================================
+       2. DATA MANAGER
+       ========================================= */
+			class DataManager {
+				constructor() {
+					this.supabase = null;
+					this.cache = {};
+				}
+
+				init(url, key) {
+					try {
+						if (!url || !key) return false;
+						this.supabase = supabase.createClient(url, key);
+						localStorage.setItem('sb_url', url);
+						localStorage.setItem('sb_key', key);
+						return true;
+					} catch (e) {
+						console.error('Supabase Init Error:', e);
+						return false;
+					}
+				}
+
+				async fetch(tableName) {
+					if (!tableName || typeof tableName !== 'string') return [];
+					if (this.cache[tableName]) return this.cache[tableName];
+
+					const { data, error } = await this.supabase.from(tableName).select('*');
+					if (error) {
+						console.error(`Error fetching ${tableName}:`, error.message);
+						return [];
+					}
+					this.cache[tableName] = data;
+					return data;
+				}
+
+				async save(schemaKey, payload, isUpdate, identifiers = {}) {
+					const schema = SCHEMAS[schemaKey];
+					const tableName = schema.tableName || schemaKey;
+
+					// Remove readonly fields if present (like serial ids) on create
+					if (!isUpdate) {
+						schema.fields.forEach((f) => {
+							if (f.readOnly && payload[f.key]) delete payload[f.key];
+						});
+					}
+
+					let query;
+					if (isUpdate) {
+						query = this.supabase.from(tableName).update(payload);
+						// Handle Composite or Standard PK
+						if (schema.primaryKeys && schema.primaryKeys.length > 0) {
+							schema.primaryKeys.forEach((k) => (query = query.eq(k, identifiers[k])));
+						} else {
+							// Fallback to 'id'
+							query = query.eq('id', identifiers.id);
+						}
+					} else {
+						query = this.supabase.from(tableName).insert([payload]);
+					}
+
+					const { data, error } = await query.select();
+					if (error) throw error;
+
+					const savedItem = data[0];
+
+					if (!this.cache[tableName]) this.cache[tableName] = [];
+
+					if (isUpdate) {
+						// Simple ID matching for cache update
+						const idx = this.cache[tableName].findIndex((i) => i.id == identifiers.id);
+						if (idx > -1) this.cache[tableName][idx] = savedItem;
+					} else {
+						this.cache[tableName].push(savedItem);
+					}
+
+					return savedItem;
+				}
+
+				async delete(schemaKey, item) {
+					const schema = SCHEMAS[schemaKey];
+					const tableName = schema.tableName || schemaKey;
+					let query = this.supabase.from(tableName).delete().eq('id', item.id);
+
+					const { error } = await query;
+					if (error) throw error;
+
+					const idx = this.cache[tableName]?.findIndex((i) => i.id == item.id);
+					if (idx > -1) this.cache[tableName].splice(idx, 1);
+				}
+
+				async checkReferences(targetSchemaKey, targetId) {
+					if (!targetId) return [];
+					const refs = [];
+
+					for (const [sKey, schema] of Object.entries(SCHEMAS)) {
+						const fkFields = schema.fields.filter((f) => f.foreignKey === targetSchemaKey);
+						if (fkFields.length === 0) continue;
+
+						const tableName = schema.tableName || sKey;
+						for (const field of fkFields) {
+							const { data } = await this.supabase.from(tableName).select('id').eq(field.key, targetId).limit(5);
+							if (data && data.length > 0) {
+								refs.push({ schema: sKey, label: schema.label, items: data });
+							}
+						}
+					}
+					return refs;
+				}
+			}
+
+			/* =========================================
+       3. FORM BUILDER
+       ========================================= */
+			class FormBuilder {
+				constructor(dataManager, onQuickAddRequest) {
+					this.dm = dataManager;
+					this.editors = {};
+					this.selects = [];
+					this.onQuickAdd = onQuickAddRequest;
+				}
+
+				destroy() {
+					Object.values(this.editors).forEach((e) => e.destroy());
+					this.selects.forEach((s) => s.destroy());
+					this.editors = {};
+					this.selects = [];
+				}
+
+				async render(schemaKey, containerId, item = null) {
+					this.destroy();
+					const schema = SCHEMAS[schemaKey];
+					if (!schema) return;
+
+					const form = DOM.get(containerId);
+					DOM.clear(form);
+
+					for (const field of schema.fields) {
+						// Don't show ReadOnly fields (like auto-increment ID) unless we are Editing
+						if (field.readOnly && !item) continue;
+
+						// Always hide ID on edit, show on list only
+						if (field.primaryKey && field.readOnly) {
+							if (item) {
+								// Optional: Show ID as text label instead of input
+								const wrapper = DOM.create('div', 'form-group');
+								wrapper.appendChild(DOM.create('label', [], field.label));
+								wrapper.appendChild(DOM.create('div', ['text-muted', 'text-sm'], String(item[field.key])));
+								form.appendChild(wrapper);
+							}
+							continue;
+						}
+
+						const wrapper = DOM.create('div', 'form-group');
+						wrapper.dataset.key = field.key;
+
+						const val = item ? item[field.key] : field.default || null;
+						const inputId = `${containerId}_${field.key}`;
+						const labelText = field.label + (field.required ? ' *' : '');
+
+						// --- JSON FIELD ---
+						if (field.type === 'json') {
+							const header = DOM.create('div', 'flex-between');
+							header.style.marginBottom = '5px';
+							const label = DOM.create('label', [], labelText);
+							label.style.marginBottom = '0';
+							header.appendChild(label);
+
+							const btnMax = DOM.create('button', ['btn', 'btn-sm', 'btn-ghost'], '⛶ Maximize');
+							btnMax.type = 'button';
+							btnMax.style.fontSize = '0.75rem';
+
+							btnMax.onclick = () => {
+								const isFull = wrapper.classList.toggle('json-fullscreen');
+								btnMax.innerText = isFull ? '✕ Close' : '⛶ Maximize';
+								btnMax.classList.toggle('btn-danger', isFull);
+								btnMax.classList.toggle('btn-ghost', !isFull);
+							};
+							header.appendChild(btnMax);
+							wrapper.appendChild(header);
+
+							const editorContainer = DOM.create('div', 'json-editor-container');
+							editorContainer.style.height = '250px';
+							wrapper.appendChild(editorContainer);
+
+							const editor = new JSONEditor(editorContainer, {
+								mode: 'tree',
+								modes: ['code', 'tree'],
+								mainMenuBar: true,
+							});
+							editor.set(val || {});
+							this.editors[field.key] = editor;
+
+							// --- SELECT FIELD ---
+						} else if (field.type === 'select') {
+							wrapper.appendChild(DOM.create('label', [], labelText));
+
+							const row = DOM.create('div', [], []);
+							row.style.display = 'flex';
+							row.style.gap = '8px';
+
+							const select = DOM.create('select', [], []);
+							select.id = inputId;
+							select.name = field.key;
+							select.innerHTML = '<option value="">Select...</option>';
+
+							// Explicit options
+							if (field.options) {
+								field.options.forEach((opt) => {
+									const op = DOM.create('option', [], opt);
+									op.value = opt;
+									if (String(val) === String(opt)) op.selected = true;
+									select.appendChild(op);
+								});
+							}
+							// Foreign Key Lookup
+							else if (field.foreignKey) {
+								const fkSchema = SCHEMAS[field.foreignKey];
+								if (fkSchema) {
+									const data = await this.dm.fetch(field.foreignKey);
+
+									// Try to find a human readable field
+									const displayField =
+										fkSchema.fields.find((f) => ['name', 'title', 'label'].includes(f.key))?.key || 'id';
+
+									data.sort((a, b) => {
+										const tA = a[displayField] || a.id || '';
+										const tB = b[displayField] || b.id || '';
+										return tA.toString().localeCompare(tB.toString());
+									});
+
+									data.forEach((d) => {
+										const label = d[displayField] || d.id;
+										const op = DOM.create('option', [], label);
+										op.value = d.id; // Assumption: all tables have 'id'
+										if (val == d.id) op.selected = true;
+										select.appendChild(op);
+									});
+								} else {
+									console.warn(`Foreign key schema '${field.foreignKey}' not found in loaded schemas.`);
+								}
+							}
+							row.appendChild(select);
+
+							if (field.foreignKey && SCHEMAS[field.foreignKey]) {
+								const btn = DOM.create('button', ['btn', 'btn-sm'], '+');
+								btn.type = 'button';
+								btn.onclick = () => this.onQuickAdd(field.foreignKey, select.id);
+								row.appendChild(btn);
+							}
+
+							wrapper.appendChild(row);
+
+							setTimeout(() => {
+								if (document.body.contains(select)) {
+									this.selects.push(new TomSelect(select, { create: false, maxOptions: 100 }));
+								}
+							}, 50);
+
+							// --- STANDARD INPUTS ---
+						} else {
+							wrapper.appendChild(DOM.create('label', [], labelText));
+
+							if (field.type === 'textarea') {
+								const input = DOM.create('textarea');
+								input.name = field.key;
+								input.rows = 4;
+								input.value = val || '';
+								wrapper.appendChild(input);
+							} else {
+								const input = DOM.create('input');
+								input.type = field.type;
+								input.name = field.key;
+								input.value = val !== null ? val : '';
+								wrapper.appendChild(input);
+							}
+						}
+
+						if (field.required && field.type !== 'json') {
+							const input = wrapper.querySelector('input, select, textarea');
+							if (input) input.required = true;
+						}
+
+						form.appendChild(wrapper);
+					}
+
+					const btn = DOM.create('button', ['btn', 'btn-primary'], item ? 'Update Item' : 'Create Item');
+					btn.style.width = '100%';
+					btn.style.marginTop = '10px';
+					btn.type = 'submit';
+					form.appendChild(btn);
+				}
+
+				extractData(formId) {
+					const form = DOM.get(formId);
+					const formData = new FormData(form);
+					const payload = {};
+
+					for (const [k, v] of formData.entries()) {
+						payload[k] = v === '' ? null : v;
+					}
+
+					Object.entries(this.editors).forEach(([key, editor]) => {
+						try {
+							payload[key] = editor.get();
+						} catch (e) {
+							console.error('Invalid JSON in field', key);
+							payload[key] = null;
+						}
+					});
+
+					return payload;
+				}
+			}
+
+			/* =========================================
+       4. TABLE VIEWER
+       ========================================= */
+			class TableViewer {
+				constructor(dataManager, onEdit, onDelete) {
+					this.dm = dataManager;
+					this.onEdit = onEdit;
+					this.onDelete = onDelete;
+					this.filters = {};
+					this.sort = { field: null, dir: 'asc' };
+				}
+
+				renderFilterBar(schemaKey) {
+					const container = DOM.get('filterContainer');
+					DOM.clear(container);
+					const schema = SCHEMAS[schemaKey];
+					if (!schema) return;
+
+					const validFields = schema.fields.filter((f) => ['text', 'select', 'number'].includes(f.type));
+
+					validFields.forEach((f) => {
+						const wrapper = DOM.create('div', 'filter-item');
+						const input = DOM.create('input');
+						input.placeholder = f.label;
+						input.className = 'text-sm';
+						input.onkeyup = (e) => {
+							this.filters[f.key] = e.target.value.toLowerCase();
+							this.refreshTable(schemaKey);
+						};
+						wrapper.appendChild(input);
+						container.appendChild(wrapper);
+					});
+				}
+
+				async renderTable(schemaKey, items) {
+					if (!schemaKey) return;
+					const container = DOM.get('tableContainer');
+					DOM.clear(container);
+
+					const schema = SCHEMAS[schemaKey];
+					if (!schema) return console.error('Schema not found for key:', schemaKey);
+
+					const tableName = schema.tableName || schemaKey;
+
+					if (!items) {
+						items = await this.dm.fetch(tableName);
+					}
+
+					// Filter
+					let data = items.filter((item) => {
+						return Object.entries(this.filters).every(([k, v]) => {
+							if (!v) return true;
+							const val = String(item[k] || '').toLowerCase();
+							return val.includes(v);
+						});
+					});
+
+					// Sort
+					if (this.sort.field) {
+						data.sort((a, b) => {
+							const va = a[this.sort.field];
+							const vb = b[this.sort.field];
+							if (va < vb) return this.sort.dir === 'asc' ? -1 : 1;
+							if (va > vb) return this.sort.dir === 'asc' ? 1 : -1;
+							return 0;
+						});
+					}
+
+					DOM.get('statusCount').innerText = `${data.length} records found`;
+
+					const table = DOM.create('table');
+					const thead = DOM.create('thead');
+					const trHead = DOM.create('tr');
+
+					schema.listFields.forEach((f) => {
+						const fDef = schema.fields.find((x) => x.key === f);
+						const label = fDef ? fDef.label : f;
+						const th = DOM.create('th', [], label);
+						if (this.sort.field === f) {
+							th.innerText += this.sort.dir === 'asc' ? ' ▲' : ' ▼';
+						}
+						th.onclick = () => {
+							if (this.sort.field === f) this.sort.dir = this.sort.dir === 'asc' ? 'desc' : 'asc';
+							else {
+								this.sort.field = f;
+								this.sort.dir = 'asc';
+							}
+							this.renderTable(schemaKey, items);
+						};
+						trHead.appendChild(th);
+					});
+					trHead.appendChild(DOM.create('th', [], 'Actions'));
+					thead.appendChild(trHead);
+					table.appendChild(thead);
+
+					const tbody = DOM.create('tbody');
+
+					data.forEach((row) => {
+						const tr = DOM.create('tr');
+						schema.listFields.forEach((key) => {
+							let val = row[key];
+
+							const fDef = schema.fields.find((x) => x.key === key);
+							if (fDef && fDef.foreignKey) {
+								const fkSchema = SCHEMAS[fDef.foreignKey];
+								if (fkSchema) {
+									const cachedFK = this.dm.cache[fDef.foreignKey];
+									if (cachedFK) {
+										const displayField =
+											fkSchema.fields.find((f) => ['name', 'title', 'label'].includes(f.key))?.key || 'id';
+										const match = cachedFK.find((x) => x.id === val);
+										if (match) val = match[displayField] || val;
+									}
+								}
+								val = DOM.create('span', 'tag', String(val || '-'));
+								const td = DOM.create('td');
+								td.appendChild(val);
+								tr.appendChild(td);
+							} else {
+								if (typeof val === 'string' && val.length > 50) val = val.substring(0, 50) + '...';
+								if (val === null || val === undefined) val = '-';
+								tr.appendChild(DOM.create('td', [], String(val)));
+							}
+						});
+
+						const tdActions = DOM.create('td');
+						const btnEdit = DOM.create('button', ['btn', 'btn-sm'], 'Edit');
+						btnEdit.onclick = () => this.onEdit(row);
+
+						const btnDel = DOM.create('button', ['btn', 'btn-sm', 'btn-danger'], 'Del');
+						btnDel.onclick = () => this.onDelete(row);
+
+						tdActions.appendChild(btnEdit);
+						tdActions.appendChild(DOM.create('span', [], ' '));
+						tdActions.appendChild(btnDel);
+						tr.appendChild(tdActions);
+						tbody.appendChild(tr);
+					});
+
+					table.appendChild(tbody);
+					container.appendChild(table);
+				}
+
+				refreshTable(schemaKey) {
+					const schema = SCHEMAS[schemaKey];
+					if (schema) {
+						this.renderTable(schemaKey, this.dm.cache[schemaKey]);
+					}
+				}
+			}
+
+			/* =========================================
+       5. MAIN APP
+       ========================================= */
+			class App {
+				constructor() {
+					this.dm = new DataManager();
+					this.fb = new FormBuilder(this.dm, this.handleQuickAdd.bind(this));
+					this.tv = new TableViewer(this.dm, this.handleEdit.bind(this), this.handleDelete.bind(this));
+
+					this.activeSchema = null;
+					this.editingItem = null;
+
+					this.bindEvents();
+					this.checkAuth();
+				}
+
+				bindEvents() {
+					DOM.get('btnConnect').addEventListener('click', () => this.login());
+					DOM.get('btnLogout').addEventListener('click', () => {
+						localStorage.clear();
+						location.reload();
+					});
+
+					DOM.get('btnRefresh').addEventListener('click', () => this.refreshAll());
+					DOM.get('btnToggleFilters').addEventListener('click', () => DOM.toggle(DOM.get('filterContainer')));
+					DOM.get('btnNewItem').addEventListener('click', () => this.resetForm());
+
+					DOM.get('dynamicForm').addEventListener('submit', async (e) => {
+						e.preventDefault();
+						if (!this.activeSchema) return;
+						await this.saveItem('dynamicForm', this.activeSchema, this.editingItem, (updated) => {
+							Toast.show('Item saved');
+							this.editingItem = null;
+							this.resetForm();
+						});
+					});
+
+					DOM.get('quickAddForm').addEventListener('submit', async (e) => {
+						e.preventDefault();
+						const schemaKey = DOM.get('quickAddForm').dataset.schema;
+						await this.saveItem('quickAddForm', schemaKey, null, (newItem) => {
+							const triggerId = DOM.get('quickAddForm').dataset.trigger;
+
+							// Find better label than ID
+							const schema = SCHEMAS[schemaKey];
+							const displayField = schema.fields.find((f) => ['name', 'title'].includes(f.key))?.key || 'id';
+							const label = newItem[displayField] || newItem.id;
+
+							Toast.show(`Created ${label}`);
+							DOM.hide(DOM.get('quickAddModal'));
+
+							const select = document.getElementById(triggerId);
+							if (select && select.tomselect) {
+								select.tomselect.addOption({ value: newItem.id, text: label });
+								select.tomselect.addItem(newItem.id);
+							}
+						});
+					});
+
+					DOM.get('btnCloseQuickAdd').onclick = () => DOM.hide(DOM.get('quickAddModal'));
+				}
+
+				checkAuth() {
+					const url = localStorage.getItem('sb_url');
+					const key = localStorage.getItem('sb_key');
+					// Pre-fill fields
+					if (url) DOM.get('sbUrl').value = url;
+					if (key) DOM.get('sbKey').value = key;
+				}
+
+				async login() {
+					const url = DOM.get('sbUrl').value.replace(/\/$/, ''); // remove trailing slash
+					const key = DOM.get('sbKey').value;
+
+					DOM.get('btnConnect').innerText = 'Introspecting Database...';
+
+					try {
+						if (this.dm.init(url, key)) {
+							// 1. Fetch Schema
+							SCHEMAS = await SchemaIntrospector.fetchAndParse(url, key);
+
+							DOM.hide(DOM.get('authModal'));
+							DOM.show(DOM.get('app'));
+							this.initApp();
+						} else {
+							throw new Error('Supabase client failed to init');
+						}
+					} catch (e) {
+						Toast.show(e.message, 'error');
+						DOM.get('btnConnect').innerText = 'Connect & Load Schema';
+					}
+				}
+
+				async initApp() {
+					try {
+						this.renderNav();
+						DOM.get('schemaStatusDisplay').innerText = `${Object.keys(SCHEMAS).length} tables loaded`;
+
+						const keys = Object.keys(SCHEMAS);
+						if (keys.length > 0) {
+							// Sort alphabetical
+							keys.sort();
+							this.switchTab(keys[0]);
+						}
+					} catch (e) {
+						Toast.show('Init Error: ' + e.message, 'error');
+					}
+				}
+
+				renderNav() {
+					const container = DOM.get('navContainer');
+					DOM.clear(container);
+
+					const categories = {};
+					Object.entries(SCHEMAS).forEach(([key, val]) => {
+						if (!categories[val.category]) categories[val.category] = [];
+						categories[val.category].push({ key, label: val.label });
+					});
+
+					// Sort keys for consistent UI
+					Object.keys(categories)
+						.sort()
+						.forEach((cat) => {
+							const group = DOM.create('div', 'nav-group');
+							group.appendChild(DOM.create('div', 'nav-label', cat));
+
+							categories[cat].sort((a, b) => a.label.localeCompare(b.label));
+
+							categories[cat].forEach((item) => {
+								const btn = DOM.create('button', 'nav-item', item.label);
+								btn.onclick = () => this.switchTab(item.key);
+								btn.dataset.key = item.key;
+								group.appendChild(btn);
+							});
+							container.appendChild(group);
+						});
+				}
+
+				async switchTab(key) {
+					if (!SCHEMAS[key]) return;
+					this.activeSchema = key;
+					this.editingItem = null;
+
+					document.querySelectorAll('.nav-item').forEach((el) => el.classList.remove('active'));
+					document.querySelector(`.nav-item[data-key="${key}"]`)?.classList.add('active');
+
+					DOM.get('pageTitle').innerText = SCHEMAS[key].label;
+					DOM.hide(DOM.get('crossRefSection'));
+
+					await this.fb.render(key, 'dynamicForm');
+					this.tv.filters = {};
+					this.tv.renderFilterBar(key);
+
+					DOM.clear(DOM.get('tableContainer'));
+					DOM.get('statusCount').innerText = 'Loading...';
+
+					await this.tv.renderTable(key);
+				}
+
+				async refreshAll() {
+					if (!this.activeSchema) return;
+					this.dm.cache = {};
+					await this.tv.renderTable(this.activeSchema);
+				}
+
+				async saveItem(formId, schemaKey, originalItem, onSuccess) {
+					const payload = this.fb.extractData(formId);
+					const schema = SCHEMAS[schemaKey];
+					const missing = schema.fields.filter((f) => f.required && !payload[f.key]);
+
+					// Simple validation
+					if (missing.length > 0) {
+						// Check if missing fields are actually auto-increment PKs which are allowed to be null on create
+						const realMissing = missing.filter((f) => !f.primaryKey);
+						if (realMissing.length > 0) {
+							return Toast.show(`Missing: ${realMissing.map((f) => f.label).join(', ')}`, 'error');
+						}
+					}
+
+					try {
+						const identifiers = originalItem ? { id: originalItem.id, ...originalItem } : {};
+						const res = await this.dm.save(schemaKey, payload, !!originalItem, identifiers);
+						onSuccess(res);
+
+						// Refresh view
+						this.tv.renderTable(schemaKey, this.dm.cache[schemaKey]);
+					} catch (e) {
+						console.error(e);
+						Toast.show(e.message, 'error');
+					}
+				}
+
+				async handleEdit(item) {
+					this.editingItem = item;
+					await this.fb.render(this.activeSchema, 'dynamicForm', item);
+					DOM.get('dynamicForm').scrollIntoView({ behavior: 'smooth' });
+
+					const list = DOM.get('crossRefList');
+					const section = DOM.get('crossRefSection');
+					DOM.clear(list);
+
+					const refs = await this.dm.checkReferences(this.activeSchema, item.id);
+					if (refs.length) {
+						DOM.show(section);
+						refs.forEach((r) => {
+							list.appendChild(DOM.create('div', 'text-sm', `${r.label}: ${r.items.length} items`));
+						});
+					} else {
+						DOM.hide(section);
+					}
+				}
+
+				async handleDelete(item) {
+					if (!confirm('Are you sure?')) return;
+					try {
+						const refs = await this.dm.checkReferences(this.activeSchema, item.id);
+						if (refs.length > 0) {
+							return alert(`Cannot delete. Referenced by:\n${refs.map((r) => r.label).join(', ')}`);
+						}
+
+						await this.dm.delete(this.activeSchema, item);
+						Toast.show('Deleted successfully');
+						this.tv.refreshTable(this.activeSchema);
+						if (this.editingItem && this.editingItem.id === item.id) {
+							this.resetForm();
+						}
+					} catch (e) {
+						Toast.show(e.message, 'error');
+					}
+				}
+
+				resetForm() {
+					this.editingItem = null;
+					DOM.get('dynamicForm').reset();
+					this.fb.render(this.activeSchema, 'dynamicForm');
+					DOM.hide(DOM.get('crossRefSection'));
+				}
+
+				handleQuickAdd(foreignSchema, triggerId) {
+					const modal = DOM.get('quickAddModal');
+					const form = DOM.get('quickAddForm');
+					form.dataset.schema = foreignSchema;
+					form.dataset.trigger = triggerId;
+
+					DOM.get('quickAddTitle').innerText = `New ${SCHEMAS[foreignSchema].label}`;
+					this.fb.render(foreignSchema, 'quickAddForm');
+					DOM.show(modal);
+				}
+			}
+
+			window.onload = () => {
+				new App();
+			};
+		</script>
+	</body>
+</html>
