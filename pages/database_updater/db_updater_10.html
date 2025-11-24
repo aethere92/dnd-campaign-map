@@ -1053,6 +1053,30 @@
 						form.appendChild(wrapper);
 					}
 
+					// --- NEW: Keep Fields Checkbox ---
+					const optionsRow = DOM.create('div', ['flex-between'], []);
+					optionsRow.style.marginTop = '15px';
+					optionsRow.style.marginBottom = '5px';
+
+					const keepLabel = DOM.create('label', [], ' Keep values after submit');
+					keepLabel.style.display = 'flex';
+					keepLabel.style.alignItems = 'center';
+					keepLabel.style.gap = '8px';
+					keepLabel.style.fontSize = '0.85rem';
+					keepLabel.style.color = 'var(--colors-text-muted)';
+					keepLabel.style.cursor = 'pointer';
+
+					const keepCheck = DOM.create('input');
+					keepCheck.type = 'checkbox';
+					keepCheck.id = 'chkKeepFields';
+					keepCheck.style.width = 'auto'; // Override default full width
+					keepCheck.style.margin = '0';
+
+					keepLabel.prepend(keepCheck);
+					optionsRow.appendChild(keepLabel);
+					form.appendChild(optionsRow);
+					// --------------------------------
+
 					const btn = DOM.create('button', ['btn', 'btn-primary'], item ? 'Update Item' : 'Create Item');
 					btn.style.width = '100%';
 					btn.style.marginTop = '10px';
@@ -1263,10 +1287,27 @@
 					DOM.get('dynamicForm').addEventListener('submit', async (e) => {
 						e.preventDefault();
 						if (!this.activeSchema) return;
+
+						// Check the box state
+						const keepFields = document.getElementById('chkKeepFields')?.checked;
+
 						await this.saveItem('dynamicForm', this.activeSchema, this.editingItem, (updated) => {
 							Toast.show('Item saved');
-							this.editingItem = null;
-							this.resetForm();
+
+							if (keepFields) {
+								// If keeping fields, we strip the ID from the internal state
+								// so the NEXT click creates a new item instead of updating the old one.
+								this.editingItem = null;
+
+								// Optional: Update button text to indicate we are now creating new
+								const btn = DOM.get('dynamicForm').querySelector('button[type="submit"]');
+								if (btn) btn.innerText = 'Create Item';
+
+								Toast.show('Saved. Form retained for new entry.');
+							} else {
+								this.editingItem = null;
+								this.resetForm();
+							}
 						});
 					});
 
