@@ -12,6 +12,10 @@ class StoryHelperTooltip {
 		this.#campaignId = campaignData.campaignId;
 
 		const dataRegistry = this.#buildDataRegistry(campaignData);
+
+		// ✅ ADD THIS LINE: Store campaign ID in registry for TooltipDataService
+		dataRegistry.campaign = { id: this.#campaignId };
+
 		const supabase = supabaseClient || SupabaseClient.getInstance();
 		const apiBaseUrl = 'https://www.dnd5eapi.co/api/2014/';
 

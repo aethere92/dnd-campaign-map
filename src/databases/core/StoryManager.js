@@ -36,15 +36,19 @@ class StoryManager {
 	}
 
 	#initializeHelpers(options) {
-		this.#tooltipManager = new StoryHelperTooltip({
-			campaignId: options.campaignData?.id,
-			characters: options.campaignData?.metadata?.characters || [],
-			npcs: options.campaignData?.npcs || [],
-			locations: options.campaignData?.locations || [],
-			quests: options.campaignData?.quests || [],
-			factions: options.campaignData?.factions || [],
-			encounters: options.campaignData?.encounters || [],
-		});
+		this.#tooltipManager = new StoryHelperTooltip(
+			{
+				campaignId: options.campaignData?.id,
+				characters: options.campaignData?.metadata?.characters || [],
+				npcs: options.campaignData?.npcs || [],
+				locations: options.campaignData?.locations || [],
+				quests: options.campaignData?.quests || [],
+				factions: options.campaignData?.factions || [],
+				encounters: options.campaignData?.encounters || [],
+				monsters: options.campaignData?.monsters || [],
+			},
+			SupabaseClient.getInstance() // Pass the Supabase client as second parameter
+		);
 
 		this.#placeholderProcessor = new StoryHelperPlaceholder(this.#tooltipManager, options.campaignData);
 		this.#navigationManager = new StoryHelperNavigation();

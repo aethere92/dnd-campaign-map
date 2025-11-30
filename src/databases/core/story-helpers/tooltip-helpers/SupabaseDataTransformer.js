@@ -125,4 +125,158 @@ class SupabaseDataTransformer {
 		const match = String(scoreStr).match(/^(\d+)/);
 		return match ? parseInt(match[1], 10) : 10;
 	}
+
+	static transformNPC(supabaseNPC) {
+		if (!supabaseNPC) return null;
+		const npc = Array.isArray(supabaseNPC) ? supabaseNPC[0] : supabaseNPC;
+		if (!npc) return null;
+
+		// Parse JSON fields if they're strings
+		const parseJson = (field) => {
+			if (!field) return null;
+			if (typeof field === 'string') {
+				try {
+					return JSON.parse(field);
+				} catch {
+					return null;
+				}
+			}
+			return field;
+		};
+
+		return {
+			...npc,
+			location: parseJson(npc.location),
+			goals: parseJson(npc.goals),
+			items: parseJson(npc.items),
+			relationships: parseJson(npc.relationships),
+			encounters: parseJson(npc.encounters),
+			link: parseJson(npc.link),
+		};
+	}
+
+	static transformLocation(supabaseLocation) {
+		if (!supabaseLocation) return null;
+		const loc = Array.isArray(supabaseLocation) ? supabaseLocation[0] : supabaseLocation;
+		if (!loc) return null;
+
+		const parseJson = (field) => {
+			if (!field) return null;
+			if (typeof field === 'string') {
+				try {
+					return JSON.parse(field);
+				} catch {
+					return null;
+				}
+			}
+			return field;
+		};
+
+		return {
+			...loc,
+			features: parseJson(loc.features),
+			npcs: parseJson(loc.npcs),
+			connections: parseJson(loc.connections),
+			threats: parseJson(loc.threats),
+			items: parseJson(loc.items),
+		};
+	}
+
+	static transformQuest(supabaseQuest) {
+		if (!supabaseQuest) return null;
+		const quest = Array.isArray(supabaseQuest) ? supabaseQuest[0] : supabaseQuest;
+		if (!quest) return null;
+
+		const parseJson = (field) => {
+			if (!field) return null;
+			if (typeof field === 'string') {
+				try {
+					return JSON.parse(field);
+				} catch {
+					return null;
+				}
+			}
+			return field;
+		};
+
+		return {
+			...quest,
+			sessions: parseJson(quest.sessions),
+		};
+	}
+
+	static transformEncounter(supabaseEncounter) {
+		if (!supabaseEncounter) return null;
+		const enc = Array.isArray(supabaseEncounter) ? supabaseEncounter[0] : supabaseEncounter;
+		if (!enc) return null;
+
+		const parseJson = (field) => {
+			if (!field) return null;
+			if (typeof field === 'string') {
+				try {
+					return JSON.parse(field);
+				} catch {
+					return null;
+				}
+			}
+			return field;
+		};
+
+		return {
+			...enc,
+			environment: parseJson(enc.environment),
+			initiative: parseJson(enc.initiative),
+			rounds: parseJson(enc.rounds),
+			outcome: parseJson(enc.outcome),
+			post_combat: parseJson(enc.post_combat),
+		};
+	}
+
+	static transformCharacter(supabaseCharacter) {
+		if (!supabaseCharacter) return null;
+		const char = Array.isArray(supabaseCharacter) ? supabaseCharacter[0] : supabaseCharacter;
+		if (!char) return null;
+
+		const parseJson = (field) => {
+			if (!field) return null;
+			if (typeof field === 'string') {
+				try {
+					return JSON.parse(field);
+				} catch {
+					return null;
+				}
+			}
+			return field;
+		};
+
+		return {
+			...char,
+			shortDescription,
+			stats: parseJson(char.stats),
+		};
+	}
+
+	static transformFaction(supabaseFaction) {
+		if (!supabaseFaction) return null;
+		const faction = Array.isArray(supabaseFaction) ? supabaseFaction[0] : supabaseFaction;
+		if (!faction) return null;
+
+		const parseJson = (field) => {
+			if (!field) return null;
+			if (typeof field === 'string') {
+				try {
+					return JSON.parse(field);
+				} catch {
+					return null;
+				}
+			}
+			return field;
+		};
+
+		return {
+			...faction,
+			npcs: parseJson(faction.npcs),
+			encounters: parseJson(faction.encounters),
+		};
+	}
 }

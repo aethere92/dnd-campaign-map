@@ -1,29 +1,37 @@
 // ============================================
-// TooltipDataService.js
+// TooltipDataService.js - COMPLETE VERSION (No Character Supabase)
 // ============================================
 class TooltipDataService {
 	constructor(dataRegistry, supabaseClient, apiBaseUrl) {
 		this.dataRegistry = dataRegistry;
 		this.supabaseClient = supabaseClient;
 		this.apiBaseUrl = apiBaseUrl;
+		this.campaignId = null;
+		this.#extractCampaignId();
+	}
+
+	#extractCampaignId() {
+		if (this.dataRegistry.campaign?.id) {
+			this.campaignId = this.dataRegistry.campaign.id;
+		}
 	}
 
 	async fetch(entityType, entityName) {
 		const normalizedName = entityName.toLowerCase().trim();
 
-		if (entityType === 'spell') {
-			return await this.#fetchSpellData(entityName);
+		// Try Supabase first for supported entity types (removed 'character')
+		if (['spell', 'monster', 'npc', 'location', 'faction', 'quest', 'encounter'].includes(entityType)) {
+			const supabaseData = await this.#fetchFromSupabase(entityType, entityName, normalizedName);
+			if (supabaseData) return supabaseData;
 		}
 
-		if (entityType === 'monster') {
-			return await this.#fetchMonsterData(entityName);
-		}
-
+		// Fallback to local registry
 		if (this.dataRegistry[entityType]) {
 			const data = this.dataRegistry[entityType][normalizedName];
 			if (data) return data;
 		}
 
+		// Fallback to D&D API for reference data
 		if (['class', 'race', 'equipment', 'condition', 'feat'].includes(entityType)) {
 			return await this.#fetchFromDndApi(entityType, entityName);
 		}
@@ -31,62 +39,120 @@ class TooltipDataService {
 		return null;
 	}
 
-	async #fetchSpellData(spellName) {
-		if (this.supabaseClient?.isReady()) {
-			try {
-				const supabaseData = await Promise.race([
-					this.supabaseClient.fetchSpellByName(spellName),
-					new Promise((_, reject) => setTimeout(() => reject(new Error('Supabase timeout')), 1000)),
-				]);
-
-				if (supabaseData) {
-					return SupabaseDataTransformer.transformSpell(supabaseData);
-				}
-			} catch (error) {
-				console.warn('Failed to fetch spell from Supabase, trying fallbacks:', error);
-			}
-		}
-
-		if (this.dataRegistry.spell[spellName]) {
-			return this.dataRegistry.spell[spellName];
-		}
+	async #fetchFromSupabase(entityType, entityName, normalizedName) {
+		if (!this.supabaseClient?.isReady()) return null;
 
 		try {
-			return await this.#fetchFromDndApi('spell', spellName);
+			let supabaseData = null;
+
+			switch (entityType) {
+				case 'spell':
+					supabaseData = await Promise.race([
+						this.supabaseClient.fetchSpellByName(entityName),
+						new Promise((_, reject) => setTimeout(() => reject(new Error('Supabase timeout')), 1000)),
+					]);
+					break;
+
+				case 'monster':
+					supabaseData = await Promise.race([
+						this.supabaseClient.fetchMonsterByName(entityName),
+						new Promise((_, reject) => setTimeout(() => reject(new Error('Supabase timeout')), 1000)),
+					]);
+					break;
+
+				case 'npc':
+				case 'location':
+				case 'faction':
+				case 'quest':
+				case 'encounter':
+					supabaseData = await this.#fetchEntityByQuery(entityType, entityName, normalizedName);
+					break;
+			}
+
+			if (supabaseData) {
+				return this.#transformSupabaseData(entityType, supabaseData);
+			}
 		} catch (error) {
-			console.warn('Failed to fetch spell from D&D API:', error);
+			console.warn(`Failed to fetch ${entityType} from Supabase:`, error);
+		}
+
+		return null;
+	}
+
+	async #fetchEntityByQuery(entityType, entityName, normalizedName) {
+		if (!this.supabaseClient?.isReady() || !this.campaignId) return null;
+
+		const client = this.supabaseClient.getClient();
+		if (!client) return null;
+
+		const tableMap = {
+			npc: 'npcs',
+			location: 'locations',
+			faction: 'factions',
+			quest: 'quests',
+			encounter: 'encounters',
+		};
+
+		const nameFieldMap = {
+			npc: 'name',
+			location: 'name',
+			faction: 'name',
+			quest: 'title',
+			encounter: 'name',
+		};
+
+		const table = tableMap[entityType];
+		const nameField = nameFieldMap[entityType];
+
+		if (!table || !nameField) return null;
+
+		try {
+			// Wrap the entire operation in a single timeout
+			return await Promise.race([
+				(async () => {
+					// Try by name first (case-insensitive)
+					const { data: dataByName, error: errorByName } = await client
+						.from(table)
+						.select('*')
+						.eq('campaign_id', this.campaignId)
+						.ilike(nameField, entityName)
+						.single();
+
+					if (!errorByName && dataByName) return dataByName;
+
+					// Try by ID as fallback
+					const { data: dataById, error: errorById } = await client
+						.from(table)
+						.select('*')
+						.eq('campaign_id', this.campaignId)
+						.eq('id', normalizedName)
+						.single();
+
+					if (!errorById && dataById) return dataById;
+
+					return null;
+				})(),
+				new Promise((_, reject) => setTimeout(() => reject(new Error('Supabase timeout')), 1000)),
+			]);
+		} catch (error) {
+			console.warn(`Error in fetchEntityByQuery for ${entityType}:`, error);
 			return null;
 		}
 	}
 
-	async #fetchMonsterData(monsterName) {
-		const normalizedName = monsterName.toLowerCase().trim();
+	#transformSupabaseData(entityType, data) {
+		const transformers = {
+			spell: SupabaseDataTransformer.transformSpell,
+			monster: SupabaseDataTransformer.transformMonster,
+			npc: SupabaseDataTransformer.transformNPC,
+			location: SupabaseDataTransformer.transformLocation,
+			quest: SupabaseDataTransformer.transformQuest,
+			encounter: SupabaseDataTransformer.transformEncounter,
+			faction: SupabaseDataTransformer.transformFaction,
+		};
 
-		if (this.supabaseClient?.isReady()) {
-			try {
-				const supabaseData = await Promise.race([
-					this.supabaseClient.fetchMonsterByName(monsterName),
-					new Promise((_, reject) => setTimeout(() => reject(new Error('Supabase timeout')), 1000)),
-				]);
-
-				if (supabaseData) {
-					return SupabaseDataTransformer.transformMonster(supabaseData);
-				}
-			} catch (error) {
-				console.warn('Failed to fetch monster from Supabase, trying fallbacks:', error);
-			}
-		}
-
-		if (this.dataRegistry.monster[normalizedName]) {
-			return this.dataRegistry.monster[normalizedName];
-		}
-
-		try {
-			return await this.#fetchFromDndApi('monster', monsterName);
-		} catch (error) {
-			console.warn('Failed to fetch monster from D&D API:', error);
-			return null;
-		}
+		const transformer = transformers[entityType];
+		return transformer ? transformer(data) : Array.isArray(data) ? data[0] : data;
 	}
 
 	async #fetchFromDndApi(entityType, entityName) {

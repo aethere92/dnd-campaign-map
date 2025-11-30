@@ -6,16 +6,12 @@
 		<title>DM Console - Auto-Schema Edition</title>
 
 		<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-		<link
-			href="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/css/tom-select.css"
-			rel="stylesheet"
-		/>
+		<link href="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/css/tom-select.css" rel="stylesheet" />
 		<script src="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/js/tom-select.complete.min.js"></script>
 		<link
 			href="https://cdnjs.cloudflare.com/ajax/libs/jsoneditor/9.10.0/jsoneditor.min.css"
 			rel="stylesheet"
-			type="text/css"
-		/>
+			type="text/css" />
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/jsoneditor/9.10.0/jsoneditor.min.js"></script>
 
 		<style>
@@ -32,8 +28,7 @@
 				--colors-danger: #ef4444;
 				--colors-warning: #eab308;
 
-				--font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
-					Roboto, sans-serif;
+				--font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 				--radius: 6px;
 				--shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
 			}
@@ -340,7 +335,7 @@
 			.dropdown-item:hover {
 				background: var(--colors-surface-200);
 			}
-			.dropdown-item input[type="checkbox"] {
+			.dropdown-item input[type='checkbox'] {
 				width: auto;
 				margin: 0;
 			}
@@ -522,9 +517,7 @@
 	<body>
 		<div id="authModal" class="modal-overlay">
 			<div class="modal-card">
-				<h2 style="margin-bottom: 15px; color: var(--colors-brand)">
-					Database Connection
-				</h2>
+				<h2 style="margin-bottom: 15px; color: var(--colors-brand)">Database Connection</h2>
 				<p class="text-muted text-sm" style="margin-bottom: 15px">
 					This app requires a Supabase project. It will auto-detect your schema.
 				</p>
@@ -534,8 +527,7 @@
 						type="text"
 						id="sbUrl"
 						placeholder="https://xxx.supabase.co"
-						value="https://yffukfulnggfhlgoyowg.supabase.co"
-					/>
+						value="https://yffukfulnggfhlgoyowg.supabase.co" />
 				</div>
 				<div class="form-group">
 					<label>Supabase Key</label>
@@ -543,12 +535,13 @@
 						type="password"
 						id="sbKey"
 						placeholder="public-anon-key"
-						value="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlmZnVrZnVsbmdnZmhsZ295b3dnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjM1NTcyMDYsImV4cCI6MjA3OTEzMzIwNn0.BcB9Uea-vfnxwKA22YpQU0QlFCA0bfigsiDC_r2SNQ4"
-					/>
+						value="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlmZnVrZnVsbmdnZmhsZ295b3dnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjM1NTcyMDYsImV4cCI6MjA3OTEzMzIwNn0.BcB9Uea-vfnxwKA22YpQU0QlFCA0bfigsiDC_r2SNQ4" />
 				</div>
-				<button id="btnConnect" class="btn btn-primary" style="width: 100%">
-					Connect & Load Schema
-				</button>
+				<p style="display: flex; gap: 0.5rem; margin-bottom: 0.5rem">
+					<button class="btn btn-secondary" style="width: 100%" id="set-db-1">Db 1</button>
+					<button class="btn btn-secondary" style="width: 100%" id="set-db-2">Db 2</button>
+				</p>
+				<button id="btnConnect" class="btn btn-primary" style="width: 100%">Connect & Load Schema</button>
 			</div>
 		</div>
 
@@ -559,21 +552,11 @@
 						<span>⚡</span>
 						DB Console
 					</div>
-					<div
-						class="text-sm text-muted"
-						style="margin-top: 5px"
-						id="schemaStatusDisplay"
-					>
-						Loading...
-					</div>
+					<div class="text-sm text-muted" style="margin-top: 5px" id="schemaStatusDisplay">Loading...</div>
 				</div>
 				<div id="navContainer" class="sidebar-content"></div>
-				<div
-					style="padding-top: 15px; border-top: 1px solid var(--colors-border)"
-				>
-					<button id="btnLogout" class="btn btn-sm btn-ghost text-muted">
-						Log Out
-					</button>
+				<div style="padding-top: 15px; border-top: 1px solid var(--colors-border)">
+					<button id="btnLogout" class="btn btn-sm btn-ghost text-muted">Log Out</button>
 				</div>
 			</div>
 
@@ -581,13 +564,7 @@
 				<div class="top-bar">
 					<h3 id="pageTitle">Dashboard</h3>
 					<div style="display: flex; gap: 10px">
-						<button
-							id="btnRefresh"
-							class="btn btn-sm btn-ghost"
-							title="Refresh Data"
-						>
-							↻ Refresh
-						</button>
+						<button id="btnRefresh" class="btn btn-sm btn-ghost" title="Refresh Data">↻ Refresh</button>
 					</div>
 				</div>
 
@@ -596,9 +573,7 @@
 						<div class="panel-header">
 							<span class="panel-title">Editor</span>
 							<div class="flex-between" gap="10">
-								<button id="btnNewItem" class="btn btn-sm btn-primary">
-									+ New
-								</button>
+								<button id="btnNewItem" class="btn btn-sm btn-primary">+ New</button>
 							</div>
 						</div>
 						<div class="panel-body">
@@ -607,20 +582,8 @@
 							<div
 								id="crossRefSection"
 								class="hidden"
-								style="
-									margin-top: 20px;
-									border-top: 1px solid var(--colors-border);
-									padding-top: 15px;
-								"
-							>
-								<h4
-									class="text-muted"
-									style="
-										font-size: 0.75rem;
-										text-transform: uppercase;
-										margin-bottom: 10px;
-									"
-								>
+								style="margin-top: 20px; border-top: 1px solid var(--colors-border); padding-top: 15px">
+								<h4 class="text-muted" style="font-size: 0.75rem; text-transform: uppercase; margin-bottom: 10px">
 									References
 								</h4>
 								<div id="crossRefList"></div>
@@ -636,9 +599,7 @@
 									<button id="btnColumns" class="btn btn-sm">Columns ▾</button>
 									<div id="columnDropdown" class="dropdown-menu"></div>
 								</div>
-								<button id="btnToggleFilters" class="btn btn-sm">
-									Filters
-								</button>
+								<button id="btnToggleFilters" class="btn btn-sm">Filters</button>
 							</div>
 						</div>
 
@@ -653,8 +614,7 @@
 								min-height: 40px;
 								font-size: 0.8rem;
 								color: var(--colors-text-muted);
-							"
-						>
+							">
 							<span id="statusCount">0 records</span>
 						</div>
 					</div>
@@ -688,30 +648,25 @@
 							headers: {
 								apikey: key,
 								Authorization: `Bearer ${key}`,
-								Accept: "application/openapi+json",
+								Accept: 'application/openapi+json',
 							},
 						});
 
 						if (!response.ok)
-							throw new Error(
-								`Failed to fetch DB Schema. Status: ${response.status} - ${response.statusText}`
-							);
+							throw new Error(`Failed to fetch DB Schema. Status: ${response.status} - ${response.statusText}`);
 
 						const doc = await response.json();
 						const schemas = {};
 						const defs = doc.definitions || doc.components?.schemas;
 
-						if (!defs)
-							throw new Error(
-								"Invalid Schema format received: No definitions found."
-							);
+						if (!defs) throw new Error('Invalid Schema format received: No definitions found.');
 
 						Object.keys(defs).forEach((tableName) => {
 							const def = defs[tableName];
 							const fields = [];
 							const defaultListFields = [];
 
-							if (tableName.startsWith("_")) return;
+							if (tableName.startsWith('_')) return;
 
 							Object.keys(def.properties).forEach((colName) => {
 								const prop = def.properties[colName];
@@ -723,64 +678,53 @@
 								};
 
 								// 1. Foreign Keys
-								if (
-									prop.description &&
-									prop.description.includes("Foreign Key to")
-								) {
-									const match = prop.description.match(
-										/Foreign Key to `(\w+)\.(\w+)`/
-									);
+								if (prop.description && prop.description.includes('Foreign Key to')) {
+									const match = prop.description.match(/Foreign Key to `(\w+)\.(\w+)`/);
 									if (match) {
-										field.type = "select";
+										field.type = 'select';
 										field.foreignKey = match[1];
-										field.displayField = "name";
+										field.displayField = 'name';
 										field.isFk = true;
 									}
 								}
 
 								// 2. Primary Keys
-								if (
-									prop.description &&
-									prop.description.includes("Primary Key")
-								) {
+								if (prop.description && prop.description.includes('Primary Key')) {
 									field.primaryKey = true;
-									if (prop.type === "integer" && prop.format !== "uuid") {
+									if (prop.type === 'integer' && prop.format !== 'uuid') {
 										field.readOnly = true;
 									}
-									if (prop.format === "uuid" && prop.default) {
+									if (prop.format === 'uuid' && prop.default) {
 										field.readOnly = true;
 									}
 								}
 
 								// 3. Data Types
 								if (!field.type) {
-									if (prop.format && prop.format.includes("json")) {
-										field.type = "json";
-									} else if (prop.format === "uuid") {
-										field.type = "text";
+									if (prop.format && prop.format.includes('json')) {
+										field.type = 'json';
+									} else if (prop.format === 'uuid') {
+										field.type = 'text';
 										field.isUuid = true;
-									} else if (prop.type === "boolean") {
-										field.type = "select";
-										field.options = ["true", "false"];
-									} else if (
-										prop.type === "integer" ||
-										prop.type === "number"
-									) {
-										field.type = "number";
-									} else if (prop.type === "string") {
+									} else if (prop.type === 'boolean') {
+										field.type = 'select';
+										field.options = ['true', 'false'];
+									} else if (prop.type === 'integer' || prop.type === 'number') {
+										field.type = 'number';
+									} else if (prop.type === 'string') {
 										const lower = colName.toLowerCase();
 										if (
-											lower.includes("description") ||
-											lower.includes("content") ||
-											lower.includes("history") ||
-											lower.includes("notes")
+											lower.includes('description') ||
+											lower.includes('content') ||
+											lower.includes('history') ||
+											lower.includes('notes')
 										) {
-											field.type = "textarea";
+											field.type = 'textarea';
 										} else {
-											field.type = "text";
+											field.type = 'text';
 										}
 									} else {
-										field.type = "text";
+										field.type = 'text';
 									}
 								}
 
@@ -788,18 +732,18 @@
 							});
 
 							// --- Default List Logic ---
-							const pk = fields.find((f) => f.primaryKey)?.key || "id";
+							const pk = fields.find((f) => f.primaryKey)?.key || 'id';
 							defaultListFields.push(pk);
 
 							fields.forEach((f) => {
 								if (defaultListFields.length >= 5) return;
 								if (f.key === pk) return;
-								if (f.type === "json" || f.type === "textarea") return;
+								if (f.type === 'json' || f.type === 'textarea') return;
 								defaultListFields.push(f.key);
 							});
 
 							schemas[tableName] = {
-								category: "Database Tables",
+								category: 'Database Tables',
 								label: tableName,
 								fields: fields,
 								defaultListFields: defaultListFields, // Store heuristic defaults separately
@@ -810,7 +754,7 @@
 
 						return schemas;
 					} catch (e) {
-						console.error("Schema Introspection Error:", e);
+						console.error('Schema Introspection Error:', e);
 						throw e;
 					}
 				}
@@ -825,13 +769,13 @@
 					if (classes) {
 						const classList = Array.isArray(classes) ? classes : [classes];
 						classList.forEach((c) => {
-							if (c && typeof c === "string") el.classList.add(c);
+							if (c && typeof c === 'string') el.classList.add(c);
 						});
 					}
 					const childList = Array.isArray(children) ? children : [children];
 					childList.forEach((child) => {
 						if (child === null || child === undefined) return;
-						if (typeof child === "string" || typeof child === "number") {
+						if (typeof child === 'string' || typeof child === 'number') {
 							el.appendChild(document.createTextNode(String(child)));
 						} else if (child instanceof Node) {
 							el.appendChild(child);
@@ -840,21 +784,21 @@
 					return el;
 				},
 				clear: (el) => {
-					if (el) el.innerHTML = "";
+					if (el) el.innerHTML = '';
 				},
 				get: (id) => document.getElementById(id),
-				show: (el) => el?.classList.remove("hidden"),
-				hide: (el) => el?.classList.add("hidden"),
-				toggle: (el) => el?.classList.toggle("hidden"),
+				show: (el) => el?.classList.remove('hidden'),
+				hide: (el) => el?.classList.add('hidden'),
+				toggle: (el) => el?.classList.toggle('hidden'),
 			};
 
 			class Toast {
-				static show(msg, type = "success") {
-					const el = DOM.get("toast");
+				static show(msg, type = 'success') {
+					const el = DOM.get('toast');
 					if (!el) return;
 					el.innerText = msg;
-					el.className = `toast show ${type === "error" ? "error" : ""}`;
-					setTimeout(() => el.classList.remove("show"), 3000);
+					el.className = `toast show ${type === 'error' ? 'error' : ''}`;
+					setTimeout(() => el.classList.remove('show'), 3000);
 				}
 			}
 
@@ -878,20 +822,15 @@
 
 					try {
 						const savedCols = JSON.parse(raw);
-						if (!Array.isArray(savedCols) || savedCols.length === 0)
-							return [...schema.defaultListFields];
+						if (!Array.isArray(savedCols) || savedCols.length === 0) return [...schema.defaultListFields];
 
 						// Validate: Only keep columns that still exist in the schema
-						const validCols = savedCols.filter((colName) =>
-							schema.fields.find((f) => f.key === colName)
-						);
+						const validCols = savedCols.filter((colName) => schema.fields.find((f) => f.key === colName));
 
 						// If validation killed all columns, revert to default
-						return validCols.length > 0
-							? validCols
-							: [...schema.defaultListFields];
+						return validCols.length > 0 ? validCols : [...schema.defaultListFields];
 					} catch (e) {
-						console.error("Error loading column prefs", e);
+						console.error('Error loading column prefs', e);
 						return [...schema.defaultListFields];
 					}
 				}
@@ -899,10 +838,7 @@
 				static save(schemaKey, columns) {
 					const schema = SCHEMAS[schemaKey];
 					if (!schema) return;
-					localStorage.setItem(
-						this.getStorageKey(schema.tableName),
-						JSON.stringify(columns)
-					);
+					localStorage.setItem(this.getStorageKey(schema.tableName), JSON.stringify(columns));
 					schema.listFields = columns; // Update memory
 				}
 			}
@@ -920,22 +856,20 @@
 					try {
 						if (!url || !key) return false;
 						this.supabase = supabase.createClient(url, key);
-						localStorage.setItem("sb_url", url);
-						localStorage.setItem("sb_key", key);
+						localStorage.setItem('sb_url', url);
+						localStorage.setItem('sb_key', key);
 						return true;
 					} catch (e) {
-						console.error("Supabase Init Error:", e);
+						console.error('Supabase Init Error:', e);
 						return false;
 					}
 				}
 
 				async fetch(tableName) {
-					if (!tableName || typeof tableName !== "string") return [];
+					if (!tableName || typeof tableName !== 'string') return [];
 					if (this.cache[tableName]) return this.cache[tableName];
 
-					const { data, error } = await this.supabase
-						.from(tableName)
-						.select("*");
+					const { data, error } = await this.supabase.from(tableName).select('*');
 					if (error) {
 						console.error(`Error fetching ${tableName}:`, error.message);
 						return [];
@@ -958,11 +892,9 @@
 					if (isUpdate) {
 						query = this.supabase.from(tableName).update(payload);
 						if (schema.primaryKeys && schema.primaryKeys.length > 0) {
-							schema.primaryKeys.forEach(
-								(k) => (query = query.eq(k, identifiers[k]))
-							);
+							schema.primaryKeys.forEach((k) => (query = query.eq(k, identifiers[k])));
 						} else {
-							query = query.eq("id", identifiers.id);
+							query = query.eq('id', identifiers.id);
 						}
 					} else {
 						query = this.supabase.from(tableName).insert([payload]);
@@ -975,9 +907,7 @@
 					if (!this.cache[tableName]) this.cache[tableName] = [];
 
 					if (isUpdate) {
-						const idx = this.cache[tableName].findIndex(
-							(i) => i.id == identifiers.id
-						);
+						const idx = this.cache[tableName].findIndex((i) => i.id == identifiers.id);
 						if (idx > -1) this.cache[tableName][idx] = savedItem;
 					} else {
 						this.cache[tableName].push(savedItem);
@@ -989,7 +919,7 @@
 				async delete(schemaKey, item) {
 					const schema = SCHEMAS[schemaKey];
 					const tableName = schema.tableName || schemaKey;
-					let query = this.supabase.from(tableName).delete().eq("id", item.id);
+					let query = this.supabase.from(tableName).delete().eq('id', item.id);
 
 					const { error } = await query;
 					if (error) throw error;
@@ -1002,17 +932,11 @@
 					if (!targetId) return [];
 					const refs = [];
 					for (const [sKey, schema] of Object.entries(SCHEMAS)) {
-						const fkFields = schema.fields.filter(
-							(f) => f.foreignKey === targetSchemaKey
-						);
+						const fkFields = schema.fields.filter((f) => f.foreignKey === targetSchemaKey);
 						if (fkFields.length === 0) continue;
 						const tableName = schema.tableName || sKey;
 						for (const field of fkFields) {
-							const { data } = await this.supabase
-								.from(tableName)
-								.select("id")
-								.eq(field.key, targetId)
-								.limit(5);
+							const { data } = await this.supabase.from(tableName).select('id').eq(field.key, targetId).limit(5);
 							if (data && data.length > 0) {
 								refs.push({ schema: sKey, label: schema.label, items: data });
 							}
@@ -1052,76 +976,63 @@
 						if (field.readOnly && !item) continue;
 						if (field.primaryKey && field.readOnly) {
 							if (item) {
-								const wrapper = DOM.create("div", "form-group");
-								wrapper.appendChild(DOM.create("label", [], field.label));
-								wrapper.appendChild(
-									DOM.create(
-										"div",
-										["text-muted", "text-sm"],
-										String(item[field.key])
-									)
-								);
+								const wrapper = DOM.create('div', 'form-group');
+								wrapper.appendChild(DOM.create('label', [], field.label));
+								wrapper.appendChild(DOM.create('div', ['text-muted', 'text-sm'], String(item[field.key])));
 								form.appendChild(wrapper);
 							}
 							continue;
 						}
 
-						const wrapper = DOM.create("div", "form-group");
+						const wrapper = DOM.create('div', 'form-group');
 						wrapper.dataset.key = field.key;
 						const val = item ? item[field.key] : field.default || null;
 						const inputId = `${containerId}_${field.key}`;
-						const labelText = field.label + (field.required ? " *" : "");
+						const labelText = field.label + (field.required ? ' *' : '');
 
-						if (field.type === "json") {
-							const header = DOM.create("div", "flex-between");
-							header.style.marginBottom = "5px";
-							const label = DOM.create("label", [], labelText);
-							label.style.marginBottom = "0";
+						if (field.type === 'json') {
+							const header = DOM.create('div', 'flex-between');
+							header.style.marginBottom = '5px';
+							const label = DOM.create('label', [], labelText);
+							label.style.marginBottom = '0';
 							header.appendChild(label);
 
-							const btnMax = DOM.create(
-								"button",
-								["btn", "btn-sm", "btn-ghost"],
-								"⛶ Maximize"
-							);
-							btnMax.type = "button";
-							btnMax.style.fontSize = "0.75rem";
+							const btnMax = DOM.create('button', ['btn', 'btn-sm', 'btn-ghost'], '⛶ Maximize');
+							btnMax.type = 'button';
+							btnMax.style.fontSize = '0.75rem';
 							btnMax.onclick = () => {
-								const isFull = wrapper.classList.toggle("json-fullscreen");
-								btnMax.innerText = isFull ? "✕ Close" : "⛶ Maximize";
-								btnMax.classList.toggle("btn-danger", isFull);
-								btnMax.classList.toggle("btn-ghost", !isFull);
+								const isFull = wrapper.classList.toggle('json-fullscreen');
+								btnMax.innerText = isFull ? '✕ Close' : '⛶ Maximize';
+								btnMax.classList.toggle('btn-danger', isFull);
+								btnMax.classList.toggle('btn-ghost', !isFull);
 							};
 							header.appendChild(btnMax);
 							wrapper.appendChild(header);
 
-							const editorContainer = DOM.create(
-								"div",
-								"json-editor-container"
-							);
-							editorContainer.style.height = "250px";
+							const editorContainer = DOM.create('div', 'json-editor-container');
+							editorContainer.style.height = '250px';
 							wrapper.appendChild(editorContainer);
 							const editor = new JSONEditor(editorContainer, {
-								mode: "tree",
-								modes: ["code", "tree"],
+								mode: 'tree',
+								modes: ['code', 'tree'],
 								mainMenuBar: true,
 							});
 							editor.set(val || {});
 							this.editors[field.key] = editor;
-						} else if (field.type === "select") {
-							wrapper.appendChild(DOM.create("label", [], labelText));
-							const row = DOM.create("div", [], []);
-							row.style.display = "flex";
-							row.style.gap = "8px";
+						} else if (field.type === 'select') {
+							wrapper.appendChild(DOM.create('label', [], labelText));
+							const row = DOM.create('div', [], []);
+							row.style.display = 'flex';
+							row.style.gap = '8px';
 
-							const select = DOM.create("select", [], []);
+							const select = DOM.create('select', [], []);
 							select.id = inputId;
 							select.name = field.key;
 							select.innerHTML = '<option value="">Select...</option>';
 
 							if (field.options) {
 								field.options.forEach((opt) => {
-									const op = DOM.create("option", [], opt);
+									const op = DOM.create('option', [], opt);
 									op.value = opt;
 									if (String(val) === String(opt)) op.selected = true;
 									select.appendChild(op);
@@ -1131,19 +1042,17 @@
 								if (fkSchema) {
 									const data = await this.dm.fetch(field.foreignKey);
 									const displayField =
-										fkSchema.fields.find((f) =>
-											["name", "title", "label"].includes(f.key)
-										)?.key || "id";
+										fkSchema.fields.find((f) => ['name', 'title', 'label'].includes(f.key))?.key || 'id';
 
 									data.sort((a, b) => {
-										const tA = a[displayField] || a.id || "";
-										const tB = b[displayField] || b.id || "";
+										const tA = a[displayField] || a.id || '';
+										const tB = b[displayField] || b.id || '';
 										return tA.toString().localeCompare(tB.toString());
 									});
 
 									data.forEach((d) => {
 										const label = d[displayField] || d.id;
-										const op = DOM.create("option", [], label);
+										const op = DOM.create('option', [], label);
 										op.value = d.id;
 										if (val == d.id) op.selected = true;
 										select.appendChild(op);
@@ -1152,74 +1061,63 @@
 							}
 							row.appendChild(select);
 							if (field.foreignKey && SCHEMAS[field.foreignKey]) {
-								const btn = DOM.create("button", ["btn", "btn-sm"], "+");
-								btn.type = "button";
-								btn.onclick = () =>
-									this.onQuickAdd(field.foreignKey, select.id);
+								const btn = DOM.create('button', ['btn', 'btn-sm'], '+');
+								btn.type = 'button';
+								btn.onclick = () => this.onQuickAdd(field.foreignKey, select.id);
 								row.appendChild(btn);
 							}
 							wrapper.appendChild(row);
 							setTimeout(() => {
 								if (document.body.contains(select)) {
-									this.selects.push(
-										new TomSelect(select, { create: false, maxOptions: 100 })
-									);
+									this.selects.push(new TomSelect(select, { create: false, maxOptions: 100 }));
 								}
 							}, 50);
 						} else {
-							wrapper.appendChild(DOM.create("label", [], labelText));
-							if (field.type === "textarea") {
-								const input = DOM.create("textarea");
+							wrapper.appendChild(DOM.create('label', [], labelText));
+							if (field.type === 'textarea') {
+								const input = DOM.create('textarea');
 								input.name = field.key;
 								input.rows = 4;
-								input.value = val || "";
+								input.value = val || '';
 								wrapper.appendChild(input);
 							} else {
-								const input = DOM.create("input");
+								const input = DOM.create('input');
 								input.type = field.type;
 								input.name = field.key;
-								input.value = val !== null ? val : "";
+								input.value = val !== null ? val : '';
 								wrapper.appendChild(input);
 							}
 						}
-						if (field.required && field.type !== "json") {
-							const input = wrapper.querySelector("input, select, textarea");
+						if (field.required && field.type !== 'json') {
+							const input = wrapper.querySelector('input, select, textarea');
 							if (input) input.required = true;
 						}
 						form.appendChild(wrapper);
 					}
 
-					const optionsRow = DOM.create("div", ["flex-between"], []);
-					optionsRow.style.marginTop = "15px";
-					optionsRow.style.marginBottom = "5px";
-					const keepLabel = DOM.create(
-						"label",
-						[],
-						" Keep values after submit"
-					);
-					keepLabel.style.display = "flex";
-					keepLabel.style.alignItems = "center";
-					keepLabel.style.gap = "8px";
-					keepLabel.style.fontSize = "0.85rem";
-					keepLabel.style.color = "var(--colors-text-muted)";
-					keepLabel.style.cursor = "pointer";
-					const keepCheck = DOM.create("input");
-					keepCheck.type = "checkbox";
-					keepCheck.id = "chkKeepFields";
-					keepCheck.style.width = "auto";
-					keepCheck.style.margin = "0";
+					const optionsRow = DOM.create('div', ['flex-between'], []);
+					optionsRow.style.marginTop = '15px';
+					optionsRow.style.marginBottom = '5px';
+					const keepLabel = DOM.create('label', [], ' Keep values after submit');
+					keepLabel.style.display = 'flex';
+					keepLabel.style.alignItems = 'center';
+					keepLabel.style.gap = '8px';
+					keepLabel.style.fontSize = '0.85rem';
+					keepLabel.style.color = 'var(--colors-text-muted)';
+					keepLabel.style.cursor = 'pointer';
+					const keepCheck = DOM.create('input');
+					keepCheck.type = 'checkbox';
+					keepCheck.id = 'chkKeepFields';
+					keepCheck.style.width = 'auto';
+					keepCheck.style.margin = '0';
 					keepLabel.prepend(keepCheck);
 					optionsRow.appendChild(keepLabel);
 					form.appendChild(optionsRow);
 
-					const btn = DOM.create(
-						"button",
-						["btn", "btn-primary"],
-						item ? "Update Item" : "Create Item"
-					);
-					btn.style.width = "100%";
-					btn.style.marginTop = "10px";
-					btn.type = "submit";
+					const btn = DOM.create('button', ['btn', 'btn-primary'], item ? 'Update Item' : 'Create Item');
+					btn.style.width = '100%';
+					btn.style.marginTop = '10px';
+					btn.type = 'submit';
 					form.appendChild(btn);
 				}
 
@@ -1228,7 +1126,7 @@
 					const formData = new FormData(form);
 					const payload = {};
 					for (const [k, v] of formData.entries()) {
-						payload[k] = v === "" ? null : v;
+						payload[k] = v === '' ? null : v;
 					}
 					Object.entries(this.editors).forEach(([key, editor]) => {
 						try {
@@ -1251,22 +1149,20 @@
 					this.onDelete = onDelete;
 					this.onColumnsChanged = onColumnsChanged; // Callback when columns change
 					this.filters = {};
-					this.sort = { field: null, dir: "asc" };
+					this.sort = { field: null, dir: 'asc' };
 				}
 
 				renderFilterBar(schemaKey) {
-					const container = DOM.get("filterContainer");
+					const container = DOM.get('filterContainer');
 					DOM.clear(container);
 					const schema = SCHEMAS[schemaKey];
 					if (!schema) return;
-					const validFields = schema.fields.filter((f) =>
-						["text", "select", "number"].includes(f.type)
-					);
+					const validFields = schema.fields.filter((f) => ['text', 'select', 'number'].includes(f.type));
 					validFields.forEach((f) => {
-						const wrapper = DOM.create("div", "filter-item");
-						const input = DOM.create("input");
+						const wrapper = DOM.create('div', 'filter-item');
+						const input = DOM.create('input');
 						input.placeholder = f.label;
-						input.className = "text-sm";
+						input.className = 'text-sm';
 						input.onkeyup = (e) => {
 							this.filters[f.key] = e.target.value.toLowerCase();
 							this.refreshTable(schemaKey);
@@ -1279,24 +1175,24 @@
 				// --- NEW: Column Picker UI ---
 				renderColumnPicker(schemaKey) {
 					const schema = SCHEMAS[schemaKey];
-					const dropdown = DOM.get("columnDropdown");
+					const dropdown = DOM.get('columnDropdown');
 					DOM.clear(dropdown);
 
 					if (!schema) return;
 
 					// Header
-					const header = DOM.create("div", [], "Visible Columns");
-					header.style.padding = "5px 10px";
-					header.style.fontWeight = "600";
-					header.style.fontSize = "0.75rem";
-					header.style.color = "var(--colors-text-muted)";
-					header.style.textTransform = "uppercase";
+					const header = DOM.create('div', [], 'Visible Columns');
+					header.style.padding = '5px 10px';
+					header.style.fontWeight = '600';
+					header.style.fontSize = '0.75rem';
+					header.style.color = 'var(--colors-text-muted)';
+					header.style.textTransform = 'uppercase';
 					dropdown.appendChild(header);
 
 					schema.fields.forEach((field) => {
-						const row = DOM.create("div", "dropdown-item");
-						const chk = DOM.create("input");
-						chk.type = "checkbox";
+						const row = DOM.create('div', 'dropdown-item');
+						const chk = DOM.create('input');
+						chk.type = 'checkbox';
 						chk.checked = schema.listFields.includes(field.key);
 
 						// Prevent unchecking the last column (safety)
@@ -1304,18 +1200,13 @@
 							const currentlySelected = schema.listFields;
 							if (!chk.checked && currentlySelected.length <= 1) {
 								chk.checked = true; // Revert
-								return Toast.show(
-									"At least one column must be visible",
-									"error"
-								);
+								return Toast.show('At least one column must be visible', 'error');
 							}
 
 							if (chk.checked) {
 								schema.listFields.push(field.key);
 							} else {
-								schema.listFields = schema.listFields.filter(
-									(k) => k !== field.key
-								);
+								schema.listFields = schema.listFields.filter((k) => k !== field.key);
 							}
 
 							// Notify App to save and redraw
@@ -1323,22 +1214,18 @@
 						};
 
 						row.appendChild(chk);
-						row.appendChild(DOM.create("span", [], field.label));
+						row.appendChild(DOM.create('span', [], field.label));
 						dropdown.appendChild(row);
 					});
 
 					// Reset Button
-					const divReset = DOM.create("div", [], []);
-					divReset.style.padding = "8px";
-					divReset.style.borderTop = "1px solid var(--colors-border)";
-					divReset.style.marginTop = "5px";
+					const divReset = DOM.create('div', [], []);
+					divReset.style.padding = '8px';
+					divReset.style.borderTop = '1px solid var(--colors-border)';
+					divReset.style.marginTop = '5px';
 
-					const btnReset = DOM.create(
-						"button",
-						["btn", "btn-sm", "btn-ghost"],
-						"Reset to Default"
-					);
-					btnReset.style.width = "100%";
+					const btnReset = DOM.create('button', ['btn', 'btn-sm', 'btn-ghost'], 'Reset to Default');
+					btnReset.style.width = '100%';
 					btnReset.onclick = () => {
 						schema.listFields = [...schema.defaultListFields];
 						this.renderColumnPicker(schemaKey); // Re-render self to update checks
@@ -1350,11 +1237,11 @@
 
 				async renderTable(schemaKey, items) {
 					if (!schemaKey) return;
-					const container = DOM.get("tableContainer");
+					const container = DOM.get('tableContainer');
 					DOM.clear(container);
 
 					const schema = SCHEMAS[schemaKey];
-					if (!schema) return console.error("Schema not found");
+					if (!schema) return console.error('Schema not found');
 					const tableName = schema.tableName || schemaKey;
 
 					if (!items) items = await this.dm.fetch(tableName);
@@ -1362,7 +1249,7 @@
 					let data = items.filter((item) => {
 						return Object.entries(this.filters).every(([k, v]) => {
 							if (!v) return true;
-							const val = String(item[k] || "").toLowerCase();
+							const val = String(item[k] || '').toLowerCase();
 							return val.includes(v);
 						});
 					});
@@ -1371,45 +1258,44 @@
 						data.sort((a, b) => {
 							const va = a[this.sort.field];
 							const vb = b[this.sort.field];
-							if (va < vb) return this.sort.dir === "asc" ? -1 : 1;
-							if (va > vb) return this.sort.dir === "asc" ? 1 : -1;
+							if (va < vb) return this.sort.dir === 'asc' ? -1 : 1;
+							if (va > vb) return this.sort.dir === 'asc' ? 1 : -1;
 							return 0;
 						});
 					}
 
-					DOM.get("statusCount").innerText = `${data.length} records found`;
+					DOM.get('statusCount').innerText = `${data.length} records found`;
 
-					const table = DOM.create("table");
-					const thead = DOM.create("thead");
-					const trHead = DOM.create("tr");
+					const table = DOM.create('table');
+					const thead = DOM.create('thead');
+					const trHead = DOM.create('tr');
 
 					// Render based on schema.listFields (dynamic)
 					schema.listFields.forEach((f) => {
 						const fDef = schema.fields.find((x) => x.key === f);
 						const label = fDef ? fDef.label : f;
-						const th = DOM.create("th", [], label);
+						const th = DOM.create('th', [], label);
 						if (this.sort.field === f) {
-							th.innerText += this.sort.dir === "asc" ? " ▲" : " ▼";
+							th.innerText += this.sort.dir === 'asc' ? ' ▲' : ' ▼';
 						}
 						th.onclick = () => {
-							if (this.sort.field === f)
-								this.sort.dir = this.sort.dir === "asc" ? "desc" : "asc";
+							if (this.sort.field === f) this.sort.dir = this.sort.dir === 'asc' ? 'desc' : 'asc';
 							else {
 								this.sort.field = f;
-								this.sort.dir = "asc";
+								this.sort.dir = 'asc';
 							}
 							this.renderTable(schemaKey, items);
 						};
 						trHead.appendChild(th);
 					});
-					trHead.appendChild(DOM.create("th", [], "Actions"));
+					trHead.appendChild(DOM.create('th', [], 'Actions'));
 					thead.appendChild(trHead);
 					table.appendChild(thead);
 
-					const tbody = DOM.create("tbody");
+					const tbody = DOM.create('tbody');
 
 					data.forEach((row) => {
-						const tr = DOM.create("tr");
+						const tr = DOM.create('tr');
 						schema.listFields.forEach((key) => {
 							let val = row[key];
 							const fDef = schema.fields.find((x) => x.key === key);
@@ -1419,36 +1305,29 @@
 									const cachedFK = this.dm.cache[fDef.foreignKey];
 									if (cachedFK) {
 										const displayField =
-											fkSchema.fields.find((f) =>
-												["name", "title", "label"].includes(f.key)
-											)?.key || "id";
+											fkSchema.fields.find((f) => ['name', 'title', 'label'].includes(f.key))?.key || 'id';
 										const match = cachedFK.find((x) => x.id === val);
 										if (match) val = match[displayField] || val;
 									}
 								}
-								val = DOM.create("span", "tag", String(val || "-"));
-								const td = DOM.create("td");
+								val = DOM.create('span', 'tag', String(val || '-'));
+								const td = DOM.create('td');
 								td.appendChild(val);
 								tr.appendChild(td);
 							} else {
-								if (typeof val === "string" && val.length > 50)
-									val = val.substring(0, 50) + "...";
-								if (val === null || val === undefined) val = "-";
-								tr.appendChild(DOM.create("td", [], String(val)));
+								if (typeof val === 'string' && val.length > 50) val = val.substring(0, 50) + '...';
+								if (val === null || val === undefined) val = '-';
+								tr.appendChild(DOM.create('td', [], String(val)));
 							}
 						});
 
-						const tdActions = DOM.create("td");
-						const btnEdit = DOM.create("button", ["btn", "btn-sm"], "Edit");
+						const tdActions = DOM.create('td');
+						const btnEdit = DOM.create('button', ['btn', 'btn-sm'], 'Edit');
 						btnEdit.onclick = () => this.onEdit(row);
-						const btnDel = DOM.create(
-							"button",
-							["btn", "btn-sm", "btn-danger"],
-							"Del"
-						);
+						const btnDel = DOM.create('button', ['btn', 'btn-sm', 'btn-danger'], 'Del');
 						btnDel.onclick = () => this.onDelete(row);
 						tdActions.appendChild(btnEdit);
-						tdActions.appendChild(DOM.create("span", [], " "));
+						tdActions.appendChild(DOM.create('span', [], ' '));
 						tdActions.appendChild(btnDel);
 						tr.appendChild(tdActions);
 						tbody.appendChild(tr);
@@ -1487,74 +1366,58 @@
 				}
 
 				bindEvents() {
-					DOM.get("btnConnect").addEventListener("click", () => this.login());
-					DOM.get("btnLogout").addEventListener("click", () => {
+					DOM.get('btnConnect').addEventListener('click', () => this.login());
+					DOM.get('btnLogout').addEventListener('click', () => {
 						localStorage.clear();
 						location.reload();
 					});
-					DOM.get("btnRefresh").addEventListener("click", () =>
-						this.refreshAll()
-					);
-					DOM.get("btnToggleFilters").addEventListener("click", () =>
-						DOM.toggle(DOM.get("filterContainer"))
-					);
-					DOM.get("btnNewItem").addEventListener("click", () =>
-						this.resetForm()
-					);
+					DOM.get('btnRefresh').addEventListener('click', () => this.refreshAll());
+					DOM.get('btnToggleFilters').addEventListener('click', () => DOM.toggle(DOM.get('filterContainer')));
+					DOM.get('btnNewItem').addEventListener('click', () => this.resetForm());
 
 					// --- NEW: Column Picker Toggles ---
-					const dd = DOM.get("columnDropdown");
-					DOM.get("btnColumns").addEventListener("click", (e) => {
+					const dd = DOM.get('columnDropdown');
+					DOM.get('btnColumns').addEventListener('click', (e) => {
 						e.stopPropagation();
-						dd.classList.toggle("show");
+						dd.classList.toggle('show');
 					});
 					// Close dropdown if clicked outside
-					document.addEventListener("click", (e) => {
-						if (!dd.contains(e.target) && e.target.id !== "btnColumns") {
-							dd.classList.remove("show");
+					document.addEventListener('click', (e) => {
+						if (!dd.contains(e.target) && e.target.id !== 'btnColumns') {
+							dd.classList.remove('show');
 						}
 					});
-					dd.addEventListener("click", (e) => e.stopPropagation()); // Prevent closing when clicking inside
+					dd.addEventListener('click', (e) => e.stopPropagation()); // Prevent closing when clicking inside
 					// ----------------------------------
 
-					DOM.get("dynamicForm").addEventListener("submit", async (e) => {
+					DOM.get('dynamicForm').addEventListener('submit', async (e) => {
 						e.preventDefault();
 						if (!this.activeSchema) return;
-						const keepFields =
-							document.getElementById("chkKeepFields")?.checked;
-						await this.saveItem(
-							"dynamicForm",
-							this.activeSchema,
-							this.editingItem,
-							(updated) => {
-								Toast.show("Item saved");
-								if (keepFields) {
-									this.editingItem = null;
-									const btn = DOM.get("dynamicForm").querySelector(
-										'button[type="submit"]'
-									);
-									if (btn) btn.innerText = "Create Item";
-									Toast.show("Saved. Form retained for new entry.");
-								} else {
-									this.editingItem = null;
-									this.resetForm();
-								}
+						const keepFields = document.getElementById('chkKeepFields')?.checked;
+						await this.saveItem('dynamicForm', this.activeSchema, this.editingItem, (updated) => {
+							Toast.show('Item saved');
+							if (keepFields) {
+								this.editingItem = null;
+								const btn = DOM.get('dynamicForm').querySelector('button[type="submit"]');
+								if (btn) btn.innerText = 'Create Item';
+								Toast.show('Saved. Form retained for new entry.');
+							} else {
+								this.editingItem = null;
+								this.resetForm();
 							}
-						);
+						});
 					});
 
-					DOM.get("quickAddForm").addEventListener("submit", async (e) => {
+					DOM.get('quickAddForm').addEventListener('submit', async (e) => {
 						e.preventDefault();
-						const schemaKey = DOM.get("quickAddForm").dataset.schema;
-						await this.saveItem("quickAddForm", schemaKey, null, (newItem) => {
-							const triggerId = DOM.get("quickAddForm").dataset.trigger;
+						const schemaKey = DOM.get('quickAddForm').dataset.schema;
+						await this.saveItem('quickAddForm', schemaKey, null, (newItem) => {
+							const triggerId = DOM.get('quickAddForm').dataset.trigger;
 							const schema = SCHEMAS[schemaKey];
-							const displayField =
-								schema.fields.find((f) => ["name", "title"].includes(f.key))
-									?.key || "id";
+							const displayField = schema.fields.find((f) => ['name', 'title'].includes(f.key))?.key || 'id';
 							const label = newItem[displayField] || newItem.id;
 							Toast.show(`Created ${label}`);
-							DOM.hide(DOM.get("quickAddModal"));
+							DOM.hide(DOM.get('quickAddModal'));
 							const select = document.getElementById(triggerId);
 							if (select && select.tomselect) {
 								select.tomselect.addOption({ value: newItem.id, text: label });
@@ -1562,54 +1425,51 @@
 							}
 						});
 					});
-					DOM.get("btnCloseQuickAdd").onclick = () =>
-						DOM.hide(DOM.get("quickAddModal"));
+					DOM.get('btnCloseQuickAdd').onclick = () => DOM.hide(DOM.get('quickAddModal'));
 				}
 
 				checkAuth() {
-					const url = localStorage.getItem("sb_url");
-					const key = localStorage.getItem("sb_key");
-					if (url) DOM.get("sbUrl").value = url;
-					if (key) DOM.get("sbKey").value = key;
+					const url = localStorage.getItem('sb_url');
+					const key = localStorage.getItem('sb_key');
+					if (url) DOM.get('sbUrl').value = url;
+					if (key) DOM.get('sbKey').value = key;
 				}
 
 				async login() {
-					const url = DOM.get("sbUrl").value.replace(/\/$/, "");
-					const key = DOM.get("sbKey").value;
-					DOM.get("btnConnect").innerText = "Introspecting Database...";
+					const url = DOM.get('sbUrl').value.replace(/\/$/, '');
+					const key = DOM.get('sbKey').value;
+					DOM.get('btnConnect').innerText = 'Introspecting Database...';
 					try {
 						if (this.dm.init(url, key)) {
 							SCHEMAS = await SchemaIntrospector.fetchAndParse(url, key);
-							DOM.hide(DOM.get("authModal"));
-							DOM.show(DOM.get("app"));
+							DOM.hide(DOM.get('authModal'));
+							DOM.show(DOM.get('app'));
 							this.initApp();
 						} else {
-							throw new Error("Supabase client failed to init");
+							throw new Error('Supabase client failed to init');
 						}
 					} catch (e) {
-						Toast.show(e.message, "error");
-						DOM.get("btnConnect").innerText = "Connect & Load Schema";
+						Toast.show(e.message, 'error');
+						DOM.get('btnConnect').innerText = 'Connect & Load Schema';
 					}
 				}
 
 				async initApp() {
 					try {
 						this.renderNav();
-						DOM.get("schemaStatusDisplay").innerText = `${
-							Object.keys(SCHEMAS).length
-						} tables loaded`;
+						DOM.get('schemaStatusDisplay').innerText = `${Object.keys(SCHEMAS).length} tables loaded`;
 						const keys = Object.keys(SCHEMAS);
 						if (keys.length > 0) {
 							keys.sort();
 							this.switchTab(keys[0]);
 						}
 					} catch (e) {
-						Toast.show("Init Error: " + e.message, "error");
+						Toast.show('Init Error: ' + e.message, 'error');
 					}
 				}
 
 				renderNav() {
-					const container = DOM.get("navContainer");
+					const container = DOM.get('navContainer');
 					DOM.clear(container);
 					const categories = {};
 					Object.entries(SCHEMAS).forEach(([key, val]) => {
@@ -1619,11 +1479,11 @@
 					Object.keys(categories)
 						.sort()
 						.forEach((cat) => {
-							const group = DOM.create("div", "nav-group");
-							group.appendChild(DOM.create("div", "nav-label", cat));
+							const group = DOM.create('div', 'nav-group');
+							group.appendChild(DOM.create('div', 'nav-label', cat));
 							categories[cat].sort((a, b) => a.label.localeCompare(b.label));
 							categories[cat].forEach((item) => {
-								const btn = DOM.create("button", "nav-item", item.label);
+								const btn = DOM.create('button', 'nav-item', item.label);
 								btn.onclick = () => this.switchTab(item.key);
 								btn.dataset.key = item.key;
 								group.appendChild(btn);
@@ -1637,27 +1497,23 @@
 					this.activeSchema = key;
 					this.editingItem = null;
 
-					document
-						.querySelectorAll(".nav-item")
-						.forEach((el) => el.classList.remove("active"));
-					document
-						.querySelector(`.nav-item[data-key="${key}"]`)
-						?.classList.add("active");
+					document.querySelectorAll('.nav-item').forEach((el) => el.classList.remove('active'));
+					document.querySelector(`.nav-item[data-key="${key}"]`)?.classList.add('active');
 
-					DOM.get("pageTitle").innerText = SCHEMAS[key].label;
-					DOM.hide(DOM.get("crossRefSection"));
+					DOM.get('pageTitle').innerText = SCHEMAS[key].label;
+					DOM.hide(DOM.get('crossRefSection'));
 
 					// --- Load Saved Columns ---
 					const schema = SCHEMAS[key];
 					schema.listFields = ColumnManager.load(schema);
 
-					await this.fb.render(key, "dynamicForm");
+					await this.fb.render(key, 'dynamicForm');
 					this.tv.filters = {};
 					this.tv.renderFilterBar(key);
 					this.tv.renderColumnPicker(key); // Build dropdown for this schema
 
-					DOM.clear(DOM.get("tableContainer"));
-					DOM.get("statusCount").innerText = "Loading...";
+					DOM.clear(DOM.get('tableContainer'));
+					DOM.get('statusCount').innerText = 'Loading...';
 					await this.tv.renderTable(key);
 				}
 
@@ -1676,57 +1532,36 @@
 				async saveItem(formId, schemaKey, originalItem, onSuccess) {
 					const payload = this.fb.extractData(formId);
 					const schema = SCHEMAS[schemaKey];
-					const missing = schema.fields.filter(
-						(f) => f.required && !payload[f.key]
-					);
+					const missing = schema.fields.filter((f) => f.required && !payload[f.key]);
 					if (missing.length > 0) {
 						const realMissing = missing.filter((f) => !f.primaryKey);
 						if (realMissing.length > 0) {
-							return Toast.show(
-								`Missing: ${realMissing.map((f) => f.label).join(", ")}`,
-								"error"
-							);
+							return Toast.show(`Missing: ${realMissing.map((f) => f.label).join(', ')}`, 'error');
 						}
 					}
 					try {
-						const identifiers = originalItem
-							? { id: originalItem.id, ...originalItem }
-							: {};
-						const res = await this.dm.save(
-							schemaKey,
-							payload,
-							!!originalItem,
-							identifiers
-						);
+						const identifiers = originalItem ? { id: originalItem.id, ...originalItem } : {};
+						const res = await this.dm.save(schemaKey, payload, !!originalItem, identifiers);
 						onSuccess(res);
 						this.tv.renderTable(schemaKey, this.dm.cache[schemaKey]);
 					} catch (e) {
 						console.error(e);
-						Toast.show(e.message, "error");
+						Toast.show(e.message, 'error');
 					}
 				}
 
 				async handleEdit(item) {
 					this.editingItem = item;
-					await this.fb.render(this.activeSchema, "dynamicForm", item);
-					DOM.get("dynamicForm").scrollIntoView({ behavior: "smooth" });
-					const list = DOM.get("crossRefList");
-					const section = DOM.get("crossRefSection");
+					await this.fb.render(this.activeSchema, 'dynamicForm', item);
+					DOM.get('dynamicForm').scrollIntoView({ behavior: 'smooth' });
+					const list = DOM.get('crossRefList');
+					const section = DOM.get('crossRefSection');
 					DOM.clear(list);
-					const refs = await this.dm.checkReferences(
-						this.activeSchema,
-						item.id
-					);
+					const refs = await this.dm.checkReferences(this.activeSchema, item.id);
 					if (refs.length) {
 						DOM.show(section);
 						refs.forEach((r) => {
-							list.appendChild(
-								DOM.create(
-									"div",
-									"text-sm",
-									`${r.label}: ${r.items.length} items`
-								)
-							);
+							list.appendChild(DOM.create('div', 'text-sm', `${r.label}: ${r.items.length} items`));
 						});
 					} else {
 						DOM.hide(section);
@@ -1734,52 +1569,62 @@
 				}
 
 				async handleDelete(item) {
-					if (!confirm("Are you sure?")) return;
+					if (!confirm('Are you sure?')) return;
 					try {
-						const refs = await this.dm.checkReferences(
-							this.activeSchema,
-							item.id
-						);
+						const refs = await this.dm.checkReferences(this.activeSchema, item.id);
 						if (refs.length > 0) {
-							return alert(
-								`Cannot delete. Referenced by:\n${refs
-									.map((r) => r.label)
-									.join(", ")}`
-							);
+							return alert(`Cannot delete. Referenced by:\n${refs.map((r) => r.label).join(', ')}`);
 						}
 						await this.dm.delete(this.activeSchema, item);
-						Toast.show("Deleted successfully");
+						Toast.show('Deleted successfully');
 						this.tv.refreshTable(this.activeSchema);
 						if (this.editingItem && this.editingItem.id === item.id) {
 							this.resetForm();
 						}
 					} catch (e) {
-						Toast.show(e.message, "error");
+						Toast.show(e.message, 'error');
 					}
 				}
 
 				resetForm() {
 					this.editingItem = null;
-					DOM.get("dynamicForm").reset();
-					this.fb.render(this.activeSchema, "dynamicForm");
-					DOM.hide(DOM.get("crossRefSection"));
+					DOM.get('dynamicForm').reset();
+					this.fb.render(this.activeSchema, 'dynamicForm');
+					DOM.hide(DOM.get('crossRefSection'));
 				}
 
 				handleQuickAdd(foreignSchema, triggerId) {
-					const modal = DOM.get("quickAddModal");
-					const form = DOM.get("quickAddForm");
+					const modal = DOM.get('quickAddModal');
+					const form = DOM.get('quickAddForm');
 					form.dataset.schema = foreignSchema;
 					form.dataset.trigger = triggerId;
-					DOM.get(
-						"quickAddTitle"
-					).innerText = `New ${SCHEMAS[foreignSchema].label}`;
-					this.fb.render(foreignSchema, "quickAddForm");
+					DOM.get('quickAddTitle').innerText = `New ${SCHEMAS[foreignSchema].label}`;
+					this.fb.render(foreignSchema, 'quickAddForm');
 					DOM.show(modal);
 				}
 			}
 
 			window.onload = () => {
 				new App();
+				document.getElementById('set-db-1').addEventListener('click', (e) => {
+					const url = `https://yffukfulnggfhlgoyowg.supabase.co`;
+					const password = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlmZnVrZnVsbmdnZmhsZ295b3dnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjM1NTcyMDYsImV4cCI6MjA3OTEzMzIwNn0.BcB9Uea-vfnxwKA22YpQU0QlFCA0bfigsiDC_r2SNQ4`;
+					const urlInput = document.getElementById('sbUrl');
+					const passwordInput = document.getElementById('sbKey');
+
+					urlInput.value = url;
+					passwordInput.value = password;
+				});
+
+				document.getElementById('set-db-2').addEventListener('click', (e) => {
+					const url = `https://cqumntwoephyeutyckjh.supabase.co`;
+					const password = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNxdW1udHdvZXBoeWV1dHlja2poIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjI2NjU3MTIsImV4cCI6MjA3ODI0MTcxMn0.bKWD7u8v0dg72aEr5a_mgyyto3IwUilBuOg9o9IlShM`;
+					const urlInput = document.getElementById('sbUrl');
+					const passwordInput = document.getElementById('sbKey');
+
+					urlInput.value = url;
+					passwordInput.value = password;
+				});
 			};
 		</script>
 	</body>
