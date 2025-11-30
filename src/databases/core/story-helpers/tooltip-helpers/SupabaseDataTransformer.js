@@ -1,5 +1,5 @@
 // ============================================
-// SupabaseDataTransformer.js
+// SupabaseDataTransformer.js - FIXED
 // ============================================
 class SupabaseDataTransformer {
 	static transformSpell(supabaseSpell) {
@@ -49,18 +49,18 @@ class SupabaseDataTransformer {
 		return {
 			name: monster.name,
 			type: monster.meta || '',
-			size: this.#extractSize(monster.meta),
-			alignment: this.#extractAlignment(monster.meta),
+			size: SupabaseDataTransformer.#extractSize(monster.meta),
+			alignment: SupabaseDataTransformer.#extractAlignment(monster.meta),
 			armor_class: monster.armor_class,
 			hit_points: monster.hit_points,
 			hit_points_roll: monster.hit_points,
-			speed: this.#parseSpeed(monster.speed),
-			strength: this.#parseAbilityScore(abilityScores?.str),
-			dexterity: this.#parseAbilityScore(abilityScores?.dex),
-			constitution: this.#parseAbilityScore(abilityScores?.con),
-			intelligence: this.#parseAbilityScore(abilityScores?.int),
-			wisdom: this.#parseAbilityScore(abilityScores?.wis),
-			charisma: this.#parseAbilityScore(abilityScores?.cha),
+			speed: SupabaseDataTransformer.#parseSpeed(monster.speed),
+			strength: SupabaseDataTransformer.#parseAbilityScore(abilityScores?.str),
+			dexterity: SupabaseDataTransformer.#parseAbilityScore(abilityScores?.dex),
+			constitution: SupabaseDataTransformer.#parseAbilityScore(abilityScores?.con),
+			intelligence: SupabaseDataTransformer.#parseAbilityScore(abilityScores?.int),
+			wisdom: SupabaseDataTransformer.#parseAbilityScore(abilityScores?.wis),
+			charisma: SupabaseDataTransformer.#parseAbilityScore(abilityScores?.cha),
 			str: abilityScores?.str || '10 (+0)',
 			dex: abilityScores?.dex || '10 (+0)',
 			con: abilityScores?.con || '10 (+0)',
@@ -131,7 +131,6 @@ class SupabaseDataTransformer {
 		const npc = Array.isArray(supabaseNPC) ? supabaseNPC[0] : supabaseNPC;
 		if (!npc) return null;
 
-		// Parse JSON fields if they're strings
 		const parseJson = (field) => {
 			if (!field) return null;
 			if (typeof field === 'string') {
@@ -251,7 +250,6 @@ class SupabaseDataTransformer {
 
 		return {
 			...char,
-			shortDescription,
 			stats: parseJson(char.stats),
 		};
 	}

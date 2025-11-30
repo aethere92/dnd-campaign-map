@@ -464,7 +464,7 @@ class SupabaseClient {
 				this.fetchQuestsWithRelations(campaignId).catch(() => []),
 				this.fetchFactionsWithRelations(campaignId).catch(() => []),
 				this.fetchEncounters(campaignId).catch(() => []),
-				this.fetchTimeline(campaignId).catch(() => []),
+				this.fetchTimelineEvents(campaignId).catch(() => []), // Updated this line
 			]);
 
 			return {
@@ -568,6 +568,26 @@ class SupabaseClient {
 			return data || [];
 		} catch (error) {
 			console.error(`Error fetching NPCs for faction ${factionId}:`, error);
+			throw error;
+		}
+	}
+
+	async fetchTimelineEvents(campaignId) {
+		if (!this.isReady()) {
+			throw new Error('Supabase client is not initialized');
+		}
+
+		try {
+			const { data, error } = await this.#client
+				.from('timeline_events')
+				.select('*')
+				.eq('campaign_id', campaignId)
+				.order('event_order', { ascending: true });
+
+			if (error) throw error;
+			return data || [];
+		} catch (error) {
+			console.error(`Error fetching timeline events for ${campaignId}:`, error);
 			throw error;
 		}
 	}

@@ -1,6 +1,7 @@
 class StoryHelperTimeline {
 	#campaign;
 	#placeholderProcessor;
+	#supabaseClient;
 
 	// Type icon mapping
 	#typeIcons = {
@@ -13,31 +14,52 @@ class StoryHelperTimeline {
 	constructor(campaign, placeholderProcessor) {
 		this.#campaign = campaign;
 		this.#placeholderProcessor = placeholderProcessor;
+		this.#supabaseClient = SupabaseClient.getInstance();
 	}
 
-	render(contentArea) {
-		const timelineData = this.#campaign?.timeline;
+	async render(contentArea) {
+		// Show loading state
+		contentArea.innerHTML = `
+			<div class="story-timeline-container visible">
+				<div class="timeline-header"><h2>Campaign Timeline</h2></div>
+				<div class="loading">Loading timeline...</div>
+			</div>
+		`;
 
-		if (!timelineData?.length) {
+		try {
+			// Fetch timeline data from Supabase
+			const timelineData = await this.#supabaseClient.fetchTimelineEvents(this.#campaign.id);
+
+			if (!timelineData?.length) {
+				contentArea.innerHTML = `
+					<div class="story-timeline-container visible">
+						<div class="timeline-header"><h2>Campaign Timeline</h2></div>
+						<div class="no-content">Timeline data not available for this campaign.</div>
+					</div>
+				`;
+				return;
+			}
+
+			const container = document.createElement('div');
+			container.className = 'story-timeline-container visible';
+
+			const header = this.#createHeader();
+			const timeline = this.#createTimeline(timelineData);
+
+			container.append(header, timeline);
+			contentArea.innerHTML = '';
+			contentArea.appendChild(container);
+
+			this.#placeholderProcessor.processTimelinePlaceholders(container);
+		} catch (error) {
+			console.error('Error loading timeline:', error);
 			contentArea.innerHTML = `
 				<div class="story-timeline-container visible">
 					<div class="timeline-header"><h2>Campaign Timeline</h2></div>
-					<div class="no-content">Timeline data not available for this campaign.</div>
+					<div class="error">Error loading timeline data. Please try again later.</div>
 				</div>
 			`;
-			return;
 		}
-
-		const container = document.createElement('div');
-		container.className = 'story-timeline-container visible';
-
-		const header = this.#createHeader();
-		const timeline = this.#createTimeline(timelineData);
-
-		container.append(header, timeline);
-		contentArea.appendChild(container);
-
-		this.#placeholderProcessor.processTimelinePlaceholders(container);
 	}
 
 	#createHeader() {
@@ -100,7 +122,7 @@ class StoryHelperTimeline {
 		mainContent.className = 'timeline-content';
 		mainContent.innerHTML = `
 			<h3>${item.title}</h3>
-			<div class="timeline-location" style="margin-left: auto">${item.location}</div>
+			<div class="timeline-location" style="margin-left: auto">${item.location || ''}</div>
 			${item.is_new_session ? '<div class="timeline-new-session">New session</div>' : ''}
 			${item.session ? `<span class="timeline-item-session">Session ${item.session}</span>` : ''}
 		`;
@@ -136,7 +158,7 @@ class StoryHelperTimeline {
 		let html = `
 			<h4>
 				<span style="font-size: 8pt">${this.#typeIcons[subitem.type] || '❓'}</span>
-				${this.#capitalize(subitem.type)}: ${subitem.actors}
+				${this.#capitalize(subitem.type)}: ${subitem.actors || ''}
 			</h4>
 		`;
 
