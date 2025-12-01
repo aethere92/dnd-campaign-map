@@ -1,23 +1,27 @@
+// --- START OF FILE SupabaseClient.js ---
+
 class SupabaseClient {
 	static instance = null;
 	#client = null;
 	#isInitialized = false;
+
+	// Configuration
+	#SUPABASE_URL = 'https://yffukfulnggfhlgoyowg.supabase.co';
+	#SUPABASE_ANON_KEY =
+		'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlmZnVrZnVsbmdnZmhsZ295b3dnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjM1NTcyMDYsImV4cCI6MjA3OTEzMzIwNn0.BcB9Uea-vfnxwKA22YpQU0QlFCA0bfigsiDC_r2SNQ4';
 
 	constructor() {
 		if (SupabaseClient.instance) {
 			return SupabaseClient.instance;
 		}
 
-		// Using the public anon key (safe to expose with proper RLS policies)
-		const SUPABASE_URL = 'https://cqumntwoephyeutyckjh.supabase.co';
-		const SUPABASE_ANON_KEY =
-			'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNxdW1udHdvZXBoeWV1dHlja2poIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjI2NjU3MTIsImV4cCI6MjA3ODI0MTcxMn0.bKWD7u8v0dg72aEr5a_mgyyto3IwUilBuOg9o9IlShM';
-
 		try {
-			this.#client = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+			// Assumes the Supabase JS library is loaded via CDN in your HTML file
+			// <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+			this.#client = supabase.createClient(this.#SUPABASE_URL, this.#SUPABASE_ANON_KEY);
 			this.#isInitialized = true;
 		} catch (error) {
-			console.error('Failed to initialize Supabase client:', error);
+			console.error('SupabaseClient: Failed to initialize:', error);
 			this.#isInitialized = false;
 		}
 
@@ -31,564 +35,287 @@ class SupabaseClient {
 		return SupabaseClient.instance;
 	}
 
-	getClient() {
-		return this.#client;
-	}
-
 	isReady() {
 		return this.#isInitialized && this.#client !== null;
 	}
 
+	getClient() {
+		return this.#client;
+	}
+
+	// ==========================================
+	// CAMPAIGN MANAGEMENT
+	// ==========================================
+
 	/**
-	 * Fetch session data from Supabase
+	 * Get a list of all available campaigns.
 	 */
-	async fetchSessionData(campaignId, sessionId) {
-		if (!this.isReady()) {
-			throw new Error('Supabase client is not initialized');
-		}
+	async getAllCampaigns() {
+		if (!this.isReady()) return [];
 
-		try {
-			const { data, error } = await this.#client
-				.from('sessions')
-				.select('narrative, summary')
-				.eq('campaign_id', campaignId)
-				.eq('id', sessionId)
-				.single();
-			if (error) throw error;
-			if (!data) throw new Error(`No session found for ${campaignId}/${sessionId}`);
+		const { data, error } = await this.#client
+			.from('campaigns')
+			.select('id, name, description, metadata, styling')
+			.order('name');
 
-			return data;
-		} catch (error) {
-			console.error(`Error fetching session ${sessionId}:`, error);
+		if (error) {
+			console.error('Error fetching campaigns:', error);
 			throw error;
 		}
+		return data || [];
 	}
 
 	/**
-	 * Fetch all sessions for a campaign
+	 * Get full metadata for a specific campaign.
 	 */
-	async fetchCampaignSessions(campaignId) {
-		if (!this.isReady()) {
-			throw new Error('Supabase client is not initialized');
-		}
+	async getCampaignById(campaignId) {
+		if (!this.isReady()) return null;
 
-		try {
-			const { data, error } = await this.#client
-				.from('sessions')
-				.select('*')
-				.eq('campaign_id', campaignId)
-				.order('session_order', { ascending: true });
-			if (error) throw error;
-			return data || [];
-		} catch (error) {
-			console.error(`Error fetching sessions for ${campaignId}:`, error);
+		const { data, error } = await this.#client.from('campaigns').select('*').eq('id', campaignId).single();
+
+		if (error) {
+			console.error(`Error fetching campaign ${campaignId}:`, error);
 			throw error;
 		}
+		return data;
+	}
+
+	// ==========================================
+	// CORE ENTITIES (Sessions & Events)
+	// ==========================================
+
+	/**
+	 * Get the list of sessions for the sidebar/navigation (lightweight).
+	 */
+	async getSessionList(campaignId) {
+		const { data, error } = await this.#client
+			.from('sessions')
+			.select('id, session_number, title, session_date, summary')
+			.eq('campaign_id', campaignId)
+			.order('session_number', { ascending: true });
+
+		if (error) throw error;
+		return data || [];
 	}
 
 	/**
-	 * Fetch all characters for a campaign
+	 * Get full details for a single session, including linked events.
 	 */
-	async fetchCharacters(campaignId) {
-		if (!this.isReady()) {
-			throw new Error('Supabase client is not initialized');
-		}
-
-		try {
-			const { data, error } = await this.#client
-				.from('characters')
-				.select('*')
-				.eq('campaign_id', campaignId)
-				.order('name', { ascending: true });
-
-			if (error) throw error;
-			return data || [];
-		} catch (error) {
-			console.error(`Error fetching characters for ${campaignId}:`, error);
-			throw error;
-		}
-	}
-
-	/**
-	 * Fetch a single character
-	 */
-	async fetchCharacter(campaignId, characterName) {
-		if (!this.isReady()) {
-			throw new Error('Supabase client is not initialized');
-		}
-
-		try {
-			const { data, error } = await this.#client
-				.from('characters')
-				.select('*')
-				.eq('campaign_id', campaignId)
-				.eq('name', characterName)
-				.single();
-
-			if (error) throw error;
-			return data;
-		} catch (error) {
-			console.error(`Error fetching character ${characterName}:`, error);
-			throw error;
-		}
-	}
-
-	/**
-	 * Fetch all NPCs for a campaign
-	 */
-	async fetchNPCs(campaignId) {
-		if (!this.isReady()) {
-			throw new Error('Supabase client is not initialized');
-		}
-
-		try {
-			const { data, error } = await this.#client
-				.from('npcs')
-				.select('*')
-				.eq('campaign_id', campaignId)
-				.order('name', { ascending: true });
-			if (error) throw error;
-			return data || [];
-		} catch (error) {
-			console.error(`Error fetching NPCs for ${campaignId}:`, error);
-			throw error;
-		}
-	}
-
-	/**
-	 * Fetch all NPCs with their relationships, encounters, and items
-	 */
-	async fetchNPCsWithRelations(campaignId) {
-		if (!this.isReady()) {
-			throw new Error('Supabase client is not initialized');
-		}
-
-		try {
-			const { data, error } = await this.#client
-				.from('npcs')
-				.select(
-					`
-					*,
-					relationships:npc_relationships(*),
-					encounters:npc_encounters(*),
-					items:npc_items(*)
+	async getSessionDetails(sessionId) {
+		// We fetch the session and join the session_events
+		const { data, error } = await this.#client
+			.from('sessions')
+			.select(
 				`
-				)
-				.eq('campaign_id', campaignId)
-				.order('name', { ascending: true });
+                *,
+                events:session_events(
+                    *,
+                    npc:npcs(id, name),
+                    location:locations(id, name),
+                    quest:quests(id, title),
+                    encounter:encounters(id, name),
+                    faction:factions(id, name)
+                )
+            `
+			)
+			.eq('id', sessionId)
+			.single();
 
-			if (error) throw error;
-			return data || [];
-		} catch (error) {
-			console.error(`Error fetching NPCs with relations for ${campaignId}:`, error);
-			throw error;
+		if (error) throw error;
+
+		// Sort events by order if they aren't already
+		if (data.events) {
+			data.events.sort((a, b) => a.event_order - b.event_order);
 		}
+		return data;
 	}
 
-	/**
-	 * Fetch all locations for a campaign (basic)
-	 */
-	async fetchLocations(campaignId) {
-		if (!this.isReady()) {
-			throw new Error('Supabase client is not initialized');
-		}
+	// ==========================================
+	// CHARACTERS & NPCS
+	// ==========================================
 
-		try {
-			const { data, error } = await this.#client
-				.from('locations')
-				.select('*')
-				.eq('campaign_id', campaignId)
-				.order('name', { ascending: true });
+	async getCharacters(campaignId) {
+		const { data, error } = await this.#client
+			.from('characters')
+			.select('*')
+			.eq('campaign_id', campaignId)
+			.eq('is_active', true)
+			.order('name');
 
-			if (error) throw error;
-			return data || [];
-		} catch (error) {
-			console.error(`Error fetching locations for ${campaignId}:`, error);
-			throw error;
-		}
+		if (error) throw error;
+		return data || [];
 	}
 
-	/**
-	 * Fetch all locations with their related data (threats, features, connections, NPCs)
-	 */
-	async fetchLocationsWithRelations(campaignId) {
-		if (!this.isReady()) {
-			throw new Error('Supabase client is not initialized');
-		}
-
-		try {
-			const { data, error } = await this.#client
-				.from('locations')
-				.select(
-					`
-					*,
-					threats:location_threats(threat),
-					features:location_features(feature),
-					connections:location_connections(connected_location_id, connection_type, distance),
-					npcs:location_npcs(npc_id, is_primary, notes)
+	async getCharacterDetails(characterId) {
+		const { data, error } = await this.#client
+			.from('characters')
+			.select(
 				`
-				)
-				.eq('campaign_id', campaignId)
-				.order('name', { ascending: true });
+                *,
+                sessions:character_sessions(
+                    notes,
+                    session:sessions(id, title, session_number)
+                )
+            `
+			)
+			.eq('id', characterId)
+			.single();
 
-			if (error) throw error;
-			return data || [];
-		} catch (error) {
-			console.error(`Error fetching locations with relations for ${campaignId}:`, error);
-			throw error;
-		}
+		if (error) throw error;
+		return data;
 	}
 
-	/**
-	 * Fetch all quests for a campaign
-	 */
-	async fetchQuests(campaignId) {
-		if (!this.isReady()) {
-			throw new Error('Supabase client is not initialized');
-		}
+	async getNPCs(campaignId) {
+		const { data, error } = await this.#client.from('npcs').select('*').eq('campaign_id', campaignId).order('name');
 
-		try {
-			const { data, error } = await this.#client
-				.from('quests')
-				.select('*')
-				.eq('campaign_id', campaignId)
-				.order('title', { ascending: true });
-
-			if (error) throw error;
-			return data || [];
-		} catch (error) {
-			console.error(`Error fetching quests for ${campaignId}:`, error);
-			throw error;
-		}
+		if (error) throw error;
+		return data || [];
 	}
 
-	/**
-	 * Fetch all quests with their objectives, NPCs, and locations
-	 */
-	async fetchQuestsWithRelations(campaignId) {
-		if (!this.isReady()) {
-			throw new Error('Supabase client is not initialized');
-		}
+	// ==========================================
+	// WORLD DATA (Locations, Quests, Factions)
+	// ==========================================
 
-		try {
-			const { data, error } = await this.#client
-				.from('quests')
-				.select(
-					`
-					*,
-					objectives:quest_objectives(*),
-					npcs:quest_npcs(npc_id, involvement),
-					locations:quest_locations(location_id, relevance)
+	async getLocations(campaignId) {
+		const { data, error } = await this.#client
+			.from('locations')
+			.select('*')
+			.eq('campaign_id', campaignId)
+			.order('name');
+
+		if (error) throw error;
+		return data || [];
+	}
+
+	async getQuests(campaignId) {
+		const { data, error } = await this.#client
+			.from('quests')
+			.select(
 				`
-				)
-				.eq('campaign_id', campaignId)
-				.order('title', { ascending: true });
+                *,
+                objectives:quest_objectives(*)
+            `
+			)
+			.eq('campaign_id', campaignId)
+			.order('status')
+			.order('title');
 
-			if (error) throw error;
-			return data || [];
-		} catch (error) {
-			console.error(`Error fetching quests with relations for ${campaignId}:`, error);
-			throw error;
-		}
+		if (error) throw error;
+		return data || [];
 	}
 
-	/**
-	 * Fetch all factions for a campaign
-	 */
-	async fetchFactions(campaignId) {
-		if (!this.isReady()) {
-			throw new Error('Supabase client is not initialized');
-		}
+	async getFactions(campaignId) {
+		const { data, error } = await this.#client.from('factions').select('*').eq('campaign_id', campaignId).order('name');
 
-		try {
-			const { data, error } = await this.#client
-				.from('factions')
-				.select('*')
-				.eq('campaign_id', campaignId)
-				.order('name', { ascending: true });
-
-			if (error) throw error;
-			return data || [];
-		} catch (error) {
-			console.error(`Error fetching factions for ${campaignId}:`, error);
-			throw error;
-		}
+		if (error) throw error;
+		return data || [];
 	}
 
-	/**
-	 * Fetch all factions with their encounters and NPCs included
-	 */
-	async fetchFactionsWithRelations(campaignId) {
-		if (!this.isReady()) {
-			throw new Error('Supabase client is not initialized');
-		}
-
-		try {
-			const { data, error } = await this.#client
-				.from('factions')
-				.select(
-					`
-					*,
-					encounters:faction_encounters(session, description),
-					npcs:faction_npcs(npc_id, role)
+	async getEncounters(campaignId) {
+		const { data, error } = await this.#client
+			.from('encounters')
+			.select(
 				`
-				)
-				.eq('campaign_id', campaignId)
-				.order('name', { ascending: true });
+                *,
+                rounds:encounter_rounds(*),
+                combatants:encounter_initiative(*)
+            `
+			)
+			.eq('campaign_id', campaignId)
+			.order('created_at', { ascending: false });
 
-			if (error) throw error;
-			return data || [];
-		} catch (error) {
-			console.error(`Error fetching factions with relations for ${campaignId}:`, error);
-			throw error;
+		if (error) throw error;
+		return data || [];
+	}
+
+	async getTimeline(campaignId) {
+		// Assuming you might have a view or table for timeline,
+		// or you construct it from sessions/events.
+		// For now, fetching sessions serves as a basic timeline.
+		return this.getSessionList(campaignId);
+	}
+
+	// ==========================================
+	// RELATIONSHIPS & ADVANCED VIEWS
+	// ==========================================
+
+	/**
+	 * Fetch the 'complete' view of an entity for the Wiki/Popup system.
+	 */
+	async getEntityCompleteData(entityId) {
+		const { data, error } = await this.#client.from('entity_complete_view').select('*').eq('id', entityId).single();
+
+		if (error) {
+			console.warn(`Entity view fetch failed for ${entityId}`, error);
+			return null;
 		}
+		return data;
+	}
+
+	async getGlobalRelationships(campaignId) {
+		// This is for the node graph visualization
+		const { data, error } = await this.#client
+			.from('entity_relationships')
+			.select(
+				`
+                *,
+                from:entities!fk_from_entity(name, type),
+                to:entities!fk_to_entity(name, type)
+            `
+			)
+			.limit(1000); // Safety limit
+
+		if (error) throw error;
+		return data || [];
 	}
 
 	/**
-	 * Fetch all encounters for a campaign
+	 * Fetch full timeline data: Sessions -> Events -> Related Entities
 	 */
-	async fetchEncounters(campaignId) {
-		if (!this.isReady()) {
-			throw new Error('Supabase client is not initialized');
-		}
+	async getTimelineWithEvents(campaignId) {
+		if (!this.isReady()) return [];
 
-		try {
-			const { data, error } = await this.#client
-				.from('encounters')
-				.select('*')
-				.eq('campaign_id', campaignId)
-				.order('session', { ascending: true });
+		const { data, error } = await this.#client
+			.from('sessions')
+			.select(
+				`
+                id,
+                session_number,
+                title,
+                session_date,
+                events:session_events(
+                    id,
+                    event_order,
+                    event_type,
+                    title,
+                    description,
+                    created_at,
+                    npc:npcs(id, name),
+                    location:locations(id, name),
+                    quest:quests(id, title),
+                    encounter:encounters(id, name),
+                    faction:factions(id, name),
+                    character:characters(id, name)
+                )
+            `
+			)
+			.eq('campaign_id', campaignId)
+			.order('session_number', { ascending: true });
 
-			if (error) throw error;
-			return data || [];
-		} catch (error) {
-			console.error(`Error fetching encounters for ${campaignId}:`, error);
+		if (error) {
+			console.error('Error fetching timeline:', error);
 			throw error;
 		}
-	}
 
-	/**
-	 * Fetch all monsters from Supabase
-	 */
-	async fetchMonsters() {
-		if (!this.isReady()) {
-			throw new Error('Supabase client is not initialized');
+		// Sort events within sessions (Supabase sort on nested relation is sometimes tricky, safe to sort in JS)
+		if (data) {
+			data.forEach((session) => {
+				if (session.events) {
+					session.events.sort((a, b) => a.event_order - b.event_order);
+				}
+			});
 		}
 
-		try {
-			const { data, error } = await this.#client.from('monsters').select('*').order('name', { ascending: true });
-
-			if (error) throw error;
-			return data || [];
-		} catch (error) {
-			console.error('Error fetching monsters:', error);
-			throw error;
-		}
-	}
-
-	/**
-	 * Fetch a single monster by name
-	 */
-	async fetchMonsterByName(monsterName) {
-		if (!this.isReady()) {
-			throw new Error('Supabase client is not initialized');
-		}
-
-		try {
-			const { data, error } = await this.#client.from('monsters').select('*').ilike('name', monsterName).single();
-
-			if (error) throw error;
-			return data;
-		} catch (error) {
-			console.error(`Error fetching monster ${monsterName}:`, error);
-			throw error;
-		}
-	}
-
-	/**
-	 * Fetch timeline for a campaign
-	 */
-	async fetchTimeline(campaignId) {
-		if (!this.isReady()) {
-			throw new Error('Supabase client is not initialized');
-		}
-
-		try {
-			const { data, error } = await this.#client
-				.from('timeline')
-				.select('*')
-				.eq('campaign_id', campaignId)
-				.order('order_index', { ascending: true });
-
-			if (error) throw error;
-			return data || [];
-		} catch (error) {
-			console.error(`Error fetching timeline for ${campaignId}:`, error);
-			throw error;
-		}
-	}
-
-	/**
-	 * Fetch timeline for a campaign
-	 */
-	async fetchSpellByName(spellName) {
-		if (!this.isReady()) {
-			throw new Error('Supabase client is not initialized');
-		}
-
-		try {
-			const { data, error } = await this.#client.from('spells').select('*').eq('spell_name', spellName);
-
-			if (error) throw error;
-			return data || [];
-		} catch (error) {
-			console.error(`Error fetching timeline for ${campaignId}:`, error);
-			throw error;
-		}
-	}
-
-	/**
-	 * Fetch all campaign data at once (more efficient)
-	 */
-	async fetchAllCampaignData(campaignId) {
-		if (!this.isReady()) {
-			throw new Error('Supabase client is not initialized');
-		}
-
-		try {
-			const [sessions, characters, npcs, locations, quests, factions, encounters, timeline] = await Promise.all([
-				this.fetchCampaignSessions(campaignId).catch(() => []),
-				this.fetchCharacters(campaignId).catch(() => []),
-				this.fetchNPCsWithRelations(campaignId).catch(() => []),
-				this.fetchLocationsWithRelations(campaignId).catch(() => []),
-				this.fetchQuestsWithRelations(campaignId).catch(() => []),
-				this.fetchFactionsWithRelations(campaignId).catch(() => []),
-				this.fetchEncounters(campaignId).catch(() => []),
-				this.fetchTimelineEvents(campaignId).catch(() => []), // Updated this line
-			]);
-
-			return {
-				sessions,
-				characters,
-				npcs,
-				locations,
-				quests,
-				factions,
-				encounters,
-				timeline,
-			};
-		} catch (error) {
-			console.error(`Error fetching all campaign data for ${campaignId}:`, error);
-			throw error;
-		}
-	}
-
-	// Legacy methods kept for backward compatibility
-
-	/**
-	 * @deprecated Use fetchLocationsWithRelations instead
-	 */
-	async fetchLocationThreats(locationId) {
-		if (!this.isReady()) {
-			throw new Error('Supabase client is not initialized');
-		}
-
-		try {
-			const { data, error } = await this.#client.from('location_threats').select('*').eq('location_id', locationId);
-
-			if (error) throw error;
-			return data || [];
-		} catch (error) {
-			console.error(`Error fetching threats for location ${locationId}:`, error);
-			throw error;
-		}
-	}
-
-	/**
-	 * @deprecated Use fetchLocationsWithRelations instead
-	 */
-	async fetchLocationsWithThreats(campaignId) {
-		return this.fetchLocationsWithRelations(campaignId);
-	}
-
-	/**
-	 * @deprecated Use fetchLocationsWithRelations instead
-	 */
-	async fetchLocationFeatures(locationId) {
-		if (!this.isReady()) {
-			throw new Error('Supabase client is not initialized');
-		}
-
-		try {
-			const { data, error } = await this.#client.from('location_features').select('*').eq('location_id', locationId);
-
-			if (error) throw error;
-			return data || [];
-		} catch (error) {
-			console.error(`Error fetching features for location ${locationId}:`, error);
-			throw error;
-		}
-	}
-
-	/**
-	 * @deprecated Use fetchFactionsWithRelations instead
-	 */
-	async fetchFactionEncounters(factionId) {
-		if (!this.isReady()) {
-			throw new Error('Supabase client is not initialized');
-		}
-
-		try {
-			const { data, error } = await this.#client
-				.from('faction_encounters')
-				.select('*')
-				.eq('faction_id', factionId)
-				.order('session', { ascending: true });
-
-			if (error) throw error;
-			return data || [];
-		} catch (error) {
-			console.error(`Error fetching encounters for faction ${factionId}:`, error);
-			throw error;
-		}
-	}
-
-	/**
-	 * @deprecated Use fetchFactionsWithRelations instead
-	 */
-	async fetchFactionNPCs(factionId) {
-		if (!this.isReady()) {
-			throw new Error('Supabase client is not initialized');
-		}
-
-		try {
-			const { data, error } = await this.#client.from('faction_npcs').select('*').eq('faction_id', factionId);
-
-			if (error) throw error;
-			return data || [];
-		} catch (error) {
-			console.error(`Error fetching NPCs for faction ${factionId}:`, error);
-			throw error;
-		}
-	}
-
-	async fetchTimelineEvents(campaignId) {
-		if (!this.isReady()) {
-			throw new Error('Supabase client is not initialized');
-		}
-
-		try {
-			const { data, error } = await this.#client
-				.from('timeline_events')
-				.select('*')
-				.eq('campaign_id', campaignId)
-				.order('event_order', { ascending: true });
-
-			if (error) throw error;
-			return data || [];
-		} catch (error) {
-			console.error(`Error fetching timeline events for ${campaignId}:`, error);
-			throw error;
-		}
+		return data || [];
 	}
 }

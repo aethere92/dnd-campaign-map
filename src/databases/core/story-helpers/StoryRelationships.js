@@ -1,5 +1,7 @@
+// --- START OF FILE StoryRelationships.js ---
+
 class StoryHelperRelationships {
-	#campaign;
+	#campaignId;
 	#supabaseClient;
 	#cy = null;
 	#container = null;
@@ -9,113 +11,131 @@ class StoryHelperRelationships {
 
 	// Constants
 	static ICON_BASE_PATH = 'images/assets/relationship_icons';
-	static ICON_MAP = {
-		female: 'npc_icon_female.png',
-		male: 'npc_icon.png',
-		monster: 'npc_icon_monster.png',
-		gnome: 'npc_icon_gnome.png',
-		feline: 'npc_icon_feline.png',
-		avian: 'npc_icon_avian.png',
+
+	static TYPE_ICON_MAP = {
+		npc: 'npc.png',
+		character: 'npc.png',
+		monster: 'monster.png',
+		location: 'location.png',
+		faction: 'faction.png',
+		quest: 'quest.png',
+		default: 'unknown.png',
 	};
+
 	static RELATIONSHIP_COLORS = {
 		enemy: '#f44336',
 		hostile: '#f44336',
+		rival: '#e57373',
 		ally: '#4caf50',
 		friend: '#4caf50',
 		companion: '#2196f3',
 		partner: '#2196f3',
 		lover: '#e91e63',
+		spouse: '#e91e63',
 		family: '#9c27b0',
+		sibling: '#ce93d8',
+		parent: '#8e24aa',
+		child: '#8e24aa',
 		commander: '#ff9800',
 		superior: '#ff9800',
-		subordinate: '#ff9800',
+		master: '#ff9800',
+		subordinate: '#ffb74d',
+		minion: '#ffb74d',
 		colleague: '#607d8b',
 		neutral: '#9e9e9e',
+		acquaintance: '#bdbdbd',
 	};
 	static DEFAULT_COLOR = '#8d6e63';
 
-	constructor(campaign) {
-		this.#campaign = campaign;
+	constructor() {
 		this.#supabaseClient = SupabaseClient.getInstance();
 	}
 
-	async render(contentArea) {
+	async render(contentArea, campaignId) {
 		this.#showLoading(contentArea);
 
-		try {
-			const [relationships, npcs] = await Promise.all([this.#fetchRelationships(), this.#fetchNPCs()]);
+		if (campaignId) this.#campaignId = campaignId;
 
-			if (!relationships?.length) {
+		if (!this.#campaignId) {
+			this.#showError(contentArea, 'Campaign ID is missing.');
+			return;
+		}
+
+		try {
+			const entities = await this.#fetchDataFromView();
+			console.log(entities);
+
+			// 1. Build Graph Elements
+			const elements = this.#buildCytoscapeElements(entities);
+
+			// 2. Check if we actually have connected nodes
+			if (!elements.nodes.length) {
 				this.#showEmptyState(contentArea);
 				return;
 			}
 
-			this.#renderGraph(contentArea, relationships, npcs);
+			this.#renderGraph(contentArea, elements);
 		} catch (error) {
 			console.error('Error rendering relationships:', error);
 			this.#showError(contentArea, error.message);
 		}
 	}
 
-	// Simplified fetch methods
-	async #fetchRelationships() {
+	async #fetchDataFromView() {
 		const { data, error } = await this.#supabaseClient
 			.getClient()
-			.from('entities')
-			.select('id, relationships')
-			.eq('campaign_id', this.#campaign.id)
-			.not('relationships', 'is', null);
+			.from('entity_complete_view')
+			.select('id, name, type, relationships, attributes') // 'icon' column might not exist in view, we check attributes
+			.eq('campaign_id', this.#campaignId);
 
 		if (error) throw error;
-
-		return (
-			data?.flatMap((entity) => {
-				const rels = typeof entity.relationships === 'string' ? JSON.parse(entity.relationships) : entity.relationships;
-
-				return Array.isArray(rels)
-					? rels.map((rel) => ({
-							source_entity_id: entity.id,
-							target_entity_id: rel.target_id,
-							target_entity_name: rel.target_name,
-							relationship_type: rel.type,
-							description: rel.description,
-							icon_type: rel.icon_type,
-					  }))
-					: [];
-			}) || []
-		);
+		return data || [];
 	}
 
-	async #fetchNPCs() {
-		const { data, error } = await this.#supabaseClient
-			.getClient()
-			.from('entities')
-			.select('id, name, entity_icon_type')
-			.eq('campaign_id', this.#campaign.id);
+	// --- ICON RESOLUTION LOGIC ---
 
-		if (error) throw error;
-		return new Map(data?.map((npc) => [npc.id, npc]) || []);
+	/**
+	 * Extract the raw icon string from the entity object (checking attributes/properties)
+	 */
+	#getRawEntityIcon(entity) {
+		// 1. Check if 'icon' property exists directly (if added to view)
+		if (entity.icon) return entity.icon;
+
+		// 2. Check Attributes (Portrait/Image/Icon)
+		if (entity.attributes) {
+			const findAttr = (key) => {
+				const match = Object.keys(entity.attributes).find((k) => k.toLowerCase() === key.toLowerCase());
+				if (!match) return null;
+				const val = entity.attributes[match];
+				return Array.isArray(val) ? val[0]?.value : val;
+			};
+			return findAttr('Portrait') || findAttr('Image') || findAttr('Icon');
+		}
+		return null;
 	}
 
-	// Utility methods
-	#getNodeIcon(npcId, npcs) {
-		const type = npcs.get(npcId)?.entity_icon_type?.toLowerCase();
-		if (!type) return `${StoryHelperRelationships.ICON_BASE_PATH}/npc_icon_unknown_gender.png`;
+	/**
+	 * Flexible icon resolver.
+	 * Can take a direct URL (from relationship column) or fallback to type-based icon.
+	 */
+	#resolveIcon(specificIcon, entityType) {
+		// 1. If specific icon provided, construct proper path
+		if (specificIcon) {
+			// If it's already a full path (contains / or http), use as-is
+			if (specificIcon.includes('/') || specificIcon.startsWith('http')) {
+				return specificIcon;
+			}
+			// Otherwise, construct path assuming it's in the relationship_icons folder
+			// Handle both with and without .png extension
+			const fileName = specificIcon.endsWith('.png') ? specificIcon : `${specificIcon}.png`;
+			return `${StoryHelperRelationships.ICON_BASE_PATH}/${fileName}`;
+		}
 
-		const mapped = StoryHelperRelationships.ICON_MAP[type];
-		return mapped
-			? `${StoryHelperRelationships.ICON_BASE_PATH}/${mapped}`
-			: `${StoryHelperRelationships.ICON_BASE_PATH}/npc_icon_${type}.png`;
-	}
-
-	#formatNPCName(npcId, npcs) {
-		return (
-			npcs.get(npcId)?.name ||
-			npcId
-				.split('-')
-				.map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-				.join(' ')
-		);
+		// 2. Fallback to generic type icon
+		const typeKey = entityType?.toLowerCase();
+		const genericFile =
+			StoryHelperRelationships.TYPE_ICON_MAP[typeKey] || StoryHelperRelationships.TYPE_ICON_MAP.default;
+		return `${StoryHelperRelationships.ICON_BASE_PATH}/${genericFile}`;
 	}
 
 	#getRelationshipColor(type) {
@@ -126,85 +146,82 @@ class StoryHelperRelationships {
 		return StoryHelperRelationships.DEFAULT_COLOR;
 	}
 
-	#buildCytoscapeElements(relationships, npcs) {
-		const nodes = new Map();
-		const edgeMap = new Map();
+	#buildCytoscapeElements(entities) {
+		const edges = [];
+		const activeNodeIds = new Set();
+		const entityMap = new Map();
+		const entityIconMap = new Map(); // Track best icon for each entity
 
-		relationships.forEach((rel) => {
-			// Add source node
-			if (!nodes.has(rel.source_entity_id)) {
-				nodes.set(rel.source_entity_id, {
+		entities.forEach((e) => entityMap.set(e.id, e));
+
+		// 1. Build Edges and collect icons from relationships
+		entities.forEach((entity) => {
+			const rels = entity.relationships;
+			if (!rels || !Array.isArray(rels)) return;
+
+			rels.forEach((rel) => {
+				if (!entityMap.has(rel.entity_id)) return;
+
+				// Store icon from relationship for the target entity
+				if (rel.icon && !entityIconMap.has(rel.entity_id)) {
+					entityIconMap.set(rel.entity_id, rel.icon);
+				}
+
+				const color = this.#getRelationshipColor(rel.type);
+				const isHostile = rel.type?.toLowerCase().match(/enemy|hostile|rival/);
+
+				edges.push({
 					data: {
-						id: rel.source_entity_id,
-						label: this.#formatNPCName(rel.source_entity_id, npcs),
-						icon: this.#getNodeIcon(rel.source_entity_id, npcs),
+						id: `e_${entity.id}_${rel.entity_id}`,
+						source: entity.id,
+						target: rel.entity_id,
+						type: rel.type || 'Related',
+						description: rel.description || '',
+						color: color,
+						bidirectional: rel.is_bidirectional || false,
+						isHostile: !!isHostile,
+					},
+				});
+
+				activeNodeIds.add(entity.id);
+				activeNodeIds.add(rel.entity_id);
+			});
+		});
+
+		// 2. Build Nodes (Only active ones)
+		const nodes = [];
+		activeNodeIds.forEach((id) => {
+			const entity = entityMap.get(id);
+			if (entity) {
+				// Try: relationship icon > entity attributes > type fallback
+				const relIcon = entityIconMap.get(id);
+				const attrIcon = this.#getRawEntityIcon(entity);
+				const rawIcon = relIcon || attrIcon;
+				const resolvedIcon = this.#resolveIcon(rawIcon, entity.type);
+
+				nodes.push({
+					data: {
+						id: entity.id,
+						label: entity.name,
+						type: entity.type,
+						icon: resolvedIcon,
 						degree: 0,
 					},
 				});
-			}
-
-			// Add target node
-			if (!nodes.has(rel.target_entity_id)) {
-				nodes.set(rel.target_entity_id, {
-					data: {
-						id: rel.target_entity_id,
-						label: this.#formatNPCName(rel.target_entity_name ?? rel.target_entity_id, npcs),
-						icon: this.#getNodeIcon(rel.target_entity_id, npcs),
-						degree: 0,
-					},
-				});
-			}
-
-			// Increment degree for both nodes
-			nodes.get(rel.source_entity_id).data.degree++;
-			nodes.get(rel.target_entity_id).data.degree++;
-
-			// Create bidirectional edge key
-			const edgeKey = [rel.source_entity_id, rel.target_entity_id].sort().join('|');
-
-			if (!edgeMap.has(edgeKey)) {
-				edgeMap.set(edgeKey, {
-					source: rel.source_entity_id,
-					target: rel.target_entity_id,
-					types: [rel.relationship_type || 'unknown'],
-					descriptions: [rel.description || ''],
-					colors: [this.#getRelationshipColor(rel.relationship_type)],
-					bidirectional: false,
-				});
-			} else {
-				const existing = edgeMap.get(edgeKey);
-				existing.bidirectional = true;
-				existing.types.push(rel.relationship_type || 'unknown');
-				existing.descriptions.push(rel.description || '');
-				existing.colors.push(this.#getRelationshipColor(rel.relationship_type));
 			}
 		});
 
-		const edges = Array.from(edgeMap.values()).map((edge, index) => ({
-			data: {
-				id: `edge-${index}`,
-				source: edge.source,
-				target: edge.target,
-				type: edge.types.join(' / '),
-				description: edge.descriptions.filter((d) => d).join(' | '),
-				color: edge.colors[0],
-				bidirectional: edge.bidirectional,
-				// Determine if this is a hostile relationship
-				isHostile: edge.types.some((t) => t.toLowerCase().includes('enemy') || t.toLowerCase().includes('hostile')),
-			},
-		}));
-
-		return { nodes: Array.from(nodes.values()), edges };
+		return { nodes, edges };
 	}
 
 	// UI State methods
 	#showLoading(contentArea) {
 		contentArea.innerHTML = `
 			<div class="story-view-container">
-				<div class="view-header"><h2>NPC Relationships</h2></div>
+				<div class="view-header"><h2>Relationships</h2></div>
 				<div class="loading-container">
 					<div class="loading-spinner"></div>
-					<p>Loading relationships...</p>
+					<p>Tracing connections...</p>
 				</div>
 			</div>
 		`;
@@ -213,8 +230,8 @@ class StoryHelperRelationships {
 	#showEmptyState(contentArea) {
 		contentArea.innerHTML = `
 			<div class="story-view-container">
-				<div class="view-header"><h2>NPC Relationships</h2></div>
-				<div class="no-content">No relationships found for this campaign.</div>
+				<div class="view-header"><h2>Relationships</h2></div>
+				<div class="no-content">No relationships found.</div>
 			</div>
 		`;
 	}
@@ -222,9 +239,9 @@ class StoryHelperRelationships {
 	#showError(contentArea, message) {
 		contentArea.innerHTML = `
 			<div class="story-view-container">
-				<div class="view-header"><h2>NPC Relationships</h2></div>
+				<div class="view-header"><h2>Relationships</h2></div>
 				<div class="error-message">
-					<p><strong>Error loading relationships</strong></p>
+					<p><strong>Error loading graph</strong></p>
 					<p class="error-details">${message}</p>
 				</div>
 			</div>
@@ -232,13 +249,13 @@ class StoryHelperRelationships {
 	}
 
 	// Render methods
-	#renderGraph(contentArea, relationships, npcs) {
+	#renderGraph(contentArea, elements) {
 		const container = this.#createContainer();
 		const graphWrapper = this.#createGraphWrapper();
 
 		this.#container = document.createElement('div');
 		this.#container.id = 'cy-container';
-		this.#container.style.cssText = 'width: 100%; height: 100%;';
+		this.#container.style.cssText = 'width: 100%; height: 100%; position: absolute; inset: 0;';
 
 		this.#infoPanel = this.#createInfoPanel();
 		const controls = this.#createControls();
@@ -249,21 +266,21 @@ class StoryHelperRelationships {
 		contentArea.innerHTML = '';
 		contentArea.appendChild(container);
 
-		setTimeout(() => this.#initializeCytoscape(relationships, npcs), 100);
+		setTimeout(() => this.#initializeCytoscape(elements), 100);
 	}
 
 	#createContainer() {
 		const container = document.createElement('div');
 		container.className = 'story-view-container relationships-container';
 		container.style.cssText =
-			'height: 100%; width: 100%; display: flex; flex-direction: column; background: url(images/assets/background_texture.png)';
+			'height: 100%; width: 100%; display: flex; flex-direction: column; background: url(images/assets/background_texture.png);';
 		return container;
 	}
 
 	#createHeader() {
 		const header = document.createElement('div');
 		header.className = 'view-header';
-		header.innerHTML = '<h2>NPC Relationships</h2>';
+		header.innerHTML = '<h2>Relationship Graph</h2>';
 		return header;
 	}
 
@@ -275,9 +292,7 @@ class StoryHelperRelationships {
 			overflow: hidden; 
 			background: #fffae9;
 			background-image: url(images/assets/background_texture.png);
-			min-height: 500px;
-			width: calc(100% - 2rem);
-			margin-bottom: 1rem;
+			width: 100%;
 		`;
 		return wrapper;
 	}
@@ -300,24 +315,16 @@ class StoryHelperRelationships {
 		`;
 
 		this.#searchInput.addEventListener('input', (e) => this.#handleSearch(e.target.value));
-		this.#searchInput.addEventListener('focus', () => {
-			this.#searchInput.style.borderColor = '#8d6e63';
-			this.#searchInput.style.boxShadow = '0 0 0 2px rgba(141, 110, 99, 0.1)';
-		});
-		this.#searchInput.addEventListener('blur', () => {
-			this.#searchInput.style.borderColor = '#c0aa76';
-			this.#searchInput.style.boxShadow = 'none';
-		});
 
 		const clearBtn = document.createElement('button');
 		clearBtn.textContent = '✕';
-		clearBtn.title = 'Clear Search';
 		clearBtn.className = 'button-secondary';
 		clearBtn.style.cssText = `
 			padding: 8px 12px; background: #fffcf1; border: 1px solid #c0aa76;
 			border-radius: 4px; cursor: pointer; font-family: 'Noto Sans', sans-serif;
 			font-size: 0.9rem; color: #5d4a3a; transition: all 0.2s;
 		`;
+
 		clearBtn.addEventListener('click', () => {
 			this.#searchInput.value = '';
 			this.#handleSearch('');
@@ -332,47 +339,35 @@ class StoryHelperRelationships {
 		controls.style.cssText = `
 			position: absolute; top: 10px; left: 10px;
 			display: flex; gap: 8px; z-index: 10; flex-wrap: wrap;
-			max-width: 50%;
+			max-width: 60%;
 		`;
 
 		const buttons = [
-			{ text: 'Reset', title: 'Reset View', action: () => this.#resetView() },
-			{ text: '+', title: 'Zoom In', action: () => this.#cy?.zoom(this.#cy.zoom() * 1.2) },
-			{ text: '−', title: 'Zoom Out', action: () => this.#cy?.zoom(this.#cy.zoom() * 0.8) },
-			{ text: '⛶', title: 'Toggle Fullscreen', action: () => this.#toggleFullscreen() },
+			{ text: 'Reset', action: () => this.#resetView() },
+			{ text: '+', action: () => this.#cy?.zoom(this.#cy.zoom() * 1.2) },
+			{ text: '−', action: () => this.#cy?.zoom(this.#cy.zoom() * 0.8) },
+			{ text: '⛶', action: () => this.#toggleFullscreen() },
 		];
 
-		buttons.forEach((btn) => controls.appendChild(this.#createButton(btn)));
+		buttons.forEach(({ text, action }) => {
+			const btn = document.createElement('button');
+			btn.textContent = text;
+			btn.className = 'button-secondary';
+			btn.style.cssText = `
+				padding: 8px 12px; background: #fffcf1; border: 1px solid #c0aa76;
+				border-radius: 4px; cursor: pointer; font-family: 'Noto Sans', sans-serif;
+				font-size: 0.9rem; color: #5d4a3a; transition: all 0.2s;
+			`;
+			btn.onclick = action;
+			controls.appendChild(btn);
+		});
+
 		controls.appendChild(this.#createLayoutSelect());
-
 		return controls;
-	}
-
-	#createButton({ text, title, action }) {
-		const button = document.createElement('button');
-		button.textContent = text;
-		button.title = title;
-		button.className = 'button-secondary';
-		button.style.cssText = `
-			padding: 8px 12px; background: #fffcf1; border: 1px solid #c0aa76;
-			border-radius: 4px; cursor: pointer; font-family: 'Noto Sans', sans-serif;
-			font-size: 0.9rem; color: #5d4a3a; transition: all 0.2s;
-		`;
-		button.addEventListener('click', action);
-		button.addEventListener('mouseenter', () => {
-			button.style.background = '#f8f4e3';
-			button.style.borderColor = '#8d6e63';
-		});
-		button.addEventListener('mouseleave', () => {
-			button.style.background = '#fffcf1';
-			button.style.borderColor = '#c0aa76';
-		});
-		return button;
 	}
 
 	#createLayoutSelect() {
 		const select = document.createElement('select');
-		select.title = 'Change Layout';
 		select.style.cssText = `
 			padding: 8px 12px; background: #fffcf1; border: 1px solid #c0aa76;
 			border-radius: 4px; cursor: pointer; font-family: 'Noto Sans', sans-serif;
@@ -381,11 +376,9 @@ class StoryHelperRelationships {
 
 		const layouts = [
 			{ value: 'cose', label: 'Force Directed' },
-			{ value: 'importance', label: 'By Importance' },
-			{ value: 'tension', label: 'Tension-Based' },
+			{ value: 'tension', label: 'Tension (Physics)' },
 			{ value: 'circle', label: 'Circle' },
 			{ value: 'concentric', label: 'Concentric' },
-			{ value: 'grid', label: 'Grid' },
 			{ value: 'breadthfirst', label: 'Hierarchy' },
 		];
 
@@ -412,84 +405,63 @@ class StoryHelperRelationships {
 			background-image: url('https://transparenttextures.com/patterns/little-pluses.png');
 			border: 2px solid #c0aa76; border-radius: 8px; padding: 15px;
 			max-width: min(320px, calc(100vw - 40px)); max-height: 40vh;
-			overflow-y: auto; display: none; z-index: 10;
+			overflow-y: auto; display: none; z-index: 20;
 			box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 			font-family: 'Noto Sans', sans-serif;
 		`;
 		return panel;
 	}
 
-	// Search functionality
+	// Search
 	#handleSearch(query) {
 		if (!this.#cy) return;
-
 		this.#cy.elements().removeClass('search-match search-hidden');
 
-		if (!query.trim()) {
-			return;
-		}
+		if (!query.trim()) return;
 
 		const lowerQuery = query.toLowerCase();
 		const matchedNodes = this.#cy.nodes().filter((node) => {
-			const label = node.data('label').toLowerCase();
-			return label.includes(lowerQuery);
+			return node.data('label').toLowerCase().includes(lowerQuery);
 		});
 
 		if (matchedNodes.length === 0) {
-			// No matches - show all dimmed
 			this.#cy.elements().addClass('search-hidden');
 			return;
 		}
 
-		// Highlight matched nodes and their connections
 		matchedNodes.addClass('search-match');
-		const connectedEdges = matchedNodes.connectedEdges();
-		const connectedNodes = connectedEdges.connectedNodes();
-
-		connectedEdges.addClass('search-match');
-		connectedNodes.addClass('search-match');
-
-		// Hide non-matching elements
+		matchedNodes.connectedEdges().addClass('search-match');
+		matchedNodes.connectedEdges().connectedNodes().addClass('search-match');
 		this.#cy.elements().not('.search-match').addClass('search-hidden');
 
-		// Focus on matched nodes
-		if (matchedNodes.length === 1) {
-			this.#cy.animate({
-				fit: { eles: matchedNodes.neighborhood().add(matchedNodes), padding: 50 },
-				duration: 500,
-			});
-		} else {
-			this.#cy.animate({
-				fit: { eles: matchedNodes, padding: 50 },
-				duration: 500,
-			});
-		}
+		this.#cy.animate({
+			fit: { eles: matchedNodes.neighborhood().add(matchedNodes), padding: 50 },
+			duration: 500,
+		});
 	}
 
-	// Cytoscape initialization
-	#initializeCytoscape(relationships, npcs) {
-		const elements = this.#buildCytoscapeElements(relationships, npcs);
+	// Cytoscape Logic
+	#initializeCytoscape(elements) {
+		if (this.#cy) this.#cy.destroy();
 
+		// eslint-disable-next-line no-undef
 		this.#cy = cytoscape({
 			container: this.#container,
-			elements: [...elements.nodes, ...elements.edges],
+			elements: [...(elements.nodes || []), ...(elements.edges || [])],
 			style: this.#getCytoscapeStyles(),
 			layout: this.#getLayoutConfig(this.#currentLayout),
 			minZoom: 0.3,
 			maxZoom: 3,
 			wheelSensitivity: 0.2,
-			autoungrabify: true,
+			autoungrabify: true, // Disable dragging
 			autounselectify: false,
 		});
 
 		this.#attachEventHandlers();
-		setTimeout(() => {
-			this.#cy.fit(null, 50);
-			this.#cy.center();
-		}, 100);
 	}
 
 	#getCytoscapeStyles() {
+		// RESTORED STYLES
 		return [
 			{
 				selector: 'node',
@@ -541,13 +513,6 @@ class StoryHelperRelationships {
 				},
 			},
 			{
-				selector: 'edge[bidirectional = true]',
-				style: {
-					'source-arrow-color': 'data(color)',
-					'source-arrow-shape': 'triangle',
-				},
-			},
-			{
 				selector: 'edge:selected',
 				style: {
 					width: 3,
@@ -563,7 +528,7 @@ class StoryHelperRelationships {
 			},
 			{
 				selector: '.dimmed',
-				style: { opacity: (node) => (node.isNode() ? 0.3 : 0.2) },
+				style: { opacity: 0.2 }, // Slightly less transparent than 0.1 for visibility
 			},
 			{
 				selector: '.search-match',
@@ -603,76 +568,41 @@ class StoryHelperRelationships {
 				coolingFactor: 0.95,
 				minTemp: 1.0,
 			},
-			importance: {
-				name: 'concentric',
-				fit: true,
-				padding: 50,
-				avoidOverlap: true,
-				concentric: (node) => node.degree() * 10, // More connected = inner circles
-				levelWidth: (nodes) => 3,
-				minNodeSpacing: 80,
-			},
 			tension: {
 				name: 'cose',
-				idealEdgeLength: (edge) => {
-					// Hostile relationships = longer edges (push apart)
-					return edge.data('isHostile') ? 500 : 200;
-				},
+				idealEdgeLength: (edge) => (edge.data('isHostile') ? 500 : 200),
 				nodeOverlap: 80,
 				refresh: 20,
 				fit: true,
 				padding: 80,
 				randomize: false,
-				nodeRepulsion: (node) => {
-					// More important nodes repel more
-					return 800000 + node.degree() * 200000;
-				},
-				edgeElasticity: (edge) => {
-					// Hostile relationships are less elastic (stay far)
-					return edge.data('isHostile') ? 32 : 100;
-				},
+				nodeRepulsion: (node) => 800000 + node.degree() * 200000,
+				edgeElasticity: (edge) => (edge.data('isHostile') ? 32 : 100),
 				gravity: 40,
 				numIter: 1500,
 			},
 			circle: { name: 'circle', fit: true, padding: 30, avoidOverlap: true },
-			concentric: {
-				name: 'concentric',
-				fit: true,
-				padding: 30,
-				concentric: (node) => node.degree(),
-				levelWidth: () => 2,
-			},
-			grid: {
-				name: 'grid',
-				fit: true,
-				padding: 30,
-				avoidOverlap: true,
-				avoidOverlapPadding: 10,
-			},
-			breadthfirst: {
-				name: 'breadthfirst',
-				fit: true,
-				padding: 30,
-				directed: true,
-				spacingFactor: 1.5,
-			},
+			concentric: { name: 'concentric', fit: true, padding: 30, concentric: (n) => n.degree(), levelWidth: () => 2 },
+			breadthfirst: { name: 'breadthfirst', fit: true, padding: 30, directed: true, spacingFactor: 1.5 },
 		};
 		return configs[name] || configs.cose;
 	}
 
-	// Event handlers
 	#attachEventHandlers() {
+		// Node click: Show info + Highlight connections
 		this.#cy.on('tap', 'node', (evt) => {
-			this.#showNodeInfo(evt.target);
-			this.#highlightConnections(evt.target);
+			const node = evt.target;
+			this.#showNodeInfo(node);
+			this.#highlightConnections(node);
 		});
 
+		// Edge click: Show edge info
 		this.#cy.on('tap', 'edge', (evt) => this.#showEdgeInfo(evt.target));
 
+		// Bg click: Reset
 		this.#cy.on('tap', (evt) => {
 			if (evt.target === this.#cy) {
-				this.#infoPanel.style.display = 'none';
-				this.#clearHighlights();
+				this.#resetView();
 			}
 		});
 
@@ -684,16 +614,13 @@ class StoryHelperRelationships {
 		this.#cy.elements().removeClass('highlighted dimmed');
 		const connectedEdges = node.connectedEdges();
 		const connectedNodes = connectedEdges.connectedNodes();
+		// Dim everything that ISN'T connected or the node itself
 		this.#cy.elements().not(connectedNodes).not(connectedEdges).not(node).addClass('dimmed');
 		connectedEdges.addClass('highlighted');
 	}
 
-	#clearHighlights() {
-		this.#cy.elements().removeClass('highlighted dimmed');
-	}
-
 	#showNodeInfo(node) {
-		const { id, label, degree } = node.data();
+		const { id, label } = node.data();
 		const edges = node.connectedEdges();
 
 		let html = `
@@ -715,7 +642,8 @@ class StoryHelperRelationships {
 				const isSource = data.source === id;
 				const isBidirectional = data.bidirectional;
 				const otherId = isSource ? data.target : data.source;
-				const otherLabel = this.#cy.getElementById(otherId).data('label');
+				const otherNode = this.#cy.getElementById(otherId);
+				const otherLabel = otherNode.data('label');
 
 				const arrow = isBidirectional ? '↔' : isSource ? '→' : '←';
 
@@ -767,14 +695,7 @@ class StoryHelperRelationships {
 				</div>
 				${
 					data.description
-						? `
-					<div>
-						<strong style="color: #5d4a3a;">Description:</strong>
-						<p style="margin: 4px 0 0 0; color: #6d4c41; line-height: 1.4;">
-							${data.description}
-						</p>
-					</div>
-				`
+						? `<div><p style="margin: 4px 0 0 0; color: #6d4c41; line-height: 1.4;">${data.description}</p></div>`
 						: ''
 				}
 			</div>
@@ -782,15 +703,12 @@ class StoryHelperRelationships {
 		this.#infoPanel.style.display = 'block';
 	}
 
-	// Control actions
 	#resetView() {
 		if (!this.#cy) return;
-		this.#cy.fit(null, 50);
-		this.#cy.zoom(1);
-		this.#clearHighlights();
+		this.#cy.elements().removeClass('highlighted dimmed search-match search-hidden');
 		this.#infoPanel.style.display = 'none';
 		this.#searchInput.value = '';
-		this.#cy.elements().removeClass('search-match search-hidden');
+		// this.#cy.fit();
 	}
 
 	#toggleFullscreen() {
@@ -821,9 +739,8 @@ class StoryHelperRelationships {
 		document.body.style.overflow = 'hidden';
 	}
 
-	#applyLayout(layoutName = 'cose') {
+	#applyLayout(name) {
 		if (!this.#cy) return;
-		const config = this.#getLayoutConfig(layoutName);
-		this.#cy.layout(config).run();
+		this.#cy.layout(this.#getLayoutConfig(name)).run();
 	}
 }

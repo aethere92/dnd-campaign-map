@@ -1,3 +1,5 @@
+// --- START OF FILE StoryBase.js ---
+
 class StoryHelperBase {
 	#campaign;
 	#placeholderProcessor;
@@ -5,8 +7,6 @@ class StoryHelperBase {
 	#listPanel = null;
 	#storyUrlManager;
 	#supabaseClient;
-	#items = null;
-	#isLoading = false;
 
 	constructor(campaign, placeholderProcessor) {
 		this.#campaign = campaign;
@@ -15,32 +15,27 @@ class StoryHelperBase {
 		this.#supabaseClient = SupabaseClient.getInstance();
 	}
 
-	// Abstract methods - must be implemented by subclasses
-	getItems() {
+	// Abstract methods
+	async getItems() {
 		throw new Error('getItems() must be implemented by subclass');
 	}
-
 	getViewTitle() {
 		throw new Error('getViewTitle() must be implemented by subclass');
 	}
-
 	groupItems(items) {
 		throw new Error('groupItems() must be implemented by subclass');
 	}
-
 	createDetailContent(item) {
 		throw new Error('createDetailContent() must be implemented by subclass');
 	}
-
 	getItemId(item) {
-		throw new Error('getItemId() must be implemented by subclass');
-	}
-
+		return item.id;
+	} // Default to UUID
 	getUrlParam() {
 		throw new Error('getUrlParam() must be implemented by subclass');
 	}
 
-	// URL management methods
+	// URL management
 	getTargetFromUrl() {
 		return this.#storyUrlManager.getParam(this.getUrlParam());
 	}
@@ -66,44 +61,37 @@ class StoryHelperBase {
 	}
 
 	findItemById(items, itemId) {
-		return items.find((item) => {
-			const id = this.getItemId(item);
-			return id === itemId || String(id) === String(itemId);
-		});
+		if (!itemId) return null;
+		return items.find((item) => String(this.getItemId(item)) === String(itemId));
 	}
 
-	// Main render method - now async
+	// Main render method
 	async render(contentArea) {
-		// Show loading state
 		contentArea.innerHTML = `
-			<div class="story-view-container">
-				<div class="view-header"><h2>${this.getViewTitle()}</h2></div>
-				<div class="loading-container">
-					<div class="loading-spinner"></div>
-					<p>Loading ${this.getViewTitle().toLowerCase()}...</p>
-				</div>
-			</div>
-		`;
+            <div class="story-view-container">
+                <div class="view-header"><h2>${this.getViewTitle()}</h2></div>
+                <div class="loading-container">
+                    <div class="loading-spinner"></div>
+                    <p>Loading ${this.getViewTitle().toLowerCase()}...</p>
+                </div>
+            </div>
+        `;
 
 		try {
 			const items = await this.getItems();
 
 			if (!items?.length) {
 				contentArea.innerHTML = `
-					<div class="story-view-container">
-						<div class="view-header"><h2>${this.getViewTitle()}</h2></div>
-						<div class="no-content">No ${this.getViewTitle().toLowerCase()} available for this campaign.</div>
-					</div>
-				`;
+                    <div class="story-view-container">
+                        <div class="view-header"><h2>${this.getViewTitle()}</h2></div>
+                        <div class="no-content">No ${this.getViewTitle().toLowerCase()} available.</div>
+                    </div>
+                `;
 				return;
 			}
 
 			const container = document.createElement('div');
 			container.className = 'story-view-container';
-
-			const header = document.createElement('div');
-			header.className = 'view-header';
-			header.innerHTML = `<h2>${this.getViewTitle()}</h2>`;
 
 			const body = document.createElement('div');
 			body.className = 'view-body';
@@ -119,45 +107,44 @@ class StoryHelperBase {
 			let initialItem = items[0];
 
 			if (targetId) {
-				const decodedId = decodeURIComponent(targetId);
-				const foundItem = this.findItemById(items, decodedId);
-				if (foundItem) {
-					initialItem = foundItem;
-				}
+				const foundItem = this.findItemById(items, targetId);
+				if (foundItem) initialItem = foundItem;
 			}
 
 			const groupedItems = this.groupItems(items);
 			this.renderGroups(listPanel, groupedItems, detailPanel);
-			this.selectItem(initialItem, detailPanel);
 
-			if (targetId && initialItem !== items[0]) {
+			// Initial Select
+			if (initialItem) {
+				this.selectItem(initialItem, detailPanel);
+			}
+
+			if (targetId && initialItem) {
 				setTimeout(() => {
-					const targetElement = listPanel.querySelector(`[data-item-id="${this.getItemId(initialItem)}"]`);
-					targetElement?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+					const el = listPanel.querySelector(`[data-item-id="${this.getItemId(initialItem)}"]`);
+					el?.scrollIntoView({ behavior: 'smooth', block: 'center' });
 				}, 100);
 			}
 
 			body.append(listPanel, detailPanel);
-			container.append(body);
+			container.appendChild(body);
 			contentArea.innerHTML = '';
 			contentArea.appendChild(container);
 		} catch (error) {
 			console.error('Error rendering view:', error);
 			contentArea.innerHTML = `
-				<div class="story-view-container">
-					<div class="view-header"><h2>${this.getViewTitle()}</h2></div>
-					<div class="error-message">
-						<p><strong>Error loading ${this.getViewTitle().toLowerCase()}</strong></p>
-						<p class="error-details">${error.message}</p>
-					</div>
-				</div>
-			`;
+                <div class="story-view-container">
+                    <div class="view-header"><h2>${this.getViewTitle()}</h2></div>
+                    <div class="error-message">Error loading content: ${error.message}</div>
+                </div>
+            `;
 		}
 	}
 
 	renderGroups(container, groupedItems, detailPanel) {
-		Object.entries(groupedItems).forEach(([groupName, items]) => {
-			this.renderGroup(container, groupName, items, detailPanel);
+		const sortedKeys = Object.keys(groupedItems).sort();
+		sortedKeys.forEach((groupName) => {
+			this.renderGroup(container, groupName, groupedItems[groupName], detailPanel);
 		});
 	}
 
@@ -185,6 +172,7 @@ class StoryHelperBase {
 		listItem.className = 'view-list-item';
 		const itemId = this.getItemId(item);
 		listItem.dataset.itemId = itemId;
+		listItem.id = `list-item-${itemId}`; // For anchors
 
 		const content = this.createListItemContent(item);
 		listItem.appendChild(content);
@@ -206,13 +194,11 @@ class StoryHelperBase {
 	selectItem(item, detailPanel) {
 		const itemId = this.getItemId(item);
 		this.#selectedItemId = itemId;
-
 		this.updateUrl(itemId);
 
 		if (this.#listPanel) {
-			const allItems = this.#listPanel.querySelectorAll('.view-list-item');
-			allItems.forEach((listItem) => {
-				listItem.classList.toggle('selected', listItem.dataset.itemId === itemId);
+			this.#listPanel.querySelectorAll('.view-list-item').forEach((el) => {
+				el.classList.toggle('selected', el.dataset.itemId === String(itemId));
 			});
 		}
 
@@ -221,19 +207,24 @@ class StoryHelperBase {
 		detailPanel.appendChild(detailContent);
 	}
 
+	// Shared UI Builders
 	createSection(title, content, contentClass = '') {
 		const section = StoryDOMBuilder.createSection(title, content, contentClass);
-		this.#placeholderProcessor.processEntityReferences(section.querySelector('.view-section-content'));
+		if (section.querySelector('.view-section-content')) {
+			this.#placeholderProcessor.processEntityReferences(section.querySelector('.view-section-content'));
+		}
 		return section;
 	}
 
 	createListSection(title, items) {
+		if (!items || items.length === 0) return document.createDocumentFragment();
 		const ul = StoryDOMBuilder.createList(items, 'view-list');
 		this.#placeholderProcessor.processEntityReferences(ul);
 		return this.createSection(title, ul);
 	}
 
 	createEncountersSection(encounters) {
+		if (!encounters || encounters.length === 0) return document.createDocumentFragment();
 		const content = document.createElement('div');
 		content.className = 'view-encounters';
 
@@ -241,12 +232,10 @@ class StoryHelperBase {
 			const card = document.createElement('div');
 			card.className = 'view-card';
 
-			if (encounter.session) {
-				const sessionLabel = document.createElement('div');
-				sessionLabel.className = 'view-card-label';
-				sessionLabel.textContent = `Session ${encounter.session}`;
-				card.appendChild(sessionLabel);
-			}
+			const header = document.createElement('div');
+			header.className = 'view-card-header';
+			header.textContent = encounter.name || `Encounter`;
+			card.appendChild(header);
 
 			if (encounter.description) {
 				const desc = document.createElement('p');
@@ -255,66 +244,26 @@ class StoryHelperBase {
 				this.#placeholderProcessor.processEntityReferences(desc);
 				card.appendChild(desc);
 			}
-
 			content.appendChild(card);
 		});
 
-		return this.createSection('Party Encounters', content);
-	}
-
-	createLinksSection(links) {
-		const content = document.createElement('ul');
-		content.className = 'view-links';
-
-		links.forEach((link) => {
-			const card = document.createElement('li');
-			card.className = 'view-link';
-
-			const linkContent = document.createElement('a');
-			linkContent.className = 'view-link-anchor';
-			linkContent.textContent = link.title;
-			linkContent.href = link.link;
-			linkContent.target = '_blank';
-
-			card.append(linkContent);
-			content.append(card);
-		});
-
-		return this.createSection('Involved in', content);
+		return this.createSection('Encounters', content);
 	}
 
 	formatName(name) {
 		return StoryDOMBuilder.formatName(name);
 	}
-
 	createMetaTags(metaData) {
 		return StoryDOMBuilder.createMetaTags(metaData);
 	}
 
-	processEntityReference(entity) {
-		const processedText = entity.replace(
-			/\[ENTITY:([\w-]+):([^:\]]+)(?::([^\]]+))?\]/gi,
-			(match, type, name, givenName) => {
-				const cleanType = type.toLowerCase().trim();
-				const cleanName = name.trim();
-
-				if (!cleanType || !cleanName) return match;
-
-				const displayText = givenName ? givenName.trim() : cleanName;
-				return displayText;
-			}
-		);
-		return processedText;
-	}
-
+	// Accessors
 	get campaign() {
 		return this.#campaign;
 	}
-
 	get placeholderProcessor() {
 		return this.#placeholderProcessor;
 	}
-
 	get supabaseClient() {
 		return this.#supabaseClient;
 	}

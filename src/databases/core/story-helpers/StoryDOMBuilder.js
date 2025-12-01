@@ -1,182 +1,81 @@
-// Reusable DOM component builder
+// --- START OF FILE StoryDOMBuilder.js ---
+
 class StoryDOMBuilder {
-	// Create a toggleable section header
-	static createToggleHeader(title, contentElement, className = '', isExpanded = true) {
+	static createToggleHeader(title, contentElement, className = '') {
 		const header = document.createElement('div');
-		header.className = `view-group-header ${className}`.trim();
-
-		const titleElement = document.createElement('span');
-		titleElement.className = 'view-group-header-title';
-		titleElement.textContent = title;
-
-		const toggleButton = document.createElement('button');
-		toggleButton.className = 'view-group-toggle';
-		toggleButton.setAttribute('aria-expanded', isExpanded);
-		toggleButton.setAttribute('aria-label', `Toggle ${title} group`);
-		toggleButton.innerHTML = `<span class="toggle-icon">${isExpanded ? '▼' : '▶'}</span>`;
-
-		const toggle = () => {
-			const currentlyExpanded = contentElement.style.display !== 'none';
-			contentElement.style.display = currentlyExpanded ? 'none' : 'block';
-			toggleButton.setAttribute('aria-expanded', !currentlyExpanded);
-			toggleButton.querySelector('.toggle-icon').textContent = currentlyExpanded ? '▶' : '▼';
+		header.className = `view-group-header ${className}`;
+		header.innerHTML = `
+            <span class="title">${title}</span>
+            <span class="icon">▼</span>
+        `;
+		header.onclick = () => {
+			const isHidden = contentElement.style.display === 'none';
+			contentElement.style.display = isHidden ? 'block' : 'none';
+			header.querySelector('.icon').textContent = isHidden ? '▼' : '▶';
 		};
-
-		toggleButton.addEventListener('click', (e) => {
-			e.stopPropagation();
-			toggle();
-		});
-
-		titleElement.addEventListener('click', (e) => {
-			e.stopPropagation();
-			toggle();
-		});
-
-		header.append(titleElement, toggleButton);
 		return header;
 	}
 
-	// Create a toggleable content section
-	static createToggleableContent(content, toggleClass, descriptionClass, buttonText = 'Show') {
-		const toggle = document.createElement('button');
-		toggle.className = toggleClass;
-		toggle.textContent = buttonText;
+	static createSection(title, content, className = '') {
+		const div = document.createElement('div');
+		div.className = `view-section ${className}`;
 
-		const description = document.createElement('div');
-		description.className = descriptionClass;
-		description.innerHTML = content;
-		description.style.display = 'none';
+		const h3 = document.createElement('div');
+		h3.className = 'view-section-header';
+		h3.textContent = title;
 
-		toggle.addEventListener('click', () => {
-			const isVisible = description.style.display !== 'none';
-			description.style.display = isVisible ? 'none' : 'block';
-			toggle.textContent = isVisible ? buttonText : 'Hide';
-		});
+		const body = document.createElement('div');
+		body.className = 'view-section-content';
 
-		return { toggle, description };
+		if (typeof content === 'string') body.innerHTML = content;
+		else body.appendChild(content);
+
+		div.append(h3, body);
+		return div;
 	}
 
-	// Create a "Toggle All" button for sections
-	static createToggleAllButton(sectionSelector, descriptionSelector, toggleSelector) {
-		const button = document.createElement('button');
-		button.className = 'character-section__toggle-all';
-		button.textContent = 'Toggle All';
-		
-		button.addEventListener('click', (e) => {
-			const section = e.target.closest(sectionSelector);
-			const descriptions = section.querySelectorAll(descriptionSelector);
-			const anyVisible = Array.from(descriptions).some(d => d.style.display !== 'none');
-
-			descriptions.forEach(desc => desc.style.display = anyVisible ? 'none' : 'block');
-			section.querySelectorAll(toggleSelector).forEach(btn => {
-				btn.textContent = anyVisible ? 'Show' : 'Hide';
-			});
-		});
-
-		return button;
-	}
-
-	// Create meta tags
-	static createMetaTags(metaData) {
-		const meta = document.createElement('div');
-		meta.className = 'view-detail-meta';
-
-		metaData.forEach(({ className, text }) => {
-			if (text) {
-				const span = document.createElement('span');
-				span.className = `view-meta-tag ${className}`;
-				span.textContent = text;
-				meta.appendChild(span);
-			}
-		});
-
-		return meta;
-	}
-
-	// Create a list section
 	static createList(items, className = 'view-list') {
 		const ul = document.createElement('ul');
 		ul.className = className;
-
-		items.forEach(item => {
+		items.forEach((item) => {
 			const li = document.createElement('li');
-			li.textContent = typeof item === 'string' ? item : item.name || item.title;
+			li.textContent = typeof item === 'object' ? item.name || item.title : item;
 			ul.appendChild(li);
 		});
-
 		return ul;
 	}
 
-	// Create a section with header and content
-	static createSection(title, content, contentClass = '') {
-		const section = document.createElement('div');
-		section.className = 'view-section';
-
-		const header = document.createElement('div');
-		header.className = 'view-section-header';
-		header.textContent = title;
-
-		const contentDiv = document.createElement('div');
-		contentDiv.className = `view-section-content ${contentClass}`.trim();
-
-		if (typeof content === 'string') {
-			contentDiv.innerHTML = content;
-		} else {
-			contentDiv.appendChild(content);
-		}
-
-		section.append(header, contentDiv);
-		return section;
+	static formatName(str) {
+		if (!str) return '';
+		return str.replace(/-|_/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase());
 	}
 
-	// Format type names (e.g., "some-type" -> "Some Type")
-	static formatName(name) {
-		return name
-			.split(/[-_]/)
-			.map(word => word.charAt(0).toUpperCase() + word.slice(1))
-			.join(' ');
+	static createMetaTags(tags) {
+		const div = document.createElement('div');
+		div.className = 'view-meta-tags';
+		tags.forEach((tag) => {
+			if (tag.text) {
+				const span = document.createElement('span');
+				span.className = `tag ${tag.className || ''}`;
+				span.textContent = tag.text;
+				div.appendChild(span);
+			}
+		});
+		return div;
 	}
 
-	// Create ability scores display
 	static createAbilityScores(scores) {
-		if (!scores || !Array.isArray(scores)) return null;
-
 		const grid = document.createElement('div');
 		grid.className = 'character-abilities__grid';
-
-		scores.forEach(ability => {
-			const item = document.createElement('div');
-			item.className = 'character-abilities__item';
-			item.innerHTML = `
-				<div class="character-abilities__name">${ability.abbr.toUpperCase()}</div>
-				<div class="character-abilities__value">${ability.value}</div>
-				<div class="character-abilities__modifier">(${ability.score})</div>
-			`;
-			grid.appendChild(item);
+		scores.forEach((s) => {
+			grid.innerHTML += `
+                <div class="ability">
+                    <span class="name">${s.abbr}</span>
+                    <span class="score">${s.value}</span>
+                    <span class="mod">(${s.modifier >= 0 ? '+' : ''}${s.modifier})</span>
+                </div>
+            `;
 		});
-
 		return grid;
-	}
-
-	// Create header with toggleable row
-	static createToggleableHeaderRow(title, items, descriptionSelector, toggleSelector) {
-		const headerRow = document.createElement('div');
-		headerRow.className = 'character-section__header-row';
-
-		const header = document.createElement('h3');
-		header.className = 'character-section__header';
-		header.textContent = title;
-		headerRow.appendChild(header);
-
-		if (items.some(item => item.description)) {
-			const toggleAll = this.createToggleAllButton(
-				'.character-section',
-				descriptionSelector,
-				toggleSelector
-			);
-			headerRow.appendChild(toggleAll);
-		}
-
-		return headerRow;
 	}
 }

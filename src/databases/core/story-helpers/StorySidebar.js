@@ -1,381 +1,162 @@
+// --- START OF FILE StorySidebar.js ---
+
 class StoryHelperSidebar {
-	#getCampaign;
+	#getCampaign; // Metadata only
 	#getCurrentView;
 	#getCurrentSessionId;
-	#getSelectedCharacterName;
-	#onToggle;
-	#onCharacterClick;
-	#onSessionClick;
-	#onTimelineClick;
-	#onQuestsClick;
-	#onLocationsClick;
-	#onNPCsClick;
-	#onFactionsClick;
-	#onEncountersClick;
-	#onMapClick;
-	#onRelationshipsClick;
+	#getSelectedCharacterId;
+	#callbacks;
 	#searchManager;
 	#supabaseClient;
-
-	// Sidebar section toggle states
-	#sectionStates = {
-		characters: true,
-		campaignTools: true,
-		sessions: true,
-	};
 
 	constructor(
 		getCampaign,
 		getCurrentView,
 		getCurrentSessionId,
-		getSelectedCharacterName,
+		getSelectedCharacterId,
 		onToggle,
-		onCharacterClick,
-		onSessionClick,
-		onTimelineClick,
-		onQuestsClick,
-		onLocationsClick,
-		onNPCsClick,
-		onFactionsClick,
-		onEncountersClick,
-		onMapClick,
-		onRelationshipsClick,
-		searchManager
+		onCharClick,
+		onSessClick,
+		onTimeline,
+		onQuests,
+		onLocs,
+		onNPCs,
+		onFactions,
+		onEncounters,
+		onMap,
+		onRels,
+		searchManager,
+		supabaseClient
 	) {
 		this.#getCampaign = getCampaign;
 		this.#getCurrentView = getCurrentView;
 		this.#getCurrentSessionId = getCurrentSessionId;
-		this.#getSelectedCharacterName = getSelectedCharacterName;
-		this.#onToggle = onToggle;
-		this.#onCharacterClick = onCharacterClick;
-		this.#onSessionClick = onSessionClick;
-		this.#onTimelineClick = onTimelineClick;
-		this.#onQuestsClick = onQuestsClick;
-		this.#onLocationsClick = onLocationsClick;
-		this.#onNPCsClick = onNPCsClick;
-		this.#onFactionsClick = onFactionsClick;
-		this.#onEncountersClick = onEncountersClick;
-		this.#onMapClick = onMapClick;
+		this.#getSelectedCharacterId = getSelectedCharacterId;
+		this.#callbacks = {
+			toggle: onToggle,
+			character: onCharClick,
+			session: onSessClick,
+			timeline: onTimeline,
+			quests: onQuests,
+			locations: onLocs,
+			npcs: onNPCs,
+			factions: onFactions,
+			encounters: onEncounters,
+			map: onMap,
+			relationships: onRels,
+		};
 		this.#searchManager = searchManager;
-		this.#onRelationshipsClick = onRelationshipsClick;
-		this.#supabaseClient = SupabaseClient.getInstance();
-
-		// Load saved section states
-		this.#loadSectionStates();
+		this.#supabaseClient = supabaseClient || SupabaseClient.getInstance();
 	}
 
-	async createSidebar(isCollapsed) {
+	async createSidebar(isCollapsed, campaignId) {
 		const sidebar = document.createElement('div');
 		sidebar.className = 'story-sidebar';
 
-		const campaignName = this.#createCampaignHeader();
+		const campaign = this.#getCampaign();
+		sidebar.innerHTML = `<div class="story-campaign-name"><h3>${campaign.name}</h3></div>`;
 
-		sidebar.append(
-			campaignName,
-			this.#createSearchButton(),
-			this.#createCharacterSection(),
-			this.#createCampaignToolsSection(),
-			await this.#createSessionSection()
-		);
+		// Search
+		const searchBtn = document.createElement('button');
+		searchBtn.className = 'search-trigger-button';
+		searchBtn.textContent = '🔍 Search';
+		searchBtn.onclick = () => this.#searchManager.openSearch();
+		sidebar.appendChild(searchBtn);
+
+		// Sections
+		sidebar.appendChild(await this.#createCharacterSection(campaignId));
+		sidebar.appendChild(this.#createToolsSection());
+		sidebar.appendChild(await this.#createSessionSection(campaignId));
 
 		return sidebar;
 	}
 
-	#createCampaignHeader() {
-		const campaign = this.#getCampaign();
-		const header = document.createElement('div');
-		header.className = 'story-campaign-name';
-		header.innerHTML = `<h3>${campaign.metadata?.name || 'Unnamed Campaign'}</h3>`;
-		return header;
-	}
-
-	#createSearchButton() {
-		const button = document.createElement('button');
-		button.className = 'search-trigger-button';
-		button.innerHTML = '🔍 Search';
-		button.title = 'Search (Ctrl+K)';
-
-		button.addEventListener('click', () => {
-			this.#searchManager.openSearch();
-		});
-
-		return button;
-	}
-
-	#createCharacterSection() {
-		const campaign = this.#getCampaign();
-		const characters = campaign.metadata?.characters?.filter((char) => char?.is_included);
-
-		if (!characters?.length) {
-			return document.createDocumentFragment();
-		}
-
-		const section = document.createElement('div');
-		section.className = 'story-sidebar-section';
-
-		const header = this.#createSectionHeader('Characters', 'characters', this.#sectionStates.characters);
-
-		const content = document.createElement('div');
-		content.className = 'story-sidebar-section-content';
-		content.style.display = this.#sectionStates.characters ? 'block' : 'none';
-
+	async #createCharacterSection(campaignId) {
+		const section = this.#createSectionBase('Characters');
 		const list = document.createElement('div');
 		list.className = 'story-character-list';
 
-		characters.forEach((character) => {
-			const card = this.#createCharacterCard(character);
+		const chars = await this.#supabaseClient.getCharacters(campaignId);
+
+		chars.forEach((c) => {
+			const card = document.createElement('div');
+			card.className = 'story-character-card';
+			if (this.#getCurrentView() === 'character' && this.#getSelectedCharacterId() === c.id) {
+				card.classList.add('active');
+			}
+			card.innerHTML = `
+                <div class="character-avatar"><img src="${c.icon || 'default.png'}"></div>
+                <div class="character-info"><span>${c.name}</span></div>
+            `;
+			card.onclick = () => this.#callbacks.character(c.id);
 			list.appendChild(card);
 		});
 
-		content.appendChild(list);
-		section.append(header, content);
+		section.querySelector('.content').appendChild(list);
 		return section;
 	}
 
-	#createCharacterCard(character) {
-		const card = document.createElement('div');
-		card.className = 'story-character-card';
+	#createToolsSection() {
+		const section = this.#createSectionBase('Campaign Tools');
+		const list = document.createElement('div');
+		list.className = 'story-campaign-tools-list';
 
-		if (this.#getCurrentView() === 'character' && this.#getSelectedCharacterName() === character.name) {
-			card.classList.add('active');
-		}
+		const tools = [
+			{ label: 'Timeline', cb: this.#callbacks.timeline, icon: '⏳' },
+			{ label: 'Quests', cb: this.#callbacks.quests, icon: '📜' },
+			{ label: 'Locations', cb: this.#callbacks.locations, icon: '📍' },
+			{ label: 'NPCs', cb: this.#callbacks.npcs, icon: '👤' },
+			{ label: 'Factions', cb: this.#callbacks.factions, icon: '🛡️' },
+			{ label: 'Encounters', cb: this.#callbacks.encounters, icon: '⚔️' },
+			{ label: 'Map', cb: this.#callbacks.map, icon: '🗺️' },
+			{ label: 'Relationships', cb: this.#callbacks.relationships, icon: '🕸️' },
+		];
 
-		card.innerHTML = `
-			<div class="character-avatar">
-				<img src="${character.icon}" alt="${character.name}" />
-			</div>
-			<div class="character-info">
-				<h3>${character.name}</h3>
-			</div>
-		`;
-		card.title = `Lvl ${character.level} ${character.race} ${character.class}`;
-		card.addEventListener('click', () => this.#onCharacterClick(character.name));
-
-		return card;
-	}
-
-	#createCampaignToolsSection() {
-		const section = document.createElement('div');
-		section.className = 'story-sidebar-section';
-
-		const header = this.#createSectionHeader('Campaign', 'campaignTools', this.#sectionStates.campaignTools);
-
-		const content = document.createElement('div');
-		content.className = 'story-sidebar-section-content';
-		content.style.display = this.#sectionStates.campaignTools ? 'block' : 'none';
-
-		const toolsList = document.createElement('div');
-		toolsList.className = 'story-campaign-tools-list';
-
-		// Timeline button
-		const timelineBtn = this.#createToolButton('⏳ Timeline', 'timeline');
-		toolsList.appendChild(timelineBtn);
-
-		// Quests button
-		const campaign = this.#getCampaign();
-		if (campaign?.quests?.length) {
-			const questsBtn = this.#createToolButton('📜 Quests', 'quests');
-			toolsList.appendChild(questsBtn);
-		}
-
-		// Locations button
-		if (campaign?.locations?.length) {
-			const locationsBtn = this.#createToolButton('📍 Locations', 'locations');
-			toolsList.appendChild(locationsBtn);
-		}
-
-		// NPCs button
-		if (campaign?.npcs?.length) {
-			const npcsBtn = this.#createToolButton('🧌 NPCs', 'npcs');
-			toolsList.appendChild(npcsBtn);
-		}
-
-		// Factions button
-		if (campaign?.factions?.length) {
-			const factionsBtn = this.#createToolButton('🛡️ Factions', 'factions');
-			toolsList.appendChild(factionsBtn);
-		}
-
-		// Encounters button
-		if (campaign?.encounters?.length) {
-			const encountersBtn = this.#createToolButton('⚔️ Encounters', 'encounters');
-			toolsList.appendChild(encountersBtn);
-		}
-
-		// Map button (always show if campaign has map data)
-		if (campaign?.data) {
-			const mapBtn = this.#createToolButton('🗺️ Map', 'map');
-			toolsList.appendChild(mapBtn);
-		}
-
-		const relationshipsBtn = this.#createToolButton('🔗 Relationships', 'relationships');
-		toolsList.appendChild(relationshipsBtn);
-
-		content.appendChild(toolsList);
-		section.append(header, content);
-		return section;
-	}
-
-	#createToolButton(text, viewType) {
-		const button = document.createElement('button');
-		button.className = 'campaign-tool-button';
-		button.textContent = text;
-
-		if (this.#getCurrentView() === viewType) {
-			button.classList.add('active');
-		}
-
-		button.addEventListener('click', () => {
-			switch (viewType) {
-				case 'timeline':
-					this.#onTimelineClick();
-					break;
-				case 'quests':
-					this.#onQuestsClick();
-					break;
-				case 'locations':
-					this.#onLocationsClick();
-					break;
-				case 'npcs':
-					this.#onNPCsClick();
-					break;
-				case 'factions':
-					this.#onFactionsClick();
-					break;
-				case 'encounters':
-					this.#onEncountersClick();
-					break;
-				case 'map':
-					this.#onMapClick();
-					break;
-				case 'relationships':
-					this.#onRelationshipsClick();
-					break;
-			}
+		tools.forEach((t) => {
+			const btn = document.createElement('button');
+			btn.className = 'campaign-tool-button';
+			btn.innerHTML = `${t.icon} ${t.label}`;
+			btn.onclick = t.cb;
+			list.appendChild(btn);
 		});
 
-		return button;
-	}
-
-	async getSessions() {
-		const campaign = this.#getCampaign();
-		// Try Supabase first, fallback to campaign data
-		if (this.#supabaseClient?.isReady()) {
-			try {
-				const sessions = await Promise.race([
-					this.#supabaseClient.fetchCampaignSessions(campaign.id),
-					new Promise((_, reject) => setTimeout(() => reject(new Error('Supabase timeout')), 1000)),
-				]);
-				if (sessions && sessions.length > 0) {
-					return sessions;
-				}
-			} catch (error) {
-				console.warn('Failed to fetch sessions from Supabase, using local data:', error);
-			}
-		}
-
-		// Fallback to local data
-		return campaign?.recaps || [];
-	}
-
-	async #createSessionSection() {
-		const campaign = this.#getCampaign();
-		const recaps = await this.getSessions();
-
-		const section = document.createElement('div');
-		section.className = 'story-sidebar-section';
-
-		const header = this.#createSectionHeader('Sessions', 'sessions', this.#sectionStates.sessions);
-
-		const content = document.createElement('div');
-		content.className = 'story-sidebar-section-content';
-		content.style.display = this.#sectionStates.sessions ? 'block' : 'none';
-
-		if (!recaps?.length) {
-			const noSessions = document.createElement('div');
-			noSessions.className = 'no-sessions';
-			noSessions.textContent = 'No sessions available';
-			content.appendChild(noSessions);
-		} else {
-			const list = this.#createSessionList(recaps);
-			content.appendChild(list);
-		}
-
-		section.append(header, content);
+		section.querySelector('.content').appendChild(list);
 		return section;
 	}
 
-	#createSessionList(recaps) {
+	async #createSessionSection(campaignId) {
+		const section = this.#createSectionBase('Sessions');
 		const list = document.createElement('div');
 		list.className = 'story-session-list';
 
-		recaps.forEach((session) => {
+		const sessions = await this.#supabaseClient.getSessionList(campaignId);
+
+		if (sessions.length === 0) {
+			list.innerHTML = '<div class="no-content">No sessions.</div>';
+		}
+
+		sessions.forEach((s) => {
 			const item = document.createElement('div');
 			item.className = 'story-session-item';
-
-			if (this.#getCurrentView() === 'session' && session.id === this.#getCurrentSessionId()) {
+			if (this.#getCurrentView() === 'session' && this.#getCurrentSessionId() === s.id) {
 				item.classList.add('active');
 			}
-
-			item.innerHTML = `
-				<h3>${session.title}</h3>
-				<div class="session-date">${session.date || ''}</div>
-			`;
-
-			item.addEventListener('click', () => this.#onSessionClick(session.id));
-
+			item.innerHTML = `<h3>${s.title}</h3><span class="date">${s.session_date || ''}</span>`;
+			item.onclick = () => this.#callbacks.session(s.id);
 			list.appendChild(item);
 		});
 
-		return list;
+		section.querySelector('.content').appendChild(list);
+		return section;
 	}
 
-	#createSectionHeader(title, sectionKey, isExpanded) {
-		const header = document.createElement('div');
-		header.className = 'story-sidebar-section-header';
-
-		const titleElement = document.createElement('h2');
-		titleElement.textContent = title;
-
-		const toggleButton = document.createElement('button');
-		toggleButton.className = 'sidebar-section-toggle';
-		toggleButton.setAttribute('aria-expanded', isExpanded);
-		toggleButton.innerHTML = `<span class="toggle-icon">${isExpanded ? '▼' : '▶'}</span>`;
-
-		toggleButton.addEventListener('click', () => {
-			const section = header.parentElement;
-			const content = section.querySelector('.story-sidebar-section-content');
-			const isCurrentlyExpanded = content.style.display !== 'none';
-
-			content.style.display = isCurrentlyExpanded ? 'none' : 'block';
-			toggleButton.setAttribute('aria-expanded', !isCurrentlyExpanded);
-			toggleButton.querySelector('.toggle-icon').textContent = isCurrentlyExpanded ? '▶' : '▼';
-
-			this.#sectionStates[sectionKey] = !isCurrentlyExpanded;
-			this.#saveSectionStates();
-		});
-
-		header.append(titleElement, toggleButton);
-		return header;
-	}
-
-	#loadSectionStates() {
-		const saved = localStorage.getItem('story-sidebar-sections');
-		if (saved) {
-			try {
-				const parsed = JSON.parse(saved);
-				this.#sectionStates = { ...this.#sectionStates, ...parsed };
-			} catch (e) {
-				console.warn('Failed to load sidebar section states:', e);
-			}
-		}
-	}
-
-	#saveSectionStates() {
-		try {
-			localStorage.setItem('story-sidebar-sections', JSON.stringify(this.#sectionStates));
-		} catch (e) {
-			console.warn('Failed to save sidebar section states:', e);
-		}
+	#createSectionBase(title) {
+		const div = document.createElement('div');
+		div.className = 'story-sidebar-section';
+		div.innerHTML = `
+            <div class="story-sidebar-section-header"><h2>${title}</h2></div>
+            <div class="story-sidebar-section-content content"></div>
+        `;
+		return div;
 	}
 }

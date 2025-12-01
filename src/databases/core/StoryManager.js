@@ -1,13 +1,20 @@
+// --- START OF FILE StoryManager.js ---
+
 class StoryManager {
 	#rootElement;
-	#campaign;
-	#currentSessionId;
-	#currentView = StoryURLManager.VIEW_TYPES.SESSION;
-	#selectedCharacterName = null;
-	#isSidebarCollapsed = false;
+	#supabase;
 	#storyUrlManager;
 
-	// Helper instances
+	// State
+	#campaignId;
+	#campaignData;
+	#currentSessionId;
+	#currentView;
+	#selectedCharacterId;
+	#currentItemId;
+	#isSidebarCollapsed = false;
+
+	// Helpers
 	#contentRenderer;
 	#sidebarManager;
 	#tooltipManager;
@@ -16,6 +23,10 @@ class StoryManager {
 	#searchManager;
 	#relationshipsRenderer;
 
+	// External callbacks
+	campaignManager;
+	showCampaignSelection;
+
 	constructor(elementId, options = {}) {
 		this.#rootElement = document.getElementById(elementId);
 		if (!this.#rootElement) {
@@ -23,48 +34,89 @@ class StoryManager {
 			return;
 		}
 
+		this.#supabase = SupabaseClient.getInstance();
 		this.#storyUrlManager = new StoryURLManager();
-		this.#initializeHelpers(options);
-		this.#loadSavedState();
+		this.#campaignId = options.campaignId;
 
-		this.updateCampaign(
-			options.campaignData,
-			options.initialSessionId,
-			options.initialCharacterName,
-			options.initialViewType
-		);
+		this.#loadSavedState();
 	}
 
-	#initializeHelpers(options) {
-		this.#tooltipManager = new StoryHelperTooltip(
-			{
-				campaignId: options.campaignData?.id,
-				characters: options.campaignData?.metadata?.characters || [],
-				npcs: options.campaignData?.npcs || [],
-				locations: options.campaignData?.locations || [],
-				quests: options.campaignData?.quests || [],
-				factions: options.campaignData?.factions || [],
-				encounters: options.campaignData?.encounters || [],
-				monsters: options.campaignData?.monsters || [],
-			},
-			SupabaseClient.getInstance() // Pass the Supabase client as second parameter
-		);
+	// ==========================================
+	// INITIALIZATION & CONTEXT
+	// ==========================================
 
-		this.#placeholderProcessor = new StoryHelperPlaceholder(this.#tooltipManager, options.campaignData);
+	async loadContext(campaign, sessionId, characterIdentifier, viewType, itemId) {
+		this.#campaignData = campaign;
+		this.#campaignId = campaign.id;
+		this.#currentItemId = itemId;
+
+		// Resolve View Type
+		if (viewType) {
+			this.#currentView = viewType;
+			this.#selectedCharacterId = null;
+			this.#currentSessionId = sessionId;
+		} else if (characterIdentifier) {
+			this.#currentView = StoryURLManager.VIEW_TYPES.CHARACTER;
+			this.#selectedCharacterId = await this.#resolveCharacterId(characterIdentifier);
+		} else {
+			this.#currentView = StoryURLManager.VIEW_TYPES.SESSION;
+			this.#currentSessionId = sessionId;
+		}
+
+		// Initialize Helpers if not already done
+		if (!this.#sidebarManager) {
+			await this.#initializeHelpers();
+		}
+
+		await this.render();
+	}
+
+	async #resolveCharacterId(identifier) {
+		// Simple check if string is UUID
+		const isUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(identifier);
+		if (isUUID) return identifier;
+
+		return identifier;
+	}
+
+	async #initializeHelpers() {
+		// 1. Fetch "Lite" data for global tools (Sidebar search, tooltips)
+		const [chars, npcs, locs, quests, factions] = await Promise.all([
+			this.#supabase.getCharacters(this.#campaignId),
+			this.#supabase.getNPCs(this.#campaignId),
+			this.#supabase.getLocations(this.#campaignId),
+			this.#supabase.getQuests(this.#campaignId),
+			this.#supabase.getFactions(this.#campaignId),
+		]);
+
+		const contextData = {
+			campaignId: this.#campaignId,
+			characters: chars,
+			npcs,
+			locations: locs,
+			quests,
+			factions,
+		};
+
+		// 2. Instantiate Helpers
+		this.#tooltipManager = new StoryHelperTooltip(contextData, this.#supabase);
+		this.#placeholderProcessor = new StoryHelperPlaceholder(this.#tooltipManager, contextData);
 		this.#navigationManager = new StoryHelperNavigation();
+
 		this.#searchManager = new StoryHelperSearch(
-			() => this.#campaign,
-			(navigation) => this.#handleSearchNavigation(navigation)
+			() => contextData,
+			(nav) => this.#handleSearchNavigation(nav)
 		);
 
 		this.#sidebarManager = new StoryHelperSidebar(
-			() => this.#campaign,
+			() => this.#campaignData,
 			() => this.#currentView,
 			() => this.#currentSessionId,
-			() => this.#selectedCharacterName,
+			() => this.#selectedCharacterId,
 			(collapsed) => this.#handleSidebarToggle(collapsed),
-			(characterName) => this.#handleCharacterClick(characterName),
-			(sessionId) => this.#handleSessionClick(sessionId),
+			(id) => this.#handleCharacterClick(id),
+			(id) => this.#handleSessionClick(id),
+			// Navigation callbacks
 			() => this.#handleViewChange(StoryURLManager.VIEW_TYPES.TIMELINE),
 			() => this.#handleViewChange(StoryURLManager.VIEW_TYPES.QUESTS),
 			() => this.#handleViewChange(StoryURLManager.VIEW_TYPES.LOCATIONS),
@@ -73,16 +125,13 @@ class StoryManager {
 			() => this.#handleViewChange(StoryURLManager.VIEW_TYPES.ENCOUNTERS),
 			() => this.#handleViewChange(StoryURLManager.VIEW_TYPES.MAP),
 			() => this.#handleViewChange(StoryURLManager.VIEW_TYPES.RELATIONSHIPS),
-			this.#searchManager
+			this.#searchManager,
+			this.#supabase
 		);
 
-		this.#relationshipsRenderer = new StoryHelperRelationships(options.campaignData);
+		this.#relationshipsRenderer = new StoryHelperRelationships(this.#campaignData);
 
-		this.#contentRenderer = new StoryHelperContent(
-			this.#placeholderProcessor,
-			() => this.#campaign,
-			() => this.#currentSessionId
-		);
+		this.#contentRenderer = new StoryHelperContent(this.#placeholderProcessor, this.#supabase, this.#campaignId);
 	}
 
 	#loadSavedState() {
@@ -92,259 +141,114 @@ class StoryManager {
 		}
 	}
 
-	getSidebarElement() {
-		return this.#rootElement?.querySelector('.story-sidebar');
+	setCampaignManager(manager, callback) {
+		this.campaignManager = manager;
+		this.showCampaignSelection = callback;
 	}
 
-	setCampaignManager(campaignManager, showCampaignSelectionCallback) {
-		this.campaignManager = campaignManager;
-		this.showCampaignSelection = showCampaignSelectionCallback;
-		this.#ensureCampaignSelectionButton();
-	}
-
-	#ensureCampaignSelectionButton() {
-		const sidebar = this.getSidebarElement();
-		if (!sidebar) return;
-
-		const existingButton = sidebar.querySelector('.story-campaign-selection');
-		existingButton?.remove();
-
-		const buttonContainer = document.createElement('div');
-		buttonContainer.className = 'story-campaign-selection';
-		Object.assign(buttonContainer.style, {
-			marginTop: 'auto',
-			padding: '10px',
-		});
-
-		const button = document.createElement('button');
-		button.textContent = 'Campaign selection';
-		button.className = 'sidebar-back-button button-secondary';
-		button.style.width = '100%';
-		button.addEventListener('click', this.showCampaignSelection);
-
-		buttonContainer.appendChild(button);
-		sidebar.appendChild(buttonContainer);
-	}
-
-	updateCampaign(campaign, sessionId = null, characterName = null, viewType = null) {
-		if (!campaign) return;
-
-		this.#campaign = campaign;
-		this.#determineView(viewType, characterName, sessionId);
-		this.#searchManager?.invalidateIndex();
-		this.render();
-	}
-
-	#determineView(viewType, characterName, sessionId) {
-		const viewTypeMap = {
-			[StoryURLManager.VIEW_TYPES.TIMELINE]: StoryURLManager.VIEW_TYPES.TIMELINE,
-			[StoryURLManager.VIEW_TYPES.QUESTS]: StoryURLManager.VIEW_TYPES.QUESTS,
-			[StoryURLManager.VIEW_TYPES.LOCATIONS]: StoryURLManager.VIEW_TYPES.LOCATIONS,
-			[StoryURLManager.VIEW_TYPES.NPCS]: StoryURLManager.VIEW_TYPES.NPCS,
-			[StoryURLManager.VIEW_TYPES.FACTIONS]: StoryURLManager.VIEW_TYPES.FACTIONS,
-			[StoryURLManager.VIEW_TYPES.ENCOUNTERS]: StoryURLManager.VIEW_TYPES.ENCOUNTERS,
-			[StoryURLManager.VIEW_TYPES.MAP]: StoryURLManager.VIEW_TYPES.MAP,
-			[StoryURLManager.VIEW_TYPES.RELATIONSHIPS]: StoryURLManager.VIEW_TYPES.RELATIONSHIPS,
-		};
-
-		if (viewTypeMap[viewType]) {
-			this.#currentView = viewTypeMap[viewType];
-			this.#selectedCharacterName = null;
-			this.#currentSessionId = sessionId || this.#getFirstSessionId();
-		} else if (characterName) {
-			this.#currentView = StoryURLManager.VIEW_TYPES.CHARACTER;
-			this.#selectedCharacterName = characterName;
-			this.#currentSessionId = sessionId || this.#getFirstSessionId();
-		} else {
-			this.#currentView = StoryURLManager.VIEW_TYPES.SESSION;
-			this.#selectedCharacterName = null;
-			this.#currentSessionId = sessionId || this.#getFirstSessionId();
-
-			if (!this.#currentSessionId) {
-				console.error('StoryManager: No valid session ID for session view');
-				this.#currentSessionId = this.#getFirstSessionId();
-
-				if (!this.#currentSessionId) {
-					this.#rootElement.innerHTML = '<p>Error: No sessions found for this campaign.</p>';
-					return;
-				}
-			}
-		}
-	}
-
-	#getFirstSessionId() {
-		return this.#campaign?.recaps?.[0]?.id ?? null;
-	}
+	// ==========================================
+	// MAIN RENDER LOOP
+	// ==========================================
 
 	async render() {
-		if (!this.#rootElement || !this.#campaign) return;
+		if (!this.#rootElement || !this.#campaignId) return;
 
-		// If the map element currently lives inside the story view (from MAP sub-view),
-		// move it back under the page root before clearing to avoid destroying the Leaflet instance.
-		try {
-			const mapEl = document.getElementById('map');
-			const pageRoot = document.getElementById('root');
-			if (mapEl && this.#rootElement.contains(mapEl) && pageRoot) {
-				mapEl.style.display = 'none';
-				pageRoot.appendChild(mapEl);
-			}
-		} catch (e) {
-			console.warn('StoryManager: failed to relocate map element before render', e);
-		}
-
+		// Clear existing
 		this.#rootElement.innerHTML = '';
 
+		// Container
 		const container = document.createElement('div');
 		container.className = 'story-container';
 
 		const mainContent = document.createElement('div');
 		mainContent.className = 'story-main-content';
-		if (this.#isSidebarCollapsed) {
-			mainContent.classList.add('sidebar-collapsed');
-		}
+		if (this.#isSidebarCollapsed) mainContent.classList.add('sidebar-collapsed');
 
-		const sidebar = await this.#sidebarManager.createSidebar(this.#isSidebarCollapsed);
+		// Sidebar
+		const sidebar = await this.#sidebarManager.createSidebar(this.#isSidebarCollapsed, this.#campaignId);
+
+		// Content Area
 		const contentArea = document.createElement('div');
 		contentArea.className = 'story-content-area';
+		contentArea.innerHTML = '<div class="loader">Loading content...</div>';
 
-		// Mount the structure first so inner renders (like Leaflet map) have a live DOM container
 		mainContent.append(sidebar, contentArea);
 		container.appendChild(mainContent);
 		this.#rootElement.appendChild(container);
 
+		// Load Content
 		await this.#loadContentArea(contentArea);
 
+		// Post-Load Utilities
 		if (this.#currentView === StoryURLManager.VIEW_TYPES.SESSION) {
 			this.#generateTableOfContents(contentArea);
 			this.#navigationManager.scrollToHash();
 		}
 
-		this.#ensureCampaignSelectionButton();
-	}
-
-	#handleSidebarToggle(collapsed) {
-		this.#isSidebarCollapsed = collapsed;
-		localStorage.setItem('story-sidebar-collapsed', collapsed);
-	}
-
-	#handleCharacterClick(characterName) {
-		if (this.#currentView === StoryURLManager.VIEW_TYPES.CHARACTER && this.#selectedCharacterName === characterName) {
-			this.#currentView = StoryURLManager.VIEW_TYPES.SESSION;
-			this.#selectedCharacterName = null;
-		} else {
-			this.#currentView = StoryURLManager.VIEW_TYPES.CHARACTER;
-			this.#selectedCharacterName = characterName;
-		}
-
-		this.#updateURL();
-		this.render();
-	}
-
-	#handleSessionClick(sessionId) {
-		this.#currentView = StoryURLManager.VIEW_TYPES.SESSION;
-		this.#selectedCharacterName = null;
-		this.#currentSessionId = sessionId;
-
-		this.#updateURL();
-		this.render();
-	}
-
-	#handleViewChange(viewType) {
-		if (this.#currentView === viewType) return;
-
-		this.#currentView = viewType;
-		this.#selectedCharacterName = null;
-
-		this.#updateURL();
-		this.render();
-	}
-
-	#handleSearchNavigation(navigation) {
-		const { view, sessionId, characterName, itemId } = navigation;
-
-		switch (view) {
-			case StoryURLManager.VIEW_TYPES.SESSION:
-				this.#handleSessionClick(sessionId);
-				break;
-			case StoryURLManager.VIEW_TYPES.CHARACTER:
-				this.#handleCharacterClick(characterName);
-				break;
-			case StoryURLManager.VIEW_TYPES.QUESTS:
-			case StoryURLManager.VIEW_TYPES.LOCATIONS:
-			case StoryURLManager.VIEW_TYPES.NPCS:
-			case StoryURLManager.VIEW_TYPES.FACTIONS:
-			case StoryURLManager.VIEW_TYPES.ENCOUNTERS:
-				this.#currentView = view;
-				this.#selectedCharacterName = null;
-
-				const url = this.#storyUrlManager.buildStoryItemURL(this.#campaign.id, view, itemId);
-				this.#storyUrlManager.updateHistory(url, null, true);
-				this.render();
-				break;
-		}
-	}
-
-	#updateURL() {
-		const config = {
-			campaign: this.#campaign.id,
-		};
-
-		// Set view-specific parameters
-		switch (this.#currentView) {
-			case StoryURLManager.VIEW_TYPES.TIMELINE:
-			case StoryURLManager.VIEW_TYPES.QUESTS:
-			case StoryURLManager.VIEW_TYPES.LOCATIONS:
-			case StoryURLManager.VIEW_TYPES.FACTIONS:
-			case StoryURLManager.VIEW_TYPES.NPCS:
-			case StoryURLManager.VIEW_TYPES.ENCOUNTERS:
-			case StoryURLManager.VIEW_TYPES.RELATIONSHIPS:
-			case StoryURLManager.VIEW_TYPES.MAP:
-				config.view = this.#currentView;
-				break;
-			case StoryURLManager.VIEW_TYPES.CHARACTER:
-				config.character = this.#selectedCharacterName;
-				break;
-			case StoryURLManager.VIEW_TYPES.SESSION:
-			default:
-				config.session = this.#currentSessionId;
-				break;
-		}
-
-		const url = this.#storyUrlManager.buildURL(config);
-		const state = this.#storyUrlManager.createState(StoryURLManager.VIEW_TYPES.STORY, {
-			campaignId: this.#campaign.id,
-			sessionId: this.#currentView === StoryURLManager.VIEW_TYPES.SESSION ? this.#currentSessionId : null,
-			characterName: this.#currentView === StoryURLManager.VIEW_TYPES.CHARACTER ? this.#selectedCharacterName : null,
-			viewType: this.#currentView,
-		});
-
-		this.#storyUrlManager.updateHistory(url, state, true);
+		this.#ensureCampaignSelectionButton(sidebar);
 	}
 
 	async #loadContentArea(contentArea) {
 		contentArea.innerHTML = '';
 
-		const viewMap = {
-			[StoryURLManager.VIEW_TYPES.TIMELINE]: () => this.#contentRenderer.renderTimeline(contentArea),
-			[StoryURLManager.VIEW_TYPES.QUESTS]: () => this.#contentRenderer.renderQuests(contentArea),
-			[StoryURLManager.VIEW_TYPES.LOCATIONS]: () => this.#contentRenderer.renderLocations(contentArea),
-			[StoryURLManager.VIEW_TYPES.NPCS]: () => this.#contentRenderer.renderNPCs(contentArea),
-			[StoryURLManager.VIEW_TYPES.FACTIONS]: () => this.#contentRenderer.renderFactions(contentArea),
-			[StoryURLManager.VIEW_TYPES.ENCOUNTERS]: () => this.#contentRenderer.renderEncounters(contentArea),
-			[StoryURLManager.VIEW_TYPES.MAP]: () => this.#contentRenderer.renderMap(contentArea),
-			[StoryURLManager.VIEW_TYPES.CHARACTER]: () =>
-				this.#contentRenderer.renderCharacter(contentArea, this.#selectedCharacterName),
-			[StoryURLManager.VIEW_TYPES.SESSION]: () => this.#contentRenderer.renderSession(contentArea),
-			[StoryURLManager.VIEW_TYPES.RELATIONSHIPS]: () => this.#relationshipsRenderer.render(contentArea),
-		};
+		// Route to appropriate renderer
+		switch (this.#currentView) {
+			case StoryURLManager.VIEW_TYPES.SESSION:
+				if (this.#currentSessionId) {
+					await this.#contentRenderer.renderSession(contentArea, this.#currentSessionId);
+				} else {
+					contentArea.innerHTML = '<div class="empty-state">No session selected.</div>';
+				}
+				break;
+			case StoryURLManager.VIEW_TYPES.CHARACTER:
+				await this.#contentRenderer.renderCharacter(contentArea, this.#selectedCharacterId);
+				break;
+			case StoryURLManager.VIEW_TYPES.TIMELINE:
+				await this.#contentRenderer.renderTimeline(contentArea);
+				break;
+			case StoryURLManager.VIEW_TYPES.QUESTS:
+				await this.#contentRenderer.renderQuests(contentArea);
+				break;
+			case StoryURLManager.VIEW_TYPES.LOCATIONS:
+				await this.#contentRenderer.renderLocations(contentArea);
+				break;
+			case StoryURLManager.VIEW_TYPES.NPCS:
+				await this.#contentRenderer.renderNPCs(contentArea);
+				break;
+			case StoryURLManager.VIEW_TYPES.FACTIONS:
+				await this.#contentRenderer.renderFactions(contentArea);
+				break;
+			case StoryURLManager.VIEW_TYPES.ENCOUNTERS:
+				await this.#contentRenderer.renderEncounters(contentArea);
+				break;
+			case StoryURLManager.VIEW_TYPES.RELATIONSHIPS:
+				await this.#relationshipsRenderer.render(contentArea, this.#campaignId);
+				break;
+			case StoryURLManager.VIEW_TYPES.MAP:
+				// Map is typically handled by CampaignManager overlay, but we provide a placeholder here
+				// in case it's embedded. If your Map view is separate, this might remain empty.
+				contentArea.innerHTML = '<div class="empty-state">Map View Active</div>';
+				break;
+			default:
+				console.warn(`View type not found: ${this.#currentView}`);
+				contentArea.innerHTML = '<p>View not implemented yet.</p>';
+		}
 
-		const renderMethod = viewMap[this.#currentView] || viewMap[StoryURLManager.VIEW_TYPES.SESSION];
-		await renderMethod();
+		// Handle Deeplinking to specific items
+		if (this.#currentItemId) {
+			setTimeout(() => {
+				const el = document.getElementById(this.#currentItemId);
+				if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+			}, 100);
+		}
 	}
 
+	// ==========================================
+	// UI UTILITIES
+	// ==========================================
+
 	#generateTableOfContents(contentArea) {
-		const sessionContent = contentArea.querySelector('.session-main-content');
-		if (!sessionContent) return;
+		const sessionContent = contentArea.querySelector('.session-main-content') || contentArea;
 
 		const headings = sessionContent.querySelectorAll('h1, h2, h3, h4');
 		if (headings.length === 0) return;
@@ -393,5 +297,91 @@ class StoryManager {
 		});
 
 		tocContainer.append(tocTitle, tocList);
+	}
+
+	#ensureCampaignSelectionButton(sidebar) {
+		if (!sidebar) return;
+
+		sidebar.querySelector('.story-campaign-selection')?.remove();
+
+		const btnContainer = document.createElement('div');
+		btnContainer.className = 'story-campaign-selection';
+		btnContainer.style.marginTop = 'auto';
+		btnContainer.style.padding = '10px';
+
+		const btn = document.createElement('button');
+		btn.textContent = 'Back to Campaigns';
+		btn.className = 'sidebar-back-button button-secondary';
+		btn.style.width = '100%';
+		btn.onclick = () => this.showCampaignSelection();
+
+		btnContainer.appendChild(btn);
+		sidebar.appendChild(btnContainer);
+	}
+
+	// ==========================================
+	// EVENT HANDLERS
+	// ==========================================
+
+	#handleSidebarToggle(collapsed) {
+		this.#isSidebarCollapsed = collapsed;
+		localStorage.setItem('story-sidebar-collapsed', collapsed);
+		const main = this.#rootElement.querySelector('.story-main-content');
+		if (main) {
+			collapsed ? main.classList.add('sidebar-collapsed') : main.classList.remove('sidebar-collapsed');
+		}
+	}
+
+	#handleCharacterClick(characterId) {
+		this.#currentView = StoryURLManager.VIEW_TYPES.CHARACTER;
+		this.#selectedCharacterId = characterId;
+		this.#updateURL();
+		this.render();
+	}
+
+	#handleSessionClick(sessionId) {
+		this.#currentView = StoryURLManager.VIEW_TYPES.SESSION;
+		this.#currentSessionId = sessionId;
+		this.#updateURL();
+		this.render();
+	}
+
+	#handleViewChange(viewType) {
+		this.#currentView = viewType;
+		this.#selectedCharacterId = null;
+		this.#updateURL();
+		this.render();
+	}
+
+	#handleSearchNavigation(navData) {
+		if (navData.view) this.#currentView = navData.view;
+		if (navData.id) this.#currentItemId = navData.id;
+		if (navData.sessionId) this.#currentSessionId = navData.sessionId;
+
+		this.#updateURL();
+		this.render();
+	}
+
+	#updateURL() {
+		const config = {
+			campaign: this.#campaignId,
+			view: this.#currentView,
+		};
+
+		if (this.#currentView === StoryURLManager.VIEW_TYPES.SESSION) {
+			config.session = this.#currentSessionId;
+		} else if (this.#currentView === StoryURLManager.VIEW_TYPES.CHARACTER) {
+			config.charId = this.#selectedCharacterId;
+		}
+
+		const url = this.#storyUrlManager.buildURL(config);
+		const state = {
+			campaignId: this.#campaignId,
+			sessionId: this.#currentView === StoryURLManager.VIEW_TYPES.SESSION ? this.#currentSessionId : null,
+			characterId: this.#currentView === StoryURLManager.VIEW_TYPES.CHARACTER ? this.#selectedCharacterId : null,
+			viewType: this.#currentView,
+		};
+
+		this.#storyUrlManager.updateHistory(url, state, true);
 	}
 }

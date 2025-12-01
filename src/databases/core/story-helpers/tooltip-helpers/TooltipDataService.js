@@ -1,158 +1,79 @@
-// ============================================
-// TooltipDataService.js - COMPLETE VERSION (No Character Supabase)
-// ============================================
+// --- START OF FILE TooltipDataService.js ---
+
 class TooltipDataService {
-	constructor(dataRegistry, supabaseClient, apiBaseUrl) {
-		this.dataRegistry = dataRegistry;
+	constructor(campaignId, supabaseClient, apiBaseUrl) {
+		this.campaignId = campaignId;
 		this.supabaseClient = supabaseClient;
 		this.apiBaseUrl = apiBaseUrl;
-		this.campaignId = null;
-		this.#extractCampaignId();
-	}
-
-	#extractCampaignId() {
-		if (this.dataRegistry.campaign?.id) {
-			this.campaignId = this.dataRegistry.campaign.id;
-		}
 	}
 
 	async fetch(entityType, entityName) {
-		const normalizedName = entityName.toLowerCase().trim();
+		const normalizedType = entityType.toLowerCase();
 
-		// Try Supabase first for supported entity types (removed 'character')
-		if (['spell', 'monster', 'npc', 'location', 'faction', 'quest', 'encounter'].includes(entityType)) {
-			const supabaseData = await this.#fetchFromSupabase(entityType, entityName, normalizedName);
-			if (supabaseData) return supabaseData;
+		// 1. Campaign Entities (Fetch from Supabase View)
+		if (['npc', 'location', 'faction', 'quest', 'encounter', 'character'].includes(normalizedType)) {
+			return await this.#fetchFromSupabase(normalizedType, entityName);
 		}
 
-		// Fallback to local registry
-		if (this.dataRegistry[entityType]) {
-			const data = this.dataRegistry[entityType][normalizedName];
-			if (data) return data;
+		// 2. Reference Data (Fetch from Supabase specific tables or D&D API)
+		if (['spell', 'monster'].includes(normalizedType)) {
+			return await this.#fetchReferenceData(normalizedType, entityName);
 		}
 
-		// Fallback to D&D API for reference data
-		if (['class', 'race', 'equipment', 'condition', 'feat'].includes(entityType)) {
-			return await this.#fetchFromDndApi(entityType, entityName);
-		}
-
-		return null;
-	}
-
-	async #fetchFromSupabase(entityType, entityName, normalizedName) {
-		if (!this.supabaseClient?.isReady()) return null;
-
-		try {
-			let supabaseData = null;
-
-			switch (entityType) {
-				case 'spell':
-					supabaseData = await Promise.race([
-						this.supabaseClient.fetchSpellByName(entityName),
-						new Promise((_, reject) => setTimeout(() => reject(new Error('Supabase timeout')), 1000)),
-					]);
-					break;
-
-				case 'monster':
-					supabaseData = await Promise.race([
-						this.supabaseClient.fetchMonsterByName(entityName),
-						new Promise((_, reject) => setTimeout(() => reject(new Error('Supabase timeout')), 1000)),
-					]);
-					break;
-
-				case 'npc':
-				case 'location':
-				case 'faction':
-				case 'quest':
-				case 'encounter':
-					supabaseData = await this.#fetchEntityByQuery(entityType, entityName, normalizedName);
-					break;
-			}
-
-			if (supabaseData) {
-				return this.#transformSupabaseData(entityType, supabaseData);
-			}
-		} catch (error) {
-			console.warn(`Failed to fetch ${entityType} from Supabase:`, error);
+		// 3. Rules Data (Fetch from D&D API)
+		if (['class', 'race', 'equipment', 'condition', 'feat'].includes(normalizedType)) {
+			return await this.#fetchFromDndApi(normalizedType, entityName);
 		}
 
 		return null;
 	}
 
-	async #fetchEntityByQuery(entityType, entityName, normalizedName) {
-		if (!this.supabaseClient?.isReady() || !this.campaignId) return null;
-
-		const client = this.supabaseClient.getClient();
-		if (!client) return null;
-
-		const tableMap = {
-			npc: 'npcs',
-			location: 'locations',
-			faction: 'factions',
-			quest: 'quests',
-			encounter: 'encounters',
-		};
-
-		const nameFieldMap = {
-			npc: 'name',
-			location: 'name',
-			faction: 'name',
-			quest: 'title',
-			encounter: 'name',
-		};
-
-		const table = tableMap[entityType];
-		const nameField = nameFieldMap[entityType];
-
-		if (!table || !nameField) return null;
+	async #fetchFromSupabase(entityType, entityName) {
+		if (!this.supabaseClient.isReady()) return null;
 
 		try {
-			// Wrap the entire operation in a single timeout
-			return await Promise.race([
-				(async () => {
-					// Try by name first (case-insensitive)
-					const { data: dataByName, error: errorByName } = await client
-						.from(table)
-						.select('*')
-						.eq('campaign_id', this.campaignId)
-						.ilike(nameField, entityName)
-						.single();
+			const { data, error } = await this.supabaseClient
+				.getClient()
+				.from('entity_complete_view')
+				.select('*')
+				.eq('campaign_id', this.campaignId)
+				.eq('type', entityType)
+				.ilike('name', entityName) // Case-insensitive search
+				.maybeSingle(); // Returns null instead of error if not found
 
-					if (!errorByName && dataByName) return dataByName;
+			if (error) throw error;
+			if (!data) return null;
 
-					// Try by ID as fallback
-					const { data: dataById, error: errorById } = await client
-						.from(table)
-						.select('*')
-						.eq('campaign_id', this.campaignId)
-						.eq('id', normalizedName)
-						.single();
-
-					if (!errorById && dataById) return dataById;
-
-					return null;
-				})(),
-				new Promise((_, reject) => setTimeout(() => reject(new Error('Supabase timeout')), 1000)),
-			]);
+			return this.#transformEntityData(data);
 		} catch (error) {
-			console.warn(`Error in fetchEntityByQuery for ${entityType}:`, error);
+			console.warn(`Tooltip fetch failed for ${entityType}:${entityName}`, error);
 			return null;
 		}
 	}
 
-	#transformSupabaseData(entityType, data) {
-		const transformers = {
-			spell: SupabaseDataTransformer.transformSpell,
-			monster: SupabaseDataTransformer.transformMonster,
-			npc: SupabaseDataTransformer.transformNPC,
-			location: SupabaseDataTransformer.transformLocation,
-			quest: SupabaseDataTransformer.transformQuest,
-			encounter: SupabaseDataTransformer.transformEncounter,
-			faction: SupabaseDataTransformer.transformFaction,
-		};
+	async #fetchReferenceData(entityType, entityName) {
+		if (!this.supabaseClient.isReady()) return null;
 
-		const transformer = transformers[entityType];
-		return transformer ? transformer(data) : Array.isArray(data) ? data[0] : data;
+		// Spells and Monsters might be in their own reference tables in your DB,
+		// or we might fall back to D&D API. Assuming DB tables based on previous prompts:
+		try {
+			const table = entityType === 'spell' ? 'spells' : 'monsters';
+			const nameCol = entityType === 'spell' ? 'spell_name' : 'name';
+
+			const { data, error } = await this.supabaseClient
+				.getClient()
+				.from(table)
+				.select('*')
+				.ilike(nameCol, entityName)
+				.maybeSingle();
+
+			if (data) return data;
+
+			// If not in DB, try API
+			return await this.#fetchFromDndApi(entityType, entityName);
+		} catch (e) {
+			return await this.#fetchFromDndApi(entityType, entityName);
+		}
 	}
 
 	async #fetchFromDndApi(entityType, entityName) {
@@ -173,26 +94,32 @@ class TooltipDataService {
 
 		try {
 			const response = await fetch(`${this.apiBaseUrl}${endpoint}/${formattedName}`);
-			if (response.ok) {
-				return await response.json();
-			}
-
-			const searchResponse = await fetch(`${this.apiBaseUrl}${endpoint}?name=${encodeURIComponent(entityName)}`);
-
-			if (searchResponse.ok) {
-				const searchData = await searchResponse.json();
-				if (searchData.results?.length > 0) {
-					const detailResponse = await fetch(`${this.apiBaseUrl}${searchData.results[0].url}`);
-					if (detailResponse.ok) {
-						return await detailResponse.json();
-					}
-				}
-			}
-
+			if (response.ok) return await response.json();
 			return null;
 		} catch (error) {
-			console.error(`Error fetching ${entityType} data:`, error);
-			throw error;
+			console.error(`API fetch error for ${entityType}:`, error);
+			return null;
 		}
+	}
+
+	#transformEntityData(data) {
+		// Helper to extract attribute values
+		const getAttr = (key) => {
+			if (!data.attributes || !data.attributes[key]) return null;
+			const val = data.attributes[key];
+			return Array.isArray(val) ? val[0]?.value : val;
+		};
+
+		// Normalize data for generators
+		return {
+			...data,
+			// Add convenience fields for common attributes
+			race: getAttr('race'),
+			class: getAttr('class'),
+			level: getAttr('level'),
+			status: getAttr('status'),
+			description: data.description || getAttr('description'),
+			icon: data.icon || getAttr('Portrait') || getAttr('Image'),
+		};
 	}
 }

@@ -1,32 +1,34 @@
+// --- START OF FILE LocationTooltip.js ---
+
 class LocationTooltipGenerator extends BaseTooltipGenerator {
 	generate(data) {
 		const navLink = this.navigationLinkBuilder.build('location', data);
+
+		const getAttr = (key) => {
+			if (!data.attributes) return null;
+			const match = Object.keys(data.attributes).find((k) => k.toLowerCase() === key.toLowerCase());
+			if (!match) return null;
+			const val = data.attributes[match];
+			return Array.isArray(val) ? val[0]?.value : val;
+		};
+
+		const type = getAttr('type') || 'Location';
+		const region = getAttr('region');
+		const pop = getAttr('population');
+		const ruler = getAttr('ruler');
+		const desc = data.description || getAttr('description') || '';
 
 		return `
 			<div class="entity-tooltip entity-location-tooltip">
 				<div class="tooltip-header">
 					<h3>${data.name}</h3>
-					<span class="location-type">${data.type}</span>
+					<span class="location-type">${type}</span>
 				</div>
 				<div class="tooltip-content">
-					${data.region ? `<div><strong>Region:</strong> ${data.region}</div>` : ''}
-					${data.population ? `<div><strong>Population:</strong> ${data.population}</div>` : ''}
-					${data.ruler ? `<div><strong>Ruler:</strong> ${data.ruler}</div>` : ''}
-					<div class="tooltip-description">${data.description}</div>
-					${
-						data.features?.length
-							? `<div class="tooltip-features"><strong>Features:</strong><ul>${data.features
-									.map((f) => `<li>${f}</li>`)
-									.join('')}</ul></div>`
-							: ''
-					}
-					${
-						data.threats?.length
-							? `<div class="tooltip-threats"><strong>Threats:</strong><ul>${data.threats
-									.map((t) => `<li>${t}</li>`)
-									.join('')}</ul></div>`
-							: ''
-					}
+					${region ? `<div><strong>Region:</strong> ${region}</div>` : ''}
+					${pop ? `<div><strong>Population:</strong> ${pop}</div>` : ''}
+					${ruler ? `<div><strong>Ruler:</strong> ${ruler}</div>` : ''}
+					<div class="tooltip-description">${desc.substring(0, 200)}${desc.length > 200 ? '...' : ''}</div>
 				</div>
 				<div class="tooltip-footer">${navLink}</div>
 			</div>

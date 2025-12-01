@@ -1,14 +1,22 @@
+// --- START OF FILE StoryTimeline.js ---
+
 class StoryHelperTimeline {
 	#campaign;
 	#placeholderProcessor;
 	#supabaseClient;
 
 	// Type icon mapping
-	#typeIcons = {
+	static TYPE_ICONS = {
 		narrative: '💬',
 		encounter: '⚔️',
 		investigation: '🔎',
 		traversal: '👣',
+		combat: '⚔️',
+		social: '🗣️',
+		exploration: '🗺️',
+		rest: '⛺',
+		loot: '💰',
+		quest: '📜',
 	};
 
 	constructor(campaign, placeholderProcessor) {
@@ -18,208 +26,238 @@ class StoryHelperTimeline {
 	}
 
 	async render(contentArea) {
-		// Show loading state
+		// 1. Initial Loading State
 		contentArea.innerHTML = `
-			<div class="story-timeline-container visible">
-				<div class="timeline-header"><h2>Campaign Timeline</h2></div>
-				<div class="loading">Loading timeline...</div>
+			<div class="story-view-container">
+				<div class="view-header"><h2>Campaign Timeline</h2></div>
+				<div class="loading-container">
+					<div class="loading-spinner"></div>
+					<p>Constructing history...</p>
+				</div>
 			</div>
 		`;
 
 		try {
-			// Fetch timeline data from Supabase
-			const timelineData = await this.#supabaseClient.fetchTimelineEvents(this.#campaign.id);
+			// 2. Fetch Data
+			const sessions = await this.#supabaseClient.getTimelineWithEvents(this.#campaign.id);
 
-			if (!timelineData?.length) {
+			if (!sessions?.length) {
 				contentArea.innerHTML = `
-					<div class="story-timeline-container visible">
-						<div class="timeline-header"><h2>Campaign Timeline</h2></div>
-						<div class="no-content">Timeline data not available for this campaign.</div>
+					<div class="story-view-container">
+						<div class="view-header"><h2>Campaign Timeline</h2></div>
+						<div class="no-content">No timeline events found.</div>
 					</div>
 				`;
 				return;
 			}
 
-			const container = document.createElement('div');
-			container.className = 'story-timeline-container visible';
-
-			const header = this.#createHeader();
-			const timeline = this.#createTimeline(timelineData);
-
-			container.append(header, timeline);
-			contentArea.innerHTML = '';
-			contentArea.appendChild(container);
-
-			this.#placeholderProcessor.processTimelinePlaceholders(container);
+			// 3. Build Layout (Sidebar + Main Content)
+			this.#buildLayout(contentArea, sessions);
 		} catch (error) {
 			console.error('Error loading timeline:', error);
 			contentArea.innerHTML = `
-				<div class="story-timeline-container visible">
-					<div class="timeline-header"><h2>Campaign Timeline</h2></div>
-					<div class="error">Error loading timeline data. Please try again later.</div>
+				<div class="story-view-container">
+					<div class="view-header"><h2>Campaign Timeline</h2></div>
+					<div class="error-message">Error loading timeline: ${error.message}</div>
 				</div>
 			`;
 		}
 	}
 
-	#createHeader() {
+	#buildLayout(contentArea, sessions) {
+		contentArea.innerHTML = '';
+
+		const container = document.createElement('div');
+		container.className = 'story-view-container';
+
 		const header = document.createElement('div');
-		header.className = 'timeline-header';
+		header.className = 'view-header';
 		header.innerHTML = '<h2>Campaign Timeline</h2>';
 
-		const toggleButton = document.createElement('button');
-		toggleButton.className = 'timeline-toggle-all-button';
-		toggleButton.textContent = 'Toggle descriptions';
-		toggleButton.type = 'button';
+		const body = document.createElement('div');
+		body.className = 'view-body';
 
-		toggleButton.addEventListener('click', (e) => {
-			const container = e.target.closest('.story-timeline-container');
-			const descriptions = container.querySelectorAll('.timeline-main-description, .timeline-sub-description');
-			const anyActive = Array.from(descriptions).some((desc) => desc.classList.contains('active'));
+		// -- Left Panel: Session List (Navigation) --
+		const listPanel = document.createElement('div');
+		listPanel.className = 'view-list-panel';
 
-			descriptions.forEach((desc) => desc.classList.remove('active'));
+		// Create a single group for sessions
+		const group = document.createElement('div');
+		group.className = 'view-group';
 
-			if (!anyActive) {
-				setTimeout(() => {
-					descriptions.forEach((desc) => desc.classList.add('active'));
-				}, 50);
-			}
-		});
+		const groupContent = document.createElement('div');
+		groupContent.className = 'view-group-content';
 
-		header.appendChild(toggleButton);
-		return header;
-	}
+		const groupHeader = StoryDOMBuilder.createToggleHeader('Sessions', groupContent, 'view-group-header-level-1');
+		group.appendChild(groupHeader);
 
-	#createTimeline(timelineData) {
-		const timeline = document.createElement('div');
-		timeline.className = 'timeline';
+		// -- Right Panel: Timeline Visualization --
+		const detailPanel = document.createElement('div');
+		detailPanel.className = 'view-detail-panel';
+
+		const detailContent = document.createElement('div');
+		detailContent.className = 'view-detail-content';
+		detailContent.style.alignItems = 'stretch'; // Fill width
+
+		// Render Items
+		const timelineContainer = document.createElement('div');
+		timelineContainer.className = 'timeline';
 
 		let side = 'left';
 
-		timelineData.forEach((item) => {
-			const mainItem = this.#createMainItem(item, side);
-			timeline.appendChild(mainItem);
+		sessions.forEach((session) => {
+			if (!session.events || session.events.length === 0) return;
 
-			if (item.items?.length) {
-				item.items.forEach((subitem) => {
-					const subitemEl = this.#createSubItem(subitem, item.id, side);
-					timeline.appendChild(subitemEl);
-				});
-			}
+			// 1. Sidebar Item
+			const listItem = document.createElement('div');
+			listItem.className = 'view-list-item';
+			listItem.textContent = `Session ${session.session_number}: ${session.title}`;
+			listItem.addEventListener('click', () => {
+				const target = document.getElementById(`session-${session.id}`);
+				if (target) {
+					target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+					// update active state
+					listPanel.querySelectorAll('.view-list-item').forEach((el) => el.classList.remove('selected'));
+					listItem.classList.add('selected');
+				}
+			});
+			groupContent.appendChild(listItem);
+
+			// 2. Timeline Main Node (The Session)
+			const sessionNode = this.#createSessionNode(session, side);
+			timelineContainer.appendChild(sessionNode);
+
+			// 3. Timeline Sub Nodes (The Events)
+			session.events.forEach((event) => {
+				const eventNode = this.#createEventNode(event, session.id, side);
+				timelineContainer.appendChild(eventNode);
+			});
 
 			side = side === 'left' ? 'right' : 'left';
 		});
 
-		return timeline;
+		group.appendChild(groupContent);
+		listPanel.appendChild(group);
+
+		detailContent.appendChild(timelineContainer);
+		detailPanel.appendChild(detailContent);
+
+		body.append(listPanel, detailPanel);
+		container.append(header, body);
+		contentArea.appendChild(container);
+
+		// Process links
+		this.#placeholderProcessor.processTimelinePlaceholders(timelineContainer);
 	}
 
-	#createMainItem(item, side) {
-		const mainItem = document.createElement('div');
-		mainItem.className = `timeline-item timeline-main-item ${side}`;
-		mainItem.setAttribute('data-id', item.id);
+	#createSessionNode(session, side) {
+		const node = document.createElement('div');
+		node.className = `timeline-item timeline-main-item ${side}`;
+		node.id = `session-${session.id}`;
+		node.setAttribute('data-id', session.id);
 
-		const mainContent = document.createElement('div');
-		mainContent.className = 'timeline-content';
-		mainContent.innerHTML = `
-			<h3>${item.title}</h3>
-			<div class="timeline-location" style="margin-left: auto">${item.location || ''}</div>
-			${item.is_new_session ? '<div class="timeline-new-session">New session</div>' : ''}
-			${item.session ? `<span class="timeline-item-session">Session ${item.session}</span>` : ''}
+		const content = document.createElement('div');
+		content.className = 'timeline-content';
+
+		// Header
+		content.innerHTML = `
+			<h3>Session ${session.session_number}: ${session.title}</h3>
+			<div class="timeline-date">${session.session_date || ''}</div>
 		`;
 
-		if (item.url) {
-			const link = this.#createSessionLink(item.url, mainContent);
-			mainItem.appendChild(link);
-		} else {
-			mainItem.appendChild(mainContent);
-		}
-
-		if (item.description) {
-			const { button, description } = this.#createToggleableDescription(
-				item.description,
-				'timeline-main-button',
-				'timeline-main-description'
-			);
-			mainItem.append(button, description);
-		}
-
-		return mainItem;
+		return node;
 	}
 
-	#createSubItem(subitem, parentId, side) {
-		const subitemEl = document.createElement('div');
-		subitemEl.className = `timeline-item timeline-subitem ${side}`;
-		subitemEl.setAttribute('data-parent-id', parentId);
-		subitemEl.setAttribute('data-type', subitem.type);
+	#createEventNode(event, sessionId, side) {
+		const node = document.createElement('div');
+		node.className = `timeline-item timeline-subitem ${side}`;
+		node.setAttribute('data-parent-id', sessionId);
 
-		const subContent = document.createElement('div');
-		subContent.className = 'timeline-content';
+		const content = document.createElement('div');
+		content.className = 'timeline-content';
 
-		let html = `
-			<h4>
-				<span style="font-size: 8pt">${this.#typeIcons[subitem.type] || '❓'}</span>
-				${this.#capitalize(subitem.type)}: ${subitem.actors || ''}
-			</h4>
-		`;
+		const icon = StoryHelperTimeline.TYPE_ICONS[event.event_type] || '•';
+		const title = event.title || 'Untitled Event';
 
-		if (subitem.is_new_session) {
-			subitemEl.classList.add('new-session-indicator');
-			html += '<div class="timeline-new-session">New session</div>';
+		// Title Row
+		const header = document.createElement('h4');
+		header.innerHTML = `<span class="timeline-icon">${icon}</span> ${title}`;
+		content.appendChild(header);
+
+		// Meta Tags Row (Entities)
+		const tagsContainer = this.#createEntityTags(event);
+		if (tagsContainer) {
+			content.appendChild(tagsContainer);
 		}
 
-		if (subitem.sublocation) {
-			html += `<div class="timeline-sublocation">${subitem.sublocation}</div>`;
+		// Description
+		if (event.description) {
+			const desc = document.createElement('div');
+			desc.className = 'timeline-description';
+			desc.innerHTML = event.description;
+			// Simple toggle for long descriptions could be added here
+			content.appendChild(desc);
 		}
 
-		subContent.innerHTML = html;
-
-		if (subitem.url) {
-			const link = this.#createSessionLink(subitem.url, subContent);
-			subitemEl.appendChild(link);
-		} else {
-			subitemEl.appendChild(subContent);
-		}
-
-		if (subitem.description) {
-			const { button, description } = this.#createToggleableDescription(
-				subitem.description,
-				'timeline-sub-button',
-				'timeline-sub-description'
-			);
-			subitemEl.append(button, description);
-		}
-
-		return subitemEl;
+		node.appendChild(content);
+		return node;
 	}
 
-	#createSessionLink(urlData, content) {
-		const link = document.createElement('a');
-		link.href = `?campaign=${urlData.campaign}&session=${urlData.session}${urlData.target ? `#${urlData.target}` : ''}`;
-		link.title = 'Go to this session recap point.';
-		link.appendChild(content);
-		return link;
-	}
+	#createEntityTags(event) {
+		const tags = [];
 
-	#createToggleableDescription(descriptionHtml, buttonClass, descriptionClass) {
-		const button = document.createElement('button');
-		button.className = buttonClass;
-		button.textContent = '›';
-		button.type = 'button';
+		if (event.npc) {
+			tags.push({ text: event.npc.name, className: 'tag-npc', type: 'npc', id: event.npc.id });
+		}
+		if (event.location) {
+			tags.push({ text: event.location.name, className: 'tag-location', type: 'location', id: event.location.id });
+		}
+		if (event.quest) {
+			tags.push({ text: event.quest.title, className: 'tag-quest', type: 'quest', id: event.quest.id });
+		}
+		if (event.encounter) {
+			tags.push({ text: event.encounter.name, className: 'tag-encounter', type: 'encounter', id: event.encounter.id });
+		}
+		if (event.faction) {
+			tags.push({ text: event.faction.name, className: 'tag-faction', type: 'faction', id: event.faction.id });
+		}
+		if (event.character) {
+			tags.push({ text: event.character.name, className: 'tag-character', type: 'character', id: event.character.id });
+		}
 
-		const description = document.createElement('div');
-		description.className = descriptionClass;
-		description.innerHTML = descriptionHtml;
+		if (tags.length === 0) return null;
 
-		button.onclick = (e) => {
-			e.preventDefault();
-			e.stopPropagation();
-			description.classList.toggle('active');
-		};
+		const container = document.createElement('div');
+		container.className = 'timeline-tags';
+		container.style.marginTop = '0.5rem';
+		container.style.display = 'flex';
+		container.style.flexWrap = 'wrap';
+		container.style.gap = '0.25rem';
 
-		return { button, description };
-	}
+		tags.forEach((tag) => {
+			const span = document.createElement('span');
+			// Use existing style classes if they map, or fallback generic
+			let styleClass = 'view-meta-tag';
+			if (tag.className === 'tag-npc') styleClass += ' npc-role'; // Blue-ish
+			else if (tag.className === 'tag-location') styleClass += ' location-type'; // Green-ish
+			else if (tag.className === 'tag-quest') styleClass += ' priority-normal'; // Gold/Yellow
+			else if (tag.className === 'tag-encounter') styleClass += ' status-hostile'; // Red
 
-	#capitalize(str) {
-		return str.charAt(0).toUpperCase() + str.slice(1);
+			span.className = styleClass;
+			span.style.fontSize = '0.75rem';
+			span.style.padding = '2px 6px';
+			span.textContent = tag.text;
+
+			// If we want these to be clickable links
+			// We can construct the ENTITY link format manually to let placeholder processor handle it later
+			// OR just make it a link here. Let's use the ENTITY format for consistency.
+			// Actually, visual tags are better rendered directly, but we can add data attr for tooltips
+			span.dataset.entityType = tag.type;
+			span.dataset.entityName = tag.text; // Name based lookup
+
+			container.appendChild(span);
+		});
+
+		return container;
 	}
 }
