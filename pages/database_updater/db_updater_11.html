@@ -1085,7 +1085,28 @@
 								input.type = field.type;
 								input.name = field.key;
 								input.value = val !== null ? val : '';
-								wrapper.appendChild(input);
+
+								// Add datalist for text inputs
+								if (field.type === 'text') {
+									const datalistId = `datalist_${inputId}`;
+									input.setAttribute('list', datalistId);
+
+									const datalist = DOM.create('datalist');
+									datalist.id = datalistId;
+
+									// Populate datalist with unique values
+									const uniqueVals = await this.getUniqueValues(schemaKey, field.key);
+									uniqueVals.forEach((v) => {
+										const option = DOM.create('option');
+										option.value = v;
+										datalist.appendChild(option);
+									});
+
+									wrapper.appendChild(input);
+									wrapper.appendChild(datalist);
+								} else {
+									wrapper.appendChild(input);
+								}
 							}
 						}
 						if (field.required && field.type !== 'json') {
@@ -1119,6 +1140,20 @@
 					btn.style.marginTop = '10px';
 					btn.type = 'submit';
 					form.appendChild(btn);
+				}
+
+				async getUniqueValues(schemaKey, fieldKey) {
+					const schema = SCHEMAS[schemaKey];
+					const tableName = schema.tableName || schemaKey;
+					const data = await this.dm.fetch(tableName);
+
+					const uniqueValues = [
+						...new Set(
+							data.map((item) => item[fieldKey]).filter((val) => val !== null && val !== undefined && val !== '')
+						),
+					].sort();
+
+					return uniqueValues;
 				}
 
 				extractData(formId) {
